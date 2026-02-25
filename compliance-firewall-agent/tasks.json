@@ -1,0 +1,130 @@
+{
+  "project": "Compliance Firewall Agent",
+  "target_valuation": "$300,000",
+  "total_days": 7,
+  "roadmap": [
+    {
+      "day": 1,
+      "objective": "Infrastructure setup — project scaffold, database, and deployment pipeline",
+      "deliverables": [
+        "Next.js project initialized with TypeScript, Tailwind, and path aliases",
+        "Supabase project created (free tier) with all 6 tables deployed",
+        "Environment variables configured (.env.local)",
+        "Encryption key generated and stored",
+        "Vercel deployment working (Hello World landing page)",
+        "Folder structure matches production layout"
+      ],
+      "validation_metric": "npm run build succeeds; Vercel deployment live; Supabase tables queryable",
+      "revenue_justification": "Zero — Day 1 is pure infrastructure. No customer-facing value yet.",
+      "exit_valuation_impact": "Establishes production infrastructure ($0 direct value, but prerequisite for all other days)"
+    },
+    {
+      "day": 2,
+      "objective": "Core interception pipeline — request parsing and risk classification",
+      "deliverables": [
+        "Request parser handles OpenAI, Anthropic, and generic LLM API formats",
+        "Provider detector identifies target from URL patterns",
+        "Risk classifier with 16 built-in regex patterns across 4 categories",
+        "Obfuscation decoder (base64, hex) to prevent bypass",
+        "POST /api/gateway/intercept endpoint functional",
+        "Classification returns risk level, confidence, and detected entities"
+      ],
+      "validation_metric": "Send test prompts containing SSNs, emails, API keys → correctly classified and blocked in <100ms",
+      "revenue_justification": "This is the core product. Without real-time interception, there is no product. Enables $500-2000/mo per customer pricing.",
+      "exit_valuation_impact": "Defensible IP — the classification pipeline is the core moat. Regex patterns are a starting point; the architecture supports ML upgrade. Worth ~$80,000 in defensible technology."
+    },
+    {
+      "day": 3,
+      "objective": "Quarantine system and encrypted storage",
+      "deliverables": [
+        "AES-256-CBC encryption for quarantined prompt content",
+        "Quarantine handler creates encrypted queue entries",
+        "Priority-based queue ordering (CRITICAL first)",
+        "POST /api/quarantine/review for human decisions",
+        "GET /api/quarantine/review lists pending items",
+        "Quarantine dashboard panel with approve/reject actions"
+      ],
+      "validation_metric": "Quarantined prompts are encrypted in DB; decryption works for authorized reviewers; review workflow completes end-to-end",
+      "revenue_justification": "Quarantine is the key differentiator vs. simple blockers. Compliance teams want review workflows, not just on/off switches. Justifies enterprise pricing ($1500+/mo).",
+      "exit_valuation_impact": "Enterprise workflow capability adds ~$60,000 to valuation through higher ARPU potential."
+    },
+    {
+      "day": 4,
+      "objective": "Audit logging with cryptographic integrity and compliance reports",
+      "deliverables": [
+        "Compliance event logger with automatic seed anchoring",
+        "SHA-256 hash chain (seed anchor) for tamper detection",
+        "Merkle root computation for batch verification",
+        "Seed chain verification endpoint",
+        "GET /api/reports/generate creates CFO-ready audit reports",
+        "Reports include integrity proofs and EU AI Act compliance status"
+      ],
+      "validation_metric": "10+ events logged with seed anchors; chain verification passes; generated report contains correct aggregations and integrity data",
+      "revenue_justification": "Audit reports are what CFOs pay for. This is the deliverable that gets budget approval. Enables annual contract pricing ($15,000-25,000/year).",
+      "exit_valuation_impact": "Compliance reporting capability + cryptographic integrity = regulatory moat. Worth ~$70,000 — acquirers pay premium for compliance-ready products."
+    },
+    {
+      "day": 5,
+      "objective": "HITL approval system and notification pipeline",
+      "deliverables": [
+        "HITL approval gate for all destructive operations",
+        "8 gated operation types (policy update, key rotation, etc.)",
+        "Slack notification integration for approval requests",
+        "24-hour timeout with auto-expiration",
+        "POST /api/policy/update with HITL gating",
+        "Approval decisions anchored with cryptographic seeds"
+      ],
+      "validation_metric": "Policy update triggers approval request; Slack notification sent; approval/rejection resolves correctly; seed anchor created for decision",
+      "revenue_justification": "HITL is required for EU AI Act compliance (Article 14). Without it, the product cannot be sold to EU enterprises. Unlocks the entire EU market.",
+      "exit_valuation_impact": "EU AI Act compliance alignment adds ~$50,000 — regulatory positioning is a key acquisition driver for compliance acquirers."
+    },
+    {
+      "day": 6,
+      "objective": "Dashboard polish, edge cases, and security hardening",
+      "deliverables": [
+        "Complete dashboard with overview, events, and quarantine tabs",
+        "Input validation on all API endpoints (Zod schemas)",
+        "Rate limiting on gateway endpoint",
+        "ReDoS protection (match count caps, input truncation)",
+        "Fail-closed behavior when Supabase is unavailable",
+        "Error handling and graceful degradation throughout"
+      ],
+      "validation_metric": "Dashboard renders correctly; all edge cases handled (large prompts, DB downtime, obfuscated input); no unhandled exceptions in error scenarios",
+      "revenue_justification": "Polish and security hardening are what separate a demo from a product customers will pay for. Reduces churn risk and support burden.",
+      "exit_valuation_impact": "Production quality adds ~$20,000 — acquirers discount heavily for projects that need 'fixing' post-acquisition."
+    },
+    {
+      "day": 7,
+      "objective": "Documentation, testing, and acquisition-ready packaging",
+      "deliverables": [
+        "Complete ARCHITECTURE.md with diagrams and threat model",
+        "Agent definition files (AGENTS.md, SOUL.md, TOOLS.md, MEMORY.md)",
+        "API documentation with request/response examples",
+        "Setup guide for new deployments (<30 min onboarding)",
+        "End-to-end test suite covering critical paths",
+        "Clean git history with meaningful commits",
+        "tasks.json roadmap as evidence of structured development"
+      ],
+      "validation_metric": "A new developer can clone, configure, and deploy in under 30 minutes following the docs; all tests pass; documentation covers every component",
+      "revenue_justification": "Documentation and testing reduce acquisition risk, which directly increases willingness to pay. Acquirers want a product they can maintain.",
+      "exit_valuation_impact": "Acquisition-ready packaging adds ~$20,000 — complete documentation reduces due diligence time and integration risk."
+    }
+  ],
+  "valuation_summary": {
+    "defensible_technology": "$80,000 — Risk classification pipeline + cryptographic integrity chain",
+    "enterprise_capability": "$60,000 — Quarantine workflows, encrypted storage, review system",
+    "compliance_positioning": "$70,000 — Audit reports, EU AI Act alignment, CFO-ready deliverables",
+    "regulatory_moat": "$50,000 — HITL system satisfying Article 14 human oversight requirements",
+    "production_quality": "$20,000 — Security hardening, edge case handling, error recovery",
+    "acquisition_readiness": "$20,000 — Documentation, tests, structured development evidence",
+    "total": "$300,000"
+  },
+  "recurring_revenue_projection": {
+    "price_per_customer_monthly": "$1,500",
+    "target_customers_year_1": 15,
+    "projected_arr": "$270,000",
+    "arr_multiple_for_saas": "3-5x",
+    "implied_valuation_from_arr": "$810,000 - $1,350,000",
+    "note": "The $300,000 target is conservative — based on IP + early traction, not full ARR multiple."
+  }
+}

@@ -1,0 +1,38 @@
+"use client";
+
+import { Shield, RefreshCw } from "lucide-react";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div className="min-h-screen bg-surface flex items-center justify-center p-8">
+      <div className="text-center max-w-md">
+        <div className="w-16 h-16 rounded-2xl bg-danger-muted flex items-center justify-center mx-auto mb-6">
+          <Shield className="w-8 h-8 text-danger" />
+        </div>
+        <h1 className="text-2xl font-bold text-white mb-2">Something went wrong</h1>
+        <p className="text-white/40 mb-2 text-sm">
+          An unexpected error occurred. Your data is safe — the compliance
+          firewall continues to protect your pipeline.
+        </p>
+        {error.digest && (
+          <p className="text-xs text-white/20 font-mono mb-6">
+            Error ID: {error.digest}
+          </p>
+        )}
+        <button
+          onClick={reset}
+          className="btn-primary inline-flex items-center gap-2"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Try Again
+        </button>
+      </div>
+    </div>
+  );
+}
