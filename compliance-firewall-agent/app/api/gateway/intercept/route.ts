@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { interceptLLMRequest } from "@/lib/interceptor/middleware";
+import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 import { z } from "zod";
 
 const InterceptRequestSchema = z.object({
@@ -8,6 +9,43 @@ const InterceptRequestSchema = z.object({
   system: z.string().optional(),
   _destination_url: z.string().optional(),
 }).passthrough();
+
+// Maximum request body size (1MB)
+const MAX_BODY_SIZE = 1_048_576;
+
+/**
+ * Validates an API key against stored keys in the database,
+ * or accepts any non-empty key in demo mode.
+ */
+async function validateApiKey(apiKey: string): Promise<boolean> {
+  if (!isSupabaseConfigured()) {
+    // Demo mode: accept any non-empty key
+    return apiKey.length > 0;
+  }
+
+  try {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase
+      .from("api_keys")
+      .select("id")
+      .eq("key_hash", apiKey)
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+
+    // If the api_keys table doesn't exist yet, fall back to presence check
+    if (error?.code === "42P01") {
+      console.warn("api_keys table not found — accepting any key. Run migrations to enable key validation.");
+      return apiKey.length > 0;
+    }
+
+    return !!data;
+  } catch {
+    // If validation fails, don't block the request — log and allow
+    console.error("API key validation error — falling back to presence check");
+    return apiKey.length > 0;
+  }
+}
 
 /**
  * POST /api/gateway/intercept
@@ -28,14 +66,33 @@ const InterceptRequestSchema = z.object({
  *   403: Request blocked — sensitive data detected
  *   202: Request quarantined — pending human review
  *   400: Invalid request body
+ *   401: Missing or invalid API key
+ *   413: Request body too large
  *   500: Internal error
  */
 export async function POST(req: NextRequest) {
   try {
+    // Check request size
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength) > MAX_BODY_SIZE) {
+      return NextResponse.json(
+        { error: "Request body too large. Maximum size is 1MB." },
+        { status: 413 }
+      );
+    }
+
     const apiKey = req.headers.get("x-api-key");
     if (!apiKey) {
       return NextResponse.json(
         { error: "Missing x-api-key header" },
+        { status: 401 }
+      );
+    }
+
+    const isValid = await validateApiKey(apiKey);
+    if (!isValid) {
+      return NextResponse.json(
+        { error: "Invalid API key" },
         { status: 401 }
       );
     }

@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { createServiceClient } from "@/lib/supabase/client";
 import { encrypt } from "./encryption";
 import type {
@@ -131,6 +132,5 @@ export async function getPendingQuarantineItems(limit = 50) {
 }
 
 function hashString(input: string): string {
-  const { createHash } = require("crypto");
   return createHash("sha256").update(input).digest("hex");
 }

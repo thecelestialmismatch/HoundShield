@@ -58,8 +58,15 @@ export function extractPromptFromBody(
   }
   if (parts.length > 0) return parts.join("\n");
 
-  // Fallback: stringify the entire body
-  return JSON.stringify(body);
+  // Fallback: extract only known safe fields to prevent leaking entire request bodies.
+  // If none of the standard LLM formats matched, use a sanitized summary.
+  const safeFields = ["model", "temperature", "max_tokens", "top_p", "stream"];
+  const summary: Record<string, unknown> = {};
+  for (const field of safeFields) {
+    if (field in body) summary[field] = body[field];
+  }
+  summary._note = "Unrecognized request format — only metadata extracted";
+  return JSON.stringify(summary);
 }
 
 /**

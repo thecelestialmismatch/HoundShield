@@ -9,6 +9,9 @@ import { AIChat } from "@/components/dashboard/ai-chat";
 import { AgentBuilder } from "@/components/dashboard/agent-builder";
 import { LiveScanner } from "@/components/dashboard/live-scanner";
 import { ThreatTimeline } from "@/components/dashboard/threat-timeline";
+import { RealtimeFeed } from "@/components/dashboard/realtime-feed";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { DemoBanner } from "@/components/ui/demo-banner";
 import {
   Shield,
   LayoutDashboard,
@@ -31,10 +34,11 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-type Tab = "overview" | "events" | "quarantine" | "chat" | "agents" | "scanner" | "timeline" | "settings";
+type Tab = "overview" | "events" | "quarantine" | "chat" | "agents" | "scanner" | "timeline" | "realtime" | "settings";
 
 const NAV_ITEMS: { id: Tab; label: string; icon: typeof LayoutDashboard; badge?: string; section?: string }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard, section: "Dashboard" },
+  { id: "realtime", label: "Real-Time Feed", icon: Zap, section: "Dashboard" },
   { id: "timeline", label: "Threat Timeline", icon: Activity, section: "Dashboard" },
   { id: "events", label: "Event Log", icon: Activity, section: "Compliance" },
   { id: "quarantine", label: "Quarantine", icon: AlertTriangle, badge: "4", section: "Compliance" },
@@ -180,7 +184,11 @@ export default function DashboardPage() {
   }, {});
 
   return (
-    <div className="min-h-screen bg-surface flex">
+    <div className="min-h-screen bg-surface flex flex-col">
+      {/* Demo mode banner */}
+      <DemoBanner />
+
+      <div className="flex flex-1">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -350,15 +358,55 @@ export default function DashboardPage() {
 
         {/* Page content */}
         <main className="p-5 lg:p-8 max-w-7xl">
-          {activeTab === "overview" && <ComplianceOverview />}
-          {activeTab === "timeline" && <ThreatTimeline />}
-          {activeTab === "events" && <EventTable />}
-          {activeTab === "quarantine" && <QuarantinePanel />}
-          {activeTab === "scanner" && <LiveScanner />}
-          {activeTab === "chat" && <AIChat />}
-          {activeTab === "agents" && <AgentBuilder />}
-          {activeTab === "settings" && <SettingsPanel />}
+          {activeTab === "overview" && (
+            <ErrorBoundary fallbackTitle="Overview failed to load">
+              <ComplianceOverview />
+            </ErrorBoundary>
+          )}
+          {activeTab === "realtime" && (
+            <ErrorBoundary fallbackTitle="Real-time feed failed to load">
+              <div className="h-[calc(100vh-10rem)]">
+                <RealtimeFeed />
+              </div>
+            </ErrorBoundary>
+          )}
+          {activeTab === "timeline" && (
+            <ErrorBoundary fallbackTitle="Timeline failed to load">
+              <ThreatTimeline />
+            </ErrorBoundary>
+          )}
+          {activeTab === "events" && (
+            <ErrorBoundary fallbackTitle="Event log failed to load">
+              <EventTable />
+            </ErrorBoundary>
+          )}
+          {activeTab === "quarantine" && (
+            <ErrorBoundary fallbackTitle="Quarantine panel failed to load">
+              <QuarantinePanel />
+            </ErrorBoundary>
+          )}
+          {activeTab === "scanner" && (
+            <ErrorBoundary fallbackTitle="Scanner failed to load">
+              <LiveScanner />
+            </ErrorBoundary>
+          )}
+          {activeTab === "chat" && (
+            <ErrorBoundary fallbackTitle="AI Chat failed to load">
+              <AIChat />
+            </ErrorBoundary>
+          )}
+          {activeTab === "agents" && (
+            <ErrorBoundary fallbackTitle="Agent Builder failed to load">
+              <AgentBuilder />
+            </ErrorBoundary>
+          )}
+          {activeTab === "settings" && (
+            <ErrorBoundary fallbackTitle="Settings failed to load">
+              <SettingsPanel />
+            </ErrorBoundary>
+          )}
         </main>
+      </div>
       </div>
     </div>
   );

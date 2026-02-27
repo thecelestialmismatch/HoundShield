@@ -460,12 +460,15 @@ export default function DocsPage() {
               )}
 
               {/* Query Params */}
-              {"queryParams" in section && (section as Record<string, unknown>).queryParams && (
-                <div>
-                  <h3 className="text-xs font-medium text-white/50 mb-2">Query Parameters</h3>
-                  <CodeBlock code={(section as Record<string, unknown>).queryParams as string} language="params" />
-                </div>
-              )}
+              {(() => {
+                const qp = (section as { queryParams?: string }).queryParams;
+                return qp ? (
+                  <div>
+                    <h3 className="text-xs font-medium text-white/50 mb-2">Query Parameters</h3>
+                    <CodeBlock code={qp} language="params" />
+                  </div>
+                ) : null;
+              })()}
 
               {/* Request Body */}
               {section.body && (
@@ -486,14 +489,17 @@ export default function DocsPage() {
               )}
 
               {/* Error Response */}
-              {"response403" in section && (section as Record<string, unknown>).response403 && (
-                <div>
-                  <h3 className="text-xs font-medium text-white/50 mb-2 flex items-center gap-1.5">
-                    <AlertTriangle className="w-3 h-3 text-danger" /> Blocked Response (403)
-                  </h3>
-                  <CodeBlock code={(section as Record<string, unknown>).response403 as string} language="json" />
-                </div>
-              )}
+              {(() => {
+                const r403 = (section as { response403?: string }).response403;
+                return r403 ? (
+                  <div>
+                    <h3 className="text-xs font-medium text-white/50 mb-2 flex items-center gap-1.5">
+                      <AlertTriangle className="w-3 h-3 text-danger" /> Blocked Response (403)
+                    </h3>
+                    <CodeBlock code={r403} language="json" />
+                  </div>
+                ) : null;
+              })()}
             </div>
           ) : null}
         </main>

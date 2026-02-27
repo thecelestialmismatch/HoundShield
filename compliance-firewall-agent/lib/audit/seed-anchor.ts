@@ -69,9 +69,12 @@ export async function createSeedAnchor(data: SeedData): Promise<string> {
 /**
  * Verifies the integrity of the seed chain for a given entity type.
  *
- * Walks the chain from newest to oldest, re-computing each hash
- * and comparing it to the stored value. Returns the first broken
- * link if tampering is detected.
+ * Two-pass verification:
+ *   1. Chain linkage — each record's previous_hash matches the prior record's content_hash.
+ *   2. Content integrity — re-computes SHA-256(content + previous_hash) and compares
+ *      to the stored content_hash to detect tampering of log content.
+ *
+ * Returns the first broken link if tampering is detected.
  */
 export async function verifySeedChain(
   entityType: string,
@@ -80,6 +83,7 @@ export async function verifySeedChain(
   valid: boolean;
   checked: number;
   broken_at?: string;
+  error_type?: "FETCH_ERROR" | "CHAIN_BROKEN" | "CONTENT_TAMPERED";
 }> {
   const supabase = createServiceClient();
 
@@ -91,20 +95,45 @@ export async function verifySeedChain(
     .limit(limit);
 
   if (error || !seeds) {
-    return { valid: false, checked: 0, broken_at: "FETCH_ERROR" };
+    return { valid: false, checked: 0, broken_at: "FETCH_ERROR", error_type: "FETCH_ERROR" };
   }
 
+  // Pass 1: Verify chain linkage
   for (let i = 0; i < seeds.length - 1; i++) {
     const current = seeds[i];
     const next = seeds[i + 1]; // older record
 
-    // The current record's previous_hash should match the next record's content_hash
     if (current.previous_hash !== next.content_hash) {
       return {
         valid: false,
         checked: i + 1,
         broken_at: current.id,
+        error_type: "CHAIN_BROKEN",
       };
+    }
+  }
+
+  // Pass 2: Verify content integrity by re-computing hashes
+  for (let i = seeds.length - 1; i >= 0; i--) {
+    const seed = seeds[i];
+    if (seed.content && seed.content_hash) {
+      const previousHash = seed.previous_hash ?? "GENESIS";
+      const contentString = JSON.stringify(
+        seed.content,
+        seed.content ? Object.keys(seed.content as Record<string, unknown>).sort() : undefined
+      );
+      const expectedHash = createHash("sha256")
+        .update(contentString + "|" + previousHash)
+        .digest("hex");
+
+      if (expectedHash !== seed.content_hash) {
+        return {
+          valid: false,
+          checked: seeds.length - i,
+          broken_at: seed.id,
+          error_type: "CONTENT_TAMPERED",
+        };
+      }
     }
   }
 

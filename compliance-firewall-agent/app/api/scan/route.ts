@@ -7,6 +7,9 @@ const ScanSchema = z.object({
   text: z.string().min(1).max(100_000),
 });
 
+// Maximum request body size for scan endpoint (512KB)
+const MAX_SCAN_BODY_SIZE = 524_288;
+
 /**
  * POST /api/scan
  *
@@ -20,6 +23,15 @@ const ScanSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   try {
+    // Enforce request size limit
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength) > MAX_SCAN_BODY_SIZE) {
+      return NextResponse.json(
+        { error: "Request body too large. Maximum size is 512KB." },
+        { status: 413 }
+      );
+    }
+
     const body = await req.json();
     const parseResult = ScanSchema.safeParse(body);
 

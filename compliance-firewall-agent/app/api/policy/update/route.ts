@@ -44,6 +44,29 @@ export async function POST(req: NextRequest) {
 
     const { rule_id, updates, requested_by, justification } = parseResult.data;
 
+    // Validate regex pattern if provided — prevents ReDoS and crashes
+    if (updates.pattern) {
+      try {
+        const testRegex = new RegExp(updates.pattern, "g");
+        // Quick safety check: test against a benign string with a timeout-like cap
+        const testStr = "a".repeat(1000);
+        const start = performance.now();
+        testRegex.test(testStr);
+        const elapsed = performance.now() - start;
+        if (elapsed > 100) {
+          return NextResponse.json(
+            { error: "Pattern rejected: regex is too slow (possible ReDoS). Simplify the pattern." },
+            { status: 400 }
+          );
+        }
+      } catch (regexError) {
+        return NextResponse.json(
+          { error: `Invalid regex pattern: ${(regexError as Error).message}` },
+          { status: 400 }
+        );
+      }
+    }
+
     // Verify the rule exists
     const supabase = createServiceClient();
     const { data: existingRule, error: fetchError } = await supabase

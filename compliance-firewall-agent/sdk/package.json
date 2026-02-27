@@ -1,0 +1,61 @@
+{
+  "name": "@kaelus/sdk",
+  "version": "0.1.0",
+  "description": "Kaelus AI Compliance Gateway SDK — Real-time streaming compliance for LLM traffic",
+  "author": "Kaelus <sdk@kaelus.ai>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "compliance",
+    "llm",
+    "gateway",
+    "firewall",
+    "openai",
+    "anthropic",
+    "security",
+    "pii",
+    "data-protection",
+    "streaming",
+    "sse",
+    "websocket",
+    "real-time"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaelus/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/kaelus/sdk/issues"
+  },
+  "homepage": "https://kaelus.ai/docs/sdk",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "sideEffects": false,
+  "peerDependencies": {},
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  }
+}

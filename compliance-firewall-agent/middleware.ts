@@ -2,34 +2,44 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Simple in-memory rate limiter.
- * Tracks request counts per IP with a sliding window.
+ * LRU-bounded in-memory rate limiter.
+ * Tracks request counts per IP with a fixed window.
+ * Caps at MAX_ENTRIES to prevent memory leaks from unique IPs.
  */
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 const RATE_LIMIT_MAX_REQUESTS = 60; // 60 req/min per IP
+const MAX_ENTRIES = 10_000; // cap map size to prevent memory exhaustion
 
-function isRateLimited(ip: string): boolean {
+// Stricter limit for public endpoints (unauthenticated)
+const SCAN_RATE_LIMIT_MAX = 15; // 15 req/min for /api/scan
+
+function isRateLimited(ip: string, maxRequests = RATE_LIMIT_MAX_REQUESTS): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(ip);
 
   if (!entry || now > entry.resetAt) {
+    // Evict oldest entries if map is full
+    if (rateLimitMap.size >= MAX_ENTRIES) {
+      const firstKey = rateLimitMap.keys().next().value;
+      if (firstKey) rateLimitMap.delete(firstKey);
+    }
     rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
     return false;
   }
 
   entry.count++;
-  return entry.count > RATE_LIMIT_MAX_REQUESTS;
+  return entry.count > maxRequests;
 }
 
-// Cleanup old entries every 5 minutes to prevent memory leak
+// Cleanup expired entries every 2 minutes
 if (typeof globalThis !== "undefined") {
   setInterval(() => {
     const now = Date.now();
     for (const [key, val] of rateLimitMap) {
       if (now > val.resetAt) rateLimitMap.delete(key);
     }
-  }, 300_000);
+  }, 120_000);
 }
 
 export function middleware(request: NextRequest) {
@@ -49,7 +59,11 @@ export function middleware(request: NextRequest) {
 
   // === Rate limiting for API routes ===
   if (request.nextUrl.pathname.startsWith("/api/")) {
-    if (isRateLimited(ip)) {
+    // Apply stricter limits for public endpoints
+    const isScanEndpoint = request.nextUrl.pathname === "/api/scan";
+    const maxRequests = isScanEndpoint ? SCAN_RATE_LIMIT_MAX : RATE_LIMIT_MAX_REQUESTS;
+
+    if (isRateLimited(ip, maxRequests)) {
       return NextResponse.json(
         { error: "Too many requests. Please try again later." },
         { status: 429, headers: { "Retry-After": "60" } }
@@ -59,8 +73,8 @@ export function middleware(request: NextRequest) {
     // Add rate limit info headers
     const entry = rateLimitMap.get(ip);
     if (entry) {
-      response.headers.set("X-RateLimit-Limit", String(RATE_LIMIT_MAX_REQUESTS));
-      response.headers.set("X-RateLimit-Remaining", String(Math.max(0, RATE_LIMIT_MAX_REQUESTS - entry.count)));
+      response.headers.set("X-RateLimit-Limit", String(maxRequests));
+      response.headers.set("X-RateLimit-Remaining", String(Math.max(0, maxRequests - entry.count)));
     }
   }
 
