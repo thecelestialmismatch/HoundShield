@@ -1,6 +1,6 @@
 // ============================================================================
-// Kaelus Agent Orchestrator — The Brain
-// ReAct (Reason + Act) loop with streaming tool execution
+// Kaelus Agent Orchestrator — The Beast AI Brain
+// Advanced ReAct (Reason + Act) loop with streaming tool execution and multi-agent collaboration
 // ============================================================================
 
 import {
@@ -12,6 +12,7 @@ import {
 } from './types';
 import { toolRegistry } from './tools/index';
 import { agentMemory } from './memory';
+import { memoryDNA } from './memory-dna';
 
 interface OrchestratorConfig {
   model: string;
@@ -22,6 +23,17 @@ interface OrchestratorConfig {
   apiKey: string;
   sessionId?: string;
   onEvent: (event: AgentStreamEvent) => void;
+  agentId?: string;
+  collaboration?: {
+    enabled: boolean;
+    agents: Array<{
+      id: string;
+      name: string;
+      role: string;
+      model: string;
+      tools: string[];
+    }>;
+  };
 }
 
 // Parse streaming tool calls from deltas

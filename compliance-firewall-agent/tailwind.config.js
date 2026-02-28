@@ -8,11 +8,11 @@ module.exports = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: "#09090b",
-          50: "#0c0c0f",
-          100: "#111114",
-          200: "#18181c",
-          300: "#1f1f24",
+          DEFAULT: "#0c0c10",
+          50: "#0f0f14",
+          100: "#141419",
+          200: "#1a1a21",
+          300: "#22222b",
         },
         brand: {
           50: "#eef2ff",
@@ -25,6 +25,12 @@ module.exports = {
           700: "#4338ca",
           800: "#3730a3",
           900: "#312e81",
+        },
+        accent: {
+          DEFAULT: "#818cf8",
+          light: "#a5b4fc",
+          dark: "#6366f1",
+          muted: "rgba(129, 140, 248, 0.08)",
         },
         success: {
           DEFAULT: "#10b981",

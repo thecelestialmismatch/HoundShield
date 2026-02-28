@@ -88,10 +88,15 @@ const MODELS = [
   { id: 'llama-70b', name: 'Llama 3.3 70B', free: true },
   { id: 'deepseek-v3', name: 'DeepSeek V3', free: true },
   { id: 'qwen-72b', name: 'Qwen 2.5 72B', free: true },
+  { id: 'mistral-small', name: 'Mistral Small 3.1', free: true },
+  { id: 'gemma-27b', name: 'Gemma 3 27B', free: true },
+  { id: 'nemotron-70b', name: 'Nemotron 70B', free: true },
+  { id: 'phi-4', name: 'Phi-4 Reasoning+', free: true },
   { id: 'gpt-4o-mini', name: 'GPT-4o Mini', free: false },
   { id: 'gpt-4o', name: 'GPT-4o', free: false },
   { id: 'claude-sonnet', name: 'Claude Sonnet', free: false },
   { id: 'claude-haiku', name: 'Claude Haiku', free: false },
+  { id: 'gemini-pro', name: 'Gemini 2.5 Pro', free: false },
 ];
 
 const EXAMPLE_TASKS = [
@@ -497,25 +502,25 @@ export default function AgentWorkspace({
       <div key={key} className="space-y-1">
         {lines.map((line, i) => {
           // Headers
-          if (line.startsWith('### ')) return <h4 key={i} className="text-sm font-semibold text-white mt-3 mb-1">{line.slice(4)}</h4>;
-          if (line.startsWith('## ')) return <h3 key={i} className="text-base font-semibold text-white mt-4 mb-1">{line.slice(3)}</h3>;
-          if (line.startsWith('# ')) return <h2 key={i} className="text-lg font-bold text-white mt-4 mb-2">{line.slice(2)}</h2>;
+          if (line.startsWith('### ')) return <h4 key={i} className="text-sm font-semibold text-gray-900 mt-3 mb-1">{line.slice(4)}</h4>;
+          if (line.startsWith('## ')) return <h3 key={i} className="text-base font-semibold text-gray-900 mt-4 mb-1">{line.slice(3)}</h3>;
+          if (line.startsWith('# ')) return <h2 key={i} className="text-lg font-bold text-gray-900 mt-4 mb-2">{line.slice(2)}</h2>;
 
           // Horizontal rules
-          if (line.trim() === '---') return <hr key={i} className="border-white/10 my-3" />;
+          if (line.trim() === '---') return <hr key={i} className="border-gray-200 my-3" />;
 
           // Code blocks
           if (line.startsWith('```')) return null; // Skip markers
 
           // Bold
-          const boldLine = line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+          const boldLine = line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900 font-semibold">$1</strong>');
 
           // Bullet points
           if (line.startsWith('• ') || line.startsWith('- ') || line.startsWith('* ')) {
             return (
               <div key={i} className="flex gap-2 ml-2">
-                <span className="text-indigo-400 mt-0.5">•</span>
-                <span className="text-zinc-300 text-sm" dangerouslySetInnerHTML={{ __html: boldLine.slice(2) }} />
+                <span className="text-green-600 mt-0.5">•</span>
+                <span className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: boldLine.slice(2) }} />
               </div>
             );
           }
@@ -529,8 +534,8 @@ export default function AgentWorkspace({
             return (
               <div key={i} className="flex text-xs">
                 {cells.map((cell, j) => (
-                  <div key={j} className="flex-1 px-2 py-1 border-b border-white/5 text-zinc-300">
-                    <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') }} />
+                  <div key={j} className="flex-1 px-2 py-1 border-b border-gray-100 text-gray-600">
+                    <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900">$1</strong>') }} />
                   </div>
                 ))}
               </div>
@@ -542,7 +547,7 @@ export default function AgentWorkspace({
 
           // Regular text
           return (
-            <p key={i} className="text-sm text-zinc-300 leading-relaxed" dangerouslySetInnerHTML={{ __html: boldLine }} />
+            <p key={i} className="text-sm text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: boldLine }} />
           );
         })}
       </div>
@@ -554,12 +559,12 @@ export default function AgentWorkspace({
 
     if (chartData.type === 'bar') {
       return (
-        <div key={key} className="my-4 p-4 rounded-xl bg-black/40 border border-white/10">
-          <h4 className="text-sm font-semibold text-white mb-3">{chartData.title}</h4>
+        <div key={key} className="my-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
+          <h4 className="text-sm font-semibold text-gray-900 mb-3">{chartData.title}</h4>
           <div className="space-y-2">
             {chartData.labels.map((label, i) => (
               <div key={i} className="flex items-center gap-3">
-                <span className="text-xs text-zinc-400 w-20 truncate">{label}</span>
+                <span className="text-xs text-gray-500 w-20 truncate">{label}</span>
                 <div className="flex-1 flex gap-1">
                   {chartData.datasets.map((ds, j) => (
                     <div key={j} className="flex-1">
@@ -567,24 +572,24 @@ export default function AgentWorkspace({
                         className="h-6 rounded transition-all duration-500"
                         style={{
                           width: `${(ds.data[i] / maxValue) * 100}%`,
-                          backgroundColor: ds.color || '#6366f1',
+                          backgroundColor: ds.color || '#16a34a',
                           minWidth: '4px',
                         }}
                       />
                     </div>
                   ))}
                 </div>
-                <span className="text-xs text-zinc-400 w-16 text-right">
+                <span className="text-xs text-gray-500 w-16 text-right">
                   {chartData.datasets.map(ds => ds.data[i]).join(' / ')}
                 </span>
               </div>
             ))}
           </div>
           {chartData.datasets.length > 1 && (
-            <div className="flex gap-4 mt-3 pt-2 border-t border-white/5">
+            <div className="flex gap-4 mt-3 pt-2 border-t border-gray-100">
               {chartData.datasets.map((ds, i) => (
-                <div key={i} className="flex items-center gap-1.5 text-xs text-zinc-400">
-                  <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: ds.color || '#6366f1' }} />
+                <div key={i} className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: ds.color || '#16a34a' }} />
                   {ds.label}
                 </div>
               ))}
@@ -596,11 +601,11 @@ export default function AgentWorkspace({
 
     if (chartData.type === 'pie' || chartData.type === 'doughnut') {
       const total = chartData.datasets[0]?.data.reduce((a, b) => a + b, 0) || 1;
-      const colors = ['#6366f1', '#8b5cf6', '#a78bfa', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899'];
+      const colors = ['#16a34a', '#059669', '#34d399', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899'];
 
       return (
-        <div key={key} className="my-4 p-4 rounded-xl bg-black/40 border border-white/10">
-          <h4 className="text-sm font-semibold text-white mb-3">{chartData.title}</h4>
+        <div key={key} className="my-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
+          <h4 className="text-sm font-semibold text-gray-900 mb-3">{chartData.title}</h4>
           <div className="space-y-1.5">
             {chartData.labels.map((label, i) => {
               const value = chartData.datasets[0]?.data[i] || 0;
@@ -608,10 +613,10 @@ export default function AgentWorkspace({
               return (
                 <div key={i} className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: colors[i % colors.length] }} />
-                  <span className="text-xs text-zinc-300 flex-1">{label}</span>
-                  <span className="text-xs text-zinc-400">{pct}%</span>
+                  <span className="text-xs text-gray-600 flex-1">{label}</span>
+                  <span className="text-xs text-gray-500">{pct}%</span>
                   <div className="w-24">
-                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${pct}%`, backgroundColor: colors[i % colors.length] }}
@@ -628,23 +633,23 @@ export default function AgentWorkspace({
 
     // Default: table
     return (
-      <div key={key} className="my-4 p-4 rounded-xl bg-black/40 border border-white/10 overflow-x-auto">
-        <h4 className="text-sm font-semibold text-white mb-3">{chartData.title}</h4>
+      <div key={key} className="my-4 p-4 rounded-xl bg-gray-50 border border-gray-200 overflow-x-auto">
+        <h4 className="text-sm font-semibold text-gray-900 mb-3">{chartData.title}</h4>
         <table className="w-full text-xs">
           <thead>
-            <tr className="border-b border-white/10">
-              <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">Category</th>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-1.5 px-2 text-gray-500 font-medium">Category</th>
               {chartData.datasets.map((ds, i) => (
-                <th key={i} className="text-right py-1.5 px-2 text-zinc-400 font-medium">{ds.label}</th>
+                <th key={i} className="text-right py-1.5 px-2 text-gray-500 font-medium">{ds.label}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {chartData.labels.map((label, i) => (
-              <tr key={i} className="border-b border-white/5">
-                <td className="py-1.5 px-2 text-zinc-300">{label}</td>
+              <tr key={i} className="border-b border-gray-100">
+                <td className="py-1.5 px-2 text-gray-600">{label}</td>
                 {chartData.datasets.map((ds, j) => (
-                  <td key={j} className="text-right py-1.5 px-2 text-zinc-300">{ds.data[i]}</td>
+                  <td key={j} className="text-right py-1.5 px-2 text-gray-600">{ds.data[i]}</td>
                 ))}
               </tr>
             ))}
@@ -655,20 +660,20 @@ export default function AgentWorkspace({
   };
 
   return (
-    <div className={`flex h-full ${isFullscreen ? 'fixed inset-0 z-50 bg-zinc-950' : ''}`}>
+    <div className={`flex h-full ${isFullscreen ? 'fixed inset-0 z-50 bg-[#faf9f6]' : ''}`}>
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar */}
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 bg-black/20">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200 bg-white">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center">
               <Bot className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-white">
+              <h2 className="text-sm font-semibold text-gray-900">
                 {agentName || 'Kaelus Agent'}
               </h2>
-              <div className="flex items-center gap-2 text-[10px] text-zinc-500">
+              <div className="flex items-center gap-2 text-[10px] text-gray-400">
                 <span className="flex items-center gap-1">
                   <Sparkles className="w-2.5 h-2.5" />
                   {MODELS.find(m => m.id === selectedModel)?.name || selectedModel}
@@ -682,19 +687,19 @@ export default function AgentWorkspace({
           <div className="flex items-center gap-1">
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className={`p-2 rounded-lg transition-colors ${showSettings ? 'bg-indigo-500/20 text-indigo-400' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}`}
+              className={`p-2 rounded-lg transition-colors ${showSettings ? 'bg-green-50 text-green-600' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-900'}`}
             >
               <Settings2 className="w-4 h-4" />
             </button>
             <button
               onClick={() => setShowTrace(!showTrace)}
-              className={`p-2 rounded-lg transition-colors ${showTrace ? 'bg-indigo-500/20 text-indigo-400' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}`}
+              className={`p-2 rounded-lg transition-colors ${showTrace ? 'bg-green-50 text-green-600' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-900'}`}
             >
               {showTrace ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
             </button>
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 rounded-lg text-zinc-400 hover:bg-white/5 hover:text-white transition-colors"
+              className="p-2 rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-colors"
             >
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
@@ -703,10 +708,10 @@ export default function AgentWorkspace({
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className="px-4 py-3 border-b border-white/10 bg-black/30 space-y-3">
+          <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 space-y-3">
             {/* Model Selection */}
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-medium mb-1.5 block">Model</label>
+              <label className="text-[10px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Model</label>
               <div className="flex flex-wrap gap-1.5">
                 {MODELS.map(model => (
                   <button
@@ -714,12 +719,12 @@ export default function AgentWorkspace({
                     onClick={() => setSelectedModel(model.id)}
                     className={`px-2.5 py-1 rounded-lg text-[11px] transition-colors ${
                       selectedModel === model.id
-                        ? 'bg-indigo-500/30 text-indigo-300 border border-indigo-500/50'
-                        : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
+                        ? 'bg-green-100 text-green-700 border border-green-300'
+                        : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     {model.name}
-                    {model.free && <span className="ml-1 text-emerald-400">FREE</span>}
+                    {model.free && <span className="ml-1 text-green-600">FREE</span>}
                   </button>
                 ))}
               </div>
@@ -727,7 +732,7 @@ export default function AgentWorkspace({
 
             {/* Tool Selection */}
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-medium mb-1.5 block">Tools</label>
+              <label className="text-[10px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Tools</label>
               <div className="flex flex-wrap gap-1.5">
                 {ALL_TOOLS.map(tool => (
                   <button
@@ -735,8 +740,8 @@ export default function AgentWorkspace({
                     onClick={() => toggleTool(tool.name)}
                     className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] transition-colors ${
                       selectedTools.includes(tool.name)
-                        ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                        : 'bg-white/5 text-zinc-500 border border-white/10 hover:bg-white/10'
+                        ? 'bg-green-50 text-green-700 border border-green-200'
+                        : 'bg-white text-gray-400 border border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     {TOOL_ICONS[tool.name]}
@@ -748,16 +753,16 @@ export default function AgentWorkspace({
 
             {/* Max Iterations */}
             <div className="flex items-center gap-3">
-              <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-medium">Max Steps</label>
+              <label className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Max Steps</label>
               <input
                 type="range"
                 min="1"
                 max="15"
                 value={maxIterations}
                 onChange={(e) => setMaxIterations(parseInt(e.target.value))}
-                className="flex-1 h-1 bg-white/10 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-500"
+                className="flex-1 h-1 bg-gray-200 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-600"
               />
-              <span className="text-xs text-zinc-400 w-6 text-center">{maxIterations}</span>
+              <span className="text-xs text-gray-500 w-6 text-center">{maxIterations}</span>
             </div>
           </div>
         )}
@@ -766,25 +771,25 @@ export default function AgentWorkspace({
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full max-w-lg mx-auto">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-600/20 border border-indigo-500/30 flex items-center justify-center mb-4">
-                <Brain className="w-8 h-8 text-indigo-400" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 flex items-center justify-center mb-4">
+                <Brain className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">
                 {agentName || 'Kaelus Agent'}
               </h3>
-              <p className="text-sm text-zinc-400 text-center mb-6">
+              <p className="text-sm text-gray-500 text-center mb-6">
                 I&apos;m an agentic AI that can search the web, execute code, analyze data, generate charts, and more. Give me a complex task and I&apos;ll break it down step by step.
               </p>
 
               <div className="w-full space-y-2">
-                <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-medium">Try these:</p>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Try these:</p>
                 {EXAMPLE_TASKS.slice(0, 4).map((task, i) => (
                   <button
                     key={i}
                     onClick={() => setInput(task)}
-                    className="w-full text-left p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors text-xs text-zinc-400 hover:text-zinc-300"
+                    className="w-full text-left p-3 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-colors text-xs text-gray-500 hover:text-gray-600"
                   >
-                    <Sparkles className="w-3 h-3 inline mr-2 text-indigo-400" />
+                    <Sparkles className="w-3 h-3 inline mr-2 text-green-600" />
                     {task}
                   </button>
                 ))}
@@ -794,7 +799,7 @@ export default function AgentWorkspace({
             messages.map(message => (
               <div key={message.id} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
                 {message.role === 'assistant' && (
-                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Bot className="w-3.5 h-3.5 text-white" />
                   </div>
                 )}
@@ -802,8 +807,8 @@ export default function AgentWorkspace({
                 <div className={`max-w-[85%] ${message.role === 'user' ? 'order-first' : ''}`}>
                   {/* User message */}
                   {message.role === 'user' && (
-                    <div className="px-4 py-2.5 rounded-2xl rounded-br-md bg-indigo-500/20 border border-indigo-500/30">
-                      <p className="text-sm text-white">{message.content}</p>
+                    <div className="px-4 py-2.5 rounded-2xl rounded-br-md bg-green-50 border border-green-200">
+                      <p className="text-sm text-gray-900">{message.content}</p>
                     </div>
                   )}
 
@@ -812,12 +817,12 @@ export default function AgentWorkspace({
                     <div className="space-y-2">
                       {/* Thinking */}
                       {message.thinking && (
-                        <div className="px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                        <div className="px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200">
                           <div className="flex items-center gap-1.5 mb-1">
-                            <Brain className="w-3 h-3 text-purple-400" />
-                            <span className="text-[10px] uppercase tracking-wider text-purple-400 font-medium">Thinking</span>
+                            <Brain className="w-3 h-3 text-emerald-600" />
+                            <span className="text-[10px] uppercase tracking-wider text-emerald-600 font-medium">Thinking</span>
                           </div>
-                          <p className="text-xs text-purple-300/70 line-clamp-3">{message.thinking}</p>
+                          <p className="text-xs text-emerald-700/70 line-clamp-3">{message.thinking}</p>
                         </div>
                       )}
 
@@ -825,35 +830,35 @@ export default function AgentWorkspace({
                       {message.toolCalls && message.toolCalls.length > 0 && (
                         <div className="space-y-1.5">
                           {message.toolCalls.map(tc => (
-                            <div key={tc.id} className="rounded-lg border border-white/10 overflow-hidden">
+                            <div key={tc.id} className="rounded-lg border border-gray-200 overflow-hidden">
                               <button
                                 onClick={() => toggleToolExpand(tc.id)}
-                                className="w-full flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/[0.07] transition-colors"
+                                className="w-full flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 transition-colors"
                               >
-                                <div className="text-blue-400">
+                                <div className="text-blue-600">
                                   {TOOL_ICONS[tc.name] || <Wrench className="w-3.5 h-3.5" />}
                                 </div>
-                                <span className="text-xs font-medium text-zinc-300">{tc.name}</span>
+                                <span className="text-xs font-medium text-gray-600">{tc.name}</span>
                                 <div className="flex-1" />
                                 {tc.status === 'running' ? (
-                                  <Loader2 className="w-3 h-3 text-amber-400 animate-spin" />
+                                  <Loader2 className="w-3 h-3 text-amber-600 animate-spin" />
                                 ) : tc.status === 'error' ? (
-                                  <XCircle className="w-3 h-3 text-red-400" />
+                                  <XCircle className="w-3 h-3 text-red-600" />
                                 ) : (
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                  <CheckCircle2 className="w-3 h-3 text-green-600" />
                                 )}
                                 {expandedTools.has(tc.id)
-                                  ? <ChevronDown className="w-3 h-3 text-zinc-500" />
-                                  : <ChevronRight className="w-3 h-3 text-zinc-500" />
+                                  ? <ChevronDown className="w-3 h-3 text-gray-400" />
+                                  : <ChevronRight className="w-3 h-3 text-gray-400" />
                                 }
                               </button>
 
                               {expandedTools.has(tc.id) && (
-                                <div className="px-3 py-2 bg-black/30 space-y-2">
+                                <div className="px-3 py-2 bg-white space-y-2">
                                   {Object.keys(tc.args).length > 0 && (
                                     <div>
-                                      <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-medium">Args</span>
-                                      <pre className="text-[11px] text-zinc-400 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono">
+                                      <span className="text-[9px] uppercase tracking-wider text-gray-400 font-medium">Args</span>
+                                      <pre className="text-[11px] text-gray-500 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono">
                                         {JSON.stringify(tc.args, null, 2)}
                                       </pre>
                                     </div>
@@ -861,15 +866,15 @@ export default function AgentWorkspace({
                                   {tc.result && (
                                     <div>
                                       <div className="flex items-center justify-between">
-                                        <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-medium">Result</span>
+                                        <span className="text-[9px] uppercase tracking-wider text-gray-400 font-medium">Result</span>
                                         <button
                                           onClick={() => copyToClipboard(tc.result!, tc.id)}
-                                          className="text-zinc-500 hover:text-white transition-colors"
+                                          className="text-gray-400 hover:text-gray-900 transition-colors"
                                         >
-                                          {copiedId === tc.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                                          {copiedId === tc.id ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
                                         </button>
                                       </div>
-                                      <pre className="text-[11px] text-zinc-400 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono max-h-48 overflow-y-auto">
+                                      <pre className="text-[11px] text-gray-500 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono max-h-48 overflow-y-auto">
                                         {tc.result}
                                       </pre>
                                     </div>
@@ -890,7 +895,7 @@ export default function AgentWorkspace({
 
                       {/* Footer stats */}
                       {(message.tokens || message.steps) && (
-                        <div className="flex items-center gap-3 px-3 text-[10px] text-zinc-600">
+                        <div className="flex items-center gap-3 px-3 text-[10px] text-gray-400">
                           {message.steps && (
                             <span className="flex items-center gap-1">
                               <RotateCcw className="w-2.5 h-2.5" />
@@ -915,8 +920,8 @@ export default function AgentWorkspace({
                       {/* Loading indicator */}
                       {isRunning && message === messages[messages.length - 1] && !message.content && !message.thinking && (
                         <div className="flex items-center gap-2 px-3 py-2">
-                          <Loader2 className="w-4 h-4 text-indigo-400 animate-spin" />
-                          <span className="text-xs text-zinc-400">Agent is thinking...</span>
+                          <Loader2 className="w-4 h-4 text-green-600 animate-spin" />
+                          <span className="text-xs text-gray-500">Agent is thinking...</span>
                         </div>
                       )}
                     </div>
@@ -924,8 +929,8 @@ export default function AgentWorkspace({
                 </div>
 
                 {message.role === 'user' && (
-                  <div className="w-7 h-7 rounded-lg bg-zinc-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <User className="w-3.5 h-3.5 text-zinc-300" />
+                  <div className="w-7 h-7 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <User className="w-3.5 h-3.5 text-gray-600" />
                   </div>
                 )}
               </div>
@@ -935,7 +940,7 @@ export default function AgentWorkspace({
         </div>
 
         {/* Input Area */}
-        <div className="px-4 py-3 border-t border-white/10 bg-black/20">
+        <div className="px-4 py-3 border-t border-gray-200 bg-white">
           <div className="flex items-end gap-2">
             <div className="flex-1 relative">
               <textarea
@@ -946,7 +951,7 @@ export default function AgentWorkspace({
                 placeholder={isRunning ? 'Agent is working...' : 'Give the agent a task...'}
                 disabled={isRunning}
                 rows={1}
-                className="w-full px-4 py-2.5 pr-12 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50 resize-none disabled:opacity-50 max-h-32"
+                className="w-full px-4 py-2.5 pr-12 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-green-400 resize-none disabled:opacity-50 max-h-32"
                 style={{ minHeight: '42px' }}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
@@ -959,7 +964,7 @@ export default function AgentWorkspace({
             {isRunning ? (
               <button
                 onClick={handleStop}
-                className="w-10 h-10 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 flex items-center justify-center hover:bg-red-500/30 transition-colors flex-shrink-0"
+                className="w-10 h-10 rounded-xl bg-red-50 border border-red-200 text-red-600 flex items-center justify-center hover:bg-red-100 transition-colors flex-shrink-0"
               >
                 <StopCircle className="w-4 h-4" />
               </button>
@@ -967,7 +972,7 @@ export default function AgentWorkspace({
               <button
                 onClick={handleSend}
                 disabled={!input.trim()}
-                className="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center hover:bg-indigo-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+                className="w-10 h-10 rounded-xl bg-green-600 text-white flex items-center justify-center hover:bg-green-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex-shrink-0"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -978,7 +983,7 @@ export default function AgentWorkspace({
 
       {/* Execution Trace Panel */}
       {showTrace && (
-        <div className="w-72 border-l border-white/10 bg-black/20 flex-shrink-0">
+        <div className="w-72 border-l border-gray-200 bg-white flex-shrink-0">
           <ExecutionTrace
             steps={traceSteps}
             isRunning={isRunning}

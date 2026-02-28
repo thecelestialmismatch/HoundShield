@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import Link from "next/link";
 import { ComplianceOverview } from "@/components/dashboard/compliance-overview";
 import { EventTable } from "@/components/dashboard/event-table";
@@ -12,6 +12,11 @@ import { ThreatTimeline } from "@/components/dashboard/threat-timeline";
 import { RealtimeFeed } from "@/components/dashboard/realtime-feed";
 import AgentWorkspace from "@/components/dashboard/agent-workspace";
 import KnowledgeBase from "@/components/dashboard/knowledge-base";
+import ContentPipeline from "@/components/dashboard/content-pipeline";
+import TasksBoard from "@/components/dashboard/tasks-board";
+import TeamView from "@/components/dashboard/team-view";
+import CalendarView from "@/components/dashboard/calendar-view";
+import MemoryView from "@/components/dashboard/memory-view";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { DemoBanner } from "@/components/ui/demo-banner";
 import {
@@ -39,9 +44,35 @@ import {
   CheckCircle,
   Brain,
   Database,
+  Kanban,
+  ListChecks,
+  Users,
+  Calendar,
+  BookMarked,
+  Github,
+  Chrome,
+  Sparkles,
+  Lock,
+  Mail,
 } from "lucide-react";
 
-type Tab = "overview" | "events" | "quarantine" | "chat" | "agents" | "scanner" | "timeline" | "realtime" | "settings" | "workspace" | "knowledge";
+type Tab =
+  | "overview"
+  | "events"
+  | "quarantine"
+  | "chat"
+  | "agents"
+  | "scanner"
+  | "timeline"
+  | "realtime"
+  | "settings"
+  | "workspace"
+  | "knowledge"
+  | "pipeline"
+  | "tasks"
+  | "team"
+  | "calendar"
+  | "memory";
 
 const NAV_ITEMS: { id: Tab; label: string; icon: typeof LayoutDashboard; badge?: string; section?: string }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard, section: "Dashboard" },
@@ -54,8 +85,149 @@ const NAV_ITEMS: { id: Tab; label: string; icon: typeof LayoutDashboard; badge?:
   { id: "agents", label: "Agent Builder", icon: Bot, section: "AI Agents" },
   { id: "chat", label: "AI Chat", icon: MessageSquare, section: "AI Agents" },
   { id: "knowledge", label: "Knowledge Base", icon: Database, section: "AI Agents" },
+  { id: "pipeline", label: "Content Pipeline", icon: Kanban, section: "Mission Control" },
+  { id: "tasks", label: "Tasks Board", icon: ListChecks, section: "Mission Control" },
+  { id: "team", label: "Agent Team", icon: Users, section: "Mission Control" },
+  { id: "calendar", label: "Calendar", icon: Calendar, section: "Mission Control" },
+  { id: "memory", label: "Memory DNA", icon: BookMarked, section: "Mission Control" },
   { id: "settings", label: "Settings", icon: Settings, section: "System" },
 ];
+
+// ---------------------------------------------------------------------------
+// Auth Modal
+// ---------------------------------------------------------------------------
+function AuthModal({ onClose, onAuth }: { onClose: () => void; onAuth: (user: { name: string; email: string; avatar: string; provider: string }) => void }) {
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  const handleSocialAuth = (provider: string) => {
+    // Simulate OAuth
+    onAuth({
+      name: provider === "google" ? "User" : "Developer",
+      email: provider === "google" ? "user@gmail.com" : "dev@github.com",
+      avatar: provider === "google" ? "G" : "D",
+      provider,
+    });
+  };
+
+  const handleEmailAuth = () => {
+    if (!email.trim()) return;
+    onAuth({
+      name: name || email.split("@")[0],
+      email,
+      avatar: (name || email)[0].toUpperCase(),
+      provider: "email",
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-md mx-4 bg-[#111114] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="p-6 pb-4 text-center border-b border-white/[0.06]">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mx-auto mb-3">
+            <Shield className="w-6 h-6 text-indigo-400" />
+          </div>
+          <h2 className="text-xl font-bold text-white">
+            {mode === "login" ? "Welcome Back" : "Create Account"}
+          </h2>
+          <p className="text-sm text-white/40 mt-1">
+            {mode === "login" ? "Sign in to Kaelus AI Platform" : "Join the most powerful AI platform"}
+          </p>
+        </div>
+
+        <div className="p-6 space-y-4">
+          {/* Social Auth */}
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => handleSocialAuth("google")}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/80 text-sm font-medium hover:bg-white/[0.06] hover:border-white/[0.12] transition-all"
+            >
+              <Chrome className="w-4 h-4 text-blue-400" />
+              Google
+            </button>
+            <button
+              onClick={() => handleSocialAuth("github")}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/80 text-sm font-medium hover:bg-white/[0.06] hover:border-white/[0.12] transition-all"
+            >
+              <Github className="w-4 h-4" />
+              GitHub
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-white/[0.06]" />
+            <span className="text-[11px] text-white/25 uppercase tracking-wider">or continue with email</span>
+            <div className="flex-1 h-px bg-white/[0.06]" />
+          </div>
+
+          {/* Email Form */}
+          <div className="space-y-3">
+            {mode === "signup" && (
+              <div>
+                <label className="block text-[11px] text-white/40 mb-1.5 uppercase tracking-wider">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Your name"
+                  className="w-full bg-[#0c0c10] border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+                />
+              </div>
+            )}
+            <div>
+              <label className="block text-[11px] text-white/40 mb-1.5 uppercase tracking-wider">Email</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full bg-[#0c0c10] border border-white/[0.06] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[11px] text-white/40 mb-1.5 uppercase tracking-wider">Password</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full bg-[#0c0c10] border border-white/[0.06] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={handleEmailAuth}
+            className="w-full btn-primary py-3 text-sm"
+          >
+            <Sparkles className="w-4 h-4" />
+            {mode === "login" ? "Sign In" : "Create Account"}
+          </button>
+
+          <p className="text-center text-xs text-white/30">
+            {mode === "login" ? "Don't have an account? " : "Already have an account? "}
+            <button
+              onClick={() => setMode(mode === "login" ? "signup" : "login")}
+              className="text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              {mode === "login" ? "Sign Up" : "Sign In"}
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Settings Panel
@@ -129,7 +301,7 @@ function SettingsPanel() {
         <div>
           <label className="block text-xs text-white/40 mb-1.5">Gateway API Key</label>
           <div className="flex gap-2">
-            <input type="text" value={apiKey} readOnly className="flex-1 bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white/60 font-mono" />
+            <input type="text" value={apiKey} readOnly className="flex-1 bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white/60 font-mono" />
             <button onClick={() => navigator.clipboard?.writeText(apiKey)} className="btn-ghost text-xs px-3">Copy</button>
           </div>
         </div>
@@ -139,7 +311,7 @@ function SettingsPanel() {
             type="text"
             value={typeof window !== "undefined" ? `${window.location.origin}/api/gateway/intercept` : "/api/gateway/intercept"}
             readOnly
-            className="w-full bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white/60 font-mono"
+            className="w-full bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white/60 font-mono"
           />
         </div>
       </div>
@@ -148,12 +320,17 @@ function SettingsPanel() {
       <div className="glass-card p-6 space-y-4">
         <h3 className="text-sm font-medium text-white flex items-center gap-2">
           <Zap className="w-4 h-4 text-amber-400" />
-          AI Models (OpenRouter)
+          AI Models (OpenRouter) — 8 Free + 5 Paid Models
         </h3>
         <p className="text-xs text-white/30">
           AI Chat & Agent Workspace use OpenRouter for 200+ AI models. Get a free API key at{" "}
           <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">openrouter.ai/keys</a>
         </p>
+        <div className="flex flex-wrap gap-1.5 text-[10px]">
+          {["Gemini Flash", "Llama 3.3 70B", "DeepSeek V3", "Qwen 2.5 72B", "Mistral Small", "Gemma 3 27B", "Nemotron 70B", "Phi-4 Reasoning+"].map(m => (
+            <span key={m} className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">FREE {m}</span>
+          ))}
+        </div>
         <div>
           <label className="block text-xs text-white/40 mb-1.5">OpenRouter API Key</label>
           <div className="flex gap-2">
@@ -162,7 +339,7 @@ function SettingsPanel() {
               value={openrouterKey}
               onChange={(e) => { setOpenrouterKey(e.target.value); setKeyStatus("unknown"); }}
               placeholder="sk-or-v1-..."
-              className="flex-1 bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all font-mono"
+              className="flex-1 bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all font-mono"
             />
             <button onClick={testKey} className="btn-ghost text-xs px-3" disabled={!openrouterKey.trim()}>
               {keyStatus === "checking" ? "Testing..." : "Test & Save"}
@@ -170,7 +347,7 @@ function SettingsPanel() {
           </div>
           {keyStatus === "valid" && (
             <p className="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
-              <CheckCircle className="w-3 h-3" /> Key saved and valid! AI features are active.
+              <CheckCircle className="w-3 h-3" /> Key saved and valid! All 13 AI models are active.
             </p>
           )}
           {keyStatus === "invalid" && (
@@ -189,7 +366,7 @@ function SettingsPanel() {
             value={webhookUrl}
             onChange={(e) => setWebhookUrl(e.target.value)}
             placeholder="https://hooks.slack.com/services/..."
-            className="w-full bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+            className="w-full bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
           />
         </div>
         <div className="flex items-center justify-between">
@@ -250,6 +427,8 @@ export default function DashboardPage() {
   const [currentTime, setCurrentTime] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showAuth, setShowAuth] = useState(false);
+  const [user, setUser] = useState<{ name: string; email: string; avatar: string; provider: string } | null>(null);
 
   // Agent → Chat state
   const [agentChat, setAgentChat] = useState<{
@@ -272,6 +451,13 @@ export default function DashboardPage() {
     tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem("kaelus_user");
+      if (savedUser) setUser(JSON.parse(savedUser));
+    } catch {}
   }, []);
 
   const sections = NAV_ITEMS.reduce<Record<string, typeof NAV_ITEMS>>((acc, item) => {
@@ -307,6 +493,17 @@ export default function DashboardPage() {
     []
   );
 
+  const handleAuth = (userData: { name: string; email: string; avatar: string; provider: string }) => {
+    setUser(userData);
+    setShowAuth(false);
+    try { localStorage.setItem("kaelus_user", JSON.stringify(userData)); } catch {}
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    try { localStorage.removeItem("kaelus_user"); } catch {}
+  };
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     const lower = query.toLowerCase();
@@ -314,9 +511,14 @@ export default function DashboardPage() {
     else if (lower.includes("quarantine") || lower.includes("review")) handleTabChange("quarantine");
     else if (lower.includes("scan")) handleTabChange("scanner");
     else if (lower.includes("agent") && lower.includes("build")) handleTabChange("agents");
-    else if (lower.includes("workspace") || lower.includes("agentic") || lower.includes("agent")) handleTabChange("workspace");
+    else if (lower.includes("workspace") || lower.includes("agentic")) handleTabChange("workspace");
     else if (lower.includes("chat") || lower.includes("ai")) handleTabChange("chat");
     else if (lower.includes("knowledge") || lower.includes("doc")) handleTabChange("knowledge");
+    else if (lower.includes("pipeline") || lower.includes("content")) handleTabChange("pipeline");
+    else if (lower.includes("task") || lower.includes("board")) handleTabChange("tasks");
+    else if (lower.includes("team") || lower.includes("agent")) handleTabChange("team");
+    else if (lower.includes("calendar") || lower.includes("schedule")) handleTabChange("calendar");
+    else if (lower.includes("memory") || lower.includes("dna") || lower.includes("lesson")) handleTabChange("memory");
     else if (lower.includes("setting") || lower.includes("config") || lower.includes("key")) handleTabChange("settings");
     else if (lower.includes("real") || lower.includes("live") || lower.includes("feed")) handleTabChange("realtime");
     setSearchOpen(false);
@@ -329,9 +531,13 @@ export default function DashboardPage() {
     return NAV_ITEMS.find((n) => n.id === activeTab)?.label ?? "Dashboard";
   };
 
+  const fullWidthTabs = ["workspace"];
+
   return (
-    <div className="min-h-screen bg-[#09090b] flex flex-col">
+    <div className="min-h-screen bg-[#0c0c10] flex flex-col">
       <DemoBanner />
+
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onAuth={handleAuth} />}
 
       <div className="flex flex-1">
         {sidebarOpen && (
@@ -339,7 +545,7 @@ export default function DashboardPage() {
         )}
 
         {/* Sidebar */}
-        <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0c] border-r border-white/[0.06] flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0d] border-r border-white/[0.06] flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
           {/* Logo */}
           <div className="h-16 flex items-center gap-2.5 px-5 border-b border-white/[0.06]">
             <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
@@ -359,7 +565,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-3 text-[10px] text-white/30">
               <span className="flex items-center gap-1"><Zap className="w-3 h-3" />12ms avg</span>
-              <span className="flex items-center gap-1"><Globe className="w-3 h-3" />4 providers</span>
+              <span className="flex items-center gap-1"><Globe className="w-3 h-3" />13 models</span>
             </div>
           </div>
 
@@ -407,20 +613,37 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          <div className="p-4 border-t border-white/[0.06] flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center text-sm font-semibold text-indigo-300 border border-indigo-500/10">K</div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">Admin</p>
-              <p className="text-xs text-white/40 truncate">admin@kaelus.ai</p>
-            </div>
-            <ChevronDown className="w-4 h-4 text-white/20" />
+          {/* User Section */}
+          <div className="p-4 border-t border-white/[0.06]">
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center text-sm font-semibold text-indigo-300 border border-indigo-500/10">
+                  {user.avatar}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">{user.name}</p>
+                  <p className="text-xs text-white/40 truncate">{user.email}</p>
+                </div>
+                <button onClick={handleLogout} className="p-1.5 rounded-lg text-white/20 hover:text-white/50 hover:bg-white/[0.03] transition-colors">
+                  <LogOut className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowAuth(true)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium hover:bg-indigo-500/15 transition-all"
+              >
+                <Sparkles className="w-4 h-4" />
+                Sign In / Join Now
+              </button>
+            )}
           </div>
         </aside>
 
         {/* Main content */}
         <div className="flex-1 lg:ml-64 flex flex-col">
           {/* Top header */}
-          <header className="sticky top-0 z-30 h-16 bg-[#09090b]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-5">
+          <header className="sticky top-0 z-30 h-16 bg-[#0c0c10]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-5">
             <div className="flex items-center gap-3">
               <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-colors">
                 <Menu className="w-5 h-5" />
@@ -444,6 +667,15 @@ export default function DashboardPage() {
                 <span className="status-dot" />
                 <span className="text-emerald-400 text-xs font-medium">Protected</span>
               </div>
+              {!user && (
+                <button
+                  onClick={() => setShowAuth(true)}
+                  className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium hover:bg-indigo-500/15 transition-all"
+                >
+                  <Sparkles className="w-3 h-3" />
+                  Join Now
+                </button>
+              )}
             </div>
           </header>
 
@@ -454,7 +686,7 @@ export default function DashboardPage() {
                 <Search className="w-4 h-4 text-white/30 ml-3" />
                 <input
                   type="text"
-                  placeholder="Search events, agents, knowledge base... or jump to a tab"
+                  placeholder="Search events, agents, tasks, memory... or jump to a tab"
                   autoFocus
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -472,7 +704,7 @@ export default function DashboardPage() {
           )}
 
           {/* Page content */}
-          <main className={`flex-1 ${activeTab === 'workspace' ? '' : 'p-5 lg:p-8 max-w-7xl'}`}>
+          <main className={`flex-1 ${fullWidthTabs.includes(activeTab) ? '' : 'p-5 lg:p-8 max-w-7xl'}`}>
             {activeTab === "overview" && (
               <ErrorBoundary fallbackTitle="Overview failed to load">
                 <ComplianceOverview />
@@ -550,6 +782,31 @@ export default function DashboardPage() {
                 <div className="h-[calc(100vh-10rem)] relative">
                   <KnowledgeBase />
                 </div>
+              </ErrorBoundary>
+            )}
+            {activeTab === "pipeline" && (
+              <ErrorBoundary fallbackTitle="Content Pipeline failed to load">
+                <ContentPipeline />
+              </ErrorBoundary>
+            )}
+            {activeTab === "tasks" && (
+              <ErrorBoundary fallbackTitle="Tasks Board failed to load">
+                <TasksBoard />
+              </ErrorBoundary>
+            )}
+            {activeTab === "team" && (
+              <ErrorBoundary fallbackTitle="Team view failed to load">
+                <TeamView />
+              </ErrorBoundary>
+            )}
+            {activeTab === "calendar" && (
+              <ErrorBoundary fallbackTitle="Calendar failed to load">
+                <CalendarView />
+              </ErrorBoundary>
+            )}
+            {activeTab === "memory" && (
+              <ErrorBoundary fallbackTitle="Memory DNA failed to load">
+                <MemoryView />
               </ErrorBoundary>
             )}
             {activeTab === "settings" && (
