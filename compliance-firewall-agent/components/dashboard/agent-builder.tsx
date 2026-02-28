@@ -18,8 +18,12 @@ import {
   Database,
   Play,
   CheckCircle,
-  Copy,
+  Settings2,
 } from "lucide-react";
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 
 interface Agent {
   id: string;
@@ -33,23 +37,40 @@ interface Agent {
   createdAt: Date;
 }
 
+// ---------------------------------------------------------------------------
+// Real OpenRouter models
+// ---------------------------------------------------------------------------
+
+const AVAILABLE_MODELS = [
+  { id: "gemini-flash", name: "Gemini Flash", tag: "Free · Fast" },
+  { id: "llama-70b", name: "Llama 3.3 70B", tag: "Free · Smart" },
+  { id: "deepseek-v3", name: "DeepSeek V3", tag: "Free · Coder" },
+  { id: "qwen-72b", name: "Qwen 72B", tag: "Free · Powerful" },
+  { id: "gpt-4o-mini", name: "GPT-4o Mini", tag: "$0.15/M" },
+  { id: "claude-sonnet", name: "Claude Sonnet", tag: "$3/M" },
+];
+
+// ---------------------------------------------------------------------------
+// Templates
+// ---------------------------------------------------------------------------
+
 const TEMPLATES = [
   {
     name: "Code Assistant",
     icon: Code,
     description: "Expert coder in any language with best practices",
     systemPrompt:
-      "You are an expert software engineer. Write clean, production-ready code with best practices, error handling, and documentation. Support all major languages.",
-    model: "GPT-5.2",
+      "You are an expert software engineer and coding assistant. Write clean, production-ready code with best practices, comprehensive error handling, and clear documentation. Support all major programming languages and frameworks. When asked to write code, provide complete, working implementations — not snippets. Include type annotations where applicable. Explain your design decisions briefly.",
+    model: "deepseek-v3",
     color: "brand",
   },
   {
     name: "Data Analyst",
     icon: BarChart3,
-    description: "Analyze data and generate actionable insights",
+    description: "Analyze data, generate insights, write SQL",
     systemPrompt:
-      "You are a senior data analyst. Analyze data, find patterns, generate insights, and create visualizations. Be precise with numbers and statistics.",
-    model: "GPT-5.2",
+      "You are a senior data analyst and scientist. Analyze data, find statistical patterns, generate actionable insights, and create data visualizations. You're proficient in SQL, Python (pandas, numpy, matplotlib, seaborn), R, and data modeling. Be precise with numbers and always validate your statistical conclusions. When writing queries, optimize for performance.",
+    model: "gemini-flash",
     color: "info",
   },
   {
@@ -57,35 +78,35 @@ const TEMPLATES = [
     icon: Headphones,
     description: "Professional customer service agent",
     systemPrompt:
-      "You are a professional customer support agent. Be helpful, empathetic, and solution-oriented. Resolve issues efficiently and escalate when needed.",
-    model: "GPT-5.2",
+      "You are a professional, empathetic customer support agent for a SaaS company. Be helpful, solution-oriented, and patient. Always acknowledge the customer's concern before offering solutions. Maintain a warm but professional tone. If you can't resolve an issue, clearly explain escalation steps. Follow up questions to ensure full resolution.",
+    model: "gemini-flash",
     color: "success",
   },
   {
     name: "Content Writer",
     icon: PenTool,
-    description: "Create compelling marketing content",
+    description: "Create compelling marketing & blog content",
     systemPrompt:
-      "You are a skilled content writer specializing in marketing. Write engaging, SEO-optimized content that converts. Adapt tone and style to the audience.",
-    model: "GPT-5.2",
+      "You are a skilled content writer specializing in technology marketing. Write engaging, SEO-optimized content that educates and converts. Adapt your tone and style to the target audience. Structure content with clear headings, bullet points, and calls-to-action. When writing blog posts, include an introduction hook, structured body, and compelling conclusion.",
+    model: "llama-70b",
     color: "warning",
   },
   {
     name: "Security Auditor",
     icon: Shield,
-    description: "Review code and data for security vulnerabilities",
+    description: "Review code for vulnerabilities & security issues",
     systemPrompt:
-      "You are a cybersecurity expert. Audit code for vulnerabilities, review data handling practices, and recommend security improvements following OWASP guidelines.",
-    model: "GPT-5.2",
+      "You are a cybersecurity expert specializing in application security. Audit code for vulnerabilities following OWASP Top 10 guidelines. Review data handling practices, authentication flows, and authorization logic. Identify injection risks, XSS vectors, CSRF vulnerabilities, and insecure configurations. Provide severity ratings (Critical/High/Medium/Low) and remediation steps for each finding.",
+    model: "deepseek-v3",
     color: "danger",
   },
   {
     name: "Database Expert",
     icon: Database,
-    description: "Design and optimize database queries and schemas",
+    description: "Design schemas, optimize queries, model data",
     systemPrompt:
-      "You are a database expert proficient in SQL, NoSQL, and data modeling. Optimize queries, design schemas, and troubleshoot performance issues.",
-    model: "GPT-5.2",
+      "You are a database expert proficient in PostgreSQL, MySQL, MongoDB, Redis, and data modeling. Design normalized schemas, optimize slow queries with EXPLAIN analysis, create efficient indexes, and troubleshoot performance issues. When designing schemas, consider data integrity, scalability, and query patterns. Always include migration scripts.",
+    model: "deepseek-v3",
     color: "brand",
   },
 ];
@@ -98,44 +119,52 @@ const COLOR_MAP: Record<string, { icon: string; bg: string; border: string }> = 
   danger: { icon: "text-danger", bg: "bg-danger-muted", border: "border-danger/20" },
 };
 
-// Pre-populate with demo agents
-const DEMO_AGENTS: Agent[] = [
-  {
-    id: "agent-1",
-    name: "Kaelus Code Pro",
-    description: "Production-ready code generator with compliance awareness",
-    systemPrompt: "You are an expert coder. Always check for sensitive data before outputting code.",
-    model: "GPT-5.2",
-    temperature: 0.7,
-    isActive: true,
-    conversations: 147,
-    createdAt: new Date(Date.now() - 7 * 86400000),
-  },
-  {
-    id: "agent-2",
-    name: "Compliance Scanner",
-    description: "Automated PII and data leak detection agent",
-    systemPrompt: "You scan text for sensitive data including PII, financial information, API keys, and strategic data.",
-    model: "GPT-5.2",
-    temperature: 0.2,
-    isActive: true,
-    conversations: 89,
-    createdAt: new Date(Date.now() - 3 * 86400000),
-  },
-];
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 
-export function AgentBuilder() {
-  const [agents, setAgents] = useState<Agent[]>(DEMO_AGENTS);
+export function AgentBuilder({
+  onChatWithAgent,
+}: {
+  onChatWithAgent?: (agent: { name: string; systemPrompt: string; model: string }) => void;
+}) {
+  const [agents, setAgents] = useState<Agent[]>([
+    {
+      id: "agent-1",
+      name: "Kaelus Code Pro",
+      description: "Production-ready code generator with compliance awareness",
+      systemPrompt:
+        "You are Kaelus Code Pro, an expert coding assistant. Write clean, production-ready code with best practices and compliance awareness. Always check for sensitive data patterns before outputting code. Support all major languages.",
+      model: "deepseek-v3",
+      temperature: 0.7,
+      isActive: true,
+      conversations: 0,
+      createdAt: new Date(Date.now() - 7 * 86400000),
+    },
+    {
+      id: "agent-2",
+      name: "Compliance Scanner",
+      description: "Automated PII and data leak detection assistant",
+      systemPrompt:
+        "You are a compliance scanning assistant. Help users understand data protection requirements, identify PII patterns, and implement data leak prevention. Explain GDPR, CCPA, SOC 2, and EU AI Act requirements clearly.",
+      model: "gemini-flash",
+      temperature: 0.3,
+      isActive: true,
+      conversations: 0,
+      createdAt: new Date(Date.now() - 3 * 86400000),
+    },
+  ]);
   const [showModal, setShowModal] = useState(false);
   const [editingAgent, setEditingAgent] = useState<Agent | null>(null);
   const [form, setForm] = useState({
     name: "",
     description: "",
     systemPrompt: "",
-    model: "GPT-5.2",
+    model: "gemini-flash",
     temperature: 0.7,
   });
   const [notification, setNotification] = useState<string | null>(null);
+  const [testingAgent, setTestingAgent] = useState<string | null>(null);
 
   const showNotify = (msg: string) => {
     setNotification(msg);
@@ -149,7 +178,14 @@ export function AgentBuilder() {
       setAgents((prev) =>
         prev.map((a) =>
           a.id === editingAgent.id
-            ? { ...a, name: form.name, description: form.description, systemPrompt: form.systemPrompt, model: form.model, temperature: form.temperature }
+            ? {
+                ...a,
+                name: form.name,
+                description: form.description,
+                systemPrompt: form.systemPrompt,
+                model: form.model,
+                temperature: form.temperature,
+              }
             : a
         )
       );
@@ -172,13 +208,19 @@ export function AgentBuilder() {
 
     setShowModal(false);
     setEditingAgent(null);
-    setForm({ name: "", description: "", systemPrompt: "", model: "GPT-5.2", temperature: 0.7 });
+    setForm({ name: "", description: "", systemPrompt: "", model: "gemini-flash", temperature: 0.7 });
   };
 
   const deleteAgent = (id: string) => {
     const agent = agents.find((a) => a.id === id);
     setAgents((prev) => prev.filter((a) => a.id !== id));
     if (agent) showNotify(`Agent "${agent.name}" deleted`);
+  };
+
+  const toggleAgent = (id: string) => {
+    setAgents((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, isActive: !a.isActive } : a))
+    );
   };
 
   const applyTemplate = (template: (typeof TEMPLATES)[0]) => {
@@ -205,6 +247,20 @@ export function AgentBuilder() {
     setShowModal(true);
   };
 
+  const chatWithAgent = (agent: Agent) => {
+    if (onChatWithAgent) {
+      // Increment conversation count
+      setAgents((prev) =>
+        prev.map((a) => (a.id === agent.id ? { ...a, conversations: a.conversations + 1 } : a))
+      );
+      onChatWithAgent({
+        name: agent.name,
+        systemPrompt: agent.systemPrompt,
+        model: agent.model,
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Notification */}
@@ -219,12 +275,14 @@ export function AgentBuilder() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-white">AI Agents</h2>
-          <p className="text-xs text-white/40 mt-0.5">Create and manage autonomous AI agents</p>
+          <p className="text-xs text-white/40 mt-0.5">
+            Create custom AI agents with specialized system prompts. Click &quot;Chat&quot; to talk with any agent.
+          </p>
         </div>
         <button
           onClick={() => {
             setEditingAgent(null);
-            setForm({ name: "", description: "", systemPrompt: "", model: "GPT-5.2", temperature: 0.7 });
+            setForm({ name: "", description: "", systemPrompt: "", model: "gemini-flash", temperature: 0.7 });
             setShowModal(true);
           }}
           className="btn-primary text-xs px-4 py-2 flex items-center gap-1.5"
@@ -234,89 +292,120 @@ export function AgentBuilder() {
       </div>
 
       {/* Templates */}
-      {agents.length <= 2 && (
-        <div>
-          <p className="text-xs text-white/30 mb-3">Quick start with a template:</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-            {TEMPLATES.map((t, i) => {
-              const colors = COLOR_MAP[t.color] || COLOR_MAP.brand;
-              return (
-                <button
-                  key={i}
-                  onClick={() => applyTemplate(t)}
-                  className="glass-card p-3 text-left hover:border-white/15 transition-all group"
+      <div>
+        <p className="text-xs text-white/30 mb-3">Quick start with a template:</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          {TEMPLATES.map((t, i) => {
+            const colors = COLOR_MAP[t.color] || COLOR_MAP.brand;
+            return (
+              <button
+                key={i}
+                onClick={() => applyTemplate(t)}
+                className="glass-card p-3 text-left hover:border-white/15 transition-all group"
+              >
+                <div
+                  className={`w-8 h-8 rounded-lg ${colors.bg} flex items-center justify-center mb-2 border ${colors.border}`}
                 >
-                  <div className={`w-8 h-8 rounded-lg ${colors.bg} flex items-center justify-center mb-2 border ${colors.border}`}>
-                    <t.icon className={`w-4 h-4 ${colors.icon}`} />
-                  </div>
-                  <h4 className="text-[11px] font-medium text-white/80 group-hover:text-white transition-colors">{t.name}</h4>
-                  <p className="text-[10px] text-white/30 mt-0.5 line-clamp-1">{t.description}</p>
-                </button>
-              );
-            })}
-          </div>
+                  <t.icon className={`w-4 h-4 ${colors.icon}`} />
+                </div>
+                <h4 className="text-[11px] font-medium text-white/80 group-hover:text-white transition-colors">
+                  {t.name}
+                </h4>
+                <p className="text-[10px] text-white/30 mt-0.5 line-clamp-1">{t.description}</p>
+              </button>
+            );
+          })}
         </div>
-      )}
+      </div>
 
       {/* Agent Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {agents.map((agent) => (
-          <div key={agent.id} className="glass-card p-5 hover:border-white/15 transition-all group">
-            <div className="flex items-start justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
-                <Bot className="w-5 h-5 text-brand-400" />
+        {agents.map((agent) => {
+          const modelInfo = AVAILABLE_MODELS.find((m) => m.id === agent.model);
+          return (
+            <div key={agent.id} className="glass-card p-5 hover:border-white/15 transition-all group">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
+                  <Bot className="w-5 h-5 text-brand-400" />
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => startEdit(agent)}
+                    className="p-1.5 rounded-lg hover:bg-white/10 text-white/30 hover:text-white/70 transition-all"
+                    title="Edit agent"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => deleteAgent(agent.id)}
+                    className="p-1.5 rounded-lg hover:bg-danger-muted text-white/30 hover:text-danger transition-all"
+                    title="Delete agent"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+              <h3 className="font-semibold text-sm text-white mb-1">{agent.name}</h3>
+              <p className="text-xs text-white/40 mb-3 line-clamp-2">{agent.description}</p>
+
+              {/* System prompt preview */}
+              <div className="mb-4 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+                <p className="text-[10px] text-white/25 line-clamp-2 font-mono">{agent.systemPrompt}</p>
+              </div>
+
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3 text-[10px] text-white/25">
+                  <span className="flex items-center gap-1">
+                    <Zap className="w-3 h-3" /> {modelInfo?.name || agent.model}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MessageSquare className="w-3 h-3" /> {agent.conversations}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Settings2 className="w-3 h-3" /> {agent.temperature}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={() => startEdit(agent)}
-                  className="p-1.5 rounded-lg hover:bg-white/10 text-white/30 hover:text-white/70 transition-all"
+                  onClick={() => chatWithAgent(agent)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-medium hover:bg-brand-500/20 transition-all"
                 >
-                  <Edit3 className="w-3.5 h-3.5" />
+                  <Play className="w-3.5 h-3.5" />
+                  Chat
                 </button>
                 <button
-                  onClick={() => deleteAgent(agent.id)}
-                  className="p-1.5 rounded-lg hover:bg-danger-muted text-white/30 hover:text-danger transition-all"
+                  onClick={() => toggleAgent(agent.id)}
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    agent.isActive
+                      ? "bg-success/10 border border-success/20 text-success"
+                      : "bg-white/[0.04] border border-white/[0.08] text-white/30"
+                  }`}
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  {agent.isActive ? "Active" : "Off"}
                 </button>
               </div>
             </div>
-
-            <h3 className="font-semibold text-sm text-white mb-1">{agent.name}</h3>
-            <p className="text-xs text-white/40 mb-4 line-clamp-2">{agent.description}</p>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3 text-[10px] text-white/25">
-                <span className="flex items-center gap-1">
-                  <Zap className="w-3 h-3" /> {agent.model}
-                </span>
-                <span className="flex items-center gap-1">
-                  <MessageSquare className="w-3 h-3" /> {agent.conversations}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${agent.isActive ? "bg-success" : "bg-white/20"}`}
-                />
-                <span className={`text-[10px] ${agent.isActive ? "text-success" : "text-white/30"}`}>
-                  {agent.isActive ? "Active" : "Inactive"}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Create/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowModal(false)} />
-          <div className="relative w-full max-w-lg glass-card p-6 space-y-4">
+          <div className="relative w-full max-w-lg glass-card p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-semibold text-white">
                 {editingAgent ? "Edit Agent" : "Create Agent"}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-white/30 hover:text-white/60 transition-colors">
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-white/30 hover:text-white/60 transition-colors"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -346,10 +435,11 @@ export function AgentBuilder() {
               <textarea
                 value={form.systemPrompt}
                 onChange={(e) => setForm({ ...form, systemPrompt: e.target.value })}
-                placeholder="Define the agent's behavior and capabilities..."
-                rows={4}
+                placeholder="Define the agent's behavior, personality, and capabilities..."
+                rows={5}
                 className="w-full bg-surface-100 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-brand-500/50 focus:outline-none transition-all resize-none"
               />
+              <p className="text-[10px] text-white/20 mt-1">{form.systemPrompt.length} characters</p>
             </div>
 
             <div className="flex gap-3">
@@ -360,9 +450,11 @@ export function AgentBuilder() {
                   onChange={(e) => setForm({ ...form, model: e.target.value })}
                   className="w-full bg-surface-100 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white focus:border-brand-500/50 focus:outline-none transition-all"
                 >
-                  <option value="GPT-5.2">GPT-5.2 (Free)</option>
-                  <option value="GPT-4o">GPT-4o (Free)</option>
-                  <option value="Claude Sonnet">Claude Sonnet (Free)</option>
+                  {AVAILABLE_MODELS.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} ({m.tag})
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="w-28">

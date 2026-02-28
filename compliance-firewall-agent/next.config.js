@@ -3,8 +3,13 @@ const nextConfig = {
   // Required for Docker standalone build
   output: "standalone",
 
-  // Dev server origins
-  allowedDevOrigins: ["http://127.0.0.1:3000", "http://localhost:3000"],
+  // Dev server origins (allow all local access)
+  allowedDevOrigins: [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+    "http://127.0.0.1:*",
+    "http://localhost:*",
+  ],
 
   // Performance optimizations
   poweredByHeader: false,
