@@ -508,8 +508,8 @@ export default function FeaturesPage() {
             <div className="w-8 h-8 rounded-lg bg-brand-500/15 flex items-center justify-center border border-brand-500/20">
               <Shield className="w-[18px] h-[18px] text-brand-400" />
             </div>
-            <span className="text-lg font-semibold text-white tracking-tight">
-              Kaelus
+            <span className="text-lg font-bold tracking-tight">
+              Kaelus<span className="text-brand-400">.ai</span>
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-6">
@@ -1168,7 +1168,7 @@ export default function FeaturesPage() {
                 <div className="w-7 h-7 rounded-lg bg-brand-500/15 flex items-center justify-center border border-brand-500/20">
                   <Shield className="w-4 h-4 text-brand-400" />
                 </div>
-                <span className="font-semibold text-white">Kaelus</span>
+                <span className="font-bold">Kaelus<span className="text-brand-400">.ai</span></span>
               </div>
               <p className="text-sm text-white/30 leading-relaxed">
                 AI-powered compliance firewall protecting enterprise data from
@@ -1245,7 +1245,7 @@ export default function FeaturesPage() {
           </div>
           <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-white/15">
-              &copy; 2026 Kaelus. All rights reserved.
+              &copy; 2026 Kaelus.ai — All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-xs text-white/20">
               <span>Privacy Policy</span>

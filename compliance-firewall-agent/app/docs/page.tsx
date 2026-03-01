@@ -337,7 +337,7 @@ export default function DocsPage() {
             <div className="w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
               <Shield className="w-4 h-4 text-brand-400" />
             </div>
-            <span className="font-bold text-white">Kaelus</span>
+            <span className="font-bold tracking-tight">Kaelus<span className="text-brand-400">.ai</span></span>
           </Link>
           <ChevronRight className="w-4 h-4 text-white/20" />
           <div className="flex items-center gap-1.5">
