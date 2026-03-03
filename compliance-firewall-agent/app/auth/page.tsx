@@ -260,7 +260,10 @@ export default function AuthPage() {
           {/* Logo / Brand */}
           <Link href="/" className="flex items-center gap-3.5 mb-10 group hover:opacity-90 transition-opacity">
             <div className="relative w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-glow group-hover:border-white/20 transition-colors">
-              <Shield className="w-8 h-8 text-brand-200" />
+              <div className={`relative w-8 h-8 `}>
+  <Shield className="w-full h-full text-brand-400" strokeWidth={1.5} />
+  <Zap className={`absolute inset-0 m-auto w-4 h-4 text-white`} strokeWidth={2} />
+</div>
               <Zap className="absolute w-4 h-4 text-emerald-400" style={{ fill: "currentColor" }} />
             </div>
             <div>

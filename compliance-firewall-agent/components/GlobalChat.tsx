@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, X, Send, Bot } from "lucide-react";
+import { MessageCircle, X, Send, Bot, Shield, Zap } from "lucide-react";
 
 export function GlobalChat() {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,12 @@ export function GlobalChat() {
                 onClick={() => setIsOpen(!isOpen)}
                 className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-indigo-600 hover:bg-indigo-500 rounded-full flex items-center justify-center shadow-lg shadow-indigo-500/25 transition-transform hover:scale-105 active:scale-95"
             >
-                {isOpen ? <X className="w-6 h-6 text-white" /> : <MessageCircle className="w-6 h-6 text-white" />}
+                {isOpen ? <X className="w-6 h-6 text-white" /> : (
+                    <div className={`relative w-7 h-7 `}>
+                        <Shield className="w-full h-full text-white" strokeWidth={1.5} />
+                        <Zap className={`absolute inset-0 m-auto w-3.5 h-3.5 text-indigo-400`} strokeWidth={2} />
+                    </div>
+                )}
             </button>
 
             {isOpen && (

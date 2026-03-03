@@ -727,7 +727,10 @@ export default function PricingPage() {
             <div>
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="w-7 h-7 rounded-lg bg-brand-500/15 flex items-center justify-center border border-brand-500/20">
-                  <Shield className="w-4 h-4 text-brand-400" />
+                  <div className={`relative w-4 h-4 `}>
+  <Shield className="w-full h-full text-brand-400" strokeWidth={1.5} />
+  <Zap className={`absolute inset-0 m-auto w-2 h-2 text-white`} strokeWidth={2} />
+</div>
                 </div>
                 <span className="font-bold">Kaelus<span className="text-brand-400">.ai</span></span>
               </div>

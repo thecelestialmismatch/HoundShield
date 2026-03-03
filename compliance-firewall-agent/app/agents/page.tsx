@@ -785,7 +785,10 @@ export default function AgentsPage() {
             <div className="col-span-2 md:col-span-1">
               <Link href="/" className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
-                  <Shield className="w-3.5 h-3.5 text-brand-400" />
+                  <div className={`relative w-3.5 h-3.5 `}>
+  <Shield className="w-full h-full text-brand-400" strokeWidth={1.5} />
+  <Zap className={`absolute inset-0 m-auto w-[10px] h-[10px] text-white`} strokeWidth={2} />
+</div>
                 </div>
                 <span className="font-bold">Kaelus<span className="text-brand-400">.ai</span></span>
               </Link>

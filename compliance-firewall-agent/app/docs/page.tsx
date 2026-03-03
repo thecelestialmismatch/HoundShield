@@ -335,7 +335,10 @@ export default function DocsPage() {
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
-              <Shield className="w-4 h-4 text-brand-400" />
+              <div className={`relative w-4 h-4 `}>
+  <Shield className="w-full h-full text-brand-400" strokeWidth={1.5} />
+  <Zap className={`absolute inset-0 m-auto w-2 h-2 text-white`} strokeWidth={2} />
+</div>
             </div>
             <span className="font-bold tracking-tight">Kaelus<span className="text-brand-400">.ai</span></span>
           </Link>
