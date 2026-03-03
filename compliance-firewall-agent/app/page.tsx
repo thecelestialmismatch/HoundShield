@@ -1,5 +1,6 @@
 "use client";
 
+import { Logo } from "@/components/Logo";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { LocalizedPrice } from "@/components/LocalizedPrice";
@@ -148,8 +149,8 @@ function LiveScanDemo() {
             <span className="text-white/20 shrink-0">{line.time}</span>
             <span className={
               line.type === "success" ? "text-emerald-400" :
-              line.type === "danger" ? "text-rose-400" :
-              "text-amber-400"
+                line.type === "danger" ? "text-rose-400" :
+                  "text-amber-400"
             }>
               {line.text}
             </span>
@@ -225,11 +226,10 @@ function ChatWidget() {
           <div className="flex-1 overflow-y-auto p-4 space-y-3 chat-messages" style={{ maxHeight: "320px" }}>
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[85%] px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-brand-500/20 text-white border border-brand-500/20"
-                    : "bg-white/[0.05] text-white/70 border border-white/[0.06]"
-                }`}>
+                <div className={`max-w-[85%] px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${msg.role === "user"
+                  ? "bg-brand-500/20 text-white border border-brand-500/20"
+                  : "bg-white/[0.05] text-white/70 border border-white/[0.06]"
+                  }`}>
                   {msg.content}
                 </div>
               </div>
@@ -307,7 +307,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  
+
 
   return (
     <div className="min-h-screen bg-surface text-white overflow-x-hidden">
@@ -602,9 +602,9 @@ export default function Home() {
                     <p className="text-xs text-white/30">{t.role}</p>
                   </div>
                 </div>
-                  <div className="absolute -bottom-6 left-0 right-0 text-center">
-                    <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
-                  </div>
+                <div className="absolute -bottom-6 left-0 right-0 text-center">
+                  <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
+                </div>
               </AnimatedSection>
             ))}
           </div>
@@ -631,9 +631,8 @@ export default function Home() {
               { name: "Enterprise", price: "Custom", desc: "Self-hosted + SSO", cta: "Contact Sales", variant: "ghost" },
             ].map((plan, i) => (
               <AnimatedSection key={plan.name} delay={i * 100}>
-                <div className={`glass-card p-6 text-center relative ${
-                  plan.popular ? "border-brand-500/30 scale-[1.02]" : ""
-                }`}>
+                <div className={`glass-card p-6 text-center relative ${plan.popular ? "border-brand-500/30 scale-[1.02]" : ""
+                  }`}>
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-brand-500 rounded-full text-[10px] font-bold text-white">
                       MOST POPULAR
@@ -649,9 +648,9 @@ export default function Home() {
                     {plan.cta}
                   </Link>
                 </div>
-                  <div className="absolute -bottom-6 left-0 right-0 text-center">
-                    <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
-                  </div>
+                <div className="absolute -bottom-6 left-0 right-0 text-center">
+                  <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
+                </div>
               </AnimatedSection>
             ))}
           </div>
@@ -675,10 +674,7 @@ export default function Home() {
             <div className="glass-card-glow p-8 md:p-12 text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-brand-500/[0.05] via-transparent to-purple-500/[0.05]" />
               <div className="relative z-10">
-                <div className={`relative w-12 h-12 mx-auto mb-6`}>
-  <Shield className="w-full h-full text-brand-400" strokeWidth={1.5} />
-  <Zap className={`absolute inset-0 m-auto w-6 h-6 text-white`} strokeWidth={2} />
-</div>
+                <Logo className="mx-auto mb-6 w-16 h-16 scale-125" />
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
                   Ready to Secure Your{" "}
                   <span className="text-gradient-brand">AI Pipeline</span>?
@@ -712,13 +708,10 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-2 md:col-span-1">
               <Link href="/" className="flex items-center gap-2 mb-3">
-                <div className="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
-                  <div className={`relative w-3.5 h-3.5 `}>
-  <Shield className="w-full h-full text-brand-400" strokeWidth={1.5} />
-  <Zap className={`absolute inset-0 m-auto w-[10px] h-[10px] text-white`} strokeWidth={2} />
-</div>
-                </div>
-                <span className="font-bold">Kaelus<span className="text-brand-400">.ai</span></span>
+                <Logo className="w-7 h-7" />
+                <span className="text-lg font-bold tracking-tight text-white">
+                  Kaelus<span className="text-brand-400">.ai</span>
+                </span>
               </Link>
               <p className="text-xs text-white/25 leading-relaxed">
                 The AI compliance firewall. Real-time scanning, encrypted quarantine, and agentic intelligence.
