@@ -584,15 +584,16 @@ export default function DashboardPage() {
         {/* Sidebar */}
         <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0d] border-r border-white/[0.06] flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
           {/* Logo */}
-          <div className="h-16 flex items-center gap-2.5 px-5 border-b border-white/[0.06]">
-            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-              <Shield className="w-5 h-5 text-indigo-400" />
+          <Link href="/" className="h-16 flex items-center gap-2.5 px-5 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors group">
+            <div className="relative w-9 h-9 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 group-hover:border-brand-500/40 transition-colors">
+              <Shield className="w-5 h-5 text-brand-400" />
+              <Zap className="w-2.5 h-2.5 text-emerald-400 absolute" style={{ fill: "currentColor" }} />
             </div>
             <div>
               <span className="text-base font-bold text-white tracking-tight block leading-tight">Kaelus<span className="text-brand-400">.ai</span></span>
               <span className="text-[10px] text-white/25 uppercase tracking-widest">AI Platform</span>
             </div>
-          </div>
+          </Link>
 
           {/* System Status */}
           <div className="mx-3 mt-3 mb-1 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
@@ -655,13 +656,22 @@ export default function DashboardPage() {
             {user ? (
               <UserDropdown user={user} onLogout={handleLogout} />
             ) : (
-              <button
-                onClick={() => setShowAuth(true)}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium hover:bg-indigo-500/15 transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                Sign In / Join Now
-              </button>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleAuth({ name: "Demo User", email: "demo@kaelus.ai", avatar: "", provider: "demo" })}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium hover:bg-emerald-500/15 transition-all"
+                >
+                  <Zap className="w-4 h-4" style={{ fill: "currentColor" }} />
+                  Demo Login
+                </button>
+                <button
+                  onClick={() => setShowAuth(true)}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium hover:bg-indigo-500/15 transition-all"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Sign In / Join Now
+                </button>
+              </div>
             )}
           </div>
         </aside>

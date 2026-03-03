@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { GlobalChat } from "@/components/GlobalChat";
 
 export const viewport: Viewport = {
   themeColor: "#6366f1",
@@ -76,6 +77,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <GlobalChat />
         </ThemeProvider>
       </body>
     </html>

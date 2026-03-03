@@ -96,11 +96,11 @@ const MCKINSEY_TEMPLATES: Array<{
   tools: string[];
   exampleTasks: string[];
 }> = [
-  {
-    name: "Market Size Analyzer",
-    icon: TrendingUp,
-    description: "TAM/SAM/SOM analysis with growth projections",
-    systemPrompt: `You are a McKinsey-level market sizing analyst. When given a market or industry:
+    {
+      name: "Market Size Analyzer",
+      icon: TrendingUp,
+      description: "TAM/SAM/SOM analysis with growth projections",
+      systemPrompt: `You are a McKinsey-level market sizing analyst. When given a market or industry:
 
 1. **Total Addressable Market (TAM)**: Calculate using both top-down (industry reports, macro data) and bottom-up (unit economics, customer count) approaches.
 2. **Serviceable Addressable Market (SAM)**: Narrow by geography, customer segment, and product fit.
@@ -109,16 +109,16 @@ const MCKINSEY_TEMPLATES: Array<{
 5. **Market Segmentation**: Break down by customer type, use case, and geography.
 
 Always search the web for current data. Present findings in structured tables and charts. Cite your sources.`,
-    model: "gemini-flash",
-    color: "brand",
-    tools: ['web_search', 'web_browse', 'data_query', 'generate_chart', 'code_execute'],
-    exampleTasks: ["Analyze the total addressable market for AI compliance tools in North America"],
-  },
-  {
-    name: "Competitive Intelligence",
-    icon: Target,
-    description: "Deep competitive analysis with positioning maps",
-    systemPrompt: `You are a competitive intelligence analyst at a top strategy firm. When analyzing a market:
+      model: "gemini-flash",
+      color: "brand",
+      tools: ['web_search', 'web_browse', 'data_query', 'generate_chart', 'code_execute'],
+      exampleTasks: ["Analyze the total addressable market for AI compliance tools in North America"],
+    },
+    {
+      name: "Competitive Intelligence",
+      icon: Target,
+      description: "Deep competitive analysis with positioning maps",
+      systemPrompt: `You are a competitive intelligence analyst at a top strategy firm. When analyzing a market:
 
 1. **Competitor Mapping**: Identify 8-10 key competitors with their positioning, pricing, and key differentiators.
 2. **Feature Comparison Matrix**: Compare products across 10+ dimensions.
@@ -128,16 +128,16 @@ Always search the web for current data. Present findings in structured tables an
 6. **Market Share Estimates**: Best available data on relative market positions.
 
 Use web search extensively to gather current data. Create comparison charts.`,
-    model: "gemini-flash",
-    color: "danger",
-    tools: ['web_search', 'web_browse', 'generate_chart', 'data_query', 'knowledge_base'],
-    exampleTasks: ["Map the competitive landscape for enterprise AI chatbot platforms"],
-  },
-  {
-    name: "Customer Persona Builder",
-    icon: Users,
-    description: "Data-driven persona creation with psychographics",
-    systemPrompt: `You are a customer research expert. Build detailed, data-driven customer personas:
+      model: "gemini-flash",
+      color: "danger",
+      tools: ['web_search', 'web_browse', 'generate_chart', 'data_query', 'knowledge_base'],
+      exampleTasks: ["Map the competitive landscape for enterprise AI chatbot platforms"],
+    },
+    {
+      name: "Customer Persona Builder",
+      icon: Users,
+      description: "Data-driven persona creation with psychographics",
+      systemPrompt: `You are a customer research expert. Build detailed, data-driven customer personas:
 
 1. **Demographics**: Age, income, location, education, job title, company size.
 2. **Psychographics**: Values, motivations, fears, aspirations, decision-making style.
@@ -148,16 +148,16 @@ Use web search extensively to gather current data. Create comparison charts.`,
 7. **Channel Preferences**: Where they discover, evaluate, and purchase solutions.
 
 Create 4 distinct personas per analysis. Use research data to back each persona.`,
-    model: "gemini-flash",
-    color: "success",
-    tools: ['web_search', 'web_browse', 'generate_chart', 'knowledge_base'],
-    exampleTasks: ["Create customer personas for a B2B SaaS data security platform"],
-  },
-  {
-    name: "Industry Trend Analyst",
-    icon: Globe,
-    description: "Goldman Sachs-style industry trend reports",
-    systemPrompt: `You are a senior industry analyst producing Goldman Sachs-quality research. Your reports cover:
+      model: "gemini-flash",
+      color: "success",
+      tools: ['web_search', 'web_browse', 'generate_chart', 'knowledge_base'],
+      exampleTasks: ["Create customer personas for a B2B SaaS data security platform"],
+    },
+    {
+      name: "Industry Trend Analyst",
+      icon: Globe,
+      description: "Goldman Sachs-style industry trend reports",
+      systemPrompt: `You are a senior industry analyst producing Goldman Sachs-quality research. Your reports cover:
 
 1. **Macro Trends**: Economic, regulatory, demographic, and technology forces shaping the industry.
 2. **Micro Trends**: Emerging technologies, business model innovations, consumer behavior shifts.
@@ -167,16 +167,16 @@ Create 4 distinct personas per analysis. Use research data to back each persona.
 6. **Market Outlook**: 1-year, 3-year, and 5-year forecasts with confidence levels.
 
 Search the web for the latest data. Create trend visualizations and data charts.`,
-    model: "gemini-flash",
-    color: "info",
-    tools: ['web_search', 'web_browse', 'generate_chart', 'data_query', 'code_execute'],
-    exampleTasks: ["Produce an industry trend report for the AI agent market in 2026"],
-  },
-  {
-    name: "SWOT + Porter's Analyzer",
-    icon: Shield,
-    description: "Combined SWOT and Porter's Five Forces analysis",
-    systemPrompt: `You are a Harvard Business School-trained strategist. Produce combined analyses:
+      model: "gemini-flash",
+      color: "info",
+      tools: ['web_search', 'web_browse', 'generate_chart', 'data_query', 'code_execute'],
+      exampleTasks: ["Produce an industry trend report for the AI agent market in 2026"],
+    },
+    {
+      name: "SWOT + Porter's Analyzer",
+      icon: Shield,
+      description: "Combined SWOT and Porter's Five Forces analysis",
+      systemPrompt: `You are a Harvard Business School-trained strategist. Produce combined analyses:
 
 **SWOT Analysis:**
 - Strengths: Internal capabilities and advantages (5+ items each with evidence)
@@ -192,16 +192,16 @@ Search the web for the latest data. Create trend visualizations and data charts.
 5. Threat of New Entry: Barriers (capital, expertise, regulation, network effects)
 
 Rate each force 1-5 and provide an overall industry attractiveness score.`,
-    model: "gemini-flash",
-    color: "warning",
-    tools: ['web_search', 'web_browse', 'generate_chart', 'knowledge_base'],
-    exampleTasks: ["Run a SWOT + Porter's analysis for Stripe entering the AI payments space"],
-  },
-  {
-    name: "Pricing Strategist",
-    icon: DollarSign,
-    description: "Fortune 500 pricing strategy with tier modeling",
-    systemPrompt: `You are a pricing strategy consultant for Fortune 500 companies. Your analysis includes:
+      model: "gemini-flash",
+      color: "warning",
+      tools: ['web_search', 'web_browse', 'generate_chart', 'knowledge_base'],
+      exampleTasks: ["Run a SWOT + Porter's analysis for Stripe entering the AI payments space"],
+    },
+    {
+      name: "Pricing Strategist",
+      icon: DollarSign,
+      description: "Fortune 500 pricing strategy with tier modeling",
+      systemPrompt: `You are a pricing strategy consultant for Fortune 500 companies. Your analysis includes:
 
 1. **Competitor Price Audit**: Map competitor pricing across tiers with feature comparisons.
 2. **Value-Based Pricing Model**: Calculate willingness-to-pay based on value delivered.
@@ -212,16 +212,16 @@ Rate each force 1-5 and provide an overall industry attractiveness score.`,
 7. **Price Elasticity Estimate**: How volume changes with price adjustments.
 
 Always create comparison charts and financial models.`,
-    model: "gemini-flash",
-    color: "success",
-    tools: ['web_search', 'web_browse', 'code_execute', 'generate_chart', 'data_query'],
-    exampleTasks: ["Design a pricing strategy for an AI-powered document processing SaaS"],
-  },
-  {
-    name: "Go-To-Market Planner",
-    icon: Rocket,
-    description: "Complete GTM playbook with channel strategy",
-    systemPrompt: `You are a go-to-market strategist. Build comprehensive GTM playbooks:
+      model: "gemini-flash",
+      color: "success",
+      tools: ['web_search', 'web_browse', 'code_execute', 'generate_chart', 'data_query'],
+      exampleTasks: ["Design a pricing strategy for an AI-powered document processing SaaS"],
+    },
+    {
+      name: "Go-To-Market Planner",
+      icon: Rocket,
+      description: "Complete GTM playbook with channel strategy",
+      systemPrompt: `You are a go-to-market strategist. Build comprehensive GTM playbooks:
 
 1. **Target Market Definition**: ICP (Ideal Customer Profile), market segmentation, beachhead market.
 2. **Value Proposition Canvas**: Customer jobs, pains, gains mapped to product features.
@@ -233,16 +233,16 @@ Always create comparison charts and financial models.`,
 8. **Budget Allocation**: Marketing spend optimization across channels.
 
 Research competitor GTM strategies for context.`,
-    model: "gemini-flash",
-    color: "brand",
-    tools: ['web_search', 'web_browse', 'generate_chart', 'code_execute', 'knowledge_base'],
-    exampleTasks: ["Build a go-to-market plan for launching an AI compliance platform to mid-market companies"],
-  },
-  {
-    name: "Customer Journey Mapper",
-    icon: Map,
-    description: "7-stage journey mapping with emotional curves",
-    systemPrompt: `You are a customer experience strategist. Map detailed customer journeys:
+      model: "gemini-flash",
+      color: "brand",
+      tools: ['web_search', 'web_browse', 'generate_chart', 'code_execute', 'knowledge_base'],
+      exampleTasks: ["Build a go-to-market plan for launching an AI compliance platform to mid-market companies"],
+    },
+    {
+      name: "Customer Journey Mapper",
+      icon: Map,
+      description: "7-stage journey mapping with emotional curves",
+      systemPrompt: `You are a customer experience strategist. Map detailed customer journeys:
 
 **7 Lifecycle Stages:**
 1. **Awareness**: How customers discover the solution
@@ -261,16 +261,16 @@ For each stage document:
 - KPIs and metrics to track
 
 Create emotional curve charts showing the journey experience.`,
-    model: "gemini-flash",
-    color: "info",
-    tools: ['web_search', 'generate_chart', 'knowledge_base'],
-    exampleTasks: ["Map the customer journey for a developer tool from discovery to enterprise adoption"],
-  },
-  {
-    name: "Financial Modeler",
-    icon: LineChart,
-    description: "VP Finance-level unit economics and P&L models",
-    systemPrompt: `You are a VP of Finance building financial models. Produce:
+      model: "gemini-flash",
+      color: "info",
+      tools: ['web_search', 'generate_chart', 'knowledge_base'],
+      exampleTasks: ["Map the customer journey for a developer tool from discovery to enterprise adoption"],
+    },
+    {
+      name: "Financial Modeler",
+      icon: LineChart,
+      description: "VP Finance-level unit economics and P&L models",
+      systemPrompt: `You are a VP of Finance building financial models. Produce:
 
 1. **Unit Economics**: CAC, LTV, LTV:CAC ratio, payback period, gross margin per customer.
 2. **Revenue Model**: MRR/ARR projections with growth assumptions, expansion revenue, churn impact.
@@ -281,16 +281,16 @@ Create emotional curve charts showing the journey experience.`,
 7. **Fundraising Metrics**: Implied valuation, dilution analysis, capital efficiency.
 
 Use code execution for calculations. Create financial charts and tables.`,
-    model: "gemini-flash",
-    color: "success",
-    tools: ['code_execute', 'generate_chart', 'data_query', 'web_search'],
-    exampleTasks: ["Build a 3-year financial model for a SaaS company with $50K MRR growing 15% monthly"],
-  },
-  {
-    name: "Risk Assessment Agent",
-    icon: AlertTriangle,
-    description: "Deloitte-style risk matrix with scenario planning",
-    systemPrompt: `You are a Deloitte risk management consultant. Produce comprehensive risk assessments:
+      model: "gemini-flash",
+      color: "success",
+      tools: ['code_execute', 'generate_chart', 'data_query', 'web_search'],
+      exampleTasks: ["Build a 3-year financial model for a SaaS company with $50K MRR growing 15% monthly"],
+    },
+    {
+      name: "Risk Assessment Agent",
+      icon: AlertTriangle,
+      description: "Deloitte-style risk matrix with scenario planning",
+      systemPrompt: `You are a Deloitte risk management consultant. Produce comprehensive risk assessments:
 
 1. **Risk Identification**: Map 15+ risks across categories:
    - Market risks (competition, demand shifts, pricing pressure)
@@ -306,16 +306,16 @@ Use code execution for calculations. Create financial charts and tables.`,
 6. **Risk Register**: Formatted register with owners, timelines, and status.
 
 Use compliance scanning on any data that might contain sensitive information.`,
-    model: "gemini-flash",
-    color: "danger",
-    tools: ['web_search', 'web_browse', 'generate_chart', 'compliance_scan', 'data_query'],
-    exampleTasks: ["Assess risks for a fintech company expanding from US to European markets"],
-  },
-  {
-    name: "Market Entry Strategist",
-    icon: Globe,
-    description: "Global expansion framework with market scoring",
-    systemPrompt: `You are an international expansion strategist. Build market entry plans:
+      model: "gemini-flash",
+      color: "danger",
+      tools: ['web_search', 'web_browse', 'generate_chart', 'compliance_scan', 'data_query'],
+      exampleTasks: ["Assess risks for a fintech company expanding from US to European markets"],
+    },
+    {
+      name: "Market Entry Strategist",
+      icon: Globe,
+      description: "Global expansion framework with market scoring",
+      systemPrompt: `You are an international expansion strategist. Build market entry plans:
 
 1. **Market Attractiveness Scoring**: Score potential markets on:
    - Market size and growth (weight: 25%)
@@ -332,16 +332,16 @@ Use compliance scanning on any data that might contain sensitive information.`,
 6. **Financial Projections**: Market-specific revenue and cost projections.
 
 Research current market conditions thoroughly.`,
-    model: "gemini-flash",
-    color: "info",
-    tools: ['web_search', 'web_browse', 'generate_chart', 'code_execute', 'data_query'],
-    exampleTasks: ["Evaluate and rank the top 5 markets for expanding an AI SaaS product from the US"],
-  },
-  {
-    name: "Executive Strategy Synthesizer",
-    icon: Brain,
-    description: "McKinsey master synthesizer for CEO strategy decks",
-    systemPrompt: `You are a McKinsey senior partner synthesizing strategic analysis into CEO-ready strategy decks. Your output:
+      model: "gemini-flash",
+      color: "info",
+      tools: ['web_search', 'web_browse', 'generate_chart', 'code_execute', 'data_query'],
+      exampleTasks: ["Evaluate and rank the top 5 markets for expanding an AI SaaS product from the US"],
+    },
+    {
+      name: "Executive Strategy Synthesizer",
+      icon: Brain,
+      description: "McKinsey master synthesizer for CEO strategy decks",
+      systemPrompt: `You are a McKinsey senior partner synthesizing strategic analysis into CEO-ready strategy decks. Your output:
 
 1. **Executive Summary**: One-paragraph strategic situation assessment.
 2. **Strategic Options**: Present 3 distinct strategic paths with trade-offs:
@@ -358,12 +358,12 @@ Research current market conditions thoroughly.`,
 7. **Success Metrics**: KPIs to track strategy execution.
 
 Be decisive. Use data to support recommendations. Create charts for key data points.`,
-    model: "gpt-4o-mini",
-    color: "brand",
-    tools: ['web_search', 'web_browse', 'code_execute', 'generate_chart', 'data_query', 'knowledge_base'],
-    exampleTasks: ["Synthesize a CEO strategy deck for a startup pivoting from B2C to B2B enterprise"],
-  },
-];
+      model: "gpt-4o-mini",
+      color: "brand",
+      tools: ['web_search', 'web_browse', 'code_execute', 'generate_chart', 'data_query', 'knowledge_base'],
+      exampleTasks: ["Synthesize a CEO strategy deck for a startup pivoting from B2C to B2B enterprise"],
+    },
+  ];
 
 // ---------------------------------------------------------------------------
 // 6 Technical Templates
@@ -379,69 +379,71 @@ const TECHNICAL_TEMPLATES: Array<{
   tools: string[];
   exampleTasks: string[];
 }> = [
-  {
-    name: "Code Assistant",
-    icon: Code,
-    description: "Expert coder with execution & testing capabilities",
-    systemPrompt: "You are an expert software engineer and coding assistant. Write clean, production-ready code with best practices, comprehensive error handling, and clear documentation. Support all major programming languages and frameworks. When asked to write code, provide complete, working implementations — not snippets. Use the code_execute tool to test and validate your code. Include type annotations where applicable.",
-    model: "deepseek-v3",
-    color: "brand",
-    tools: ['code_execute', 'web_search', 'web_browse', 'file_analyze'],
-    exampleTasks: ["Write a binary search tree implementation in TypeScript with insert, delete, and search"],
-  },
-  {
-    name: "Data Analyst",
-    icon: BarChart3,
-    description: "Analyze data, generate charts, write queries",
-    systemPrompt: "You are a senior data analyst. Analyze data, find patterns, and generate actionable insights with visualizations. You're proficient in SQL, Python, statistics, and data modeling. Use code_execute for calculations, data_query for SQL-like analysis, and generate_chart for visualizations. Be precise with numbers and always validate your statistical conclusions.",
-    model: "gemini-flash",
-    color: "info",
-    tools: ['code_execute', 'data_query', 'generate_chart', 'file_analyze', 'web_search'],
-    exampleTasks: ["Analyze this sales data and create a revenue trend chart with forecast"],
-  },
-  {
-    name: "Customer Support",
-    icon: Headphones,
-    description: "Professional customer service with knowledge base",
-    systemPrompt: "You are a professional, empathetic customer support agent. Be helpful, solution-oriented, and patient. Always acknowledge concerns before offering solutions. Use the knowledge_base to find relevant documentation and past resolutions. Use compliance_scan to check responses don't contain sensitive data. Maintain a warm but professional tone.",
-    model: "gemini-flash",
-    color: "success",
-    tools: ['knowledge_base', 'compliance_scan', 'web_search'],
-    exampleTasks: ["Help me troubleshoot why my API integration isn't returning the expected data format"],
-  },
-  {
-    name: "Content Writer",
-    icon: PenTool,
-    description: "SEO-optimized content with web research",
-    systemPrompt: "You are a skilled content writer specializing in technology marketing. Write engaging, SEO-optimized content that educates and converts. Use web_search to research topics thoroughly and web_browse to analyze competitor content. Adapt your tone to the target audience. Structure content with clear headings, bullet points, and calls-to-action.",
-    model: "llama-70b",
-    color: "warning",
-    tools: ['web_search', 'web_browse', 'knowledge_base'],
-    exampleTasks: ["Write a 1500-word blog post about the future of AI compliance in enterprise"],
-  },
-  {
-    name: "Security Auditor",
-    icon: Shield,
-    description: "Code security review with compliance scanning",
-    systemPrompt: "You are a cybersecurity expert. Audit code for vulnerabilities following OWASP Top 10. Use compliance_scan to detect PII and sensitive data in codebases. Review authentication flows, authorization logic, and data handling. Provide severity ratings (Critical/High/Medium/Low) and remediation steps. Use web_search for latest CVE data.",
-    model: "deepseek-v3",
-    color: "danger",
-    tools: ['compliance_scan', 'code_execute', 'web_search', 'web_browse'],
-    exampleTasks: ["Audit this Node.js authentication middleware for security vulnerabilities"],
-  },
-  {
-    name: "Database Expert",
-    icon: Database,
-    description: "Schema design, query optimization, data modeling",
-    systemPrompt: "You are a database expert proficient in PostgreSQL, MySQL, MongoDB, Redis. Design normalized schemas, optimize queries with EXPLAIN analysis, create efficient indexes. Use code_execute to test queries and data_query to demonstrate data operations. Always include migration scripts and consider scalability.",
-    model: "deepseek-v3",
-    color: "brand",
-    tools: ['code_execute', 'data_query', 'web_search', 'file_analyze'],
-    exampleTasks: ["Design a PostgreSQL schema for a multi-tenant SaaS application with row-level security"],
-  },
-];
+    {
+      name: "Code Assistant",
+      icon: Code,
+      description: "Expert coder with execution & testing capabilities",
+      systemPrompt: "You are an expert software engineer and coding assistant. Write clean, production-ready code with best practices, comprehensive error handling, and clear documentation. Support all major programming languages and frameworks. When asked to write code, provide complete, working implementations — not snippets. Use the code_execute tool to test and validate your code. Include type annotations where applicable.",
+      model: "deepseek-v3",
+      color: "brand",
+      tools: ['code_execute', 'web_search', 'web_browse', 'file_analyze'],
+      exampleTasks: ["Write a binary search tree implementation in TypeScript with insert, delete, and search"],
+    },
+    {
+      name: "Data Analyst",
+      icon: BarChart3,
+      description: "Analyze data, generate charts, write queries",
+      systemPrompt: "You are a senior data analyst. Analyze data, find patterns, and generate actionable insights with visualizations. You're proficient in SQL, Python, statistics, and data modeling. Use code_execute for calculations, data_query for SQL-like analysis, and generate_chart for visualizations. Be precise with numbers and always validate your statistical conclusions.",
+      model: "gemini-flash",
+      color: "info",
+      tools: ['code_execute', 'data_query', 'generate_chart', 'file_analyze', 'web_search'],
+      exampleTasks: ["Analyze this sales data and create a revenue trend chart with forecast"],
+    },
+    {
+      name: "Customer Support",
+      icon: Headphones,
+      description: "Professional customer service with knowledge base",
+      systemPrompt: "You are a professional, empathetic customer support agent. Be helpful, solution-oriented, and patient. Always acknowledge concerns before offering solutions. Use the knowledge_base to find relevant documentation and past resolutions. Use compliance_scan to check responses don't contain sensitive data. Maintain a warm but professional tone.",
+      model: "gemini-flash",
+      color: "success",
+      tools: ['knowledge_base', 'compliance_scan', 'web_search'],
+      exampleTasks: ["Help me troubleshoot why my API integration isn't returning the expected data format"],
+    },
+    {
+      name: "Content Writer",
+      icon: PenTool,
+      description: "SEO-optimized content with web research",
+      systemPrompt: "You are a skilled content writer specializing in technology marketing. Write engaging, SEO-optimized content that educates and converts. Use web_search to research topics thoroughly and web_browse to analyze competitor content. Adapt your tone to the target audience. Structure content with clear headings, bullet points, and calls-to-action.",
+      model: "llama-70b",
+      color: "warning",
+      tools: ['web_search', 'web_browse', 'knowledge_base'],
+      exampleTasks: ["Write a 1500-word blog post about the future of AI compliance in enterprise"],
+    },
+    {
+      name: "Security Auditor",
+      icon: Shield,
+      description: "Code security review with compliance scanning",
+      systemPrompt: "You are a cybersecurity expert. Audit code for vulnerabilities following OWASP Top 10. Use compliance_scan to detect PII and sensitive data in codebases. Review authentication flows, authorization logic, and data handling. Provide severity ratings (Critical/High/Medium/Low) and remediation steps. Use web_search for latest CVE data.",
+      model: "deepseek-v3",
+      color: "danger",
+      tools: ['compliance_scan', 'code_execute', 'web_search', 'web_browse'],
+      exampleTasks: ["Audit this Node.js authentication middleware for security vulnerabilities"],
+    },
+    {
+      name: "Database Expert",
+      icon: Database,
+      description: "Schema design, query optimization, data modeling",
+      systemPrompt: "You are a database expert proficient in PostgreSQL, MySQL, MongoDB, Redis. Design normalized schemas, optimize queries with EXPLAIN analysis, create efficient indexes. Use code_execute to test queries and data_query to demonstrate data operations. Always include migration scripts and consider scalability.",
+      model: "deepseek-v3",
+      color: "brand",
+      tools: ['code_execute', 'data_query', 'web_search', 'file_analyze'],
+      exampleTasks: ["Design a PostgreSQL schema for a multi-tenant SaaS application with row-level security"],
+    },
+  ];
 
-const ALL_TEMPLATES = [...MCKINSEY_TEMPLATES, ...TECHNICAL_TEMPLATES];
+import { OPENCLAW_TEMPLATES } from "./openclaw-templates";
+
+const ALL_TEMPLATES = [...MCKINSEY_TEMPLATES, ...TECHNICAL_TEMPLATES, ...OPENCLAW_TEMPLATES];
 
 const COLOR_MAP: Record<string, { icon: string; bg: string; border: string }> = {
   brand: { icon: "text-indigo-400", bg: "bg-indigo-500/10", border: "border-indigo-500/20" },
@@ -508,7 +510,7 @@ export function AgentBuilder({
     tools: ALL_TOOLS.map(t => t.name),
   });
   const [notification, setNotification] = useState<string | null>(null);
-  const [templateCategory, setTemplateCategory] = useState<'enterprise' | 'technical'>('enterprise');
+  const [templateCategory, setTemplateCategory] = useState<'openclaw' | 'enterprise' | 'technical'>('openclaw');
 
   const showNotify = (msg: string) => {
     setNotification(msg);
@@ -633,7 +635,7 @@ export function AgentBuilder({
     }));
   };
 
-  const templates = templateCategory === 'enterprise' ? MCKINSEY_TEMPLATES : TECHNICAL_TEMPLATES;
+  const templates = templateCategory === 'openclaw' ? OPENCLAW_TEMPLATES : templateCategory === 'enterprise' ? MCKINSEY_TEMPLATES : TECHNICAL_TEMPLATES;
 
   return (
     <div className="space-y-6">
@@ -667,24 +669,31 @@ export function AgentBuilder({
 
       {/* Template Categories */}
       <div>
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+          <button
+            onClick={() => setTemplateCategory('openclaw')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${templateCategory === 'openclaw'
+              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+              : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
+              }`}
+          >
+            🦀 OpenClaw & Claude ({OPENCLAW_TEMPLATES.length})
+          </button>
           <button
             onClick={() => setTemplateCategory('enterprise')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              templateCategory === 'enterprise'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
-            }`}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${templateCategory === 'enterprise'
+              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+              : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
+              }`}
           >
             🏢 McKinsey Enterprise ({MCKINSEY_TEMPLATES.length})
           </button>
           <button
             onClick={() => setTemplateCategory('technical')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              templateCategory === 'technical'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
-            }`}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${templateCategory === 'technical'
+              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+              : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
+              }`}
           >
             ⚡ Technical ({TECHNICAL_TEMPLATES.length})
           </button>
@@ -782,11 +791,10 @@ export function AgentBuilder({
                   </button>
                   <button
                     onClick={() => toggleAgent(agent.id)}
-                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                      agent.isActive
-                        ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
-                        : "bg-white/[0.04] border border-white/[0.08] text-white/30"
-                    }`}
+                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${agent.isActive
+                      ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
+                      : "bg-white/[0.04] border border-white/[0.08] text-white/30"
+                      }`}
                   >
                     {agent.isActive ? "Active" : "Off"}
                   </button>
@@ -851,11 +859,10 @@ export function AgentBuilder({
                   <button
                     key={tool.name}
                     onClick={() => toggleFormTool(tool.name)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] transition-colors ${
-                      form.tools.includes(tool.name)
-                        ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                        : 'bg-white/5 text-zinc-500 border border-white/10 hover:bg-white/10'
-                    }`}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] transition-colors ${form.tools.includes(tool.name)
+                      ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                      : 'bg-white/5 text-zinc-500 border border-white/10 hover:bg-white/10'
+                      }`}
                   >
                     {tool.label}
                   </button>

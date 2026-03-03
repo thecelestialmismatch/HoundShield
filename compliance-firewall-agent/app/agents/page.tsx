@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { Navbar } from "@/components/Navbar";
 import {
   Shield,
   Zap,
@@ -220,13 +221,7 @@ export default function AgentsPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navLinks = [
-    { label: "Features", href: "/features" },
-    { label: "How It Works", href: "/how-it-works" },
-    { label: "AI Agents", href: "/agents" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Dashboard", href: "/dashboard" },
-  ];
+  
 
   const tools = [
     { icon: Search, name: "Web Search", desc: "Real-time web intelligence for threat analysis and compliance research", color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
@@ -359,72 +354,7 @@ export default function AgentsPage() {
       <div className="orb orb-3" />
 
       {/* ===== NAVIGATION ===== */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-surface/80 backdrop-blur-xl border-b border-white/[0.06]" : ""
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center group-hover:border-brand-500/40 transition-colors">
-                <Shield className="w-4.5 h-4.5 text-brand-400" />
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                Kaelus<span className="text-brand-400">.ai</span>
-              </span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className={`px-3.5 py-2 text-sm transition-colors rounded-lg ${
-                    link.href === "/agents"
-                      ? "text-white bg-white/[0.06]"
-                      : "text-white/45 hover:text-white/80"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            <div className="hidden md:flex items-center gap-3">
-              <Link href="/auth" className="text-sm text-white/50 hover:text-white transition-colors">Sign In</Link>
-              <Link href="/auth" className="btn-primary text-sm !py-2 !px-5">
-                Get Started <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <button className="md:hidden p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-surface/95 backdrop-blur-xl border-t border-white/[0.06] animate-fade-in">
-            <div className="px-4 py-4 space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className={`block px-4 py-3 rounded-lg text-sm ${
-                    link.href === "/agents" ? "text-white bg-white/[0.06]" : "text-white/50 hover:text-white"
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="pt-3 flex flex-col gap-2">
-                <Link href="/auth" className="btn-ghost text-sm justify-center">Sign In</Link>
-                <Link href="/auth" className="btn-primary text-sm justify-center">Get Started</Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </nav>
+      <Navbar />
 
       {/* ===== HERO ===== */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28">

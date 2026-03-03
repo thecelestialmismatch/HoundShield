@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { LocalizedPrice } from "@/components/LocalizedPrice";
+import { Navbar } from "@/components/Navbar";
 import {
   Shield,
   Zap,
@@ -305,13 +307,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const navLinks = [
-    { label: "Features", href: "/features" },
-    { label: "How It Works", href: "/how-it-works" },
-    { label: "AI Agents", href: "/agents" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Dashboard", href: "/dashboard" },
-  ];
+  
 
   return (
     <div className="min-h-screen bg-surface text-white overflow-x-hidden">
@@ -321,44 +317,7 @@ export default function Home() {
       <div className="orb orb-3" />
 
       {/* ===== NAV ===== */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-surface/80 backdrop-blur-xl border-b border-white/[0.06] shadow-lg shadow-black/20" : ""
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center group-hover:border-brand-500/40 transition-colors">
-              <Shield className="w-4.5 h-4.5 text-brand-400" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">
-              Kaelus<span className="text-brand-400">.ai</span>
-            </span>
-          </Link>
-          <div className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link key={link.label} href={link.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">
-                {link.label}
-              </Link>
-            ))}
-            <Link href="/auth" className="text-sm text-white/40 hover:text-white/70 transition-colors">Sign In</Link>
-            <Link href="/auth" className="btn-primary text-sm">
-              Get Started <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-colors">
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-surface-50/95 backdrop-blur-xl border-b border-white/[0.06] px-6 py-4 space-y-3">
-            {navLinks.map((link) => (
-              <Link key={link.label} href={link.href} onClick={() => setMobileMenuOpen(false)} className="block text-sm text-white/60 hover:text-white py-2">
-                {link.label}
-              </Link>
-            ))}
-            <Link href="/auth" className="btn-primary w-full py-3 mt-2 justify-center">Get Started <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        )}
-      </nav>
+      <Navbar />
 
       {/* ===== HERO ===== */}
       <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
@@ -430,6 +389,52 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== HOW IT WORKS (Brief — links to /how-it-works) ===== */}
+      <section className="relative py-24 px-6">
+        <div className="bg-dot-grid absolute inset-0" />
+        <div className="max-w-5xl mx-auto relative z-10">
+          <AnimatedSection className="text-center mb-14">
+            <span className="text-xs font-medium tracking-widest uppercase text-emerald-400 mb-4 block">How It Works</span>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+              5 Simple Steps, <span className="text-gradient-brand">Done in a Blink</span>
+            </h2>
+            <p className="text-white/60 max-w-2xl mx-auto">
+              We made it so easy even a kid could understand it. Picture Kaelus as a smart security guard checking backpacks before anyone leaves the school.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            {[
+              { num: "01", title: "You send a message", icon: Network, color: "text-brand-400" },
+              { num: "02", title: "Guard checks it", icon: Search, color: "text-emerald-400" },
+              { num: "03", title: "Spot bad words", icon: Brain, color: "text-purple-400" },
+              { num: "04", title: "Stop or Go", icon: ShieldCheck, color: "text-amber-400" },
+              { num: "05", title: "Write it down", icon: FileCheck, color: "text-rose-400" },
+            ].map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <AnimatedSection key={step.num} delay={i * 100}>
+                  <div className="glass-card p-5 text-center h-full">
+                    <span className="text-xs font-mono text-white/20 mb-2 block">{step.num}</span>
+                    <Icon className={`w-7 h-7 ${step.color} mx-auto mb-2`} />
+                    <h3 className="text-sm font-semibold text-white">{step.title}</h3>
+                  </div>
+                </AnimatedSection>
+              );
+            })}
+          </div>
+
+          <AnimatedSection delay={500} className="mt-10 text-center">
+            <Link href="/how-it-works" className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors group">
+              Deep dive into the pipeline
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       {/* ===== FEATURE HIGHLIGHTS (Brief — links to /features) ===== */}
       <section className="relative py-24 px-6">
         <div className="bg-aurora absolute inset-0" />
@@ -481,49 +486,6 @@ export default function Home() {
           <AnimatedSection delay={500} className="mt-10 text-center">
             <Link href="/features" className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors group">
               Explore all features in detail
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* ===== HOW IT WORKS (Brief — links to /how-it-works) ===== */}
-      <section className="relative py-24 px-6">
-        <div className="bg-dot-grid absolute inset-0" />
-        <div className="max-w-5xl mx-auto relative z-10">
-          <AnimatedSection className="text-center mb-14">
-            <span className="text-xs font-medium tracking-widest uppercase text-emerald-400 mb-4 block">How It Works</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              5 Stages, <span className="text-gradient-brand">Under 50ms</span>
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {[
-              { num: "01", title: "Connect", icon: Network, color: "text-brand-400" },
-              { num: "02", title: "Scan", icon: Search, color: "text-emerald-400" },
-              { num: "03", title: "Classify", icon: Brain, color: "text-purple-400" },
-              { num: "04", title: "Block / Pass", icon: ShieldCheck, color: "text-amber-400" },
-              { num: "05", title: "Audit", icon: FileCheck, color: "text-rose-400" },
-            ].map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <AnimatedSection key={step.num} delay={i * 100}>
-                  <div className="glass-card p-5 text-center h-full">
-                    <span className="text-xs font-mono text-white/20 mb-2 block">{step.num}</span>
-                    <Icon className={`w-7 h-7 ${step.color} mx-auto mb-2`} />
-                    <h3 className="text-sm font-semibold text-white">{step.title}</h3>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
-          </div>
-
-          <AnimatedSection delay={500} className="mt-10 text-center">
-            <Link href="/how-it-works" className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors group">
-              Deep dive into the pipeline
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </AnimatedSection>
@@ -640,6 +602,9 @@ export default function Home() {
                     <p className="text-xs text-white/30">{t.role}</p>
                   </div>
                 </div>
+                  <div className="absolute -bottom-6 left-0 right-0 text-center">
+                    <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
+                  </div>
               </AnimatedSection>
             ))}
           </div>
@@ -662,7 +627,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               { name: "Starter", price: "Free", desc: "1,000 scans/month", cta: "Start Free", variant: "ghost" },
-              { name: "Pro", price: "$49/mo", desc: "Unlimited scans", cta: "Start Trial", variant: "primary", popular: true },
+              { name: "Pro", price: "$20/mo", desc: "Unlimited scans", cta: "Start Trial", variant: "primary", popular: true },
               { name: "Enterprise", price: "Custom", desc: "Self-hosted + SSO", cta: "Contact Sales", variant: "ghost" },
             ].map((plan, i) => (
               <AnimatedSection key={plan.name} delay={i * 100}>
@@ -684,6 +649,9 @@ export default function Home() {
                     {plan.cta}
                   </Link>
                 </div>
+                  <div className="absolute -bottom-6 left-0 right-0 text-center">
+                    <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
+                  </div>
               </AnimatedSection>
             ))}
           </div>

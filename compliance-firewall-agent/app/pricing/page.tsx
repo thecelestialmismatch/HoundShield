@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { LocalizedPrice } from "@/components/LocalizedPrice";
+import { Navbar } from "@/components/Navbar";
 import {
   Shield,
   ArrowRight,
@@ -273,119 +275,7 @@ export default function PricingPage() {
       <div className="orb orb-3" />
 
       {/* ===== NAV ===== */}
-      <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? "backdrop-blur-xl bg-surface/90 border-b border-white/[0.06] shadow-lg shadow-black/20"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-500/15 flex items-center justify-center border border-brand-500/20">
-              <Shield className="w-[18px] h-[18px] text-brand-400" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">
-              Kaelus<span className="text-brand-400">.ai</span>
-            </span>
-          </Link>
-          <div className="hidden md:flex items-center gap-6">
-            <Link
-              href="/#features"
-              className="text-sm text-white/40 hover:text-white/70 transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="/#how-it-works"
-              className="text-sm text-white/40 hover:text-white/70 transition-colors"
-            >
-              How It Works
-            </Link>
-            <Link
-              href="/#agents"
-              className="text-sm text-white/40 hover:text-white/70 transition-colors"
-            >
-              AI Agents
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-sm text-white font-medium"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-sm text-white/40 hover:text-white/70 transition-colors"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/auth"
-              className="text-sm text-white/40 hover:text-white/70 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link href="/auth" className="btn-primary text-sm">
-              Get Started <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-colors"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
-          </button>
-        </div>
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-surface-50/95 backdrop-blur-xl border-b border-white/[0.06] px-6 py-4 space-y-3">
-            <Link
-              href="/#features"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm text-white/60 hover:text-white py-2"
-            >
-              Features
-            </Link>
-            <Link
-              href="/#how-it-works"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm text-white/60 hover:text-white py-2"
-            >
-              How It Works
-            </Link>
-            <Link
-              href="/#agents"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm text-white/60 hover:text-white py-2"
-            >
-              AI Agents
-            </Link>
-            <Link
-              href="/pricing"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm text-white font-medium py-2"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/dashboard"
-              className="block text-sm text-white/60 hover:text-white py-2"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/auth"
-              className="btn-primary w-full py-3 mt-2"
-            >
-              Get Started <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        )}
-      </nav>
+      <Navbar />
 
       {/* ===== HERO ===== */}
       <section className="relative pt-32 pb-16 px-6 overflow-hidden">

@@ -258,19 +258,20 @@ export default function AuthPage() {
 
         <div className="relative z-10 max-w-lg w-full">
           {/* Logo / Brand */}
-          <div className="flex items-center gap-3.5 mb-10">
-            <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-glow">
+          <Link href="/" className="flex items-center gap-3.5 mb-10 group hover:opacity-90 transition-opacity">
+            <div className="relative w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-glow group-hover:border-white/20 transition-colors">
               <Shield className="w-8 h-8 text-brand-200" />
+              <Zap className="absolute w-4 h-4 text-emerald-400" style={{ fill: "currentColor" }} />
             </div>
             <div>
-              <span className="text-2xl font-bold text-white tracking-tight block">
+              <span className="text-2xl font-bold text-white tracking-tight block leading-tight">
                 Kaelus<span className="text-brand-400">.ai</span>
               </span>
               <span className="text-[10px] text-brand-300/50 uppercase tracking-[0.2em]">
                 AI Compliance Firewall
               </span>
             </div>
-          </div>
+          </Link>
 
           {/* Headline */}
           <h1 className="text-display-sm font-bold text-white leading-[1.05] mb-4">
