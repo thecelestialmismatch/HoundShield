@@ -260,10 +260,7 @@ export default function AuthPage() {
         <div className="relative z-10 max-w-lg w-full">
           {/* Logo / Brand */}
           <Link href="/" className="flex items-center gap-3.5 mb-10 group hover:opacity-90 transition-opacity">
-            <div className="relative w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-glow group-hover:border-white/20 transition-colors">
-              <Logo />
-              <Zap className="absolute w-4 h-4 text-emerald-400" style={{ fill: "currentColor" }} />
-            </div>
+            <Logo className="w-14 h-14 rounded-2xl shadow-glow group-hover:border-brand-500/40 transition-colors [&>svg:first-child]:w-7 [&>svg:first-child]:h-7 [&>svg:last-child]:w-3.5 [&>svg:last-child]:h-3.5" />
             <div>
               <span className="text-2xl font-bold text-white tracking-tight block leading-tight">
                 Kaelus<span className="text-brand-400">.ai</span>
