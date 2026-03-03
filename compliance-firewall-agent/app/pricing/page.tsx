@@ -56,8 +56,8 @@ const plans = [
     icon: Crown,
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 49,
-    annualPrice: 39,
+    monthlyPrice: 24,
+    annualPrice: 20,
     description: "For growing teams with serious compliance needs. Full protection suite.",
     features: [
       "Unlimited scans",
@@ -215,9 +215,8 @@ function AnimatedSection({
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${className} ${
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
+      className={`transition-all duration-700 ease-out ${className} ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
@@ -236,15 +235,13 @@ function FAQItem({ q, a }: { q: string; a: string }) {
       >
         <span className="text-sm font-medium text-white/80 pr-4">{q}</span>
         <ChevronDown
-          className={`w-4 h-4 text-white/30 flex-shrink-0 transition-transform duration-300 ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`w-4 h-4 text-white/30 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
+            }`}
         />
       </button>
       <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${
-          open ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`overflow-hidden transition-all duration-300 ease-out ${open ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="px-5 pb-5 -mt-1">
           <p className="text-sm text-white/40 leading-relaxed">{a}</p>
@@ -311,21 +308,19 @@ export default function PricingPage() {
             <div className="inline-flex items-center gap-4 p-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
               <button
                 onClick={() => setIsAnnual(false)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                  !isAnnual
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!isAnnual
                     ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
                     : "text-white/40 hover:text-white/60"
-                }`}
+                  }`}
               >
                 Monthly
               </button>
               <button
                 onClick={() => setIsAnnual(true)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                  isAnnual
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${isAnnual
                     ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
                     : "text-white/40 hover:text-white/60"
-                }`}
+                  }`}
               >
                 Annual
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
@@ -346,18 +341,17 @@ export default function PricingPage() {
                 plan.monthlyPrice === -1
                   ? null
                   : isAnnual
-                  ? plan.annualPrice
-                  : plan.monthlyPrice;
+                    ? plan.annualPrice
+                    : plan.monthlyPrice;
               const Icon = plan.icon;
 
               return (
                 <AnimatedSection key={plan.id} delay={i * 150}>
                   <div
-                    className={`relative h-full flex flex-col rounded-2xl transition-all duration-300 ${
-                      plan.highlighted
+                    className={`relative h-full flex flex-col rounded-2xl transition-all duration-300 ${plan.highlighted
                         ? "scale-[1.02] md:scale-105"
                         : "hover:scale-[1.02]"
-                    }`}
+                      }`}
                   >
                     {/* Gradient border for highlighted card */}
                     {plan.highlighted && (
@@ -375,11 +369,10 @@ export default function PricingPage() {
                     )}
 
                     <div
-                      className={`relative h-full flex flex-col p-8 rounded-2xl ${
-                        plan.highlighted
+                      className={`relative h-full flex flex-col p-8 rounded-2xl ${plan.highlighted
                           ? "bg-surface-50"
                           : "glass-card-glow"
-                      }`}
+                        }`}
                     >
                       {/* Plan header */}
                       <div className="flex items-center gap-3 mb-4">
@@ -434,9 +427,8 @@ export default function PricingPage() {
                       {/* CTA */}
                       <Link
                         href={plan.id === "enterprise" ? "#contact" : "/auth"}
-                        className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${
-                          plan.highlighted ? "py-3" : ""
-                        }`}
+                        className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""
+                          }`}
                       >
                         {plan.cta}
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -453,11 +445,10 @@ export default function PricingPage() {
                             className="flex items-start gap-3 text-sm"
                           >
                             <Check
-                              className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
-                                plan.highlighted
+                              className={`w-4 h-4 flex-shrink-0 mt-0.5 ${plan.highlighted
                                   ? "text-brand-400"
                                   : "text-emerald-400/70"
-                              }`}
+                                }`}
                             />
                             <span className="text-white/50">{feature}</span>
                           </li>
@@ -522,11 +513,10 @@ export default function PricingPage() {
                 {["Starter", "Pro", "Enterprise"].map((name) => (
                   <div
                     key={name}
-                    className={`p-5 text-center text-sm font-semibold ${
-                      name === "Pro"
+                    className={`p-5 text-center text-sm font-semibold ${name === "Pro"
                         ? "text-brand-400 bg-brand-500/[0.04]"
                         : "text-white/60"
-                    }`}
+                      }`}
                   >
                     {name}
                     {name === "Pro" && (
@@ -568,9 +558,8 @@ export default function PricingPage() {
                           return (
                             <div
                               key={planKey}
-                              className={`p-4 text-center text-sm ${
-                                planKey === "pro" ? "bg-brand-500/[0.02]" : ""
-                              }`}
+                              className={`p-4 text-center text-sm ${planKey === "pro" ? "bg-brand-500/[0.02]" : ""
+                                }`}
                             >
                               {typeof val === "boolean" ? (
                                 val ? (

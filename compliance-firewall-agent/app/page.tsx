@@ -627,7 +627,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               { name: "Starter", price: "Free", desc: "1,000 scans/month", cta: "Start Free", variant: "ghost" },
-              { name: "Pro", price: "$20/mo", desc: "Unlimited scans", cta: "Start Trial", variant: "primary", popular: true },
+              { name: "Pro", price: <><LocalizedPrice basePrice={24} />/mo</>, desc: "Unlimited scans", cta: "Start Trial", variant: "primary", popular: true },
               { name: "Enterprise", price: "Custom", desc: "Self-hosted + SSO", cta: "Contact Sales", variant: "ghost" },
             ].map((plan, i) => (
               <AnimatedSection key={plan.name} delay={i * 100}>

@@ -21,25 +21,26 @@ export function LocalizedPrice({ basePrice }: { basePrice: number }) {
                 currency = "CAD";
             }
 
-            // Basic static conversion rates just for visual demo
+            // Basic static conversion rates
+            // User requested USD $24 -> AUD $35 precisely. So rate = 35 / 24 ≈ 1.458333
             const rates: Record<string, number> = {
                 USD: 1,
-                GBP: 0.79,
-                EUR: 0.92,
-                AUD: 1.53,
+                GBP: 0.79, // £19
+                EUR: 0.92, // €22
+                AUD: 1.458334, // Exactly $35 for $24 base
                 INR: 83.12,
                 CAD: 1.35
             };
 
-            const localPrice = basePrice * (rates[currency] || 1);
+            const localPrice = Math.round(basePrice * (rates[currency] || 1));
 
-            const format = new Intl.NumberFormat(navigator.language, {
-                style: "currency",
-                currency: currency,
-                maximumFractionDigits: 0
-            });
+            let symbolStr = "$";
+            if (currency === "GBP") symbolStr = "£";
+            else if (currency === "EUR") symbolStr = "€";
+            else if (currency === "INR") symbolStr = "₹";
+            else if (currency !== "USD") symbolStr = `${currency}$`; // Outputs AUD$ or CAD$
 
-            setFormattedPrice(format.format(localPrice));
+            setFormattedPrice(`${symbolStr}${localPrice}`);
         } catch {
             // Fallback
         }

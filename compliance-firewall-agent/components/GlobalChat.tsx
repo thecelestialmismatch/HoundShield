@@ -37,10 +37,8 @@ export function GlobalChat() {
             {isOpen && (
                 <div className="fixed bottom-24 right-6 z-50 w-[350px] bg-[#0c0c10] border border-white/[0.1] rounded-2xl shadow-2xl overflow-hidden animate-fade-in flex flex-col">
                     <div className="bg-white/[0.03] border-b border-white/[0.05] p-4 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-                            <Bot className="w-4 h-4 text-indigo-400" />
-                        </div>
-                        <div>
+                        <Logo className="w-8 h-8" />
+                        <div className="ml-1">
                             <h3 className="text-sm font-semibold text-white">Kaelus Assistant</h3>
                             <p className="text-[10px] text-emerald-400 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
