@@ -53,6 +53,17 @@ function GitHubLogo({ className }: { className?: string }) {
   );
 }
 
+function MicrosoftLogo({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 21 21">
+      <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+      <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+      <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+      <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+    </svg>
+  );
+}
+
 /* ──────────────────────────────────────────────
    Live scanner animation component
    ────────────────────────────────────────────── */
@@ -113,13 +124,12 @@ function LiveScanner() {
               }}
             >
               <span
-                className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                  line.status === "PASS"
-                    ? "bg-emerald-500/10 text-emerald-400"
-                    : line.status === "BLOCK"
+                className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${line.status === "PASS"
+                  ? "bg-emerald-500/10 text-emerald-400"
+                  : line.status === "BLOCK"
                     ? "bg-red-500/10 text-red-400"
                     : "bg-amber-500/10 text-amber-400"
-                }`}
+                  }`}
               >
                 {line.status}
               </span>
@@ -202,7 +212,7 @@ export default function AuthPage() {
     []
   );
 
-  const handleSocialAuth = useCallback(async (provider: "google" | "github") => {
+  const handleSocialAuth = useCallback(async (provider: "google" | "github" | "microsoft" | "sso") => {
     setLoading(true);
     try {
       await new Promise((r) => setTimeout(r, 800));
@@ -346,47 +356,14 @@ export default function AuthPage() {
                     setError("");
                     setShowPassword(false);
                   }}
-                  className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${
-                    activeTab === tab
-                      ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
-                      : "text-white/40 hover:text-white/60"
-                  }`}
+                  className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === tab
+                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    : "text-white/40 hover:text-white/60"
+                    }`}
                 >
                   {tab === "signin" ? "Sign In" : "Sign Up"}
                 </button>
               ))}
-            </div>
-
-            {/* Social Auth Buttons */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <button
-                onClick={() => handleSocialAuth("google")}
-                disabled={loading}
-                className="flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl bg-white/[0.05] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.08] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
-              >
-                <GoogleLogo className="w-4 h-4" />
-                Google
-              </button>
-              <button
-                onClick={() => handleSocialAuth("github")}
-                disabled={loading}
-                className="flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl bg-white/[0.05] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.08] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
-              >
-                <GitHubLogo className="w-4 h-4" />
-                GitHub
-              </button>
-            </div>
-
-            {/* Divider */}
-            <div className="relative my-5">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/[0.06]" />
-              </div>
-              <div className="relative flex justify-center">
-                <span className="bg-[rgba(20,20,25,0.7)] px-3 text-[11px] text-white/25 uppercase tracking-wider">
-                  or continue with email
-                </span>
-              </div>
             </div>
 
             {/* Error message */}
@@ -398,16 +375,15 @@ export default function AuthPage() {
 
             {/* ─── SIGN IN FORM ─── */}
             <div
-              className={`transition-all duration-300 ${
-                activeTab === "signin"
-                  ? "block opacity-100 translate-y-0"
-                  : "hidden opacity-0 translate-y-2"
-              }`}
+              className={`transition-all duration-300 ${activeTab === "signin"
+                ? "block opacity-100 translate-y-0"
+                : "hidden opacity-0 translate-y-2 absolute pointer-events-none"
+                }`}
             >
               <form onSubmit={handleSignIn} className="space-y-4">
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-medium text-white/50 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
                     Email address
                   </label>
                   <div className="relative">
@@ -418,7 +394,7 @@ export default function AuthPage() {
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
                       placeholder="you@company.com"
-                      className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.07] focus:outline-none transition-all duration-200 text-sm"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
@@ -426,7 +402,7 @@ export default function AuthPage() {
                 {/* Password */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5 ml-0.5">
-                    <label className="block text-xs font-medium text-white/50">
+                    <label className="block text-xs font-medium text-white/70">
                       Password
                     </label>
                     <button
@@ -444,7 +420,7 @@ export default function AuthPage() {
                       value={signInPassword}
                       onChange={(e) => setSignInPassword(e.target.value)}
                       placeholder="Enter your password"
-                      className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.07] focus:outline-none transition-all duration-200 text-sm"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                     <button
                       type="button"
@@ -472,7 +448,7 @@ export default function AuthPage() {
                       Signing in...
                     </span>
                   ) : (
-                    "Sign In"
+                    "Sign in"
                   )}
                 </button>
               </form>
@@ -480,16 +456,15 @@ export default function AuthPage() {
 
             {/* ─── SIGN UP FORM ─── */}
             <div
-              className={`transition-all duration-300 ${
-                activeTab === "signup"
-                  ? "block opacity-100 translate-y-0"
-                  : "hidden opacity-0 translate-y-2"
-              }`}
+              className={`transition-all duration-300 ${activeTab === "signup"
+                ? "block opacity-100 translate-y-0"
+                : "hidden opacity-0 translate-y-2 absolute pointer-events-none"
+                }`}
             >
               <form onSubmit={handleSignUp} className="space-y-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-medium text-white/50 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
                     Full name
                   </label>
                   <div className="relative">
@@ -500,14 +475,14 @@ export default function AuthPage() {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="John Doe"
-                      className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.07] focus:outline-none transition-all duration-200 text-sm"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-medium text-white/50 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
                     Email address
                   </label>
                   <div className="relative">
@@ -518,14 +493,14 @@ export default function AuthPage() {
                       value={signUpEmail}
                       onChange={(e) => setSignUpEmail(e.target.value)}
                       placeholder="you@company.com"
-                      className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.07] focus:outline-none transition-all duration-200 text-sm"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Password */}
                 <div>
-                  <label className="block text-xs font-medium text-white/50 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
                     Password
                   </label>
                   <div className="relative">
@@ -537,7 +512,7 @@ export default function AuthPage() {
                       onChange={(e) => setSignUpPassword(e.target.value)}
                       placeholder="Min. 8 characters"
                       minLength={8}
-                      className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.07] focus:outline-none transition-all duration-200 text-sm"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                     <button
                       type="button"
@@ -565,15 +540,64 @@ export default function AuthPage() {
                       Creating account...
                     </span>
                   ) : (
-                    "Create Account"
+                    "Sign up"
                   )}
                 </button>
               </form>
             </div>
 
+            {/* Divider */}
+            <div className="relative my-7">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/[0.06]" />
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-[rgba(20,20,25,0.7)] px-4 text-xs font-medium text-white/30">
+                  or
+                </span>
+              </div>
+            </div>
+
+            {/* Social Auth Buttons */}
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => handleSocialAuth("google")}
+                disabled={loading}
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+              >
+                <GoogleLogo className="w-4 h-4" />
+                Continue with Google
+              </button>
+              <button
+                onClick={() => handleSocialAuth("microsoft")}
+                disabled={loading}
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+              >
+                <MicrosoftLogo className="w-4 h-4" />
+                Continue with Microsoft
+              </button>
+
+              <button
+                onClick={() => handleSocialAuth("github")}
+                disabled={loading}
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+              >
+                <GitHubLogo className="w-4 h-4" />
+                Continue with GitHub
+              </button>
+              <button
+                onClick={() => handleSocialAuth("sso")}
+                disabled={loading}
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                Continue with SSO
+              </button>
+            </div>
+
             {/* Terms (sign up only) */}
             {activeTab === "signup" && (
-              <p className="text-[11px] text-white/25 text-center mt-4 leading-relaxed">
+              <p className="text-[11px] text-white/25 text-center mt-6 leading-relaxed">
                 By creating an account, you agree to our{" "}
                 <span className="text-white/40 hover:text-white/60 cursor-pointer transition-colors">
                   Terms of Service
