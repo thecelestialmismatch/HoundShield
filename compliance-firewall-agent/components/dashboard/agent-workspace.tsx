@@ -660,21 +660,21 @@ export default function AgentWorkspace({
   };
 
   return (
-    <div className={`flex h-full ${isFullscreen ? 'fixed inset-0 z-50 bg-[#faf9f6]' : ''}`}>
+    <div className={`flex h-full ${isFullscreen ? 'fixed inset-0 z-50 bg-surface' : ''}`}>
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar */}
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200 bg-white">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06] bg-[#0a0a0d]">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500/20 to-emerald-500/20 border border-brand-500/30 flex items-center justify-center">
               <Shield className="w-4 h-4 text-brand-400" fill="rgba(99,102,241,0.15)" />
               <Zap className="w-1.5 h-1.5 text-emerald-400 absolute" style={{ fill: 'currentColor' }} />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-gray-900">
+              <h2 className="text-sm font-semibold text-white">
                 {agentName || 'Kaelus Agent'}
               </h2>
-              <div className="flex items-center gap-2 text-[10px] text-gray-400">
+              <div className="flex items-center gap-2 text-[10px] text-white/40">
                 <span className="flex items-center gap-1">
                   <Sparkles className="w-2.5 h-2.5" />
                   {MODELS.find(m => m.id === selectedModel)?.name || selectedModel}
@@ -688,19 +688,19 @@ export default function AgentWorkspace({
           <div className="flex items-center gap-1">
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className={`p-2 rounded-lg transition-colors ${showSettings ? 'bg-green-50 text-green-600' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-900'}`}
+              className={`p-2 rounded-lg transition-colors ${showSettings ? 'bg-brand-500/10 text-brand-400' : 'text-white/40 hover:bg-white/[0.06] hover:text-white'}`}
             >
               <Settings2 className="w-4 h-4" />
             </button>
             <button
               onClick={() => setShowTrace(!showTrace)}
-              className={`p-2 rounded-lg transition-colors ${showTrace ? 'bg-green-50 text-green-600' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-900'}`}
+              className={`p-2 rounded-lg transition-colors ${showTrace ? 'bg-brand-500/10 text-brand-400' : 'text-white/40 hover:bg-white/[0.06] hover:text-white'}`}
             >
               {showTrace ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
             </button>
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+              className="p-2 rounded-lg text-white/40 hover:bg-white/[0.06] hover:text-white transition-colors"
             >
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
@@ -709,22 +709,22 @@ export default function AgentWorkspace({
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 space-y-3">
+          <div className="px-4 py-3 border-b border-white/[0.06] bg-white/[0.02] space-y-3">
             {/* Model Selection */}
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Model</label>
+              <label className="text-[10px] uppercase tracking-wider text-white/30 font-medium mb-1.5 block">Model</label>
               <div className="flex flex-wrap gap-1.5">
                 {MODELS.map(model => (
                   <button
                     key={model.id}
                     onClick={() => setSelectedModel(model.id)}
                     className={`px-2.5 py-1 rounded-lg text-[11px] transition-colors ${selectedModel === model.id
-                        ? 'bg-green-100 text-green-700 border border-green-300'
-                        : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-100'
+                        ? 'bg-brand-500/20 text-brand-300 border border-brand-500/30'
+                        : 'bg-white/[0.04] text-white/50 border border-white/[0.08] hover:bg-white/[0.08]'
                       }`}
                   >
                     {model.name}
-                    {model.free && <span className="ml-1 text-green-600">FREE</span>}
+                    {model.free && <span className="ml-1 text-emerald-400">FREE</span>}
                   </button>
                 ))}
               </div>
@@ -732,15 +732,15 @@ export default function AgentWorkspace({
 
             {/* Tool Selection */}
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Tools</label>
+              <label className="text-[10px] uppercase tracking-wider text-white/30 font-medium mb-1.5 block">Tools</label>
               <div className="flex flex-wrap gap-1.5">
                 {ALL_TOOLS.map(tool => (
                   <button
                     key={tool.name}
                     onClick={() => toggleTool(tool.name)}
                     className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] transition-colors ${selectedTools.includes(tool.name)
-                        ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'bg-white text-gray-400 border border-gray-200 hover:bg-gray-100'
+                        ? 'bg-brand-500/10 text-brand-300 border border-brand-500/20'
+                        : 'bg-white/[0.04] text-white/40 border border-white/[0.08] hover:bg-white/[0.08]'
                       }`}
                   >
                     {TOOL_ICONS[tool.name]}
@@ -752,16 +752,16 @@ export default function AgentWorkspace({
 
             {/* Max Iterations */}
             <div className="flex items-center gap-3">
-              <label className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Max Steps</label>
+              <label className="text-[10px] uppercase tracking-wider text-white/30 font-medium">Max Steps</label>
               <input
                 type="range"
                 min="1"
                 max="15"
                 value={maxIterations}
                 onChange={(e) => setMaxIterations(parseInt(e.target.value))}
-                className="flex-1 h-1 bg-gray-200 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-600"
+                className="flex-1 h-1 bg-white/10 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-500"
               />
-              <span className="text-xs text-gray-500 w-6 text-center">{maxIterations}</span>
+              <span className="text-xs text-white/50 w-6 text-center">{maxIterations}</span>
             </div>
           </div>
         )}
@@ -774,22 +774,22 @@ export default function AgentWorkspace({
                 <Shield className="w-8 h-8 text-brand-400" fill="rgba(99,102,241,0.15)" />
                 <Zap className="w-3.5 h-3.5 text-emerald-400 absolute" style={{ fill: 'currentColor' }} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              <h3 className="text-lg font-semibold text-white mb-1">
                 {agentName || 'Kaelus Agent'}
               </h3>
-              <p className="text-sm text-gray-500 text-center mb-6">
+              <p className="text-sm text-white/40 text-center mb-6">
                 I&apos;m an agentic AI that can search the web, execute code, analyze data, generate charts, and more. Give me a complex task and I&apos;ll break it down step by step.
               </p>
 
               <div className="w-full space-y-2">
-                <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Try these:</p>
+                <p className="text-[10px] uppercase tracking-wider text-white/30 font-medium">Try these:</p>
                 {EXAMPLE_TASKS.slice(0, 4).map((task, i) => (
                   <button
                     key={i}
                     onClick={() => setInput(task)}
-                    className="w-full text-left p-3 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-colors text-xs text-gray-500 hover:text-gray-600"
+                    className="w-full text-left p-3 rounded-lg bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.12] transition-colors text-xs text-white/50 hover:text-white/70"
                   >
-                    <Sparkles className="w-3 h-3 inline mr-2 text-green-600" />
+                    <Sparkles className="w-3 h-3 inline mr-2 text-brand-400" />
                     {task}
                   </button>
                 ))}
@@ -808,8 +808,8 @@ export default function AgentWorkspace({
                 <div className={`max-w-[85%] ${message.role === 'user' ? 'order-first' : ''}`}>
                   {/* User message */}
                   {message.role === 'user' && (
-                    <div className="px-4 py-2.5 rounded-2xl rounded-br-md bg-green-50 border border-green-200">
-                      <p className="text-sm text-gray-900">{message.content}</p>
+                    <div className="px-4 py-2.5 rounded-2xl rounded-br-md bg-brand-500/10 border border-brand-500/20">
+                      <p className="text-sm text-white">{message.content}</p>
                     </div>
                   )}
 
@@ -818,12 +818,12 @@ export default function AgentWorkspace({
                     <div className="space-y-2">
                       {/* Thinking */}
                       {message.thinking && (
-                        <div className="px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200">
+                        <div className="px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                           <div className="flex items-center gap-1.5 mb-1">
-                            <Brain className="w-3 h-3 text-emerald-600" />
-                            <span className="text-[10px] uppercase tracking-wider text-emerald-600 font-medium">Thinking</span>
+                            <Brain className="w-3 h-3 text-emerald-400" />
+                            <span className="text-[10px] uppercase tracking-wider text-emerald-400 font-medium">Thinking</span>
                           </div>
-                          <p className="text-xs text-emerald-700/70 line-clamp-3">{message.thinking}</p>
+                          <p className="text-xs text-emerald-300/60 line-clamp-3">{message.thinking}</p>
                         </div>
                       )}
 
@@ -831,35 +831,35 @@ export default function AgentWorkspace({
                       {message.toolCalls && message.toolCalls.length > 0 && (
                         <div className="space-y-1.5">
                           {message.toolCalls.map(tc => (
-                            <div key={tc.id} className="rounded-lg border border-gray-200 overflow-hidden">
+                            <div key={tc.id} className="rounded-lg border border-white/[0.08] overflow-hidden">
                               <button
                                 onClick={() => toggleToolExpand(tc.id)}
-                                className="w-full flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 transition-colors"
+                                className="w-full flex items-center gap-2 px-3 py-2 bg-white/[0.03] hover:bg-white/[0.06] transition-colors"
                               >
-                                <div className="text-blue-600">
+                                <div className="text-brand-400">
                                   {TOOL_ICONS[tc.name] || <Wrench className="w-3.5 h-3.5" />}
                                 </div>
-                                <span className="text-xs font-medium text-gray-600">{tc.name}</span>
+                                <span className="text-xs font-medium text-white/70">{tc.name}</span>
                                 <div className="flex-1" />
                                 {tc.status === 'running' ? (
-                                  <Loader2 className="w-3 h-3 text-amber-600 animate-spin" />
+                                  <Loader2 className="w-3 h-3 text-amber-400 animate-spin" />
                                 ) : tc.status === 'error' ? (
-                                  <XCircle className="w-3 h-3 text-red-600" />
+                                  <XCircle className="w-3 h-3 text-red-400" />
                                 ) : (
-                                  <CheckCircle2 className="w-3 h-3 text-green-600" />
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                                 )}
                                 {expandedTools.has(tc.id)
-                                  ? <ChevronDown className="w-3 h-3 text-gray-400" />
-                                  : <ChevronRight className="w-3 h-3 text-gray-400" />
+                                  ? <ChevronDown className="w-3 h-3 text-white/30" />
+                                  : <ChevronRight className="w-3 h-3 text-white/30" />
                                 }
                               </button>
 
                               {expandedTools.has(tc.id) && (
-                                <div className="px-3 py-2 bg-white space-y-2">
+                                <div className="px-3 py-2 bg-white/[0.02] space-y-2">
                                   {Object.keys(tc.args).length > 0 && (
                                     <div>
-                                      <span className="text-[9px] uppercase tracking-wider text-gray-400 font-medium">Args</span>
-                                      <pre className="text-[11px] text-gray-500 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono">
+                                      <span className="text-[9px] uppercase tracking-wider text-white/30 font-medium">Args</span>
+                                      <pre className="text-[11px] text-white/40 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono">
                                         {JSON.stringify(tc.args, null, 2)}
                                       </pre>
                                     </div>
@@ -867,15 +867,15 @@ export default function AgentWorkspace({
                                   {tc.result && (
                                     <div>
                                       <div className="flex items-center justify-between">
-                                        <span className="text-[9px] uppercase tracking-wider text-gray-400 font-medium">Result</span>
+                                        <span className="text-[9px] uppercase tracking-wider text-white/30 font-medium">Result</span>
                                         <button
                                           onClick={() => copyToClipboard(tc.result!, tc.id)}
-                                          className="text-gray-400 hover:text-gray-900 transition-colors"
+                                          className="text-white/30 hover:text-white transition-colors"
                                         >
-                                          {copiedId === tc.id ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
+                                          {copiedId === tc.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                                         </button>
                                       </div>
-                                      <pre className="text-[11px] text-gray-500 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono max-h-48 overflow-y-auto">
+                                      <pre className="text-[11px] text-white/40 mt-0.5 overflow-x-auto whitespace-pre-wrap font-mono max-h-48 overflow-y-auto">
                                         {tc.result}
                                       </pre>
                                     </div>
@@ -896,7 +896,7 @@ export default function AgentWorkspace({
 
                       {/* Footer stats */}
                       {(message.tokens || message.steps) && (
-                        <div className="flex items-center gap-3 px-3 text-[10px] text-gray-400">
+                        <div className="flex items-center gap-3 px-3 text-[10px] text-white/30">
                           {message.steps && (
                             <span className="flex items-center gap-1">
                               <RotateCcw className="w-2.5 h-2.5" />
@@ -921,8 +921,8 @@ export default function AgentWorkspace({
                       {/* Loading indicator */}
                       {isRunning && message === messages[messages.length - 1] && !message.content && !message.thinking && (
                         <div className="flex items-center gap-2 px-3 py-2">
-                          <Loader2 className="w-4 h-4 text-green-600 animate-spin" />
-                          <span className="text-xs text-gray-500">Agent is thinking...</span>
+                          <Loader2 className="w-4 h-4 text-brand-400 animate-spin" />
+                          <span className="text-xs text-white/40">Agent is thinking...</span>
                         </div>
                       )}
                     </div>
@@ -930,8 +930,8 @@ export default function AgentWorkspace({
                 </div>
 
                 {message.role === 'user' && (
-                  <div className="w-7 h-7 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <User className="w-3.5 h-3.5 text-gray-600" />
+                  <div className="w-7 h-7 rounded-lg bg-white/[0.08] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <User className="w-3.5 h-3.5 text-white/60" />
                   </div>
                 )}
               </div>
@@ -941,7 +941,7 @@ export default function AgentWorkspace({
         </div>
 
         {/* Input Area */}
-        <div className="px-4 py-3 border-t border-gray-200 bg-white">
+        <div className="px-4 py-3 border-t border-white/[0.06] bg-[#0a0a0d]">
           <div className="flex items-end gap-2">
             <div className="flex-1 relative">
               <textarea
@@ -952,7 +952,7 @@ export default function AgentWorkspace({
                 placeholder={isRunning ? 'Agent is working...' : 'Give the agent a task...'}
                 disabled={isRunning}
                 rows={1}
-                className="w-full px-4 py-2.5 pr-12 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-green-400 resize-none disabled:opacity-50 max-h-32"
+                className="w-full px-4 py-2.5 pr-12 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 resize-none disabled:opacity-50 max-h-32"
                 style={{ minHeight: '42px' }}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
@@ -965,7 +965,7 @@ export default function AgentWorkspace({
             {isRunning ? (
               <button
                 onClick={handleStop}
-                className="w-10 h-10 rounded-xl bg-red-50 border border-red-200 text-red-600 flex items-center justify-center hover:bg-red-100 transition-colors flex-shrink-0"
+                className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center hover:bg-red-500/20 transition-colors flex-shrink-0"
               >
                 <StopCircle className="w-4 h-4" />
               </button>
@@ -973,7 +973,7 @@ export default function AgentWorkspace({
               <button
                 onClick={handleSend}
                 disabled={!input.trim()}
-                className="w-10 h-10 rounded-xl bg-green-600 text-white flex items-center justify-center hover:bg-green-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+                className="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center hover:bg-brand-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex-shrink-0"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -984,7 +984,7 @@ export default function AgentWorkspace({
 
       {/* Execution Trace Panel */}
       {showTrace && (
-        <div className="w-72 border-l border-gray-200 bg-white flex-shrink-0">
+        <div className="w-72 border-l border-white/[0.06] bg-[#0a0a0d] flex-shrink-0">
           <ExecutionTrace
             steps={traceSteps}
             isRunning={isRunning}
