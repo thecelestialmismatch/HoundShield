@@ -17,6 +17,7 @@ import TasksBoard from "@/components/dashboard/tasks-board";
 import TeamView from "@/components/dashboard/team-view";
 import CalendarView from "@/components/dashboard/calendar-view";
 import MemoryView from "@/components/dashboard/memory-view";
+import { PixelOffice } from "@/components/dashboard/pixel-office/pixel-office";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { DemoBanner } from "@/components/ui/demo-banner";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
@@ -55,6 +56,7 @@ import {
   Sparkles,
   Lock,
   Mail,
+  Gamepad2,
 } from "lucide-react";
 
 function GoogleLogo({ className }: { className?: string }) {
@@ -95,7 +97,8 @@ type Tab =
   | "tasks"
   | "team"
   | "calendar"
-  | "memory";
+  | "memory"
+  | "pixeloffice";
 
 const NAV_ITEMS: { id: Tab; label: string; icon: typeof LayoutDashboard; badge?: string; section?: string }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard, section: "Dashboard" },
@@ -108,6 +111,7 @@ const NAV_ITEMS: { id: Tab; label: string; icon: typeof LayoutDashboard; badge?:
   { id: "agents", label: "Agent Builder", icon: Bot, section: "AI Agents" },
   { id: "chat", label: "AI Chat", icon: MessageSquare, section: "AI Agents" },
   { id: "knowledge", label: "Knowledge Base", icon: Database, section: "AI Agents" },
+  { id: "pixeloffice", label: "Pixel Office", icon: Gamepad2, section: "AI Agents" },
   { id: "pipeline", label: "Content Pipeline", icon: Kanban, section: "Mission Control" },
   { id: "tasks", label: "Tasks Board", icon: ListChecks, section: "Mission Control" },
   { id: "team", label: "Agent Team", icon: Users, section: "Mission Control" },
@@ -556,6 +560,7 @@ export default function DashboardPage() {
     else if (lower.includes("team") || lower.includes("agent")) handleTabChange("team");
     else if (lower.includes("calendar") || lower.includes("schedule")) handleTabChange("calendar");
     else if (lower.includes("memory") || lower.includes("dna") || lower.includes("lesson")) handleTabChange("memory");
+    else if (lower.includes("pixel") || lower.includes("office") || lower.includes("game")) handleTabChange("pixeloffice");
     else if (lower.includes("setting") || lower.includes("config") || lower.includes("key")) handleTabChange("settings");
     else if (lower.includes("real") || lower.includes("live") || lower.includes("feed")) handleTabChange("realtime");
     setSearchOpen(false);
@@ -843,6 +848,13 @@ export default function DashboardPage() {
             {activeTab === "memory" && (
               <ErrorBoundary fallbackTitle="Memory DNA failed to load">
                 <MemoryView />
+              </ErrorBoundary>
+            )}
+            {activeTab === "pixeloffice" && (
+              <ErrorBoundary fallbackTitle="Pixel Office failed to load">
+                <div className="h-[calc(100vh-10rem)]">
+                  <PixelOffice />
+                </div>
               </ErrorBoundary>
             )}
             {activeTab === "settings" && (
