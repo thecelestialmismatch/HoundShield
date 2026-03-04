@@ -16,7 +16,7 @@ export function Navbar() {
     }, []);
 
     const navLinks = [
-        { label: "How It Works", href: "/#problem" },
+        { label: "Free Demo", href: "/demo", highlight: true },
         { label: "Features", href: "/features" },
         { label: "AI Agents", href: "/agents" },
         { label: "Pricing", href: "/pricing" },
@@ -36,7 +36,12 @@ export function Navbar() {
 
                 <div className="hidden md:flex items-center gap-6">
                     {navLinks.map((link) => (
-                        <Link key={link.label} href={link.href} className="text-sm text-white/60 hover:text-white transition-colors">
+                        <Link key={link.label} href={link.href} className={
+                            (link as any).highlight
+                                ? "text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
+                                : "text-sm text-white/60 hover:text-white transition-colors"
+                        }>
+                            {(link as any).highlight && <Zap className="w-3.5 h-3.5 inline-block mr-1" />}
                             {link.label}
                         </Link>
                     ))}
