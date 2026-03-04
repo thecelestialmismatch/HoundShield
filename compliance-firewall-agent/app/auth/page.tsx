@@ -321,9 +321,7 @@ export default function AuthPage() {
         <div className="relative z-10 w-full max-w-[420px]">
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-10 lg:hidden">
-            <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
-              <Shield className="w-5 h-5 text-brand-400" />
-            </div>
+            <Logo className="w-10 h-10" />
             <div>
               <span className="text-lg font-bold text-white tracking-tight">
                 Kaelus<span className="text-brand-400">.ai</span>

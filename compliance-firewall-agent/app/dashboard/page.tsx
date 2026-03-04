@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import { ComplianceOverview } from "@/components/dashboard/compliance-overview";
 import { EventTable } from "@/components/dashboard/event-table";
 import { QuarantinePanel } from "@/components/dashboard/quarantine-panel";
@@ -23,6 +24,7 @@ import { DemoBanner } from "@/components/ui/demo-banner";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
 import {
   Shield,
+
   LayoutDashboard,
   Activity,
   AlertTriangle,
@@ -154,9 +156,7 @@ function AuthModal({ onClose, onAuth }: { onClose: () => void; onAuth: (user: { 
       <div className="w-full max-w-md mx-4 bg-[#111114] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="p-6 pb-4 text-center border-b border-white/[0.06]">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mx-auto mb-3">
-            <Shield className="w-6 h-6 text-indigo-400" />
-          </div>
+          <Logo className="w-12 h-12 rounded-2xl mx-auto mb-3" />
           <h2 className="text-xl font-bold text-white">
             {mode === "login" ? "Welcome Back" : "Create Account"}
           </h2>
@@ -590,10 +590,7 @@ export default function DashboardPage() {
         <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0d] border-r border-white/[0.06] flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
           {/* Logo */}
           <Link href="/" className="h-16 flex items-center gap-2.5 px-5 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors group">
-            <div className="relative w-9 h-9 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 group-hover:border-brand-500/40 transition-colors">
-              <Shield className="w-5 h-5 text-brand-400" />
-              <Zap className="w-2.5 h-2.5 text-emerald-400 absolute" style={{ fill: "currentColor" }} />
-            </div>
+            <Logo className="w-9 h-9 group-hover:border-brand-500/40 transition-colors" />
             <div>
               <span className="text-base font-bold text-white tracking-tight block leading-tight">Kaelus<span className="text-brand-400">.ai</span></span>
               <span className="text-[10px] text-white/25 uppercase tracking-widest">AI Platform</span>

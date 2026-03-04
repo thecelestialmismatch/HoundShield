@@ -1,6 +1,7 @@
 "use client";
 
-import { Shield, RefreshCw } from "lucide-react";
+import { Logo } from "@/components/Logo";
+import { RefreshCw } from "lucide-react";
 
 export default function Error({
   error,
@@ -12,9 +13,7 @@ export default function Error({
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center p-8">
       <div className="text-center max-w-md">
-        <div className="w-16 h-16 rounded-2xl bg-danger-muted flex items-center justify-center mx-auto mb-6">
-          <Shield className="w-8 h-8 text-danger" />
-        </div>
+        <Logo className="w-16 h-16 rounded-2xl mx-auto mb-6" />
         <h1 className="text-2xl font-bold text-white mb-2">Something went wrong</h1>
         <p className="text-white/40 mb-2 text-sm">
           An unexpected error occurred. Your data is safe — the compliance
