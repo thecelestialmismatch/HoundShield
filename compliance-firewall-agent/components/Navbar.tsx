@@ -16,7 +16,7 @@ export function Navbar() {
     }, []);
 
     const navLinks = [
-        { label: "How It Works", href: "/how-it-works" },
+        { label: "How It Works", href: "/#problem" },
         { label: "Features", href: "/features" },
         { label: "AI Agents", href: "/agents" },
         { label: "Pricing", href: "/pricing" },

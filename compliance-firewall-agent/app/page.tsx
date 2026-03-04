@@ -1,763 +1,269 @@
 "use client";
 
-import { Logo } from "@/components/Logo";
-import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { LocalizedPrice } from "@/components/LocalizedPrice";
+import { ArrowRight, ChevronRight, CheckCircle2, ShieldAlert, MonitorPlay, Activity } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { Navbar } from "@/components/Navbar";
-import {
-  Shield,
-  Zap,
-  Lock,
-  Eye,
-  FileCheck,
-  ArrowRight,
-  ChevronRight,
-  Activity,
-  Check,
-  Star,
-  Menu,
-  X,
-  MessageCircle,
-  Send,
-  Bot,
-  Sparkles,
-  Globe,
-  ShieldCheck,
-  Brain,
-  Cpu,
-  Network,
-  Layers,
-  Users,
-  Clock,
-  CheckCircle2,
-  Fingerprint,
-  Radar,
-  GitBranch,
-  Search,
-  BarChart3,
-} from "lucide-react";
 
-/* ===== ANIMATED COUNTER ===== */
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          let start = 0;
-          const duration = 2000;
-          const startTime = performance.now();
-          const animate = (now: number) => {
-            const progress = Math.min((now - startTime) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.floor(eased * target));
-            if (progress < 1) requestAnimationFrame(animate);
-          };
-          requestAnimationFrame(animate);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [target]);
-  return <span ref={ref} className="tabular-nums">{count.toLocaleString()}{suffix}</span>;
-}
+// Extracted Components
+import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-section";
+import { ChatWidget } from "@/components/landing/chat-widget";
+import { PipelineSimulator } from "@/components/landing/pipeline-simulator";
+import { ArchitectureDiagram } from "@/components/landing/architecture-diagram";
+import { ReActLoop } from "@/components/landing/react-loop";
+import { IntegrationCode } from "@/components/landing/integration-code";
+import { DetectionGrid } from "@/components/landing/detection-grid";
 
-/* ===== INTERSECTION OBSERVER HOOK ===== */
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setInView(true); obs.unobserve(el); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, inView };
-}
-
-/* ===== ANIMATED SECTION ===== */
-function AnimatedSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  const { ref, inView } = useInView(0.1);
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(24px)",
-        transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-/* ===== LIVE SCAN DEMO ===== */
-function LiveScanDemo() {
-  const [lines, setLines] = useState<Array<{ text: string; type: string; time: string }>>([]);
-
-  useEffect(() => {
-    const samples = [
-      { text: '[SCAN] "Summarize Q4 earnings..." → PASS (12ms)', type: "success" },
-      { text: '[BLOCK] SSN detected: 123-45-**** → QUARANTINED', type: "danger" },
-      { text: '[SCAN] "Best practices for GDPR..." → PASS (8ms)', type: "success" },
-      { text: '[BLOCK] API key sk-proj-*** → ENCRYPTED', type: "danger" },
-      { text: '[SCAN] "Compare React vs Vue..." → PASS (11ms)', type: "success" },
-      { text: '[FLAG] Patient PHI detected → REVIEW QUEUE', type: "warn" },
-      { text: '[SCAN] "Draft marketing email..." → PASS (9ms)', type: "success" },
-      { text: '[BLOCK] Credit card 4111-****-1111 → BLOCKED', type: "danger" },
-    ];
-    let i = 0;
-    const interval = setInterval(() => {
-      const sample = samples[i % samples.length];
-      const time = new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      setLines((prev) => [{ ...sample, time }, ...prev].slice(0, 5));
-      i++;
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="code-block">
-      <div className="code-header">
-        <div className="code-dot bg-[#ff5f57]" />
-        <div className="code-dot bg-[#febc2e]" />
-        <div className="code-dot bg-[#28c840]" />
-        <span className="ml-2 text-xs text-white/30 font-mono">kaelus-firewall.log</span>
-        <div className="ml-auto flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[10px] text-emerald-400/70 font-mono">LIVE</span>
-        </div>
-      </div>
-      <div className="p-4 space-y-1 min-h-[140px]">
-        {lines.map((line, i) => (
-          <div
-            key={`${line.time}-${i}`}
-            className="flex items-start gap-2 text-xs font-mono animate-fade-in"
-            style={{ opacity: Math.max(0.3, 1 - i * 0.15) }}
-          >
-            <span className="text-white/20 shrink-0">{line.time}</span>
-            <span className={
-              line.type === "success" ? "text-emerald-400" :
-                line.type === "danger" ? "text-rose-400" :
-                  "text-amber-400"
-            }>
-              {line.text}
-            </span>
-          </div>
-        ))}
-        {lines.length === 0 && (
-          <span className="text-white/20 text-xs font-mono">Initializing scanner...</span>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ===== CHAT WIDGET ===== */
-function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { role: "assistant", content: "Hi! I'm Kaelus AI. Ask me anything about compliance, security, or our platform." },
-  ]);
-  const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const quickReplies = [
-    { text: "What can Kaelus detect?", response: "Kaelus detects 16 sensitive data patterns including SSNs, credit cards, API keys, medical records, M&A data, emails, and more — all in under 50ms." },
-    { text: "How does the ReAct loop work?", response: "The ReAct loop follows 4 steps: Observe (gather context), Think (reason about approach), Act (execute tools), Iterate (evaluate and repeat). It uses 13 AI models and 8 built-in tools." },
-    { text: "Is there a free tier?", response: "Yes! Our Starter plan is free forever — 1,000 scans/month, 4 detection categories, basic dashboard, and email alerts. No credit card required." },
-  ];
-
-  const handleSend = useCallback((text: string) => {
-    if (!text.trim()) return;
-    setMessages((prev) => [...prev, { role: "user", content: text }]);
-    setInput("");
-    setIsTyping(true);
-    const match = quickReplies.find((q) => q.text === text);
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: match?.response || "That's a great question! For detailed information, check out our Features page or reach out to our team." },
-      ]);
-      setIsTyping(false);
-    }, 1200);
-  }, []);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  return (
-    <>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="chat-widget-trigger"
-        aria-label="Chat with Kaelus AI"
-      >
-        {isOpen ? <X className="w-5 h-5 text-white" /> : <MessageCircle className="w-5 h-5 text-white" />}
-      </button>
-
-      {isOpen && (
-        <div className="chat-window">
-          <div className="p-4 border-b border-white/[0.08] flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-brand-400" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-white">Kaelus AI</p>
-              <p className="text-[10px] text-emerald-400 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />Online
-              </p>
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 chat-messages" style={{ maxHeight: "320px" }}>
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[85%] px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${msg.role === "user"
-                  ? "bg-brand-500/20 text-white border border-brand-500/20"
-                  : "bg-white/[0.05] text-white/70 border border-white/[0.06]"
-                  }`}>
-                  {msg.content}
-                </div>
-              </div>
-            ))}
-            {isTyping && (
-              <div className="flex justify-start">
-                <div className="bg-white/[0.05] border border-white/[0.06] px-4 py-3 rounded-xl">
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/30 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/30 animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/30 animate-bounce" style={{ animationDelay: "300ms" }} />
-                  </div>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {messages.length <= 2 && (
-            <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-              {quickReplies.map((qr) => (
-                <button
-                  key={qr.text}
-                  onClick={() => handleSend(qr.text)}
-                  className="text-[11px] px-2.5 py-1 rounded-full border border-brand-500/20 text-brand-300 hover:bg-brand-500/10 transition-colors"
-                >
-                  {qr.text}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="p-3 border-t border-white/[0.08]">
-            <form
-              onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
-              className="flex items-center gap-2"
-            >
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask anything..."
-                className="flex-1 bg-white/[0.05] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-brand-500/30"
-              />
-              <button
-                type="submit"
-                className="p-2 rounded-lg bg-brand-500/20 text-brand-400 hover:bg-brand-500/30 transition-colors"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
-/* ===== MAIN PAGE ===== */
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [blockedCount, setBlockedCount] = useState(2847561);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBlockedCount((prev) => prev + Math.floor(Math.random() * 3) + 1);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-
-
   return (
-    <div className="min-h-screen bg-surface text-white overflow-x-hidden">
-      {/* Floating Orbs */}
-      <div className="orb orb-1" />
-      <div className="orb orb-2" />
-      <div className="orb orb-3" />
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-brand-500/30 font-sans overflow-x-hidden">
+      {/* Background Orbs */}
+      <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
+      <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
 
-      {/* ===== NAV ===== */}
       <Navbar />
 
-      {/* ===== HERO ===== */}
-      <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-        <div className="bg-dot-grid absolute inset-0" />
-        <div className="bg-hero-glow absolute inset-0" />
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-          <AnimatedSection>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] mb-8">
-              <div className="status-dot" />
-              <span className="text-xs text-white/50">
-                <span className="text-emerald-400 font-medium tabular-nums">{blockedCount.toLocaleString()}</span> threats blocked and counting
-              </span>
+      {/* ===== HERO SECTION ===== */}
+      <main className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+        <div className="bg-dot-grid absolute inset-0 opacity-40" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <AnimatedSection className="text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-500/30 bg-brand-500/10 mb-8 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+              <ShieldAlert className="w-4 h-4 text-brand-400 animate-pulse" />
+              <span className="text-xs font-semibold tracking-wide text-brand-300 uppercase">Stop AI Data Leaks instantly</span>
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]">
+              The Security Guard For Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-emerald-400">AI Prompts</span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-white/50 mb-10 leading-relaxed font-medium">
+              Your employees are pasting secret company data into ChatGPT. <br className="hidden md:block" />
+              We sit in the middle, check the data, and block the secrets.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/auth" className="btn-primary text-base px-8 py-4 w-full sm:w-auto shadow-[0_0_30px_rgba(99,102,241,0.4)]">
+                Start Free Trial <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link href="#problem" className="btn-ghost text-base px-8 py-4 w-full sm:w-auto bg-white/[0.03]">
+                See How It Works <ChevronRight className="w-5 h-5" />
+              </Link>
             </div>
           </AnimatedSection>
+        </div>
+      </main>
 
-          <AnimatedSection delay={100}>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-display-lg font-bold tracking-tight mb-6 leading-[1.05]">
-              The AI Compliance<br />
-              <span className="text-gradient-brand">Firewall</span> Your Team Needs
-            </h1>
+      <div className="section-divider border-t border-white/[0.04]" />
+
+      {/* ===== THE PROBLEM VS THE FIX (DEMO DASHBOARD CONCEPT) ===== */}
+      <section id="problem" className="py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-4xl font-bold tracking-tight mb-4">Why Do You Need This?</h2>
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              Explaining it like you're 5: If your company is a school, AI is a field trip.
+              We are the chaperone making sure kids don't take their passports with them.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {/* The Problem */}
+            <AnimatedSection delay={100}>
+              <div className="glass-card-glow p-8 border-rose-500/30 shadow-[0_0_40px_-10px_rgba(244,63,94,0.15)] h-full">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-rose-500/20 flex items-center justify-center border border-rose-500/50">
+                    <ShieldAlert className="w-5 h-5 text-rose-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">The Problem</h3>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex gap-3 text-white/60">
+                    <span className="text-rose-400 mt-1">1.</span>
+                    A developer copies a chunk of code to ask ChatGPT to fix a bug.
+                  </li>
+                  <li className="flex gap-3 text-white/60">
+                    <span className="text-rose-400 mt-1">2.</span>
+                    They didn't notice the code contained your company's AWS Master Password.
+                  </li>
+                  <li className="flex gap-3 text-white/60">
+                    <span className="text-rose-400 mt-1">3.</span>
+                    That password goes to OpenAI servers. It becomes their training data. Your company is breached, and you don't even know it happened.
+                  </li>
+                </ul>
+              </div>
+            </AnimatedSection>
+
+            {/* The Fix */}
+            <AnimatedSection delay={200}>
+              <div className="glass-card-glow p-8 border-emerald-500/30 shadow-[0_0_40px_-10px_rgba(16,185,129,0.15)] h-full">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/50">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">The Kaelus Fix</h3>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex gap-3 text-white/60">
+                    <span className="text-emerald-400 mt-1">1.</span>
+                    You route your AI traffic through Kaelus. (It takes 1 line of code).
+                  </li>
+                  <li className="flex gap-3 text-white/60">
+                    <span className="text-emerald-400 mt-1">2.</span>
+                    The developer tries to send the same code with the AWS password.
+                  </li>
+                  <li className="flex gap-3 text-white/60">
+                    <span className="text-emerald-400 mt-1">3.</span>
+                    In 0.05 seconds, Kaelus detects the password, blocks the request, encrypts the leak, and sends you a report. Disaster averted.
+                  </li>
+                </ul>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== LIVE SIMULATOR ===== */}
+      <section className="py-24 relative overflow-hidden bg-black/20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <AnimatedSection className="mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <MonitorPlay className="w-6 h-6 text-brand-400" />
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                Live Firewall <span className="text-brand-400">Scanner</span>
+              </h2>
+            </div>
+            <p className="text-white/50 text-lg">Watch Kaelus intercept and block real threats in an automated loop.</p>
           </AnimatedSection>
 
           <AnimatedSection delay={200}>
-            <p className="text-lg md:text-xl text-white/40 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Intercept, scan, and control every LLM request in under 50ms.
-              Block sensitive data leaks before they reach AI providers.
-              Powered by 13 AI models and agentic intelligence.
+            <PipelineSimulator />
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ===== WHAT WE SCAN FOR ===== */}
+      <section className="py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-4xl font-bold tracking-tight mb-4">Zero Blind Spots</h2>
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              We look for 16 specific patterns of sensitive data. If any of these are in the prompt, we lock it down.
             </p>
           </AnimatedSection>
+          <AnimatedSection delay={150}>
+            <DetectionGrid />
+          </AnimatedSection>
+        </div>
+      </section>
 
-          <AnimatedSection delay={300}>
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-              <Link href="/auth" className="btn-primary px-8 py-3.5 text-base">
-                Start Free Trial <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link href="/how-it-works" className="btn-ghost px-8 py-3.5 text-base">
-                See How It Works <ChevronRight className="w-4 h-4" />
-              </Link>
+      {/* ===== ARCHITECTURE DEEP DIVE ===== */}
+      <section className="py-24 relative bg-[#0a0a0f]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-4xl font-bold tracking-tight mb-4">How The Machine Works</h2>
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              From the employee to the vault. See exactly where Kaelus steps in to protect your business.
+            </p>
+          </AnimatedSection>
+          <AnimatedSection delay={200}>
+            <ArchitectureDiagram />
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ===== REACT AGENT LOOP (WHY WE ARE DIFFERENT) ===== */}
+      <section className="py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="mb-16 text-center">
+            <div className="inline-block px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs font-bold tracking-wider mb-6">
+              THE SECRET SAUCE
             </div>
-          </AnimatedSection>
-
-          {/* Live Scan Demo */}
-          <AnimatedSection delay={400}>
-            <div className="max-w-2xl mx-auto">
-              <LiveScanDemo />
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ===== LIVE STATS BAR ===== */}
-      <section className="py-6 px-6 border-b border-white/[0.03] bg-surface-50/50">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {[
-            { icon: Zap, value: <><AnimatedCounter target={50} />ms</>, label: "Avg Scan Latency" },
-            { icon: Activity, value: <AnimatedCounter target={99} suffix="%" />, label: "Uptime SLA" },
-            { icon: Brain, value: <AnimatedCounter target={13} />, label: "AI Models" },
-            { icon: Shield, value: <AnimatedCounter target={16} />, label: "Detection Patterns" },
-          ].map((stat, i) => {
-            const Icon = stat.icon;
-            return (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <Icon className="w-4 h-4 text-brand-400 mb-1" />
-                <span className="text-2xl font-bold text-white">{stat.value}</span>
-                <span className="text-xs text-white/30">{stat.label}</span>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ===== HOW IT WORKS (Brief — links to /how-it-works) ===== */}
-      <section className="relative py-24 px-6">
-        <div className="bg-dot-grid absolute inset-0" />
-        <div className="max-w-5xl mx-auto relative z-10">
-          <AnimatedSection className="text-center mb-14">
-            <span className="text-xs font-medium tracking-widest uppercase text-emerald-400 mb-4 block">How It Works</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              5 Simple Steps, <span className="text-gradient-brand">Done in a Blink</span>
-            </h2>
-            <p className="text-white/60 max-w-2xl mx-auto">
-              We made it so easy even a kid could understand it. Picture Kaelus as a smart security guard checking backpacks before anyone leaves the school.
+            <h2 className="text-4xl font-bold tracking-tight mb-4">We Don't Just Scan.<br />We <span className="text-purple-400">Think.</span></h2>
+            <p className="text-lg text-white/40 max-w-3xl mx-auto">
+              DLP tools break because they are dumb. They flag the word "Apple" as a company secret even when the prompt is a recipe for a pie. Kaelus uses 13 AI Agents to read the context and only block actual threats.
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {[
-              { num: "01", title: "You send a message", icon: Network, color: "text-brand-400" },
-              { num: "02", title: "Guard checks it", icon: Search, color: "text-emerald-400" },
-              { num: "03", title: "Spot bad words", icon: Brain, color: "text-purple-400" },
-              { num: "04", title: "Stop or Go", icon: ShieldCheck, color: "text-amber-400" },
-              { num: "05", title: "Write it down", icon: FileCheck, color: "text-rose-400" },
-            ].map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <AnimatedSection key={step.num} delay={i * 100}>
-                  <div className="glass-card p-5 text-center h-full">
-                    <span className="text-xs font-mono text-white/20 mb-2 block">{step.num}</span>
-                    <Icon className={`w-7 h-7 ${step.color} mx-auto mb-2`} />
-                    <h3 className="text-sm font-semibold text-white">{step.title}</h3>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
-          </div>
-
-          <AnimatedSection delay={500} className="mt-10 text-center">
-            <Link href="/how-it-works" className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors group">
-              Deep dive into the pipeline
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+          <AnimatedSection delay={150}>
+            <ReActLoop />
           </AnimatedSection>
         </div>
       </section>
 
-      <div className="section-divider" />
-
-      {/* ===== FEATURE HIGHLIGHTS (Brief — links to /features) ===== */}
-      <section className="relative py-24 px-6">
-        <div className="bg-aurora absolute inset-0" />
-        <div className="max-w-6xl mx-auto relative z-10">
-          <AnimatedSection className="text-center mb-14">
-            <span className="text-xs font-medium tracking-widest uppercase text-brand-400 mb-4 block">Core Capabilities</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              Enterprise-Grade <span className="text-gradient-brand">AI Security</span>
-            </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
-              Everything you need to secure your AI pipeline — from real-time interception
-              to cryptographic audit trails.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              { icon: Zap, title: "Real-Time Interception", desc: "Sub-50ms scanning of every LLM request before it reaches the provider.", color: "amber" },
-              { icon: Lock, title: "Encrypted Quarantine", desc: "AES-256 encrypted vault for flagged content with human-in-the-loop review.", color: "emerald" },
-              { icon: Eye, title: "Immutable Audit Trail", desc: "SHA-256 hash chain for tamper-proof logging of every compliance event.", color: "blue" },
-              { icon: Radar, title: "16 Detection Patterns", desc: "SSNs, credit cards, API keys, PHI, M&A data, and more — caught instantly.", color: "rose" },
-              { icon: Brain, title: "Agentic AI Engine", desc: "ReAct reasoning loop with 8 tools and 13 AI models for intelligent decisions.", color: "purple" },
-              { icon: FileCheck, title: "1-Click Reports", desc: "CFO-ready compliance reports for SOC 2, GDPR, HIPAA, and EU AI Act.", color: "brand" },
-            ].map((feature, i) => {
-              const Icon = feature.icon;
-              const colors: Record<string, { iconBg: string; iconColor: string }> = {
-                amber: { iconBg: "bg-amber-500/10 border-amber-500/20", iconColor: "text-amber-400" },
-                emerald: { iconBg: "bg-emerald-500/10 border-emerald-500/20", iconColor: "text-emerald-400" },
-                blue: { iconBg: "bg-blue-500/10 border-blue-500/20", iconColor: "text-blue-400" },
-                rose: { iconBg: "bg-rose-500/10 border-rose-500/20", iconColor: "text-rose-400" },
-                purple: { iconBg: "bg-purple-500/10 border-purple-500/20", iconColor: "text-purple-400" },
-                brand: { iconBg: "bg-brand-500/10 border-brand-500/20", iconColor: "text-brand-400" },
-              };
-              const c = colors[feature.color];
-              return (
-                <AnimatedSection key={feature.title} delay={i * 80}>
-                  <div className="glass-card p-6 h-full group hover:border-white/10 transition-all">
-                    <div className={`w-11 h-11 rounded-xl ${c.iconBg} border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                      <Icon className={`w-5 h-5 ${c.iconColor}`} />
-                    </div>
-                    <h3 className="text-base font-semibold text-white mb-2">{feature.title}</h3>
-                    <p className="text-sm text-white/40 leading-relaxed">{feature.desc}</p>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
-          </div>
-
-          <AnimatedSection delay={500} className="mt-10 text-center">
-            <Link href="/features" className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors group">
-              Explore all features in detail
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* ===== AI AGENTS TEASER ===== */}
-      <section className="relative py-24 px-6">
-        <div className="bg-aurora absolute inset-0" />
-        <div className="max-w-5xl mx-auto relative z-10">
-          <AnimatedSection className="text-center mb-14">
-            <span className="text-xs font-medium tracking-widest uppercase text-purple-400 mb-4 block">Agentic AI</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              AI Agents That <span className="text-gradient-aurora">Think & Act</span>
-            </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
-              Beyond pattern matching — autonomous AI agents with a ReAct reasoning loop,
-              8 tools, and 13 models for intelligent compliance at scale.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "18 Templates", sub: "Pre-built agents", icon: Bot },
-              { label: "8 Tools", sub: "Built-in toolbox", icon: Layers },
-              { label: "13 Models", sub: "8 free + 5 premium", icon: Cpu },
-              { label: "ReAct Loop", sub: "Think → Act → Iterate", icon: Brain },
-            ].map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <AnimatedSection key={item.label} delay={i * 100}>
-                  <div className="glass-card p-5 text-center">
-                    <Icon className="w-7 h-7 text-brand-400 mx-auto mb-3" />
-                    <div className="text-sm font-semibold text-white mb-0.5">{item.label}</div>
-                    <div className="text-xs text-white/30">{item.sub}</div>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
-          </div>
-
-          <AnimatedSection delay={500} className="mt-10 text-center">
-            <Link href="/agents" className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors group">
-              Explore AI agents & templates
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* ===== TRUST / SOCIAL PROOF ===== */}
-      <section className="py-24 px-6 relative">
-        <div className="bg-dot-grid absolute inset-0" />
-        <div className="max-w-5xl mx-auto relative z-10">
-          <AnimatedSection className="text-center mb-14">
-            <span className="text-xs font-medium tracking-widest uppercase text-amber-400 mb-4 block">Trusted By</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              Built for <span className="text-gradient-brand">Enterprise Compliance</span>
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {[
-              { name: "SOC 2 Type II", desc: "Security, availability, and confidentiality controls verified by independent auditors.", icon: ShieldCheck, color: "brand" },
-              { name: "GDPR", desc: "Full data protection compliance with right to erasure and consent management.", icon: Globe, color: "emerald" },
-              { name: "HIPAA", desc: "Protected health information encrypted at rest and in transit. BAA available.", icon: Lock, color: "purple" },
-              { name: "EU AI Act", desc: "High-risk AI system compliance with transparency and human oversight.", icon: Layers, color: "amber" },
-            ].map((item, i) => {
-              const Icon = item.icon;
-              const colorClasses: Record<string, { iconBg: string; text: string }> = {
-                brand: { iconBg: "bg-brand-500/10 border-brand-500/20", text: "text-brand-400" },
-                emerald: { iconBg: "bg-emerald-500/10 border-emerald-500/20", text: "text-emerald-400" },
-                purple: { iconBg: "bg-purple-500/10 border-purple-500/20", text: "text-purple-400" },
-                amber: { iconBg: "bg-amber-500/10 border-amber-500/20", text: "text-amber-400" },
-              };
-              const c = colorClasses[item.color];
-              return (
-                <AnimatedSection key={item.name} delay={i * 100}>
-                  <div className="glass-card p-5 flex gap-4">
-                    <div className={`w-11 h-11 rounded-xl ${c.iconBg} border flex items-center justify-center shrink-0`}>
-                      <Icon className={`w-5 h-5 ${c.text}`} />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-white mb-1">{item.name}</h3>
-                      <p className="text-sm text-white/40">{item.desc}</p>
-                    </div>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
-          </div>
-
-          {/* Testimonials */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              { quote: "Kaelus caught an API key leak in our first scan. Saved us from a potential breach.", name: "Sarah Chen", role: "CTO, DataFlow AI", stars: 5 },
-              { quote: "We deployed the SOC Analyst agent and it triaged 200+ alerts in the first week.", name: "Marcus Johnson", role: "CISO, TechVault", stars: 5 },
-              { quote: "The compliance reports are CFO-ready out of the box. Saved us weeks of manual work.", name: "Elena Rodriguez", role: "VP Compliance, FinSecure", stars: 5 },
-            ].map((t, i) => (
-              <AnimatedSection key={t.name} delay={i * 100}>
-                <div className="glass-card p-6 h-full">
-                  <div className="flex items-center gap-0.5 mb-3">
-                    {Array.from({ length: t.stars }).map((_, j) => (
-                      <Star key={j} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-white/60 leading-relaxed mb-4">&ldquo;{t.quote}&rdquo;</p>
-                  <div>
-                    <p className="text-sm font-medium text-white">{t.name}</p>
-                    <p className="text-xs text-white/30">{t.role}</p>
-                  </div>
-                </div>
-                <div className="absolute -bottom-6 left-0 right-0 text-center">
-                  <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* ===== PRICING TEASER ===== */}
-      <section className="relative py-24 px-6">
-        <div className="bg-aurora absolute inset-0" />
-        <div className="max-w-4xl mx-auto relative z-10">
-          <AnimatedSection className="text-center mb-12">
-            <span className="text-xs font-medium tracking-widest uppercase text-emerald-400 mb-4 block">Pricing</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              Start Free, <span className="text-gradient-brand">Scale When Ready</span>
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              { name: "Starter", price: "Free", desc: "1,000 scans/month", cta: "Start Free", variant: "ghost" },
-              { name: "Pro", price: <><LocalizedPrice basePrice={24} />/mo</>, desc: "Unlimited scans", cta: "Start Trial", variant: "primary", popular: true },
-              { name: "Enterprise", price: "Custom", desc: "Self-hosted + SSO", cta: "Contact Sales", variant: "ghost" },
-            ].map((plan, i) => (
-              <AnimatedSection key={plan.name} delay={i * 100}>
-                <div className={`glass-card p-6 text-center relative ${plan.popular ? "border-brand-500/30 scale-[1.02]" : ""
-                  }`}>
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-brand-500 rounded-full text-[10px] font-bold text-white">
-                      MOST POPULAR
-                    </div>
-                  )}
-                  <h3 className="text-lg font-semibold text-white mb-1">{plan.name}</h3>
-                  <div className="text-3xl font-bold text-white mb-1">{plan.price}</div>
-                  <p className="text-sm text-white/40 mb-5">{plan.desc}</p>
-                  <Link
-                    href={plan.name === "Enterprise" ? "/pricing" : "/auth"}
-                    className={plan.variant === "primary" ? "btn-primary w-full justify-center" : "btn-ghost w-full justify-center"}
-                  >
-                    {plan.cta}
-                  </Link>
-                </div>
-                <div className="absolute -bottom-6 left-0 right-0 text-center">
-                  <p className="text-[9px] text-white/30 truncate px-2">Weekly rate limits for top 5% of users. Pushing heavy users to API.</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-
-          <AnimatedSection delay={400} className="mt-10 text-center">
-            <Link href="/pricing" className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors group">
-              View full pricing & feature comparison
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* ===== FINAL CTA ===== */}
-      <section className="relative py-24 px-6 overflow-hidden">
-        <div className="bg-dot-grid absolute inset-0" />
-        <div className="max-w-4xl mx-auto relative z-10">
+      {/* ===== INTEGRATION ===== */}
+      <section className="py-24 relative bg-black/40 border-y border-white/[0.04]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
           <AnimatedSection>
-            <div className="glass-card-glow p-8 md:p-12 text-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-500/[0.05] via-transparent to-purple-500/[0.05]" />
-              <div className="relative z-10">
-                <Logo className="mx-auto mb-6 w-16 h-16 scale-125" />
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-                  Ready to Secure Your{" "}
-                  <span className="text-gradient-brand">AI Pipeline</span>?
-                </h2>
-                <p className="text-white/40 max-w-xl mx-auto mb-8">
-                  Join teams that trust Kaelus to protect every LLM request.
-                  Start free — no credit card required.
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-4">
-                  <Link href="/auth" className="btn-primary px-8 py-3.5 text-base">
-                    Get Started Free <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <Link href="/dashboard" className="btn-ghost px-8 py-3.5 text-base">
-                    Open Dashboard <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-                <div className="flex items-center justify-center gap-6 mt-6 text-xs text-white/30">
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Free tier forever</span>
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />No credit card</span>
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />Cancel anytime</span>
-                </div>
-              </div>
+            <h2 className="text-4xl font-bold tracking-tight mb-6">1 Line of Code.<br /><span className="text-emerald-400">Total Security.</span></h2>
+            <p className="text-lg text-white/50 mb-8 leading-relaxed">
+              We know engineers hate setting up complicated proxy servers. So we didn't build one.
+              Just change the base URL of your OpenAI or Anthropic SDK to ours, and pass your corporate token. Everything else works exactly the same.
+            </p>
+            <ul className="space-y-4">
+              <li className="flex items-center gap-3 bg-white/[0.03] p-3 rounded-lg border border-white/[0.05]"><CheckCircle2 className="w-5 h-5 text-emerald-400" /> Supports Python, Node.js, cURL</li>
+              <li className="flex items-center gap-3 bg-white/[0.03] p-3 rounded-lg border border-white/[0.05]"><CheckCircle2 className="w-5 h-5 text-emerald-400" /> Works with LangChain</li>
+              <li className="flex items-center gap-3 bg-white/[0.03] p-3 rounded-lg border border-white/[0.05]"><CheckCircle2 className="w-5 h-5 text-emerald-400" /> Zero noticeable latency (&lt;50ms)</li>
+            </ul>
+          </AnimatedSection>
+
+          <AnimatedSection delay={200}>
+            <IntegrationCode />
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ===== Final CTA ===== */}
+      <section className="py-32 relative">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <AnimatedSection>
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-brand-500/20 border-2 border-brand-500/50 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(99,102,241,0.4)]">
+              <Logo className="w-10 h-10" />
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+              Lock Down Your AI Today
+            </h2>
+            <p className="text-xl text-white/50 mb-10 max-w-2xl mx-auto">
+              If your team uses ChatGPT, you are leaking data right now.
+              Deploy Kaelus in 5 minutes and stop the bleeding.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/auth" className="btn-primary text-lg !py-4 !px-10 shadow-[0_0_30px_rgba(99,102,241,0.4)]">
+                Start Free Trial
+              </Link>
+              <Link href="/pricing" className="btn-ghost text-lg !py-4 !px-10">
+                View Pricing
+              </Link>
             </div>
           </AnimatedSection>
         </div>
       </section>
+
+      {/* ===== Floating Chat ===== */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <ChatWidget />
+      </div>
 
       {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/[0.04] py-12 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="flex items-center gap-2 mb-3">
-                <Logo className="w-7 h-7" />
-                <span className="text-lg font-bold tracking-tight text-white">
-                  Kaelus<span className="text-brand-400">.ai</span>
-                </span>
-              </Link>
-              <p className="text-xs text-white/25 leading-relaxed">
-                The AI compliance firewall. Real-time scanning, encrypted quarantine, and agentic intelligence.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-white/40 font-semibold mb-4">Product</p>
-              <div className="space-y-2.5">
-                <Link href="/features" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Features</Link>
-                <Link href="/how-it-works" className="block text-sm text-white/30 hover:text-white/60 transition-colors">How It Works</Link>
-                <Link href="/agents" className="block text-sm text-white/30 hover:text-white/60 transition-colors">AI Agents</Link>
-                <Link href="/pricing" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Pricing</Link>
-                <Link href="/dashboard" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Dashboard</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-white/40 font-semibold mb-4">Compliance</p>
-              <div className="space-y-2.5">
-                <span className="block text-sm text-white/30">SOC 2</span>
-                <span className="block text-sm text-white/30">GDPR</span>
-                <span className="block text-sm text-white/30">EU AI Act</span>
-                <span className="block text-sm text-white/30">HIPAA</span>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-white/40 font-semibold mb-4">Company</p>
-              <div className="space-y-2.5">
-                <Link href="/docs" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Documentation</Link>
-                <Link href="/auth" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Sign In</Link>
-                <Link href="/auth" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Get Started</Link>
-              </div>
+      <footer className="border-t border-white/[0.06] bg-[#050505] py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <Link href="/" className="flex items-center gap-2">
+              <Logo className="w-6 h-6" />
+              <span className="text-xl font-bold tracking-tight">Kaelus<span className="text-brand-400">.ai</span></span>
+            </Link>
+            <div className="flex gap-6 text-sm text-white/40">
+              <Link href="/features" className="hover:text-white transition-colors">Features</Link>
+              <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
+              <Link href="/dashboard" className="hover:text-white transition-colors">Login</Link>
             </div>
           </div>
-          <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-white/15">&copy; 2026 Kaelus.ai — All rights reserved.</p>
-            <div className="flex items-center gap-4 text-xs text-white/20">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
-              <span>Security</span>
-            </div>
+          <div className="mt-8 text-center text-xs text-white/20">
+            &copy; {new Date().getFullYear()} Kaelus.ai — All rights reserved.
           </div>
         </div>
       </footer>
-
-      {/* Chat Widget */}
-      <ChatWidget />
     </div>
   );
 }
