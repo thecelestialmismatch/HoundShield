@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ChevronRight, CheckCircle2, ShieldAlert, MonitorPlay, Activity } from "lucide-react";
+import { ArrowRight, ChevronRight, CheckCircle2, ShieldAlert, MonitorPlay, Activity, Zap, Brain, Radar, BarChart3, AlertTriangle, Lock, Shield, TrendingDown, Users, DollarSign } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Navbar } from "@/components/Navbar";
 
@@ -51,6 +51,27 @@ export default function Home() {
                 See How It Works <ChevronRight className="w-5 h-5" />
               </Link>
             </div>
+          </AnimatedSection>
+
+          {/* Hero Stat Counters */}
+          <AnimatedSection delay={300} className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            {[
+              { icon: Zap, value: 50, suffix: "ms", prefix: "<", label: "Scan Speed", color: "text-amber-400" },
+              { icon: Radar, value: 16, suffix: "", prefix: "", label: "Threat Patterns", color: "text-brand-400" },
+              { icon: Brain, value: 13, suffix: "", prefix: "", label: "AI Models", color: "text-purple-400" },
+              { icon: Shield, value: 99, suffix: "%", prefix: "", label: "Accuracy", color: "text-emerald-400" },
+            ].map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <div key={stat.label} className="glass-card p-5 text-center group hover:border-brand-500/30 transition-all duration-300">
+                  <Icon className={`w-6 h-6 ${stat.color} mx-auto mb-3 group-hover:scale-110 transition-transform`} />
+                  <div className="text-3xl font-bold text-white mb-1">
+                    {stat.prefix}<AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="text-xs text-white/40 font-medium uppercase tracking-wider">{stat.label}</div>
+                </div>
+              );
+            })}
           </AnimatedSection>
         </div>
       </main>
@@ -210,6 +231,85 @@ export default function Home() {
 
           <AnimatedSection delay={200}>
             <IntegrationCode />
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ===== DASHBOARD DEMO / SERVICE PITCH ===== */}
+      <section className="py-28 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-500/[0.03] to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <AnimatedSection className="text-center mb-16">
+            <div className="inline-block px-4 py-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-300 text-xs font-bold tracking-wider mb-6">
+              ⚠️ YOUR COMPANY RIGHT NOW
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">See What You&apos;re Leaking</h2>
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              Here is a simulated snapshot of what the Kaelus Dashboard would surface for a typical enterprise — and why you need our service package to fix it.
+            </p>
+          </AnimatedSection>
+
+          {/* Fake Dashboard Metrics */}
+          <AnimatedSection delay={150} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="glass-card-glow p-6 border-rose-500/20">
+              <div className="flex items-center gap-3 mb-4">
+                <AlertTriangle className="w-6 h-6 text-rose-400" />
+                <span className="text-xs font-bold text-rose-300 uppercase tracking-wider">Critical Leaks (Last 30 Days)</span>
+              </div>
+              <div className="text-5xl font-black text-rose-400 mb-2"><AnimatedCounter target={247} /></div>
+              <p className="text-sm text-white/40">API keys, passwords, and SSNs sent to external AI providers by your team.</p>
+            </div>
+            <div className="glass-card-glow p-6 border-amber-500/20">
+              <div className="flex items-center gap-3 mb-4">
+                <TrendingDown className="w-6 h-6 text-amber-400" />
+                <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">Compliance Risk Score</span>
+              </div>
+              <div className="text-5xl font-black text-amber-400 mb-2">87<span className="text-2xl">/100</span></div>
+              <p className="text-sm text-white/40">Your company fails SOC 2 and GDPR audits due to unmonitored AI traffic.</p>
+            </div>
+            <div className="glass-card-glow p-6 border-emerald-500/20">
+              <div className="flex items-center gap-3 mb-4">
+                <DollarSign className="w-6 h-6 text-emerald-400" />
+                <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">Estimated Savings w/ Kaelus</span>
+              </div>
+              <div className="text-5xl font-black text-emerald-400 mb-2">$<AnimatedCounter target={450} />K</div>
+              <p className="text-sm text-white/40">Average cost saved by blocking data breaches before they reach external AI.</p>
+            </div>
+          </AnimatedSection>
+
+          {/* Why ONLY our Service fixes this */}
+          <AnimatedSection delay={300}>
+            <div className="glass-card-glow p-8 md:p-10 border-brand-500/20">
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-4">Why Only <span className="text-brand-400">Kaelus Pro</span> Can Fix This</h3>
+                  <p className="text-white/50 mb-6 leading-relaxed">Free DLP scanners flag safe content and miss actual threats. Our commercial service provides the full stack that enterprises need — from Human-in-the-Loop review to cryptographic audit chains that survive SOC 2 audits.</p>
+                  <ul className="space-y-3">
+                    {[
+                      "13-Model Agentic Vault (avoid false positives)",
+                      "HITL Queue (human review for borderline payloads)",
+                      "SHA-256 Hash Chain Audit Trail (tamper-proof logs)",
+                      "1-Click Compliance Reports (SOC 2, GDPR, HIPAA)",
+                      "24/7 Threat Monitoring & Alerting",
+                    ].map(item => (
+                      <li key={item} className="flex items-start gap-3 text-sm">
+                        <CheckCircle2 className="w-4 h-4 text-brand-400 mt-0.5 shrink-0" />
+                        <span className="text-white/70">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex flex-col gap-4">
+                  <Link href="/auth" className="btn-primary w-full text-center !py-4 shadow-[0_0_30px_rgba(99,102,241,0.4)]">
+                    Start Free Trial — See Your Real Data <ArrowRight className="w-5 h-5" />
+                  </Link>
+                  <Link href="/pricing" className="btn-ghost w-full text-center !py-4 bg-white/[0.03]">
+                    Compare Plans <ChevronRight className="w-5 h-5" />
+                  </Link>
+                  <p className="text-xs text-white/30 text-center">No credit card required • Free tier available forever</p>
+                </div>
+              </div>
+            </div>
           </AnimatedSection>
         </div>
       </section>
