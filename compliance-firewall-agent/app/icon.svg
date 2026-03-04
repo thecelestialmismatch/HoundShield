@@ -1,7 +1,13 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="#0c0c12"/>
-  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" stroke="#6366f1" stroke-opacity="0.3"/>
-  <path d="M16 5L7 9v7c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V9L16 5z" fill="#6366f1" fill-opacity="0.15" stroke="#6366f1" stroke-width="1.5" stroke-linejoin="round"/>
-  <circle cx="22" cy="22" r="4" fill="#34d399"/>
-  <path d="M20.5 22l1 1 2-2" stroke="#0c0c12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(99,102,241,0.2)"/>
+      <stop offset="100%" stop-color="rgba(52,211,153,0.2)"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="#0a0a0f"/>
+  <rect width="32" height="32" rx="8" fill="url(#bg)"/>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" fill="none" stroke="rgba(99,102,241,0.3)" stroke-width="1"/>
+  <path d="M16 6 L24 10 L24 18 C24 22.4 20.4 25.6 16 27 C11.6 25.6 8 22.4 8 18 L8 10 Z" fill="rgba(99,102,241,0.15)" stroke="#818cf8" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M17.5 12 L14.5 17 H16.5 L15 21 L19.5 15.5 H17 Z" fill="#34d399" stroke="#34d399" stroke-width="0.5" stroke-linejoin="round"/>
 </svg>
