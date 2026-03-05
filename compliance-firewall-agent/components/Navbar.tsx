@@ -18,8 +18,9 @@ export function Navbar() {
     const navLinks = [
         { label: "Free Demo", href: "/demo", highlight: true },
         { label: "Features", href: "/features" },
-        { label: "AI Agents", href: "/agents" },
         { label: "Pricing", href: "/pricing" },
+        { label: "About", href: "/about" },
+        { label: "Changelog", href: "/changelog" },
         { label: "Dashboard", href: "/dashboard" },
     ];
 

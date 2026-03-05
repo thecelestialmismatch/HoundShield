@@ -19,7 +19,7 @@
  */
 
 import { createServer, type IncomingMessage } from "http";
-import { parse } from "url";
+import { parse } from "node:url";
 import next from "next";
 import { WebSocketServer } from "ws";
 import { handleWebSocketConnection } from "./lib/gateway/ws-handler";

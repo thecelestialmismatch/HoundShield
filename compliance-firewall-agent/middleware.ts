@@ -56,6 +56,10 @@ export function middleware(request: NextRequest) {
     "Strict-Transport-Security",
     "max-age=31536000; includeSubDomains"
   );
+  response.headers.set(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' wss: ws: https:; frame-ancestors 'none';"
+  );
 
   // === Rate limiting for API routes ===
   if (request.nextUrl.pathname.startsWith("/api/")) {
@@ -80,7 +84,22 @@ export function middleware(request: NextRequest) {
 
   // === CORS for the gateway API ===
   if (request.nextUrl.pathname.startsWith("/api/gateway")) {
-    response.headers.set("Access-Control-Allow-Origin", "*");
+    // In production, restrict CORS to the configured app URL.
+    // In demo mode (no env set), allow all origins for development convenience.
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
+    const isDemo = !appUrl || appUrl === "http://localhost:3000";
+    const requestOrigin = request.headers.get("origin") ?? "";
+
+    if (isDemo) {
+      response.headers.set("Access-Control-Allow-Origin", requestOrigin || "*");
+    } else {
+      // Only allow the configured app origin
+      const allowedOrigins = [appUrl, "http://localhost:3000", "http://127.0.0.1:3000"];
+      if (allowedOrigins.includes(requestOrigin)) {
+        response.headers.set("Access-Control-Allow-Origin", requestOrigin);
+      }
+    }
+    response.headers.set("Vary", "Origin");
     response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
     response.headers.set(
       "Access-Control-Allow-Headers",

@@ -38,7 +38,7 @@ export function AnimatedSection({ children, className = "", delay = 0 }: { child
 }
 
 /* ===== ANIMATED COUNTER ===== */
-export function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+export function AnimatedCounter({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
     const [count, setCount] = useState(0);
     const ref = useRef<HTMLSpanElement>(null);
     useEffect(() => {
@@ -63,5 +63,5 @@ export function AnimatedCounter({ target, suffix = "" }: { target: number; suffi
         if (ref.current) obs.observe(ref.current);
         return () => obs.disconnect();
     }, [target]);
-    return <span ref={ref} className="tabular-nums">{count.toLocaleString()}{suffix}</span>;
+    return <span ref={ref} className="tabular-nums">{prefix}{count.toLocaleString()}{suffix}</span>;
 }
