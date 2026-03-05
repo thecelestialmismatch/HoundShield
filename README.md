@@ -1,119 +1,134 @@
 <div align="center">
-  <h1>Kaelus.ai 🛡️</h1>
-  <p><strong>The Enterprise AI Compliance Firewall</strong></p>
-  <p>Protecting sensitive corporate data from LLM leaks with real-time interception, AES-256 encrypted quarantine, and immutable cryptographic audit trails.</p>
+  <picture>
+    <img alt="Kaelus AI Security Framework" src="assets/kaelus-banner.png" width="100%">
+  </picture>
+</div>
+
+<div align="center">
+  <p><strong>The Enterprise Standard for Generative AI Security and Compliance</strong></p>
 
   <p>
-    <a href="https://kaelus.ai">Website</a> •
-    <a href="https://kaelus.ai/features">Features</a> •
-    <a href="https://kaelus.ai/changelog">Changelog</a>
+    <a href="https://kaelus.ai">Website</a> |
+    <a href="https://kaelus.ai/features">Capabilities</a> |
+    <a href="https://kaelus.ai/changelog">Changelog</a> |
+    <a href="https://kaelus.ai/docs">Documentation</a>
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/Status-Production-emerald?style=for-the-badge&logoColor=white" alt="Status" />
-    <img src="https://img.shields.io/badge/Compliance-SOC2%20%7C%20GDPR%20%7C%20HIPAA-blue?style=for-the-badge&logoColor=white" alt="Compliance" />
-    <img src="https://img.shields.io/badge/Latency-%3C50ms-orange?style=for-the-badge&logoColor=white" alt="Latency" />
-    <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+    <img src="https://img.shields.io/badge/Status-Production_Ready-black?style=for-the-badge&logoColor=white" alt="Status" />
+    <img src="https://img.shields.io/badge/Compliance-SOC2_|_GDPR_|_HIPAA-black?style=for-the-badge&logoColor=white" alt="Compliance" />
+    <img src="https://img.shields.io/badge/Latency-%3C50ms-black?style=for-the-badge&logoColor=white" alt="Latency" />
+    <img src="https://img.shields.io/badge/Architecture-Zero_Trust-black?style=for-the-badge&logoColor=white" alt="Zero Trust" />
   </p>
 </div>
 
----
+***
 
-## 🚀 The Problem We Solve
-Generative AI adoption is exploding, but **78% of enterprises have zero visibility into what data is flowing to external AI providers** (OpenAI, Anthropic, Google, etc.). 
-A single developer pasting a configuration file containing an AWS root password into ChatGPT can lead to a catastrophic breach.
+## Abstract
 
-**Kaelus.ai is the fix.** We are an inline API proxy that sits between your employees/applications and the AI providers, scanning every payload in real-time.
+As Generative AI adoption reaches critical mass within the enterprise, organizations are inadvertently exposing underlying infrastructure, intellectual property, and protected health information (PHI) to third-party Large Language Models. 
 
----
+**Kaelus** is a real-time, inline compliance firewall designed to intercept, analyze, and sanitize downstream AI traffic before it exits your perimeter. Built on a zero-trust architecture, Kaelus ensures absolute data sovereignty without compromising developer velocity.
 
-## 💎 Core Features (Beast Mode)
+## Core Capabilities
 
-* ⚡ **Real-Time Interception (<50ms):** Zero-copy stream scanning ensures no noticeable latency is added to your LLM requests.
-* 🧠 **13-Agent ReAct Loop:** We don't just use dumb regex. Our context-aware LLM agents understand the difference between *source code containing a secret* and *source code containing a generic placeholder*.
-* 🛡️ **16 Detection Patterns:** Simultaneously scans for PII, Financial Data, Trade Secrets, Medical Records, SSH Keys, API tokens, and more.
-* 🔒 **AES-256 Encrypted Quarantine:** High-risk prompts are blocked and securely encrypted at rest. Zero plaintext storage.
-* ⛓️ **Immutable Audit Trails:** Every event is logged via a SHA-256 cryptographic hash chain, allowing for 1-click integrity verification by auditors.
-* 📊 **1-Click Compliance Reports:** Generate CFO-ready PDF reports to satisfy SOC 2, ISO 27001, HIPAA, and the EU AI Act.
+* **Sub-50ms Real-Time Interception:** Zero-copy stream scanning algorithms process multi-kilobyte payloads with negligible latency overhead.
+* **Context-Aware ReAct Engine:** Conventional Data Loss Prevention (DLP) relies on static regular expressions, resulting in high false-positive rates. Kaelus utilizes 13 specialized AI agents in a Reasoning and Acting (ReAct) loop to understand context, distinguishing between a benign placeholder and a critical enterprise secret.
+* **16-Vector Detection Matrix:** Parallel processing of payload data across 16 critical risk categories, including PII, Financial Instruments, Source Code, API Credentials, and Strategic M&A documentation.
+* **Cryptographic Event Auditing:** Every transaction, interception, and quarantine event is hashed and committed to an immutable SHA-256 ledger, providing instantaneous, tamper-evident verification for regulatory audits.
+* **AES-256 Encrypted Quarantine:** High-risk anomalous requests are isolated and encrypted at rest, ensuring that no plaintext sensitive data is ever stored in the platform database. 
 
----
+## Primary Use Cases
 
-## 🛠️ Integration: 1 Line of Code
+### 1. Stopping Source Code and Credential Leaks
+Engineering teams routinely use LLMs to debug code. Kaelus detects AWS keys, database credentials, and proprietary algorithms within the code context and prevents transmission to public AI endpoints.
 
-Integrating Kaelus doesn't require complex network re-routing. If your engineers can change a base URL, they can secure your AI traffic.
+### 2. Regulatory Compliance Enforcement
+Organizations operating within healthcare or finance can enforce HIPAA and PCI-DSS compliance instantly. Kaelus redacts or blocks PHI and cardholder data before the AI provider network ever receives the transmission.
+
+### 3. Forensic Auditing and Reporting
+Compliance officers require definitive proof of data governance. Kaelus generates CFO-ready, deterministically verifiable audit reports that trace every API call made by every employee or internal service.
+
+## Integration: Frictionless Deployment
+
+Security platforms that slow down engineering teams are fundamentally flawed. Kaelus requires zero infrastructure routing changes. Integration is executed at the SDK layer by simply overriding the base URL to point to the Kaelus Gateway.
+
+### Python Example
 
 ```python
-# Before
+# Standard Implementation (Unsecured)
 from openai import OpenAI
-client = OpenAI(api_key="sk-...")
+client = OpenAI(api_key="sk-your-provider-key")
 
-# After (Secure)
+# Kaelus Implementation (Secured)
 from openai import OpenAI
 client = OpenAI(
-    api_key="sk-...", 
+    api_key="sk-your-provider-key", 
     base_url="https://gateway.kaelus.ai/v1", 
-    default_headers={"x-kaelus-token": "corp-..."}
+    default_headers={"x-kaelus-token": "corp-your-organization-token"}
 )
 ```
 
----
+### Node.js Example
 
-## 📂 Architecture & Stack
+```typescript
+// Kaelus Implementation (Secured)
+import OpenAI from 'openai';
 
-Kaelus is designed for massive scale and zero trust.
+const openai = new OpenAI({
+  apiKey: process.env.PROVIDER_API_KEY,      
+  baseURL: 'https://gateway.kaelus.ai/v1',
+  defaultHeaders: { 'x-kaelus-token': process.env.KAELUS_ORG_TOKEN }
+});
+```
 
-* **Frontend:** Next.js 14 (App Router), React 18, Tailwind CSS v4, Framer Motion
-* **Backend:** Node.js Edge Runtime, WebSocket streaming proxy 
-* **Database:** Supabase (PostgreSQL with Row Level Security)
-* **Design System:** Porsche Premium Dark (Glassmorphism, custom CSS particle animations)
-* **Security Layer:** Content Security Policy (CSP), rigorous CORS settings, strict rate-limiting.
+## Platform Architecture
 
----
+Kaelus is engineered for extreme throughput and high availability:
 
-## 💻 Getting Started (Local Development)
+* **Edge Gateway:** Node.js Edge Runtime implementing concurrent WebSockets for continuous stream monitoring.
+* **Detection Engine:** Hybrid pipeline combining rapid regular expression heuristics with Named Entity Recognition (NER) models.
+* **Data Persistence:** Supabase PostgreSQL with strict Row Level Security (RLS).
+* **Interface layer:** Next.js 14, React 18, utilizing the Framer Motion library and a strict, high-contrast UI design system.
 
-To run the Kaelus agent locally:
+## Local Deployment Guide
 
-1. Clone the repository:
+To deploy the Kaelus platform within your own isolated environment:
+
+1. **Clone the Source Repository:**
    ```bash
    git clone https://github.com/thecelestialmismatch/Kaelus.ai.git
    cd Kaelus.ai/compliance-firewall-agent
    ```
 
-2. Install dependencies:
+2. **Initialize Dependencies:**
    ```bash
    npm install
    ```
 
-3. Configure environment variables (`.env.local`):
+3. **Configure Environment Variables:**
+   Duplicate the `.env.example` file to `.env.local` and supply your infrastructure details:
    ```env
    NEXT_PUBLIC_APP_URL=http://localhost:3000
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_api_key
    ```
 
-4. Start the development server:
+4. **Boot the Instance:**
    ```bash
    npm run dev
    ```
-   *The application will be available at `http://localhost:3000`.*
+   The dashboard and gateway will establish listeners on `http://localhost:3000`.
 
----
+## Security Protocols
 
-## 📖 Key Directories
-* `app/page.tsx`: The ultimate 18-section marketing/landing page.
-* `lib/gateway/`: The core interception proxy logic.
-* `lib/interceptor/`: The 16-pattern threat detection engine.
-* `lib/agents/`: State machines and memory memory logic spanning our 13 distinct agents.
-* `components/landing/`: Reusable, scroll-animated glassmorphic components.
+Kaelus maintains a zero-tolerance policy for vulnerabilities. If you identify a security flaw in this software, do not submit a public issue or pull request. Please contact our security operations center immediately at `security@kaelus.ai`.
 
----
+## License
 
-## 🔒 Security & Bug Reports
-For security vulnerabilities, please do not open a public issue. Email us directly at `security@kaelus.ai`.
+This software is proprietary and confidential. Unauthorized copying, distribution, or reverse engineering of this repository is strictly prohibited.
 
----
+***
 <div align="center">
-  <i>"Developer experience and enterprise security shouldn't be at odds. They should be the exact same thing."</i><br>
-  <b>Kaelus.ai Team</b>
+  <i>Engineering uncompromising security for the next generation of artificial intelligence.</i>
 </div>
