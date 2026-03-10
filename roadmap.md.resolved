@@ -1,0 +1,52 @@
+# ShieldReady Development Roadmap
+
+This roadmap outlines the phased development plan for the ShieldReady platform, based on the Product Requirements Document (V1.0).
+
+> **Note:** We are executing this entire roadmap under a **Zero-Budget Constraint**. It will be completely built by leveraging your laptop, local open-source tools, and strictly free-tier services (Vercel, Supabase, Gemini Free Tier, Resend).
+
+## Phase 1: Foundation (Weeks 1-2)
+- Study NIST SP 800-171 Rev 2 and CMMC Assessment Guide.
+- Build the 110-control database in Supabase.
+- Populate the database with plain-English translations, SPRS values, remediation steps, evidence requirements, and policy mappings.
+
+## Phase 2: Prototype (Weeks 3-4)
+- Setup the Next.js 14 project with Tailwind CSS and shadcn/ui.
+- Integrate Supabase authentication for user registration and workspace creation.
+- Build the CMMC Level Determination Wizard.
+- Develop the assessment questionnaire for 10 high-priority controls.
+- Implement the live SPRS score display.
+
+## Phase 3: MVP Build (Weeks 5-8)
+- Complete the assessment engine for all 110 controls.
+- Integrate the AI Engine (Claude API / OpenAI) for contextual plain-English guidance and remediation.
+- Develop the Compliance Dashboard with a visual heat map.
+- Implement the System Security Plan (SSP) document generator using `docx-js` and `pdf-lib`.
+
+## Phase 4: Beta Test (Weeks 9-10)
+- Deploy to Vercel staging environment.
+- Recruit 5 beta testers (from r/CMMC and CMMC COA community).
+- Monitor logs, collect feedback, and fix critical usability bugs.
+- Validate generated documents against C3PAO assessment expectations.
+
+## Phase 5: Launch (Weeks 11-12)
+- Finalize production deployment on Vercel.
+- Launch Starter ($79/mo) and Professional ($149/mo) tiers.
+- Activate community outreach, content marketing, and SAM.gov direct outreach.
+
+## Phase 6: Post-Launch & V1.1 (Months 4-6)
+- Add POA&M tracker with deadline alerts.
+- Develop evidence collection templates and upload functionality.
+- Expand document generator to include all 8 core policy documents.
+- Implement email notifications using Resend.
+
+## Phase 7: Expansion & V1.2 (Months 6-9)
+- Launch Consultant ($499/mo) tier.
+- Build a multi-client dashboard for CMMC consultants/RPOs.
+- Implement white-label reporting.
+- Begin RPO partnerships and apply for SBIR Phase I grants.
+
+## Phase 8: Scale & V2.0 (Months 9-12)
+- Implement Mock Assessment Scoring Engine.
+- Develop Board-Ready Compliance Reports.
+- Create Supply Chain Compliance Package for prime contractors.
+- Ensure SOC 2 Type II compliance for the ShieldReady platform itself.

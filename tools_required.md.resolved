@@ -1,0 +1,46 @@
+# ShieldReady Required Tools & Technologies
+
+Based on the ShieldReady Product Requirements Document (PRD v1.0), the following tools and technologies are required to build, deploy, and scale the platform.
+
+## Frontend
+- **Next.js 14 (App Router):** Core React framework for building the user interface and handling server-side rendering/API routes.
+- **React 18:** JavaScript library for building user interfaces.
+- **Tailwind CSS:** Utility-first CSS framework for rapid and responsive styling.
+- **shadcn/ui:** Reusable, accessible component library built on Radix UI and Tailwind CSS for professional, high-contrast UI design.
+- **Framer Motion:** Animation library for React to create smooth, professional UI transitions (inherited from Kaelus.ai stack).
+
+## Backend & Database
+- **Supabase:** Open-source Firebase alternative providing the core backend services.
+  - **PostgreSQL Database:** To store the 110-control database, user responses, and metadata.
+  - **Supabase Auth:** For user authentication, registration, and session management.
+  - **Row Level Security (RLS):** Crucial for ensuring complete data isolation between different tenant organizations.
+
+## AI & Logic (Zero-Cost Setup)
+- **Local LLMs or Free Tier APIs:** Operating on a strictly zero-budget approach, we will swap out paid APIs for:
+  - **Ollama:** Running open-source models (like Llama 3) locally on your laptop for development and testing.
+  - **Google Gemini API (Free Tier) / Groq:** Generous free tiers for production AI text generation.
+  These will power:
+  - Providing plain-English explanations of controls.
+  - Generating tailored step-by-step remediation guidance.
+  - Personalizing auto-generated policy documents.
+- **AI Orchestration Framework:** Direct API integration to avoid unnecessary over-engineering and keep the codebase lightweight.
+
+## Document Generation
+- **docx-js:** JavaScript library for generating and modifying Microsoft Word (.docx) documents server-side (for SSPs and Policy Documents).
+- **pdf-lib:** JavaScript library for creating and modifying PDF documents (for generating PDF versions of compliance reports and SSPs).
+
+## Hosting & Infrastructure
+- **Vercel:** Cloud platform for static sites and Serverless Functions, used for hosting the Next.js frontend and API endpoints.
+
+## Communications
+- **Resend:** Email API for sending transactional emails, notifications, and deadline alerts.
+
+## Project Management & Verification
+- **GitHub:** Source code version control and repository hosting.
+- **Node.js Environment:** Local development runtime.
+- **npm / pnpm:** Package management.
+
+## Security & Compliance (Platform Level)
+- **AES-256 Encryption Libraries:** For ensuring data is encrypted at rest (handled primarily via Supabase).
+- **TLS 1.3:** For secure data transmission.
+- **SOC 2 Type II Auditing Tools:** (Future requirement for Month 12 platform compliance).
