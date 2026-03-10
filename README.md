@@ -4,31 +4,41 @@
   </picture>
 </div>
 
+<br />
+
 <div align="center">
-  <p><strong>The Enterprise Standard for Generative AI Security and Compliance</strong></p>
-
-  <p>
-    <a href="https://kaelus.ai">Website</a> |
-    <a href="https://kaelus.ai/features">Capabilities</a> |
-    <a href="https://kaelus.ai/changelog">Changelog</a> |
-    <a href="https://kaelus.ai/docs">Documentation</a>
-  </p>
-
-  <p>
-    <img src="https://img.shields.io/badge/Status-Production_Ready-black?style=for-the-badge&logoColor=white" alt="Status" />
-    <img src="https://img.shields.io/badge/Compliance-SOC2_|_GDPR_|_HIPAA-black?style=for-the-badge&logoColor=white" alt="Compliance" />
-    <img src="https://img.shields.io/badge/Latency-%3C50ms-black?style=for-the-badge&logoColor=white" alt="Latency" />
-    <img src="https://img.shields.io/badge/Architecture-Zero_Trust-black?style=for-the-badge&logoColor=white" alt="Zero Trust" />
-  </p>
+    <strong>The Enterprise Standard for Generative AI Security and Compliance.</strong>
+    <br />
+    <br />
 </div>
 
-***
+<div align="center">
 
-## Abstract
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production_Ready-black?style=flat-square&logoColor=white)](https://kaelus.ai)
+[![Compliance](https://img.shields.io/badge/Compliance-SOC2_|_GDPR_|_HIPAA-black?style=flat-square&logoColor=white)](https://kaelus.ai)
+[![Latency](https://img.shields.io/badge/Latency-%3C50ms-black?style=flat-square&logoColor=white)](https://kaelus.ai)
+[![Architecture](https://img.shields.io/badge/Architecture-Zero_Trust-black?style=flat-square&logoColor=white)](https://kaelus.ai)
+
+</div>
+
+---
+
+# Kaelus.ai Compliance Firewall
 
 As Generative AI adoption reaches critical mass within the enterprise, organizations are inadvertently exposing underlying infrastructure, intellectual property, and protected health information (PHI) to third-party Large Language Models. 
 
 **Kaelus** is a real-time, inline compliance firewall designed to intercept, analyze, and sanitize downstream AI traffic before it exits your perimeter. Built on a zero-trust architecture, Kaelus ensures absolute data sovereignty without compromising developer velocity.
+
+## Table of Contents
+
+- [Core Capabilities](#core-capabilities)
+- [Primary Use Cases](#primary-use-cases)
+- [Quick Start](#quick-start)
+- [Integration Examples](#integration-examples)
+- [Platform Architecture](#platform-architecture)
+- [Security Protocols](#security-protocols)
+- [Community](#community)
 
 ## Core Capabilities
 
@@ -49,11 +59,27 @@ Organizations operating within healthcare or finance can enforce HIPAA and PCI-D
 ### 3. Forensic Auditing and Reporting
 Compliance officers require definitive proof of data governance. Kaelus generates CFO-ready, deterministically verifiable audit reports that trace every API call made by every employee or internal service.
 
-## Integration: Frictionless Deployment
+## Quick Start
+
+To deploy the Kaelus platform within your own isolated environment:
+
+```bash
+git clone https://github.com/thecelestialmismatch/Kaelus.ai.git
+cd Kaelus.ai/compliance-firewall-agent
+
+npm install
+cp .env.example .env.local
+
+npm run dev
+```
+
+The dashboard and gateway will establish listeners on `http://localhost:3000`.
+
+## Integration Examples
 
 Security platforms that slow down engineering teams are fundamentally flawed. Kaelus requires zero infrastructure routing changes. Integration is executed at the SDK layer by simply overriding the base URL to point to the Kaelus Gateway.
 
-### Python Example
+### Python
 
 ```python
 # Standard Implementation (Unsecured)
@@ -69,7 +95,7 @@ client = OpenAI(
 )
 ```
 
-### Node.js Example
+### Node.js
 
 ```typescript
 // Kaelus Implementation (Secured)
@@ -91,44 +117,23 @@ Kaelus is engineered for extreme throughput and high availability:
 * **Data Persistence:** Supabase PostgreSQL with strict Row Level Security (RLS).
 * **Interface layer:** Next.js 14, React 18, utilizing the Framer Motion library and a strict, high-contrast UI design system.
 
-## Local Deployment Guide
-
-To deploy the Kaelus platform within your own isolated environment:
-
-1. **Clone the Source Repository:**
-   ```bash
-   git clone https://github.com/thecelestialmismatch/Kaelus.ai.git
-   cd Kaelus.ai/compliance-firewall-agent
-   ```
-
-2. **Initialize Dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment Variables:**
-   Duplicate the `.env.example` file to `.env.local` and supply your infrastructure details:
-   ```env
-   NEXT_PUBLIC_APP_URL=http://localhost:3000
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_api_key
-   ```
-
-4. **Boot the Instance:**
-   ```bash
-   npm run dev
-   ```
-   The dashboard and gateway will establish listeners on `http://localhost:3000`.
-
 ## Security Protocols
 
-Kaelus maintains a zero-tolerance policy for vulnerabilities. If you identify a security flaw in this software, do not submit a public issue or pull request. Please contact our security operations center immediately at `security@kaelus.ai`.
+Kaelus maintains a zero-tolerance policy for vulnerabilities. If you identify a security flaw in this software, do not submit a public issue or pull request. Please contact our security operations center immediately at `security@kaelus.ai`. See our [Security Policy](SECURITY.md) for more details.
 
-## License
+## Community
 
-This software is proprietary and confidential. Unauthorized copying, distribution, or reverse engineering of this repository is strictly prohibited.
+- Read our [Contribution Guidelines](CONTRIBUTING.md)
+- Check our [Changelog](CHANGELOG.md)
+- File a [Bug Report](.github/ISSUE_TEMPLATE/bug_report.md) or [Feature Request](.github/ISSUE_TEMPLATE/feature_request.md)
 
-***
+---
+
 <div align="center">
   <i>Engineering uncompromising security for the next generation of artificial intelligence.</i>
+  <br>
+  <a href="https://kaelus.ai">Website</a> |
+  <a href="https://kaelus.ai/features">Capabilities</a> |
+  <a href="https://kaelus.ai/changelog">Changelog</a> |
+  <a href="https://kaelus.ai/docs">Documentation</a>
 </div>
