@@ -1,0 +1,246 @@
+
+> compliance-firewall-agent@2.0.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/30) ...
+ReferenceError: TextLogo is not defined
+    at k (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/auth/page.js:1:10111)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681) {
+  digest: '358741099'
+}
+
+Error occurred prerendering page "/auth". Read more: https://nextjs.org/docs/messages/prerender-error
+
+ReferenceError: TextLogo is not defined
+    at k (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/auth/page.js:1:10111)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681)
+ReferenceError: TextLogo is not defined
+    at b (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/docs/page.js:189:1684)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681) {
+  digest: '2024883883'
+}
+
+Error occurred prerendering page "/docs". Read more: https://nextjs.org/docs/messages/prerender-error
+
+ReferenceError: TextLogo is not defined
+    at b (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/docs/page.js:189:1684)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681)
+ReferenceError: TextLogo is not defined
+    at h (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/changelog/page.js:1:8878)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681) {
+  digest: '1901207037'
+}
+
+Error occurred prerendering page "/changelog". Read more: https://nextjs.org/docs/messages/prerender-error
+
+ReferenceError: TextLogo is not defined
+    at h (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/changelog/page.js:1:8878)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681)
+ReferenceError: TextLogo is not defined
+    at b (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/about/page.js:1:8628)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681) {
+  digest: '859438803'
+}
+
+Error occurred prerendering page "/about". Read more: https://nextjs.org/docs/messages/prerender-error
+
+ReferenceError: TextLogo is not defined
+    at b (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/about/page.js:1:8628)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681)
+ReferenceError: TextLogo is not defined
+    at w (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/features/page.js:1:7607)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681) {
+  digest: '724510414'
+}
+
+Error occurred prerendering page "/features". Read more: https://nextjs.org/docs/messages/prerender-error
+
+ReferenceError: TextLogo is not defined
+    at w (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/features/page.js:1:7607)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681)
+ReferenceError: TextLogo is not defined
+    at O (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/agents/page.js:1:33112)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681) {
+  digest: '3269486223'
+}
+
+Error occurred prerendering page "/agents". Read more: https://nextjs.org/docs/messages/prerender-error
+
+ReferenceError: TextLogo is not defined
+    at O (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/agents/page.js:1:33112)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681)
+   Generating static pages (7/30) 
+ReferenceError: TextLogo is not defined
+    at u (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/contact/page.js:1:7770)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681) {
+  digest: '1790413898'
+}
+
+Error occurred prerendering page "/contact". Read more: https://nextjs.org/docs/messages/prerender-error
+
+ReferenceError: TextLogo is not defined
+    at u (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/contact/page.js:1:7770)
+    at nj (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nB (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:67539)
+    at nD (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:66681)
+   Generating static pages (14/30) 
+Events fetch error: B [Error]: Dynamic server usage: Route /api/compliance/events couldn't be rendered statically because it used `nextUrl.searchParams`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
+    at l (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/api/compliance/events/route.js:1:601)
+    at /Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/compliance/events couldn't be rendered statically because it used `nextUrl.searchParams`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Report generation error: B [Error]: Dynamic server usage: Route /api/reports/generate couldn't be rendered statically because it used `nextUrl.searchParams`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29137)
+    at l (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/.next/server/app/api/reports/generate/route.js:1:602)
+    at /Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/reports/generate couldn't be rendered statically because it used `nextUrl.searchParams`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (22/30) 
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+ ✓ Generating static pages (30/30)
+
+> Export encountered errors on following paths:
+	/about/page: /about
+	/agents/page: /agents
+	/auth/page: /auth
+	/changelog/page: /changelog
+	/contact/page: /contact
+	/docs/page: /docs
+	/features/page: /features
