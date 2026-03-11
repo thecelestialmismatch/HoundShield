@@ -69,7 +69,12 @@ export default function RootLayout({
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
         />
       </head>
-      <body className="bg-surface text-white/85 min-h-screen font-sans antialiased">
+      <body className="bg-surface text-white/85 min-h-screen font-sans antialiased relative">
+        <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none noise-overlay">
+           <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-900/20 blur-[120px] animate-pulse-slow" />
+           <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-900/10 blur-[120px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
+           <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-purple-900/10 blur-[100px] animate-pulse-slow" style={{ animationDelay: '4s' }} />
+        </div>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

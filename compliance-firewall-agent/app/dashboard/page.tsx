@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 import { ComplianceOverview } from "@/components/dashboard/compliance-overview";
 import { EventTable } from "@/components/dashboard/event-table";
 import { QuarantinePanel } from "@/components/dashboard/quarantine-panel";
@@ -587,12 +589,12 @@ export default function DashboardPage() {
         )}
 
         {/* Sidebar */}
-        <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0d] border-r border-white/[0.06] flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0d]/80 backdrop-blur-2xl border-r border-white/[0.06] flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
           {/* Logo */}
           <Link href="/" className="h-16 flex items-center gap-2.5 px-5 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors group">
             <Logo className="w-9 h-9 group-hover:border-brand-500/40 transition-colors" />
             <div>
-              <span className="text-base font-bold text-white tracking-tight block leading-tight">Kaelus<span className="text-brand-400">.ai</span></span>
+              <TextLogo />
               <span className="text-[10px] text-white/25 uppercase tracking-widest">AI Platform</span>
             </div>
           </Link>
@@ -622,7 +624,11 @@ export default function DashboardPage() {
                       <button
                         key={item.id}
                         onClick={() => handleTabChange(item.id)}
-                        className={`${isActive ? "nav-item-active" : "nav-item"} w-full`}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300 w-full ${
+                          isActive
+                            ? "bg-brand-500/10 text-brand-400 border border-brand-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)] relative overflow-hidden"
+                            : "text-white/40 hover:text-white/80 hover:bg-white/5 border border-transparent"
+                        }`}
                       >
                         <Icon className="w-4 h-4" />
                         <span>{item.label}</span>
@@ -638,7 +644,7 @@ export default function DashboardPage() {
 
             <div>
               <p className="text-[9px] font-medium text-white/20 uppercase tracking-widest px-3 mb-1.5">Resources</p>
-              <Link href="/docs" className="nav-item w-full">
+              <Link href="/docs" className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300 w-full text-white/40 hover:text-white/80 hover:bg-white/5 border border-transparent">
                 <BookOpen className="w-4 h-4" />
                 <span>API Docs</span>
                 <ExternalLink className="w-3 h-3 ml-auto text-white/20" />
@@ -742,7 +748,16 @@ export default function DashboardPage() {
           )}
 
           {/* Page content */}
-          <main className={`flex-1 ${fullWidthTabs.includes(activeTab) ? '' : 'p-5 lg:p-8 max-w-7xl'}`}>
+          <main className={`flex-1 relative ${fullWidthTabs.includes(activeTab) ? '' : 'p-5 lg:p-8 max-w-7xl'}`}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="h-full w-full"
+              >
             {activeTab === "overview" && (
               <ErrorBoundary fallbackTitle="Overview failed to load">
                 <ComplianceOverview />
@@ -859,6 +874,8 @@ export default function DashboardPage() {
                 <SettingsPanel />
               </ErrorBoundary>
             )}
+              </motion.div>
+            </AnimatePresence>
           </main>
         </div>
       </div>

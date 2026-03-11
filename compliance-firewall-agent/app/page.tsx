@@ -16,7 +16,6 @@ import {
   Lock,
   Shield,
   TrendingDown,
-  Users,
   DollarSign,
   Eye,
   Fingerprint,
@@ -44,6 +43,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 import { Navbar } from "@/components/Navbar";
 
 // Existing Components
@@ -933,11 +933,9 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <Logo />
-                <span className="font-bold">
-                  Kaelus<span className="text-brand-400">.ai</span>
-                </span>
+              <div className="flex items-center gap-2 mb-4 group cursor-pointer inline-flex">
+                <Logo className="w-8 h-8 group-hover:scale-105 transition-transform" />
+                <TextLogo className="group-hover:scale-105" />
               </div>
               <p className="text-sm text-white/30 leading-relaxed">
                 AI-powered compliance firewall protecting enterprise data from LLM leaks.

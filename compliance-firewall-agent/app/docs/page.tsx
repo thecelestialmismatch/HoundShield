@@ -1,6 +1,7 @@
 "use client";
 
 import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -338,7 +339,7 @@ export default function DocsPage() {
             <div className="w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
               <Logo />
             </div>
-            <span className="font-bold tracking-tight">Kaelus<span className="text-brand-400">.ai</span></span>
+            <TextLogo />
           </Link>
           <ChevronRight className="w-4 h-4 text-white/20" />
           <div className="flex items-center gap-1.5">

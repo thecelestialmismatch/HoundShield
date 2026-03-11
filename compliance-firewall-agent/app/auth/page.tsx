@@ -1,6 +1,7 @@
 "use client";
 
 import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
@@ -262,9 +263,7 @@ export default function AuthPage() {
           <Link href="/" className="flex items-center gap-3.5 mb-10 group hover:opacity-90 transition-opacity">
             <Logo className="w-14 h-14 rounded-2xl shadow-glow group-hover:border-brand-500/40 transition-colors [&>svg:first-child]:w-7 [&>svg:first-child]:h-7 [&>svg:last-child]:w-3.5 [&>svg:last-child]:h-3.5" />
             <div>
-              <span className="text-2xl font-bold text-white tracking-tight block leading-tight">
-                Kaelus<span className="text-brand-400">.ai</span>
-              </span>
+              <TextLogo />
               <span className="text-[10px] text-brand-300/50 uppercase tracking-[0.2em]">
                 AI Compliance Firewall
               </span>
@@ -323,9 +322,7 @@ export default function AuthPage() {
           <div className="flex items-center gap-2.5 mb-10 lg:hidden">
             <Logo className="w-10 h-10" />
             <div>
-              <span className="text-lg font-bold text-white tracking-tight">
-                Kaelus<span className="text-brand-400">.ai</span>
-              </span>
+              <TextLogo />
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
@@ -786,9 +787,7 @@ export default function AgentsPage() {
             <div className="col-span-2 md:col-span-1">
               <Link href="/" className="flex items-center gap-2 mb-4">
                 <Logo className="w-7 h-7" />
-                <span className="text-lg font-bold tracking-tight text-white">
-                    Kaelus<span className="text-brand-400">.ai</span>
-                </span>
+                <TextLogo />
               </Link>
               <p className="text-xs text-white/30 leading-relaxed">
                 Agentic AI compliance firewall with 18 agent templates, 8 tools, and 13 AI models.
