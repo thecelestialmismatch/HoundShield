@@ -1,9 +1,9 @@
 "use client";
 
+import { TextLogo } from "@/components/TextLogo";
 import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { Logo } from "@/components/Logo";
 import { AnimatedSection } from "@/components/landing/animated-section";
 import { Mail, MessageSquare, Clock, CheckCircle2, ArrowRight, Send } from "lucide-react";
 
@@ -144,8 +144,7 @@ export default function ContactPage() {
             <footer className="border-t border-white/[0.06] py-12 px-6">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <Link href="/" className="flex items-center gap-2">
-                        <Logo className="w-6 h-6" />
-                        <span className="text-xl font-bold tracking-tight">Kaelus<span className="text-brand-400">.ai</span></span>
+                        <TextLogo />
                     </Link>
                     <p className="text-xs text-white/20">&copy; 2026 Kaelus.ai — All rights reserved.</p>
                 </div>

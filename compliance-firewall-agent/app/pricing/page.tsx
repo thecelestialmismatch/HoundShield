@@ -1,16 +1,13 @@
 "use client";
 
-import { Logo } from "@/components/Logo";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { LocalizedPrice } from "@/components/LocalizedPrice";
 import { Navbar } from "@/components/Navbar";
+import { TextLogo } from "@/components/TextLogo";
 import {
   Shield,
   ArrowRight,
   Check,
-  X,
-  Menu,
   ChevronDown,
   Zap,
   Crown,
@@ -254,14 +251,6 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 /* ===== MAIN PAGE ===== */
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
 
@@ -716,8 +705,7 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <Logo />
-                <span className="font-bold">Kaelus<span className="text-brand-400">.ai</span></span>
+                <TextLogo />
               </div>
               <p className="text-sm text-white/30 leading-relaxed">
                 AI-powered compliance firewall protecting enterprise data from

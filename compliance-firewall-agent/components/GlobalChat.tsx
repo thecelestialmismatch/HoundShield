@@ -2,7 +2,7 @@
 
 import { Logo } from "@/components/Logo";
 import { useState } from "react";
-import { MessageCircle, X, Send, Bot, Shield, Zap } from "lucide-react";
+import { X, Send } from "lucide-react";
 
 export function GlobalChat() {
     const [isOpen, setIsOpen] = useState(false);

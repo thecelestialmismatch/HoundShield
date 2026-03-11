@@ -1,6 +1,6 @@
 import { Logo } from "@/components/Logo";
 import Link from "next/link";
-import { Shield, Zap, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
   return (

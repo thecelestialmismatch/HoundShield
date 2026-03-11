@@ -229,7 +229,7 @@ export class StreamScanner {
 
     // We use classifyRisk directly but handle it as a fire-and-resolve
     // For synchronous regex evaluation, the Promise resolves in the same tick
-    let classificationResult: ClassificationResult | null = null;
+    const classificationResult: ClassificationResult | null = null;
 
     // The classifyRisk function uses only regex patterns (no network calls),
     // so while it returns a Promise, it resolves synchronously.
