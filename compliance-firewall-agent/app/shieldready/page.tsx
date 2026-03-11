@@ -1,288 +1,260 @@
 "use client";
 
-import Link from 'next/link';
-import { motion, Variants } from 'framer-motion';
+import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import {
-  ShieldCheck,
-  ClipboardCheck,
-  SearchX,
-  FileBarChart,
-  TrendingUp,
-  CheckCircle2,
+  Shield,
+  ArrowRight,
+  BarChart3,
   AlertTriangle,
+  CheckCircle2,
+  XCircle,
   Clock,
-  ArrowRight
-} from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { useState, useEffect } from 'react';
+  TrendingUp,
+  FileText,
+  Crosshair,
+  BookOpen,
+  Zap,
+} from "lucide-react";
+import SPRSGauge from "@/components/dashboard/SPRSGauge";
+import { ALL_CONTROLS } from "@/lib/shieldready/controls";
+import { CONTROL_FAMILIES } from "@/lib/shieldready/controls/families";
+import {
+  calculateSPRS,
+  getCompletionPercent,
+  getRemediationPriorities,
+} from "@/lib/shieldready/scoring";
+import { getAssessmentResponses, getOrganization } from "@/lib/shieldready/storage";
 
-// ─── Animations ──────────────────────────────────────────────────────────────
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
-};
-
-// ─── Placeholder Stats ───────────────────────────────────────────────────────
-
-const STATS = [
+const NAV_CARDS = [
   {
-    label: 'Controls Assessed',
-    value: 45,
-    max: 110,
-    icon: ClipboardCheck,
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
-    glow: 'group-hover:shadow-[0_0_20px_rgba(96,165,250,0.2)]',
+    title: "Assessment",
+    description: "Walk through all 110 NIST 800-171 controls",
+    href: "/shieldready/assessment",
+    icon: Shield,
+    color: "blue",
   },
   {
-    label: 'Completion',
-    value: 41,
-    suffix: '%',
-    icon: TrendingUp,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-    glow: 'group-hover:shadow-[0_0_20px_rgba(52,211,153,0.2)]',
+    title: "Gap Analysis",
+    description: "Prioritized remediation roadmap",
+    href: "/shieldready/gaps",
+    icon: Crosshair,
+    color: "amber",
   },
   {
-    label: 'Controls Met',
-    value: 22,
-    max: 110,
-    icon: CheckCircle2,
-    color: 'text-green-400',
-    bg: 'bg-green-500/10',
-    glow: 'group-hover:shadow-[0_0_20px_rgba(74,222,128,0.2)]',
+    title: "Reports",
+    description: "Print-ready SPRS assessment summary",
+    href: "/shieldready/reports",
+    icon: FileText,
+    color: "emerald",
   },
   {
-    label: 'Open Gaps',
-    value: 23,
-    max: 110,
-    icon: AlertTriangle,
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/10',
-    glow: 'group-hover:shadow-[0_0_20px_rgba(251,191,36,0.2)]',
+    title: "Resources",
+    description: "CMMC guides, templates, and tools",
+    href: "/shieldready/resources",
+    icon: BookOpen,
+    color: "purple",
   },
 ];
-
-const QUICK_ACTIONS = [
-  {
-    label: 'Start Assessment',
-    href: '/shieldready/assessment',
-    icon: ClipboardCheck,
-    description: 'Begin evaluating your NIST 800-171 controls',
-    gradient: 'from-emerald-500/20 to-teal-500/10 border-emerald-500/30 glow-emerald',
-  },
-  {
-    label: 'View Gaps',
-    href: '/shieldready/gaps',
-    icon: SearchX,
-    description: 'Identify unmet controls and remediation steps',
-    gradient: 'from-amber-500/20 to-orange-500/10 border-amber-500/30 glow-amber',
-  },
-  {
-    label: 'Generate Report',
-    href: '/shieldready/reports',
-    icon: FileBarChart,
-    description: 'Export your SPRS score and assessment details',
-    gradient: 'from-blue-500/20 to-indigo-500/10 border-blue-500/30 glow-blue',
-  },
-];
-
-// ─── Component ───────────────────────────────────────────────────────────────
-
-function AnimatedCounter({ value, suffix = '', duration = 1.5 }: { value: number, suffix?: string, duration?: number }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    let startTime: number;
-    let animationFrame: number;
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      // use simple easeOutQuart
-      const easeProgress = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(easeProgress * value));
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [value, duration]);
-
-  return <>{count}{suffix}</>;
-}
 
 export default function ShieldReadyDashboard() {
-  const sprsScore = 45;
-  const maxScore = 110;
-  
-  // Recharts data for a sleek gauge block
-  const gaugeData = [
-    { name: 'Score', value: sprsScore },
-    { name: 'Remaining', value: maxScore - sprsScore },
-  ];
-  
-  const COLORS = ['#34d399', '#ffffff05']; // emerald-400 and faint blank
+  const [responses, setResponses] = useState<any[]>([]);
+
+  useEffect(() => {
+    setResponses(getAssessmentResponses());
+  }, []);
+
+  const org = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    return getOrganization();
+  }, []);
+
+  const sprs = useMemo(() => calculateSPRS(ALL_CONTROLS, responses), [responses]);
+  const completion = useMemo(() => getCompletionPercent(ALL_CONTROLS.length, responses), [responses]);
+  const priorities = useMemo(() => getRemediationPriorities(ALL_CONTROLS, responses), [responses]);
+
+  const responseMap = useMemo(() => new Map(responses.map((r: any) => [r.controlId, r])), [responses]);
+
+  const statusCounts = useMemo(() => {
+    let met = 0, partial = 0, unmet = 0, open = 0;
+    for (const c of ALL_CONTROLS) {
+      const s = responseMap.get(c.id)?.status ?? "NOT_ASSESSED";
+      if (s === "MET") met++;
+      else if (s === "PARTIAL") partial++;
+      else if (s === "UNMET") unmet++;
+      else open++;
+    }
+    return { met, partial, unmet, open };
+  }, [responseMap]);
+
+  const hasStarted = responses.length > 0;
 
   return (
-    <motion.div 
-      className="space-y-8"
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-    >
-      {/* Header */}
-      <motion.div variants={itemVariants}>
-        <h1 className="text-3xl font-semibold tracking-tight text-white drop-shadow-md">
-          Dashboard
-        </h1>
-        <p className="mt-2 text-sm text-white/60 font-medium">
-          CMMC 2.0 / NIST SP 800-171 compliance at a glance
-        </p>
-      </motion.div>
-
-      {/* SPRS Score Gauge */}
-      <motion.div variants={itemVariants} className="glass-card-glow relative overflow-hidden bg-[#14141a]/60 p-8 pt-10 backdrop-blur-3xl shadow-[0_8px_32px_-8px_rgba(0,0,0,0.8)] group transition-all duration-500 hover:border-emerald-500/40">
-        <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        <div className="absolute -top-32 -left-32 h-64 w-64 rounded-full bg-emerald-500/10 blur-[80px] transition-all duration-700 group-hover:bg-emerald-500/20" />
-        
-        <div className="relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-center">
-          <div className="relative flex h-48 w-48 flex-col items-center justify-center">
-             <ResponsiveContainer width="100%" height="100%">
-               <PieChart>
-                 <Pie
-                   data={gaugeData}
-                   cx="50%"
-                   cy="50%"
-                   startAngle={210}
-                   endAngle={-30}
-                   innerRadius={70}
-                   outerRadius={90}
-                   paddingAngle={5}
-                   dataKey="value"
-                   stroke="none"
-                   cornerRadius={10}
-                 >
-                   {gaugeData.map((entry, index) => (
-                     <Cell 
-                        key={`cell-${index}`} 
-                        fill={COLORS[index % COLORS.length]} 
-                        style={index === 0 ? { filter: 'drop-shadow(0px 0px 8px rgba(52,211,153,0.6))' } : {}}
-                     />
-                   ))}
-                 </Pie>
-               </PieChart>
-             </ResponsiveContainer>
-             <div className="absolute flex flex-col items-center justify-center mt-2">
-                 <span className="text-5xl font-bold tracking-tighter text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">
-                   <AnimatedCounter value={sprsScore} />
-                 </span>
-                 <p className="text-xs font-semibold uppercase tracking-widest text-emerald-400/80 mt-1">
-                   Score
-                 </p>
-             </div>
+    <div className="min-h-screen p-6 lg:p-8 max-w-7xl mx-auto">
+      {/* Hero */}
+      <div className="mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-3 mb-3"
+        >
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center">
+            <Shield size={20} className="text-white" />
           </div>
-          
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30 shadow-[0_0_15px_rgba(52,211,153,0.3)]">
-                <ShieldCheck className="h-5 w-5" />
-              </div>
-              <h2 className="text-xl font-semibold text-white">Assessment Progress</h2>
-            </div>
-            <p className="max-w-md text-sm leading-relaxed text-white/50">
-              Your overall SPRS gap assessment is underway. Address Open Gaps to increase your score towards the maximum NIST SP 800-171 target of 110.
+          <div>
+            <h1 className="text-3xl font-bold text-white">ShieldReady</h1>
+            <p className="text-slate-400 text-sm">
+              CMMC Compliance Readiness • {org?.name ?? "Get started with onboarding"}
             </p>
-            <div className="flex items-center gap-2 pt-2 text-xs font-medium text-white/40">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              Range: -203 (worst) to +110 (perfect)
-            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {STATS.map(({ label, value, max, suffix, icon: Icon, color, bg, glow }, index) => (
+        {!hasStarted && (
           <motion.div
-            key={label}
-            variants={itemVariants}
-            className={`glass-card group relative p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-[#1a1a23]/60 ${glow}`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-6 bg-gradient-to-r from-blue-500/10 to-emerald-500/10 border border-blue-500/20 rounded-2xl p-6"
           >
-            <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            <div className="flex items-center gap-4">
-              <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${bg} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-inner`}>
-                <Icon className={`h-6 w-6 ${color}`} />
-              </div>
+            <div className="flex items-start gap-4">
+              <Zap size={24} className="text-blue-400 shrink-0 mt-0.5" />
               <div>
-                <span className="text-sm font-medium text-white/50">{label}</span>
-                <p className="mt-1 text-3xl font-bold tracking-tight text-white drop-shadow-sm flex items-end gap-1">
-                  <AnimatedCounter value={value} suffix={suffix} /> 
-                  {max && <span className="text-lg text-white/30 font-medium pb-1">/{max}</span>}
+                <h3 className="text-lg font-bold text-white mb-1">Welcome! Let&apos;s get started.</h3>
+                <p className="text-slate-300 text-sm mb-4">
+                  Complete your organization profile, then walk through each NIST 800-171 control
+                  to calculate your SPRS score and identify gaps.
                 </p>
+                <Link
+                  href="/shieldready/onboarding"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-white text-sm font-medium transition-colors"
+                >
+                  Start Onboarding <ArrowRight size={16} />
+                </Link>
               </div>
             </div>
           </motion.div>
-        ))}
+        )}
       </div>
 
-      {/* Quick Actions */}
-      <motion.div variants={itemVariants} className="pt-2">
-        <div className="mb-5 flex items-center gap-2">
-           <h2 className="text-lg font-semibold text-white">Quick Actions</h2>
-           <div className="h-px w-12 bg-gradient-to-r from-emerald-500/50 to-transparent" />
-        </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-          {QUICK_ACTIONS.map(({ label, href, icon: Icon, description, gradient }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`glass-card group relative flex flex-col justify-between p-6 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1`}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-xl ${gradient}`} />
-              <div className="relative z-10">
-                <Icon className="h-7 w-7 text-white/50 transition-colors duration-300 group-hover:text-white" />
-                <h3 className="mt-4 text-base font-semibold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70">
-                  {label}
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-white/40 group-hover:text-white/60">
-                  {description}
-                </p>
-              </div>
-              <div className="relative z-10 mt-6 flex translate-x-[-10px] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                 <ArrowRight className="h-5 w-5 text-white" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </motion.div>
+      {/* Score + Stats */}
+      {hasStarted && (
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-8">
+          <div className="lg:col-span-2 bg-slate-900/70 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 flex items-center justify-center">
+            <SPRSGauge score={sprs.total} size="md" />
+          </div>
 
-      {/* Recent Activity */}
-      <motion.div variants={itemVariants} className="glass-card p-8 group">
-        <h2 className="text-lg font-semibold text-white mb-6">Recent Activity</h2>
-        <div className="relative flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.08] bg-white/[0.01] py-12 text-center transition-all duration-300 group-hover:border-white/20 group-hover:bg-white/[0.02]">
-          <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/[0.02] to-transparent pointer-events-none rounded-xl" />
-          <Clock className="h-10 w-10 text-emerald-500/30 mb-2 transition-transform duration-300 group-hover:scale-110" />
-          <p className="mt-4 text-base font-medium text-white/70">Awaiting your first assessment</p>
-          <p className="mt-2 text-sm text-white/40 max-w-sm">
-            Activity events like uploading evidence, completing sections, and closing gaps will appear here in real-time.
-          </p>
+          <div className="lg:col-span-4 grid grid-cols-2 gap-3">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+              className="bg-slate-900/70 border border-slate-700/50 rounded-2xl p-5"
+            >
+              <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
+                <BarChart3 size={14} />
+                Completion
+              </div>
+              <div className="text-3xl font-bold text-white">{completion}%</div>
+              <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3 overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"
+                  animate={{ width: `${completion}%` }}
+                />
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+              className="bg-slate-900/70 border border-emerald-500/20 rounded-2xl p-5"
+            >
+              <div className="flex items-center gap-2 text-emerald-400 text-xs mb-2">
+                <CheckCircle2 size={14} />
+                Controls Met
+              </div>
+              <div className="text-3xl font-bold text-emerald-400">{statusCounts.met}</div>
+              <div className="text-xs text-slate-500 mt-1">of {ALL_CONTROLS.length}</div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="bg-slate-900/70 border border-amber-500/20 rounded-2xl p-5"
+            >
+              <div className="flex items-center gap-2 text-amber-400 text-xs mb-2">
+                <AlertTriangle size={14} />
+                Partial
+              </div>
+              <div className="text-3xl font-bold text-amber-400">{statusCounts.partial}</div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+              className="bg-slate-900/70 border border-red-500/20 rounded-2xl p-5"
+            >
+              <div className="flex items-center gap-2 text-red-400 text-xs mb-2">
+                <XCircle size={14} />
+                Gaps
+              </div>
+              <div className="text-3xl font-bold text-red-400">{statusCounts.unmet + statusCounts.open}</div>
+              <div className="text-xs text-slate-500 mt-1">
+                {statusCounts.unmet} unmet, {statusCounts.open} not assessed
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </motion.div>
-    </motion.div>
+      )}
+
+      {/* Nav Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {NAV_CARDS.map((card, i) => {
+          const Icon = card.icon;
+          return (
+            <motion.div
+              key={card.href}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + i * 0.05 }}
+            >
+              <Link
+                href={card.href}
+                className={`block bg-slate-900/70 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 group hover:border-${card.color}-500/30 hover:bg-${card.color}-500/5 transition-all`}
+              >
+                <Icon size={24} className={`text-${card.color}-400 mb-3`} />
+                <h3 className="text-white font-semibold mb-1 group-hover:text-white">{card.title}</h3>
+                <p className="text-slate-400 text-sm mb-3">{card.description}</p>
+                <span className={`text-${card.color}-400 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all`}>
+                  Open <ArrowRight size={14} />
+                </span>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Top priorities (if assessment started) */}
+      {hasStarted && priorities.length > 0 && (
+        <div className="bg-slate-900/70 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between p-5 border-b border-slate-700/50">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <AlertTriangle size={18} className="text-amber-400" />
+              Top Remediation Priorities
+            </h3>
+            <Link
+              href="/shieldready/gaps"
+              className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1"
+            >
+              View all <ArrowRight size={14} />
+            </Link>
+          </div>
+          <div className="divide-y divide-slate-800/50">
+            {priorities.slice(0, 5).map((item, i) => (
+              <div key={item.id} className="flex items-center gap-4 px-5 py-3 hover:bg-slate-800/30 transition-colors">
+                <span className="text-slate-500 font-mono text-xs w-5">{i + 1}</span>
+                <span className="text-blue-400 text-xs font-bold">{item.id}</span>
+                <span className="text-white text-sm flex-1 truncate">{item.title}</span>
+                <span className="text-red-400 text-xs font-bold">{item.sprsDeduction}pts</span>
+                <span className="text-slate-500 text-xs flex items-center gap-1">
+                  <Clock size={12} />{item.estimatedHours}h
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

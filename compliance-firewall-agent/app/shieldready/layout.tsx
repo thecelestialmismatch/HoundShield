@@ -18,7 +18,8 @@ const NAV_ITEMS = [
   { label: 'Assessment', href: '/shieldready/assessment', icon: ClipboardCheck },
   { label: 'Gap Analysis', href: '/shieldready/gaps', icon: SearchX },
   { label: 'Reports', href: '/shieldready/reports', icon: FileBarChart },
-  { label: 'Settings', href: '/shieldready/settings', icon: Settings },
+  { label: 'Resources', href: '/shieldready/resources', icon: Settings },
+  { label: 'Onboarding', href: '/shieldready/onboarding', icon: Settings },
 ] as const;
 
 export default function ShieldReadyLayout({
