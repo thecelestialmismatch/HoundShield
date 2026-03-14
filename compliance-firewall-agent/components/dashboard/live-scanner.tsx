@@ -40,7 +40,7 @@ interface ScanResult {
 }
 
 const RISK_COLORS: Record<string, { bg: string; text: string; border: string; dot: string }> = {
-  NONE: { bg: "bg-white/5", text: "text-white/50", border: "border-white/10", dot: "bg-white/30" },
+  NONE: { bg: "bg-white/5", text: "text-slate-500", border: "border-white/10", dot: "bg-white/30" },
   LOW: { bg: "bg-info-muted", text: "text-info", border: "border-info/20", dot: "bg-info" },
   MEDIUM: { bg: "bg-warning-muted", text: "text-warning", border: "border-warning/20", dot: "bg-warning" },
   HIGH: { bg: "bg-[#f97316]/10", text: "text-[#f97316]", border: "border-[#f97316]/20", dot: "bg-[#f97316]" },
@@ -110,12 +110,12 @@ export function LiveScanner() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-white">Live Compliance Scanner</h2>
-          <p className="text-xs text-white/40 mt-0.5">
+          <h2 className="text-lg font-semibold text-slate-900">Live Compliance Scanner</h2>
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
             Paste any text to scan for sensitive data in real-time
           </p>
         </div>
-        <div className="flex items-center gap-2 text-[10px] text-white/25">
+        <div className="flex items-center gap-2 text-[10px] text-slate-600 dark:text-slate-400">
           <Zap className="w-3 h-3" />
           16 detection patterns • 4 risk categories
         </div>
@@ -130,7 +130,7 @@ export function LiveScanner() {
               setText(ex.text);
               setResult(null);
             }}
-            className="text-[11px] px-3 py-1.5 rounded-lg border border-white/[0.06] text-white/40 hover:text-white/70 hover:border-white/15 transition-all"
+            className="text-[11px] px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 dark:text-slate-400 hover:text-slate-700 hover:border-white/15 transition-all"
           >
             Try: {ex.label}
           </button>
@@ -139,26 +139,26 @@ export function LiveScanner() {
 
       {/* Scanner */}
       <div className="glass-card overflow-hidden">
-        <div className="p-4 border-b border-white/[0.06]">
+        <div className="p-4 border-b border-slate-200">
           <div className="flex items-center gap-2 mb-3">
             <div className="flex gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-danger/60" />
               <div className="w-2.5 h-2.5 rounded-full bg-warning/60" />
               <div className="w-2.5 h-2.5 rounded-full bg-success/60" />
             </div>
-            <span className="text-[10px] font-mono text-white/25">kaelus-scanner</span>
+            <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400">kaelus-scanner</span>
           </div>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Paste text here to scan for PII, financial data, API keys, strategic information..."
             rows={6}
-            className="w-full bg-transparent text-sm text-white/80 placeholder-white/20 focus:outline-none resize-none font-mono leading-relaxed"
+            className="w-full bg-transparent text-sm text-slate-800 placeholder-white/20 focus:outline-none resize-none font-mono leading-relaxed"
           />
         </div>
 
         <div className="px-4 py-3 bg-surface-50/50 flex items-center justify-between">
-          <div className="flex items-center gap-3 text-[10px] text-white/25">
+          <div className="flex items-center gap-3 text-[10px] text-slate-600 dark:text-slate-400">
             <span>{text.length} characters</span>
             {result && (
               <span className="flex items-center gap-1">
@@ -219,7 +219,7 @@ export function LiveScanner() {
                       {result.risk_level} RISK
                     </span>
                   </div>
-                  <p className="text-xs text-white/40 mt-0.5">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                     Confidence: {Math.round(result.confidence * 100)}%
                   </p>
                 </div>
@@ -247,20 +247,20 @@ export function LiveScanner() {
             {/* Stats */}
             <div className="grid grid-cols-4 gap-3">
               <div className="text-center">
-                <p className="text-lg font-semibold text-white">{result.entities_found}</p>
-                <p className="text-[10px] text-white/30">Entities Found</p>
+                <p className="text-lg font-semibold text-slate-900">{result.entities_found}</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-400">Entities Found</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-semibold text-white">{result.classifications.length}</p>
-                <p className="text-[10px] text-white/30">Categories</p>
+                <p className="text-lg font-semibold text-slate-900">{result.classifications.length}</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-400">Categories</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-semibold text-white">{result.processing_time_ms}ms</p>
-                <p className="text-[10px] text-white/30">Scan Time</p>
+                <p className="text-lg font-semibold text-slate-900">{result.processing_time_ms}ms</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-400">Scan Time</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-semibold text-white">{Math.round(result.confidence * 100)}%</p>
-                <p className="text-[10px] text-white/30">Confidence</p>
+                <p className="text-lg font-semibold text-slate-900">{Math.round(result.confidence * 100)}%</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-400">Confidence</p>
               </div>
             </div>
           </div>
@@ -268,23 +268,23 @@ export function LiveScanner() {
           {/* Entities */}
           {result.entities.length > 0 && (
             <div className="glass-card p-5">
-              <h3 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
-                <Eye className="w-4 h-4 text-brand-400" />
+              <h3 className="text-sm font-medium text-slate-900 mb-3 flex items-center gap-2">
+                <Eye className="w-4 h-4 text-blue-600" />
                 Detected Entities ({result.entities.length})
               </h3>
               <div className="space-y-2">
                 {result.entities.map((entity, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between py-2.5 px-3 rounded-lg bg-surface-50/50 border border-white/[0.04]"
+                    className="flex items-center justify-between py-2.5 px-3 rounded-lg bg-surface-50/50 border border-slate-200"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-[10px] font-mono text-brand-300 bg-brand-500/10 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-mono text-blue-500 bg-blue-50 px-2 py-0.5 rounded">
                         {entity.type}
                       </span>
-                      <span className="text-xs text-white/60 font-mono">{entity.value_redacted}</span>
+                      <span className="text-xs text-slate-600 font-mono">{entity.value_redacted}</span>
                     </div>
-                    <span className="text-[10px] text-white/30">
+                    <span className="text-[10px] text-slate-600 dark:text-slate-400">
                       {Math.round(entity.confidence * 100)}% confidence
                     </span>
                   </div>
@@ -299,7 +299,7 @@ export function LiveScanner() {
               {result.classifications.map((c, i) => (
                 <span
                   key={i}
-                  className="text-[10px] font-medium px-2.5 py-1 rounded-full bg-brand-500/10 text-brand-300 border border-brand-500/20"
+                  className="text-[10px] font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-500 border border-blue-200"
                 >
                   {c}
                 </span>
@@ -310,13 +310,13 @@ export function LiveScanner() {
           {/* AI Classification */}
           {result.ai_classification && (
             <div className="glass-card p-4">
-              <h3 className="text-xs font-medium text-white/50 mb-2 flex items-center gap-1.5">
-                <Zap className="w-3 h-3 text-brand-400" />
+              <h3 className="text-xs font-medium text-slate-500 mb-2 flex items-center gap-1.5">
+                <Zap className="w-3 h-3 text-blue-600" />
                 AI Classification (Powered by {result.ai_classification.powered_by})
               </h3>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-white">{result.ai_classification.top_label}</span>
-                <span className="text-xs text-white/40">
+                <span className="text-sm font-medium text-slate-900">{result.ai_classification.top_label}</span>
+                <span className="text-xs text-slate-600 dark:text-slate-400">
                   Score: {Math.round(result.ai_classification.top_score * 100)}%
                 </span>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full ${result.ai_classification.is_sensitive ? "bg-danger-muted text-danger" : "bg-success-muted text-success"}`}>
@@ -344,19 +344,19 @@ export function LiveScanner() {
       {/* Scan History */}
       {scanHistory.length > 0 && (
         <div>
-          <h3 className="text-xs font-medium text-white/30 mb-3">Recent Scans</h3>
+          <h3 className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-3">Recent Scans</h3>
           <div className="space-y-1">
             {scanHistory.map((item, i) => {
               const c = RISK_COLORS[item.result.risk_level] || RISK_COLORS.NONE;
               return (
                 <div
                   key={i}
-                  className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/[0.02] transition-colors"
+                  className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white transition-colors"
                 >
                   <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
                   <span className={`text-[10px] font-medium ${c.text} w-16`}>{item.result.risk_level}</span>
-                  <span className="text-[11px] text-white/40 flex-1 truncate">{item.text}...</span>
-                  <span className="text-[10px] text-white/20">{item.result.processing_time_ms}ms</span>
+                  <span className="text-[11px] text-slate-600 dark:text-slate-400 flex-1 truncate">{item.text}...</span>
+                  <span className="text-[10px] text-slate-500">{item.result.processing_time_ms}ms</span>
                 </div>
               );
             })}

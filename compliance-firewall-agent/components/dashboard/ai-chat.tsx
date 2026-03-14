@@ -69,22 +69,22 @@ const MODELS = [
 function CodeBlock({ language, code }: { language: string; code: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="my-3 rounded-lg overflow-hidden border border-white/[0.08]">
-      <div className="flex items-center justify-between px-4 py-2 bg-white/[0.03] border-b border-white/[0.06]">
-        <span className="text-[10px] font-mono text-white/30 uppercase">{language}</span>
+    <div className="my-3 rounded-lg overflow-hidden border border-slate-200">
+      <div className="flex items-center justify-between px-4 py-2 bg-slate-50 border-b border-slate-200">
+        <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400 uppercase">{language}</span>
         <button
           onClick={() => {
             navigator.clipboard?.writeText(code);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
           }}
-          className="flex items-center gap-1 text-[10px] text-white/30 hover:text-white/60 transition-colors"
+          className="flex items-center gap-1 text-[10px] text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-colors"
         >
           {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-white/70 bg-surface-100/50">
+      <pre className="p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-700 bg-slate-50/50">
         <code>{code}</code>
       </pre>
     </div>
@@ -106,7 +106,7 @@ function renderContent(content: string) {
             <span key={`${i}-${j}`}>
               {boldParts.map((bp, k) => {
                 if (bp.startsWith("**") && bp.endsWith("**")) {
-                  return <strong key={k} className="text-white font-semibold">{bp.slice(2, -2)}</strong>;
+                  return <strong key={k} className="text-slate-900 font-semibold">{bp.slice(2, -2)}</strong>;
                 }
                 return <span key={k}>{bp}</span>;
               })}
@@ -468,11 +468,11 @@ export function AIChat({
   return (
     <div className="flex h-[calc(100vh-12rem)] max-h-[750px]">
       {/* Sessions sidebar */}
-      <div className="hidden md:flex w-56 flex-col border-r border-white/[0.06] bg-surface-50/50">
+      <div className="hidden md:flex w-56 flex-col border-r border-slate-200 bg-surface-50/50">
         <div className="p-3">
           <button
             onClick={() => setActiveSession(null)}
-            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-white/[0.08] text-xs text-white/50 hover:text-white/80 hover:border-white/15 transition-all"
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-slate-200 text-xs text-slate-500 hover:text-slate-800 hover:border-white/15 transition-all"
           >
             <Plus className="w-3.5 h-3.5" /> New Chat
           </button>
@@ -484,8 +484,8 @@ export function AIChat({
               onClick={() => setActiveSession(s.id)}
               className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-[11px] group transition-all ${
                 activeSession === s.id
-                  ? "bg-brand-500/10 text-brand-300"
-                  : "text-white/40 hover:bg-white/[0.03] hover:text-white/60"
+                  ? "bg-blue-50 text-blue-500"
+                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 hover:text-slate-600"
               }`}
             >
               <MessageSquare className="w-3 h-3 flex-shrink-0" />
@@ -500,7 +500,7 @@ export function AIChat({
             </button>
           ))}
           {sessions.length === 0 && (
-            <p className="text-[10px] text-white/20 text-center py-8">No conversations yet</p>
+            <p className="text-[10px] text-slate-700 dark:text-slate-300 text-center py-8">No conversations yet</p>
           )}
         </div>
       </div>
@@ -511,24 +511,24 @@ export function AIChat({
           /* Welcome screen */
           <div className="flex-1 flex items-center justify-center p-6">
             <div className="text-center max-w-md">
-              <div className="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mx-auto mb-5 border border-brand-500/20">
-                <Sparkles className="w-7 h-7 text-brand-400" />
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-5 border border-blue-200">
+                <Sparkles className="w-7 h-7 text-blue-600" />
               </div>
-              <h2 className="text-xl font-semibold text-white mb-2">
+              <h2 className="text-xl font-semibold text-slate-900 mb-2">
                 {agentName ? agentName : "Kaelus AI"}
               </h2>
-              <p className="text-sm text-white/40 mb-2">
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
                 {initialSystemPrompt
                   ? "Agent ready. Start a conversation below."
                   : "Powered by real AI models. Code, analyze, scan for compliance, and more."}
               </p>
 
               {/* Model badge */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-[11px] text-white/40 mb-6">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] text-slate-600 dark:text-slate-400 mb-6">
                 <span>{modelInfo.icon}</span>
                 <span>{modelInfo.name}</span>
-                <span className="text-white/20">·</span>
-                <span className="text-brand-400">{modelInfo.tag}</span>
+                <span className="text-slate-500">·</span>
+                <span className="text-blue-600">{modelInfo.tag}</span>
               </div>
 
               {apiKeyMissing && (
@@ -537,11 +537,11 @@ export function AIChat({
                     <AlertTriangle className="w-3.5 h-3.5 text-warning" />
                     <span className="text-xs font-medium text-warning">Setup Required</span>
                   </div>
-                  <p className="text-[11px] text-white/40">
-                    Add <code className="text-white/60 bg-white/5 px-1 rounded">OPENROUTER_API_KEY</code> to{" "}
-                    <code className="text-white/60 bg-white/5 px-1 rounded">.env.local</code> and restart.
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                    Add <code className="text-slate-600 bg-white/5 px-1 rounded">OPENROUTER_API_KEY</code> to{" "}
+                    <code className="text-slate-600 bg-white/5 px-1 rounded">.env.local</code> and restart.
                     Get a free key at{" "}
-                    <a href="https://openrouter.ai/keys" target="_blank" className="text-brand-400 underline">
+                    <a href="https://openrouter.ai/keys" target="_blank" className="text-blue-600 underline">
                       openrouter.ai/keys
                     </a>
                   </p>
@@ -553,9 +553,9 @@ export function AIChat({
                   <button
                     key={i}
                     onClick={() => sendMessage(s.text)}
-                    className="flex items-center gap-2.5 p-3 rounded-xl border border-white/[0.06] text-left text-xs text-white/50 hover:text-white/80 hover:border-white/15 hover:bg-white/[0.02] transition-all"
+                    className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 text-left text-xs text-slate-500 hover:text-slate-800 hover:border-white/15 hover:bg-white transition-all"
                   >
-                    <s.icon className="w-4 h-4 text-brand-400 flex-shrink-0" />
+                    <s.icon className="w-4 h-4 text-blue-600 flex-shrink-0" />
                     {s.text}
                   </button>
                 ))}
@@ -568,8 +568,8 @@ export function AIChat({
             {currentSession.messages.map((msg) => (
               <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : ""}`}>
                 {msg.role === "assistant" && (
-                  <div className="w-7 h-7 rounded-lg bg-brand-500/15 flex items-center justify-center flex-shrink-0 mt-0.5 border border-brand-500/20">
-                    <Bot className="w-3.5 h-3.5 text-brand-400" />
+                  <div className="w-7 h-7 rounded-lg bg-brand-500/15 flex items-center justify-center flex-shrink-0 mt-0.5 border border-blue-200">
+                    <Bot className="w-3.5 h-3.5 text-blue-600" />
                   </div>
                 )}
                 <div className="max-w-[80%] min-w-0">
@@ -588,8 +588,8 @@ export function AIChat({
                   <div
                     className={
                       msg.role === "user"
-                        ? "bg-brand-500/15 border border-brand-500/20 rounded-2xl rounded-br-md px-4 py-2.5 text-sm text-white/90"
-                        : `text-sm text-white/70 leading-relaxed ${msg.blocked ? "text-danger/80" : ""}`
+                        ? "bg-brand-500/15 border border-blue-200 rounded-2xl rounded-br-md px-4 py-2.5 text-sm text-slate-900"
+                        : `text-sm text-slate-700 leading-relaxed ${msg.blocked ? "text-danger/80" : ""}`
                     }
                   >
                     {msg.role === "assistant" ? renderContent(msg.content) : msg.content}
@@ -600,7 +600,7 @@ export function AIChat({
                 </div>
                 {msg.role === "user" && (
                   <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <User className="w-3.5 h-3.5 text-white/50" />
+                    <User className="w-3.5 h-3.5 text-slate-500" />
                   </div>
                 )}
               </div>
@@ -609,8 +609,8 @@ export function AIChat({
               currentSession.messages.length > 0 &&
               currentSession.messages[currentSession.messages.length - 1].role === "user" && (
                 <div className="flex gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-brand-500/15 flex items-center justify-center flex-shrink-0 border border-brand-500/20">
-                    <Bot className="w-3.5 h-3.5 text-brand-400" />
+                  <div className="w-7 h-7 rounded-lg bg-brand-500/15 flex items-center justify-center flex-shrink-0 border border-blue-200">
+                    <Bot className="w-3.5 h-3.5 text-blue-600" />
                   </div>
                   <div className="flex items-center gap-1.5 px-4 py-3">
                     <div className="w-1.5 h-1.5 rounded-full bg-brand-400/60 animate-pulse" />
@@ -630,13 +630,13 @@ export function AIChat({
         )}
 
         {/* Input area */}
-        <div className="p-3 border-t border-white/[0.06]">
+        <div className="p-3 border-t border-slate-200">
           {/* Model selector row */}
           <div className="flex items-center gap-2 mb-2">
             <div className="relative">
               <button
                 onClick={() => setShowModelPicker(!showModelPicker)}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] text-white/50 hover:text-white/70 hover:border-white/15 transition-all"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] text-slate-500 hover:text-slate-700 hover:border-white/15 transition-all"
               >
                 <Settings2 className="w-3 h-3" />
                 <span>{modelInfo.icon} {modelInfo.name}</span>
@@ -644,7 +644,7 @@ export function AIChat({
               </button>
 
               {showModelPicker && (
-                <div className="absolute bottom-full left-0 mb-1 w-56 bg-surface-50 border border-white/[0.08] rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
+                <div className="absolute bottom-full left-0 mb-1 w-56 bg-surface-50 border border-slate-200 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
                   <div className="p-1.5">
                     {MODELS.map((m) => (
                       <button
@@ -663,16 +663,16 @@ export function AIChat({
                         }}
                         className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all ${
                           selectedModel === m.id
-                            ? "bg-brand-500/10 text-brand-300"
-                            : "text-white/60 hover:bg-white/[0.04] hover:text-white/80"
+                            ? "bg-blue-50 text-blue-500"
+                            : "text-slate-600 hover:bg-slate-100 hover:text-slate-800"
                         }`}
                       >
                         <span className="text-sm">{m.icon}</span>
                         <div className="flex-1">
                           <span className="text-xs font-medium block">{m.name}</span>
-                          <span className="text-[10px] text-white/30">{m.tag}</span>
+                          <span className="text-[10px] text-slate-600 dark:text-slate-400">{m.tag}</span>
                         </div>
-                        {selectedModel === m.id && <Check className="w-3 h-3 text-brand-400" />}
+                        {selectedModel === m.id && <Check className="w-3 h-3 text-blue-600" />}
                       </button>
                     ))}
                   </div>
@@ -709,12 +709,12 @@ export function AIChat({
               }
               disabled={isStreaming}
               rows={1}
-              className="flex-1 bg-surface-100 border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/25 focus:border-brand-500/50 focus:outline-none transition-all disabled:opacity-50 resize-none max-h-[150px]"
+              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-400 focus:outline-none transition-all disabled:opacity-50 resize-none max-h-[150px]"
             />
             <button
               onClick={() => sendMessage()}
               disabled={isStreaming || !input.trim()}
-              className="w-10 h-10 rounded-xl bg-brand-500 hover:bg-brand-600 flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-brand-500 flex-shrink-0"
+              className="w-10 h-10 rounded-xl bg-brand-500 hover:bg-blue-600 flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-brand-500 flex-shrink-0"
             >
               {isStreaming ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -723,7 +723,7 @@ export function AIChat({
               )}
             </button>
           </div>
-          <p className="text-center text-[10px] text-white/15 mt-1.5">
+          <p className="text-center text-[10px] text-slate-700 dark:text-slate-300 mt-1.5">
             Powered by OpenRouter · All messages scanned by Kaelus Compliance Engine
           </p>
         </div>

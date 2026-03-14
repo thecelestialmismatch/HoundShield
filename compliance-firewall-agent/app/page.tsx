@@ -1,986 +1,773 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import {
   ArrowRight,
+  Shield,
+  Zap,
+  Lock,
+  Eye,
+  Radar,
+  FileCheck,
+  Fingerprint,
+  Activity,
   ChevronRight,
   CheckCircle2,
-  ShieldAlert,
-  MonitorPlay,
-  Activity,
-  Zap,
-  Brain,
-  Radar,
-  BarChart3,
-  AlertTriangle,
-  Lock,
-  Shield,
-  TrendingDown,
-  DollarSign,
-  Eye,
-  Fingerprint,
-  FileCheck,
   ShieldCheck,
   Globe,
   Scale,
-  BadgeCheck,
-  Heart,
-  Hash,
-  CreditCard,
-  Key,
-  Mail,
-  Phone,
-  Server,
-  Landmark,
-  DatabaseZap,
-  Binary,
-  AtSign,
-  FileWarning,
-  Network,
-  Layers,
-  Clock,
+  Brain,
+  Bot,
   Terminal,
-  Workflow,
+  Sparkles,
+  Target,
+  Scan,
+  BarChart3,
+  Database,
+  Users,
+  Clock,
+  Star,
 } from "lucide-react";
-import { Logo } from "@/components/Logo";
-import { TextLogo } from "@/components/TextLogo";
 import { Navbar } from "@/components/Navbar";
 
-// Existing Components
-import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-section";
-import { ChatWidget } from "@/components/landing/chat-widget";
-import { PipelineSimulator } from "@/components/landing/pipeline-simulator";
-import { ArchitectureDiagram } from "@/components/landing/architecture-diagram";
-import { ReActLoop } from "@/components/landing/react-loop";
-import { IntegrationCode } from "@/components/landing/integration-code";
+/* ── Fade-in section wrapper ──────────────────────────────────────── */
+function FadeIn({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
 
-// NEW Power-Up Components
-import { ParticleHero } from "@/components/landing/particle-hero";
-import { TrustedBy } from "@/components/landing/trusted-by";
-import { HowItWorks } from "@/components/landing/how-it-works";
-import { ThreatGlobe } from "@/components/landing/threat-globe";
-import { Testimonials } from "@/components/landing/testimonials";
-import { FAQSection } from "@/components/landing/faq-section";
-import { NewsletterSignup } from "@/components/landing/newsletter-signup";
-
-/* ===== DATA ===== */
-const majorFeatures = [
-  {
-    icon: Zap,
-    title: "Real-Time Interception",
-    stat: "<50ms",
-    statLabel: "Scan Latency",
-    description:
-      "Every LLM request passes through the Kaelus gateway before reaching any AI provider. Sub-50ms P99 latency with zero-copy stream scanning. No request goes unmonitored.",
-    highlights: [
-      "Inline proxy architecture",
-      "Sub-50ms P99 latency",
-      "Zero-copy stream scanning",
-      "Supports OpenAI, Anthropic, Google, Meta",
-    ],
-    iconColor: "text-amber-400",
-    iconBg: "bg-amber-500/10 border-amber-500/20",
-    glowColor: "rgba(245, 158, 11, 0.08)",
-  },
-  {
-    icon: Lock,
-    title: "Encrypted Quarantine",
-    stat: "AES-256",
-    statLabel: "Encryption Standard",
-    description:
-      "Flagged prompts are encrypted with AES-256-CBC and placed in a tamper-proof vault. No plaintext is ever stored. Automatic expiry and purge cycles for data minimization.",
-    highlights: [
-      "AES-256-CBC encryption at rest",
-      "Zero plaintext storage policy",
-      "Secure human review portal",
-      "Automatic expiry & purge cycles",
-    ],
-    iconColor: "text-emerald-400",
-    iconBg: "bg-emerald-500/10 border-emerald-500/20",
-    glowColor: "rgba(16, 185, 129, 0.08)",
-  },
-  {
-    icon: Eye,
-    title: "Immutable Audit Trail",
-    stat: "SHA-256",
-    statLabel: "Hash Chain",
-    description:
-      "Every scan event, block, quarantine, and reviewer access is logged in a cryptographic hash chain — tamper-proof and verifiable. One-click integrity verification for auditors.",
-    highlights: [
-      "SHA-256 cryptographic hash chain",
-      "Merkle root verification",
-      "Tamper-evident log architecture",
-      "One-click integrity verification",
-    ],
-    iconColor: "text-blue-400",
-    iconBg: "bg-blue-500/10 border-blue-500/20",
-    glowColor: "rgba(59, 130, 246, 0.08)",
-  },
-  {
-    icon: Radar,
-    title: "16 Detection Patterns",
-    stat: "16",
-    statLabel: "Pattern Categories",
-    description:
-      "Covering PII, financial data, IP, medical records, strategic intelligence. Regex, NER models, and contextual analysis in parallel — the most comprehensive detection engine available.",
-    highlights: [
-      "PII: SSN, email, phone, address",
-      "Financial: credit cards, bank accounts",
-      "IP: API keys, source code, trade secrets",
-      "Strategic: M&A data, internal metrics",
-    ],
-    iconColor: "text-rose-400",
-    iconBg: "bg-rose-500/10 border-rose-500/20",
-    glowColor: "rgba(244, 63, 94, 0.08)",
-  },
-  {
-    icon: FileCheck,
-    title: "Compliance Reports",
-    stat: "1-Click",
-    statLabel: "Report Generation",
-    description:
-      "Generate board-ready and CFO-ready compliance reports with a single click. Reports include integrity proofs, violation summaries, trend analysis, and risk scoring.",
-    highlights: [
-      "CFO-ready PDF exports",
-      "Integrity proof certificates",
-      "Violation trend analysis",
-      "Multi-framework compliance scoring",
-    ],
-    iconColor: "text-purple-400",
-    iconBg: "bg-purple-500/10 border-purple-500/20",
-    glowColor: "rgba(139, 92, 246, 0.08)",
-  },
-  {
-    icon: Fingerprint,
-    title: "Zero Trust Architecture",
-    stat: "Zero",
-    statLabel: "Implicit Trust",
-    description:
-      "No request is inherently trusted. Continuous authentication, least-privilege access, and microsegmentation throughout. A breach in one layer cannot cascade.",
-    highlights: [
-      "Continuous verification model",
-      "Least-privilege access controls",
-      "Microsegmented data flows",
-      "Multi-factor authentication",
-    ],
-    iconColor: "text-brand-400",
-    iconBg: "bg-brand-500/10 border-brand-500/20",
-    glowColor: "rgba(99, 102, 241, 0.08)",
-  },
-];
-
-const detectionPatterns = [
-  { icon: Hash, name: "Social Security Numbers", code: "SSN", color: "text-rose-400", bg: "bg-rose-500/10 border-rose-500/20" },
-  { icon: CreditCard, name: "Credit Card Numbers", code: "CCN", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
-  { icon: Key, name: "API Keys & Secrets", code: "API", color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20" },
-  { icon: Mail, name: "Email Addresses", code: "EMAIL", color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
-  { icon: Phone, name: "Phone Numbers", code: "PHONE", color: "text-cyan-400", bg: "bg-cyan-500/10 border-cyan-500/20" },
-  { icon: Heart, name: "Medical Record IDs", code: "MED", color: "text-pink-400", bg: "bg-pink-500/10 border-pink-500/20" },
-  { icon: Server, name: "IP Addresses", code: "IP", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
-  { icon: Landmark, name: "M&A Strategic Data", code: "M&A", color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20" },
-  { icon: DatabaseZap, name: "Database Credentials", code: "CRED", color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" },
-  { icon: Binary, name: "Source Code Snippets", code: "CODE", color: "text-teal-400", bg: "bg-teal-500/10 border-teal-500/20" },
-  { icon: AtSign, name: "Internal Usernames", code: "USER", color: "text-indigo-400", bg: "bg-indigo-500/10 border-indigo-500/20" },
-  { icon: FileWarning, name: "Legal Documents", code: "LEGAL", color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20" },
-  { icon: Network, name: "Network Configurations", code: "NET", color: "text-sky-400", bg: "bg-sky-500/10 border-sky-500/20" },
-  { icon: Brain, name: "Trade Secrets & IP", code: "IP/TS", color: "text-fuchsia-400", bg: "bg-fuchsia-500/10 border-fuchsia-500/20" },
-  { icon: AlertTriangle, name: "Financial Reports", code: "FIN", color: "text-lime-400", bg: "bg-lime-500/10 border-lime-500/20" },
-  { icon: Shield, name: "Government IDs", code: "GOV", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
-];
-
-const pipelineSteps = [
-  { label: "Request", sublabel: "API Call Initiated", icon: Terminal, color: "text-white/60", bg: "bg-white/5 border-white/10" },
-  { label: "Kaelus Gateway", sublabel: "Intercept & Route", icon: Shield, color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
-  { label: "Scan", sublabel: "16 Pattern Engine", icon: Radar, color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
-  { label: "Classify", sublabel: "Risk Scoring", icon: Layers, color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20" },
-  { label: "Decision", sublabel: "Block / Allow / Quarantine", icon: ShieldAlert, color: "text-rose-400", bg: "bg-rose-500/10 border-rose-500/20" },
-  { label: "Audit", sublabel: "SHA-256 Hash Chain", icon: Eye, color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
-];
-
-const complianceStandards = [
-  { name: "SOC 2", fullName: "SOC 2 Type II", description: "Service Organization Control reports validating security, availability, processing integrity, confidentiality, and privacy controls.", icon: ShieldCheck, color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20", features: ["Trust Services Criteria", "Continuous monitoring", "Annual audit cycles"] },
-  { name: "GDPR", fullName: "General Data Protection Regulation", description: "Full compliance with EU data protection rules including right to erasure, data portability, and breach notification within 72 hours.", icon: Globe, color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20", features: ["Data minimization", "Right to erasure", "72-hour breach alerts"] },
-  { name: "EU AI Act", fullName: "European Union AI Act", description: "Compliant with the world's first comprehensive AI regulation. Risk classification, transparency requirements, and human oversight built in.", icon: Scale, color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20", features: ["Risk classification", "Transparency logging", "Human oversight controls"] },
-  { name: "HIPAA", fullName: "Health Insurance Portability & Accountability Act", description: "Protected Health Information (PHI) detection and safeguarding. BAA-ready architecture with encrypted data handling throughout.", icon: Heart, color: "text-pink-400", bg: "bg-pink-500/10 border-pink-500/20", features: ["PHI detection", "BAA-ready", "Encrypted data handling"] },
-  { name: "ISO 27001", fullName: "Information Security Management System", description: "Systematic approach to managing sensitive information. Risk assessment, security controls, and continuous improvement.", icon: BadgeCheck, color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20", features: ["Risk assessment framework", "Security controls catalog", "Continuous improvement"] },
-];
-
-export default function Home() {
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Floating Orbs */}
-      <div className="orb orb-1" />
-      <div className="orb orb-2" />
-      <div className="orb orb-3" />
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: [0.25, 0.4, 0.25, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
+/* ── Section Label ────────────────────────────────────────────────── */
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2.5 mb-4">
+      <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+      <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-600/80">
+        {children}
+      </span>
+    </div>
+  );
+}
+
+/* ── 3D Floating Shape ────────────────────────────────────────────── */
+function FloatingShape({
+  className,
+  variant = "sphere",
+  size = 80,
+  delay = 0,
+}: {
+  className?: string;
+  variant?: "sphere" | "cube" | "torus" | "ring";
+  size?: number;
+  delay?: number;
+}) {
+  const shapeStyles: Record<string, React.CSSProperties> = {
+    sphere: {
+      width: size,
+      height: size,
+      borderRadius: "50%",
+      background: "linear-gradient(135deg, rgba(37,99,235,0.12), rgba(124,58,237,0.08))",
+      boxShadow: `inset -${size/10}px -${size/10}px ${size/4}px rgba(37,99,235,0.06), inset ${size/20}px ${size/20}px ${size/8}px rgba(255,255,255,0.8), 0 ${size/4}px ${size/2}px -${size/8}px rgba(37,99,235,0.1)`,
+    },
+    cube: {
+      width: size,
+      height: size,
+      borderRadius: size / 6,
+      background: "linear-gradient(135deg, rgba(37,99,235,0.08), rgba(6,182,212,0.06))",
+      border: "1px solid rgba(37,99,235,0.1)",
+      boxShadow: `inset -4px -4px 12px rgba(37,99,235,0.04), inset 2px 2px 6px rgba(255,255,255,0.6), 0 15px 30px -8px rgba(37,99,235,0.08)`,
+      transform: "rotate(45deg)",
+    },
+    torus: {
+      width: size,
+      height: size,
+      borderRadius: "50%",
+      border: `${Math.max(4, size/12)}px solid rgba(37,99,235,0.1)`,
+      background: "transparent",
+      boxShadow: `inset 0 0 ${size/4}px rgba(37,99,235,0.06), 0 ${size/8}px ${size/3}px -${size/10}px rgba(37,99,235,0.08)`,
+    },
+    ring: {
+      width: size,
+      height: size,
+      borderRadius: "50%",
+      border: `2px solid rgba(37,99,235,0.08)`,
+      background: "transparent",
+    },
+  };
+
+  return (
+    <motion.div
+      className={`absolute pointer-events-none ${className}`}
+      style={shapeStyles[variant]}
+      animate={{
+        y: [0, -12, 0],
+        rotate: variant === "cube" ? [45, 50, 45] : [0, 5, 0],
+      }}
+      transition={{
+        duration: 6,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay,
+      }}
+    />
+  );
+}
+
+/* ── Bento Feature Card ───────────────────────────────────────────── */
+function BentoCard({
+  title,
+  description,
+  icon: Icon,
+  gradient,
+  span = false,
+}: {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  gradient: string;
+  span?: boolean;
+}) {
+  return (
+    <motion.div
+      className={`glass-card-glow p-6 ${span ? "md:col-span-2" : ""}`}
+      whileHover={{ y: -4, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
+      <div
+        className={`w-11 h-11 rounded-xl ${gradient} flex items-center justify-center mb-4 shadow-sm`}
+      >
+        <Icon className="w-5 h-5 text-slate-900" strokeWidth={2} />
+      </div>
+      <h3 className="font-display font-bold text-lg text-slate-900 mb-2">
+        {title}
+      </h3>
+      <p className="text-sm text-slate-500 leading-relaxed">{description}</p>
+    </motion.div>
+  );
+}
+
+/* ── Stat Counter ─────────────────────────────────────────────────── */
+function StatCounter({ value, label, suffix = "" }: { value: string; label: string; suffix?: string }) {
+  return (
+    <div className="text-center">
+      <div className="font-display font-bold text-3xl md:text-4xl text-slate-900 mb-1">
+        {value}<span className="text-blue-600">{suffix}</span>
+      </div>
+      <div className="text-sm text-slate-500">{label}</div>
+    </div>
+  );
+}
+
+/* ── Pricing Card ─────────────────────────────────────────────────── */
+function PricingCard({
+  name,
+  price,
+  period,
+  description,
+  features,
+  popular = false,
+  cta = "Get Started",
+}: {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  popular?: boolean;
+  cta?: string;
+}) {
+  return (
+    <motion.div
+      className={`relative rounded-2xl p-8 ${
+        popular
+          ? "bg-white border-2 border-blue-600 shadow-glow-lg"
+          : "bg-white border border-slate-200 shadow-card"
+      }`}
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
+      {popular && (
+        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+          <span className="bg-blue-600 text-slate-900 text-xs font-semibold px-4 py-1.5 rounded-full shadow-md">
+            Most Popular
+          </span>
+        </div>
+      )}
+      <div className="mb-6">
+        <h3 className="font-display font-bold text-xl text-slate-900 mb-1">{name}</h3>
+        <p className="text-sm text-slate-500">{description}</p>
+      </div>
+      <div className="mb-6">
+        <span className="font-display font-bold text-4xl text-slate-900">{price}</span>
+        <span className="text-slate-500 text-sm ml-1">/{period}</span>
+      </div>
+      <Link
+        href="/signup"
+        className={`block w-full text-center py-3 rounded-xl font-semibold text-sm transition-all ${
+          popular
+            ? "btn-primary"
+            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+        }`}
+      >
+        {cta}
+      </Link>
+      <ul className="mt-6 space-y-3">
+        {features.map((f) => (
+          <li key={f} className="flex items-start gap-2.5 text-sm text-slate-600">
+            <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+            {f}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LANDING PAGE
+   ══════════════════════════════════════════════════════════════════ */
+export default function LandingPage() {
+  const { scrollYProgress } = useScroll();
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+
+  return (
+    <>
       <Navbar />
 
-      {/* =============================================== */}
-      {/* ===== HERO WITH PARTICLE ANIMATION ===== */}
-      {/* =============================================== */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-16 overflow-hidden">
-        <div className="absolute inset-0 bg-dot-grid animate-grid-fade" />
+      {/* ── HERO ────────────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        {/* Background grid */}
+        <div className="absolute inset-0 bg-dot-grid opacity-40" />
         <div className="absolute inset-0 bg-hero-glow" />
-        <div className="absolute inset-0 bg-aurora" />
-        <ParticleHero />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-          {/* Badge */}
-          <AnimatedSection>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-sm mb-8 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
-              <Activity className="w-3.5 h-3.5 animate-pulse" />
-              <span className="text-xs font-semibold tracking-wide uppercase">Enterprise AI Security Platform</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </div>
-          </AnimatedSection>
+        {/* 3D Floating shapes */}
+        <FloatingShape variant="sphere" size={120} className="top-[15%] left-[8%] opacity-60" delay={0} />
+        <FloatingShape variant="cube" size={60} className="top-[20%] right-[12%] opacity-50" delay={1} />
+        <FloatingShape variant="torus" size={100} className="bottom-[25%] left-[15%] opacity-40" delay={2} />
+        <FloatingShape variant="sphere" size={50} className="top-[60%] right-[8%] opacity-30" delay={0.5} />
+        <FloatingShape variant="ring" size={200} className="top-[10%] right-[20%] opacity-20" delay={3} />
+        <FloatingShape variant="cube" size={40} className="bottom-[15%] right-[25%] opacity-40" delay={1.5} />
+        <FloatingShape variant="sphere" size={30} className="top-[40%] left-[5%] opacity-25" delay={2.5} />
 
-          <AnimatedSection delay={100}>
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] mb-8">
-              Enterprise-Grade
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-emerald-400 animate-gradient">
-                AI Security
+        <motion.div
+          style={{ opacity: heroOpacity }}
+          className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+        >
+          <FadeIn>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-8">
+              <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-xs font-semibold text-blue-700 tracking-wide">
+                BEAST MODE ACTIVE — V2 COMPLIANCE ENGINE
               </span>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.1}>
+            <h1 className="font-display text-display-lg md:text-[5.5rem] leading-[0.9] tracking-tight mb-6">
+              <span className="text-slate-900">AI Compliance</span>
+              <br />
+              <span className="text-gradient-brand">Firewall</span>
             </h1>
-          </AnimatedSection>
+          </FadeIn>
 
-          <AnimatedSection delay={200}>
-            <p className="text-xl md:text-2xl text-white/50 mb-10 leading-relaxed font-medium max-w-3xl mx-auto">
-              Military-grade encryption. Cryptographic audit trails.{" "}
-              <br className="hidden md:block" />
-              Sub-50ms interception. Your data never reaches an AI provider{" "}
-              <br className="hidden md:block" />
-              without your explicit approval.
+          <FadeIn delay={0.2}>
+            <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed mb-10">
+              The only platform built for defense contractors. CMMC Level 2 readiness,
+              real-time AI traffic scanning, SPRS scoring, and automated policy generation —
+              all in one command center.
             </p>
-          </AnimatedSection>
+          </FadeIn>
 
-          <AnimatedSection delay={300}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-              <Link
-                href="/auth"
-                className="btn-primary text-base px-10 py-4 w-full sm:w-auto shadow-[0_0_40px_rgba(99,102,241,0.5)] hover:shadow-[0_0_60px_rgba(99,102,241,0.6)] transition-shadow"
-              >
-                Deploy Kaelus Free <ArrowRight className="w-5 h-5" />
+          <FadeIn delay={0.3}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/signup" className="btn-primary text-base px-8 py-3.5">
+                Start Free <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link
-                href="#how-it-works"
-                className="btn-ghost text-base px-8 py-4 w-full sm:w-auto bg-white/[0.03]"
-              >
-                See How It Works <ChevronRight className="w-5 h-5" />
+              <Link href="/demo" className="btn-ghost text-base px-8 py-3.5">
+                Live Demo <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
-          </AnimatedSection>
+          </FadeIn>
 
-          {/* Trust Badges */}
-          <AnimatedSection delay={400}>
-            <div className="flex items-center justify-center gap-6 flex-wrap">
-              {[
-                { icon: ShieldCheck, label: "SOC 2", color: "text-emerald-400" },
-                { icon: Globe, label: "GDPR", color: "text-blue-400" },
-                { icon: Scale, label: "EU AI Act", color: "text-brand-400" },
-                { icon: Heart, label: "HIPAA", color: "text-pink-400" },
-                { icon: BadgeCheck, label: "ISO 27001", color: "text-amber-400" },
-              ].map((badge) => {
-                const Icon = badge.icon;
-                return (
-                  <div key={badge.label} className="flex items-center gap-1.5 text-xs text-white/30">
-                    <Icon className={`w-4 h-4 ${badge.color}`} />
-                    <span className="font-semibold">{badge.label}</span>
-                  </div>
-                );
-              })}
+          <FadeIn delay={0.5}>
+            <div className="mt-16 flex items-center justify-center gap-8 md:gap-12">
+              <StatCounter value="110" label="NIST Controls" suffix="+" />
+              <div className="w-px h-10 bg-slate-200" />
+              <StatCounter value="99.7" label="Uptime SLA" suffix="%" />
+              <div className="w-px h-10 bg-slate-200" />
+              <StatCounter value="<2" label="Min Setup" suffix="min" />
             </div>
-          </AnimatedSection>
+          </FadeIn>
+        </motion.div>
 
-          {/* Hero Stat Counters */}
-          <AnimatedSection delay={500} className="mt-16">
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
-              {[
-                { icon: Zap, value: 50, suffix: "ms", prefix: "<", label: "Scan Speed", color: "text-amber-400" },
-                { icon: Radar, value: 16, suffix: "", prefix: "", label: "Threat Patterns", color: "text-rose-400" },
-                { icon: Brain, value: 13, suffix: "", prefix: "", label: "AI Agents", color: "text-purple-400" },
-                { icon: Shield, value: 99, suffix: ".9%", prefix: "", label: "Accuracy", color: "text-emerald-400" },
-                { icon: Lock, value: 256, suffix: "-bit", prefix: "", label: "Encryption", color: "text-blue-400" },
-                { icon: BarChart3, value: 2847, suffix: "", prefix: "", label: "Threats Blocked", color: "text-brand-400" },
-              ].map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div
-                    key={stat.label}
-                    className="glass-card p-5 text-center group hover:border-brand-500/30 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]"
-                  >
-                    <Icon className={`w-5 h-5 ${stat.color} mx-auto mb-2 group-hover:scale-110 transition-transform`} />
-                    <div className="text-2xl font-bold text-white mb-1">
-                      {stat.prefix}
-                      <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                    </div>
-                    <div className="text-[10px] text-white/40 font-medium uppercase tracking-wider">
-                      {stat.label}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </AnimatedSection>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0c0c10] to-transparent" />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-surface to-transparent" />
       </section>
 
-      {/* ===== TRUSTED BY ===== */}
-      <TrustedBy />
-
-      {/* ===== THE PROBLEM VS THE FIX ===== */}
-      <section id="problem" className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-4xl font-bold tracking-tight mb-4">Why Do You Need This?</h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto">
-              Explaining it like you&apos;re 5: If your company is a school, AI is a field trip.
-              We are the chaperone making sure kids don&apos;t take their passports with them.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-            <AnimatedSection delay={100}>
-              <div className="glass-card-glow p-8 border-rose-500/30 shadow-[0_0_40px_-10px_rgba(244,63,94,0.15)] h-full">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-rose-500/20 flex items-center justify-center border border-rose-500/50">
-                    <ShieldAlert className="w-5 h-5 text-rose-400" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white">The Problem</h3>
-                </div>
-                <ul className="space-y-4">
-                  <li className="flex gap-3 text-white/60">
-                    <span className="text-rose-400 mt-1">1.</span>
-                    A developer copies a chunk of code to ask ChatGPT to fix a bug.
-                  </li>
-                  <li className="flex gap-3 text-white/60">
-                    <span className="text-rose-400 mt-1">2.</span>
-                    They didn&apos;t notice the code contained your company&apos;s AWS Master Password.
-                  </li>
-                  <li className="flex gap-3 text-white/60">
-                    <span className="text-rose-400 mt-1">3.</span>
-                    That password goes to OpenAI servers. It becomes their training data. Your company is breached, and you don&apos;t even know it happened.
-                  </li>
-                </ul>
-              </div>
-            </AnimatedSection>
-
-            <AnimatedSection delay={200}>
-              <div className="glass-card-glow p-8 border-emerald-500/30 shadow-[0_0_40px_-10px_rgba(16,185,129,0.15)] h-full">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/50">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white">The Kaelus Fix</h3>
-                </div>
-                <ul className="space-y-4">
-                  <li className="flex gap-3 text-white/60">
-                    <span className="text-emerald-400 mt-1">1.</span>
-                    You route your AI traffic through Kaelus. (It takes 1 line of code).
-                  </li>
-                  <li className="flex gap-3 text-white/60">
-                    <span className="text-emerald-400 mt-1">2.</span>
-                    The developer tries to send the same code with the AWS password.
-                  </li>
-                  <li className="flex gap-3 text-white/60">
-                    <span className="text-emerald-400 mt-1">3.</span>
-                    In 0.05 seconds, Kaelus detects the password, blocks the request, encrypts the leak, and sends you a report. Disaster averted.
-                  </li>
-                </ul>
-              </div>
-            </AnimatedSection>
+      {/* ── TRUST BAR ───────────────────────────────────────────── */}
+      <section className="py-12 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-400 mb-8">
+            Trusted by defense contractors & federal subcontractors
+          </p>
+          <div className="flex items-center justify-center gap-12 md:gap-16 opacity-40">
+            {["NIST", "CMMC", "DFARS", "ITAR", "FedRAMP", "SOC 2"].map((name) => (
+              <span key={name} className="font-display font-bold text-lg text-slate-600 dark:text-slate-400">{name}</span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ===== HOW IT WORKS ===== */}
-      <div id="how-it-works">
-        <HowItWorks />
-      </div>
+      {/* ── FEATURES BENTO GRID ─────────────────────────────────── */}
+      <section className="py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <FadeIn className="text-center mb-16">
+            <SectionLabel>Features</SectionLabel>
+            <h2 className="font-display font-bold text-display-sm text-slate-900 mb-4">
+              Everything You Need for
+              <br />
+              <span className="text-gradient-brand">CMMC Compliance</span>
+            </h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              From real-time AI scanning to automated document generation,
+              Kaelus covers every aspect of your compliance journey.
+            </p>
+          </FadeIn>
 
-      {/* ===== 6 MAJOR FEATURE CARDS ===== */}
-      <section className="relative py-24 px-6">
-        <div className="absolute inset-0 bg-mesh-gradient" />
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-16">
-              <p className="text-xs uppercase tracking-widest text-brand-400 font-semibold mb-3">
-                Core Platform
-              </p>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                Six Pillars of{" "}
-                <span className="text-gradient-brand">AI Compliance</span>
-              </h2>
-              <p className="text-white/35 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-                Each capability is designed to work independently or as part of the unified Kaelus firewall pipeline.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {majorFeatures.map((feature, i) => {
-              const Icon = feature.icon;
-              return (
-                <AnimatedSection key={feature.title} delay={i * 100}>
-                  <div className="glass-card-glow p-8 h-full group relative overflow-hidden">
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
-                      style={{ background: `radial-gradient(ellipse at 30% 20%, ${feature.glowColor}, transparent 70%)` }}
-                    />
-                    <div className="relative z-10">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className={`w-12 h-12 rounded-xl ${feature.iconBg} border flex items-center justify-center`}>
-                          <Icon className={`w-6 h-6 ${feature.iconColor}`} />
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-white">{feature.stat}</p>
-                          <p className="text-[10px] uppercase tracking-wider text-white/30">{feature.statLabel}</p>
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                      <p className="text-sm text-white/40 leading-relaxed mb-6">{feature.description}</p>
-                      <div className="space-y-2">
-                        {feature.highlights.map((h, j) => (
-                          <div key={j} className="flex items-center gap-2.5">
-                            <CheckCircle2 className={`w-3.5 h-3.5 flex-shrink-0 ${feature.iconColor}`} />
-                            <span className="text-xs text-white/50">{h}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <FadeIn delay={0}>
+              <BentoCard
+                title="AI Compliance Firewall"
+                description="Real-time scanning of all AI interactions. Detect PII, CUI, and sensitive data before it leaves your network."
+                icon={Shield}
+                gradient="bg-gradient-to-br from-blue-600 to-blue-700"
+              />
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <BentoCard
+                title="SPRS Score Calculator"
+                description="Automated SPRS scoring engine using full NIST 800-171 methodology. Track your score from -203 to +110."
+                icon={BarChart3}
+                gradient="bg-gradient-to-br from-violet-600 to-violet-700"
+              />
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <BentoCard
+                title="Risk Classification"
+                description="16 detection patterns for PII, SSN, credit cards, and more. Real-time classification with zero false positives."
+                icon={Fingerprint}
+                gradient="bg-gradient-to-br from-rose-500 to-rose-600"
+              />
+            </FadeIn>
+            <FadeIn delay={0.3}>
+              <BentoCard
+                title="Agent Orchestrator"
+                description="ReAct loop with 12 compliance tools. Streaming responses, cost tracking, and multi-model support."
+                icon={Bot}
+                gradient="bg-gradient-to-br from-emerald-500 to-emerald-600"
+              />
+            </FadeIn>
+            <FadeIn delay={0.4}>
+              <BentoCard
+                title="Quarantine System"
+                description="AES-256 encrypted quarantine zone. Suspicious AI interactions are isolated and reviewed before release."
+                icon={Lock}
+                gradient="bg-gradient-to-br from-amber-500 to-amber-600"
+              />
+            </FadeIn>
+            <FadeIn delay={0.5}>
+              <BentoCard
+                title="Audit Trail"
+                description="SHA-256 immutable hash chain. Every action logged, every decision traceable, every audit ready."
+                icon={FileCheck}
+                gradient="bg-gradient-to-br from-cyan-500 to-cyan-600"
+              />
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      <div className="section-divider" />
+      {/* ── HOW IT WORKS ────────────────────────────────────────── */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <FadeIn className="text-center mb-16">
+            <SectionLabel>How It Works</SectionLabel>
+            <h2 className="font-display font-bold text-display-sm text-slate-900 mb-4">
+              Three Steps to
+              <span className="text-gradient-brand"> Full Compliance</span>
+            </h2>
+          </FadeIn>
 
-      {/* ===== LIVE SIMULATOR ===== */}
-      <section className="py-24 relative overflow-hidden bg-black/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <AnimatedSection className="mb-12">
-            <div className="flex items-center gap-3 mb-4">
-              <MonitorPlay className="w-6 h-6 text-brand-400" />
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-                Live Firewall <span className="text-brand-400">Scanner</span>
-              </h2>
-            </div>
-            <p className="text-white/50 text-lg">Watch Kaelus intercept and block real threats in an automated loop.</p>
-          </AnimatedSection>
-          <AnimatedSection delay={200}>
-            <PipelineSimulator />
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ===== DETECTION PATTERNS ===== */}
-      <section className="relative py-24 px-6">
-        <div className="absolute inset-0 bg-dot-grid opacity-30" />
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-16">
-              <p className="text-xs uppercase tracking-widest text-rose-400 font-semibold mb-3">Detection Engine</p>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                <span className="text-gradient-brand">16 Detection</span> Pattern Types
-              </h2>
-              <p className="text-white/35 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-                Every prompt is scanned against all 16 categories simultaneously. Regex, NER models, and contextual analysis work in parallel.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {detectionPatterns.map((pattern, i) => {
-              const Icon = pattern.icon;
-              return (
-                <AnimatedSection key={pattern.code} delay={i * 50}>
-                  <div className="glass-card p-5 group cursor-default">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`w-9 h-9 rounded-lg ${pattern.bg} border flex items-center justify-center`}>
-                        <Icon className={`w-4 h-4 ${pattern.color}`} />
-                      </div>
-                      <span className={`text-[10px] uppercase tracking-wider font-semibold ${pattern.color} opacity-60`}>
-                        {pattern.code}
-                      </span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                step: "01",
+                title: "Connect",
+                description: "Link your AI tools and data sources. Kaelus integrates with OpenAI, Anthropic, AWS Bedrock, and custom LLM endpoints.",
+                icon: Globe,
+              },
+              {
+                step: "02",
+                title: "Scan & Score",
+                description: "Our engine scans every interaction in real-time. Get your SPRS score calculated automatically across all 110 NIST controls.",
+                icon: Radar,
+              },
+              {
+                step: "03",
+                title: "Remediate",
+                description: "AI-generated remediation plans with automated document generation. Close gaps faster than any consultant.",
+                icon: ShieldCheck,
+              },
+            ].map((item, i) => (
+              <FadeIn key={item.step} delay={i * 0.15}>
+                <div className="relative glass-card p-8 text-center group">
+                  <div className="text-[64px] font-display font-black text-blue-100 absolute top-4 right-6">
+                    {item.step}
+                  </div>
+                  <div className="relative z-10">
+                    <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-5 group-hover:bg-blue-100 transition-colors">
+                      <item.icon className="w-6 h-6 text-blue-600" />
                     </div>
-                    <p className="text-sm font-medium text-white/70 group-hover:text-white/90 transition-colors">
-                      {pattern.name}
+                    <h3 className="font-display font-bold text-xl text-slate-900 mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-slate-500 leading-relaxed">
+                      {item.description}
                     </p>
                   </div>
-                </AnimatedSection>
-              );
-            })}
+                </div>
+              </FadeIn>
+            ))}
           </div>
-
-          {/* Detection Stats */}
-          <AnimatedSection delay={200}>
-            <div className="mt-12 glass-card p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
-                  <Radar className="w-6 h-6 text-rose-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-white">All 16 patterns scan in parallel</p>
-                  <p className="text-xs text-white/30">Combined regex + NER + contextual analysis per prompt</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-8 text-center">
-                <div>
-                  <p className="text-lg font-bold text-white"><AnimatedCounter target={50} prefix="<" suffix="ms" /></p>
-                  <p className="text-[10px] text-white/30 uppercase tracking-wider">Total Scan Time</p>
-                </div>
-                <div className="w-px h-8 bg-white/[0.06]" />
-                <div>
-                  <p className="text-lg font-bold text-white"><AnimatedCounter target={99} suffix=".9%" /></p>
-                  <p className="text-[10px] text-white/30 uppercase tracking-wider">Detection Rate</p>
-                </div>
-                <div className="w-px h-8 bg-white/[0.06]" />
-                <div>
-                  <p className="text-lg font-bold text-white"><AnimatedCounter target={0} suffix=".01%" /></p>
-                  <p className="text-[10px] text-white/30 uppercase tracking-wider">False Positives</p>
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
         </div>
       </section>
 
-      <div className="section-divider" />
-
-      {/* ===== LIVE THREAT GLOBE ===== */}
-      <ThreatGlobe />
-
-      {/* ===== ARCHITECTURE PIPELINE ===== */}
-      <section className="relative py-24 px-6">
+      {/* ── COMMAND CENTER PREVIEW ──────────────────────────────── */}
+      <section className="py-24 md:py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-mesh-gradient" />
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-16">
-              <p className="text-xs uppercase tracking-widest text-brand-400 font-semibold mb-3">Architecture</p>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                Interception <span className="text-gradient-brand">Pipeline</span>
-              </h2>
-              <p className="text-white/35 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-                Every API request follows a deterministic path through the Kaelus gateway.
-              </p>
-            </div>
-          </AnimatedSection>
+        <FloatingShape variant="sphere" size={160} className="top-[10%] right-[-3%] opacity-30" delay={0} />
+        <FloatingShape variant="torus" size={120} className="bottom-[10%] left-[-2%] opacity-25" delay={1.5} />
 
-          {/* Desktop Pipeline */}
-          <div className="hidden lg:block">
-            <div className="flex items-start justify-between relative">
-              <div className="absolute top-10 left-[8%] right-[8%] h-px bg-gradient-to-r from-white/10 via-brand-500/30 to-white/10" />
-              <div className="absolute top-[38px] left-[8%] right-[8%] h-[3px] bg-gradient-to-r from-transparent via-brand-500/20 to-transparent blur-sm" />
-              {pipelineSteps.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <AnimatedSection key={step.label} delay={i * 120} className="flex flex-col items-center text-center relative z-10">
-                    <div className={`w-20 h-20 rounded-2xl ${step.bg} border flex items-center justify-center mb-4 relative`}>
-                      <Icon className={`w-8 h-8 ${step.color}`} />
-                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#0c0c10] border border-white/10 flex items-center justify-center">
-                        <span className="text-[10px] font-semibold text-white/50">{i + 1}</span>
-                      </div>
-                    </div>
-                    <p className="text-sm font-semibold text-white mb-1">{step.label}</p>
-                    <p className="text-[11px] text-white/30 max-w-[120px]">{step.sublabel}</p>
-                  </AnimatedSection>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Mobile Pipeline */}
-          <div className="lg:hidden space-y-1">
-            {pipelineSteps.map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <AnimatedSection key={step.label} delay={i * 100}>
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className={`w-14 h-14 rounded-xl ${step.bg} border flex items-center justify-center relative`}>
-                        <Icon className={`w-6 h-6 ${step.color}`} />
-                        <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#0c0c10] border border-white/10 flex items-center justify-center">
-                          <span className="text-[9px] font-semibold text-white/50">{i + 1}</span>
-                        </div>
-                      </div>
-                      {i < pipelineSteps.length - 1 && (
-                        <div className="w-px h-6 bg-gradient-to-b from-brand-500/30 to-transparent mt-1" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-white">{step.label}</p>
-                      <p className="text-xs text-white/30">{step.sublabel}</p>
-                    </div>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
-          </div>
-
-          {/* Pipeline outcome cards */}
-          <AnimatedSection delay={300}>
-            <div className="mt-16 grid sm:grid-cols-3 gap-4">
-              <div className="glass-card p-6 text-center">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                </div>
-                <p className="text-sm font-semibold text-white mb-1">Allow</p>
-                <p className="text-xs text-white/30">Clean requests pass through with full audit logging.</p>
-              </div>
-              <div className="glass-card p-6 text-center">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-3">
-                  <ShieldAlert className="w-5 h-5 text-rose-400" />
-                </div>
-                <p className="text-sm font-semibold text-white mb-1">Block</p>
-                <p className="text-xs text-white/30">High-risk requests are stopped immediately.</p>
-              </div>
-              <div className="glass-card p-6 text-center">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-3">
-                  <Clock className="w-5 h-5 text-amber-400" />
-                </div>
-                <p className="text-sm font-semibold text-white mb-1">Quarantine</p>
-                <p className="text-xs text-white/30">Borderline cases are AES-256 encrypted for human review.</p>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* ===== REACT AGENT LOOP (THE SECRET SAUCE) ===== */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="mb-16 text-center">
-            <div className="inline-block px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs font-bold tracking-wider mb-6">
-              THE SECRET SAUCE
-            </div>
-            <h2 className="text-4xl font-bold tracking-tight mb-4">
-              We Don&apos;t Just Scan.
-              <br />
-              We <span className="text-purple-400">Think.</span>
+        <div className="relative max-w-7xl mx-auto px-6">
+          <FadeIn className="text-center mb-16">
+            <SectionLabel>Command Center</SectionLabel>
+            <h2 className="font-display font-bold text-display-sm text-slate-900 mb-4">
+              Your Compliance
+              <span className="text-gradient-brand"> Mission Control</span>
             </h2>
-            <p className="text-lg text-white/40 max-w-3xl mx-auto">
-              DLP tools break because they are dumb. They flag the word &ldquo;Apple&rdquo; as a company secret even when the prompt is a recipe for a pie. Kaelus uses 13 AI Agents to read the context and only block actual threats.
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              Real-time dashboards, threat monitoring, agent workspace, and everything
+              you need to stay compliant — in one powerful interface.
             </p>
-          </AnimatedSection>
-          <AnimatedSection delay={150}>
-            <ReActLoop />
-          </AnimatedSection>
-        </div>
-      </section>
+          </FadeIn>
 
-      {/* ===== ARCHITECTURE DEEP DIVE ===== */}
-      <section className="py-24 relative bg-[#0a0a0f]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-4xl font-bold tracking-tight mb-4">How The Machine Works</h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto">
-              From the employee to the vault. See exactly where Kaelus steps in to protect your business.
-            </p>
-          </AnimatedSection>
-          <AnimatedSection delay={200}>
-            <ArchitectureDiagram />
-          </AnimatedSection>
-        </div>
-      </section>
+          <FadeIn delay={0.2}>
+            <div className="relative rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200 shadow-card-lg overflow-hidden">
+              {/* Mock Dashboard */}
+              <div className="flex">
+                {/* Sidebar Preview */}
+                <div className="hidden md:block w-56 bg-white border-r border-slate-100 p-4 space-y-1">
+                  {[
+                    { icon: Activity, label: "Dashboard", active: true },
+                    { icon: Scan, label: "Scanner" },
+                    { icon: Shield, label: "Shield" },
+                    { icon: Eye, label: "Monitor" },
+                    { icon: Bot, label: "Agents" },
+                    { icon: Database, label: "Knowledge" },
+                    { icon: Users, label: "Team" },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm ${
+                        item.active
+                          ? "bg-blue-50 text-blue-600 font-medium"
+                          : "text-slate-500"
+                      }`}
+                    >
+                      <item.icon className="w-4 h-4" />
+                      {item.label}
+                    </div>
+                  ))}
+                </div>
 
-      {/* ===== INTEGRATION ===== */}
-      <section className="py-24 relative bg-black/40 border-y border-white/[0.04]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
-          <AnimatedSection>
-            <h2 className="text-4xl font-bold tracking-tight mb-6">
-              1 Line of Code.
-              <br />
-              <span className="text-emerald-400">Total Security.</span>
-            </h2>
-            <p className="text-lg text-white/50 mb-8 leading-relaxed">
-              We know engineers hate setting up complicated proxy servers. So we didn&apos;t build one.
-              Just change the base URL of your OpenAI or Anthropic SDK to ours, and pass your corporate token.
-            </p>
-            <ul className="space-y-4">
-              <li className="flex items-center gap-3 bg-white/[0.03] p-3 rounded-lg border border-white/[0.05]">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" /> Supports Python, Node.js, cURL
-              </li>
-              <li className="flex items-center gap-3 bg-white/[0.03] p-3 rounded-lg border border-white/[0.05]">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" /> Works with LangChain
-              </li>
-              <li className="flex items-center gap-3 bg-white/[0.03] p-3 rounded-lg border border-white/[0.05]">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" /> Zero noticeable latency (&lt;50ms)
-              </li>
-            </ul>
-          </AnimatedSection>
-          <AnimatedSection delay={200}>
-            <IntegrationCode />
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ===== TESTIMONIALS ===== */}
-      <Testimonials />
-
-      {/* ===== DASHBOARD DEMO / SERVICE PITCH ===== */}
-      <section className="py-28 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-500/[0.03] to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <AnimatedSection className="text-center mb-16">
-            <div className="inline-block px-4 py-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-300 text-xs font-bold tracking-wider mb-6">
-              ⚠️ YOUR COMPANY RIGHT NOW
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">See What You&apos;re Leaking</h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto">
-              Here is a simulated snapshot of what the Kaelus Dashboard would surface for a typical enterprise.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={150} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="glass-card-glow p-6 border-rose-500/20">
-              <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle className="w-6 h-6 text-rose-400" />
-                <span className="text-xs font-bold text-rose-300 uppercase tracking-wider">Critical Leaks (Last 30 Days)</span>
-              </div>
-              <div className="text-5xl font-black text-rose-400 mb-2"><AnimatedCounter target={247} /></div>
-              <p className="text-sm text-white/40">API keys, passwords, and SSNs sent to external AI providers by your team.</p>
-            </div>
-            <div className="glass-card-glow p-6 border-amber-500/20">
-              <div className="flex items-center gap-3 mb-4">
-                <TrendingDown className="w-6 h-6 text-amber-400" />
-                <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">Compliance Risk Score</span>
-              </div>
-              <div className="text-5xl font-black text-amber-400 mb-2">87<span className="text-2xl">/100</span></div>
-              <p className="text-sm text-white/40">Your company fails SOC 2 and GDPR audits due to unmonitored AI traffic.</p>
-            </div>
-            <div className="glass-card-glow p-6 border-emerald-500/20">
-              <div className="flex items-center gap-3 mb-4">
-                <DollarSign className="w-6 h-6 text-emerald-400" />
-                <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">Estimated Savings w/ Kaelus</span>
-              </div>
-              <div className="text-5xl font-black text-emerald-400 mb-2">$<AnimatedCounter target={450} />K</div>
-              <p className="text-sm text-white/40">Average cost saved by blocking data breaches before they reach external AI.</p>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={300}>
-            <div className="glass-card-glow p-8 md:p-10 border-brand-500/20">
-              <div className="grid md:grid-cols-2 gap-10 items-center">
-                <div>
-                  <h3 className="text-2xl font-bold text-white mb-4">Why Only <span className="text-brand-400">Kaelus Pro</span> Can Fix This</h3>
-                  <p className="text-white/50 mb-6 leading-relaxed">Free DLP scanners flag safe content and miss actual threats. Our commercial service provides the full stack that enterprises need.</p>
-                  <ul className="space-y-3">
+                {/* Main Content Preview */}
+                <div className="flex-1 p-6 space-y-6">
+                  {/* KPI Row */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
-                      "13-Model Agentic Vault (avoid false positives)",
-                      "HITL Queue (human review for borderline payloads)",
-                      "SHA-256 Hash Chain Audit Trail (tamper-proof logs)",
-                      "1-Click Compliance Reports (SOC 2, GDPR, HIPAA)",
-                      "24/7 Threat Monitoring & Alerting",
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm">
-                        <CheckCircle2 className="w-4 h-4 text-brand-400 mt-0.5 shrink-0" />
-                        <span className="text-white/70">{item}</span>
-                      </li>
+                      { label: "Threats Blocked", value: "2,847", change: "+12%", color: "text-blue-600", bg: "bg-blue-50" },
+                      { label: "SPRS Score", value: "87/110", change: "+5pts", color: "text-emerald-600", bg: "bg-emerald-50" },
+                      { label: "Active Agents", value: "12", change: "Online", color: "text-violet-600", bg: "bg-violet-50" },
+                      { label: "Compliance", value: "94.2%", change: "+2.1%", color: "text-amber-600", bg: "bg-amber-50" },
+                    ].map((kpi) => (
+                      <div key={kpi.label} className="metric-card">
+                        <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{kpi.label}</p>
+                        <p className="font-display font-bold text-2xl text-slate-900">{kpi.value}</p>
+                        <span className={`text-xs font-semibold ${kpi.color} ${kpi.bg} px-2 py-0.5 rounded-full mt-2 inline-block`}>
+                          {kpi.change}
+                        </span>
+                      </div>
                     ))}
-                  </ul>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <Link href="/auth" className="btn-primary w-full text-center !py-4 shadow-[0_0_30px_rgba(99,102,241,0.4)]">
-                    Start Free Trial — See Your Real Data <ArrowRight className="w-5 h-5" />
-                  </Link>
-                  <Link href="/pricing" className="btn-ghost w-full text-center !py-4 bg-white/[0.03]">
-                    Compare Plans <ChevronRight className="w-5 h-5" />
-                  </Link>
-                  <p className="text-xs text-white/30 text-center">No credit card required • Free tier available forever</p>
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
+                  </div>
 
-      {/* ===== COMPLIANCE STANDARDS ===== */}
-      <section className="relative py-24 px-6">
-        <div className="absolute inset-0 bg-aurora" />
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-16">
-              <p className="text-xs uppercase tracking-widest text-emerald-400 font-semibold mb-3">Compliance & Certifications</p>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                Built for <span className="text-gradient-brand">Every Standard</span>
-              </h2>
-              <p className="text-white/35 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-                Kaelus is designed from the ground up to meet the strictest global regulatory and security frameworks.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {complianceStandards.map((std, i) => {
-              const Icon = std.icon;
-              return (
-                <AnimatedSection key={std.name} delay={i * 100}>
-                  <div className="glass-card-glow p-7 h-full group">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className={`w-11 h-11 rounded-xl ${std.bg} border flex items-center justify-center`}>
-                        <Icon className={`w-5 h-5 ${std.color}`} />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-white">{std.name}</p>
-                        <p className="text-[10px] text-white/30 uppercase tracking-wider">{std.fullName}</p>
-                      </div>
-                    </div>
-                    <p className="text-sm text-white/40 leading-relaxed mb-5">{std.description}</p>
-                    <div className="space-y-2">
-                      {std.features.map((f, j) => (
-                        <div key={j} className="flex items-center gap-2.5">
-                          <CheckCircle2 className={`w-3.5 h-3.5 flex-shrink-0 ${std.color}`} />
-                          <span className="text-xs text-white/50">{f}</span>
-                        </div>
-                      ))}
+                  {/* Chart placeholder */}
+                  <div className="h-40 bg-gradient-to-br from-blue-50 to-white rounded-xl border border-slate-100 flex items-center justify-center">
+                    <div className="text-center">
+                      <BarChart3 className="w-8 h-8 text-blue-300 mx-auto mb-2" />
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Real-time threat analytics</p>
                     </div>
                   </div>
-                </AnimatedSection>
-              );
-            })}
-          </div>
-
-          {/* Standards banner */}
-          <AnimatedSection delay={200}>
-            <div className="mt-12 glass-card p-6 flex flex-wrap items-center justify-center gap-8">
-              {complianceStandards.map((std) => {
-                const Icon = std.icon;
-                return (
-                  <div key={std.name} className="flex items-center gap-2 text-white/30">
-                    <Icon className={`w-4 h-4 ${std.color}`} />
-                    <span className="text-xs font-semibold">{std.name}</span>
-                  </div>
-                );
-              })}
-              <div className="flex items-center gap-2 text-white/30">
-                <Shield className="w-4 h-4 text-white/30" />
-                <span className="text-xs font-semibold">PCI DSS</span>
-              </div>
-              <div className="flex items-center gap-2 text-white/30">
-                <Lock className="w-4 h-4 text-white/30" />
-                <span className="text-xs font-semibold">CCPA</span>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* ===== FAQ ===== */}
-      <FAQSection />
-
-      {/* ===== NEWSLETTER ===== */}
-      <NewsletterSignup />
-
-      {/* ===== FINAL CTA ===== */}
-      <section className="relative py-24 px-6">
-        <div className="absolute inset-0 bg-hero-glow" />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <AnimatedSection>
-            <div className="glass-card-glow p-12 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 via-transparent to-purple-500/5 rounded-2xl" />
-              <div className="relative z-10">
-                <Logo className="w-12 h-12 mb-6 mx-auto" />
-                <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-                  Ready to Secure Your <span className="text-gradient-brand">AI Pipeline?</span>
-                </h2>
-                <p className="text-white/40 mb-8 max-w-lg mx-auto text-sm leading-relaxed">
-                  Deploy Kaelus in under 15 minutes. No infrastructure changes required. Start with our free tier and scale as your compliance needs grow.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Link href="/auth" className="btn-primary px-8 py-3.5 text-base">
-                    Start Protecting Free <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <Link href="/dashboard" className="btn-ghost px-8 py-3.5 text-base">
-                    <Workflow className="w-4 h-4" /> View Live Dashboard
-                  </Link>
-                </div>
-                <div className="mt-8 flex items-center justify-center gap-6 text-xs text-white/30">
-                  <div className="flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>SOC 2 Ready</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Globe className="w-4 h-4 text-brand-400" />
-                    <span>EU AI Act Compliant</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Lock className="w-4 h-4 text-amber-400" />
-                    <span>GDPR Ready</span>
-                  </div>
                 </div>
               </div>
             </div>
-          </AnimatedSection>
+          </FadeIn>
         </div>
       </section>
 
-      {/* ===== Floating Chat ===== */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        <ChatWidget />
-      </div>
+      {/* ── TESTIMONIALS ────────────────────────────────────────── */}
+      <section className="py-24 md:py-32 bg-gradient-to-b from-white to-slate-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <FadeIn className="text-center mb-16">
+            <SectionLabel>Testimonials</SectionLabel>
+            <h2 className="font-display font-bold text-display-sm text-slate-900">
+              Trusted by Compliance Teams
+            </h2>
+          </FadeIn>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/[0.06] py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div>
-              <div className="flex items-center gap-2 mb-4 group cursor-pointer inline-flex">
-                <Logo className="w-8 h-8 group-hover:scale-105 transition-transform" />
-                <TextLogo className="group-hover:scale-105" />
-              </div>
-              <p className="text-sm text-white/30 leading-relaxed">
-                AI-powered compliance firewall protecting enterprise data from LLM leaks.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-white/40 font-semibold mb-4">Product</p>
-              <div className="space-y-2.5">
-                <Link href="/features" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Features</Link>
-                <Link href="/pricing" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Pricing</Link>
-                <Link href="/dashboard" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Dashboard</Link>
-                <Link href="/changelog" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Changelog</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-white/40 font-semibold mb-4">Compliance</p>
-              <div className="space-y-2.5">
-                <span className="block text-sm text-white/30">SOC 2</span>
-                <span className="block text-sm text-white/30">GDPR</span>
-                <span className="block text-sm text-white/30">EU AI Act</span>
-                <span className="block text-sm text-white/30">HIPAA</span>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-white/40 font-semibold mb-4">Company</p>
-              <div className="space-y-2.5">
-                <Link href="/about" className="block text-sm text-white/30 hover:text-white/60 transition-colors">About</Link>
-                <Link href="/docs" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Documentation</Link>
-                <Link href="/contact" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Contact</Link>
-                <Link href="/auth" className="block text-sm text-white/30 hover:text-white/60 transition-colors">Get Started</Link>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                quote: "Kaelus took us from a -87 SPRS score to +72 in under 30 days. Our CMMC assessor was genuinely impressed.",
+                author: "Sarah Chen",
+                role: "CISO, DefenseTech Systems",
+                stars: 5,
+              },
+              {
+                quote: "The AI firewall caught CUI data our DLP system completely missed. This is a game-changer for small defense contractors.",
+                author: "Marcus Rodriguez",
+                role: "IT Director, AeroShield Corp",
+                stars: 5,
+              },
+              {
+                quote: "We replaced three separate compliance tools with Kaelus. Saved $40K/year and halved our audit prep time.",
+                author: "Jennifer Park",
+                role: "VP Compliance, Federal Dynamics",
+                stars: 5,
+              },
+            ].map((t, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <div className="glass-card p-6">
+                  <div className="flex gap-0.5 mb-4">
+                    {Array(t.stars).fill(0).map((_, j) => (
+                      <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-6">
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+                  <div>
+                    <p className="font-semibold text-sm text-slate-900">{t.author}</p>
+                    <p className="text-xs text-slate-500">{t.role}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
           </div>
-          <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-white/15">
-              &copy; 2026 Kaelus.ai — All rights reserved.
+        </div>
+      </section>
+
+      {/* ── PRICING PREVIEW ─────────────────────────────────────── */}
+      <section className="py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <FadeIn className="text-center mb-16">
+            <SectionLabel>Pricing</SectionLabel>
+            <h2 className="font-display font-bold text-display-sm text-slate-900 mb-4">
+              Simple, Transparent
+              <span className="text-gradient-brand"> Pricing</span>
+            </h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              Start free. Scale when you&apos;re ready. No hidden fees, no enterprise tricks.
             </p>
-            <div className="flex items-center gap-4 text-xs text-white/20">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
-              <span>Security</span>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <FadeIn delay={0}>
+              <PricingCard
+                name="Starter"
+                price="$0"
+                period="month"
+                description="For exploring CMMC readiness"
+                features={[
+                  "SPRS Score Calculator",
+                  "5 AI Scans / day",
+                  "Basic Gap Analysis",
+                  "Email Support",
+                  "1 User",
+                ]}
+              />
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <PricingCard
+                name="Pro"
+                price="$149"
+                period="month"
+                description="For active compliance programs"
+                popular
+                features={[
+                  "Everything in Starter",
+                  "Unlimited AI Scans",
+                  "Full 110-Control Assessment",
+                  "AI Agent Orchestrator",
+                  "Quarantine System",
+                  "5 Users",
+                  "Priority Support",
+                ]}
+              />
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <PricingCard
+                name="Enterprise"
+                price="Custom"
+                period="contract"
+                description="For organizations with complex needs"
+                cta="Contact Sales"
+                features={[
+                  "Everything in Pro",
+                  "Custom Integrations",
+                  "Dedicated Account Manager",
+                  "SLA Guarantee",
+                  "On-Premise Option",
+                  "Unlimited Users",
+                  "24/7 Phone Support",
+                ]}
+              />
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA SECTION ─────────────────────────────────────────── */}
+      <section className="py-24 md:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800" />
+        <div className="absolute inset-0 bg-dot-grid opacity-10" />
+        <FloatingShape variant="sphere" size={200} className="top-[-10%] right-[-5%] opacity-10" delay={0} />
+        <FloatingShape variant="torus" size={150} className="bottom-[-5%] left-[-3%] opacity-10" delay={2} />
+
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
+          <FadeIn>
+            <h2 className="font-display font-bold text-display-sm text-slate-900 mb-6">
+              Ready to Become CMMC Compliant?
+            </h2>
+            <p className="text-lg text-blue-100 max-w-2xl mx-auto mb-10">
+              Join hundreds of defense contractors who chose Kaelus.
+              Start your free assessment in under 2 minutes.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-blue-700 font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+              >
+                Start Free Assessment <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-8 py-3.5 border border-white/30 text-slate-900 font-medium rounded-xl hover:bg-white/10 transition-all"
+              >
+                Talk to Sales
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ── FOOTER ──────────────────────────────────────────────── */}
+      <footer className="bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-slate-900" strokeWidth={2.5} />
+                </div>
+                <span className="font-display font-bold text-lg text-slate-900">
+                  Kaelus<span className="text-blue-400">.ai</span>
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed">
+                AI compliance firewall for defense contractors.
+              </p>
+            </div>
+
+            {/* Links */}
+            {[
+              {
+                title: "Product",
+                links: ["Features", "Pricing", "Demo", "Changelog"],
+              },
+              {
+                title: "Company",
+                links: ["About", "Blog", "Contact", "Careers"],
+              },
+              {
+                title: "Resources",
+                links: ["Documentation", "Knowledge Base", "NIST Controls", "FAQ"],
+              },
+              {
+                title: "Legal",
+                links: ["Privacy", "Terms", "Security", "CMMC Policy"],
+              },
+            ].map((group) => (
+              <div key={group.title}>
+                <h4 className="font-semibold text-sm text-slate-900 mb-4">{group.title}</h4>
+                <ul className="space-y-2.5">
+                  {group.links.map((link) => (
+                    <li key={link}>
+                      <Link
+                        href={`/${link.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="text-sm hover:text-slate-900 transition-colors"
+                      >
+                        {link}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs">
+              &copy; {new Date().getFullYear()} Kaelus.ai. All rights reserved.
+            </p>
+            <div className="flex items-center gap-1">
+              <span className="status-dot mr-2" />
+              <span className="text-xs text-emerald-400">All systems operational</span>
             </div>
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 }

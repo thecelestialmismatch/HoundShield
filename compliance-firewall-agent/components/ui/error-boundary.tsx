@@ -40,14 +40,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <div className="w-12 h-12 rounded-xl bg-warning-muted flex items-center justify-center mx-auto mb-4">
             <AlertTriangle className="w-6 h-6 text-warning" />
           </div>
-          <h3 className="text-sm font-medium text-white mb-1">
+          <h3 className="text-sm font-medium text-slate-900 mb-1">
             {this.props.fallbackTitle ?? "Component Error"}
           </h3>
-          <p className="text-xs text-white/40 mb-4 max-w-sm mx-auto">
+          <p className="text-xs text-slate-900/40 mb-4 max-w-sm mx-auto">
             This section encountered an error. Your data is safe &mdash; other dashboard sections are unaffected.
           </p>
           {this.state.error && (
-            <p className="text-[10px] text-white/20 font-mono mb-4 max-w-md mx-auto break-all">
+            <p className="text-[10px] text-slate-900/20 font-mono mb-4 max-w-md mx-auto break-all">
               {this.state.error.message}
             </p>
           )}

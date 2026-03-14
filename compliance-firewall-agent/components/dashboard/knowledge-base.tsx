@@ -166,7 +166,7 @@ export default function KnowledgeBase() {
       {/* Header */}
       <div className="px-4 py-3 border-b border-white/10">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-indigo-400" />
             Knowledge Base
             <span className="text-[10px] text-zinc-500 ml-1">({documents.length} docs)</span>
@@ -190,7 +190,7 @@ export default function KnowledgeBase() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="Search knowledge base..."
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50"
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-900 placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50"
             />
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function KnowledgeBase() {
                 <div className="flex items-center gap-2 min-w-0">
                   {getTypeIcon(doc.type)}
                   <div className="min-w-0">
-                    <h4 className="text-xs font-medium text-white truncate">{doc.title}</h4>
+                    <h4 className="text-xs font-medium text-slate-900 truncate">{doc.title}</h4>
                     <div className="flex items-center gap-2 mt-0.5">
                       <span className="text-[10px] text-zinc-500 uppercase">{doc.type}</span>
                       <span className="text-[10px] text-zinc-600">•</span>
@@ -243,7 +243,7 @@ export default function KnowledgeBase() {
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => setViewDoc({ title: doc.title, content: doc.preview })}
-                    className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white"
+                    className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-slate-900"
                   >
                     <Eye className="w-3 h-3" />
                   </button>
@@ -266,8 +266,8 @@ export default function KnowledgeBase() {
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-lg bg-zinc-900 rounded-xl border border-white/10 shadow-2xl">
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-              <h3 className="text-sm font-semibold text-white">Add Document</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-zinc-400 hover:text-white">
+              <h3 className="text-sm font-semibold text-slate-900">Add Document</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-zinc-400 hover:text-slate-900">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -280,7 +280,7 @@ export default function KnowledgeBase() {
                   value={newDoc.title}
                   onChange={(e) => setNewDoc(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Document title..."
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50"
+                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-900 placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50"
                 />
               </div>
 
@@ -317,7 +317,7 @@ export default function KnowledgeBase() {
                   onChange={(e) => setNewDoc(prev => ({ ...prev, content: e.target.value }))}
                   placeholder="Paste your document content here..."
                   rows={10}
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50 resize-none font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-900 placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50 resize-none font-mono"
                 />
                 <div className="text-[10px] text-zinc-500 mt-1">
                   {newDoc.content.length.toLocaleString()} characters
@@ -335,7 +335,7 @@ export default function KnowledgeBase() {
               <button
                 onClick={handleAddDocument}
                 disabled={!newDoc.title.trim() || !newDoc.content.trim() || isLoading}
-                className="px-4 py-1.5 rounded-lg text-xs font-medium bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-1.5 rounded-lg text-xs font-medium bg-indigo-500 text-slate-900 hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? 'Adding...' : 'Add Document'}
               </button>
@@ -349,8 +349,8 @@ export default function KnowledgeBase() {
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-lg bg-zinc-900 rounded-xl border border-white/10 shadow-2xl max-h-[80vh] flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-              <h3 className="text-sm font-semibold text-white">{viewDoc.title}</h3>
-              <button onClick={() => setViewDoc(null)} className="text-zinc-400 hover:text-white">
+              <h3 className="text-sm font-semibold text-slate-900">{viewDoc.title}</h3>
+              <button onClick={() => setViewDoc(null)} className="text-zinc-400 hover:text-slate-900">
                 <X className="w-4 h-4" />
               </button>
             </div>

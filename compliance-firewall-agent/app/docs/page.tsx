@@ -296,7 +296,7 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      className="flex items-center gap-1 text-[10px] text-white/30 hover:text-white/60 transition-colors"
+      className="flex items-center gap-1 text-[10px] text-slate-900/30 hover:text-slate-900/60 transition-colors"
     >
       {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
       {copied ? "Copied" : "Copy"}
@@ -308,10 +308,10 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
   return (
     <div className="rounded-lg overflow-hidden border border-white/[0.06]">
       <div className="flex items-center justify-between px-4 py-2 bg-white/[0.02] border-b border-white/[0.06]">
-        <span className="text-[10px] font-mono text-white/25 uppercase">{language}</span>
+        <span className="text-[10px] font-mono text-slate-900/25 uppercase">{language}</span>
         <CopyButton text={code} />
       </div>
-      <pre className="p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-white/60 bg-surface-100/30">
+      <pre className="p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-900/60 bg-surface-100/30">
         <code>{code}</code>
       </pre>
     </div>
@@ -341,10 +341,10 @@ export default function DocsPage() {
             </div>
             <TextLogo />
           </Link>
-          <ChevronRight className="w-4 h-4 text-white/20" />
+          <ChevronRight className="w-4 h-4 text-slate-900/20" />
           <div className="flex items-center gap-1.5">
             <BookOpen className="w-4 h-4 text-brand-400" />
-            <span className="text-sm font-medium text-white/70">API Documentation</span>
+            <span className="text-sm font-medium text-slate-900/70">API Documentation</span>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -360,7 +360,7 @@ export default function DocsPage() {
       <div className="max-w-7xl mx-auto flex">
         {/* Sidebar */}
         <aside className="w-56 flex-shrink-0 border-r border-white/[0.06] py-6 px-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto hidden lg:block">
-          <p className="text-[10px] font-medium text-white/25 uppercase tracking-wider mb-3 px-2">Endpoints</p>
+          <p className="text-[10px] font-medium text-slate-900/25 uppercase tracking-wider mb-3 px-2">Endpoints</p>
           <div className="space-y-0.5">
             {API_SECTIONS.map((s) => (
               <button
@@ -369,10 +369,10 @@ export default function DocsPage() {
                 className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-all ${
                   activeSection === s.id
                     ? "bg-brand-500/10 text-brand-300 font-medium"
-                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.03]"
+                    : "text-slate-900/40 hover:text-slate-900/70 hover:bg-white/[0.03]"
                 }`}
               >
-                <span className={`inline-block w-9 text-[9px] font-mono mr-1.5 ${activeSection === s.id ? "text-brand-400" : "text-white/20"}`}>
+                <span className={`inline-block w-9 text-[9px] font-mono mr-1.5 ${activeSection === s.id ? "text-brand-400" : "text-slate-900/20"}`}>
                   {s.method.split(" ")[0]}
                 </span>
                 {s.title}
@@ -380,7 +380,7 @@ export default function DocsPage() {
             ))}
           </div>
 
-          <p className="text-[10px] font-medium text-white/25 uppercase tracking-wider mt-6 mb-3 px-2">SDK Examples</p>
+          <p className="text-[10px] font-medium text-slate-900/25 uppercase tracking-wider mt-6 mb-3 px-2">SDK Examples</p>
           <div className="space-y-0.5">
             {(["javascript", "python", "curl"] as const).map((lang) => (
               <button
@@ -392,7 +392,7 @@ export default function DocsPage() {
                 className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-all ${
                   activeSection === "sdk" && sdkLang === lang
                     ? "bg-brand-500/10 text-brand-300 font-medium"
-                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.03]"
+                    : "text-slate-900/40 hover:text-slate-900/70 hover:bg-white/[0.03]"
                 }`}
               >
                 <Code className="w-3 h-3 inline mr-1.5" />
@@ -407,8 +407,8 @@ export default function DocsPage() {
           {activeSection === "sdk" ? (
             <div className="max-w-3xl space-y-6">
               <div>
-                <h1 className="text-2xl font-bold text-white mb-2">SDK Examples</h1>
-                <p className="text-sm text-white/40">
+                <h1 className="text-2xl font-bold text-slate-900 mb-2">SDK Examples</h1>
+                <p className="text-sm text-slate-900/40">
                   Integrate Kaelus into your application with these code examples.
                 </p>
               </div>
@@ -421,7 +421,7 @@ export default function DocsPage() {
                     className={`text-xs px-3 py-1.5 rounded-lg transition-all ${
                       sdkLang === lang
                         ? "bg-brand-500/15 text-brand-300 border border-brand-500/30"
-                        : "text-white/40 hover:text-white/60 border border-transparent"
+                        : "text-slate-900/40 hover:text-slate-900/60 border border-transparent"
                     }`}
                   >
                     {lang.charAt(0).toUpperCase() + lang.slice(1)}
@@ -439,24 +439,24 @@ export default function DocsPage() {
                   <span className={`text-[10px] font-mono font-medium px-2 py-0.5 rounded ${METHOD_COLORS[section.method] || ""}`}>
                     {section.method}
                   </span>
-                  <code className="text-sm font-mono text-white/70">{section.path}</code>
+                  <code className="text-sm font-mono text-slate-900/70">{section.path}</code>
                 </div>
-                <h1 className="text-2xl font-bold text-white mb-2">{section.title}</h1>
-                <p className="text-sm text-white/40">{section.description}</p>
+                <h1 className="text-2xl font-bold text-slate-900 mb-2">{section.title}</h1>
+                <p className="text-sm text-slate-900/40">{section.description}</p>
               </div>
 
               {/* Auth */}
               <div>
-                <h3 className="text-xs font-medium text-white/50 mb-2 flex items-center gap-1.5">
+                <h3 className="text-xs font-medium text-slate-900/50 mb-2 flex items-center gap-1.5">
                   <Lock className="w-3 h-3" /> Authentication
                 </h3>
-                <p className="text-sm text-white/60">{section.auth}</p>
+                <p className="text-sm text-slate-900/60">{section.auth}</p>
               </div>
 
               {/* Headers */}
               {section.headers && (
                 <div>
-                  <h3 className="text-xs font-medium text-white/50 mb-2">Headers</h3>
+                  <h3 className="text-xs font-medium text-slate-900/50 mb-2">Headers</h3>
                   <CodeBlock code={section.headers} language="headers" />
                 </div>
               )}
@@ -466,7 +466,7 @@ export default function DocsPage() {
                 const qp = (section as { queryParams?: string }).queryParams;
                 return qp ? (
                   <div>
-                    <h3 className="text-xs font-medium text-white/50 mb-2">Query Parameters</h3>
+                    <h3 className="text-xs font-medium text-slate-900/50 mb-2">Query Parameters</h3>
                     <CodeBlock code={qp} language="params" />
                   </div>
                 ) : null;
@@ -475,7 +475,7 @@ export default function DocsPage() {
               {/* Request Body */}
               {section.body && (
                 <div>
-                  <h3 className="text-xs font-medium text-white/50 mb-2">Request Body</h3>
+                  <h3 className="text-xs font-medium text-slate-900/50 mb-2">Request Body</h3>
                   <CodeBlock code={section.body} language="json" />
                 </div>
               )}
@@ -483,7 +483,7 @@ export default function DocsPage() {
               {/* Response */}
               {section.response200 && (
                 <div>
-                  <h3 className="text-xs font-medium text-white/50 mb-2 flex items-center gap-1.5">
+                  <h3 className="text-xs font-medium text-slate-900/50 mb-2 flex items-center gap-1.5">
                     <Check className="w-3 h-3 text-success" /> Success Response (200)
                   </h3>
                   <CodeBlock code={section.response200} language="json" />
@@ -495,7 +495,7 @@ export default function DocsPage() {
                 const r403 = (section as { response403?: string }).response403;
                 return r403 ? (
                   <div>
-                    <h3 className="text-xs font-medium text-white/50 mb-2 flex items-center gap-1.5">
+                    <h3 className="text-xs font-medium text-slate-900/50 mb-2 flex items-center gap-1.5">
                       <AlertTriangle className="w-3 h-3 text-danger" /> Blocked Response (403)
                     </h3>
                     <CodeBlock code={r403} language="json" />

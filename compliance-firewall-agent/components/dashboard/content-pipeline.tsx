@@ -46,7 +46,7 @@ const STAGES: { key: Stage; label: string; icon: React.ElementType; accent: stri
 ];
 
 const PRIORITY_COLORS: Record<Priority, { bg: string; text: string; dot: string }> = {
-  low: { bg: 'bg-white/[0.06]', text: 'text-white/50', dot: 'bg-white/40' },
+  low: { bg: 'bg-slate-100', text: 'text-slate-500', dot: 'bg-white/40' },
   medium: { bg: 'bg-amber-500/10', text: 'text-amber-400', dot: 'bg-amber-400' },
   high: { bg: 'bg-orange-500/10', text: 'text-orange-400', dot: 'bg-orange-500' },
   urgent: { bg: 'bg-red-500/10', text: 'text-red-400', dot: 'bg-red-500' },
@@ -173,17 +173,17 @@ export default function ContentPipeline() {
   return (
     <div className="min-h-full bg-[#0c0c10]">
       {/* Header */}
-      <div className="px-6 py-5 border-b border-white/[0.06]">
+      <div className="px-6 py-5 border-b border-slate-200">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-white tracking-tight">Content Pipeline</h2>
-            <p className="text-sm text-white/50 mt-0.5">
+            <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Content Pipeline</h2>
+            <p className="text-sm text-slate-500 mt-0.5">
               {cards.length} items across {STAGES.length} stages
             </p>
           </div>
           <div className="flex items-center gap-2">
             {STAGES.map((s) => (
-              <div key={s.key} className="flex items-center gap-1.5 text-xs text-white/50">
+              <div key={s.key} className="flex items-center gap-1.5 text-xs text-slate-500">
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.accent }} />
                 <span>{byStage(s.key).length}</span>
               </div>
@@ -201,14 +201,14 @@ export default function ContentPipeline() {
             return (
               <div
                 key={stage.key}
-                className="w-72 flex-shrink-0 bg-[#141419] rounded-xl border border-white/[0.06] overflow-hidden"
+                className="w-72 flex-shrink-0 bg-[#141419] rounded-xl border border-slate-200 overflow-hidden"
               >
                 {/* Column header strip */}
                 <div className="h-1" style={{ backgroundColor: stage.accent }} />
                 <div className="px-4 py-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Icon className="w-4 h-4" style={{ color: stage.accent }} />
-                    <span className="text-sm font-semibold text-white">{stage.label}</span>
+                    <span className="text-sm font-semibold text-slate-900">{stage.label}</span>
                     <span
                       className="text-xs font-medium px-1.5 py-0.5 rounded-full"
                       style={{
@@ -221,7 +221,7 @@ export default function ContentPipeline() {
                   </div>
                   <button
                     onClick={() => setAddingTo(addingTo === stage.key ? null : stage.key)}
-                    className="p-1 rounded-md hover:bg-white/[0.03] transition-colors text-white/40 hover:text-white/60"
+                    className="p-1 rounded-md hover:bg-slate-50 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-600"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -230,25 +230,25 @@ export default function ContentPipeline() {
                 {/* Add new card form */}
                 {addingTo === stage.key && (
                   <div className="px-3 pb-3">
-                    <div className="bg-[#1a1a21] rounded-lg p-3 border border-white/[0.06]">
+                    <div className="bg-[#1a1a21] rounded-lg p-3 border border-slate-200">
                       <input
                         autoFocus
                         value={newTitle}
                         onChange={(e) => setNewTitle(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAdd(stage.key)}
                         placeholder="Enter title..."
-                        className="w-full text-sm bg-transparent border-none outline-none placeholder-white/20 text-white"
+                        className="w-full text-sm bg-transparent border-none outline-none placeholder-white/20 text-slate-900"
                       />
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => handleAdd(stage.key)}
-                          className="text-xs font-medium px-3 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                          className="text-xs font-medium px-3 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors"
                         >
                           Add
                         </button>
                         <button
                           onClick={() => { setAddingTo(null); setNewTitle(''); }}
-                          className="text-xs text-white/50 hover:text-white/80"
+                          className="text-xs text-slate-500 hover:text-slate-800"
                         >
                           Cancel
                         </button>
@@ -267,14 +267,14 @@ export default function ContentPipeline() {
                     return (
                       <div
                         key={card.id}
-                        className="group bg-[#141419] rounded-lg border border-white/[0.06] p-3 hover:border-white/10 transition-all cursor-pointer"
+                        className="group bg-[#141419] rounded-lg border border-slate-200 p-3 hover:border-white/10 transition-all cursor-pointer"
                         onClick={() => setExpandedCard(isExpanded ? null : card.id)}
                       >
                         {/* Grip + title */}
                         <div className="flex items-start gap-2">
-                          <GripVertical className="w-3.5 h-3.5 text-white/30 mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <GripVertical className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400 mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white leading-snug">{card.title}</p>
+                            <p className="text-sm font-medium text-slate-900 leading-snug">{card.title}</p>
                           </div>
                         </div>
 
@@ -288,23 +288,23 @@ export default function ContentPipeline() {
                           </span>
                           <div className="flex items-center gap-1.5">
                             <div
-                              className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold"
+                              className="w-5 h-5 rounded-full flex items-center justify-center text-slate-900 text-[10px] font-bold"
                               style={{ backgroundColor: card.assignee.color }}
                             >
                               {card.assignee.name[0]}
                             </div>
-                            <span className="text-xs text-white/50">{card.assignee.name}</span>
+                            <span className="text-xs text-slate-500">{card.assignee.name}</span>
                           </div>
                         </div>
 
                         {/* Tags */}
                         {card.tags.length > 0 && (
                           <div className="flex items-center gap-1.5 mt-2">
-                            <Tag className="w-3 h-3 text-white/40" />
+                            <Tag className="w-3 h-3 text-slate-600 dark:text-slate-400" />
                             {card.tags.map((tag) => (
                               <span
                                 key={tag}
-                                className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/[0.06] text-white/50"
+                                className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-100 text-slate-500"
                               >
                                 {tag}
                               </span>
@@ -314,11 +314,11 @@ export default function ContentPipeline() {
 
                         {/* Expanded actions */}
                         {isExpanded && (
-                          <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center gap-1.5">
+                          <div className="mt-3 pt-2.5 border-t border-slate-200 flex items-center gap-1.5">
                             {stageIdx > 0 && (
                               <button
                                 onClick={(e) => { e.stopPropagation(); moveCard(card.id, 'prev'); }}
-                                className="flex items-center gap-1 text-xs text-white/50 hover:text-white/80 px-2 py-1 rounded hover:bg-white/[0.03] transition-colors"
+                                className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-800 px-2 py-1 rounded hover:bg-slate-50 transition-colors"
                               >
                                 <ArrowRight className="w-3 h-3 rotate-180" /> Back
                               </button>
@@ -326,7 +326,7 @@ export default function ContentPipeline() {
                             {stageIdx < STAGES.length - 1 && (
                               <button
                                 onClick={(e) => { e.stopPropagation(); moveCard(card.id, 'next'); }}
-                                className="flex items-center gap-1 text-xs font-medium px-2 py-1 rounded transition-colors bg-indigo-500 hover:bg-indigo-600 text-white"
+                                className="flex items-center gap-1 text-xs font-medium px-2 py-1 rounded transition-colors bg-indigo-500 hover:bg-indigo-600 text-slate-900"
                               >
                                 Next <ArrowRight className="w-3 h-3" />
                               </button>
@@ -334,7 +334,7 @@ export default function ContentPipeline() {
                             <div className="flex-1" />
                             <button
                               onClick={(e) => { e.stopPropagation(); removeCard(card.id); }}
-                              className="p-1 rounded hover:bg-red-500/10 text-white/40 hover:text-red-500 transition-colors"
+                              className="p-1 rounded hover:bg-red-500/10 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors"
                             >
                               <X className="w-3.5 h-3.5" />
                             </button>
@@ -346,7 +346,7 @@ export default function ContentPipeline() {
 
                   {items.length === 0 && (
                     <div className="py-8 text-center">
-                      <p className="text-xs text-white/40">No items yet</p>
+                      <p className="text-xs text-slate-600 dark:text-slate-400">No items yet</p>
                     </div>
                   )}
                 </div>

@@ -29,9 +29,9 @@ const STAT_CARDS = [
     key: "total_events" as const,
     label: "Total Events",
     icon: ShieldCheck,
-    iconBg: "bg-brand-500/10",
-    iconColor: "text-brand-400",
-    valueColor: "text-white",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
+    valueColor: "text-slate-900",
     gradient: "from-brand-500/10 to-transparent",
   },
   {
@@ -117,10 +117,10 @@ function ThreatChart({ events }: { events: any[] }) {
     <div className="glass-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-sm font-medium text-white">Threat Activity</h3>
-          <p className="text-[11px] text-white/30">Last 12 hours</p>
+          <h3 className="text-sm font-medium text-slate-900">Threat Activity</h3>
+          <p className="text-[11px] text-slate-600 dark:text-slate-400">Last 12 hours</p>
         </div>
-        <Activity className="w-4 h-4 text-brand-400" />
+        <Activity className="w-4 h-4 text-blue-600" />
       </div>
       <div className="flex items-end gap-1.5 h-24">
         {hours.map((hour, i) => (
@@ -140,13 +140,13 @@ function ThreatChart({ events }: { events: any[] }) {
                 </div>
               )}
             </div>
-            <span className="text-[8px] text-white/20 group-hover:text-white/40 transition-colors">
+            <span className="text-[8px] text-slate-700 dark:text-slate-300 group-hover:text-slate-600 dark:text-slate-400 transition-colors">
               {hour.label}
             </span>
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-4 mt-3 text-[10px] text-white/30">
+      <div className="flex items-center gap-4 mt-3 text-[10px] text-slate-600 dark:text-slate-400">
         <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-sm bg-brand-500/30" />Total</div>
         <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-sm bg-danger/40" />Blocked</div>
       </div>
@@ -163,26 +163,26 @@ function RecentThreats({ events }: { events: any[] }) {
     <div className="glass-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-sm font-medium text-white">Recent Threats</h3>
-          <p className="text-[11px] text-white/30">Critical & high risk events</p>
+          <h3 className="text-sm font-medium text-slate-900">Recent Threats</h3>
+          <p className="text-[11px] text-slate-600 dark:text-slate-400">Critical & high risk events</p>
         </div>
         <ShieldAlert className="w-4 h-4 text-danger" />
       </div>
       <div className="space-y-3">
         {threats.length === 0 ? (
-          <p className="text-xs text-white/30 text-center py-4">No recent threats</p>
+          <p className="text-xs text-slate-600 dark:text-slate-400 text-center py-4">No recent threats</p>
         ) : (
           threats.map((event: any) => (
             <div
               key={event.id}
-              className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
+              className="flex items-center gap-3 p-2.5 rounded-lg bg-white hover:bg-slate-100 transition-colors"
             >
               <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
                 event.risk_level === "CRITICAL" ? "bg-danger" : "bg-warning"
               }`} />
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-white/70 truncate">{event.user_id}</p>
-                <p className="text-[10px] text-white/30">
+                <p className="text-xs text-slate-700 truncate">{event.user_id}</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-400">
                   {event.classifications.join(", ")} - {event.destination_provider}
                 </p>
               </div>
@@ -215,17 +215,17 @@ function ProviderBreakdown({ events }: { events: any[] }) {
     <div className="glass-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-sm font-medium text-white">Provider Breakdown</h3>
-          <p className="text-[11px] text-white/30">Requests by AI provider</p>
+          <h3 className="text-sm font-medium text-slate-900">Provider Breakdown</h3>
+          <p className="text-[11px] text-slate-600 dark:text-slate-400">Requests by AI provider</p>
         </div>
-        <Zap className="w-4 h-4 text-brand-400" />
+        <Zap className="w-4 h-4 text-blue-600" />
       </div>
       <div className="space-y-3">
         {entries.map(([provider, count], i) => (
           <div key={provider}>
             <div className="flex items-center justify-between text-xs mb-1">
-              <span className="text-white/60">{provider}</span>
-              <span className="text-white/40">{count} ({Math.round((count / total) * 100)}%)</span>
+              <span className="text-slate-600">{provider}</span>
+              <span className="text-slate-600 dark:text-slate-400">{count} ({Math.round((count / total) * 100)}%)</span>
             </div>
             <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
               <div
@@ -303,12 +303,12 @@ export function ComplianceOverview() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-white">Compliance Overview</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Compliance Overview</h2>
           {lastUpdated && (
-            <p className="text-[11px] text-white/25 flex items-center gap-1">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 flex items-center gap-1">
               <Clock className="w-3 h-3" />
               Last updated: {lastUpdated.toLocaleTimeString()}
-              <span className="text-white/15"> | Auto-refreshes every 30s</span>
+              <span className="text-slate-500"> | Auto-refreshes every 30s</span>
             </p>
           )}
         </div>
@@ -340,7 +340,7 @@ export function ComplianceOverview() {
                     <Icon className={`w-5 h-5 ${card.iconColor}`} />
                   </div>
                   {card.key !== "total_events" && (
-                    <div className={`flex items-center gap-1 text-xs ${isGood ? "text-success" : "text-white/30"}`}>
+                    <div className={`flex items-center gap-1 text-xs ${isGood ? "text-success" : "text-slate-600 dark:text-slate-400"}`}>
                       <TrendIcon className="w-3 h-3" />
                       <span>{percentage}%</span>
                     </div>
@@ -349,7 +349,7 @@ export function ComplianceOverview() {
                 <p className={`text-2xl font-bold ${card.valueColor} counter-value`}>
                   <AnimatedValue target={value} />
                 </p>
-                <p className="text-xs text-white/40 mt-1">{card.label}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{card.label}</p>
               </div>
             </div>
           );
@@ -363,7 +363,7 @@ export function ComplianceOverview() {
       </div>
 
       <div className="glass-card p-6">
-        <h3 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-4">Quick Actions</h3>
+        <h3 className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-4">Quick Actions</h3>
         <div className="flex gap-3 flex-wrap">
           <a
             href={`/api/reports/generate?from=${new Date(Date.now() - 7 * 86400000).toISOString()}&to=${new Date().toISOString()}`}

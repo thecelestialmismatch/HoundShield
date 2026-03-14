@@ -650,7 +650,7 @@ export function AgentBuilder({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-white">AI Agents</h2>
+          <h2 className="text-lg font-semibold text-slate-900">AI Agents</h2>
           <p className="text-xs text-zinc-500 mt-0.5">
             18 enterprise + technical templates with real tool calling. Click &quot;Launch&quot; to start any agent.
           </p>
@@ -710,10 +710,10 @@ export function AgentBuilder({
                 <div className={`w-8 h-8 rounded-lg ${colors.bg} flex items-center justify-center mb-2 border ${colors.border}`}>
                   <t.icon className={`w-4 h-4 ${colors.icon}`} />
                 </div>
-                <h4 className="text-[11px] font-medium text-white/80 group-hover:text-white transition-colors">
+                <h4 className="text-[11px] font-medium text-slate-800 group-hover:text-slate-900 transition-colors">
                   {t.name}
                 </h4>
-                <p className="text-[10px] text-white/30 mt-0.5 line-clamp-1">{t.description}</p>
+                <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 line-clamp-1">{t.description}</p>
                 <div className="flex gap-1 mt-2">
                   <button
                     onClick={() => quickLaunchTemplate(t)}
@@ -748,17 +748,17 @@ export function AgentBuilder({
                     <Bot className={`w-5 h-5 ${colors.icon}`} />
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => startEdit(agent)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/30 hover:text-white/70 transition-all" title="Edit">
+                    <button onClick={() => startEdit(agent)} className="p-1.5 rounded-lg hover:bg-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-700 transition-all" title="Edit">
                       <Edit3 className="w-3.5 h-3.5" />
                     </button>
-                    <button onClick={() => deleteAgent(agent.id)} className="p-1.5 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-all" title="Delete">
+                    <button onClick={() => deleteAgent(agent.id)} className="p-1.5 rounded-lg hover:bg-red-500/20 text-slate-600 dark:text-slate-400 hover:text-red-400 transition-all" title="Delete">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
 
-                <h3 className="font-semibold text-sm text-white mb-1">{agent.name}</h3>
-                <p className="text-xs text-white/40 mb-2 line-clamp-2">{agent.description}</p>
+                <h3 className="font-semibold text-sm text-slate-900 mb-1">{agent.name}</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 line-clamp-2">{agent.description}</p>
 
                 {/* Tools badges */}
                 <div className="flex flex-wrap gap-1 mb-3">
@@ -775,7 +775,7 @@ export function AgentBuilder({
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3 text-[10px] text-white/25">
+                  <div className="flex items-center gap-3 text-[10px] text-slate-600 dark:text-slate-400">
                     <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> {modelInfo?.name || agent.model}</span>
                     <span className="flex items-center gap-1"><MessageSquare className="w-3 h-3" /> {agent.conversations}</span>
                   </div>
@@ -793,7 +793,7 @@ export function AgentBuilder({
                     onClick={() => toggleAgent(agent.id)}
                     className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${agent.isActive
                       ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
-                      : "bg-white/[0.04] border border-white/[0.08] text-white/30"
+                      : "bg-slate-100 border border-slate-200 text-slate-600 dark:text-slate-400"
                       }`}
                   >
                     {agent.isActive ? "Active" : "Off"}
@@ -811,49 +811,49 @@ export function AgentBuilder({
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowModal(false)} />
           <div className="relative w-full max-w-lg glass-card p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold text-white">
+              <h2 className="text-base font-semibold text-slate-900">
                 {editingAgent ? "Edit Agent" : "Create Agent"}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-white/30 hover:text-white/60 transition-colors">
+              <button onClick={() => setShowModal(false)} className="text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-white/40 mb-1.5">Name</label>
+              <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">Name</label>
               <input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="e.g. Market Analyzer"
-                className="w-full bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+                className="w-full bg-zinc-900 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-white/40 mb-1.5">Description</label>
+              <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">Description</label>
               <input
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="What does this agent do?"
-                className="w-full bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+                className="w-full bg-zinc-900 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-white/40 mb-1.5">System Prompt</label>
+              <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">System Prompt</label>
               <textarea
                 value={form.systemPrompt}
                 onChange={(e) => setForm({ ...form, systemPrompt: e.target.value })}
                 placeholder="Define the agent's behavior..."
                 rows={6}
-                className="w-full bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all resize-none font-mono"
+                className="w-full bg-zinc-900 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all resize-none font-mono"
               />
-              <p className="text-[10px] text-white/20 mt-1">{form.systemPrompt.length} characters</p>
+              <p className="text-[10px] text-slate-700 dark:text-slate-300 mt-1">{form.systemPrompt.length} characters</p>
             </div>
 
             {/* Tools Selection */}
             <div>
-              <label className="block text-[11px] font-medium text-white/40 mb-1.5">Tools</label>
+              <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">Tools</label>
               <div className="flex flex-wrap gap-1.5">
                 {ALL_TOOLS.map(tool => (
                   <button
@@ -872,11 +872,11 @@ export function AgentBuilder({
 
             <div className="flex gap-3">
               <div className="flex-1">
-                <label className="block text-[11px] font-medium text-white/40 mb-1.5">Model</label>
+                <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">Model</label>
                 <select
                   value={form.model}
                   onChange={(e) => setForm({ ...form, model: e.target.value })}
-                  className="w-full bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white focus:border-indigo-500/50 focus:outline-none transition-all"
+                  className="w-full bg-zinc-900 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:border-indigo-500/50 focus:outline-none transition-all"
                 >
                   {AVAILABLE_MODELS.map((m) => (
                     <option key={m.id} value={m.id}>{m.name} ({m.tag})</option>
@@ -884,7 +884,7 @@ export function AgentBuilder({
                 </select>
               </div>
               <div className="w-28">
-                <label className="block text-[11px] font-medium text-white/40 mb-1.5">Temperature</label>
+                <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-1.5">Temperature</label>
                 <input
                   type="number"
                   min="0"
@@ -892,7 +892,7 @@ export function AgentBuilder({
                   step="0.1"
                   value={form.temperature}
                   onChange={(e) => setForm({ ...form, temperature: parseFloat(e.target.value) || 0.7 })}
-                  className="w-full bg-zinc-900 border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white focus:border-indigo-500/50 focus:outline-none transition-all"
+                  className="w-full bg-zinc-900 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:border-indigo-500/50 focus:outline-none transition-all"
                 />
               </div>
             </div>

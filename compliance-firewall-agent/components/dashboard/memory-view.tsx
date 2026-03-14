@@ -275,14 +275,14 @@ export default function MemoryView() {
     const catColor = CATEGORY_COLORS[mem.category] || '#9ca3af';
 
     return (
-      <div key={mem.id} className="bg-[#141419] rounded-lg border border-white/[0.06] p-4 hover:border-white/10 transition-all group">
+      <div key={mem.id} className="bg-[#141419] rounded-lg border border-slate-200 p-4 hover:border-white/10 transition-all group">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-white/80 leading-relaxed">{mem.content}</p>
+            <p className="text-sm text-slate-800 leading-relaxed">{mem.content}</p>
           </div>
           <button
             onClick={() => handleDeleteMemory(mem.id)}
-            className="p-1 rounded hover:bg-red-500/10 text-white/30 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
+            className="p-1 rounded hover:bg-red-500/10 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -294,16 +294,16 @@ export default function MemoryView() {
           >
             {mem.category}
           </span>
-          <span className="flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/[0.06]" style={{ color: impConf.color }}>
+          <span className="flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-100" style={{ color: impConf.color }}>
             <ImpIcon className="w-2.5 h-2.5" />
             {mem.importance}
           </span>
           {mem.tags.map((tag) => (
-            <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-[#1a1a21] text-white/50 border border-white/[0.06]">
+            <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-[#1a1a21] text-slate-500 border border-slate-200">
               {tag}
             </span>
           ))}
-          <span className="flex items-center gap-1 text-[10px] text-white/40 ml-auto">
+          <span className="flex items-center gap-1 text-[10px] text-slate-600 dark:text-slate-400 ml-auto">
             <Clock className="w-2.5 h-2.5" />
             {formatTime(mem.timestamp)}
           </span>
@@ -318,21 +318,21 @@ export default function MemoryView() {
     const catColor = CATEGORY_COLORS[lesson.category] || '#9ca3af';
 
     return (
-      <div key={lesson.id} className="bg-[#141419] rounded-lg border border-white/[0.06] p-4 hover:border-white/10 transition-all group">
+      <div key={lesson.id} className="bg-[#141419] rounded-lg border border-slate-200 p-4 hover:border-white/10 transition-all group">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-1.5">
               <Lightbulb className="w-3.5 h-3.5" style={{ color: catColor }} />
-              <span className="text-xs font-semibold text-white/80">Lesson</span>
+              <span className="text-xs font-semibold text-slate-800">Lesson</span>
             </div>
-            <p className="text-sm text-white/80 leading-relaxed">{lesson.lesson}</p>
+            <p className="text-sm text-slate-800 leading-relaxed">{lesson.lesson}</p>
             {lesson.context && (
-              <p className="text-xs text-white/50 mt-1.5 leading-relaxed italic">&ldquo;{lesson.context}&rdquo;</p>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed italic">&ldquo;{lesson.context}&rdquo;</p>
             )}
           </div>
           <button
             onClick={() => handleDeleteLesson(lesson.id)}
-            className="p-1 rounded hover:bg-red-500/10 text-white/30 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
+            className="p-1 rounded hover:bg-red-500/10 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -344,11 +344,11 @@ export default function MemoryView() {
           >
             {lesson.category}
           </span>
-          <span className="flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/[0.06]" style={{ color: impConf.color }}>
+          <span className="flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-100" style={{ color: impConf.color }}>
             <ImpIcon className="w-2.5 h-2.5" />
             {lesson.importance}
           </span>
-          <span className="flex items-center gap-1 text-[10px] text-white/40 ml-auto">
+          <span className="flex items-center gap-1 text-[10px] text-slate-600 dark:text-slate-400 ml-auto">
             <Clock className="w-2.5 h-2.5" />
             {formatTime(lesson.timestamp)}
           </span>
@@ -369,7 +369,7 @@ export default function MemoryView() {
               <Shield className="w-3.5 h-3.5" style={{ color: sevColor }} />
               <span className={`text-xs font-semibold ${sevConf.text}`}>{sg.severity.toUpperCase()}</span>
               <span
-                className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded ${sg.active ? 'bg-indigo-500/10 text-indigo-400' : 'bg-white/[0.06] text-white/50'}`}
+                className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded ${sg.active ? 'bg-indigo-500/10 text-indigo-400' : 'bg-slate-100 text-slate-500'}`}
               >
                 {sg.active ? <Eye className="w-2.5 h-2.5" /> : <EyeOff className="w-2.5 h-2.5" />}
                 {sg.active ? 'Active' : 'Disabled'}
@@ -377,20 +377,20 @@ export default function MemoryView() {
             </div>
             <p className={`text-sm leading-relaxed ${sevConf.text}`}>{sg.rule}</p>
             {sg.reason && (
-              <p className="text-xs text-white/50 mt-1">{sg.reason}</p>
+              <p className="text-xs text-slate-500 mt-1">{sg.reason}</p>
             )}
           </div>
           <div className="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               onClick={() => handleToggleSafeguard(sg.id)}
-              className="p-1 rounded hover:bg-white/[0.06] text-white/40 hover:text-white/60 transition-colors"
+              className="p-1 rounded hover:bg-slate-100 text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-colors"
               title={sg.active ? 'Disable' : 'Enable'}
             >
               {sg.active ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             </button>
             <button
               onClick={() => handleDeleteSafeguard(sg.id)}
-              className="p-1 rounded hover:bg-red-500/10 text-white/40 hover:text-red-500 transition-colors"
+              className="p-1 rounded hover:bg-red-500/10 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
             </button>
@@ -407,25 +407,25 @@ export default function MemoryView() {
   return (
     <div className="min-h-full bg-[#0c0c10]">
       {/* Header */}
-      <div className="px-6 py-5 border-b border-white/[0.06]">
+      <div className="px-6 py-5 border-b border-slate-200">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-white tracking-tight flex items-center gap-2">
+            <h2 className="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
               <Sparkles className="w-5 h-5" style={{ color: '#6366f1' }} />
               Memory DNA
             </h2>
-            <p className="text-sm text-white/50 mt-0.5">The agent&apos;s persistent identity and learned knowledge</p>
+            <p className="text-sm text-slate-500 mt-0.5">The agent&apos;s persistent identity and learned knowledge</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-white/10 text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-white/10 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
             >
               <Download className="w-3.5 h-3.5" /> Export DNA
             </button>
             <button
               onClick={() => setShowImport(true)}
-              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-white/10 text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-white/10 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
             >
               <Upload className="w-3.5 h-3.5" /> Import DNA
             </button>
@@ -449,13 +449,13 @@ export default function MemoryView() {
           ].map((s) => {
             const StatIcon = s.icon;
             return (
-              <div key={s.label} className="bg-[#141419] rounded-xl border border-white/[0.06] p-3 flex items-center gap-2.5">
+              <div key={s.label} className="bg-[#141419] rounded-xl border border-slate-200 p-3 flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: s.color + '14' }}>
                   <StatIcon className="w-4 h-4" style={{ color: s.color }} />
                 </div>
                 <div>
-                  <p className="text-base font-bold text-white">{s.value}</p>
-                  <p className="text-[10px] text-white/50">{s.label}</p>
+                  <p className="text-base font-bold text-slate-900">{s.value}</p>
+                  <p className="text-[10px] text-slate-500">{s.label}</p>
                 </div>
               </div>
             );
@@ -467,17 +467,17 @@ export default function MemoryView() {
       <div className="px-6 pt-4 pb-0">
         {/* Search */}
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 dark:text-slate-400" />
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search memories, lessons, safeguards..."
-            className="w-full pl-10 pr-4 py-2.5 text-sm bg-[#0c0c10] border border-white/[0.06] rounded-xl text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+            className="w-full pl-10 pr-4 py-2.5 text-sm bg-[#0c0c10] border border-slate-200 rounded-xl text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-white/[0.03] text-white/40"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-slate-50 text-slate-600 dark:text-slate-400"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -485,7 +485,7 @@ export default function MemoryView() {
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-1 border-b border-white/[0.06]">
+        <div className="flex items-center gap-1 border-b border-slate-200">
           {TABS.map((tab) => {
             const TabIcon = tab.icon;
             const isActive = activeTab === tab.key;
@@ -496,7 +496,7 @@ export default function MemoryView() {
                 className={`flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 border-b-2 transition-colors ${
                   isActive
                     ? 'border-indigo-500 text-indigo-400'
-                    : 'border-transparent text-white/50 hover:text-white/80 hover:border-white/30'
+                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-white/30'
                 }`}
               >
                 <TabIcon className="w-3.5 h-3.5" />
@@ -513,13 +513,13 @@ export default function MemoryView() {
         {(activeTab === 'all' || activeTab === 'memories') && (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-white/80 flex items-center gap-1.5">
+              <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
                 <Brain className="w-4 h-4" style={{ color: '#3b82f6' }} />
                 Memories ({filteredMemories.length})
               </h3>
               <button
                 onClick={() => setShowAddMemory(!showAddMemory)}
-                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors"
               >
                 <Plus className="w-3 h-3" /> Add Memory
               </button>
@@ -527,22 +527,22 @@ export default function MemoryView() {
 
             {/* Add Memory Form */}
             {showAddMemory && (
-              <div className="bg-[#141419] rounded-xl border border-white/[0.06] p-4 mb-3 space-y-3">
+              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <textarea
                   autoFocus
                   value={memForm.content}
                   onChange={(e) => setMemForm({ ...memForm, content: e.target.value })}
                   placeholder="What should I remember?"
                   rows={2}
-                  className="w-full text-sm bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 resize-none"
+                  className="w-full text-sm bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50 resize-none"
                 />
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="text-[10px] font-medium text-white/50 block mb-1">Category</label>
+                    <label className="text-[10px] font-medium text-slate-500 block mb-1">Category</label>
                     <select
                       value={memForm.category}
                       onChange={(e) => setMemForm({ ...memForm, category: e.target.value as Memory['category'] })}
-                      className="w-full text-xs bg-[#0c0c10] border border-white/[0.06] rounded-md px-2 py-1.5 text-white focus:outline-none focus:border-indigo-500/50"
+                      className="w-full text-xs bg-[#0c0c10] border border-slate-200 rounded-md px-2 py-1.5 text-slate-900 focus:outline-none focus:border-indigo-500/50"
                     >
                       <option value="journal">Journal</option>
                       <option value="interaction">Interaction</option>
@@ -551,11 +551,11 @@ export default function MemoryView() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-medium text-white/50 block mb-1">Importance</label>
+                    <label className="text-[10px] font-medium text-slate-500 block mb-1">Importance</label>
                     <select
                       value={memForm.importance}
                       onChange={(e) => setMemForm({ ...memForm, importance: e.target.value as Memory['importance'] })}
-                      className="w-full text-xs bg-[#0c0c10] border border-white/[0.06] rounded-md px-2 py-1.5 text-white focus:outline-none focus:border-indigo-500/50"
+                      className="w-full text-xs bg-[#0c0c10] border border-slate-200 rounded-md px-2 py-1.5 text-slate-900 focus:outline-none focus:border-indigo-500/50"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -564,18 +564,18 @@ export default function MemoryView() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-medium text-white/50 block mb-1">Tags (comma separated)</label>
+                    <label className="text-[10px] font-medium text-slate-500 block mb-1">Tags (comma separated)</label>
                     <input
                       value={memForm.tags}
                       onChange={(e) => setMemForm({ ...memForm, tags: e.target.value })}
                       placeholder="tag1, tag2"
-                      className="w-full text-xs bg-[#0c0c10] border border-white/[0.06] rounded-md px-2 py-1.5 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+                      className="w-full text-xs bg-[#0c0c10] border border-slate-200 rounded-md px-2 py-1.5 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
                     />
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
-                  <button onClick={() => setShowAddMemory(false)} className="text-xs text-white/50 hover:text-white/80 px-3 py-1.5">Cancel</button>
-                  <button onClick={handleAddMemory} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors">Save Memory</button>
+                  <button onClick={() => setShowAddMemory(false)} className="text-xs text-slate-500 hover:text-slate-800 px-3 py-1.5">Cancel</button>
+                  <button onClick={handleAddMemory} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors">Save Memory</button>
                 </div>
               </div>
             )}
@@ -583,8 +583,8 @@ export default function MemoryView() {
             <div className="space-y-2">
               {filteredMemories.length === 0 && (
                 <div className="text-center py-8">
-                  <Brain className="w-8 h-8 text-white/30 mx-auto mb-2" />
-                  <p className="text-sm text-white/40">No memories yet. Add your first memory above.</p>
+                  <Brain className="w-8 h-8 text-slate-600 dark:text-slate-400 mx-auto mb-2" />
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No memories yet. Add your first memory above.</p>
                 </div>
               )}
               {filteredMemories.slice().reverse().map(renderMemoryCard)}
@@ -596,41 +596,41 @@ export default function MemoryView() {
         {(activeTab === 'all' || activeTab === 'lessons') && (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-white/80 flex items-center gap-1.5">
+              <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
                 <BookOpen className="w-4 h-4" style={{ color: '#8b5cf6' }} />
                 Lessons ({filteredLessons.length})
               </h3>
               <button
                 onClick={() => setShowAddLesson(!showAddLesson)}
-                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors"
               >
                 <Plus className="w-3 h-3" /> Add Lesson
               </button>
             </div>
 
             {showAddLesson && (
-              <div className="bg-[#141419] rounded-xl border border-white/[0.06] p-4 mb-3 space-y-3">
+              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <textarea
                   autoFocus
                   value={lessonForm.lesson}
                   onChange={(e) => setLessonForm({ ...lessonForm, lesson: e.target.value })}
                   placeholder="What was learned?"
                   rows={2}
-                  className="w-full text-sm bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 resize-none"
+                  className="w-full text-sm bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50 resize-none"
                 />
                 <input
                   value={lessonForm.context}
                   onChange={(e) => setLessonForm({ ...lessonForm, context: e.target.value })}
                   placeholder="In what context?"
-                  className="w-full text-sm bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+                  className="w-full text-sm bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
                 />
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] font-medium text-white/50 block mb-1">Category</label>
+                    <label className="text-[10px] font-medium text-slate-500 block mb-1">Category</label>
                     <select
                       value={lessonForm.category}
                       onChange={(e) => setLessonForm({ ...lessonForm, category: e.target.value as Lesson['category'] })}
-                      className="w-full text-xs bg-[#0c0c10] border border-white/[0.06] rounded-md px-2 py-1.5 text-white focus:outline-none focus:border-indigo-500/50"
+                      className="w-full text-xs bg-[#0c0c10] border border-slate-200 rounded-md px-2 py-1.5 text-slate-900 focus:outline-none focus:border-indigo-500/50"
                     >
                       <option value="insight">Insight</option>
                       <option value="success">Success</option>
@@ -639,11 +639,11 @@ export default function MemoryView() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-medium text-white/50 block mb-1">Importance</label>
+                    <label className="text-[10px] font-medium text-slate-500 block mb-1">Importance</label>
                     <select
                       value={lessonForm.importance}
                       onChange={(e) => setLessonForm({ ...lessonForm, importance: e.target.value as Lesson['importance'] })}
-                      className="w-full text-xs bg-[#0c0c10] border border-white/[0.06] rounded-md px-2 py-1.5 text-white focus:outline-none focus:border-indigo-500/50"
+                      className="w-full text-xs bg-[#0c0c10] border border-slate-200 rounded-md px-2 py-1.5 text-slate-900 focus:outline-none focus:border-indigo-500/50"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -653,8 +653,8 @@ export default function MemoryView() {
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
-                  <button onClick={() => setShowAddLesson(false)} className="text-xs text-white/50 hover:text-white/80 px-3 py-1.5">Cancel</button>
-                  <button onClick={handleAddLesson} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors">Save Lesson</button>
+                  <button onClick={() => setShowAddLesson(false)} className="text-xs text-slate-500 hover:text-slate-800 px-3 py-1.5">Cancel</button>
+                  <button onClick={handleAddLesson} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors">Save Lesson</button>
                 </div>
               </div>
             )}
@@ -662,8 +662,8 @@ export default function MemoryView() {
             <div className="space-y-2">
               {filteredLessons.length === 0 && (
                 <div className="text-center py-8">
-                  <BookOpen className="w-8 h-8 text-white/30 mx-auto mb-2" />
-                  <p className="text-sm text-white/40">No lessons learned yet.</p>
+                  <BookOpen className="w-8 h-8 text-slate-600 dark:text-slate-400 mx-auto mb-2" />
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No lessons learned yet.</p>
                 </div>
               )}
               {filteredLessons.slice().reverse().map(renderLessonCard)}
@@ -675,39 +675,39 @@ export default function MemoryView() {
         {(activeTab === 'all' || activeTab === 'safeguards') && (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-white/80 flex items-center gap-1.5">
+              <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
                 <Shield className="w-4 h-4" style={{ color: '#f59e0b' }} />
                 Safeguards ({safeguards.length})
               </h3>
               <button
                 onClick={() => setShowAddSafeguard(!showAddSafeguard)}
-                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors"
               >
                 <Plus className="w-3 h-3" /> Add Safeguard
               </button>
             </div>
 
             {showAddSafeguard && (
-              <div className="bg-[#141419] rounded-xl border border-white/[0.06] p-4 mb-3 space-y-3">
+              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <input
                   autoFocus
                   value={sgForm.rule}
                   onChange={(e) => setSgForm({ ...sgForm, rule: e.target.value })}
                   placeholder="Rule (e.g., Never expose API keys)"
-                  className="w-full text-sm bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+                  className="w-full text-sm bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
                 />
                 <input
                   value={sgForm.reason}
                   onChange={(e) => setSgForm({ ...sgForm, reason: e.target.value })}
                   placeholder="Reason"
-                  className="w-full text-sm bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+                  className="w-full text-sm bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
                 />
                 <div>
-                  <label className="text-[10px] font-medium text-white/50 block mb-1">Severity</label>
+                  <label className="text-[10px] font-medium text-slate-500 block mb-1">Severity</label>
                   <select
                     value={sgForm.severity}
                     onChange={(e) => setSgForm({ ...sgForm, severity: e.target.value as Safeguard['severity'] })}
-                    className="w-full text-xs bg-[#0c0c10] border border-white/[0.06] rounded-md px-2 py-1.5 text-white focus:outline-none focus:border-indigo-500/50"
+                    className="w-full text-xs bg-[#0c0c10] border border-slate-200 rounded-md px-2 py-1.5 text-slate-900 focus:outline-none focus:border-indigo-500/50"
                   >
                     <option value="warning">Warning</option>
                     <option value="critical">Critical</option>
@@ -715,8 +715,8 @@ export default function MemoryView() {
                   </select>
                 </div>
                 <div className="flex justify-end gap-2">
-                  <button onClick={() => setShowAddSafeguard(false)} className="text-xs text-white/50 hover:text-white/80 px-3 py-1.5">Cancel</button>
-                  <button onClick={handleAddSafeguard} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors">Save Safeguard</button>
+                  <button onClick={() => setShowAddSafeguard(false)} className="text-xs text-slate-500 hover:text-slate-800 px-3 py-1.5">Cancel</button>
+                  <button onClick={handleAddSafeguard} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors">Save Safeguard</button>
                 </div>
               </div>
             )}
@@ -724,8 +724,8 @@ export default function MemoryView() {
             <div className="space-y-2">
               {filteredSafeguards.length === 0 && (
                 <div className="text-center py-8">
-                  <Shield className="w-8 h-8 text-white/30 mx-auto mb-2" />
-                  <p className="text-sm text-white/40">No safeguards configured.</p>
+                  <Shield className="w-8 h-8 text-slate-600 dark:text-slate-400 mx-auto mb-2" />
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No safeguards configured.</p>
                 </div>
               )}
               {filteredSafeguards.map(renderSafeguardCard)}
@@ -737,60 +737,60 @@ export default function MemoryView() {
         {(activeTab === 'all' || activeTab === 'preferences') && (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-white/80 flex items-center gap-1.5">
+              <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
                 <Settings2 className="w-4 h-4" style={{ color: '#6366f1' }} />
                 Preferences ({Object.keys(preferences).length})
               </h3>
               <button
                 onClick={() => setShowAddPref(!showAddPref)}
-                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors"
               >
                 <Plus className="w-3 h-3" /> Add Preference
               </button>
             </div>
 
             {showAddPref && (
-              <div className="bg-[#141419] rounded-xl border border-white/[0.06] p-4 mb-3 space-y-3">
+              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     autoFocus
                     value={prefForm.key}
                     onChange={(e) => setPrefForm({ ...prefForm, key: e.target.value })}
                     placeholder="Key (e.g., outputStyle)"
-                    className="w-full text-sm bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+                    className="w-full text-sm bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
                   />
                   <input
                     value={prefForm.value}
                     onChange={(e) => setPrefForm({ ...prefForm, value: e.target.value })}
                     placeholder="Value (e.g., detailed)"
-                    className="w-full text-sm bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+                    className="w-full text-sm bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <button onClick={() => setShowAddPref(false)} className="text-xs text-white/50 hover:text-white/80 px-3 py-1.5">Cancel</button>
-                  <button onClick={handleAddPref} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors">Save</button>
+                  <button onClick={() => setShowAddPref(false)} className="text-xs text-slate-500 hover:text-slate-800 px-3 py-1.5">Cancel</button>
+                  <button onClick={handleAddPref} className="text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors">Save</button>
                 </div>
               </div>
             )}
 
-            <div className="bg-[#141419] rounded-xl border border-white/[0.06] overflow-hidden">
+            <div className="bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
               {Object.entries(preferences).length === 0 && (
                 <div className="text-center py-8">
-                  <Settings2 className="w-8 h-8 text-white/30 mx-auto mb-2" />
-                  <p className="text-sm text-white/40">No preferences set.</p>
+                  <Settings2 className="w-8 h-8 text-slate-600 dark:text-slate-400 mx-auto mb-2" />
+                  <p className="text-sm text-slate-600 dark:text-slate-400">No preferences set.</p>
                 </div>
               )}
               {Object.entries(preferences).map(([key, value], idx) => (
                 <div
                   key={key}
                   className={`flex items-center justify-between px-4 py-3 ${
-                    idx < Object.entries(preferences).length - 1 ? 'border-b border-white/[0.06]' : ''
-                  } hover:bg-white/[0.03] transition-colors`}
+                    idx < Object.entries(preferences).length - 1 ? 'border-b border-slate-200' : ''
+                  } hover:bg-slate-50 transition-colors`}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-medium text-white/80 bg-white/[0.06] px-2 py-0.5 rounded">{key}</span>
+                    <span className="text-xs font-mono font-medium text-slate-800 bg-slate-100 px-2 py-0.5 rounded">{key}</span>
                   </div>
-                  <span className="text-sm text-white/60">{value}</span>
+                  <span className="text-sm text-slate-600">{value}</span>
                 </div>
               ))}
             </div>
@@ -801,13 +801,13 @@ export default function MemoryView() {
       {/* Import Modal */}
       {showImport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-[#141419] rounded-2xl shadow-2xl w-full max-w-lg mx-4 border border-white/[0.06] overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+          <div className="bg-[#141419] rounded-2xl shadow-2xl w-full max-w-lg mx-4 border border-slate-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
                 <FileJson className="w-4 h-4" style={{ color: '#6366f1' }} />
                 Import Memory DNA
               </h3>
-              <button onClick={() => setShowImport(false)} className="p-1 rounded-md hover:bg-white/[0.03] text-white/40">
+              <button onClick={() => setShowImport(false)} className="p-1 rounded-md hover:bg-slate-50 text-slate-600 dark:text-slate-400">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -818,14 +818,14 @@ export default function MemoryView() {
                 onChange={(e) => setImportJson(e.target.value)}
                 placeholder="Paste exported DNA JSON here..."
                 rows={10}
-                className="w-full text-xs font-mono bg-[#0c0c10] border border-white/[0.06] rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 resize-none"
+                className="w-full text-xs font-mono bg-[#0c0c10] border border-slate-200 rounded-lg px-3 py-2 text-slate-900 placeholder-white/20 focus:outline-none focus:border-indigo-500/50 resize-none"
               />
             </div>
-            <div className="px-6 py-4 border-t border-white/[0.06] flex justify-end gap-2">
-              <button onClick={() => setShowImport(false)} className="text-sm px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors">Cancel</button>
+            <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-2">
+              <button onClick={() => setShowImport(false)} className="text-sm px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">Cancel</button>
               <button
                 onClick={handleImport}
-                className="text-sm font-medium px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                className="text-sm font-medium px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-slate-900 transition-colors"
               >
                 Import
               </button>

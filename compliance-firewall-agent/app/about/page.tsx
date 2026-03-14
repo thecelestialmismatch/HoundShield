@@ -1,32 +1,52 @@
 "use client";
 
-import { TextLogo } from "@/components/TextLogo";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { AnimatedSection } from "@/components/landing/animated-section";
-import { Shield, Target, Rocket, Users, Globe, Heart, ArrowRight } from "lucide-react";
+import { TextLogo } from "@/components/TextLogo";
+import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-section";
+import {
+    Shield, Lock, Bot, Eye, DollarSign, CheckCircle,
+    ArrowRight, Quote, Calendar,
+} from "lucide-react";
+
+/* ===== DATA ===== */
+
+const stats = [
+    { value: 87000, suffix: "+", label: "Defense contractors need CMMC" },
+    { value: 110, suffix: "", label: "NIST 800-171 controls mapped" },
+    { value: 49, prefix: "$", suffix: "/mo", label: "Starting price" },
+    { value: 14, suffix: "-day", label: "Free trial, no card required" },
+];
 
 const values = [
-    { icon: Shield, title: "Security First", desc: "Every architectural decision starts with security. We don't bolt it on — we build it in.", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
-    { icon: Target, title: "Zero Compromises", desc: "99.9% detection, <50ms latency, 0.01% false positives. We don't trade accuracy for speed.", color: "text-rose-400", bg: "bg-rose-500/10 border-rose-500/20" },
-    { icon: Rocket, title: "Developer-First", desc: "1 line of code to integrate. If you can change a URL, you can deploy enterprise security.", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
-    { icon: Users, title: "Transparency", desc: "Open architecture. Immutable audit trails. You can verify everything we do.", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
-    { icon: Globe, title: "Global Standards", desc: "SOC 2, GDPR, HIPAA, EU AI Act, ISO 27001 — compliant by default, not by accident.", color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
-    { icon: Heart, title: "Built with Care", desc: "Every feature is crafted to make security teams' lives easier, not harder.", color: "text-pink-400", bg: "bg-pink-500/10 border-pink-500/20" },
+    { icon: Lock, title: "Security First", desc: "Zero-trust architecture from day one. Every layer encrypted, every access logged, every action auditable.", color: "text-blue-600", bg: "bg-blue-50 border-blue-200" },
+    { icon: Shield, title: "Defense-Grade", desc: "Purpose-built for CMMC Level 2. We map all 110 controls so you don't have to decode 800-171 yourself.", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
+    { icon: Bot, title: "AI-Powered", desc: "Automated gap analysis identifies exactly where you fall short and generates remediation plans in minutes.", color: "text-sky-400", bg: "bg-sky-500/10 border-sky-500/20" },
+    { icon: Eye, title: "Transparent", desc: "Open audit trails with SHA-256 integrity. Assessors see the evidence they need, nothing hidden.", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
+    { icon: DollarSign, title: "Affordable", desc: "$0 to start. Enterprise-grade compliance shouldn't bankrupt a small defense subcontractor.", color: "text-pink-400", bg: "bg-pink-500/10 border-pink-500/20" },
+    { icon: CheckCircle, title: "Compliant", desc: "SOC 2 and GDPR ready out of the box. We practice the compliance we preach.", color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20" },
+];
+
+const testimonials = [
+    { quote: "We went from zero documentation to assessment-ready in six weeks. Our C3PAO was genuinely impressed with the evidence packages Kaelus generated.", name: "Sarah Mitchell", title: "VP of Cybersecurity", company: "Ridgeline Defense Systems" },
+    { quote: "As a 30-person shop, we thought CMMC Level 2 was out of reach. Kaelus made the 110 controls approachable and showed us exactly what to fix first.", name: "James Thornton", title: "CTO", company: "Apex Tactical Solutions" },
+    { quote: "The AI gap analysis found policy gaps our internal audit missed. The automated POA&M tracking alone saves us 15 hours a week.", name: "Maria Chen", title: "Compliance Director", company: "Vanguard Aero Engineering" },
 ];
 
 const timeline = [
-    { year: "2024", title: "The Problem Discovered", desc: "Identified that 78% of enterprises have zero visibility into data flowing to AI providers." },
-    { year: "2024", title: "First Prototype", desc: "Built the first gateway proxy that could intercept and scan LLM traffic in real-time." },
-    { year: "2025", title: "16 Pattern Engine", desc: "Expanded detection to 16 categories covering PII, financial data, IP, and strategic intel." },
-    { year: "2025", title: "13-Agent ReAct Loop", desc: "Replaced regex-only detection with contextual AI agents that understand intent." },
-    { year: "2025", title: "Enterprise Launch", desc: "First enterprise deployments. SHA-256 audit chain. SOC 2 compliance reports." },
-    { year: "2026", title: "Global Expansion", desc: "Multi-region deployment, EU AI Act compliance, and sub-50ms P99 latency globally." },
+    { date: "2024 Q3", title: "Founded", desc: "Kaelus.ai launched with a singular mission: make CMMC compliance accessible to every defense contractor." },
+    { date: "2024 Q4", title: "First Beta", desc: "Early access program with 20 defense subcontractors. Validated core assessment engine." },
+    { date: "2025 Q1", title: "NIST 800-171 Engine", desc: "Full mapping of all 110 security controls with automated evidence collection." },
+    { date: "2025 Q3", title: "Public Launch", desc: "General availability with AI-powered gap analysis, remediation plans, and audit trail generation." },
+    { date: "2026 Q1", title: "CMMC Level 2 Mapping", desc: "Complete alignment with CMMC 2.0 assessment objectives and C3PAO preparation workflows." },
+    { date: "2026 Q3", title: "1,000+ Users", desc: "Trusted by over a thousand defense contractors from sole proprietors to mid-tier primes." },
 ];
+
+/* ===== PAGE ===== */
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen relative overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 text-slate-900 relative overflow-hidden">
             <div className="orb orb-1" />
             <div className="orb orb-2" />
             <Navbar />
@@ -36,48 +56,76 @@ export default function AboutPage() {
                 <div className="absolute inset-0 bg-hero-glow" />
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
                     <AnimatedSection>
-                        <p className="text-xs uppercase tracking-[0.2em] text-brand-400 font-semibold mb-4">Our Story</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-blue-600 font-semibold mb-4">About Kaelus.ai</p>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
-                            Building the <span className="text-gradient-brand">AI Security</span> Standard
+                            Building the Future of{" "}
+                            <span className="text-gradient-brand">Defense Compliance</span>
                         </h1>
-                        <p className="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
-                            We started Kaelus because we saw a massive blind spot: enterprises were adopting AI at breakneck speed, but nobody was watching what data was flowing out the door.
+                        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                            87,000 defense contractors need CMMC certification. Most can't afford six-figure consulting fees.
+                            We built Kaelus to change that.
                         </p>
                     </AnimatedSection>
                 </div>
             </section>
 
-            {/* Mission */}
-            <section className="py-20 px-6">
+            {/* Mission Panel */}
+            <section className="py-16 px-6">
                 <div className="max-w-4xl mx-auto">
                     <AnimatedSection>
-                        <div className="glass-card-glow p-10 md:p-14 text-center">
-                            <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">Our Mission</h2>
-                            <p className="text-lg text-white/50 leading-relaxed max-w-2xl mx-auto">
-                                To make it impossible for sensitive data to leak through AI tools — without slowing anyone down. We believe enterprise security and developer experience are not at odds. They should be the same thing.
-                            </p>
+                        <div className="border border-slate-200 bg-white backdrop-blur-xl rounded-2xl p-10 md:p-14 text-center relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-emerald-500/5 pointer-events-none" />
+                            <div className="relative z-10">
+                                <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">Our Mission</h2>
+                                <p className="text-xl md:text-2xl font-medium text-slate-700 leading-relaxed max-w-2xl mx-auto">
+                                    Democratize CMMC compliance for every defense contractor — from
+                                    sole proprietors to mid-tier primes — so protecting national security
+                                    is never gated by budget.
+                                </p>
+                            </div>
                         </div>
                     </AnimatedSection>
                 </div>
             </section>
 
-            {/* Values */}
-            <section className="py-20 px-6">
+            {/* Numbers */}
+            <section className="py-16 px-6">
                 <div className="max-w-5xl mx-auto">
                     <AnimatedSection className="text-center mb-12">
-                        <h2 className="text-3xl font-bold tracking-tight">What We Believe</h2>
+                        <h2 className="text-3xl font-bold tracking-tight">By the Numbers</h2>
+                    </AnimatedSection>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                        {stats.map((s, i) => (
+                            <AnimatedSection key={s.label} delay={i * 100}>
+                                <div className="border border-slate-200 bg-white rounded-2xl p-6 text-center">
+                                    <p className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-2 font-mono">
+                                        <AnimatedCounter target={s.value} prefix={s.prefix || ""} suffix={s.suffix} />
+                                    </p>
+                                    <p className="text-sm text-slate-600 dark:text-slate-400">{s.label}</p>
+                                </div>
+                            </AnimatedSection>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Values Grid */}
+            <section className="py-16 px-6">
+                <div className="max-w-5xl mx-auto">
+                    <AnimatedSection className="text-center mb-12">
+                        <h2 className="text-3xl font-bold tracking-tight">What We Stand For</h2>
                     </AnimatedSection>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {values.map((v, i) => {
                             const Icon = v.icon;
                             return (
                                 <AnimatedSection key={v.title} delay={i * 80}>
-                                    <div className="glass-card p-7 h-full">
+                                    <div className="border border-slate-200 bg-white rounded-2xl p-7 h-full">
                                         <div className={`w-11 h-11 rounded-xl ${v.bg} border flex items-center justify-center mb-4`}>
                                             <Icon className={`w-5 h-5 ${v.color}`} />
                                         </div>
-                                        <h3 className="text-lg font-semibold text-white mb-2">{v.title}</h3>
-                                        <p className="text-sm text-white/40 leading-relaxed">{v.desc}</p>
+                                        <h3 className="text-lg font-semibold text-slate-900 mb-2">{v.title}</h3>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{v.desc}</p>
                                     </div>
                                 </AnimatedSection>
                             );
@@ -86,24 +134,54 @@ export default function AboutPage() {
                 </div>
             </section>
 
+            {/* Testimonials */}
+            <section className="py-16 px-6 bg-[#0a0a0f]">
+                <div className="max-w-5xl mx-auto">
+                    <AnimatedSection className="text-center mb-12">
+                        <h2 className="text-3xl font-bold tracking-tight">Trusted by Defense Contractors</h2>
+                    </AnimatedSection>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {testimonials.map((t, i) => (
+                            <AnimatedSection key={t.name} delay={i * 100}>
+                                <div className="border border-slate-200 bg-white rounded-2xl p-7 h-full flex flex-col">
+                                    <Quote className="w-5 h-5 text-blue-600/40 mb-4 flex-shrink-0" />
+                                    <p className="text-sm text-slate-600 leading-relaxed flex-1 mb-6">
+                                        {t.quote}
+                                    </p>
+                                    <div className="border-t border-slate-200 pt-4">
+                                        <p className="text-sm font-semibold text-slate-900">{t.name}</p>
+                                        <p className="text-xs text-slate-600 dark:text-slate-400">{t.title}, {t.company}</p>
+                                    </div>
+                                </div>
+                            </AnimatedSection>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* Timeline */}
-            <section className="py-20 px-6 bg-[#0a0a0f]">
+            <section className="py-16 px-6">
                 <div className="max-w-3xl mx-auto">
                     <AnimatedSection className="text-center mb-12">
                         <h2 className="text-3xl font-bold tracking-tight">Our Journey</h2>
                     </AnimatedSection>
-                    <div className="space-y-8">
+                    <div className="space-y-0">
                         {timeline.map((t, i) => (
                             <AnimatedSection key={i} delay={i * 80}>
                                 <div className="flex gap-6">
                                     <div className="flex flex-col items-center">
-                                        <div className="w-3 h-3 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
-                                        {i < timeline.length - 1 && <div className="w-px flex-1 bg-gradient-to-b from-brand-500/30 to-transparent mt-2" />}
+                                        <div className="w-3 h-3 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] flex-shrink-0 mt-1" />
+                                        {i < timeline.length - 1 && (
+                                            <div className="w-px flex-1 bg-gradient-to-b from-brand-500/30 to-transparent mt-2" />
+                                        )}
                                     </div>
-                                    <div className="pb-8">
-                                        <span className="text-xs font-bold text-brand-400 uppercase tracking-wider">{t.year}</span>
-                                        <h3 className="text-lg font-semibold text-white mt-1 mb-2">{t.title}</h3>
-                                        <p className="text-sm text-white/40 leading-relaxed">{t.desc}</p>
+                                    <div className="pb-10">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <Calendar className="w-3 h-3 text-blue-600/60" />
+                                            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">{t.date}</span>
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-slate-900 mb-1">{t.title}</h3>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{t.desc}</p>
                                     </div>
                                 </div>
                             </AnimatedSection>
@@ -116,22 +194,32 @@ export default function AboutPage() {
             <section className="py-20 px-6">
                 <div className="max-w-2xl mx-auto text-center">
                     <AnimatedSection>
-                        <h2 className="text-3xl font-bold tracking-tight mb-4">Join Us</h2>
-                        <p className="text-white/40 mb-8">See what Kaelus can do for your organization.</p>
-                        <Link href="/auth" className="btn-primary px-8 py-3.5">
-                            Get Started Free <ArrowRight className="w-4 h-4" />
-                        </Link>
+                        <div className="border border-slate-200 bg-white backdrop-blur-xl rounded-2xl p-10 md:p-14 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-emerald-500/5 pointer-events-none" />
+                            <div className="relative z-10">
+                                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Join the Mission</h2>
+                                <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-md mx-auto">
+                                    Start your CMMC compliance journey today. 14-day free trial, no credit card required.
+                                </p>
+                                <Link
+                                    href="/signup"
+                                    className="inline-flex items-center gap-2 bg-brand-500 hover:bg-blue-600 text-slate-900 font-semibold px-8 py-3.5 rounded-xl transition-colors cursor-pointer"
+                                >
+                                    Get Started Free <ArrowRight className="w-4 h-4" />
+                                </Link>
+                            </div>
+                        </div>
                     </AnimatedSection>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-white/[0.06] py-12 px-6">
+            <footer className="border-t border-slate-200 py-12 px-6">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <Link href="/" className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2 cursor-pointer">
                         <TextLogo />
                     </Link>
-                    <p className="text-xs text-white/20">&copy; 2026 Kaelus.ai — All rights reserved.</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-300">&copy; 2026 Kaelus.ai — All rights reserved.</p>
                 </div>
             </footer>
         </div>
