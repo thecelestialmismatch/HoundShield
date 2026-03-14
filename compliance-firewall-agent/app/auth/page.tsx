@@ -4,6 +4,8 @@ import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/browser";
 import {
   Shield,
   ArrowLeft,
@@ -143,15 +145,15 @@ function LiveScanner() {
         {/* Stats row */}
         <div className="flex items-center gap-6 mt-4 pt-3 border-t border-white/[0.04]">
           <div>
-            <p className="text-[10px] text-white/30 uppercase tracking-wider">Threats Blocked</p>
-            <p className="text-lg font-bold text-white tabular-nums">{threats.toLocaleString()}</p>
+            <p className="text-[10px] text-slate-900/30 uppercase tracking-wider">Threats Blocked</p>
+            <p className="text-lg font-bold text-slate-900 tabular-nums">{threats.toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-[10px] text-white/30 uppercase tracking-wider">Requests Scanned</p>
-            <p className="text-lg font-bold text-white tabular-nums">{requests.toLocaleString()}</p>
+            <p className="text-[10px] text-slate-900/30 uppercase tracking-wider">Requests Scanned</p>
+            <p className="text-lg font-bold text-slate-900 tabular-nums">{requests.toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-[10px] text-white/30 uppercase tracking-wider">Latency</p>
+            <p className="text-[10px] text-slate-900/30 uppercase tracking-wider">Latency</p>
             <p className="text-lg font-bold text-emerald-400">&lt;23ms</p>
           </div>
         </div>
@@ -164,10 +166,12 @@ function LiveScanner() {
    Main Auth Page
    ────────────────────────────────────────────── */
 export default function AuthPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   // Sign In state
   const [signInEmail, setSignInEmail] = useState("");
@@ -184,16 +188,25 @@ export default function AuthPage() {
       setError("");
       setLoading(true);
       try {
-        await new Promise((r) => setTimeout(r, 1400));
-        // In production: await supabase.auth.signInWithPassword({ email, password })
-        window.location.href = "/dashboard";
+        const supabase = createClient();
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email: signInEmail,
+          password: signInPassword,
+        });
+        if (authError) {
+          setError(authError.message);
+          setLoading(false);
+          return;
+        }
+        router.push("/command-center");
+        router.refresh();
       } catch {
         setError("Invalid credentials. Please try again.");
       } finally {
         setLoading(false);
       }
     },
-    []
+    [signInEmail, signInPassword, router]
   );
 
   const handleSignUp = useCallback(
@@ -202,24 +215,43 @@ export default function AuthPage() {
       setError("");
       setLoading(true);
       try {
-        await new Promise((r) => setTimeout(r, 1400));
-        // In production: await supabase.auth.signUp({ email, password, options: { data: { full_name } } })
-        window.location.href = "/dashboard";
+        const supabase = createClient();
+        const { error: authError } = await supabase.auth.signUp({
+          email: signUpEmail,
+          password: signUpPassword,
+          options: {
+            data: { full_name: fullName },
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+        if (authError) {
+          setError(authError.message);
+          setLoading(false);
+          return;
+        }
+        setSignUpSuccess(true);
       } catch {
         setError("Something went wrong. Please try again.");
       } finally {
         setLoading(false);
       }
     },
-    []
+    [signUpEmail, signUpPassword, fullName]
   );
 
   const handleSocialAuth = useCallback(async (provider: "google" | "github" | "microsoft" | "sso") => {
     setLoading(true);
     try {
-      await new Promise((r) => setTimeout(r, 800));
-      // In production: await supabase.auth.signInWithOAuth({ provider })
-      window.location.href = "/dashboard";
+      const supabase = createClient();
+      // Map "microsoft" to "azure" (Supabase provider name) and "sso" to SAML
+      const supabaseProvider = provider === "microsoft" ? "azure" : provider === "sso" ? "azure" : provider;
+      await supabase.auth.signInWithOAuth({
+        provider: supabaseProvider as 'google' | 'github' | 'azure',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          ...(supabaseProvider === 'azure' && { scopes: 'email profile openid' }),
+        },
+      });
     } catch {
       setError(`Failed to authenticate with ${provider}. Please try again.`);
       setLoading(false);
@@ -271,7 +303,7 @@ export default function AuthPage() {
           </Link>
 
           {/* Headline */}
-          <h1 className="text-display-sm font-bold text-white leading-[1.05] mb-4">
+          <h1 className="text-display-sm font-bold text-slate-900 leading-[1.05] mb-4">
             Secure Your{" "}
             <span className="text-gradient-brand">AI Pipeline</span>
           </h1>
@@ -293,7 +325,7 @@ export default function AuthPage() {
                   <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center border border-white/[0.08] group-hover:bg-white/[0.1] group-hover:border-brand-500/20 transition-all duration-300">
                     <Icon className="w-4 h-4 text-brand-300" />
                   </div>
-                  <span className="text-white/75 text-sm group-hover:text-white/90 transition-colors">
+                  <span className="text-slate-900/75 text-sm group-hover:text-slate-900/90 transition-colors">
                     {item.text}
                   </span>
                   {item.highlight && (
@@ -328,10 +360,10 @@ export default function AuthPage() {
 
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-[1.7rem] font-bold text-white tracking-tight mb-1.5">
+            <h2 className="text-[1.7rem] font-bold text-slate-900 tracking-tight mb-1.5">
               {activeTab === "signin" ? "Welcome back" : "Get started"}
             </h2>
-            <p className="text-white/40 text-sm">
+            <p className="text-slate-900/40 text-sm">
               {activeTab === "signin"
                 ? "Sign in to access your compliance dashboard."
                 : "Create your account and secure your AI pipeline."}
@@ -351,8 +383,8 @@ export default function AuthPage() {
                     setShowPassword(false);
                   }}
                   className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === tab
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
-                    : "text-white/40 hover:text-white/60"
+                    ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/25"
+                    : "text-slate-900/40 hover:text-slate-900/60"
                     }`}
                 >
                   {tab === "signin" ? "Sign In" : "Sign Up"}
@@ -377,18 +409,18 @@ export default function AuthPage() {
               <form onSubmit={handleSignIn} className="space-y-4">
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-slate-900/70 mb-1.5 ml-0.5">
                     Email address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-900/20" />
                     <input
                       type="email"
                       required
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
                       placeholder="you@company.com"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-slate-900 placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
@@ -396,7 +428,7 @@ export default function AuthPage() {
                 {/* Password */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5 ml-0.5">
-                    <label className="block text-xs font-medium text-white/70">
+                    <label className="block text-xs font-medium text-slate-900/70">
                       Password
                     </label>
                     <button
@@ -407,19 +439,19 @@ export default function AuthPage() {
                     </button>
                   </div>
                   <div className="relative">
-                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-900/20" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
                       value={signInPassword}
                       onChange={(e) => setSignInPassword(e.target.value)}
                       placeholder="Enter your password"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-slate-900 placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50 transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-900/25 hover:text-slate-900/50 transition-colors"
                     >
                       {showPassword ? (
                         <EyeOff className="w-4 h-4" />
@@ -458,47 +490,47 @@ export default function AuthPage() {
               <form onSubmit={handleSignUp} className="space-y-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-slate-900/70 mb-1.5 ml-0.5">
                     Full name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-900/20" />
                     <input
                       type="text"
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="John Doe"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-slate-900 placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-slate-900/70 mb-1.5 ml-0.5">
                     Email address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-900/20" />
                     <input
                       type="email"
                       required
                       value={signUpEmail}
                       onChange={(e) => setSignUpEmail(e.target.value)}
                       placeholder="you@company.com"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-slate-900 placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Password */}
                 <div>
-                  <label className="block text-xs font-medium text-white/70 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-slate-900/70 mb-1.5 ml-0.5">
                     Password
                   </label>
                   <div className="relative">
-                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-900/20" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
@@ -506,12 +538,12 @@ export default function AuthPage() {
                       onChange={(e) => setSignUpPassword(e.target.value)}
                       placeholder="Min. 8 characters"
                       minLength={8}
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-slate-900 placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50 transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-900/25 hover:text-slate-900/50 transition-colors"
                     >
                       {showPassword ? (
                         <EyeOff className="w-4 h-4" />
@@ -546,7 +578,7 @@ export default function AuthPage() {
                 <div className="w-full border-t border-white/[0.06]" />
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-[rgba(20,20,25,0.7)] px-4 text-xs font-medium text-white/30">
+                <span className="bg-[rgba(20,20,25,0.7)] px-4 text-xs font-medium text-slate-900/30">
                   or
                 </span>
               </div>
@@ -557,7 +589,7 @@ export default function AuthPage() {
               <button
                 onClick={() => handleSocialAuth("google")}
                 disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-900/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
               >
                 <GoogleLogo className="w-4 h-4" />
                 Continue with Google
@@ -565,7 +597,7 @@ export default function AuthPage() {
               <button
                 onClick={() => handleSocialAuth("microsoft")}
                 disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-900/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
               >
                 <MicrosoftLogo className="w-4 h-4" />
                 Continue with Microsoft
@@ -574,7 +606,7 @@ export default function AuthPage() {
               <button
                 onClick={() => handleSocialAuth("github")}
                 disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-900/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
               >
                 <GitHubLogo className="w-4 h-4" />
                 Continue with GitHub
@@ -582,7 +614,7 @@ export default function AuthPage() {
               <button
                 onClick={() => handleSocialAuth("sso")}
                 disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-white/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-900/80 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
               >
                 <ShieldCheck className="w-4 h-4" />
                 Continue with SSO
@@ -591,13 +623,13 @@ export default function AuthPage() {
 
             {/* Terms (sign up only) */}
             {activeTab === "signup" && (
-              <p className="text-[11px] text-white/25 text-center mt-6 leading-relaxed">
+              <p className="text-[11px] text-slate-900/25 text-center mt-6 leading-relaxed">
                 By creating an account, you agree to our{" "}
-                <span className="text-white/40 hover:text-white/60 cursor-pointer transition-colors">
+                <span className="text-slate-900/40 hover:text-slate-900/60 cursor-pointer transition-colors">
                   Terms of Service
                 </span>{" "}
                 and{" "}
-                <span className="text-white/40 hover:text-white/60 cursor-pointer transition-colors">
+                <span className="text-slate-900/40 hover:text-slate-900/60 cursor-pointer transition-colors">
                   Privacy Policy
                 </span>
                 .
@@ -616,12 +648,12 @@ export default function AuthPage() {
               return (
                 <div
                   key={badge.label}
-                  className="flex items-center gap-1.5 text-white/25 group"
+                  className="flex items-center gap-1.5 text-slate-900/25 group"
                 >
                   <div className="w-6 h-6 rounded-md bg-white/[0.04] flex items-center justify-center border border-white/[0.06] group-hover:border-brand-500/20 transition-colors">
-                    <Icon className="w-3 h-3 text-white/30 group-hover:text-brand-400/60 transition-colors" />
+                    <Icon className="w-3 h-3 text-slate-900/30 group-hover:text-brand-400/60 transition-colors" />
                   </div>
-                  <span className="text-[10px] font-medium uppercase tracking-wider group-hover:text-white/40 transition-colors">
+                  <span className="text-[10px] font-medium uppercase tracking-wider group-hover:text-slate-900/40 transition-colors">
                     {badge.label}
                   </span>
                 </div>
@@ -632,7 +664,7 @@ export default function AuthPage() {
           {/* ─── BACK TO HOME ─── */}
           <Link
             href="/"
-            className="flex items-center justify-center gap-1.5 text-sm text-white/30 hover:text-white/55 mt-6 transition-colors duration-200 group"
+            className="flex items-center justify-center gap-1.5 text-sm text-slate-900/30 hover:text-slate-900/55 mt-6 transition-colors duration-200 group"
           >
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
             Back to home

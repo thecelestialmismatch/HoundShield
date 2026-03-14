@@ -146,7 +146,7 @@ function AgentSimulator() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Brain className="w-5 h-5 text-brand-400" />
-          <span className="text-sm font-semibold text-white">Agent Execution — ReAct Loop</span>
+          <span className="text-sm font-semibold text-slate-900">Agent Execution — ReAct Loop</span>
         </div>
         <div className="flex items-center gap-2">
           <div className={`w-2 h-2 rounded-full ${isRunning ? "bg-emerald-400 animate-pulse" : "bg-white/20"}`} />
@@ -154,7 +154,7 @@ function AgentSimulator() {
             onClick={() => setIsRunning(!isRunning)}
             className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] transition-all"
           >
-            {isRunning ? <Pause className="w-3.5 h-3.5 text-white/60" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
+            {isRunning ? <Pause className="w-3.5 h-3.5 text-slate-900/60" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
           </button>
         </div>
       </div>
@@ -165,7 +165,7 @@ function AgentSimulator() {
           <div
             key={phase}
             className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all duration-300 ${
-              current.phase === phase ? phaseColors[phase] : "bg-white/[0.02] text-white/20 border-white/[0.06]"
+              current.phase === phase ? phaseColors[phase] : "bg-white/[0.02] text-slate-900/20 border-white/[0.06]"
             }`}
           >
             {phase}
@@ -179,14 +179,14 @@ function AgentSimulator() {
           <div className="code-dot bg-[#ff5f57]" />
           <div className="code-dot bg-[#febc2e]" />
           <div className="code-dot bg-[#28c840]" />
-          <span className="ml-2 text-xs text-white/30 font-mono">agent-reasoning.log</span>
+          <span className="ml-2 text-xs text-slate-900/30 font-mono">agent-reasoning.log</span>
         </div>
         <div className="p-5 min-h-[120px]">
           <div className="flex items-start gap-3">
             <span className={`text-xs font-mono font-bold shrink-0 mt-0.5 ${current.color}`}>
               [{current.phase}]
             </span>
-            <p className="text-sm text-white/60 font-mono leading-relaxed">
+            <p className="text-sm text-slate-900/60 font-mono leading-relaxed">
               {thought}
               <span className="inline-block w-0.5 h-4 bg-brand-400 ml-0.5 animate-pulse" />
             </p>
@@ -349,7 +349,7 @@ export default function AgentsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface text-white overflow-x-hidden">
+    <div className="min-h-screen bg-surface text-slate-900 overflow-x-hidden">
       {/* Floating Orbs */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
@@ -366,13 +366,13 @@ export default function AgentsPage() {
           <AnimatedSection className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] mb-8">
               <Brain className="w-3.5 h-3.5 text-purple-400" />
-              <span className="text-xs text-white/50">Agentic AI System</span>
+              <span className="text-xs text-slate-900/50">Agentic AI System</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-display font-bold tracking-tight mb-6">
               AI Agents That{" "}
               <span className="text-gradient-aurora">Think, Act & Protect</span>
             </h1>
-            <p className="text-lg md:text-xl text-white/40 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-900/40 max-w-2xl mx-auto mb-10 leading-relaxed">
               Not just pattern matching. Kaelus agents use a ReAct reasoning loop with 8 tools
               and 13 AI models to autonomously handle compliance at scale.
             </p>
@@ -398,8 +398,8 @@ export default function AgentsPage() {
               return (
                 <div key={stat.label} className="glass-card p-4 text-center">
                   <Icon className="w-5 h-5 text-brand-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-white tabular-nums">{stat.value}</div>
-                  <div className="text-xs text-white/35 mt-0.5">{stat.label}</div>
+                  <div className="text-2xl font-bold text-slate-900 tabular-nums">{stat.value}</div>
+                  <div className="text-xs text-slate-900/35 mt-0.5">{stat.label}</div>
                 </div>
               );
             })}
@@ -418,7 +418,7 @@ export default function AgentsPage() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               Watch an Agent <span className="text-gradient-brand">Think in Real Time</span>
             </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
+            <p className="text-slate-900/40 max-w-2xl mx-auto">
               The ReAct loop in action — observe how the agent reasons through a compliance task,
               selects tools, and arrives at a decision.
             </p>
@@ -440,7 +440,7 @@ export default function AgentsPage() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               The <span className="text-gradient-brand">ReAct</span> Reasoning Loop
             </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
+            <p className="text-slate-900/40 max-w-2xl mx-auto">
               Every agent follows a structured reasoning pattern: Observe the environment,
               Think about the best approach, Act using tools, and Iterate until the task is complete.
             </p>
@@ -470,8 +470,8 @@ export default function AgentsPage() {
                       </div>
                       <span className={`text-xs font-mono font-bold ${c.text}`}>STEP {step.num}</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">{step.name}</h3>
-                    <p className="text-sm text-white/40 leading-relaxed">{step.desc}</p>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">{step.name}</h3>
+                    <p className="text-sm text-slate-900/40 leading-relaxed">{step.desc}</p>
                   </div>
                 </AnimatedSection>
               );
@@ -482,7 +482,7 @@ export default function AgentsPage() {
           <AnimatedSection delay={400} className="mt-8 flex justify-center">
             <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass-card">
               <RefreshCw className="w-4 h-4 text-brand-400 animate-spin-slow" />
-              <span className="text-sm text-white/50">Loops until task complete — average 2.3 iterations</span>
+              <span className="text-sm text-slate-900/50">Loops until task complete — average 2.3 iterations</span>
             </div>
           </AnimatedSection>
         </div>
@@ -499,7 +499,7 @@ export default function AgentsPage() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               8 Built-in <span className="text-gradient-brand">Agent Tools</span>
             </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
+            <p className="text-slate-900/40 max-w-2xl mx-auto">
               Every agent has access to these tools. Mix and match to create specialized
               workflows for any compliance or security use case.
             </p>
@@ -514,8 +514,8 @@ export default function AgentsPage() {
                     <div className={`w-11 h-11 rounded-xl ${tool.bg} border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                       <Icon className={`w-5 h-5 ${tool.color}`} />
                     </div>
-                    <h3 className="text-sm font-semibold text-white mb-1.5">{tool.name}</h3>
-                    <p className="text-xs text-white/35 leading-relaxed">{tool.desc}</p>
+                    <h3 className="text-sm font-semibold text-slate-900 mb-1.5">{tool.name}</h3>
+                    <p className="text-xs text-slate-900/35 leading-relaxed">{tool.desc}</p>
                   </div>
                 </AnimatedSection>
               );
@@ -535,7 +535,7 @@ export default function AgentsPage() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               <span className="text-gradient-brand">13 AI Models</span> — 8 Free
             </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
+            <p className="text-slate-900/40 max-w-2xl mx-auto">
               Agents automatically route to the best model for each task.
               8 free models for everyday use, 5 premium for maximum capability.
             </p>
@@ -552,8 +552,8 @@ export default function AgentsPage() {
                       <Cpu className={`w-4 h-4 ${model.type === "Premium" ? "text-amber-400" : "text-emerald-400"}`} />
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-white">{model.name}</div>
-                      <div className="text-[10px] text-white/30">{model.provider}</div>
+                      <div className="text-sm font-medium text-slate-900">{model.name}</div>
+                      <div className="text-[10px] text-slate-900/30">{model.provider}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -564,7 +564,7 @@ export default function AgentsPage() {
                     }`}>
                       {model.type === "Premium" ? "PRO" : "FREE"}
                     </span>
-                    <span className="text-[10px] text-white/20 hidden sm:inline">{model.badge}</span>
+                    <span className="text-[10px] text-slate-900/20 hidden sm:inline">{model.badge}</span>
                   </div>
                 </div>
               </AnimatedSection>
@@ -584,7 +584,7 @@ export default function AgentsPage() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               18 Pre-Built <span className="text-gradient-brand">Agent Templates</span>
             </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
+            <p className="text-slate-900/40 max-w-2xl mx-auto">
               Deploy specialized compliance agents in seconds. Each template comes with
               a fine-tuned persona, tool configuration, and domain expertise.
             </p>
@@ -607,10 +607,10 @@ export default function AgentsPage() {
                       <div className={`w-11 h-11 rounded-xl ${colors.iconBg} border flex items-center justify-center`}>
                         <Icon className={`w-5 h-5 ${colors.text}`} />
                       </div>
-                      <ChevronDown className={`w-4 h-4 text-white/20 transition-transform duration-300 ${isActive ? "rotate-180" : ""}`} />
+                      <ChevronDown className={`w-4 h-4 text-slate-900/20 transition-transform duration-300 ${isActive ? "rotate-180" : ""}`} />
                     </div>
-                    <h3 className="text-base font-semibold text-white mb-1">{template.name}</h3>
-                    <p className="text-xs text-white/40 leading-relaxed mb-3">{template.desc}</p>
+                    <h3 className="text-base font-semibold text-slate-900 mb-1">{template.name}</h3>
+                    <p className="text-xs text-slate-900/40 leading-relaxed mb-3">{template.desc}</p>
 
                     <div
                       className="overflow-hidden transition-all duration-500"
@@ -618,17 +618,17 @@ export default function AgentsPage() {
                     >
                       <div className="pt-3 border-t border-white/[0.06] space-y-3">
                         <div>
-                          <span className="text-[10px] uppercase tracking-wider text-white/30">Capabilities</span>
+                          <span className="text-[10px] uppercase tracking-wider text-slate-900/30">Capabilities</span>
                           <div className="flex flex-wrap gap-1.5 mt-1.5">
                             {template.capabilities.map((cap) => (
-                              <span key={cap} className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/40">
+                              <span key={cap} className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-slate-900/40">
                                 {cap}
                               </span>
                             ))}
                           </div>
                         </div>
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-white/30">Model: <span className={colors.text}>{template.model}</span></span>
+                          <span className="text-slate-900/30">Model: <span className={colors.text}>{template.model}</span></span>
                         </div>
                         <div className="flex flex-wrap gap-1">
                           {template.tools.map((t) => (
@@ -646,7 +646,7 @@ export default function AgentsPage() {
           </div>
 
           <AnimatedSection delay={700} className="mt-8 text-center">
-            <p className="text-sm text-white/30">
+            <p className="text-sm text-slate-900/30">
               + 9 more templates available in the Dashboard, plus unlimited custom agent creation
             </p>
           </AnimatedSection>
@@ -664,7 +664,7 @@ export default function AgentsPage() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               Visual <span className="text-gradient-brand">Agent Builder</span>
             </h2>
-            <p className="text-white/40 max-w-2xl mx-auto">
+            <p className="text-slate-900/40 max-w-2xl mx-auto">
               Create custom agents in the Dashboard with our visual builder.
               Define personas, select tools, configure models, and deploy in seconds.
             </p>
@@ -679,16 +679,16 @@ export default function AgentsPage() {
                     <div className="w-7 h-7 rounded-lg bg-brand-500/20 border border-brand-500/30 flex items-center justify-center">
                       <span className="text-xs font-bold text-brand-400">1</span>
                     </div>
-                    <span className="text-sm font-semibold text-white">Define Persona</span>
+                    <span className="text-sm font-semibold text-slate-900">Define Persona</span>
                   </div>
                   <div className="glass-card p-4 space-y-3">
                     <div>
-                      <label className="text-[10px] uppercase tracking-wider text-white/30 block mb-1">Agent Name</label>
-                      <div className="text-sm text-white/70 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08]">Compliance Reviewer</div>
+                      <label className="text-[10px] uppercase tracking-wider text-slate-900/30 block mb-1">Agent Name</label>
+                      <div className="text-sm text-slate-900/70 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08]">Compliance Reviewer</div>
                     </div>
                     <div>
-                      <label className="text-[10px] uppercase tracking-wider text-white/30 block mb-1">System Prompt</label>
-                      <div className="text-xs text-white/40 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] leading-relaxed">
+                      <label className="text-[10px] uppercase tracking-wider text-slate-900/30 block mb-1">System Prompt</label>
+                      <div className="text-xs text-slate-900/40 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] leading-relaxed">
                         You are an expert compliance analyst. Review all content for regulatory violations...
                       </div>
                     </div>
@@ -701,18 +701,18 @@ export default function AgentsPage() {
                     <div className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
                       <span className="text-xs font-bold text-purple-400">2</span>
                     </div>
-                    <span className="text-sm font-semibold text-white">Select Tools</span>
+                    <span className="text-sm font-semibold text-slate-900">Select Tools</span>
                   </div>
                   <div className="glass-card p-4 space-y-2">
                     {["Compliance Scan", "Data Query", "File Analysis", "Knowledge Base"].map((tool, i) => (
                       <div key={tool} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08]">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-xs text-white/60">{tool}</span>
+                        <span className="text-xs text-slate-900/60">{tool}</span>
                       </div>
                     ))}
                     <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
                       <div className="w-3.5 h-3.5 rounded border border-white/10" />
-                      <span className="text-xs text-white/25">Web Search</span>
+                      <span className="text-xs text-slate-900/25">Web Search</span>
                     </div>
                   </div>
                 </div>
@@ -723,15 +723,15 @@ export default function AgentsPage() {
                     <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
                       <span className="text-xs font-bold text-emerald-400">3</span>
                     </div>
-                    <span className="text-sm font-semibold text-white">Deploy</span>
+                    <span className="text-sm font-semibold text-slate-900">Deploy</span>
                   </div>
                   <div className="glass-card p-4 space-y-3">
                     <div>
-                      <label className="text-[10px] uppercase tracking-wider text-white/30 block mb-1">Model</label>
-                      <div className="text-sm text-white/70 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08]">Claude 3.5 Sonnet</div>
+                      <label className="text-[10px] uppercase tracking-wider text-slate-900/30 block mb-1">Model</label>
+                      <div className="text-sm text-slate-900/70 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08]">Claude 3.5 Sonnet</div>
                     </div>
                     <div>
-                      <label className="text-[10px] uppercase tracking-wider text-white/30 block mb-1">Status</label>
+                      <label className="text-[10px] uppercase tracking-wider text-slate-900/30 block mb-1">Status</label>
                       <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                         <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                         <span className="text-xs text-emerald-400 font-medium">Ready to Deploy</span>
@@ -762,7 +762,7 @@ export default function AgentsPage() {
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
                   Deploy Your AI <span className="text-gradient-brand">Agent Army</span>
                 </h2>
-                <p className="text-white/40 max-w-xl mx-auto mb-8">
+                <p className="text-slate-900/40 max-w-xl mx-auto mb-8">
                   Start with our free tier — 18 templates, 8 tools, and 8 free AI models.
                   Scale to unlimited custom agents on Pro.
                 </p>
@@ -789,12 +789,12 @@ export default function AgentsPage() {
                 <Logo className="w-7 h-7" />
                 <TextLogo />
               </Link>
-              <p className="text-xs text-white/30 leading-relaxed">
+              <p className="text-xs text-slate-900/30 leading-relaxed">
                 Agentic AI compliance firewall with 18 agent templates, 8 tools, and 13 AI models.
               </p>
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-3">Product</h4>
+              <h4 className="text-xs font-semibold text-slate-900/50 uppercase tracking-wider mb-3">Product</h4>
               <div className="space-y-2">
                 {[
                   { label: "Features", href: "/features" },
@@ -803,35 +803,35 @@ export default function AgentsPage() {
                   { label: "Pricing", href: "/pricing" },
                   { label: "Dashboard", href: "/dashboard" },
                 ].map((item) => (
-                  <Link key={item.label} href={item.href} className="block text-sm text-white/30 hover:text-white/60 transition-colors">
+                  <Link key={item.label} href={item.href} className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors">
                     {item.label}
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-3">Compliance</h4>
+              <h4 className="text-xs font-semibold text-slate-900/50 uppercase tracking-wider mb-3">Compliance</h4>
               <div className="space-y-2">
                 {["SOC 2 Type II", "GDPR", "HIPAA", "EU AI Act"].map((item) => (
-                  <span key={item} className="block text-sm text-white/30">{item}</span>
+                  <span key={item} className="block text-sm text-slate-900/30">{item}</span>
                 ))}
               </div>
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-3">Company</h4>
+              <h4 className="text-xs font-semibold text-slate-900/50 uppercase tracking-wider mb-3">Company</h4>
               <div className="space-y-2">
                 {["Documentation", "API Reference", "GitHub", "Contact"].map((item) => (
-                  <span key={item} className="block text-sm text-white/30 hover:text-white/60 cursor-pointer transition-colors">{item}</span>
+                  <span key={item} className="block text-sm text-slate-900/30 hover:text-slate-900/60 cursor-pointer transition-colors">{item}</span>
                 ))}
               </div>
             </div>
           </div>
           <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-white/20">&copy; 2026 Kaelus.ai — All rights reserved.</p>
+            <p className="text-xs text-slate-900/20">&copy; 2026 Kaelus.ai — All rights reserved.</p>
             <div className="flex items-center gap-4">
-              <span className="text-xs text-white/20 hover:text-white/40 cursor-pointer transition-colors">Privacy Policy</span>
-              <span className="text-xs text-white/20 hover:text-white/40 cursor-pointer transition-colors">Terms of Service</span>
-              <span className="text-xs text-white/20 hover:text-white/40 cursor-pointer transition-colors">Security</span>
+              <span className="text-xs text-slate-900/20 hover:text-slate-900/40 cursor-pointer transition-colors">Privacy Policy</span>
+              <span className="text-xs text-slate-900/20 hover:text-slate-900/40 cursor-pointer transition-colors">Terms of Service</span>
+              <span className="text-xs text-slate-900/20 hover:text-slate-900/40 cursor-pointer transition-colors">Security</span>
             </div>
           </div>
         </div>

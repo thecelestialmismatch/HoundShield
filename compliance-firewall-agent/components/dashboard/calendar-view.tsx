@@ -149,15 +149,15 @@ export default function CalendarView() {
   return (
     <div className="min-h-full bg-[#0c0c10]">
       {/* Header */}
-      <div className="px-6 py-5 border-b border-white/[0.06]">
+      <div className="px-6 py-5 border-b border-slate-200">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-white tracking-tight">Calendar</h2>
-            <p className="text-sm text-white/50 mt-0.5">Scheduled tasks, cron jobs, and reminders</p>
+            <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Calendar</h2>
+            <p className="text-sm text-slate-500 mt-0.5">Scheduled tasks, cron jobs, and reminders</p>
           </div>
           <div className="flex items-center gap-1">
             {Object.entries(EVENT_TYPE_CONFIG).map(([key, conf]) => (
-              <div key={key} className="flex items-center gap-1 text-xs text-white/50 mr-3">
+              <div key={key} className="flex items-center gap-1 text-xs text-slate-500 mr-3">
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: conf.color }} />
                 <span>{conf.label}</span>
               </div>
@@ -172,19 +172,19 @@ export default function CalendarView() {
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <button onClick={prevMonth} className="p-1.5 rounded-lg hover:bg-white/[0.03] text-white/50 transition-colors">
+              <button onClick={prevMonth} className="p-1.5 rounded-lg hover:bg-slate-50 text-slate-500 transition-colors">
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <h3 className="text-lg font-semibold text-white min-w-[180px] text-center">
+              <h3 className="text-lg font-semibold text-slate-900 min-w-[180px] text-center">
                 {monthNames[currentMonth]} {currentYear}
               </h3>
-              <button onClick={nextMonth} className="p-1.5 rounded-lg hover:bg-white/[0.03] text-white/50 transition-colors">
+              <button onClick={nextMonth} className="p-1.5 rounded-lg hover:bg-slate-50 text-slate-500 transition-colors">
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
             <button
               onClick={goToday}
-              className="text-xs font-medium px-3 py-1.5 rounded-md border border-white/10 text-white/60 hover:text-white hover:bg-white/[0.03] transition-colors"
+              className="text-xs font-medium px-3 py-1.5 rounded-md border border-white/10 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
             >
               Today
             </button>
@@ -193,17 +193,17 @@ export default function CalendarView() {
           {/* Day headers */}
           <div className="grid grid-cols-7 mb-1">
             {DAYS_OF_WEEK.map((day) => (
-              <div key={day} className="text-center text-[11px] font-semibold text-white/40 uppercase tracking-wider py-2">
+              <div key={day} className="text-center text-[11px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider py-2">
                 {day}
               </div>
             ))}
           </div>
 
           {/* Calendar cells */}
-          <div className="grid grid-cols-7 bg-[#141419] rounded-xl border border-white/[0.06] overflow-hidden">
+          <div className="grid grid-cols-7 bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
             {cells.map((day, i) => {
               if (day === null) {
-                return <div key={`empty-${i}`} className="h-24 border-b border-r border-white/[0.04] bg-[#0c0c10]/50" />;
+                return <div key={`empty-${i}`} className="h-24 border-b border-r border-slate-200 bg-[#0c0c10]/50" />;
               }
               const ds = dateStr(day);
               const isToday = ds === todayStr;
@@ -214,20 +214,20 @@ export default function CalendarView() {
                 <div
                   key={`day-${day}`}
                   onClick={() => setSelectedDay(isSelected ? null : ds)}
-                  className={`h-24 border-b border-r border-white/[0.04] p-1.5 cursor-pointer transition-colors ${
-                    isSelected ? 'bg-indigo-500/10' : 'hover:bg-white/[0.03]'
+                  className={`h-24 border-b border-r border-slate-200 p-1.5 cursor-pointer transition-colors ${
+                    isSelected ? 'bg-indigo-500/10' : 'hover:bg-slate-50'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span
                       className={`text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full ${
-                        isToday ? 'bg-indigo-500 text-white' : 'text-white/80'
+                        isToday ? 'bg-indigo-500 text-slate-900' : 'text-slate-800'
                       }`}
                     >
                       {day}
                     </span>
                     {dayEvents.length > 0 && (
-                      <span className="text-[9px] text-white/40 font-medium">{dayEvents.length}</span>
+                      <span className="text-[9px] text-slate-600 dark:text-slate-400 font-medium">{dayEvents.length}</span>
                     )}
                   </div>
                   <div className="space-y-0.5 overflow-hidden">
@@ -245,7 +245,7 @@ export default function CalendarView() {
                       );
                     })}
                     {dayEvents.length > 3 && (
-                      <p className="text-[9px] text-white/40 pl-1">+{dayEvents.length - 3} more</p>
+                      <p className="text-[9px] text-slate-600 dark:text-slate-400 pl-1">+{dayEvents.length - 3} more</p>
                     )}
                   </div>
                 </div>
@@ -258,24 +258,24 @@ export default function CalendarView() {
         <div className="w-80 flex-shrink-0 space-y-4">
           {/* Selected day events */}
           {selectedDay && (
-            <div className="bg-[#141419] rounded-xl border border-white/[0.06] overflow-hidden">
-              <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-white">
+            <div className="bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-slate-900">
                   {new Date(selectedDay + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
                 </h4>
-                <button onClick={() => setSelectedDay(null)} className="p-1 rounded hover:bg-white/[0.03] text-white/40">
+                <button onClick={() => setSelectedDay(null)} className="p-1 rounded hover:bg-slate-50 text-slate-600 dark:text-slate-400">
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
               <div className="p-3 space-y-2 max-h-64 overflow-y-auto">
                 {selectedEvents.length === 0 && (
-                  <p className="text-xs text-white/40 text-center py-4">No events on this day</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 text-center py-4">No events on this day</p>
                 )}
                 {selectedEvents.map((ev) => {
                   const conf = EVENT_TYPE_CONFIG[ev.type];
                   const Icon = conf.icon;
                   return (
-                    <div key={ev.id} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#1a1a21] border border-white/[0.06]">
+                    <div key={ev.id} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#1a1a21] border border-slate-200">
                       <div
                         className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
                         style={{ backgroundColor: conf.color + '18' }}
@@ -283,18 +283,18 @@ export default function CalendarView() {
                         <Icon className="w-3.5 h-3.5" style={{ color: conf.color }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-white">{ev.title}</p>
+                        <p className="text-sm font-medium text-slate-900">{ev.title}</p>
                         {ev.time && (
                           <div className="flex items-center gap-1 mt-0.5">
-                            <Clock className="w-3 h-3 text-white/40" />
-                            <span className="text-xs text-white/50">{ev.time}</span>
+                            <Clock className="w-3 h-3 text-slate-600 dark:text-slate-400" />
+                            <span className="text-xs text-slate-500">{ev.time}</span>
                           </div>
                         )}
                         {ev.agentName && (
-                          <p className="text-[10px] text-white/40 mt-0.5">Agent: {ev.agentName}</p>
+                          <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">Agent: {ev.agentName}</p>
                         )}
                         {ev.description && (
-                          <p className="text-xs text-white/50 mt-1">{ev.description}</p>
+                          <p className="text-xs text-slate-500 mt-1">{ev.description}</p>
                         )}
                       </div>
                     </div>
@@ -305,16 +305,16 @@ export default function CalendarView() {
           )}
 
           {/* Upcoming events */}
-          <div className="bg-[#141419] rounded-xl border border-white/[0.06] overflow-hidden">
-            <div className="px-4 py-3 border-b border-white/[0.06]">
+          <div className="bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-200">
               <div className="flex items-center gap-2">
                 <CalendarDays className="w-4 h-4" style={{ color: '#6366f1' }} />
-                <h4 className="text-sm font-semibold text-white">Upcoming (7 days)</h4>
+                <h4 className="text-sm font-semibold text-slate-900">Upcoming (7 days)</h4>
               </div>
             </div>
             <div className="p-3 space-y-2 max-h-80 overflow-y-auto">
               {upcoming.length === 0 && (
-                <p className="text-xs text-white/40 text-center py-4">No upcoming events</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 text-center py-4">No upcoming events</p>
               )}
               {upcoming.map((ev) => {
                 const conf = EVENT_TYPE_CONFIG[ev.type];
@@ -325,7 +325,7 @@ export default function CalendarView() {
                     ? 'Today'
                     : evDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
                 return (
-                  <div key={ev.id} className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-white/[0.03] transition-colors">
+                  <div key={ev.id} className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-50 transition-colors">
                     <div
                       className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
                       style={{ backgroundColor: conf.color + '18' }}
@@ -333,10 +333,10 @@ export default function CalendarView() {
                       <Icon className="w-3 h-3" style={{ color: conf.color }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-white truncate">{ev.title}</p>
+                      <p className="text-xs font-medium text-slate-900 truncate">{ev.title}</p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[10px] text-white/40">{dayLabel}</span>
-                        {ev.time && <span className="text-[10px] text-white/40">{ev.time}</span>}
+                        <span className="text-[10px] text-slate-600 dark:text-slate-400">{dayLabel}</span>
+                        {ev.time && <span className="text-[10px] text-slate-600 dark:text-slate-400">{ev.time}</span>}
                       </div>
                     </div>
                   </div>

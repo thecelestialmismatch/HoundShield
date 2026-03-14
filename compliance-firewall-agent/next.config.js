@@ -28,6 +28,18 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
+  // Kill the "N" dev indicator
+  devIndicators: false,
+
+  // Redirect old routes to unified Command Center
+  async redirects() {
+    return [
+      { source: '/dashboard', destination: '/command-center', permanent: true },
+      { source: '/shieldready', destination: '/command-center', permanent: true },
+      { source: '/shieldready/:path*', destination: '/command-center/shield/:path*', permanent: true },
+    ];
+  },
+
   // Headers for security
   async headers() {
     return [

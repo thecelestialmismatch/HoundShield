@@ -46,7 +46,7 @@ export default function ControlCard({
   const statusColor = status === "MET" ? "emerald" : status === "PARTIAL" ? "amber" : status === "UNMET" ? "red" : "slate";
 
   return (
-    <div className="bg-slate-900/70 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden">
+    <div className="bg-slate-50 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl overflow-hidden">
       {/* ── Header ── */}
       <div className="p-6 pb-4">
         <div className="flex items-start justify-between mb-3">
@@ -62,8 +62,8 @@ export default function ControlCard({
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-2">{control.title}</h3>
-        <p className="text-slate-300 text-sm leading-relaxed">{control.assessmentQuestion}</p>
+        <h3 className="text-lg font-semibold text-slate-900 mb-2">{control.title}</h3>
+        <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{control.assessmentQuestion}</p>
       </div>
 
       {/* ── Status Buttons ── */}
@@ -81,7 +81,7 @@ export default function ControlCard({
                 className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
                   isActive
                     ? `bg-${colorBase}-500/20 border-${colorBase}-500 text-${colorBase}-400 shadow-[0_0_12px_rgba(0,0,0,0.3)]`
-                    : "bg-slate-800/50 border-slate-600 text-slate-400 hover:border-slate-500"
+                    : "bg-slate-100 border-slate-600 text-slate-600 dark:text-slate-400 hover:border-slate-500"
                 }`}
               >
                 <Icon size={16} />
@@ -95,7 +95,7 @@ export default function ControlCard({
       {/* ── Notes & Evidence ── */}
       <div className="px-6 pb-4 space-y-3">
         <div>
-          <label className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-1.5">
+          <label className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 mb-1.5">
             <StickyNote size={12} />
             Notes
           </label>
@@ -104,7 +104,7 @@ export default function ControlCard({
             onChange={(e) => onNotesChange(e.target.value)}
             placeholder="Add implementation notes, exceptions, or context..."
             rows={2}
-            className="w-full bg-slate-800/50 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all resize-none"
+            className="w-full bg-slate-100 border border-slate-600 rounded-xl px-3 py-2 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all resize-none"
           />
         </div>
         <button
@@ -112,7 +112,7 @@ export default function ControlCard({
           className={`flex items-center gap-2 text-sm py-2 px-3 rounded-lg transition-all ${
             evidenceUploaded
               ? "bg-emerald-500/10 text-emerald-400"
-              : "bg-slate-800/50 text-slate-400 hover:text-slate-300"
+              : "bg-slate-100 text-slate-600 dark:text-slate-400 hover:text-slate-500"
           }`}
         >
           <FileCheck size={14} />
@@ -121,10 +121,10 @@ export default function ControlCard({
       </div>
 
       {/* ── Expandable Details ── */}
-      <div className="border-t border-slate-700/50">
+      <div className="border-t border-slate-200 dark:border-slate-200 dark:border-slate-700/50">
         <button
           onClick={() => setShowDetails(!showDetails)}
-          className="w-full flex items-center justify-between px-6 py-3 text-sm text-slate-400 hover:text-slate-300 transition-colors"
+          className="w-full flex items-center justify-between px-6 py-3 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 transition-colors"
         >
           <span>Remediation details & tools</span>
           <motion.div animate={{ rotate: showDetails ? 180 : 0 }}>
@@ -145,7 +145,7 @@ export default function ControlCard({
                 {/* Official Description */}
                 <div>
                   <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Official Requirement</h4>
-                  <p className="text-slate-300 text-sm">{control.officialDescription}</p>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm">{control.officialDescription}</p>
                 </div>
 
                 {/* Remediation Steps */}
@@ -157,7 +157,7 @@ export default function ControlCard({
                     </h4>
                     <ol className="space-y-1.5">
                       {control.remediationSteps.map((step, i) => (
-                        <li key={i} className="flex gap-2 text-sm text-slate-300">
+                        <li key={i} className="flex gap-2 text-sm text-slate-500">
                           <span className="text-blue-400 font-bold shrink-0">{i + 1}.</span>
                           {step}
                         </li>
@@ -195,7 +195,7 @@ export default function ControlCard({
                     </h4>
                     <ul className="space-y-1">
                       {control.evidenceRequired.map((ev, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                        <li key={i} className="flex items-start gap-2 text-sm text-slate-500">
                           <span className="text-emerald-400 mt-0.5">•</span>
                           {ev}
                         </li>
@@ -205,13 +205,13 @@ export default function ControlCard({
                 )}
 
                 {/* Metadata row */}
-                <div className="flex items-center gap-4 pt-2 border-t border-slate-700/30 text-xs text-slate-500">
+                <div className="flex items-center gap-4 pt-2 border-t border-slate-200 dark:border-slate-700/30 text-xs text-slate-500">
                   <span>Est. {control.estimatedHours}h to implement</span>
                   <span>•</span>
                   <span className={`font-medium ${
                     control.riskPriority === "CRITICAL" ? "text-red-400" :
                     control.riskPriority === "HIGH" ? "text-amber-400" :
-                    control.riskPriority === "MEDIUM" ? "text-blue-400" : "text-slate-400"
+                    control.riskPriority === "MEDIUM" ? "text-blue-400" : "text-slate-600 dark:text-slate-400"
                   }`}>
                     {control.riskPriority} priority
                   </span>

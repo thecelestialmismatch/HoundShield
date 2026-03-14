@@ -125,7 +125,7 @@ export function ThreatTimeline() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold text-white">Threat Timeline</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Threat Timeline</h2>
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
@@ -148,15 +148,15 @@ export function ThreatTimeline() {
       <div className="grid grid-cols-3 gap-3">
         <div className="glass-card p-3.5 text-center">
           <p className="text-xl font-bold text-danger">{criticalCount}</p>
-          <p className="text-[10px] text-white/30 mt-0.5">Critical Threats</p>
+          <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">Critical Threats</p>
         </div>
         <div className="glass-card p-3.5 text-center">
           <p className="text-xl font-bold text-warning">{blockedCount}</p>
-          <p className="text-[10px] text-white/30 mt-0.5">Blocked</p>
+          <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">Blocked</p>
         </div>
         <div className="glass-card p-3.5 text-center">
-          <p className="text-xl font-bold text-brand-400">{avgProcessingTime}ms</p>
-          <p className="text-[10px] text-white/30 mt-0.5">Avg Scan Time</p>
+          <p className="text-xl font-bold text-blue-600">{avgProcessingTime}ms</p>
+          <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">Avg Scan Time</p>
         </div>
       </div>
 
@@ -177,9 +177,9 @@ export function ThreatTimeline() {
         </div>
       ) : events.length === 0 ? (
         <div className="glass-card p-12 text-center">
-          <ShieldCheck className="w-10 h-10 text-white/10 mx-auto mb-3" />
-          <p className="text-sm text-white/30">No threat events yet</p>
-          <p className="text-xs text-white/15 mt-1">Events appear here when LLM requests are intercepted</p>
+          <ShieldCheck className="w-10 h-10 text-slate-700 dark:text-slate-300 mx-auto mb-3" />
+          <p className="text-sm text-slate-600 dark:text-slate-400">No threat events yet</p>
+          <p className="text-xs text-slate-700 dark:text-slate-300 mt-1">Events appear here when LLM requests are intercepted</p>
         </div>
       ) : (
         <div className="relative">
@@ -194,7 +194,7 @@ export function ThreatTimeline() {
               return (
                 <div
                   key={event.id}
-                  className={`relative flex gap-3 py-3 px-3 rounded-lg hover:bg-white/[0.02] transition-all ${
+                  className={`relative flex gap-3 py-3 px-3 rounded-lg hover:bg-white transition-all ${
                     index === 0 ? "animate-fade-in-up" : ""
                   }`}
                 >
@@ -211,13 +211,13 @@ export function ThreatTimeline() {
                         {event.action_taken}
                       </span>
                       {event.classifications.map((c, i) => (
-                        <span key={i} className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-white/30">
+                        <span key={i} className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-600 dark:text-slate-400">
                           {c}
                         </span>
                       ))}
                     </div>
 
-                    <div className="flex items-center gap-3 text-[10px] text-white/25">
+                    <div className="flex items-center gap-3 text-[10px] text-slate-600 dark:text-slate-400">
                       <span className="flex items-center gap-1">
                         <User className="w-3 h-3" />
                         {event.user_id}
@@ -243,7 +243,7 @@ export function ThreatTimeline() {
 
                   {/* Time */}
                   <div className="text-right flex-shrink-0">
-                    <span className="text-[10px] text-white/20 flex items-center gap-1">
+                    <span className="text-[10px] text-slate-700 dark:text-slate-300 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {timeAgo(event.created_at)}
                     </span>

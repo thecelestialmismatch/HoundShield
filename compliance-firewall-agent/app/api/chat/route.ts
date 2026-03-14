@@ -10,6 +10,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
+import { createRateLimiter } from "@/lib/rate-limit";
+
+// Rate limit: 10 requests per minute
+const limiter = createRateLimiter("chat", { limit: 10, windowMs: 60 * 1000 });
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,6 +43,20 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || request.ip || "anonymous";
+    const rateLimitResult = limiter(ip);
+    
+    if (!rateLimitResult.success) {
+      return NextResponse.json({ error: "Too many requests" }, {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+          "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+          "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+        }
+      });
+    }
+
     const body = await request.json();
     const {
       messages,
