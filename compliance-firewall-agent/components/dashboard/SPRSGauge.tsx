@@ -27,7 +27,7 @@ export default function SPRSGauge({
     if (score >= 90)
       return { stroke: "#10b981", text: "text-emerald-600", bg: "bg-emerald-50", ring: "ring-emerald-200" };
     if (score >= 50)
-      return { stroke: "#2563eb", text: "text-blue-600", bg: "bg-blue-50", ring: "ring-blue-200" };
+      return { stroke: "#2563eb", text: "text-brand-500", bg: "bg-brand-50", ring: "ring-brand-200" };
     if (score >= 0)
       return { stroke: "#f59e0b", text: "text-amber-600", bg: "bg-amber-50", ring: "ring-amber-200" };
     return { stroke: "#ef4444", text: "text-rose-600", bg: "bg-rose-50", ring: "ring-rose-200" };

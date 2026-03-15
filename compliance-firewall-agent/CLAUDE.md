@@ -1,5 +1,6 @@
 @~/.claude/primer.md
 @.claude-memory.md
+@.claude-session-state.md
 
 ## PROJECT CONTEXT
 Client: Kaelus.ai
@@ -16,7 +17,9 @@ Stack:  Next.js 15, React 19, Supabase, Stripe, Tailwind CSS, Framer Motion, Pos
 - Always use Tailwind CSS — never inline styles
 - Dark theme is primary: bg-[#07070b], brand-400/500/600 (indigo), emerald accent
 - Typography: Inter (body), Outfit (display)
-- Auth: Supabase Auth with GitHub + Microsoft OAuth (NO Google)
+- Auth: Supabase Auth with Google + GitHub + Microsoft OAuth
+- Logo: Always use `<Logo />` and `<TextLogo />` components — never inline Shield/Zap
+- Colors: Use `brand-*` tokens (not `blue-*`) for all accent colors
 - Every new feature must include error boundary handling
 - Keep components under 500 lines — split if larger
 - Run `npm run build` before claiming anything works

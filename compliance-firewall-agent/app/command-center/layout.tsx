@@ -37,6 +37,8 @@ import {
   Gamepad2,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 
 /* ── Nav Structure ──────────────────────────────────────────────── */
 type NavSection = {
@@ -128,19 +130,14 @@ function Sidebar({
       {/* Brand */}
       <div className="flex h-16 items-center gap-2.5 border-b border-slate-100 px-4">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md shadow-blue-600/20 flex-shrink-0 group-hover:shadow-lg transition-shadow">
-            <Shield className="w-5 h-5 text-slate-900" strokeWidth={2.5} />
-            <Zap className="absolute w-2.5 h-2.5 text-slate-900/90 top-[13px] left-[13px]" strokeWidth={3} fill="currentColor" />
-          </div>
+          <Logo className="w-9 h-9" />
           {!collapsed && (
             <motion.div
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               className="flex flex-col"
             >
-              <span className="text-lg font-display font-bold tracking-tight text-slate-900">
-                Kaelus<span className="text-blue-600">.ai</span>
-              </span>
+              <TextLogo className="text-lg" />
               <span className="text-[10px] text-slate-600 dark:text-slate-400 -mt-0.5 tracking-wider uppercase">
                 Command Center
               </span>
@@ -212,7 +209,7 @@ function Sidebar({
                             collapsed ? "justify-center" : ""
                           } ${
                             isActive
-                              ? "bg-blue-50 text-blue-600"
+                              ? "bg-brand-50 text-brand-500"
                               : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
                           }`}
                           title={collapsed ? label : undefined}
@@ -220,14 +217,14 @@ function Sidebar({
                           {isActive && (
                             <motion.div
                               layoutId="sidebarActive"
-                              className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-full bg-blue-600"
+                              className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-full bg-brand-500"
                               transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                             />
                           )}
                           <Icon
                             className={`w-4 h-4 flex-shrink-0 transition-colors ${
                               isActive
-                                ? "text-blue-600"
+                                ? "text-brand-500"
                                 : "text-slate-600 dark:text-slate-400 group-hover:text-slate-600"
                             }`}
                           />
@@ -285,7 +282,7 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
         <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
           <Command className="w-3.5 h-3.5" />
           <span className="font-mono">v2.0</span>
-          <span className="px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-600 text-[10px] font-bold ring-1 ring-blue-200">
+          <span className="px-1.5 py-0.5 rounded-md bg-brand-50 text-brand-500 text-[10px] font-bold ring-1 ring-brand-200">
             BEAST MODE
           </span>
         </div>
@@ -309,7 +306,7 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
 
         {/* User */}
         <button className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 transition-colors">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center text-slate-900 text-xs font-bold shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 flex items-center justify-center text-slate-900 text-xs font-bold shadow-sm">
             K
           </div>
           <ChevronDown className="w-3 h-3 text-slate-600 dark:text-slate-400" />
@@ -331,7 +328,7 @@ export default function CommandCenterLayout({
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* Subtle background mesh */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[40%] rounded-full bg-blue-400/[0.03] blur-[120px]" />
+        <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[40%] rounded-full bg-brand-400/[0.03] blur-[120px]" />
         <div className="absolute top-[40%] -right-[10%] h-[50%] w-[35%] rounded-full bg-violet-400/[0.02] blur-[120px]" />
       </div>
 

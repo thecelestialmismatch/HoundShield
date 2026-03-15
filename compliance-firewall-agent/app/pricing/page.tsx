@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
 import { LocalizedPrice } from "@/components/LocalizedPrice";
@@ -279,6 +280,42 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 /* ===== MAIN PAGE ===== */
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
+  const [loading, setLoading] = useState<string | null>(null);
+  const router = useRouter();
+
+  async function handleCheckout(tier: string, billing: "monthly" | "annual") {
+    if (tier === "free") {
+      router.push("/signup");
+      return;
+    }
+    if (tier === "agency") {
+      window.location.href = "#contact";
+      return;
+    }
+
+    try {
+      setLoading(tier);
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier, billing }),
+      });
+
+      if (res.status === 401) {
+        router.push("/login?redirect=/pricing");
+        return;
+      }
+
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+    } finally {
+      setLoading(null);
+    }
+  }
 
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
 
@@ -442,14 +479,32 @@ export default function PricingPage() {
                       </p>
 
                       {/* CTA */}
-                      <Link
-                        href={plan.id === "agency" ? "#contact" : "/signup"}
-                        className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""
-                          }`}
-                      >
-                        {plan.cta}
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
+                      {plan.id === "free" ? (
+                        <Link
+                          href="/signup"
+                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""}`}
+                        >
+                          {plan.cta}
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      ) : plan.id === "agency" ? (
+                        <Link
+                          href="#contact"
+                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""}`}
+                        >
+                          {plan.cta}
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => handleCheckout(plan.id, isAnnual ? "annual" : "monthly")}
+                          disabled={loading === plan.id}
+                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""} ${loading === plan.id ? "opacity-60 pointer-events-none" : ""}`}
+                        >
+                          {loading === plan.id ? "Redirecting..." : plan.cta}
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
 
                       {/* Feature divider */}
                       <div className="section-divider mb-6" />

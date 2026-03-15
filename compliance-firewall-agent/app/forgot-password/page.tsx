@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
+import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -34,11 +36,17 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-brand-50/30 to-slate-100 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
+        {/* Logo */}
+        <div className="flex items-center justify-center gap-2.5 mb-8">
+          <Logo className="w-9 h-9" />
+          <TextLogo />
+        </div>
+
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700 transition-colors mb-8"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to login
@@ -50,15 +58,15 @@ export default function ForgotPasswordPage() {
               <CheckCircle className="w-6 h-6 text-emerald-400" />
             </div>
             <h1 className="text-xl font-bold text-slate-900">Check your email</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-500 leading-relaxed">
               We sent a password reset link to{" "}
-              <span className="text-slate-600 font-medium">{email}</span>.
+              <span className="text-slate-700 font-medium">{email}</span>.
               <br />
               Click the link in the email to reset your password.
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-500 transition-colors mt-4"
+              className="inline-flex items-center gap-1.5 text-sm text-brand-500 hover:text-brand-400 transition-colors mt-4"
             >
               Return to login
             </Link>
@@ -66,7 +74,7 @@ export default function ForgotPasswordPage() {
         ) : (
           <>
             <h1 className="text-xl font-bold text-slate-900 mb-1">Reset your password</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+            <p className="text-sm text-slate-500 mb-6">
               Enter your email and we&apos;ll send you a reset link.
             </p>
 
@@ -78,18 +86,18 @@ export default function ForgotPasswordPage() {
 
             <form onSubmit={handleReset} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1.5">
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-700 dark:text-slate-300" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm placeholder:text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-300 transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
                   />
                 </div>
               </div>
@@ -97,7 +105,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-500 text-slate-900 text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-500 text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {loading ? "Sending..." : "Send reset link"}
               </button>

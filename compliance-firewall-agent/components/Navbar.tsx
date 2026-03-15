@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight, Shield } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
+import { Logo } from "@/components/Logo";
+import { TextLogo } from "@/components/TextLogo";
 
 const navLinks = [
   { href: "/features", label: "Features" },
@@ -37,12 +39,8 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md shadow-blue-600/20 group-hover:shadow-lg group-hover:shadow-blue-600/30 transition-shadow">
-              <Shield className="w-4.5 h-4.5 text-slate-900" strokeWidth={2.5} />
-            </div>
-            <span className="font-display font-bold text-lg text-slate-900 tracking-tight">
-              Kaelus<span className="text-blue-600">.ai</span>
-            </span>
+            <Logo />
+            <TextLogo className="text-lg" />
           </Link>
 
           {/* Desktop Nav */}
@@ -53,7 +51,7 @@ export function Navbar() {
                 href={link.href}
                 className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
                   pathname === link.href
-                    ? "text-blue-600 bg-blue-50"
+                    ? "text-brand-500 bg-brand-50"
                     : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                 }`}
               >
@@ -108,7 +106,7 @@ export function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className={`block px-4 py-3 text-sm font-medium rounded-lg ${
                     pathname === link.href
-                      ? "text-blue-600 bg-blue-50"
+                      ? "text-brand-500 bg-brand-50"
                       : "text-slate-600 hover:bg-slate-50"
                   }`}
                 >
