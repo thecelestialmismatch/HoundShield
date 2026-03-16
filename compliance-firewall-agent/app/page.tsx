@@ -22,7 +22,7 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 export default function LandingPage() {
   return (
     <div className="bg-[#07070b] min-h-screen">
-      <Navbar />
+      <Navbar variant="dark" />
       <HeroSection />
       <TickerSection />
       <TrustedMarquee />
