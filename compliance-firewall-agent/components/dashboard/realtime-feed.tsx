@@ -55,8 +55,8 @@ const RISK_COLORS: Record<string, string> = {
 
 const RISK_BG: Record<string, string> = {
   NONE: "bg-zinc-500/10",
-  LOW: "bg-emerald-500/10",
-  MEDIUM: "bg-amber-500/10",
+  LOW: "bg-emerald-500/100/10",
+  MEDIUM: "bg-amber-500/100/10",
   HIGH: "bg-orange-500/10",
   CRITICAL: "bg-red-500/10",
 };
@@ -180,7 +180,7 @@ export function RealtimeFeed() {
             onClick={() => setPaused(!paused)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               paused
-                ? "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20"
+                ? "bg-amber-500/100/10 text-amber-400 hover:bg-amber-500/100/20"
                 : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
             }`}
           >
@@ -207,7 +207,7 @@ export function RealtimeFeed() {
       {metrics && metrics.total_requests > 0 && (
         <div className="grid grid-cols-5 gap-px bg-zinc-800 border-b border-zinc-800">
           <MetricCell
-            icon={<Zap className="h-3.5 w-3.5 text-blue-400" />}
+            icon={<Zap className="h-3.5 w-3.5 text-brand-400" />}
             label="Total"
             value={metrics.total_requests.toLocaleString()}
           />
@@ -289,7 +289,7 @@ export function RealtimeFeed() {
             setAutoScroll(true);
             if (feedRef.current) feedRef.current.scrollTop = 0;
           }}
-          className="absolute bottom-4 right-4 flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-400 text-xs border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
+          className="absolute bottom-4 right-4 flex items-center gap-1 px-3 py-1.5 rounded-full bg-brand-500/100/10 text-brand-400 text-xs border border-brand-500/20 hover:bg-brand-500/100/20 transition-colors"
         >
           <ChevronDown className="h-3 w-3" /> New events
         </button>

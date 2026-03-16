@@ -46,6 +46,8 @@ export async function POST(request: NextRequest) {
 
   const supabase = createServiceClient();
 
+  console.log(`[Stripe Webhook] Received: ${event.type} (${event.id})`);
+
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -54,7 +56,10 @@ export async function POST(request: NextRequest) {
         const userId = session.metadata?.supabase_user_id
           || (await getCustomerUserId(supabase, session.customer as string));
 
-        if (!userId) break;
+        if (!userId) {
+          console.warn('[Stripe Webhook] checkout.session.completed: no user ID found', { subscriptionId });
+          break;
+        }
 
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         const tier = subscription.metadata?.tier || 'pro';
@@ -66,10 +71,12 @@ export async function POST(request: NextRequest) {
           stripe_price_id: subscription.items.data[0]?.price.id,
           tier,
           status: subscription.status as string,
+          cancel_at_period_end: subscription.cancel_at_period_end,
           ...periods,
         }, { onConflict: 'stripe_subscription_id' });
 
         await supabase.from('profiles').update({ tier }).eq('id', userId);
+        console.log(`[Stripe Webhook] checkout.session.completed: user=${userId} tier=${tier} status=${subscription.status}`);
         break;
       }
 
@@ -78,7 +85,10 @@ export async function POST(request: NextRequest) {
         const userId = subscription.metadata?.supabase_user_id
           || (await getCustomerUserId(supabase, subscription.customer as string));
 
-        if (!userId) break;
+        if (!userId) {
+          console.warn('[Stripe Webhook] customer.subscription.updated: no user ID found', { subscriptionId: subscription.id });
+          break;
+        }
 
         const tier = subscription.metadata?.tier || 'pro';
         const periods = extractPeriodDates(subscription as unknown as Record<string, unknown>);
@@ -97,6 +107,7 @@ export async function POST(request: NextRequest) {
 
         const effectiveTier = subscription.status === 'active' || subscription.status === 'trialing' ? tier : 'free';
         await supabase.from('profiles').update({ tier: effectiveTier }).eq('id', userId);
+        console.log(`[Stripe Webhook] customer.subscription.updated: user=${userId} tier=${effectiveTier} status=${subscription.status}`);
         break;
       }
 
@@ -105,13 +116,17 @@ export async function POST(request: NextRequest) {
         const userId = subscription.metadata?.supabase_user_id
           || (await getCustomerUserId(supabase, subscription.customer as string));
 
-        if (!userId) break;
+        if (!userId) {
+          console.warn('[Stripe Webhook] customer.subscription.deleted: no user ID found', { subscriptionId: subscription.id });
+          break;
+        }
 
         await supabase.from('subscriptions')
           .update({ status: 'canceled', canceled_at: new Date().toISOString() })
           .eq('stripe_subscription_id', subscription.id);
 
         await supabase.from('profiles').update({ tier: 'free' }).eq('id', userId);
+        console.log(`[Stripe Webhook] customer.subscription.deleted: user=${userId} → downgraded to free`);
         break;
       }
 
@@ -122,9 +137,28 @@ export async function POST(request: NextRequest) {
           await supabase.from('subscriptions')
             .update({ status: 'past_due' })
             .eq('stripe_subscription_id', subscriptionId);
+          console.log(`[Stripe Webhook] invoice.payment_failed: sub=${subscriptionId} → past_due`);
         }
         break;
       }
+
+      case 'invoice.paid': {
+        // Restores active status after a failed payment is resolved.
+        // Belt-and-suspenders alongside customer.subscription.updated.
+        const invoice = event.data.object as unknown as Record<string, unknown>;
+        const subscriptionId = invoice.subscription as string | undefined;
+        if (subscriptionId) {
+          await supabase.from('subscriptions')
+            .update({ status: 'active' })
+            .eq('stripe_subscription_id', subscriptionId)
+            .eq('status', 'past_due'); // only touch past_due rows
+          console.log(`[Stripe Webhook] invoice.paid: sub=${subscriptionId} → active`);
+        }
+        break;
+      }
+
+      default:
+        console.log(`[Stripe Webhook] Unhandled event type: ${event.type}`);
     }
   } catch (err) {
     console.error(`[Stripe Webhook] Error processing ${event.type}:`, err);

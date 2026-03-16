@@ -22,6 +22,7 @@ import {
   getOrganization,
   logActivity,
 } from "@/lib/shieldready/storage";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import type {
   AssessmentResponse,
   ControlStatus,
@@ -30,10 +31,10 @@ import type {
 
 // ─── Tailwind safelist for dynamic colors (rendered at build time) ───────────
 const _TW_SAFELIST = [
-  "bg-emerald-500/20", "text-emerald-400", "border-emerald-500", "border-emerald-500/30",
-  "bg-amber-500/20", "text-amber-400", "border-amber-500", "border-amber-500/30",
+  "bg-emerald-500/100/20", "text-emerald-400", "border-emerald-500", "border-emerald-500/30",
+  "bg-amber-500/100/20", "text-amber-400", "border-amber-500", "border-amber-500/30",
   "bg-red-500/20", "text-red-400", "border-red-500", "border-red-500/30",
-  "bg-slate-500/20", "text-slate-600 dark:text-slate-400", "border-slate-500", "border-slate-500/30",
+  "bg-white/[0.03]0/20", "text-slate-400", "border-slate-500", "border-slate-500/30",
   "shadow-[0_0_12px_rgba(0,0,0,0.3)]",
 ];
 void _TW_SAFELIST;
@@ -142,22 +143,24 @@ export default function AssessmentPage() {
   const answered = responses.filter((r) => r.status !== "NOT_ASSESSED").length;
   const total = ALL_CONTROLS.length;
 
+  const isDemo = !isSupabaseConfigured();
+
   return (
     <div className="flex min-h-screen">
       {/* ── Sidebar ── */}
-      <aside className={`w-64 shrink-0 border-r border-slate-200 dark:border-slate-200 dark:border-slate-700/50 bg-slate-50 dark:bg-slate-950/50 backdrop-blur-xl p-4 overflow-y-auto hidden lg:block`}>
+      <aside className={`w-64 shrink-0 border-r border-white/10 dark:border-white/10 dark:border-slate-700/50 bg-white/[0.03] dark:bg-slate-950/50 backdrop-blur-xl p-4 overflow-y-auto hidden lg:block`}>
         <div className="mb-6 flex justify-center">
           <SPRSGauge score={sprsScore.total} size="sm" />
         </div>
 
-        <div className="mb-4 bg-slate-100/50 rounded-xl p-3">
+        <div className="mb-4 bg-white/[0.05]/50 rounded-xl p-3">
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-slate-600 dark:text-slate-400">Progress</span>
-            <span className="text-slate-900 font-bold">{answered}/{total}</span>
+            <span className="text-slate-400">Progress</span>
+            <span className="text-white font-bold">{answered}/{total}</span>
           </div>
           <div className="w-full bg-slate-700 rounded-full h-1.5 overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"
+              className="h-full bg-gradient-to-r from-brand-500 to-emerald-500 rounded-full"
               animate={{ width: `${completionPercent}%` }}
               transition={{ type: "spring", stiffness: 120, damping: 20 }}
             />
@@ -168,8 +171,8 @@ export default function AssessmentPage() {
           onClick={() => { setActiveFamily(null); setStatusFilter("ALL"); }}
           className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium mb-2 transition-all ${
             activeFamily === null
-              ? "bg-blue-500/10 border border-blue-500/30 text-blue-400"
-              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 hover:bg-slate-100/50 border border-transparent"
+              ? "bg-brand-500/100/10 border border-brand-500/30 text-brand-400"
+              : "text-slate-400 hover:text-white hover:bg-white/[0.05]/50 border border-transparent"
           }`}
         >
           All Controls ({total})
@@ -185,15 +188,28 @@ export default function AssessmentPage() {
 
       {/* ── Main Content ── */}
       <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+        {/* Demo mode save warning */}
+        {isDemo && (
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-300">
+            <span className="mt-0.5 text-amber-400">⚠️</span>
+            <span>
+              <span className="font-semibold text-amber-200">Results are not being saved.</span>{" "}
+              Complete your account setup to persist assessment data across sessions.{" "}
+              <a href="/command-center/settings" className="underline underline-offset-2 hover:text-amber-100 transition-colors">
+                Go to Settings →
+              </a>
+            </span>
+          </div>
+        )}
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold text-white">
               {activeFamily
                 ? CONTROL_FAMILIES.find((f) => f.code === activeFamily)?.name ?? "Controls"
                 : "All Controls"}
             </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
+            <p className="text-slate-400 text-sm mt-1">
               {displayControls.length} control{displayControls.length !== 1 ? "s" : ""} shown
               {org ? ` • ${org.name}` : ""}
             </p>
@@ -202,18 +218,18 @@ export default function AssessmentPage() {
           {/* Mobile sidebar toggle */}
           <button
             onClick={() => setShowMobileSidebar(!showMobileSidebar)}
-            className="lg:hidden p-2 bg-slate-100 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900"
+            className="lg:hidden p-2 bg-white/[0.05] rounded-xl text-slate-300 dark:text-slate-300 hover:text-white"
           >
             <BarChart3 size={20} />
           </button>
         </div>
 
         {/* Mobile score bar */}
-        <div className="lg:hidden mb-6 flex items-center gap-4 bg-slate-50/70 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl p-4">
+        <div className="lg:hidden mb-6 flex items-center gap-4 bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-4">
           <SPRSGauge score={sprsScore.total} size="sm" showLabel={false} />
           <div className="flex-1">
-            <div className="text-slate-900 font-bold text-lg">SPRS: {sprsScore.total}</div>
-            <div className="text-slate-600 dark:text-slate-400 text-sm">{answered}/{total} assessed • {completionPercent}%</div>
+            <div className="text-white font-bold text-lg">SPRS: {sprsScore.total}</div>
+            <div className="text-slate-400 text-sm">{answered}/{total} assessed • {completionPercent}%</div>
           </div>
         </div>
 
@@ -234,8 +250,8 @@ export default function AssessmentPage() {
                 onClick={() => setStatusFilter(filter)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   statusFilter === filter
-                    ? "bg-blue-500/20 border border-blue-500/30 text-blue-400"
-                    : "bg-slate-100/50 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900"
+                    ? "bg-brand-500/100/20 border border-brand-500/30 text-brand-400"
+                    : "bg-white/[0.05]/50 border border-white/10 dark:border-slate-700 text-slate-400 hover:text-white"
                 }`}
               >
                 {labels[filter]}
@@ -268,7 +284,7 @@ export default function AssessmentPage() {
               <p className="text-lg">No controls match the current filter.</p>
               <button
                 onClick={() => { setStatusFilter("ALL"); setActiveFamily(null); }}
-                className="mt-3 text-blue-400 hover:text-blue-300 text-sm font-medium"
+                className="mt-3 text-brand-400 hover:text-brand-300 text-sm font-medium"
               >
                 Clear filters
               </button>

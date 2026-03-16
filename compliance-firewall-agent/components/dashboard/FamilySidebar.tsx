@@ -43,8 +43,8 @@ export default function FamilySidebar({
             onClick={() => onFamilyClick(family.code)}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all group ${
               isActive
-                ? "bg-blue-500/10 border border-blue-500/30"
-                : "hover:bg-slate-100 border border-transparent"
+                ? "bg-brand-500/100/10 border border-brand-500/30"
+                : "hover:bg-white/[0.05] border border-transparent"
             }`}
           >
             {/* Progress ring */}
@@ -68,7 +68,7 @@ export default function FamilySidebar({
                 />
               </svg>
               <span className={`absolute inset-0 flex items-center justify-center text-[9px] font-bold ${
-                isActive ? "text-blue-400" : "text-slate-600 dark:text-slate-400"
+                isActive ? "text-brand-400" : "text-slate-400"
               }`}>
                 {stats.answered}
               </span>
@@ -76,7 +76,7 @@ export default function FamilySidebar({
 
             <div className="flex-1 min-w-0">
               <div className={`text-xs font-semibold truncate ${
-                isActive ? "text-blue-400" : "text-slate-700 dark:text-slate-300 group-hover:text-slate-900"
+                isActive ? "text-brand-400" : "text-slate-300 dark:text-slate-300 group-hover:text-white"
               }`}>
                 {family.code}
               </div>
@@ -85,8 +85,8 @@ export default function FamilySidebar({
 
             {/* Status dots */}
             <div className="flex gap-0.5 shrink-0">
-              {stats.met > 0 && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" title={`${stats.met} met`} />}
-              {stats.partial > 0 && <span className="w-1.5 h-1.5 rounded-full bg-amber-500" title={`${stats.partial} partial`} />}
+              {stats.met > 0 && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/100" title={`${stats.met} met`} />}
+              {stats.partial > 0 && <span className="w-1.5 h-1.5 rounded-full bg-amber-500/100" title={`${stats.partial} partial`} />}
               {stats.unmet > 0 && <span className="w-1.5 h-1.5 rounded-full bg-red-500" title={`${stats.unmet} unmet`} />}
             </div>
           </button>

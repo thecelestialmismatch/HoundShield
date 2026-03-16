@@ -1,4 +1,5 @@
 import type { RuleCategory, RiskLevel, RuleAction } from "@/lib/supabase/types";
+import { CMMC_PATTERNS } from "./cmmc-patterns";
 
 /**
  * Built-in detection patterns.
@@ -140,6 +141,9 @@ export const BUILTIN_PATTERNS: DetectionPattern[] = [
     risk_level: "LOW",
     action: "ALLOW",
   },
+
+  // ── CMMC / DEFENSE CONTRACTING ────────────────────────────────────────────
+  ...CMMC_PATTERNS,
 ];
 
 /**

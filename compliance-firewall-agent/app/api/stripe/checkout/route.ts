@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@/lib/supabase/server';
+import { isSupabaseConfigured } from '@/lib/supabase/client';
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -8,11 +9,16 @@ function getStripe() {
   });
 }
 
-// Price IDs — set these in Stripe Dashboard, then add to env
+// Price IDs — create products in Stripe Dashboard, then add IDs to env
+// Pricing: Pro $199/mo | Growth $499/mo | Enterprise $999/mo | Agency $2,499/mo
 const PRICE_MAP: Record<string, { monthly: string; annual: string }> = {
   pro: {
     monthly: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || '',
     annual: process.env.STRIPE_PRO_ANNUAL_PRICE_ID || '',
+  },
+  growth: {
+    monthly: process.env.STRIPE_GROWTH_MONTHLY_PRICE_ID || '',
+    annual: process.env.STRIPE_GROWTH_ANNUAL_PRICE_ID || '',
   },
   enterprise: {
     monthly: process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID || '',
@@ -26,6 +32,17 @@ const PRICE_MAP: Record<string, { monthly: string; annual: string }> = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Block checkout in demo mode — Supabase must be configured for subscriptions to work
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        {
+          error: 'Demo mode active. Connect your Supabase account before subscribing.',
+          setup_url: '/command-center/settings',
+        },
+        { status: 503 }
+      );
+    }
+
     if (!process.env.STRIPE_SECRET_KEY) {
       return NextResponse.json(
         { error: 'Stripe not configured. Set STRIPE_SECRET_KEY in environment.' },

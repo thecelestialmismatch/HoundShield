@@ -9,23 +9,23 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-surface">
-      <Navbar />
+    <div className="min-h-screen bg-[#07070b]">
+      <Navbar variant="dark" />
       <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
-        <p className="text-sm text-slate-900/30 mb-10">Last updated: March 11, 2026</p>
+        <h1 className="text-3xl font-bold text-white mb-2">Privacy Policy</h1>
+        <p className="text-sm text-slate-500 mb-10">Last updated: March 11, 2026</p>
 
-        <div className="prose-dark space-y-8 text-sm text-slate-900/50 leading-relaxed">
+        <div className="prose-dark space-y-8 text-sm text-slate-400 leading-relaxed">
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">1. Information We Collect</h2>
-            <p><strong className="text-slate-900/70">Account Information:</strong> When you create an account, we collect your name, email address, and company name. If you sign in via OAuth (Google, GitHub, Microsoft), we receive your public profile information from those providers.</p>
-            <p className="mt-2"><strong className="text-slate-900/70">Usage Data:</strong> We collect information about how you interact with the platform, including pages visited, features used, API scan counts, and assessment progress.</p>
-            <p className="mt-2"><strong className="text-slate-900/70">Compliance Data:</strong> When you use the AI compliance firewall, we process API request metadata (prompt hashes, risk classifications, detected entities). We never store raw prompt content in plaintext — quarantined items are encrypted with AES-256.</p>
-            <p className="mt-2"><strong className="text-slate-900/70">Payment Information:</strong> Payment processing is handled entirely by Stripe. We do not store credit card numbers. We retain Stripe customer IDs and subscription status.</p>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">1. Information We Collect</h2>
+            <p><strong className="text-slate-300">Account Information:</strong> When you create an account, we collect your name, email address, and company name. If you sign in via OAuth (Google, GitHub, Microsoft), we receive your public profile information from those providers.</p>
+            <p className="mt-2"><strong className="text-slate-300">Usage Data:</strong> We collect information about how you interact with the platform, including pages visited, features used, API scan counts, and assessment progress.</p>
+            <p className="mt-2"><strong className="text-slate-300">Compliance Data:</strong> When you use the AI compliance firewall, we process API request metadata (prompt hashes, risk classifications, detected entities). We never store raw prompt content in plaintext — quarantined items are encrypted with AES-256.</p>
+            <p className="mt-2"><strong className="text-slate-300">Payment Information:</strong> Payment processing is handled entirely by Stripe. We do not store credit card numbers. We retain Stripe customer IDs and subscription status.</p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">2. How We Use Your Information</h2>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">2. How We Use Your Information</h2>
             <ul className="list-disc pl-5 space-y-1">
               <li>Provide and maintain the Kaelus.ai platform</li>
               <li>Process CMMC/compliance assessments and generate reports</li>
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">3. Data Security</h2>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">3. Data Security</h2>
             <p>We implement industry-standard security measures including:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>AES-256 encryption for quarantined content at rest</li>
@@ -49,24 +49,24 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">4. Data Sharing</h2>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">4. Data Sharing</h2>
             <p>We do not sell your data. We share information only with:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
-              <li><strong className="text-slate-900/70">Supabase:</strong> Database hosting and authentication</li>
-              <li><strong className="text-slate-900/70">Stripe:</strong> Payment processing</li>
-              <li><strong className="text-slate-900/70">Vercel:</strong> Application hosting</li>
-              <li><strong className="text-slate-900/70">OpenRouter:</strong> AI model inference (only when you use AI features)</li>
+              <li><strong className="text-slate-300">Supabase:</strong> Database hosting and authentication</li>
+              <li><strong className="text-slate-300">Stripe:</strong> Payment processing</li>
+              <li><strong className="text-slate-300">Vercel:</strong> Application hosting</li>
+              <li><strong className="text-slate-300">OpenRouter:</strong> AI model inference (only when you use AI features)</li>
             </ul>
             <p className="mt-2">We may disclose information if required by law or to protect the rights, safety, or property of Kaelus.ai or its users.</p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">5. Data Retention</h2>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">5. Data Retention</h2>
             <p>Compliance event data is retained based on your subscription tier (7 days free, 90 days Pro, unlimited Enterprise/Agency). You can request deletion of your account and associated data at any time by contacting us.</p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">6. Your Rights</h2>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">6. Your Rights</h2>
             <p>Depending on your jurisdiction, you may have the right to:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>Access, correct, or delete your personal data</li>
@@ -77,12 +77,12 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">7. Cookies</h2>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">7. Cookies</h2>
             <p>We use essential cookies for authentication and session management. We use anonymous analytics cookies to improve the platform. You can control cookie preferences through your browser settings.</p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-slate-900/80 mb-3">8. Contact</h2>
+            <h2 className="text-lg font-semibold text-slate-200 mb-3">8. Contact</h2>
             <p>For privacy-related inquiries, contact us at <a href="mailto:privacy@kaelus.ai" className="text-brand-400 hover:text-brand-300">privacy@kaelus.ai</a>.</p>
           </section>
         </div>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { interceptLLMRequest } from "@/lib/interceptor/middleware";
 import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
+import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
 import { z } from "zod";
 
 const InterceptRequestSchema = z.object({
@@ -98,6 +99,19 @@ export async function POST(req: NextRequest) {
     }
 
     const userId = req.headers.get("x-user-id") ?? "anonymous";
+
+    // --- Subscription gate ------------------------------------------------
+    const tier = await getUserSubscription(userId);
+    if (!canAccessGateway(tier)) {
+      return NextResponse.json(
+        {
+          error: "Gateway access requires a Pro plan or higher",
+          upgrade_url: "/pricing",
+          current_tier: tier,
+        },
+        { status: 402 }
+      );
+    }
 
     const rawBody = await req.json();
     const parseResult = InterceptRequestSchema.safeParse(rawBody);

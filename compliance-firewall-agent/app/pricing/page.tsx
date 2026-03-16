@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
 import { LocalizedPrice } from "@/components/LocalizedPrice";
@@ -13,7 +14,6 @@ import {
   Zap,
   Crown,
   Building2,
-  Sparkles,
   ShieldCheck,
   BadgeCheck,
   Clock,
@@ -27,21 +27,21 @@ import {
 const plans = [
   {
     id: "free",
-    name: "Free",
+    name: "Starter",
     icon: Zap,
     iconColor: "text-emerald-400",
     iconBg: "bg-emerald-500/10 border-emerald-500/20",
     monthlyPrice: 0,
     annualPrice: 0,
-    description: "CMMC self-assessment and basic AI scanning. Perfect for getting started.",
+    annualTotal: 0,
+    description: "CMMC self-assessment and gap scoring. No credit card required.",
     features: [
-      "100 API scans per month",
-      "CMMC self-assessment (110 controls)",
+      "ShieldReady CMMC assessment (read-only)",
+      "110-control gap analysis",
       "Live SPRS score calculator",
-      "1 AI compliance agent",
       "Basic compliance dashboard",
       "Community support",
-      "7-day log retention",
+      "No AI gateway access",
     ],
     cta: "Start Free",
     ctaStyle: "btn-ghost",
@@ -55,21 +55,22 @@ const plans = [
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
     monthlyPrice: 69,
-    annualPrice: 59,
-    description: "Full compliance suite for defense contractors pursuing CMMC Level 2.",
+    annualPrice: 55,
+    annualTotal: 660,
+    description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
-      "Unlimited API scanning",
-      "5 AI compliance agents",
-      "Real-time threat feed",
+      "AI gateway — 50,000 scans/mo",
+      "ShieldReady assessment (editable)",
+      "10 user seats",
       "Gap analysis + remediation roadmap",
-      "PDF compliance reports",
+      "JSON compliance reports",
       "SSP & policy document generation",
       "Email & Slack alerts",
       "Priority support (< 4hr SLA)",
       "90-day log retention",
       "API access",
     ],
-    cta: "Start Pro Trial",
+    cta: "Start 14-Day Trial",
     ctaStyle: "btn-primary",
     highlighted: true,
     badge: "Most Popular",
@@ -82,20 +83,20 @@ const plans = [
     iconBg: "bg-purple-500/10 border-purple-500/20",
     monthlyPrice: 249,
     annualPrice: 199,
-    description: "For organizations needing unlimited agents, team management, and audit trails.",
+    annualTotal: 2388,
+    description: "Unlimited scans, unlimited seats, and on-prem deployment for large primes.",
     features: [
-      "Everything in Pro",
-      "Unlimited AI agents",
-      "Custom compliance policies",
-      "Team management (5 seats)",
-      "API gateway (intercept mode)",
-      "Audit trail export",
-      "Slack & webhook integrations",
-      "Dedicated onboarding",
-      "Unlimited log retention",
-      "SSO & RBAC",
+      "AI gateway — unlimited scans",
+      "Everything in Growth",
+      "Unlimited user seats",
+      "PDF reports (white-labeled)",
+      "On-prem / air-gapped deployment",
+      "Custom SLA (99.99%)",
+      "Dedicated account manager",
+      "HITL quarantine review",
+      "C3PAO assessment coordination",
     ],
-    cta: "Start Enterprise Trial",
+    cta: "Start 14-Day Trial",
     ctaStyle: "btn-ghost",
     highlighted: false,
     badge: null,
@@ -107,18 +108,18 @@ const plans = [
     iconColor: "text-amber-400",
     iconBg: "bg-amber-500/10 border-amber-500/20",
     monthlyPrice: 599,
-    annualPrice: 499,
-    description: "Multi-tenant dashboard for consultants managing multiple defense contractors.",
+    annualPrice: 479,
+    annualTotal: 5748,
+    description: "Multi-tenant platform for consultants managing multiple defense contractors.",
     features: [
       "Everything in Enterprise",
       "Multi-tenant dashboard",
       "White-label compliance reports",
-      "25 client accounts",
+      "Unlimited client accounts",
       "Bulk compliance reporting",
       "Partner API access",
-      "Custom branding",
-      "Priority onboarding",
-      "Dedicated account manager",
+      "Revenue-share program",
+      "Dedicated success manager",
       "SLA guarantee (99.99%)",
     ],
     cta: "Contact Sales",
@@ -140,35 +141,37 @@ interface ComparisonRow {
 }
 
 const comparisonFeatures: ComparisonRow[] = [
-  // Scanning & Detection
-  { feature: "Monthly API scans", free: "100", pro: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "Scanning & Detection" },
-  { feature: "Detection patterns", free: "16", pro: "16", enterprise: "16+ Custom", agency: "16+ Custom", category: "Scanning & Detection" },
-  { feature: "AI compliance agents", free: "1", pro: "5", enterprise: "Unlimited", agency: "Unlimited", category: "Scanning & Detection" },
-  { feature: "Real-time threat feed", free: false, pro: true, enterprise: true, agency: true, category: "Scanning & Detection" },
-  { feature: "Custom detection rules", free: false, pro: false, enterprise: true, agency: true, category: "Scanning & Detection" },
+  // AI Gateway
+  { feature: "Monthly API scans", free: "None", pro: "50K", enterprise: "Unlimited", agency: "Unlimited", category: "AI Gateway" },
+  { feature: "Detection patterns", free: false, pro: "16", enterprise: "16+ Custom", agency: "16+ Custom", category: "AI Gateway" },
+  { feature: "Real-time threat feed", free: false, pro: true, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "Custom detection rules", free: false, pro: false, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "HITL quarantine review", free: false, pro: false, enterprise: true, agency: true, category: "AI Gateway" },
   // CMMC & Compliance
-  { feature: "CMMC self-assessment", free: true, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "CMMC self-assessment", free: "Read-only", pro: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
   { feature: "SPRS score calculator", free: true, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
   { feature: "Gap analysis & remediation", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "PDF compliance reports", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "JSON compliance reports", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "PDF compliance reports", free: false, pro: false, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
   { feature: "SSP document generation", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Policy document generation", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
   { feature: "Audit trail export", free: false, pro: false, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "C3PAO coordination", free: false, pro: false, enterprise: true, agency: true, category: "CMMC & Compliance" },
   // Platform & Integrations
   { feature: "Dashboard access", free: "Basic", pro: "Full", enterprise: "Full", agency: "Multi-tenant", category: "Platform & Integrations" },
   { feature: "Log retention", free: "7 days", pro: "90 days", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Team seats", free: "1", pro: "1", enterprise: "5", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Client accounts", free: false, pro: false, enterprise: false, agency: "25", category: "Platform & Integrations" },
+  { feature: "Team seats", free: "1", pro: "10", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Client accounts", free: false, pro: false, enterprise: false, agency: "Unlimited", category: "Platform & Integrations" },
   { feature: "Slack & webhook alerts", free: false, pro: true, enterprise: true, agency: true, category: "Platform & Integrations" },
   { feature: "API access", free: false, pro: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "White-label reports", free: false, pro: false, enterprise: false, agency: true, category: "Platform & Integrations" },
   { feature: "SSO & RBAC", free: false, pro: false, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "White-label reports", free: false, pro: false, enterprise: false, agency: true, category: "Platform & Integrations" },
+  { feature: "On-prem / air-gapped", free: false, pro: false, enterprise: true, agency: true, category: "Platform & Integrations" },
   // Support
   { feature: "Community support", free: true, pro: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Priority support", free: false, pro: true, enterprise: true, agency: true, category: "Support" },
+  { feature: "Priority support (< 4hr)", free: false, pro: true, enterprise: true, agency: true, category: "Support" },
   { feature: "Dedicated onboarding", free: false, pro: false, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated account manager", free: false, pro: false, enterprise: false, agency: true, category: "Support" },
-  { feature: "SLA guarantee", free: false, pro: false, enterprise: false, agency: "99.99%", category: "Support" },
+  { feature: "Dedicated account manager", free: false, pro: false, enterprise: true, agency: true, category: "Support" },
+  { feature: "SLA guarantee", free: false, pro: false, enterprise: "99.99%", agency: "99.99%", category: "Support" },
 ];
 
 /* ===== FAQ DATA ===== */
@@ -258,9 +261,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-5 text-left"
       >
-        <span className="text-sm font-medium text-slate-900/80 pr-4">{q}</span>
+        <span className="text-sm font-medium text-slate-200 pr-4">{q}</span>
         <ChevronDown
-          className={`w-4 h-4 text-slate-900/30 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
+          className={`w-4 h-4 text-slate-500 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
             }`}
         />
       </button>
@@ -269,7 +272,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
           }`}
       >
         <div className="px-5 pb-5 -mt-1">
-          <p className="text-sm text-slate-900/40 leading-relaxed">{a}</p>
+          <p className="text-sm text-slate-400 leading-relaxed">{a}</p>
         </div>
       </div>
     </div>
@@ -279,18 +282,54 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 /* ===== MAIN PAGE ===== */
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
+  const [loading, setLoading] = useState<string | null>(null);
+  const router = useRouter();
+
+  async function handleCheckout(tier: string, billing: "monthly" | "annual") {
+    if (tier === "free") {
+      router.push("/signup");
+      return;
+    }
+    if (tier === "agency") {
+      window.location.href = "#contact";
+      return;
+    }
+
+    try {
+      setLoading(tier);
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier, billing }),
+      });
+
+      if (res.status === 401) {
+        router.push("/login?redirect=/pricing");
+        return;
+      }
+
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+    } finally {
+      setLoading(null);
+    }
+  }
 
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
 
   return (
-    <div className="min-h-screen bg-surface relative overflow-hidden">
+    <div className="min-h-screen bg-[#07070b] relative overflow-hidden">
       {/* ===== FLOATING ORBS ===== */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
       <div className="orb orb-3" />
 
       {/* ===== NAV ===== */}
-      <Navbar />
+      <Navbar variant="dark" />
 
       {/* ===== HERO ===== */}
       <section className="relative pt-32 pb-16 px-6 overflow-hidden">
@@ -299,13 +338,6 @@ export default function PricingPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <AnimatedSection>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-sm mb-8">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>14-day free trial on Pro &mdash; No credit card required</span>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={100}>
             <h1 className="text-display-sm md:text-display lg:text-display-lg mb-6">
               Simple,{" "}
               <span className="text-gradient-brand">Transparent</span>{" "}
@@ -314,7 +346,7 @@ export default function PricingPage() {
           </AnimatedSection>
 
           <AnimatedSection delay={200}>
-            <p className="text-lg md:text-xl text-slate-900/40 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
               Protect your enterprise from AI data leaks without the enterprise
               pricing headache. Start free, scale when you&apos;re ready.
             </p>
@@ -326,8 +358,8 @@ export default function PricingPage() {
               <button
                 onClick={() => setIsAnnual(false)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!isAnnual
-                    ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/25"
-                    : "text-slate-900/40 hover:text-slate-900/60"
+                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    : "text-slate-400 hover:text-slate-300"
                   }`}
               >
                 Monthly
@@ -335,8 +367,8 @@ export default function PricingPage() {
               <button
                 onClick={() => setIsAnnual(true)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${isAnnual
-                    ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/25"
-                    : "text-slate-900/40 hover:text-slate-900/60"
+                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    : "text-slate-400 hover:text-slate-300"
                   }`}
               >
                 Annual
@@ -352,7 +384,7 @@ export default function PricingPage() {
       {/* ===== PRICING CARDS ===== */}
       <section className="relative px-6 pb-24">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5 lg:gap-6">
             {plans.map((plan, i) => {
               const price =
                 plan.monthlyPrice === -1
@@ -378,7 +410,7 @@ export default function PricingPage() {
                     {/* Badge */}
                     {plan.badge && (
                       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-slate-900 text-xs font-semibold shadow-lg shadow-brand-500/30">
+                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-white text-xs font-semibold shadow-lg shadow-brand-500/30">
                           <Star className="w-3 h-3" />
                           {plan.badge}
                         </div>
@@ -387,7 +419,7 @@ export default function PricingPage() {
 
                     <div
                       className={`relative h-full flex flex-col p-8 rounded-2xl ${plan.highlighted
-                          ? "bg-surface-50"
+                          ? "bg-[#0d0d14]"
                           : "glass-card-glow"
                         }`}
                     >
@@ -399,7 +431,7 @@ export default function PricingPage() {
                           <Icon className={`w-5 h-5 ${plan.iconColor}`} />
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-slate-900">
+                          <h3 className="text-lg font-semibold text-white">
                             {plan.name}
                           </h3>
                         </div>
@@ -409,47 +441,65 @@ export default function PricingPage() {
                       <div className="mb-4">
                         {price !== null ? (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-slate-900 tracking-tight">
+                            <span className="text-4xl font-bold text-white tracking-tight">
                               {price === 0 ? "Free" : <LocalizedPrice basePrice={price} />}
                             </span>
                             {price > 0 && (
-                              <span className="text-sm text-slate-900/30">
+                              <span className="text-sm text-slate-500">
                                 /mo
                               </span>
                             )}
                           </div>
                         ) : (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-slate-900 tracking-tight">
+                            <span className="text-4xl font-bold text-white tracking-tight">
                               Custom
                             </span>
                           </div>
                         )}
                         {price !== null && price > 0 && isAnnual && (
-                          <p className="text-xs text-slate-900/30 mt-1">
-                            Billed annually at ${price * 12}/yr
+                          <p className="text-xs text-slate-500 mt-1">
+                            Billed annually at ${'annualTotal' in plan ? plan.annualTotal.toLocaleString() : price * 12}/yr
                           </p>
                         )}
                         {price !== null && price > 0 && !isAnnual && (
                           <p className="text-xs text-emerald-400/60 mt-1">
-                            Save ${(plan.monthlyPrice - plan.annualPrice) * 12}/yr with annual billing
+                            Save ${'annualTotal' in plan ? ((plan.monthlyPrice * 12) - plan.annualTotal).toLocaleString() : (plan.monthlyPrice - plan.annualPrice) * 12}/yr with annual
                           </p>
                         )}
                       </div>
 
-                      <p className="text-sm text-slate-900/35 leading-relaxed mb-6">
+                      <p className="text-sm text-slate-500 leading-relaxed mb-6">
                         {plan.description}
                       </p>
 
                       {/* CTA */}
-                      <Link
-                        href={plan.id === "agency" ? "#contact" : "/signup"}
-                        className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""
-                          }`}
-                      >
-                        {plan.cta}
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
+                      {plan.id === "free" ? (
+                        <Link
+                          href="/signup"
+                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""}`}
+                        >
+                          {plan.cta}
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      ) : plan.id === "agency" ? (
+                        <Link
+                          href="#contact"
+                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""}`}
+                        >
+                          {plan.cta}
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => handleCheckout(plan.id, isAnnual ? "annual" : "monthly")}
+                          disabled={loading === plan.id}
+                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""} ${loading === plan.id ? "opacity-60 pointer-events-none" : ""}`}
+                        >
+                          {loading === plan.id ? "Redirecting..." : plan.cta}
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
 
                       {/* Feature divider */}
                       <div className="section-divider mb-6" />
@@ -467,7 +517,7 @@ export default function PricingPage() {
                                   : "text-emerald-400/70"
                                 }`}
                             />
-                            <span className="text-slate-900/50">{feature}</span>
+                            <span className="text-slate-400">{feature}</span>
                           </li>
                         ))}
                       </ul>
@@ -489,10 +539,10 @@ export default function PricingPage() {
                 <ShieldCheck className="w-8 h-8 text-emerald-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                <h3 className="text-lg font-semibold text-white mb-2">
                   30-Day Money-Back Guarantee
                 </h3>
-                <p className="text-sm text-slate-900/40 leading-relaxed">
+                <p className="text-sm text-slate-400 leading-relaxed">
                   Try any paid plan risk-free. If you&apos;re not completely satisfied
                   within the first 30 days, we&apos;ll refund every penny. No
                   questions asked, no hoops to jump through. We&apos;re that
@@ -513,7 +563,7 @@ export default function PricingPage() {
                 Compare{" "}
                 <span className="text-gradient-brand">Every Feature</span>
               </h2>
-              <p className="text-slate-900/40 max-w-xl mx-auto">
+              <p className="text-slate-400 max-w-xl mx-auto">
                 A detailed breakdown of what&apos;s included in each plan so you
                 can make the right choice for your team.
               </p>
@@ -524,15 +574,20 @@ export default function PricingPage() {
             <div className="glass-card overflow-x-auto">
               {/* Table header */}
               <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.06]">
-                <div className="p-5 text-sm font-medium text-slate-900/30">
+                <div className="p-5 text-sm font-medium text-slate-500">
                   Feature
                 </div>
-                {[{ name: "Free", key: "free" }, { name: "Pro", key: "pro" }, { name: "Enterprise", key: "enterprise" }, { name: "Agency", key: "agency" }].map((tier) => (
+                {([
+                  { name: "Starter", key: "free" },
+                  { name: "Pro", key: "pro" },
+                  { name: "Enterprise", key: "enterprise" },
+                  { name: "Agency", key: "agency" },
+                ] as const).map((tier) => (
                   <div
                     key={tier.key}
                     className={`p-5 text-center text-sm font-semibold ${tier.key === "pro"
                         ? "text-brand-400 bg-brand-500/[0.04]"
-                        : "text-slate-900/60"
+                        : "text-slate-400"
                       }`}
                   >
                     {tier.name}
@@ -550,8 +605,8 @@ export default function PricingPage() {
                 <div key={category}>
                   {/* Category header */}
                   <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.04] bg-white/[0.015]">
-                    <div className="col-span-5 p-4 px-5">
-                      <span className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold">
+                    <div className="col-span-6 p-4 px-5">
+                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
                         {category}
                       </span>
                     </div>
@@ -565,7 +620,7 @@ export default function PricingPage() {
                         key={ri}
                         className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
                       >
-                        <div className="p-4 px-5 text-sm text-slate-900/50">
+                        <div className="p-4 px-5 text-sm text-slate-400">
                           {row.feature}
                         </div>
                         {(
@@ -582,14 +637,14 @@ export default function PricingPage() {
                                 val ? (
                                   <Check className="w-4 h-4 text-emerald-400 mx-auto" />
                                 ) : (
-                                  <Minus className="w-4 h-4 text-slate-900/15 mx-auto" />
+                                  <Minus className="w-4 h-4 text-slate-700 mx-auto" />
                                 )
                               ) : (
                                 <span
                                   className={
                                     planKey === "pro"
                                       ? "text-brand-300 font-medium"
-                                      : "text-slate-900/50"
+                                      : "text-slate-400"
                                   }
                                 >
                                   {val}
@@ -644,10 +699,10 @@ export default function PricingPage() {
                 <item.icon
                   className={`w-5 h-5 ${item.color} mx-auto mb-3`}
                 />
-                <p className="text-2xl font-bold text-slate-900 mb-1">
+                <p className="text-2xl font-bold text-white mb-1">
                   {item.stat}
                 </p>
-                <p className="text-xs text-slate-900/30">{item.label}</p>
+                <p className="text-xs text-slate-500">{item.label}</p>
               </div>
             ))}
           </div>
@@ -663,7 +718,7 @@ export default function PricingPage() {
                 Frequently Asked{" "}
                 <span className="text-gradient-brand">Questions</span>
               </h2>
-              <p className="text-slate-900/40">
+              <p className="text-slate-400">
                 Everything you need to know about Kaelus pricing and plans.
               </p>
             </div>
@@ -700,7 +755,7 @@ export default function PricingPage() {
                     Secure Your AI?
                   </span>
                 </h2>
-                <p className="text-slate-900/40 max-w-xl mx-auto mb-8 leading-relaxed">
+                <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
                   Join 500+ teams that trust Kaelus to protect their most
                   sensitive data from unauthorized AI exposure. Deploy in
                   under 15 minutes.
@@ -717,7 +772,7 @@ export default function PricingPage() {
                   </Link>
                 </div>
 
-                <p className="text-xs text-slate-900/20 mt-6">
+                <p className="text-xs text-slate-600 mt-6">
                   No credit card required &middot; 14-day Pro trial &middot;
                   Cancel anytime
                 </p>
@@ -733,75 +788,75 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <TextLogo />
+                <TextLogo variant="dark" />
               </div>
-              <p className="text-sm text-slate-900/30 leading-relaxed">
+              <p className="text-sm text-slate-500 leading-relaxed">
                 AI-powered compliance firewall protecting enterprise data from
                 LLM leaks.
               </p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold mb-4">
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
                 Product
               </p>
               <div className="space-y-2.5">
                 <Link
                   href="/#features"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Features
                 </Link>
                 <Link
                   href="/pricing"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Pricing
                 </Link>
                 <Link
                   href="/dashboard"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/#agents"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   AI Agents
                 </Link>
               </div>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold mb-4">
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
                 Compliance
               </p>
               <div className="space-y-2.5">
-                <span className="block text-sm text-slate-900/30">SOC 2</span>
-                <span className="block text-sm text-slate-900/30">GDPR</span>
-                <span className="block text-sm text-slate-900/30">EU AI Act</span>
-                <span className="block text-sm text-slate-900/30">HIPAA</span>
+                <span className="block text-sm text-slate-500">SOC 2</span>
+                <span className="block text-sm text-slate-500">GDPR</span>
+                <span className="block text-sm text-slate-500">EU AI Act</span>
+                <span className="block text-sm text-slate-500">HIPAA</span>
               </div>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold mb-4">
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
                 Company
               </p>
               <div className="space-y-2.5">
                 <Link
                   href="/docs"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Documentation
                 </Link>
                 <Link
                   href="/signup"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/signup"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Get Started
                 </Link>
@@ -809,10 +864,10 @@ export default function PricingPage() {
             </div>
           </div>
           <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-900/15">
+            <p className="text-sm text-slate-700">
               &copy; 2026 Kaelus.ai — All rights reserved.
             </p>
-            <div className="flex items-center gap-4 text-xs text-slate-900/20">
+            <div className="flex items-center gap-4 text-xs text-slate-600">
               <span>Privacy Policy</span>
               <span>Terms of Service</span>
               <span>Security</span>

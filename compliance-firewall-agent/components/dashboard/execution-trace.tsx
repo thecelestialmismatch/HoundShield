@@ -57,11 +57,11 @@ export default function ExecutionTrace({
   const getStepIcon = (step: TraceStep) => {
     switch (step.type) {
       case 'thinking':
-        return <Brain className="w-4 h-4 text-blue-600" />;
+        return <Brain className="w-4 h-4 text-brand-500" />;
       case 'tool_call':
         return step.status === 'running'
-          ? <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
-          : <Wrench className="w-4 h-4 text-blue-600" />;
+          ? <Loader2 className="w-4 h-4 text-brand-500 animate-spin" />
+          : <Wrench className="w-4 h-4 text-brand-500" />;
       case 'tool_result':
         return step.status === 'error'
           ? <XCircle className="w-4 h-4 text-red-500" />
@@ -71,7 +71,7 @@ export default function ExecutionTrace({
       case 'error':
         return <XCircle className="w-4 h-4 text-red-500" />;
       default:
-        return <Brain className="w-4 h-4 text-slate-600 dark:text-slate-400" />;
+        return <Brain className="w-4 h-4 text-slate-400" />;
     }
   };
 
@@ -95,10 +95,10 @@ export default function ExecutionTrace({
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-slate-200">
+      <div className="px-4 py-3 border-b border-white/10">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-            <Brain className="w-4 h-4 text-blue-600" />
+          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+            <Brain className="w-4 h-4 text-brand-500" />
             Execution Trace
           </h3>
           {isRunning && (
@@ -110,7 +110,7 @@ export default function ExecutionTrace({
         </div>
 
         {/* Stats bar */}
-        <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-400">
+        <div className="flex items-center gap-3 text-xs text-slate-400">
           <span className="flex items-center gap-1">
             <Zap className="w-3 h-3" />
             {totalTokens.toLocaleString()} tokens
@@ -141,7 +141,7 @@ export default function ExecutionTrace({
       {/* Steps Timeline */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
         {steps.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-slate-600 dark:text-slate-400 text-sm">
+          <div className="flex flex-col items-center justify-center h-full text-slate-400 text-sm">
             <Brain className="w-8 h-8 mb-2 opacity-30" />
             <p>Agent execution trace will appear here</p>
             <p className="text-xs mt-1 text-slate-500">See each thinking step and tool call</p>
@@ -155,12 +155,12 @@ export default function ExecutionTrace({
               <div key={step.id} className="relative">
                 {/* Timeline connector */}
                 {!isLast && (
-                  <div className="absolute left-[11px] top-7 bottom-0 w-px bg-slate-100" />
+                  <div className="absolute left-[11px] top-7 bottom-0 w-px bg-white/[0.05]" />
                 )}
 
                 <button
                   onClick={() => toggleStep(step.id)}
-                  className="w-full text-left flex items-start gap-2 p-2 rounded-lg hover:bg-slate-100 transition-colors group"
+                  className="w-full text-left flex items-start gap-2 p-2 rounded-lg hover:bg-white/[0.05] transition-colors group"
                 >
                   {/* Timeline dot */}
                   <div className="mt-0.5 flex-shrink-0">
@@ -169,11 +169,11 @@ export default function ExecutionTrace({
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-slate-700">
+                      <span className="text-xs font-medium text-slate-300">
                         {getStepLabel(step)}
                       </span>
                       {step.duration && (
-                        <span className="text-[10px] text-slate-600 dark:text-slate-400">
+                        <span className="text-[10px] text-slate-400">
                           {formatDuration(step.duration)}
                         </span>
                       )}
@@ -186,7 +186,7 @@ export default function ExecutionTrace({
 
                     {/* Preview */}
                     {!isExpanded && step.content && (
-                      <p className="text-[11px] text-slate-600 dark:text-slate-400 truncate mt-0.5">
+                      <p className="text-[11px] text-slate-400 truncate mt-0.5">
                         {step.content.slice(0, 120)}
                       </p>
                     )}
@@ -195,8 +195,8 @@ export default function ExecutionTrace({
                   {step.content && (
                     <div className="flex-shrink-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       {isExpanded
-                        ? <ChevronDown className="w-3 h-3 text-slate-600 dark:text-slate-400" />
-                        : <ChevronRight className="w-3 h-3 text-slate-600 dark:text-slate-400" />
+                        ? <ChevronDown className="w-3 h-3 text-slate-400" />
+                        : <ChevronRight className="w-3 h-3 text-slate-400" />
                       }
                     </div>
                   )}
@@ -204,10 +204,10 @@ export default function ExecutionTrace({
 
                 {/* Expanded content */}
                 {isExpanded && step.content && (
-                  <div className="ml-8 mb-2 p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <div className="ml-8 mb-2 p-3 rounded-lg bg-white/[0.03] border border-white/10">
                     {step.type === 'tool_call' && step.toolArgs && (
                       <div className="mb-2">
-                        <span className="text-[10px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-medium">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">
                           Arguments
                         </span>
                         <pre className="text-[11px] text-slate-500 mt-1 overflow-x-auto whitespace-pre-wrap font-mono">
@@ -218,7 +218,7 @@ export default function ExecutionTrace({
 
                     <div>
                       {step.type === 'tool_call' && (
-                        <span className="text-[10px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-medium">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">
                           Reasoning
                         </span>
                       )}
@@ -228,8 +228,8 @@ export default function ExecutionTrace({
                     </div>
 
                     {step.toolResult && (
-                      <div className="mt-2 pt-2 border-t border-slate-200">
-                        <span className="text-[10px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-medium">
+                      <div className="mt-2 pt-2 border-t border-white/10">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">
                           Result
                         </span>
                         <pre className="text-[11px] text-slate-500 mt-1 overflow-x-auto whitespace-pre-wrap font-mono max-h-40 overflow-y-auto">
@@ -246,8 +246,8 @@ export default function ExecutionTrace({
 
         {/* Running indicator */}
         {isRunning && (
-          <div className="flex items-center gap-2 p-2 text-xs text-slate-600 dark:text-slate-400">
-            <Loader2 className="w-3 h-3 animate-spin text-blue-600" />
+          <div className="flex items-center gap-2 p-2 text-xs text-slate-400">
+            <Loader2 className="w-3 h-3 animate-spin text-brand-500" />
             Agent is working...
           </div>
         )}

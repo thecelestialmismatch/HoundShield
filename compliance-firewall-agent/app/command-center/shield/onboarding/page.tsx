@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Building2,
-  Users,
+  Plug,
   ShieldCheck,
   Rocket,
   ArrowRight,
@@ -13,6 +13,8 @@ import {
   CheckCircle2,
   FileCheck,
   AlertTriangle,
+  Copy,
+  Check,
 } from "lucide-react";
 import { createOrganization, logActivity } from "@/lib/shieldready/storage";
 import type { CMMCLevel } from "@/lib/shieldready/types";
@@ -20,10 +22,14 @@ import type { CMMCLevel } from "@/lib/shieldready/types";
 // ─── Step Configuration ──────────────────────────────────────────────────────
 const STEPS = [
   { id: 0, title: "Organization", icon: Building2, label: "Org Profile" },
-  { id: 1, title: "Team Setup", icon: Users, label: "Team" },
+  { id: 1, title: "Connect AI", icon: Plug, label: "Connect" },
   { id: 2, title: "CMMC Level", icon: ShieldCheck, label: "Level" },
   { id: 3, title: "Confirm & Launch", icon: Rocket, label: "Launch" },
 ];
+
+const GATEWAY_URL = process.env.NEXT_PUBLIC_APP_URL
+  ? `${process.env.NEXT_PUBLIC_APP_URL}/api/gateway/intercept`
+  : "https://kaelus.ai/api/gateway/intercept";
 
 const EMPLOYEE_RANGES = [
   { label: "1–10", value: 10 },
@@ -46,9 +52,8 @@ export default function OnboardingPage() {
   const [handlesCUI, setHandlesCUI] = useState(false);
   const [handlesFCI, setHandlesFCI] = useState(true);
 
-  // Step 2 — Team (local-only, no backend)
-  const [teamEmails, setTeamEmails] = useState<string[]>([]);
-  const [emailInput, setEmailInput] = useState("");
+  // Step 2 — Connect AI (snippet copy state)
+  const [copiedSnippet, setCopiedSnippet] = useState<"python" | "js" | null>(null);
 
   // Step 3 — CMMC Level
   const [cmmcLevel, setCmmcLevel] = useState<CMMCLevel>(2);
@@ -68,19 +73,14 @@ export default function OnboardingPage() {
     if (step > 0) setStep(step - 1);
   };
 
-  const handleAddEmail = () => {
-    const trimmed = emailInput.trim();
-    if (trimmed && trimmed.includes("@") && !teamEmails.includes(trimmed)) {
-      setTeamEmails([...teamEmails, trimmed]);
-      setEmailInput("");
-    }
+  const handleCopySnippet = (lang: "python" | "js", text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedSnippet(lang);
+      setTimeout(() => setCopiedSnippet(null), 2000);
+    });
   };
 
-  const handleRemoveEmail = (email: string) => {
-    setTeamEmails(teamEmails.filter((e) => e !== email));
-  };
-
-  const handleLaunch = () => {
+  const handleLaunch = async () => {
     createOrganization({
       name: orgName.trim(),
       employeeCount: employeeCount ?? 10,
@@ -90,6 +90,18 @@ export default function OnboardingPage() {
       cmmcLevel,
     });
     logActivity("Completed onboarding wizard");
+
+    // Fire welcome email — non-blocking, graceful failure
+    try {
+      await fetch("/api/email/welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orgName: orgName.trim() }),
+      });
+    } catch {
+      // Email failure should never block onboarding
+    }
+
     router.push("/command-center/shield/assessment");
   };
 
@@ -107,17 +119,17 @@ export default function OnboardingPage() {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                     isDone
-                      ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
+                      ? "bg-emerald-500/100/20 border-emerald-500 text-emerald-400"
                       : isActive
-                      ? "bg-blue-500/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
-                      : "bg-slate-100/50 border-slate-600 text-slate-500"
+                      ? "bg-brand-500/100/20 border-brand-500 text-brand-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                      : "bg-white/[0.05]/50 border-slate-600 text-slate-500"
                   }`}
                 >
                   {isDone ? <CheckCircle2 size={18} /> : <Icon size={18} />}
                 </div>
                 <span
                   className={`text-xs mt-2 font-medium ${
-                    isActive ? "text-blue-400" : isDone ? "text-emerald-400" : "text-slate-500"
+                    isActive ? "text-brand-400" : isDone ? "text-emerald-400" : "text-slate-500"
                   }`}
                 >
                   {s.label}
@@ -126,9 +138,9 @@ export default function OnboardingPage() {
             );
           })}
         </div>
-        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+        <div className="w-full bg-white/[0.05] rounded-full h-1.5 overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"
+            className="h-full bg-gradient-to-r from-brand-500 to-emerald-500 rounded-full"
             initial={{ width: "0%" }}
             animate={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
             transition={{ type: "spring", stiffness: 200, damping: 25 }}
@@ -146,28 +158,28 @@ export default function OnboardingPage() {
             exit={{ opacity: 0, x: -30 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <div className="bg-slate-50/70 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl p-8 shadow-2xl">
+            <div className="bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-8 shadow-2xl">
               {/* STEP 0: Org Profile */}
               {step === 0 && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-1">Organization Profile</h2>
-                    <p className="text-slate-600 dark:text-slate-400">Tell us about your defense contracting organization.</p>
+                    <h2 className="text-2xl font-bold text-white mb-1">Organization Profile</h2>
+                    <p className="text-slate-400">Tell us about your defense contracting organization.</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Company Name *</label>
+                    <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-2">Company Name *</label>
                     <input
                       type="text"
                       value={orgName}
                       onChange={(e) => setOrgName(e.target.value)}
                       placeholder="e.g. Vertex Defense Systems"
-                      className="w-full bg-slate-100/50 border border-slate-600 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+                      className="w-full bg-white/[0.05]/50 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Employee Count *</label>
+                    <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-3">Employee Count *</label>
                     <div className="grid grid-cols-4 gap-3">
                       {EMPLOYEE_RANGES.map((range) => (
                         <button
@@ -175,8 +187,8 @@ export default function OnboardingPage() {
                           onClick={() => setEmployeeCount(range.value)}
                           className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
                             employeeCount === range.value
-                              ? "bg-blue-500/20 border-blue-500 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.15)]"
-                              : "bg-slate-100/50 border-slate-600 text-slate-600 dark:text-slate-400 hover:border-slate-500"
+                              ? "bg-brand-500/100/20 border-brand-500 text-brand-400 shadow-[0_0_10px_rgba(59,130,246,0.15)]"
+                              : "bg-white/[0.05]/50 border-slate-600 text-slate-400 hover:border-slate-500"
                           }`}
                         >
                           {range.label}
@@ -186,7 +198,7 @@ export default function OnboardingPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Contract Type *</label>
+                    <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-3">Contract Type *</label>
                     <div className="grid grid-cols-3 gap-3">
                       {CONTRACT_TYPES.map((type) => (
                         <button
@@ -194,8 +206,8 @@ export default function OnboardingPage() {
                           onClick={() => setContractType(type)}
                           className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
                             contractType === type
-                              ? "bg-blue-500/20 border-blue-500 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.15)]"
-                              : "bg-slate-100/50 border-slate-600 text-slate-600 dark:text-slate-400 hover:border-slate-500"
+                              ? "bg-brand-500/100/20 border-brand-500 text-brand-400 shadow-[0_0_10px_rgba(59,130,246,0.15)]"
+                              : "bg-white/[0.05]/50 border-slate-600 text-slate-400 hover:border-slate-500"
                           }`}
                         >
                           {type}
@@ -209,8 +221,8 @@ export default function OnboardingPage() {
                       onClick={() => setHandlesCUI(!handlesCUI)}
                       className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
                         handlesCUI
-                          ? "bg-amber-500/10 border-amber-500/50 text-amber-400"
-                          : "bg-slate-100/50 border-slate-600 text-slate-600 dark:text-slate-400 hover:border-slate-500"
+                          ? "bg-amber-500/100/10 border-amber-500/50 text-amber-400"
+                          : "bg-white/[0.05]/50 border-slate-600 text-slate-400 hover:border-slate-500"
                       }`}
                     >
                       <AlertTriangle size={18} />
@@ -223,8 +235,8 @@ export default function OnboardingPage() {
                       onClick={() => setHandlesFCI(!handlesFCI)}
                       className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
                         handlesFCI
-                          ? "bg-blue-500/10 border-blue-500/50 text-blue-400"
-                          : "bg-slate-100/50 border-slate-600 text-slate-600 dark:text-slate-400 hover:border-slate-500"
+                          ? "bg-brand-500/100/10 border-brand-500/50 text-brand-400"
+                          : "bg-white/[0.05]/50 border-slate-600 text-slate-400 hover:border-slate-500"
                       }`}
                     >
                       <FileCheck size={18} />
@@ -237,63 +249,86 @@ export default function OnboardingPage() {
                 </div>
               )}
 
-              {/* STEP 1: Team Setup */}
+              {/* STEP 1: Connect Your AI Tool */}
               {step === 1 && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-1">Team Setup</h2>
-                    <p className="text-slate-600 dark:text-slate-400">
-                      Add team members who will help with the assessment.{" "}
-                      <span className="text-slate-500">(Optional — you can do this later)</span>
+                    <h2 className="text-2xl font-bold text-white mb-1">Connect Your AI Tool</h2>
+                    <p className="text-slate-400">
+                      Route your AI queries through Kaelus in under 60 seconds.
                     </p>
                   </div>
 
-                  <div className="flex gap-2">
-                    <input
-                      type="email"
-                      value={emailInput}
-                      onChange={(e) => setEmailInput(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && handleAddEmail()}
-                      placeholder="team@company.com"
-                      className="flex-1 bg-slate-100/50 border border-slate-600 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
-                    />
-                    <button
-                      onClick={handleAddEmail}
-                      className="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl text-slate-900 font-medium transition-colors"
-                    >
-                      Add
-                    </button>
+                  {/* Gateway URL */}
+                  <div>
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Your Gateway URL</p>
+                    <div className="flex items-center gap-2 bg-slate-900 border border-white/10 rounded-xl px-4 py-3">
+                      <code className="flex-1 text-emerald-400 text-sm font-mono break-all">{GATEWAY_URL}</code>
+                      <button
+                        onClick={() => handleCopySnippet("python", GATEWAY_URL)}
+                        className="shrink-0 text-slate-500 hover:text-white transition-colors"
+                        title="Copy URL"
+                      >
+                        {copiedSnippet === "python" ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
+                      </button>
+                    </div>
                   </div>
 
-                  {teamEmails.length > 0 ? (
-                    <div className="space-y-2">
-                      {teamEmails.map((email) => (
-                        <div
-                          key={email}
-                          className="flex items-center justify-between bg-slate-100/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-sm font-bold">
-                              {email[0].toUpperCase()}
-                            </div>
-                            <span className="text-slate-900 text-sm">{email}</span>
-                          </div>
-                          <button
-                            onClick={() => handleRemoveEmail(email)}
-                            className="text-slate-500 hover:text-red-400 text-sm transition-colors"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ))}
+                  {/* Python snippet */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Python (OpenAI SDK)</p>
+                      <button
+                        onClick={() => handleCopySnippet("python", `import openai\n\nclient = openai.OpenAI(\n    base_url="${GATEWAY_URL}",\n    api_key="your-openai-key",\n)\n\nresponse = client.chat.completions.create(\n    model="gpt-4o",\n    messages=[{"role": "user", "content": "Hello"}],\n    extra_headers={"X-Kaelus-Org": "${orgName || "your-org"}"},\n)`)}
+                        className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+                      >
+                        {copiedSnippet === "python" ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                        {copiedSnippet === "python" ? "Copied!" : "Copy"}
+                      </button>
                     </div>
-                  ) : (
-                    <div className="text-center py-12 text-slate-500">
-                      <Users size={40} className="mx-auto mb-3 opacity-50" />
-                      <p>No team members added yet.</p>
-                      <p className="text-sm mt-1">You can do this later — skip to continue.</p>
+                    <pre className="bg-slate-900 border border-white/10 rounded-xl px-4 py-4 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed">{`import openai
+
+client = openai.OpenAI(
+    base_url="${GATEWAY_URL}",
+    api_key="your-openai-key",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Hello"}],
+    extra_headers={"X-Kaelus-Org": "${orgName || "your-org"}"},
+)`}</pre>
+                  </div>
+
+                  {/* JS snippet */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">JavaScript / TypeScript</p>
+                      <button
+                        onClick={() => handleCopySnippet("js", `import OpenAI from "openai";\n\nconst client = new OpenAI({\n  baseURL: "${GATEWAY_URL}",\n  apiKey: process.env.OPENAI_API_KEY,\n  defaultHeaders: { "X-Kaelus-Org": "${orgName || "your-org"}" },\n});\n\nconst response = await client.chat.completions.create({\n  model: "gpt-4o",\n  messages: [{ role: "user", content: "Hello" }],\n});`)}
+                        className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+                      >
+                        {copiedSnippet === "js" ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                        {copiedSnippet === "js" ? "Copied!" : "Copy"}
+                      </button>
                     </div>
-                  )}
+                    <pre className="bg-slate-900 border border-white/10 rounded-xl px-4 py-4 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed">{`import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "${GATEWAY_URL}",
+  apiKey: process.env.OPENAI_API_KEY,
+  defaultHeaders: { "X-Kaelus-Org": "${orgName || "your-org"}" },
+});
+
+const response = await client.chat.completions.create({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: "Hello" }],
+});`}</pre>
+                  </div>
+
+                  <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 text-sm text-indigo-300">
+                    <span className="font-semibold">Skip for now —</span> you can grab your API key and gateway docs from the dashboard anytime. The assessment doesn&apos;t require connection.
+                  </div>
                 </div>
               )}
 
@@ -301,8 +336,8 @@ export default function OnboardingPage() {
               {step === 2 && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-1">CMMC Level Selection</h2>
-                    <p className="text-slate-600 dark:text-slate-400">Choose the certification level you need to achieve.</p>
+                    <h2 className="text-2xl font-bold text-white mb-1">CMMC Level Selection</h2>
+                    <p className="text-slate-400">Choose the certification level you need to achieve.</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -310,28 +345,28 @@ export default function OnboardingPage() {
                       onClick={() => setCmmcLevel(1)}
                       className={`relative p-6 rounded-2xl border text-left transition-all ${
                         cmmcLevel === 1
-                          ? "bg-blue-500/10 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
-                          : "bg-slate-100/50 border-slate-600 hover:border-slate-500"
+                          ? "bg-brand-500/100/10 border-brand-500 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
+                          : "bg-white/[0.05]/50 border-slate-600 hover:border-slate-500"
                       }`}
                     >
                       {cmmcLevel === 1 && (
                         <div className="absolute top-4 right-4">
-                          <CheckCircle2 size={20} className="text-blue-400" />
+                          <CheckCircle2 size={20} className="text-brand-400" />
                         </div>
                       )}
-                      <div className="text-3xl font-bold text-blue-400 mb-2">Level 1</div>
-                      <div className="text-slate-900 font-semibold mb-1">Foundational</div>
-                      <div className="text-slate-600 dark:text-slate-400 text-sm mb-4">Basic safeguarding of FCI</div>
+                      <div className="text-3xl font-bold text-brand-400 mb-2">Level 1</div>
+                      <div className="text-white font-semibold mb-1">Foundational</div>
+                      <div className="text-slate-400 text-sm mb-4">Basic safeguarding of FCI</div>
                       <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-2 text-slate-300 dark:text-slate-300">
                           <CheckCircle2 size={14} className="text-emerald-400" />
                           17 controls
                         </div>
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-2 text-slate-300 dark:text-slate-300">
                           <CheckCircle2 size={14} className="text-emerald-400" />
                           Self-assessment
                         </div>
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-2 text-slate-300 dark:text-slate-300">
                           <CheckCircle2 size={14} className="text-emerald-400" />
                           Annual affirmation
                         </div>
@@ -342,8 +377,8 @@ export default function OnboardingPage() {
                       onClick={() => setCmmcLevel(2)}
                       className={`relative p-6 rounded-2xl border text-left transition-all ${
                         cmmcLevel === 2
-                          ? "bg-emerald-500/10 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-                          : "bg-slate-100/50 border-slate-600 hover:border-slate-500"
+                          ? "bg-emerald-500/100/10 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+                          : "bg-white/[0.05]/50 border-slate-600 hover:border-slate-500"
                       }`}
                     >
                       {cmmcLevel === 2 && (
@@ -351,22 +386,22 @@ export default function OnboardingPage() {
                           <CheckCircle2 size={20} className="text-emerald-400" />
                         </div>
                       )}
-                      <div className="inline-block bg-emerald-500/20 text-emerald-400 text-xs font-bold px-2 py-0.5 rounded-full mb-2">
+                      <div className="inline-block bg-emerald-500/100/20 text-emerald-400 text-xs font-bold px-2 py-0.5 rounded-full mb-2">
                         RECOMMENDED
                       </div>
                       <div className="text-3xl font-bold text-emerald-400 mb-2">Level 2</div>
-                      <div className="text-slate-900 font-semibold mb-1">Advanced</div>
-                      <div className="text-slate-600 dark:text-slate-400 text-sm mb-4">Protection of CUI</div>
+                      <div className="text-white font-semibold mb-1">Advanced</div>
+                      <div className="text-slate-400 text-sm mb-4">Protection of CUI</div>
                       <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-2 text-slate-300 dark:text-slate-300">
                           <CheckCircle2 size={14} className="text-emerald-400" />
                           110 controls (NIST 800-171)
                         </div>
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-2 text-slate-300 dark:text-slate-300">
                           <CheckCircle2 size={14} className="text-emerald-400" />
                           C3PAO assessment
                         </div>
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-2 text-slate-300 dark:text-slate-300">
                           <CheckCircle2 size={14} className="text-emerald-400" />
                           Triennial certification
                         </div>
@@ -375,7 +410,7 @@ export default function OnboardingPage() {
                   </div>
 
                   {handlesCUI && cmmcLevel === 1 && (
-                    <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
+                    <div className="bg-amber-500/100/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
                       <AlertTriangle size={18} className="text-amber-400 mt-0.5 shrink-0" />
                       <div>
                         <p className="text-amber-300 text-sm font-medium">CUI requires Level 2</p>
@@ -392,62 +427,60 @@ export default function OnboardingPage() {
               {step === 3 && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-1">Ready to Launch</h2>
-                    <p className="text-slate-600 dark:text-slate-400">Review your settings and begin the assessment.</p>
+                    <h2 className="text-2xl font-bold text-white mb-1">Ready to Launch</h2>
+                    <p className="text-slate-400">Review your settings and begin the assessment.</p>
                   </div>
 
                   <div className="space-y-3">
-                    <div className="bg-slate-100/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Organization</span>
-                      <span className="text-slate-900 font-medium">{orgName || "—"}</span>
+                    <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
+                      <span className="text-slate-400">Organization</span>
+                      <span className="text-white font-medium">{orgName || "—"}</span>
                     </div>
-                    <div className="bg-slate-100/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Employees</span>
-                      <span className="text-slate-900 font-medium">
+                    <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
+                      <span className="text-slate-400">Employees</span>
+                      <span className="text-white font-medium">
                         {EMPLOYEE_RANGES.find((r) => r.value === employeeCount)?.label || "—"}
                       </span>
                     </div>
-                    <div className="bg-slate-100/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Contract Type</span>
-                      <span className="text-slate-900 font-medium">{contractType || "—"}</span>
+                    <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
+                      <span className="text-slate-400">Contract Type</span>
+                      <span className="text-white font-medium">{contractType || "—"}</span>
                     </div>
-                    <div className="bg-slate-100/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Data Types</span>
-                      <span className="text-slate-900 font-medium">
+                    <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
+                      <span className="text-slate-400">Data Types</span>
+                      <span className="text-white font-medium">
                         {[handlesCUI && "CUI", handlesFCI && "FCI"].filter(Boolean).join(", ") || "—"}
                       </span>
                     </div>
-                    <div className="bg-slate-100/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">CMMC Level</span>
-                      <span className={`font-bold ${cmmcLevel === 2 ? "text-emerald-400" : "text-blue-400"}`}>
+                    <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
+                      <span className="text-slate-400">CMMC Level</span>
+                      <span className={`font-bold ${cmmcLevel === 2 ? "text-emerald-400" : "text-brand-400"}`}>
                         Level {cmmcLevel} — {cmmcLevel === 1 ? "Foundational" : "Advanced"}
                       </span>
                     </div>
-                    <div className="bg-slate-100/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Controls to Assess</span>
-                      <span className="text-slate-900 font-bold text-lg">
+                    <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
+                      <span className="text-slate-400">Controls to Assess</span>
+                      <span className="text-white font-bold text-lg">
                         {cmmcLevel === 1 ? "17" : "110"}
                       </span>
                     </div>
-                    <div className="bg-slate-100/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-600 dark:text-slate-400">Team Members</span>
-                      <span className="text-slate-900 font-medium">
-                        {teamEmails.length > 0 ? teamEmails.length : "Solo (just you)"}
-                      </span>
+                    <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
+                      <span className="text-slate-400">Gateway</span>
+                      <span className="text-emerald-400 font-medium text-sm">Ready to connect</span>
                     </div>
                   </div>
                 </div>
               )}
 
               {/* ── Navigation Buttons ── */}
-              <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-200 dark:border-slate-200 dark:border-slate-700/50">
+              <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/10 dark:border-white/10 dark:border-slate-700/50">
                 <button
                   onClick={handleBack}
                   disabled={step === 0}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     step === 0
-                      ? "text-slate-600 cursor-not-allowed"
-                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 hover:bg-slate-100"
+                      ? "text-slate-400 cursor-not-allowed"
+                      : "text-slate-300 dark:text-slate-300 hover:text-white hover:bg-white/[0.05]"
                   }`}
                 >
                   <ArrowLeft size={16} />
@@ -460,7 +493,7 @@ export default function OnboardingPage() {
                     disabled={!canProceed()}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium transition-all ${
                       canProceed()
-                        ? "bg-blue-600 hover:bg-blue-500 text-slate-900 shadow-lg shadow-blue-500/20"
+                        ? "bg-brand-500/100 hover:bg-brand-400 text-white shadow-lg shadow-brand-500/20"
                         : "bg-slate-700 text-slate-500 cursor-not-allowed"
                     }`}
                   >
@@ -470,7 +503,7 @@ export default function OnboardingPage() {
                 ) : (
                   <button
                     onClick={handleLaunch}
-                    className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 rounded-xl text-slate-900 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all"
+                    className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-emerald-600 to-brand-500 hover:from-emerald-500 hover:to-brand-400 rounded-xl text-white font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all"
                   >
                     <Rocket size={18} />
                     Begin Assessment

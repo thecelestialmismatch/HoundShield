@@ -113,7 +113,7 @@ export function EventTable() {
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold text-slate-900">Compliance Events</h2>
+        <h2 className="text-lg font-semibold text-white">Compliance Events</h2>
         <div className="flex items-center gap-2">
           <button
             onClick={() => fetchEvents(true)}
@@ -137,8 +137,8 @@ export function EventTable() {
               onClick={() => setFilter(f)}
               className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
                 filter === f
-                  ? "bg-brand-500/15 text-blue-500 border border-brand-500/30"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-600 hover:bg-white/5 border border-transparent"
+                  ? "bg-brand-500/100/15 text-brand-500 border border-brand-500/30"
+                  : "text-slate-400 hover:text-slate-400 hover:bg-white/5 border border-transparent"
               }`}
             >
               {f === "all" ? "All" : f.charAt(0) + f.slice(1).toLowerCase()}
@@ -146,18 +146,18 @@ export function EventTable() {
           ))}
         </div>
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search events..."
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-8 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:border-blue-400 focus:outline-none transition-all"
+            className="w-full bg-white/[0.03] border border-white/10 rounded-lg pl-8 pr-8 py-1.5 text-xs text-white placeholder-slate-400 focus:border-brand-400 focus:outline-none transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 hover:text-slate-500"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-500"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -165,7 +165,7 @@ export function EventTable() {
         </div>
       </div>
 
-      <p className="text-[11px] text-slate-600 dark:text-slate-400">
+      <p className="text-[11px] text-slate-400">
         Showing {filteredEvents.length} of {events.length} events
         {filter !== "all" && ` (filtered: ${filter.toLowerCase()})`}
         {searchQuery && ` matching "${searchQuery}"`}
@@ -175,9 +175,9 @@ export function EventTable() {
         {loading ? (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200">
+              <tr className="border-b border-white/10">
                 {["Time", "User", "Risk", "Categories", "Action", "Confidence", "Provider"].map((h) => (
-                  <th key={h} className="text-left text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider px-4 py-3">{h}</th>
+                  <th key={h} className="text-left text-[10px] font-medium text-slate-400 uppercase tracking-wider px-4 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -190,10 +190,10 @@ export function EventTable() {
             <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
               <Inbox className="w-6 h-6 text-slate-500" />
             </div>
-            <p className="text-slate-600 dark:text-slate-400 text-sm">
+            <p className="text-slate-400 text-sm">
               {searchQuery ? `No events matching "${searchQuery}"` : "No events yet"}
             </p>
-            <p className="text-slate-700 dark:text-slate-300 text-xs mt-1">
+            <p className="text-slate-300 dark:text-slate-300 text-xs mt-1">
               {searchQuery ? "Try a different search term." : "Events appear here when LLM requests are intercepted."}
             </p>
           </div>
@@ -201,9 +201,9 @@ export function EventTable() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200">
+                <tr className="border-b border-white/10">
                   {["Time", "User", "Risk", "Categories", "Action", "Confidence", "Provider"].map((h) => (
-                    <th key={h} className="text-left text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider px-4 py-3 whitespace-nowrap">{h}</th>
+                    <th key={h} className="text-left text-[10px] font-medium text-slate-400 uppercase tracking-wider px-4 py-3 whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -215,7 +215,7 @@ export function EventTable() {
                       <td className="px-4 py-3.5 text-slate-500 font-mono text-xs whitespace-nowrap">
                         {new Date(event.created_at).toLocaleString()}
                       </td>
-                      <td className="px-4 py-3.5 text-slate-600 text-xs truncate max-w-[140px]">
+                      <td className="px-4 py-3.5 text-slate-400 text-xs truncate max-w-[140px]">
                         {event.user_id}
                       </td>
                       <td className="px-4 py-3.5">
@@ -243,7 +243,7 @@ export function EventTable() {
                       <td className="px-4 py-3.5 text-slate-500 font-mono text-xs">
                         {Math.round(event.confidence_score * 100)}%
                       </td>
-                      <td className="px-4 py-3.5 text-slate-600 dark:text-slate-400 text-xs">
+                      <td className="px-4 py-3.5 text-slate-400 text-xs">
                         {event.destination_provider ?? "-"}
                       </td>
                     </tr>

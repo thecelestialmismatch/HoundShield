@@ -54,8 +54,8 @@ export default function ResourcesPage() {
   return (
     <div className="min-h-screen p-6 lg:p-8 max-w-5xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Resources</h1>
-        <p className="text-slate-600 dark:text-slate-400">
+        <h1 className="text-3xl font-bold text-white mb-2">Resources</h1>
+        <p className="text-slate-400">
           Official references, implementation tools, and community resources for CMMC compliance.
         </p>
       </div>
@@ -68,8 +68,8 @@ export default function ResourcesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: si * 0.1 }}
           >
-            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <BookOpen size={18} className="text-blue-400" />
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <BookOpen size={18} className="text-brand-400" />
               {section.category}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -81,18 +81,18 @@ export default function ResourcesPage() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group bg-slate-50/70 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl p-5 hover:border-blue-500/30 hover:bg-blue-500/5 transition-all"
+                    className="group bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-5 hover:border-brand-500/30 hover:bg-brand-500/100/5 transition-all"
                   >
                     <div className="flex items-start gap-3">
-                      <Icon size={18} className="text-slate-600 dark:text-slate-400 group-hover:text-blue-400 transition-colors shrink-0 mt-0.5" />
+                      <Icon size={18} className="text-slate-400 group-hover:text-brand-400 transition-colors shrink-0 mt-0.5" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-slate-900 font-medium text-sm group-hover:text-blue-300 transition-colors">
+                          <h3 className="text-white font-medium text-sm group-hover:text-brand-300 transition-colors">
                             {item.title}
                           </h3>
-                          <ExternalLink size={12} className="text-slate-500 group-hover:text-blue-400 transition-colors" />
+                          <ExternalLink size={12} className="text-slate-500 group-hover:text-brand-400 transition-colors" />
                         </div>
-                        <p className="text-slate-600 dark:text-slate-400 text-xs">{item.description}</p>
+                        <p className="text-slate-400 text-xs">{item.description}</p>
                       </div>
                     </div>
                   </a>
