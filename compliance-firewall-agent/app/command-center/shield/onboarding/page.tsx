@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Building2,
-  Users,
+  Plug,
   ShieldCheck,
   Rocket,
   ArrowRight,
@@ -13,6 +13,8 @@ import {
   CheckCircle2,
   FileCheck,
   AlertTriangle,
+  Copy,
+  Check,
 } from "lucide-react";
 import { createOrganization, logActivity } from "@/lib/shieldready/storage";
 import type { CMMCLevel } from "@/lib/shieldready/types";
@@ -20,10 +22,14 @@ import type { CMMCLevel } from "@/lib/shieldready/types";
 // ─── Step Configuration ──────────────────────────────────────────────────────
 const STEPS = [
   { id: 0, title: "Organization", icon: Building2, label: "Org Profile" },
-  { id: 1, title: "Team Setup", icon: Users, label: "Team" },
+  { id: 1, title: "Connect AI", icon: Plug, label: "Connect" },
   { id: 2, title: "CMMC Level", icon: ShieldCheck, label: "Level" },
   { id: 3, title: "Confirm & Launch", icon: Rocket, label: "Launch" },
 ];
+
+const GATEWAY_URL = process.env.NEXT_PUBLIC_APP_URL
+  ? `${process.env.NEXT_PUBLIC_APP_URL}/api/gateway/intercept`
+  : "https://kaelus.ai/api/gateway/intercept";
 
 const EMPLOYEE_RANGES = [
   { label: "1–10", value: 10 },
@@ -46,9 +52,8 @@ export default function OnboardingPage() {
   const [handlesCUI, setHandlesCUI] = useState(false);
   const [handlesFCI, setHandlesFCI] = useState(true);
 
-  // Step 2 — Team (local-only, no backend)
-  const [teamEmails, setTeamEmails] = useState<string[]>([]);
-  const [emailInput, setEmailInput] = useState("");
+  // Step 2 — Connect AI (snippet copy state)
+  const [copiedSnippet, setCopiedSnippet] = useState<"python" | "js" | null>(null);
 
   // Step 3 — CMMC Level
   const [cmmcLevel, setCmmcLevel] = useState<CMMCLevel>(2);
@@ -68,19 +73,14 @@ export default function OnboardingPage() {
     if (step > 0) setStep(step - 1);
   };
 
-  const handleAddEmail = () => {
-    const trimmed = emailInput.trim();
-    if (trimmed && trimmed.includes("@") && !teamEmails.includes(trimmed)) {
-      setTeamEmails([...teamEmails, trimmed]);
-      setEmailInput("");
-    }
+  const handleCopySnippet = (lang: "python" | "js", text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedSnippet(lang);
+      setTimeout(() => setCopiedSnippet(null), 2000);
+    });
   };
 
-  const handleRemoveEmail = (email: string) => {
-    setTeamEmails(teamEmails.filter((e) => e !== email));
-  };
-
-  const handleLaunch = () => {
+  const handleLaunch = async () => {
     createOrganization({
       name: orgName.trim(),
       employeeCount: employeeCount ?? 10,
@@ -90,6 +90,18 @@ export default function OnboardingPage() {
       cmmcLevel,
     });
     logActivity("Completed onboarding wizard");
+
+    // Fire welcome email — non-blocking, graceful failure
+    try {
+      await fetch("/api/email/welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orgName: orgName.trim() }),
+      });
+    } catch {
+      // Email failure should never block onboarding
+    }
+
     router.push("/command-center/shield/assessment");
   };
 
@@ -237,63 +249,86 @@ export default function OnboardingPage() {
                 </div>
               )}
 
-              {/* STEP 1: Team Setup */}
+              {/* STEP 1: Connect Your AI Tool */}
               {step === 1 && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-white mb-1">Team Setup</h2>
+                    <h2 className="text-2xl font-bold text-white mb-1">Connect Your AI Tool</h2>
                     <p className="text-slate-400">
-                      Add team members who will help with the assessment.{" "}
-                      <span className="text-slate-500">(Optional — you can do this later)</span>
+                      Route your AI queries through Kaelus in under 60 seconds.
                     </p>
                   </div>
 
-                  <div className="flex gap-2">
-                    <input
-                      type="email"
-                      value={emailInput}
-                      onChange={(e) => setEmailInput(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && handleAddEmail()}
-                      placeholder="team@company.com"
-                      className="flex-1 bg-white/[0.05]/50 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition-all"
-                    />
-                    <button
-                      onClick={handleAddEmail}
-                      className="px-6 py-3 bg-brand-500/100 hover:bg-brand-400 rounded-xl text-white font-medium transition-colors"
-                    >
-                      Add
-                    </button>
+                  {/* Gateway URL */}
+                  <div>
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Your Gateway URL</p>
+                    <div className="flex items-center gap-2 bg-slate-900 border border-white/10 rounded-xl px-4 py-3">
+                      <code className="flex-1 text-emerald-400 text-sm font-mono break-all">{GATEWAY_URL}</code>
+                      <button
+                        onClick={() => handleCopySnippet("python", GATEWAY_URL)}
+                        className="shrink-0 text-slate-500 hover:text-white transition-colors"
+                        title="Copy URL"
+                      >
+                        {copiedSnippet === "python" ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
+                      </button>
+                    </div>
                   </div>
 
-                  {teamEmails.length > 0 ? (
-                    <div className="space-y-2">
-                      {teamEmails.map((email) => (
-                        <div
-                          key={email}
-                          className="flex items-center justify-between bg-white/[0.05]/50 border border-white/10 dark:border-slate-700 rounded-xl px-4 py-3"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-brand-500/100/20 flex items-center justify-center text-brand-400 text-sm font-bold">
-                              {email[0].toUpperCase()}
-                            </div>
-                            <span className="text-white text-sm">{email}</span>
-                          </div>
-                          <button
-                            onClick={() => handleRemoveEmail(email)}
-                            className="text-slate-500 hover:text-red-400 text-sm transition-colors"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ))}
+                  {/* Python snippet */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Python (OpenAI SDK)</p>
+                      <button
+                        onClick={() => handleCopySnippet("python", `import openai\n\nclient = openai.OpenAI(\n    base_url="${GATEWAY_URL}",\n    api_key="your-openai-key",\n)\n\nresponse = client.chat.completions.create(\n    model="gpt-4o",\n    messages=[{"role": "user", "content": "Hello"}],\n    extra_headers={"X-Kaelus-Org": "${orgName || "your-org"}"},\n)`)}
+                        className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+                      >
+                        {copiedSnippet === "python" ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                        {copiedSnippet === "python" ? "Copied!" : "Copy"}
+                      </button>
                     </div>
-                  ) : (
-                    <div className="text-center py-12 text-slate-500">
-                      <Users size={40} className="mx-auto mb-3 opacity-50" />
-                      <p>No team members added yet.</p>
-                      <p className="text-sm mt-1">You can do this later — skip to continue.</p>
+                    <pre className="bg-slate-900 border border-white/10 rounded-xl px-4 py-4 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed">{`import openai
+
+client = openai.OpenAI(
+    base_url="${GATEWAY_URL}",
+    api_key="your-openai-key",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Hello"}],
+    extra_headers={"X-Kaelus-Org": "${orgName || "your-org"}"},
+)`}</pre>
+                  </div>
+
+                  {/* JS snippet */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">JavaScript / TypeScript</p>
+                      <button
+                        onClick={() => handleCopySnippet("js", `import OpenAI from "openai";\n\nconst client = new OpenAI({\n  baseURL: "${GATEWAY_URL}",\n  apiKey: process.env.OPENAI_API_KEY,\n  defaultHeaders: { "X-Kaelus-Org": "${orgName || "your-org"}" },\n});\n\nconst response = await client.chat.completions.create({\n  model: "gpt-4o",\n  messages: [{ role: "user", content: "Hello" }],\n});`)}
+                        className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+                      >
+                        {copiedSnippet === "js" ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                        {copiedSnippet === "js" ? "Copied!" : "Copy"}
+                      </button>
                     </div>
-                  )}
+                    <pre className="bg-slate-900 border border-white/10 rounded-xl px-4 py-4 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed">{`import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "${GATEWAY_URL}",
+  apiKey: process.env.OPENAI_API_KEY,
+  defaultHeaders: { "X-Kaelus-Org": "${orgName || "your-org"}" },
+});
+
+const response = await client.chat.completions.create({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: "Hello" }],
+});`}</pre>
+                  </div>
+
+                  <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 text-sm text-indigo-300">
+                    <span className="font-semibold">Skip for now —</span> you can grab your API key and gateway docs from the dashboard anytime. The assessment doesn&apos;t require connection.
+                  </div>
                 </div>
               )}
 
@@ -430,10 +465,8 @@ export default function OnboardingPage() {
                       </span>
                     </div>
                     <div className="bg-white/[0.05]/50 rounded-xl p-4 flex items-center justify-between">
-                      <span className="text-slate-400">Team Members</span>
-                      <span className="text-white font-medium">
-                        {teamEmails.length > 0 ? teamEmails.length : "Solo (just you)"}
-                      </span>
+                      <span className="text-slate-400">Gateway</span>
+                      <span className="text-emerald-400 font-medium text-sm">Ready to connect</span>
                     </div>
                   </div>
                 </div>
