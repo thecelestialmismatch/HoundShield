@@ -15,29 +15,24 @@ import {
   SearchX,
   FileBarChart,
   BookOpen,
-  Brain,
-  Bot,
   MessageSquare,
-  Database,
-  Kanban,
   ListChecks,
   Users,
-  Calendar,
-  BookMarked,
   Settings,
   ChevronDown,
   Bell,
   Search,
   Menu,
   Command,
-  Layers,
   ShieldCheck,
   Target,
-  Globe,
-  Gamepad2,
+  ScrollText,
+  Wrench,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
+import { DemoBanner } from "@/components/ui/demo-banner";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 /* ── Nav Structure ──────────────────────────────────────────────── */
 type NavSection = {
@@ -61,7 +56,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: "realtime", label: "Real-Time Feed", icon: Zap, href: "/command-center/realtime" },
       { id: "timeline", label: "Threat Timeline", icon: Activity, href: "/command-center/timeline" },
       { id: "scanner", label: "Live Scanner", icon: Scan, href: "/command-center/scanner" },
-      { id: "events", label: "Event Log", icon: Globe, href: "/command-center/events" },
+      { id: "events", label: "Audit Log", icon: ScrollText, href: "/command-center/events" },
       { id: "quarantine", label: "Quarantine", icon: AlertTriangle, href: "/command-center/quarantine", badge: "4" },
     ],
   },
@@ -77,25 +72,12 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
-    label: "AI Agents",
-    icon: Brain,
+    label: "Response",
+    icon: Wrench,
     items: [
-      { id: "workspace", label: "Agent Workspace", icon: Brain, href: "/command-center/workspace" },
-      { id: "agents", label: "Agent Builder", icon: Bot, href: "/command-center/agents" },
-      { id: "chat", label: "AI Chat", icon: MessageSquare, href: "/command-center/chat" },
-      { id: "knowledge", label: "Knowledge Base", icon: Database, href: "/command-center/knowledge" },
-    ],
-  },
-  {
-    label: "Mission Control",
-    icon: Layers,
-    items: [
-      { id: "pipeline", label: "Content Pipeline", icon: Kanban, href: "/command-center/pipeline" },
-      { id: "tasks", label: "Tasks Board", icon: ListChecks, href: "/command-center/tasks" },
-      { id: "team", label: "Agent Team", icon: Users, href: "/command-center/team" },
-      { id: "calendar", label: "Calendar", icon: Calendar, href: "/command-center/calendar" },
-      { id: "memory", label: "Memory DNA", icon: BookMarked, href: "/command-center/memory" },
-      { id: "pixeloffice", label: "Pixel Office", icon: Gamepad2, href: "/command-center/pixeloffice" },
+      { id: "chat", label: "Compliance AI", icon: MessageSquare, href: "/command-center/chat" },
+      { id: "tasks", label: "Remediation Tasks", icon: ListChecks, href: "/command-center/tasks" },
+      { id: "team", label: "Team", icon: Users, href: "/command-center/team" },
     ],
   },
 ];
@@ -112,8 +94,7 @@ function Sidebar({
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     Firewall: true,
     "CMMC Shield": true,
-    "AI Agents": true,
-    "Mission Control": false,
+    Response: true,
   });
 
   const toggleSection = (label: string) => {
@@ -319,6 +300,7 @@ export default function CommandCenterLayout({
   children: React.ReactNode;
 }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const demoMode = !isSupabaseConfigured();
 
   return (
     <div className="min-h-screen bg-[#07070b] text-white font-sans">
@@ -334,10 +316,19 @@ export default function CommandCenterLayout({
       />
       <Topbar sidebarCollapsed={sidebarCollapsed} />
 
-      <main
-        className={`relative z-10 pt-14 min-h-screen transition-all duration-300 ${
-          sidebarCollapsed ? "ml-[68px]" : "ml-[260px]"
+      {/* Demo mode banner — fixed below topbar, above content */}
+      <div
+        className={`fixed top-14 right-0 z-40 transition-all duration-300 ${
+          sidebarCollapsed ? "left-[68px]" : "left-[260px]"
         }`}
+      >
+        <DemoBanner show={demoMode} />
+      </div>
+
+      <main
+        className={`relative z-10 min-h-screen transition-all duration-300 ${
+          sidebarCollapsed ? "ml-[68px]" : "ml-[260px]"
+        } ${demoMode ? "pt-[88px]" : "pt-14"}`}
       >
         <div className="p-6 lg:p-8">{children}</div>
       </main>

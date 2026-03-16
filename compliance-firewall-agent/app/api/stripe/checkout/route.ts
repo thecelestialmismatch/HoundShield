@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@/lib/supabase/server';
+import { isSupabaseConfigured } from '@/lib/supabase/client';
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -26,6 +27,17 @@ const PRICE_MAP: Record<string, { monthly: string; annual: string }> = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Block checkout in demo mode — Supabase must be configured for subscriptions to work
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        {
+          error: 'Demo mode active. Connect your Supabase account before subscribing.',
+          setup_url: '/command-center/settings',
+        },
+        { status: 503 }
+      );
+    }
+
     if (!process.env.STRIPE_SECRET_KEY) {
       return NextResponse.json(
         { error: 'Stripe not configured. Set STRIPE_SECRET_KEY in environment.' },

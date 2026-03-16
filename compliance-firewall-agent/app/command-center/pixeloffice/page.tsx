@@ -1,16 +1,6 @@
-'use client';
+import { redirect } from "next/navigation";
 
-import { motion } from 'framer-motion';
-import { PixelOffice } from '@/components/dashboard/pixel-office/pixel-office';
-
-export default function PixelOfficePage() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <PixelOffice />
-    </motion.div>
-  );
+/** This route has been deprecated. All compliance work happens in /command-center. */
+export default function DeprecatedPage() {
+  redirect("/command-center");
 }

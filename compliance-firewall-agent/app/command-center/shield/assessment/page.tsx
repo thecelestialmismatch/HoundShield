@@ -22,6 +22,7 @@ import {
   getOrganization,
   logActivity,
 } from "@/lib/shieldready/storage";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import type {
   AssessmentResponse,
   ControlStatus,
@@ -142,6 +143,8 @@ export default function AssessmentPage() {
   const answered = responses.filter((r) => r.status !== "NOT_ASSESSED").length;
   const total = ALL_CONTROLS.length;
 
+  const isDemo = !isSupabaseConfigured();
+
   return (
     <div className="flex min-h-screen">
       {/* ── Sidebar ── */}
@@ -185,6 +188,19 @@ export default function AssessmentPage() {
 
       {/* ── Main Content ── */}
       <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+        {/* Demo mode save warning */}
+        {isDemo && (
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-300">
+            <span className="mt-0.5 text-amber-400">⚠️</span>
+            <span>
+              <span className="font-semibold text-amber-200">Results are not being saved.</span>{" "}
+              Complete your account setup to persist assessment data across sessions.{" "}
+              <a href="/command-center/settings" className="underline underline-offset-2 hover:text-amber-100 transition-colors">
+                Go to Settings →
+              </a>
+            </span>
+          </div>
+        )}
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
