@@ -4,6 +4,7 @@ import { z } from "zod";
 import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 import { streamProxy } from "@/lib/gateway/stream-proxy";
 import { eventBus } from "@/lib/gateway/event-bus";
+import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
 import type { ActionTaken, RiskLevel } from "@/lib/supabase/types";
 
 // ---------------------------------------------------------------------------
@@ -164,6 +165,20 @@ export async function POST(req: NextRequest) {
 
     const body = parseResult.data;
     const userId = req.headers.get("x-user-id") ?? "anonymous";
+
+    // --- Subscription gate ------------------------------------------------
+    const tier = await getUserSubscription(userId);
+    if (!canAccessGateway(tier)) {
+      return NextResponse.json(
+        {
+          error: "Gateway access requires a Pro plan or higher",
+          upgrade_url: "/pricing",
+          current_tier: tier,
+          request_id: requestId,
+        },
+        { status: 402, headers: CORS_HEADERS }
+      );
+    }
 
     // --- Build the stream ------------------------------------------------
     const streamRequest = {
