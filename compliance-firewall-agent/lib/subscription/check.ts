@@ -1,8 +1,7 @@
 import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 
-// Matches the CHECK constraint in 003_profiles_and_subscriptions.sql
-// 'growth' tier will be added in Gap 4 alongside the DB migration
-export type SubscriptionTier = "free" | "pro" | "enterprise" | "agency";
+// Matches the CHECK constraint in 004_add_growth_tier.sql
+export type SubscriptionTier = "free" | "pro" | "growth" | "enterprise" | "agency";
 
 /**
  * Fetches the active subscription tier for a user.
@@ -65,6 +64,7 @@ export function getApiCallLimit(tier: SubscriptionTier): number {
   const limits: Record<SubscriptionTier, number> = {
     free: 0,
     pro: 50_000,
+    growth: 200_000,
     enterprise: Infinity,
     agency: Infinity,
   };
