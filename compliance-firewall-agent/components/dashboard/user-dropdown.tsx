@@ -61,7 +61,7 @@ export function UserDropdown({ user, onLogout }: { user: User; onLogout: () => v
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute bottom-[calc(100%+8px)] left-0 w-[260px] bg-[#111116] border border-slate-200 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200 z-50">
+                <div className="absolute bottom-[calc(100%+8px)] left-0 w-[260px] bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200 z-50">
 
                     {/* User Info Header */}
                     <div className="px-4 py-3 border-b border-slate-200">

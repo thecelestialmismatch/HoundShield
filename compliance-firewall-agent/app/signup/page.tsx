@@ -102,10 +102,10 @@ export default function SignupPage() {
         className="relative z-10 w-full max-w-md"
       >
         {/* Logo */}
-        <div className="flex items-center justify-center gap-3 mb-8">
+        <Link href="/" className="flex items-center justify-center gap-3 mb-8">
           <Logo className="w-10 h-10" />
           <TextLogo />
-        </div>
+        </Link>
 
         {/* Card */}
         <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-xl shadow-slate-200/50">

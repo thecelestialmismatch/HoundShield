@@ -56,7 +56,7 @@ const PRIORITY_DOTS: Record<TaskPriority, string> = {
 };
 
 const TYPE_BADGE: Record<TaskType, { icon: React.ElementType; bg: string; text: string }> = {
-  recurring: { icon: RotateCcw, bg: 'bg-blue-500/10', text: 'text-blue-400' },
+  recurring: { icon: RotateCcw, bg: 'bg-brand-500/10', text: 'text-brand-400' },
   'one-time': { icon: Target, bg: 'bg-slate-100', text: 'text-slate-600' },
   automated: { icon: Zap, bg: 'bg-purple-500/10', text: 'text-purple-400' },
 };
@@ -231,7 +231,7 @@ export default function TasksBoard() {
             const items = byStatus(col.key);
             const Icon = col.icon;
             return (
-              <div key={col.key} className="w-72 flex-shrink-0 bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
+              <div key={col.key} className="w-72 flex-shrink-0 bg-white rounded-xl border border-slate-200 overflow-hidden">
                 <div className="h-1" style={{ backgroundColor: col.color }} />
                 <div className="px-4 py-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -254,7 +254,7 @@ export default function TasksBoard() {
                     return (
                       <div
                         key={task.id}
-                        className="group bg-[#141419] rounded-lg border border-slate-200 p-3 hover:border-white/10 transition-all"
+                        className="group bg-white rounded-lg border border-slate-200 p-3 hover:border-slate-300 transition-all"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <p className="text-sm font-medium text-slate-900 leading-snug flex-1">{task.title}</p>
@@ -309,7 +309,7 @@ export default function TasksBoard() {
       {/* Add Task Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-[#141419] rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden border border-slate-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
               <h3 className="text-base font-semibold text-slate-900">New Task</h3>
               <button onClick={() => setShowAddModal(false)} className="p-1 rounded-md hover:bg-slate-50 text-slate-600 dark:text-slate-400">

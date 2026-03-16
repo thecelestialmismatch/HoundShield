@@ -39,7 +39,7 @@ export function GlobalChat() {
                     <div className="bg-white/[0.03] border-b border-white/[0.05] p-4 flex items-center gap-3">
                         <Logo className="w-8 h-8" />
                         <div className="ml-1">
-                            <h3 className="text-sm font-semibold text-slate-900">Kaelus Assistant</h3>
+                            <h3 className="text-sm font-semibold text-white">Kaelus Assistant</h3>
                             <p className="text-[10px] text-emerald-400 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                                 Online
@@ -50,7 +50,7 @@ export function GlobalChat() {
                     <div className="p-4 h-80 overflow-y-auto space-y-4">
                         {messages.map((msg, i) => (
                             <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${msg.role === 'user' ? 'bg-indigo-600 text-slate-900 rounded-br-sm' : 'bg-white/[0.05] text-slate-900/90 border border-white/[0.05] rounded-bl-sm'}`}>
+                                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm' : 'bg-white/[0.08] text-slate-200 border border-white/[0.08] rounded-bl-sm'}`}>
                                     {msg.text}
                                 </div>
                             </div>
@@ -64,7 +64,7 @@ export function GlobalChat() {
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
                                 placeholder="Ask about Kaelus.ai..."
-                                className="w-full bg-white/[0.03] border border-white/[0.1] rounded-xl pl-4 pr-10 py-2.5 text-sm text-slate-900 placeholder-white/30 focus:outline-none focus:border-indigo-500/50"
+                                className="w-full bg-white/[0.05] border border-white/[0.1] rounded-xl pl-4 pr-10 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-indigo-500/50"
                             />
                             <button
                                 type="submit"

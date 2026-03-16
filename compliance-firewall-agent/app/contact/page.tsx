@@ -60,7 +60,7 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 text-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-brand-50/30 to-slate-100 text-slate-900">
       <Navbar />
 
       {/* Hero */}
@@ -68,9 +68,6 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/[0.06] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-xs text-slate-500 mb-6">
-              <Shield className="w-3.5 h-3.5 text-indigo-400" /> CMMC Compliance Experts
-            </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
               Talk to our <span className="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">CMMC experts</span>
             </h1>

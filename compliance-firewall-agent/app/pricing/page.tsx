@@ -336,13 +336,6 @@ export default function PricingPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <AnimatedSection>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-sm mb-8">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>14-day free trial on Pro &mdash; No credit card required</span>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={100}>
             <h1 className="text-display-sm md:text-display lg:text-display-lg mb-6">
               Simple,{" "}
               <span className="text-gradient-brand">Transparent</span>{" "}

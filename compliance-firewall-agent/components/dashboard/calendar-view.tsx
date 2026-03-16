@@ -200,7 +200,7 @@ export default function CalendarView() {
           </div>
 
           {/* Calendar cells */}
-          <div className="grid grid-cols-7 bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
+          <div className="grid grid-cols-7 bg-white rounded-xl border border-slate-200 overflow-hidden">
             {cells.map((day, i) => {
               if (day === null) {
                 return <div key={`empty-${i}`} className="h-24 border-b border-r border-slate-200 bg-[#0c0c10]/50" />;
@@ -258,7 +258,7 @@ export default function CalendarView() {
         <div className="w-80 flex-shrink-0 space-y-4">
           {/* Selected day events */}
           {selectedDay && (
-            <div className="bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-slate-900">
                   {new Date(selectedDay + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
@@ -275,7 +275,7 @@ export default function CalendarView() {
                   const conf = EVENT_TYPE_CONFIG[ev.type];
                   const Icon = conf.icon;
                   return (
-                    <div key={ev.id} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#1a1a21] border border-slate-200">
+                    <div key={ev.id} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200">
                       <div
                         className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
                         style={{ backgroundColor: conf.color + '18' }}
@@ -305,7 +305,7 @@ export default function CalendarView() {
           )}
 
           {/* Upcoming events */}
-          <div className="bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-200">
               <div className="flex items-center gap-2">
                 <CalendarDays className="w-4 h-4" style={{ color: '#6366f1' }} />

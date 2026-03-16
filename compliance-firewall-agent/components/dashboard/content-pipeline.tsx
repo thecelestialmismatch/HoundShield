@@ -201,7 +201,7 @@ export default function ContentPipeline() {
             return (
               <div
                 key={stage.key}
-                className="w-72 flex-shrink-0 bg-[#141419] rounded-xl border border-slate-200 overflow-hidden"
+                className="w-72 flex-shrink-0 bg-white rounded-xl border border-slate-200 overflow-hidden"
               >
                 {/* Column header strip */}
                 <div className="h-1" style={{ backgroundColor: stage.accent }} />
@@ -230,7 +230,7 @@ export default function ContentPipeline() {
                 {/* Add new card form */}
                 {addingTo === stage.key && (
                   <div className="px-3 pb-3">
-                    <div className="bg-[#1a1a21] rounded-lg p-3 border border-slate-200">
+                    <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
                       <input
                         autoFocus
                         value={newTitle}
@@ -267,7 +267,7 @@ export default function ContentPipeline() {
                     return (
                       <div
                         key={card.id}
-                        className="group bg-[#141419] rounded-lg border border-slate-200 p-3 hover:border-white/10 transition-all cursor-pointer"
+                        className="group bg-white rounded-lg border border-slate-200 p-3 hover:border-slate-300 transition-all cursor-pointer"
                         onClick={() => setExpandedCard(isExpanded ? null : card.id)}
                       >
                         {/* Grip + title */}

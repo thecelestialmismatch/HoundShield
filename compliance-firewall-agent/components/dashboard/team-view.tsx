@@ -186,7 +186,7 @@ export default function TeamView() {
           ].map((stat) => {
             const StatIcon = stat.icon;
             return (
-              <div key={stat.label} className="bg-[#141419] rounded-xl border border-slate-200 p-4 flex items-center gap-3">
+              <div key={stat.label} className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-3">
                 <div
                   className="w-9 h-9 rounded-lg flex items-center justify-center"
                   style={{ backgroundColor: stat.color + '14' }}
@@ -215,7 +215,7 @@ export default function TeamView() {
             return (
               <div
                 key={agent.id}
-                className="bg-[#141419] rounded-xl border border-slate-200 overflow-hidden hover:border-white/10 transition-all"
+                className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:border-slate-300 transition-all"
                 style={{ borderLeftWidth: '3px', borderLeftColor: typeConf.color }}
               >
                 <div className="p-4">
@@ -252,13 +252,13 @@ export default function TeamView() {
 
                   {/* Current task */}
                   {agent.currentTask && (
-                    <div className="mt-3 px-2.5 py-2 rounded-lg bg-[#1a1a21] border border-slate-200">
+                    <div className="mt-3 px-2.5 py-2 rounded-lg bg-slate-50 border border-slate-200">
                       <p className="text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-0.5">Current Task</p>
                       <p className="text-xs text-slate-800 leading-snug">{agent.currentTask}</p>
                     </div>
                   )}
                   {!agent.currentTask && agent.status !== 'offline' && (
-                    <div className="mt-3 px-2.5 py-2 rounded-lg bg-[#1a1a21] border border-slate-200">
+                    <div className="mt-3 px-2.5 py-2 rounded-lg bg-slate-50 border border-slate-200">
                       <p className="text-xs text-slate-600 dark:text-slate-400 italic">Awaiting task assignment</p>
                     </div>
                   )}
@@ -322,7 +322,7 @@ export default function TeamView() {
       {/* Assign Task Modal */}
       {assignModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-[#141419] rounded-2xl shadow-2xl w-full max-w-md mx-4 border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 border border-slate-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
               <h3 className="text-base font-semibold text-slate-900">
                 Assign Task to {AGENTS.find((a) => a.id === assignModalOpen)?.name}

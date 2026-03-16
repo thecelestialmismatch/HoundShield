@@ -275,7 +275,7 @@ export default function MemoryView() {
     const catColor = CATEGORY_COLORS[mem.category] || '#9ca3af';
 
     return (
-      <div key={mem.id} className="bg-[#141419] rounded-lg border border-slate-200 p-4 hover:border-white/10 transition-all group">
+      <div key={mem.id} className="bg-white rounded-lg border border-slate-200 p-4 hover:border-slate-300 transition-all group">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <p className="text-sm text-slate-800 leading-relaxed">{mem.content}</p>
@@ -299,7 +299,7 @@ export default function MemoryView() {
             {mem.importance}
           </span>
           {mem.tags.map((tag) => (
-            <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-[#1a1a21] text-slate-500 border border-slate-200">
+            <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-50 text-slate-500 border border-slate-200">
               {tag}
             </span>
           ))}
@@ -318,7 +318,7 @@ export default function MemoryView() {
     const catColor = CATEGORY_COLORS[lesson.category] || '#9ca3af';
 
     return (
-      <div key={lesson.id} className="bg-[#141419] rounded-lg border border-slate-200 p-4 hover:border-white/10 transition-all group">
+      <div key={lesson.id} className="bg-white rounded-lg border border-slate-200 p-4 hover:border-slate-300 transition-all group">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-1.5">
@@ -362,7 +362,7 @@ export default function MemoryView() {
     const sevColor = CATEGORY_COLORS[sg.severity] || '#9ca3af';
 
     return (
-      <div key={sg.id} className={`rounded-lg border p-4 hover:border-white/10 transition-all group ${sevConf.bg} ${sevConf.border}`}>
+      <div key={sg.id} className={`rounded-lg border p-4 hover:border-slate-300 transition-all group ${sevConf.bg} ${sevConf.border}`}>
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1.5">
@@ -449,7 +449,7 @@ export default function MemoryView() {
           ].map((s) => {
             const StatIcon = s.icon;
             return (
-              <div key={s.label} className="bg-[#141419] rounded-xl border border-slate-200 p-3 flex items-center gap-2.5">
+              <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-3 flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: s.color + '14' }}>
                   <StatIcon className="w-4 h-4" style={{ color: s.color }} />
                 </div>
@@ -527,7 +527,7 @@ export default function MemoryView() {
 
             {/* Add Memory Form */}
             {showAddMemory && (
-              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
+              <div className="bg-white rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <textarea
                   autoFocus
                   value={memForm.content}
@@ -609,7 +609,7 @@ export default function MemoryView() {
             </div>
 
             {showAddLesson && (
-              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
+              <div className="bg-white rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <textarea
                   autoFocus
                   value={lessonForm.lesson}
@@ -688,7 +688,7 @@ export default function MemoryView() {
             </div>
 
             {showAddSafeguard && (
-              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
+              <div className="bg-white rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <input
                   autoFocus
                   value={sgForm.rule}
@@ -750,7 +750,7 @@ export default function MemoryView() {
             </div>
 
             {showAddPref && (
-              <div className="bg-[#141419] rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
+              <div className="bg-white rounded-xl border border-slate-200 p-4 mb-3 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     autoFocus
@@ -773,7 +773,7 @@ export default function MemoryView() {
               </div>
             )}
 
-            <div className="bg-[#141419] rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
               {Object.entries(preferences).length === 0 && (
                 <div className="text-center py-8">
                   <Settings2 className="w-8 h-8 text-slate-600 dark:text-slate-400 mx-auto mb-2" />
@@ -801,7 +801,7 @@ export default function MemoryView() {
       {/* Import Modal */}
       {showImport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-[#141419] rounded-2xl shadow-2xl w-full max-w-lg mx-4 border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 border border-slate-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
               <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
                 <FileJson className="w-4 h-4" style={{ color: '#6366f1' }} />
