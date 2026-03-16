@@ -59,7 +59,7 @@ function getNow(): string {
 }
 
 const LOG_COLOR: Record<LogType, string> = {
-  info: "text-white/55",
+  info: "text-gray-400",
   success: "text-emerald-400 font-semibold",
   danger: "text-rose-400 font-bold",
   warn: "text-amber-400 font-semibold",
@@ -135,16 +135,16 @@ export function PipelineSimulator() {
   }, [isInView]);
 
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-[#0a0a10]">
+    <section ref={ref} className="py-24 md:py-32 bg-[#F7F5F0]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400 mb-4">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
             Live Simulator
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-white mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
             Watch the Firewall Work
           </h2>
-          <p className="text-lg text-slate-400 max-w-[520px] mx-auto">
+          <p className="text-lg text-gray-600 max-w-[520px] mx-auto">
             See every request get intercepted, scanned, classified, routed, and logged — in real time.
           </p>
         </div>
@@ -194,7 +194,7 @@ export function PipelineSimulator() {
                           ? "bg-indigo-500/15 border-indigo-500/45 shadow-[0_0_20px_rgba(99,102,241,0.35)] scale-110"
                           : isDone
                           ? "bg-emerald-500/10 border-emerald-500/30"
-                          : "bg-[#07070b] border-white/[0.07]"
+                          : "bg-gray-800 border-gray-700"
                       }`}
                     >
                       {stage.icon}

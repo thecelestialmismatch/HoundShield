@@ -21,7 +21,7 @@ import { CTASection } from "@/components/landing/CTASection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 export default function LandingPage() {
   return (
-    <div className="bg-[#07070b] min-h-screen relative">
+    <div className="bg-[#F7F5F0] min-h-screen relative">
       <Navbar variant="dark" />
       <HeroSection />
       <TickerSection />

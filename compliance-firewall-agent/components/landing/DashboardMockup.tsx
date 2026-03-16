@@ -65,13 +65,13 @@ export function DashboardMockup() {
   }, [isInView, eventIdx]);
 
   return (
-    <section id="how" className="py-24 md:py-32 bg-[#07070b]">
+    <section id="how" className="py-24 md:py-32 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <div className="mb-14">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400 mb-4">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
             How It Works
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-white">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900">
             Two products.
             <br />
             One compliance stack.
@@ -84,14 +84,14 @@ export function DashboardMockup() {
             {HOW_STEPS.map((step) => (
               <div
                 key={step.num}
-                className="flex gap-4 items-start p-5 rounded-[14px] bg-white/[0.02] border border-transparent hover:bg-indigo-500/[0.05] hover:border-indigo-500/15 transition-all cursor-default"
+                className="flex gap-4 items-start p-5 rounded-[14px] bg-gray-50 border border-gray-200 hover:bg-indigo-50 hover:border-indigo-200 transition-all cursor-default"
               >
-                <div className="w-[34px] h-[34px] flex-shrink-0 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-[13px] font-bold text-indigo-400">
+                <div className="w-[34px] h-[34px] flex-shrink-0 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-[13px] font-bold text-indigo-600">
                   {step.num}
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-bold text-white mb-1">{step.title}</h3>
-                  <p className="text-[13px] text-slate-500 leading-relaxed">{step.desc}</p>
+                  <h3 className="text-[15px] font-bold text-gray-900 mb-1">{step.title}</h3>
+                  <p className="text-[13px] text-gray-600 leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -102,7 +102,7 @@ export function DashboardMockup() {
             className="rounded-2xl overflow-hidden border border-indigo-500/10 bg-[#0d0d14]"
             style={{
               transform: "perspective(1200px) rotateY(-8deg) rotateX(4deg)",
-              boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.05)",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.12)",
               transition: "transform 0.4s ease",
             }}
             onMouseEnter={(e) => {

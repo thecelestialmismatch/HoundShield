@@ -43,7 +43,7 @@ const PLANS = [
       "Community support",
     ],
     cta: "Get started →",
-    ctaClass: "bg-transparent text-white border border-white/15 hover:bg-white/5",
+    ctaClass: "bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50",
     href: "/signup",
     featured: false,
   },
@@ -81,7 +81,7 @@ const PLANS = [
       "Custom compliance policies",
     ],
     cta: "Start Enterprise →",
-    ctaClass: "bg-transparent text-white border border-white/15 hover:bg-white/5",
+    ctaClass: "bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50",
     href: "/signup?plan=enterprise",
     featured: false,
   },
@@ -99,7 +99,7 @@ const PLANS = [
       "Dedicated onboarding",
     ],
     cta: "Contact us →",
-    ctaClass: "bg-transparent text-white border border-white/15 hover:bg-white/5",
+    ctaClass: "bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50",
     href: "/contact?plan=agency",
     featured: false,
   },
@@ -107,16 +107,16 @@ const PLANS = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-24 md:py-32 bg-[#0a0a10]">
+    <section id="pricing" className="py-24 md:py-32 bg-[#F7F5F0]">
       <div className="max-w-6xl mx-auto px-6 text-center">
         <FadeIn className="mb-14">
-          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-indigo-400 mb-4">
+          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
             Pricing
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-white mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
             Start free. Pay when it's worth it.
           </h2>
-          <p className="text-lg text-slate-400 max-w-[520px] mx-auto">
+          <p className="text-lg text-gray-600 max-w-[520px] mx-auto">
             No contracts. No enterprise sales calls. No "contact us for pricing." Real prices for real defense contractors.
           </p>
         </FadeIn>
@@ -127,8 +127,8 @@ export function PricingSection() {
               <div
                 className={`relative p-7 rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 ${
                   plan.featured
-                    ? "bg-indigo-500/8 border border-indigo-500/50 hover:border-indigo-500/70"
-                    : "bg-white/[0.02] border border-indigo-500/15 hover:border-indigo-500/30"
+                    ? "bg-indigo-50 border border-indigo-400 hover:border-indigo-500"
+                    : "bg-white border border-gray-200 hover:border-indigo-200"
                 }`}
               >
                 {plan.featured && (
@@ -136,19 +136,19 @@ export function PricingSection() {
                     MOST POPULAR
                   </div>
                 )}
-                <div className="text-[13px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+                <div className="text-[13px] font-bold text-gray-500 uppercase tracking-widest mb-2">
                   {plan.name}
                 </div>
-                <div className="text-[36px] font-extrabold tracking-tight text-white mb-1">
+                <div className="text-[36px] font-extrabold tracking-tight text-gray-900 mb-1">
                   {plan.price}
-                  <span className="text-base font-normal text-slate-500">{plan.period}</span>
+                  <span className="text-base font-normal text-gray-500">{plan.period}</span>
                 </div>
-                <div className="text-[13px] text-slate-500 leading-relaxed mb-5">{plan.desc}</div>
+                <div className="text-[13px] text-gray-500 leading-relaxed mb-5">{plan.desc}</div>
 
                 <ul className="flex flex-col gap-2 mb-6">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-[13px] text-white/70">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <li key={feature} className="flex items-start gap-2 text-[13px] text-gray-700">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                       {feature}
                     </li>
                   ))}

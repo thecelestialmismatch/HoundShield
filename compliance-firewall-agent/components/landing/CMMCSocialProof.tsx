@@ -58,21 +58,17 @@ export function CMMCSocialProof() {
   return (
     <>
       {/* ── Social proof: 3 things contractors leak ── */}
-      <section className="relative py-24 px-6 bg-[#07070b] overflow-hidden">
-        {/* Subtle red glow — signals danger */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(ellipse, rgba(220,38,38,0.06) 0%, transparent 70%)" }} />
-
+      <section className="relative py-24 px-6 bg-[#F7F5F0] overflow-hidden">
         <div className="relative z-10 max-w-4xl mx-auto">
           <FadeIn>
-            <p className="text-center text-xs uppercase tracking-widest text-slate-600 font-semibold mb-3">
+            <p className="text-center text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">
               The Hidden Risk
             </p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white text-center mb-4 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 text-center mb-4 leading-tight">
               3 things defense contractors leak to{" "}
-              <span className="text-red-400">ChatGPT</span> every day
+              <span className="text-red-600">ChatGPT</span> every day
             </h2>
-            <p className="text-center text-slate-500 mb-14 max-w-xl mx-auto">
+            <p className="text-center text-gray-600 mb-14 max-w-xl mx-auto">
               These aren&apos;t hypotheticals. These are patterns Kaelus detects across real enterprise deployments.
             </p>
           </FadeIn>
@@ -80,34 +76,34 @@ export function CMMCSocialProof() {
           <div className="grid md:grid-cols-3 gap-5">
             {LEAKS.map((item, i) => (
               <FadeIn key={item.label} delay={i * 0.1}>
-                <div className="border border-red-500/15 bg-red-500/[0.04] rounded-2xl p-6 hover:border-red-500/25 transition-colors">
-                  <div className="text-2xl font-black text-red-500/40 mb-3">0{i + 1}</div>
-                  <p className="text-white font-semibold mb-2 leading-snug">{item.label}</p>
-                  <p className="text-sm text-slate-500">{item.detail}</p>
+                <div className="border border-red-200 bg-red-50 rounded-2xl p-6 hover:border-red-300 transition-colors">
+                  <div className="text-2xl font-black text-red-400 mb-3">0{i + 1}</div>
+                  <p className="text-gray-900 font-semibold mb-2 leading-snug">{item.label}</p>
+                  <p className="text-sm text-gray-600">{item.detail}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
 
           <FadeIn delay={0.35}>
-            <p className="text-center text-slate-300 font-semibold mt-12 text-lg">
+            <p className="text-center text-gray-700 font-semibold mt-12 text-lg">
               Kaelus catches all of it.{" "}
-              <span className="text-emerald-400">Before it&apos;s too late.</span>
+              <span className="text-emerald-600">Before it&apos;s too late.</span>
             </p>
           </FadeIn>
         </div>
       </section>
 
       {/* ── How it works ── */}
-      <section id="setup" className="relative py-24 px-6 bg-[#07070b]">
+      <section id="setup" className="relative py-24 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
-            <p className="text-center text-xs uppercase tracking-widest text-slate-600 font-semibold mb-3">
+            <p className="text-center text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">
               How It Works
             </p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white text-center mb-16 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 text-center mb-16 leading-tight">
               Deploy in 15 minutes.{" "}
-              <span className="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
                 Audit-ready forever.
               </span>
             </h2>
@@ -116,15 +112,15 @@ export function CMMCSocialProof() {
           <div className="grid md:grid-cols-3 gap-6">
             {HOW_IT_WORKS.map(({ icon: Icon, step, title, body }, i) => (
               <FadeIn key={step} delay={i * 0.12}>
-                <div className="relative glass-card p-7 h-full">
-                  <div className="absolute top-5 right-6 text-5xl font-black text-white/[0.04] select-none">
+                <div className="relative bg-white border border-gray-200 rounded-2xl p-7 h-full hover:border-gray-300 hover:-translate-y-1 transition-all duration-300">
+                  <div className="absolute top-5 right-6 text-5xl font-black text-gray-100 select-none">
                     {step}
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center mb-5">
-                    <Icon className="w-5 h-5 text-brand-400" />
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-5">
+                    <Icon className="w-5 h-5 text-indigo-600" />
                   </div>
-                  <h3 className="text-base font-bold text-white mb-2 leading-snug">{title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{body}</p>
+                  <h3 className="text-base font-bold text-gray-900 mb-2 leading-snug">{title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{body}</p>
                 </div>
               </FadeIn>
             ))}
@@ -133,26 +129,25 @@ export function CMMCSocialProof() {
       </section>
 
       {/* ── Australia / Five Eyes section ── */}
-      <section className="relative py-20 px-6 bg-[#07070b]">
+      <section className="relative py-20 px-6 bg-[#F7F5F0]">
         <div className="max-w-3xl mx-auto">
           <FadeIn>
-            <div className="border border-white/[0.07] rounded-2xl p-10 text-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.04] to-transparent pointer-events-none" />
+            <div className="border border-gray-200 rounded-2xl p-10 text-center relative overflow-hidden bg-white">
               <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-semibold text-indigo-600 uppercase tracking-widest mb-6">
                   <Globe className="w-3.5 h-3.5" />
                   Five Eyes Supply Chain
                 </div>
-                <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
+                <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4">
                   Australian Defence Contractors
                 </h2>
-                <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
+                <p className="text-gray-600 max-w-xl mx-auto mb-8 leading-relaxed">
                   Kaelus maps to DISP and ASD Essential Eight requirements.
                   Built for the Five Eyes supply chain — CMMC, AUKUS, and beyond.
                 </p>
                 <Link
                   href="/signup"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.1] hover:border-white/[0.2] rounded-xl text-white text-sm font-semibold transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white text-sm font-semibold transition-all"
                 >
                   Start your DISP assessment
                   <ArrowRight className="w-4 h-4" />

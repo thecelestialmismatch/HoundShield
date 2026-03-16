@@ -48,19 +48,19 @@ export function ReActLoop() {
   }, [isInView]);
 
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-[#07070b]">
+    <section ref={ref} className="py-24 md:py-32 bg-[#F7F5F0]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400 mb-4">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
             The Intelligence Engine
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-white mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
             We Don't Just Scan.{" "}
-            <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               We Think.
             </span>
           </h2>
-          <p className="text-lg text-slate-400 max-w-[580px] mx-auto">
+          <p className="text-lg text-gray-600 max-w-[580px] mx-auto">
             Traditional DLP tools use regex and flag everything. Kaelus uses a ReAct agent loop — 13 AI models reasoning about context — to achieve a 99.9% detection rate with only 0.01% false positives.
           </p>
         </div>
@@ -74,27 +74,23 @@ export function ReActLoop() {
                 onClick={() => setActiveStep(i)}
                 className={`relative text-left p-7 rounded-[18px] border overflow-hidden transition-all duration-400 cursor-pointer ${
                   isActive
-                    ? "bg-indigo-500/[0.06] border-indigo-500/35 shadow-[0_0_32px_rgba(99,102,241,0.12)] -translate-y-1"
-                    : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.03]"
+                    ? "bg-indigo-50 border-indigo-300 shadow-sm -translate-y-1"
+                    : "bg-white border-gray-200 hover:border-gray-300"
                 }`}
               >
-                {isActive && (
-                  <div className="absolute inset-0 opacity-100 pointer-events-none"
-                    style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.12) 0%, transparent 60%)" }} />
-                )}
                 <div
                   className={`w-16 h-16 rounded-[18px] flex items-center justify-center text-[26px] mx-auto mb-4 border-2 transition-all duration-400 ${step.colorClass} ${isActive ? "scale-110" : ""}`}
                 >
                   {step.icon}
                 </div>
-                <div className="text-base font-extrabold text-white mb-2 text-center">{step.name}</div>
-                <div className="text-[13px] text-indigo-400 font-medium mb-2.5 text-center">{step.eli5}</div>
-                <div className="text-[12px] text-white/35 font-mono leading-relaxed text-center border-t border-white/[0.05] pt-2.5">
+                <div className="text-base font-extrabold text-gray-900 mb-2 text-center">{step.name}</div>
+                <div className="text-[13px] text-indigo-600 font-medium mb-2.5 text-center">{step.eli5}</div>
+                <div className="text-[12px] text-gray-500 font-mono leading-relaxed text-center border-t border-gray-200 pt-2.5">
                   {step.desc}
                 </div>
                 {/* Progress bar at bottom */}
                 <div
-                  className={`absolute bottom-0 left-0 h-[3px] rounded-b-[18px] bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all ${isActive ? "duration-[2500ms]" : "duration-0"}`}
+                  className={`absolute bottom-0 left-0 h-[3px] rounded-b-[18px] bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all ${isActive ? "duration-[2500ms]" : "duration-0"}`}
                   style={{ width: isActive ? "100%" : "0%" }}
                 />
               </button>

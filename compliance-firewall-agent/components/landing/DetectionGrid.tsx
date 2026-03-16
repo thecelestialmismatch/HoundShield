@@ -48,18 +48,18 @@ const DETECTION_TYPES = [
 
 export function DetectionGrid() {
   return (
-    <section className="py-24 md:py-32 bg-[#0a0a10]">
+    <section className="py-24 md:py-32 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn className="text-center mb-14">
-          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-indigo-400 mb-4">
+          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
             What We Detect
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-white mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
             16 Data Categories.
             <br />
             Real-Time. Every Request.
           </h2>
-          <p className="text-lg text-slate-400 max-w-[560px] mx-auto">
+          <p className="text-lg text-gray-600 max-w-[560px] mx-auto">
             We scan for every type of sensitive data — from API keys to medical records — across every AI request your team makes.
           </p>
         </FadeIn>
@@ -67,14 +67,12 @@ export function DetectionGrid() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {DETECTION_TYPES.map((item, i) => (
             <FadeIn key={item.title} delay={i * 0.04}>
-              <div className="group relative p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden cursor-default hover:bg-indigo-500/[0.05] hover:border-indigo-500/25 hover:-translate-y-0.5 transition-all duration-300">
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, transparent 60%)" }} />
-                <div className="text-[22px] mb-3 text-indigo-500/50 group-hover:text-indigo-400 transition-colors relative z-10">
+              <div className="group relative p-5 rounded-2xl bg-gray-50 border border-gray-200 overflow-hidden cursor-default hover:bg-indigo-50 hover:border-indigo-200 hover:-translate-y-0.5 transition-all duration-300">
+                <div className="text-[22px] mb-3 relative z-10">
                   {item.icon}
                 </div>
-                <h4 className="text-sm font-bold text-white mb-1.5 relative z-10">{item.title}</h4>
-                <div className="text-[12px] text-slate-500 font-mono group-hover:text-emerald-400/80 transition-colors relative z-10">
+                <h4 className="text-sm font-bold text-gray-900 mb-1.5 relative z-10">{item.title}</h4>
+                <div className="text-[12px] text-gray-500 font-mono group-hover:text-indigo-600 transition-colors relative z-10">
                   {item.example}
                 </div>
               </div>
