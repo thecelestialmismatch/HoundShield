@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   FileText,
@@ -64,6 +64,45 @@ export default function ReportsPage() {
     window.print();
   };
 
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+
+  const handleDownloadPDF = useCallback(async () => {
+    setPdfLoading(true);
+    setPdfError(null);
+    try {
+      const to = new Date().toISOString();
+      const from = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const res = await fetch(`/api/reports/generate?format=pdf&from=${from}&to=${to}`);
+
+      if (res.status === 402) {
+        const body = await res.json();
+        setPdfError(body.error ?? "PDF reports require the Growth plan or higher.");
+        return;
+      }
+      if (res.status === 401) {
+        setPdfError("Sign in to download PDF reports.");
+        return;
+      }
+      if (!res.ok) {
+        setPdfError("Failed to generate PDF. Please try again.");
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `kaelus-compliance-report-${new Date().toISOString().slice(0, 10)}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setPdfError("Network error — could not download PDF.");
+    } finally {
+      setPdfLoading(false);
+    }
+  }, []);
+
   const today = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -86,10 +125,28 @@ export default function ReportsPage() {
             className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.05] hover:bg-white/[0.08] rounded-xl text-slate-300 dark:text-slate-300 text-sm transition-colors"
           >
             <Printer size={16} />
-            Print / PDF
+            Print
+          </button>
+          <button
+            onClick={handleDownloadPDF}
+            disabled={pdfLoading}
+            className="flex items-center gap-2 px-4 py-2.5 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 disabled:cursor-not-allowed rounded-xl text-white text-sm font-medium transition-colors"
+          >
+            <Download size={16} />
+            {pdfLoading ? "Generating…" : "Download PDF Report"}
           </button>
         </div>
       </div>
+
+      {/* PDF error / upgrade nudge */}
+      {pdfError && (
+        <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-sm text-amber-300">
+          <span>{pdfError}</span>
+          <a href="/pricing" className="text-brand-400 hover:text-brand-300 font-medium underline underline-offset-2 whitespace-nowrap">
+            Upgrade →
+          </a>
+        </div>
+      )}
 
       {/* Report Content */}
       <div ref={reportRef} className="space-y-6 print:space-y-4">

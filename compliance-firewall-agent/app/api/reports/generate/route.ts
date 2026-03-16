@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
+import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
+import type { SubscriptionTier } from "@/lib/subscription/check";
 import { createSeedAnchor, computeMerkleRoot } from "@/lib/audit/seed-anchor";
 import { DEMO_EVENTS } from "@/lib/demo-data";
 
@@ -19,6 +22,42 @@ export async function GET(req: NextRequest) {
         { error: "Both 'from' and 'to' query params required (ISO datetime)" },
         { status: 400 }
       );
+    }
+
+    const format = req.nextUrl.searchParams.get("format"); // "pdf" | null
+
+    // PDF format requires Growth tier or higher
+    if (format === "pdf") {
+      if (!isSupabaseConfigured()) {
+        return NextResponse.json(
+          {
+            error: "PDF reports require a configured Supabase environment",
+            upgrade_url: "/pricing",
+          },
+          { status: 503 }
+        );
+      }
+
+      const userClient = await createClient();
+      const { data: { user } } = await userClient.auth.getUser();
+
+      if (!user) {
+        return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+      }
+
+      const tier: SubscriptionTier = await getUserSubscription(user.id);
+      // PDF requires Growth+ (pro cannot download PDF per pricing matrix)
+      const pdfTiers: SubscriptionTier[] = ["growth", "enterprise", "agency"];
+      if (!pdfTiers.includes(tier)) {
+        return NextResponse.json(
+          {
+            error: "PDF reports require the Growth plan or higher",
+            upgrade_url: "/pricing",
+            current_tier: tier,
+          },
+          { status: 402 }
+        );
+      }
     }
 
     // Demo mode
@@ -133,6 +172,20 @@ export async function GET(req: NextRequest) {
         });
         await supabase.from("audit_reports").update({ seed_hash: seedHash }).eq("id", report.id);
       } catch { /* non-fatal */ }
+    }
+
+    if (format === "pdf") {
+      const { generateCompliancePDF } = await import("@/lib/reports/pdf-generator");
+      const pdfBuffer = generateCompliancePDF(reportData);
+      const dateStr = new Date(from).toISOString().slice(0, 10);
+      return new Response(pdfBuffer, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `attachment; filename="kaelus-compliance-report-${dateStr}.pdf"`,
+          "Cache-Control": "no-store",
+        },
+      });
     }
 
     return NextResponse.json(reportData);
