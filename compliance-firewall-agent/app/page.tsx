@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { TickerSection } from "@/components/landing/TickerSection";
 import { TrustedMarquee } from "@/components/landing/TrustedMarquee";
+import { CMMCSocialProof } from "@/components/landing/CMMCSocialProof";
 import { SetupSteps } from "@/components/landing/SetupSteps";
 import { DetectionGrid } from "@/components/landing/DetectionGrid";
 import { ReActLoop } from "@/components/landing/ReActLoop";
@@ -25,6 +26,7 @@ export default function LandingPage() {
       <HeroSection />
       <TickerSection />
       <TrustedMarquee />
+      <CMMCSocialProof />
       <SetupSteps />
       <DetectionGrid />
       <ReActLoop />

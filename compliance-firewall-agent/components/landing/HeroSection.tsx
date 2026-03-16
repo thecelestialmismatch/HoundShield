@@ -85,46 +85,59 @@ export function HeroSection() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h1 className="text-[clamp(42px,7vw,88px)] font-extrabold leading-[1.05] tracking-[-2px] max-w-[920px] mx-auto mb-6 text-white">
-            Your AI is leaking.{" "}
+          <h1 className="text-[clamp(38px,6.5vw,80px)] font-extrabold leading-[1.05] tracking-[-2px] max-w-[900px] mx-auto mb-6 text-white">
+            Your team is one ChatGPT session away from a{" "}
             <span className="bg-gradient-to-r from-indigo-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
-              We stop that.
+              CMMC violation.
             </span>
           </h1>
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          <p className="text-[clamp(16px,2vw,20px)] text-slate-400 max-w-[580px] mx-auto mb-10 leading-relaxed">
-            Real-time compliance firewall for defense contractors. Protect CUI, ace your CMMC audit, and know your SPRS score — without hiring a consultant.
+          <p className="text-[clamp(16px,2vw,20px)] text-slate-400 max-w-[620px] mx-auto mb-10 leading-relaxed">
+            Kaelus.ai intercepts every AI query before it leaves your network.
+            Protect CUI. Pass your C3PAO assessment. Keep your DoD contracts.
           </p>
         </FadeIn>
 
         <FadeIn delay={0.3}>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Link
-              href="/signup"
+              href="/command-center/shield/onboarding"
               className="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.4)] text-base"
             >
-              Get your free SPRS score
+              Start Free Assessment
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="#setup"
+              href="/demo"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/8 text-white font-semibold rounded-xl border border-white/10 hover:border-white/20 transition-all hover:-translate-y-0.5 text-base"
             >
-              See how it works
+              See a Live Demo
               <ChevronRight className="w-4 h-4" />
             </Link>
+          </div>
+        </FadeIn>
+
+        {/* Trust bar */}
+        <FadeIn delay={0.38}>
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-14 text-xs text-slate-500 uppercase tracking-widest font-semibold">
+            {["CMMC Level 2", "NIST SP 800-171", "Real-time Protection", "<50ms Latency"].map((item, i) => (
+              <span key={item} className="flex items-center gap-2">
+                {i > 0 && <span className="w-1 h-1 rounded-full bg-slate-700" />}
+                {item}
+              </span>
+            ))}
           </div>
         </FadeIn>
 
         <FadeIn delay={0.45}>
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
             {[
-              { num: "87,000+", label: "Defense contractors need CMMC" },
-              { num: "110", label: "NIST controls covered" },
-              { num: "<50ms", label: "Scan latency P99" },
-              { num: "10 min", label: "to your first SPRS score" },
+              { num: "80,000+", label: "DIB contractors must certify" },
+              { num: "0.5%", label: "certified today" },
+              { num: "$76K", label: "avg C3PAO assessment cost" },
+              { num: "<50ms", label: "Kaelus intercept latency" },
             ].map(({ num, label }) => (
               <div key={label} className="text-center">
                 <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-1">
