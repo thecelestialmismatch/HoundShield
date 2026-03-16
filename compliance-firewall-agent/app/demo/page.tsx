@@ -170,10 +170,10 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
                         <Building2 className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div>
-                        <p className="text-sm font-bold text-slate-900">{companyName}</p>
+                        <p className="text-sm font-bold text-white">{companyName}</p>
                         <p className="text-xs text-emerald-400">Connected — Scanning as {companyName}</p>
                     </div>
-                    <button onClick={() => { setConnected(false); setCompanyName(""); setCompanyDomain(""); }} className="ml-auto text-xs text-slate-400 hover:text-slate-500 transition-colors">
+                    <button onClick={() => { setConnected(false); setCompanyName(""); setCompanyDomain(""); }} className="ml-auto text-xs text-slate-400 hover:text-slate-300 transition-colors">
                         Disconnect
                     </button>
                 </div>
@@ -185,7 +185,7 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
         <div className="glass-card p-5">
             <div className="flex items-center gap-3 mb-4">
                 <Building2 className="w-5 h-5 text-brand-400" />
-                <h3 className="text-sm font-bold text-slate-700">Connect Your Company</h3>
+                <h3 className="text-sm font-bold text-slate-300">Connect Your Company</h3>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 font-semibold">OPTIONAL</span>
             </div>
             <p className="text-xs text-slate-400 mb-4">Tag your scan results with your company name. No data leaves your browser.</p>
@@ -194,16 +194,16 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     placeholder="Company Name"
-                    className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-brand-500/40"
+                    className="bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-brand-500/40"
                 />
                 <input
                     value={companyDomain}
                     onChange={(e) => setCompanyDomain(e.target.value)}
                     placeholder="Domain (optional)"
-                    className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-brand-500/40"
+                    className="bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-brand-500/40"
                 />
             </div>
-            <button onClick={handleConnect} disabled={!companyName.trim()} className={`mt-3 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${companyName.trim() ? "bg-brand-500/20 text-brand-300 border border-brand-500/30 hover:bg-brand-500/30" : "bg-slate-50 text-slate-300 border border-slate-200 cursor-not-allowed"}`}>
+            <button onClick={handleConnect} disabled={!companyName.trim()} className={`mt-3 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${companyName.trim() ? "bg-brand-500/20 text-brand-300 border border-brand-500/30 hover:bg-brand-500/30" : "bg-white/5 text-slate-400 border border-white/10 cursor-not-allowed"}`}>
                 <Building2 className="w-4 h-4" /> Connect
             </button>
         </div>
@@ -235,12 +235,12 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
             </button>
 
             {expanded && (
-                <div className="px-4 pb-4 space-y-3 border-t border-slate-200 pt-3">
+                <div className="px-4 pb-4 space-y-3 border-t border-white/10 pt-3">
                     {/* Impact */}
                     <div className="flex gap-3">
                         <AlertTriangle className={`w-4 h-4 ${color.text} mt-0.5 shrink-0`} />
                         <div>
-                            <p className="text-xs font-bold text-slate-700 mb-1">Impact</p>
+                            <p className="text-xs font-bold text-slate-300 mb-1">Impact</p>
                             <p className="text-xs text-slate-500 leading-relaxed">{result.impact}</p>
                         </div>
                     </div>
@@ -248,7 +248,7 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     <div className="flex gap-3">
                         <Lightbulb className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
                         <div>
-                            <p className="text-xs font-bold text-slate-700 mb-1">Quick Fix</p>
+                            <p className="text-xs font-bold text-slate-300 mb-1">Quick Fix</p>
                             <p className="text-xs text-slate-500 leading-relaxed">{result.tip}</p>
                         </div>
                     </div>
@@ -256,7 +256,7 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     <div className="flex gap-3">
                         <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                         <div>
-                            <p className="text-xs font-bold text-slate-700 mb-1">Permanent Fix</p>
+                            <p className="text-xs font-bold text-slate-300 mb-1">Permanent Fix</p>
                             <p className="text-xs text-slate-500 leading-relaxed">{result.fix}</p>
                         </div>
                     </div>
@@ -317,11 +317,11 @@ export default function FreeDemoPage() {
     const totalThreats = results.reduce((acc, r) => acc + r.matches.length, 0);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-brand-50/30 to-slate-100 text-slate-900 font-sans overflow-x-hidden">
-            <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
-            <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
+        <div className="min-h-screen bg-[#07070b] text-white font-sans overflow-x-hidden">
+            <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
+            <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
 
-            <Navbar />
+            <Navbar variant="dark" />
 
             <main className="pt-24 pb-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -333,7 +333,7 @@ export default function FreeDemoPage() {
                         </h1>
                         <p className="text-lg text-slate-500 max-w-3xl mx-auto leading-relaxed">
                             Paste any prompt, code, or message your team sends to AI tools like ChatGPT, Claude, or Copilot.
-                            Our scanner instantly checks for <strong className="text-slate-700">9 categories</strong> of sensitive data leaks — and tells you exactly how to fix them.
+                            Our scanner instantly checks for <strong className="text-slate-300">9 categories</strong> of sensitive data leaks — and tells you exactly how to fix them.
                         </p>
                     </div>
 
@@ -350,7 +350,7 @@ export default function FreeDemoPage() {
                                 <div key={s.step} className="glass-card p-4 text-center group hover:border-brand-500/20 transition-all">
                                     <div className={`text-xs font-black ${s.color} mb-2`}>STEP {s.step}</div>
                                     <Icon className={`w-6 h-6 ${s.color} mx-auto mb-2 group-hover:scale-110 transition-transform`} />
-                                    <p className="text-sm font-bold text-slate-900 mb-1">{s.title}</p>
+                                    <p className="text-sm font-bold text-white mb-1">{s.title}</p>
                                     <p className="text-[11px] text-slate-400">{s.desc}</p>
                                 </div>
                             );
@@ -372,7 +372,7 @@ export default function FreeDemoPage() {
                                 {SAMPLE_PROMPTS.map((sample, i) => {
                                     const SIcon = sample.icon;
                                     return (
-                                        <button key={sample.name} onClick={() => loadSample(i)} className="text-xs px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100 hover:border-slate-300 transition-all flex items-center gap-1.5">
+                                        <button key={sample.name} onClick={() => loadSample(i)} className="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/[0.08] hover:border-white/15 transition-all flex items-center gap-1.5">
                                             <SIcon className="w-3 h-3" /> {sample.name}
                                         </button>
                                     );
@@ -387,10 +387,10 @@ export default function FreeDemoPage() {
                                     onChange={(e) => { setInputText(e.target.value); setScanComplete(false); }}
                                     placeholder="Paste your AI prompt, code, or message here to scan for sensitive data..."
                                     rows={12}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm font-mono text-slate-700 placeholder:text-slate-300 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 resize-none transition-all"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-5 text-sm font-mono text-slate-200 placeholder:text-white/20 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 resize-none transition-all"
                                 />
                                 {inputText && (
-                                    <button onClick={clearAll} className="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-50 text-slate-400 hover:text-slate-500 hover:bg-slate-100 transition-all" title="Clear">
+                                    <button onClick={clearAll} className="absolute top-3 right-3 p-1.5 rounded-lg bg-white/5 text-slate-400 hover:text-slate-300 hover:bg-white/[0.08] transition-all" title="Clear">
                                         <RotateCcw className="w-4 h-4" />
                                     </button>
                                 )}
@@ -400,7 +400,7 @@ export default function FreeDemoPage() {
                             <button
                                 onClick={runScan}
                                 disabled={!inputText.trim() || isScanning}
-                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary shadow-[0_0_30px_rgba(99,102,241,0.4)]" : "bg-slate-50 text-slate-400 cursor-not-allowed border border-slate-200"}`}
+                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary shadow-[0_0_30px_rgba(99,102,241,0.4)]" : "bg-white/5 text-slate-400 cursor-not-allowed border border-white/10"}`}
                             >
                                 {isScanning ? (
                                     <>
@@ -420,7 +420,7 @@ export default function FreeDemoPage() {
                         <div className="lg:col-span-2 space-y-4">
                             <div className="glass-card p-5 min-h-[400px] flex flex-col">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
+                                    <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">
                                         {companyName ? `${companyName} — Scan Results` : "Scan Results"}
                                     </h3>
                                     {totalScans > 0 && <span className="text-xs text-slate-400">{totalScans} scan{totalScans !== 1 ? "s" : ""}</span>}
@@ -490,10 +490,10 @@ export default function FreeDemoPage() {
                                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-purple-500/15 border border-brand-500/25">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Package className="w-4 h-4 text-brand-400" />
-                                                <p className="text-sm font-bold text-slate-900">Kaelus Pro Package</p>
+                                                <p className="text-sm font-bold text-white">Kaelus Pro Package</p>
                                             </div>
                                             <p className="text-xs text-slate-500 mb-3 leading-relaxed">
-                                                This free scanner shows you the problem. <strong className="text-slate-700">Kaelus Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
+                                                This free scanner shows you the problem. <strong className="text-slate-300">Kaelus Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
                                             </p>
                                             <Link href="/auth" className="btn-primary w-full text-center text-sm !py-3 mb-2">
                                                 Get Full Protection <ArrowRight className="w-4 h-4" />
@@ -523,7 +523,7 @@ export default function FreeDemoPage() {
                                     <div key={tp.label} className="glass-card p-4 group hover:border-brand-500/20 transition-all">
                                         <div className="flex items-center gap-3 mb-2">
                                             <Icon className={`w-5 h-5 ${color.text}`} />
-                                            <span className="text-sm font-bold text-slate-700">{tp.label}</span>
+                                            <span className="text-sm font-bold text-slate-300">{tp.label}</span>
                                             <span className={`ml-auto text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full border ${color.badge}`}>{tp.severity}</span>
                                         </div>
                                         <p className="text-[11px] text-slate-400 leading-relaxed">{tp.tip.slice(0, 120)}{tp.tip.length > 120 ? "…" : ""}</p>
@@ -562,7 +562,7 @@ export default function FreeDemoPage() {
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">5. Understand What You Need</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-700">Kaelus Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
+                                    <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-300">Kaelus Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-emerald-300 mb-2">6. Get the Full Package</h3>
@@ -603,7 +603,7 @@ export default function FreeDemoPage() {
                                     "1-click SOC 2, GDPR, HIPAA reports",
                                     "Slack/Teams alerts + HITL review queue",
                                 ].map(item => (
-                                    <li key={item} className="flex items-start gap-2 text-xs text-slate-700">
+                                    <li key={item} className="flex items-start gap-2 text-xs text-slate-300">
                                         <CheckCircle2 className="w-3.5 h-3.5 text-brand-400 mt-0.5 shrink-0" />
                                         <span>{item}</span>
                                     </li>
@@ -626,7 +626,7 @@ export default function FreeDemoPage() {
                                 { label: "Cost", value: "$0" },
                             ].map((s) => (
                                 <div key={s.label} className="glass-card p-4 text-center">
-                                    <div className="text-xl font-bold text-slate-900 mb-1">{s.value}</div>
+                                    <div className="text-xl font-bold text-white mb-1">{s.value}</div>
                                     <div className="text-xs text-slate-400">{s.label}</div>
                                 </div>
                             ))}
@@ -635,8 +635,8 @@ export default function FreeDemoPage() {
                 </div>
             </main>
 
-            <footer className="border-t border-slate-200 bg-slate-50 py-8">
-                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-300">
+            <footer className="border-t border-white/10 bg-transparent py-8">
+                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
                     &copy; {new Date().getFullYear()} Kaelus.ai — All rights reserved.
                 </div>
             </footer>

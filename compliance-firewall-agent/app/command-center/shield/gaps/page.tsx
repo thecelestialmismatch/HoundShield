@@ -24,9 +24,9 @@ import type { AssessmentResponse, NISTControl, RiskPriority } from "@/lib/shield
 
 const PRIORITY_COLORS: Record<RiskPriority, { bg: string; text: string; border: string }> = {
   CRITICAL: { bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" },
-  HIGH: { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/30" },
-  MEDIUM: { bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/30" },
-  LOW: { bg: "bg-slate-500/10", text: "text-slate-600 dark:text-slate-400", border: "border-slate-500/30" },
+  HIGH: { bg: "bg-amber-500/100/10", text: "text-amber-400", border: "border-amber-500/30" },
+  MEDIUM: { bg: "bg-brand-500/100/10", text: "text-brand-400", border: "border-brand-500/30" },
+  LOW: { bg: "bg-white/[0.03]0/10", text: "text-slate-400", border: "border-slate-500/30" },
 };
 
 export default function GapsPage() {
@@ -81,8 +81,8 @@ export default function GapsPage() {
     <div className="min-h-screen p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Gap Analysis</h1>
-        <p className="text-slate-600 dark:text-slate-400">
+        <h1 className="text-3xl font-bold text-white mb-2">Gap Analysis</h1>
+        <p className="text-slate-400">
           Prioritized remediation roadmap based on SPRS impact and risk priority.
         </p>
       </div>
@@ -90,22 +90,22 @@ export default function GapsPage() {
       {/* Score + Stats Row */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-8">
         {/* SPRS Gauge */}
-        <div className="lg:col-span-1 bg-slate-50/70 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-center">
+        <div className="lg:col-span-1 bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-center">
           <SPRSGauge score={sprs.total} size="sm" />
         </div>
 
         {/* Stat cards */}
         <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="bg-slate-50/70 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl p-5">
-            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs mb-2">
+          <div className="bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-5">
+            <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
               <AlertTriangle size={14} />
               Open Gaps
             </div>
-            <div className="text-3xl font-bold text-slate-900">{totalGaps}</div>
+            <div className="text-3xl font-bold text-white">{totalGaps}</div>
             <div className="text-xs text-slate-500 mt-1">of {ALL_CONTROLS.length} controls</div>
           </div>
 
-          <div className="bg-slate-50/70 backdrop-blur-xl border border-red-500/20 rounded-2xl p-5">
+          <div className="bg-white/[0.03]/70 backdrop-blur-xl border border-red-500/20 rounded-2xl p-5">
             <div className="flex items-center gap-2 text-red-400 text-xs mb-2">
               <Shield size={14} />
               Critical + High
@@ -116,16 +116,16 @@ export default function GapsPage() {
             </div>
           </div>
 
-          <div className="bg-slate-50/70 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl p-5">
-            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs mb-2">
+          <div className="bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-5">
+            <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
               <Clock size={14} />
               Est. Hours
             </div>
-            <div className="text-3xl font-bold text-slate-900">{totalHours}</div>
+            <div className="text-3xl font-bold text-white">{totalHours}</div>
             <div className="text-xs text-slate-500 mt-1">to full remediation</div>
           </div>
 
-          <div className="bg-slate-50/70 backdrop-blur-xl border border-emerald-500/20 rounded-2xl p-5">
+          <div className="bg-white/[0.03]/70 backdrop-blur-xl border border-emerald-500/20 rounded-2xl p-5">
             <div className="flex items-center gap-2 text-emerald-400 text-xs mb-2">
               <TrendingUp size={14} />
               Recoverable Points
@@ -151,8 +151,8 @@ export default function GapsPage() {
             onClick={() => setSortBy(opt.key)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               sortBy === opt.key
-                ? "bg-blue-500/20 border border-blue-500/30 text-blue-400"
-                : "bg-slate-100/50 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900"
+                ? "bg-brand-500/100/20 border border-brand-500/30 text-brand-400"
+                : "bg-white/[0.05]/50 border border-white/10 dark:border-slate-700 text-slate-400 hover:text-white"
             }`}
           >
             {opt.label}
@@ -174,11 +174,11 @@ export default function GapsPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.02 }}
-              className="bg-slate-50/70 backdrop-blur-xl border border-slate-200 dark:border-slate-200 dark:border-slate-700/50 rounded-2xl overflow-hidden"
+              className="bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl overflow-hidden"
             >
               <button
                 onClick={() => setExpandedControl(isExpanded ? null : control.id)}
-                className="w-full flex items-center gap-4 p-5 text-left hover:bg-slate-100/30 transition-colors"
+                className="w-full flex items-center gap-4 p-5 text-left hover:bg-white/[0.05]/30 transition-colors"
               >
                 <span className="text-slate-500 font-mono text-xs w-6">{i + 1}</span>
 
@@ -186,9 +186,9 @@ export default function GapsPage() {
                   {control.riskPriority}
                 </span>
 
-                <span className="text-blue-400 text-xs font-bold shrink-0">{control.id}</span>
+                <span className="text-brand-400 text-xs font-bold shrink-0">{control.id}</span>
 
-                <span className="text-slate-900 text-sm font-medium flex-1 truncate">
+                <span className="text-white text-sm font-medium flex-1 truncate">
                   {control.title}
                 </span>
 
@@ -199,9 +199,9 @@ export default function GapsPage() {
                 <span className="text-slate-500 text-xs shrink-0">{control.estimatedHours}h</span>
 
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-lg ${
-                  currentStatus === "PARTIAL" ? "bg-amber-500/10 text-amber-400" :
+                  currentStatus === "PARTIAL" ? "bg-amber-500/100/10 text-amber-400" :
                   currentStatus === "UNMET" ? "bg-red-500/10 text-red-400" :
-                  "bg-slate-500/10 text-slate-600 dark:text-slate-400"
+                  "bg-white/[0.03]0/10 text-slate-400"
                 }`}>
                   {currentStatus === "NOT_ASSESSED" ? "OPEN" : currentStatus}
                 </span>
@@ -216,20 +216,20 @@ export default function GapsPage() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-slate-200 dark:border-slate-700/30 px-5 pb-5 pt-4"
+                  className="border-t border-white/10 dark:border-slate-700/30 px-5 pb-5 pt-4"
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
                       <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2">What to do</h4>
-                      <p className="text-slate-700 dark:text-slate-300 text-sm mb-4">{control.plainEnglish}</p>
+                      <p className="text-slate-300 dark:text-slate-300 text-sm mb-4">{control.plainEnglish}</p>
 
                       {control.remediationSteps.length > 0 && (
                         <div>
                           <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2">Fix Steps</h4>
                           <ol className="space-y-1.5">
                             {control.remediationSteps.map((step, j) => (
-                              <li key={j} className="flex gap-2 text-sm text-slate-700 dark:text-slate-300">
-                                <span className="text-blue-400 font-bold shrink-0">{j + 1}.</span>
+                              <li key={j} className="flex gap-2 text-sm text-slate-300 dark:text-slate-300">
+                                <span className="text-brand-400 font-bold shrink-0">{j + 1}.</span>
                                 {step}
                               </li>
                             ))}
@@ -246,7 +246,7 @@ export default function GapsPage() {
                           </h4>
                           <div className="flex flex-wrap gap-1.5">
                             {control.affordableTools.map((tool, j) => (
-                              <span key={j} className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-xs text-emerald-300">
+                              <span key={j} className="px-2.5 py-1 bg-emerald-500/100/10 border border-emerald-500/20 rounded-lg text-xs text-emerald-300">
                                 {tool}
                               </span>
                             ))}
@@ -259,7 +259,7 @@ export default function GapsPage() {
                           <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2">Evidence Needed</h4>
                           <ul className="space-y-1">
                             {control.evidenceRequired.map((ev, j) => (
-                              <li key={j} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                              <li key={j} className="flex items-start gap-2 text-sm text-slate-300 dark:text-slate-300">
                                 <span className="text-emerald-400 mt-0.5">•</span>{ev}
                               </li>
                             ))}
@@ -277,8 +277,8 @@ export default function GapsPage() {
         {gaps.length === 0 && (
           <div className="text-center py-20">
             <Shield size={48} className="mx-auto mb-4 text-emerald-400" />
-            <h3 className="text-xl font-bold text-slate-900 mb-2">All clear!</h3>
-            <p className="text-slate-600 dark:text-slate-400">
+            <h3 className="text-xl font-bold text-white mb-2">All clear!</h3>
+            <p className="text-slate-400">
               No gaps found. All controls are marked as Met.
             </p>
           </div>

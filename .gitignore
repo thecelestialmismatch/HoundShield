@@ -46,5 +46,17 @@ memory/
 tests/
 test_reports/
 
-# Claude
+# Claude / AI session artifacts
 .claude/
+.agents/
+.agent/
+.skills/
+.claude-memory.md
+.claude-session-state.md
+
+# Session reports & scripts (keep repo clean)
+*-REPORT.md
+*-BEAST-MODE.md
+MASTER-PRD.md
+decisions.csv
+context-guardian.html

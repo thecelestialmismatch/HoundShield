@@ -44,14 +44,14 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-      <div className="px-6 py-5 border-b border-slate-200 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-          <Icon className="w-4 h-4 text-blue-600" />
+    <div className="bg-white border border-white/10 rounded-2xl overflow-hidden">
+      <div className="px-6 py-5 border-b border-white/10 flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-200 flex items-center justify-center">
+          <Icon className="w-4 h-4 text-brand-500" />
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400">{description}</p>
+          <h3 className="text-sm font-semibold text-white">{title}</h3>
+          <p className="text-xs text-slate-400">{description}</p>
         </div>
       </div>
       <div className="p-6">{children}</div>
@@ -70,7 +70,7 @@ function Toast({ message, type, onClose }: { message: string; type: 'success' | 
     <div
       className={`fixed top-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-2xl animate-fade-in ${
         type === 'success'
-          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+          ? 'bg-emerald-500/100/10 border-emerald-500/20 text-emerald-400'
           : 'bg-red-500/10 border-red-500/20 text-red-400'
       }`}
     >
@@ -216,16 +216,16 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+        <Loader2 className="w-6 h-6 text-brand-500 animate-spin" />
       </div>
     );
   }
 
   const planBadgeColors: Record<string, string> = {
-    free: 'bg-slate-100 text-slate-500 border-slate-200',
-    pro: 'bg-blue-50 text-blue-600 border-blue-200',
+    free: 'bg-white/[0.05] text-slate-500 border-white/10',
+    pro: 'bg-brand-500/10 text-brand-500 border-brand-200',
     enterprise: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-    agency: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    agency: 'bg-amber-500/100/10 text-amber-400 border-amber-500/20',
   };
 
   return (
@@ -235,20 +235,20 @@ export default function SettingsPage() {
 
       {/* Header */}
       <div className="mb-2">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Settings</h1>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Manage your account, billing, and API access.</p>
+        <h1 className="text-2xl font-bold text-white tracking-tight">Settings</h1>
+        <p className="text-sm text-slate-400 mt-1">Manage your account, billing, and API access.</p>
       </div>
 
       {/* ── Profile Section ── */}
       <SectionCard title="Profile" description="Your personal information" icon={User}>
         <div className="space-y-4">
           {/* Avatar + Email (read-only) */}
-          <div className="flex items-center gap-4 pb-4 border-b border-slate-200">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500/20 to-emerald-500/20 border border-slate-200 flex items-center justify-center text-lg font-bold text-blue-600 uppercase">
+          <div className="flex items-center gap-4 pb-4 border-b border-white/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500/20 to-emerald-500/20 border border-white/10 flex items-center justify-center text-lg font-bold text-brand-500 uppercase">
               {profile?.full_name?.[0] || profile?.email?.[0] || '?'}
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-900">{profile?.email}</p>
+              <p className="text-sm font-medium text-white">{profile?.email}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${planBadgeColors[profile?.plan || 'free']}`}>
                   {profile?.plan || 'free'} plan
@@ -259,21 +259,21 @@ export default function SettingsPage() {
 
           {/* Full Name */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
               Full Name
             </label>
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm placeholder:text-slate-600 dark:text-slate-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-300 transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
             />
           </div>
 
           <button
             onClick={handleSaveProfile}
             disabled={saving || fullName === profile?.full_name}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 text-sm font-medium hover:bg-blue-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500/10 border border-brand-200 text-brand-500 text-sm font-medium hover:bg-brand-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
             Save Changes
@@ -285,7 +285,7 @@ export default function SettingsPage() {
       <SectionCard title="Security" description="Password and authentication" icon={Shield}>
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
               New Password
             </label>
             <div className="relative">
@@ -295,12 +295,12 @@ export default function SettingsPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="At least 8 characters"
                 minLength={8}
-                className="w-full px-4 pr-11 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm placeholder:text-slate-600 dark:text-slate-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-300 transition-all"
+                className="w-full px-4 pr-11 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-700 dark:text-slate-300 hover:text-slate-600 dark:text-slate-400"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-300 hover:text-slate-400"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -310,7 +310,7 @@ export default function SettingsPage() {
           <button
             onClick={handleChangePassword}
             disabled={saving || newPassword.length < 8}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-100 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] border border-white/10 text-slate-400 text-sm font-medium hover:bg-white/[0.05] hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Key className="w-3.5 h-3.5" />}
             Change Password
@@ -327,26 +327,26 @@ export default function SettingsPage() {
                 type={showKey ? 'text' : 'password'}
                 value={apiKey}
                 readOnly
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-mono text-xs focus:outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-slate-300 font-mono text-xs focus:outline-none transition-all"
               />
             </div>
             <button
               onClick={() => setShowKey(!showKey)}
-              className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-all"
+              className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-slate-400 hover:text-slate-400 transition-all"
               title={showKey ? 'Hide key' : 'Reveal key'}
             >
               {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
             <button
               onClick={handleCopyKey}
-              className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-all"
+              className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-slate-400 hover:text-slate-400 transition-all"
               title="Copy key"
             >
               {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
             </button>
           </div>
-          <p className="text-[11px] text-slate-700 dark:text-slate-300">
-            Include this key in the <code className="text-slate-600 dark:text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">x-api-key</code> header of your gateway requests.
+          <p className="text-[11px] text-slate-300 dark:text-slate-300">
+            Include this key in the <code className="text-slate-400 bg-white/[0.05] px-1.5 py-0.5 rounded">x-api-key</code> header of your gateway requests.
           </p>
         </div>
       </SectionCard>
@@ -354,10 +354,10 @@ export default function SettingsPage() {
       {/* ── Billing Section ── */}
       <SectionCard title="Billing" description="Subscription and payment management" icon={CreditCard}>
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 rounded-xl bg-white border border-slate-200">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-white border border-white/10">
             <div>
-              <p className="text-sm font-medium text-slate-900 capitalize">{profile?.plan || 'Free'} Plan</p>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+              <p className="text-sm font-medium text-white capitalize">{profile?.plan || 'Free'} Plan</p>
+              <p className="text-xs text-slate-400 mt-0.5">
                 {profile?.plan === 'free'
                   ? '100 API scans/month — upgrade for more'
                   : 'Managed through Stripe'}
@@ -366,7 +366,7 @@ export default function SettingsPage() {
             {profile?.plan !== 'free' && profile?.stripe_customer_id ? (
               <button
                 onClick={handleManageBilling}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-100 hover:text-slate-800 transition-all"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] border border-white/10 text-slate-400 text-sm font-medium hover:bg-white/[0.05] hover:text-slate-200 transition-all"
               >
                 Manage Billing
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -374,7 +374,7 @@ export default function SettingsPage() {
             ) : (
               <a
                 href="/pricing"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-600 text-slate-900 text-sm font-semibold hover:from-brand-500 hover:to-emerald-500 transition-all shadow-lg shadow-blue-200"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-600 text-white text-sm font-semibold hover:from-brand-500 hover:to-emerald-500 transition-all shadow-lg shadow-brand-200"
               >
                 Upgrade
               </a>

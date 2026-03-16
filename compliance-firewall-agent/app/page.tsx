@@ -18,10 +18,9 @@ import { FAQSection } from "@/components/landing/FAQSection";
 import { NewsletterSection } from "@/components/landing/NewsletterSection";
 import { CTASection } from "@/components/landing/CTASection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
-
 export default function LandingPage() {
   return (
-    <div className="bg-[#07070b] min-h-screen">
+    <div className="bg-[#07070b] min-h-screen relative">
       <Navbar variant="dark" />
       <HeroSection />
       <TickerSection />

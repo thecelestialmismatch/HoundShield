@@ -36,7 +36,7 @@ Active branch: feat/branding-shieldready-polish
 
 ## RULES (non-negotiable)
 - Always use Tailwind CSS — never inline styles
-- Dark theme is primary: bg-[#07070b], brand-400/500/600 (indigo), emerald accent
+- Light theme is primary: bg-surface (#F8FAFC), brand-400/500/600 (indigo), emerald accent
 - Typography: Inter (body), Outfit (display)
 - Auth: Supabase Auth with Google + GitHub + Microsoft OAuth
 - Logo: Always use `<Logo />` and `<TextLogo />` — never inline Shield/Zap icons

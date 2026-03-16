@@ -259,9 +259,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-5 text-left"
       >
-        <span className="text-sm font-medium text-slate-900/80 pr-4">{q}</span>
+        <span className="text-sm font-medium text-slate-200 pr-4">{q}</span>
         <ChevronDown
-          className={`w-4 h-4 text-slate-900/30 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
+          className={`w-4 h-4 text-slate-500 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
             }`}
         />
       </button>
@@ -270,7 +270,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
           }`}
       >
         <div className="px-5 pb-5 -mt-1">
-          <p className="text-sm text-slate-900/40 leading-relaxed">{a}</p>
+          <p className="text-sm text-slate-400 leading-relaxed">{a}</p>
         </div>
       </div>
     </div>
@@ -320,14 +320,14 @@ export default function PricingPage() {
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
 
   return (
-    <div className="min-h-screen bg-surface relative overflow-hidden">
+    <div className="min-h-screen bg-[#07070b] relative overflow-hidden">
       {/* ===== FLOATING ORBS ===== */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
       <div className="orb orb-3" />
 
       {/* ===== NAV ===== */}
-      <Navbar />
+      <Navbar variant="dark" />
 
       {/* ===== HERO ===== */}
       <section className="relative pt-32 pb-16 px-6 overflow-hidden">
@@ -344,7 +344,7 @@ export default function PricingPage() {
           </AnimatedSection>
 
           <AnimatedSection delay={200}>
-            <p className="text-lg md:text-xl text-slate-900/40 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
               Protect your enterprise from AI data leaks without the enterprise
               pricing headache. Start free, scale when you&apos;re ready.
             </p>
@@ -356,8 +356,8 @@ export default function PricingPage() {
               <button
                 onClick={() => setIsAnnual(false)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!isAnnual
-                    ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/25"
-                    : "text-slate-900/40 hover:text-slate-900/60"
+                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    : "text-slate-400 hover:text-slate-300"
                   }`}
               >
                 Monthly
@@ -365,8 +365,8 @@ export default function PricingPage() {
               <button
                 onClick={() => setIsAnnual(true)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${isAnnual
-                    ? "bg-brand-500 text-slate-900 shadow-lg shadow-brand-500/25"
-                    : "text-slate-900/40 hover:text-slate-900/60"
+                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    : "text-slate-400 hover:text-slate-300"
                   }`}
               >
                 Annual
@@ -408,7 +408,7 @@ export default function PricingPage() {
                     {/* Badge */}
                     {plan.badge && (
                       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-slate-900 text-xs font-semibold shadow-lg shadow-brand-500/30">
+                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-white text-xs font-semibold shadow-lg shadow-brand-500/30">
                           <Star className="w-3 h-3" />
                           {plan.badge}
                         </div>
@@ -417,7 +417,7 @@ export default function PricingPage() {
 
                     <div
                       className={`relative h-full flex flex-col p-8 rounded-2xl ${plan.highlighted
-                          ? "bg-surface-50"
+                          ? "bg-[#0d0d14]"
                           : "glass-card-glow"
                         }`}
                     >
@@ -429,7 +429,7 @@ export default function PricingPage() {
                           <Icon className={`w-5 h-5 ${plan.iconColor}`} />
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-slate-900">
+                          <h3 className="text-lg font-semibold text-white">
                             {plan.name}
                           </h3>
                         </div>
@@ -439,24 +439,24 @@ export default function PricingPage() {
                       <div className="mb-4">
                         {price !== null ? (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-slate-900 tracking-tight">
+                            <span className="text-4xl font-bold text-white tracking-tight">
                               {price === 0 ? "Free" : <LocalizedPrice basePrice={price} />}
                             </span>
                             {price > 0 && (
-                              <span className="text-sm text-slate-900/30">
+                              <span className="text-sm text-slate-500">
                                 /mo
                               </span>
                             )}
                           </div>
                         ) : (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-slate-900 tracking-tight">
+                            <span className="text-4xl font-bold text-white tracking-tight">
                               Custom
                             </span>
                           </div>
                         )}
                         {price !== null && price > 0 && isAnnual && (
-                          <p className="text-xs text-slate-900/30 mt-1">
+                          <p className="text-xs text-slate-500 mt-1">
                             Billed annually at ${price * 12}/yr
                           </p>
                         )}
@@ -467,7 +467,7 @@ export default function PricingPage() {
                         )}
                       </div>
 
-                      <p className="text-sm text-slate-900/35 leading-relaxed mb-6">
+                      <p className="text-sm text-slate-500 leading-relaxed mb-6">
                         {plan.description}
                       </p>
 
@@ -515,7 +515,7 @@ export default function PricingPage() {
                                   : "text-emerald-400/70"
                                 }`}
                             />
-                            <span className="text-slate-900/50">{feature}</span>
+                            <span className="text-slate-400">{feature}</span>
                           </li>
                         ))}
                       </ul>
@@ -537,10 +537,10 @@ export default function PricingPage() {
                 <ShieldCheck className="w-8 h-8 text-emerald-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                <h3 className="text-lg font-semibold text-white mb-2">
                   30-Day Money-Back Guarantee
                 </h3>
-                <p className="text-sm text-slate-900/40 leading-relaxed">
+                <p className="text-sm text-slate-400 leading-relaxed">
                   Try any paid plan risk-free. If you&apos;re not completely satisfied
                   within the first 30 days, we&apos;ll refund every penny. No
                   questions asked, no hoops to jump through. We&apos;re that
@@ -561,7 +561,7 @@ export default function PricingPage() {
                 Compare{" "}
                 <span className="text-gradient-brand">Every Feature</span>
               </h2>
-              <p className="text-slate-900/40 max-w-xl mx-auto">
+              <p className="text-slate-400 max-w-xl mx-auto">
                 A detailed breakdown of what&apos;s included in each plan so you
                 can make the right choice for your team.
               </p>
@@ -572,7 +572,7 @@ export default function PricingPage() {
             <div className="glass-card overflow-x-auto">
               {/* Table header */}
               <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.06]">
-                <div className="p-5 text-sm font-medium text-slate-900/30">
+                <div className="p-5 text-sm font-medium text-slate-500">
                   Feature
                 </div>
                 {[{ name: "Free", key: "free" }, { name: "Pro", key: "pro" }, { name: "Enterprise", key: "enterprise" }, { name: "Agency", key: "agency" }].map((tier) => (
@@ -580,7 +580,7 @@ export default function PricingPage() {
                     key={tier.key}
                     className={`p-5 text-center text-sm font-semibold ${tier.key === "pro"
                         ? "text-brand-400 bg-brand-500/[0.04]"
-                        : "text-slate-900/60"
+                        : "text-slate-400"
                       }`}
                   >
                     {tier.name}
@@ -599,7 +599,7 @@ export default function PricingPage() {
                   {/* Category header */}
                   <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.04] bg-white/[0.015]">
                     <div className="col-span-5 p-4 px-5">
-                      <span className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold">
+                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
                         {category}
                       </span>
                     </div>
@@ -613,7 +613,7 @@ export default function PricingPage() {
                         key={ri}
                         className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
                       >
-                        <div className="p-4 px-5 text-sm text-slate-900/50">
+                        <div className="p-4 px-5 text-sm text-slate-400">
                           {row.feature}
                         </div>
                         {(
@@ -630,14 +630,14 @@ export default function PricingPage() {
                                 val ? (
                                   <Check className="w-4 h-4 text-emerald-400 mx-auto" />
                                 ) : (
-                                  <Minus className="w-4 h-4 text-slate-900/15 mx-auto" />
+                                  <Minus className="w-4 h-4 text-slate-700 mx-auto" />
                                 )
                               ) : (
                                 <span
                                   className={
                                     planKey === "pro"
                                       ? "text-brand-300 font-medium"
-                                      : "text-slate-900/50"
+                                      : "text-slate-400"
                                   }
                                 >
                                   {val}
@@ -692,10 +692,10 @@ export default function PricingPage() {
                 <item.icon
                   className={`w-5 h-5 ${item.color} mx-auto mb-3`}
                 />
-                <p className="text-2xl font-bold text-slate-900 mb-1">
+                <p className="text-2xl font-bold text-white mb-1">
                   {item.stat}
                 </p>
-                <p className="text-xs text-slate-900/30">{item.label}</p>
+                <p className="text-xs text-slate-500">{item.label}</p>
               </div>
             ))}
           </div>
@@ -711,7 +711,7 @@ export default function PricingPage() {
                 Frequently Asked{" "}
                 <span className="text-gradient-brand">Questions</span>
               </h2>
-              <p className="text-slate-900/40">
+              <p className="text-slate-400">
                 Everything you need to know about Kaelus pricing and plans.
               </p>
             </div>
@@ -748,7 +748,7 @@ export default function PricingPage() {
                     Secure Your AI?
                   </span>
                 </h2>
-                <p className="text-slate-900/40 max-w-xl mx-auto mb-8 leading-relaxed">
+                <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
                   Join 500+ teams that trust Kaelus to protect their most
                   sensitive data from unauthorized AI exposure. Deploy in
                   under 15 minutes.
@@ -765,7 +765,7 @@ export default function PricingPage() {
                   </Link>
                 </div>
 
-                <p className="text-xs text-slate-900/20 mt-6">
+                <p className="text-xs text-slate-600 mt-6">
                   No credit card required &middot; 14-day Pro trial &middot;
                   Cancel anytime
                 </p>
@@ -781,75 +781,75 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <TextLogo />
+                <TextLogo variant="dark" />
               </div>
-              <p className="text-sm text-slate-900/30 leading-relaxed">
+              <p className="text-sm text-slate-500 leading-relaxed">
                 AI-powered compliance firewall protecting enterprise data from
                 LLM leaks.
               </p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold mb-4">
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
                 Product
               </p>
               <div className="space-y-2.5">
                 <Link
                   href="/#features"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Features
                 </Link>
                 <Link
                   href="/pricing"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Pricing
                 </Link>
                 <Link
                   href="/dashboard"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/#agents"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   AI Agents
                 </Link>
               </div>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold mb-4">
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
                 Compliance
               </p>
               <div className="space-y-2.5">
-                <span className="block text-sm text-slate-900/30">SOC 2</span>
-                <span className="block text-sm text-slate-900/30">GDPR</span>
-                <span className="block text-sm text-slate-900/30">EU AI Act</span>
-                <span className="block text-sm text-slate-900/30">HIPAA</span>
+                <span className="block text-sm text-slate-500">SOC 2</span>
+                <span className="block text-sm text-slate-500">GDPR</span>
+                <span className="block text-sm text-slate-500">EU AI Act</span>
+                <span className="block text-sm text-slate-500">HIPAA</span>
               </div>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-900/40 font-semibold mb-4">
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
                 Company
               </p>
               <div className="space-y-2.5">
                 <Link
                   href="/docs"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Documentation
                 </Link>
                 <Link
                   href="/signup"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/signup"
-                  className="block text-sm text-slate-900/30 hover:text-slate-900/60 transition-colors"
+                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Get Started
                 </Link>
@@ -857,10 +857,10 @@ export default function PricingPage() {
             </div>
           </div>
           <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-900/15">
+            <p className="text-sm text-slate-700">
               &copy; 2026 Kaelus.ai — All rights reserved.
             </p>
-            <div className="flex items-center gap-4 text-xs text-slate-900/20">
+            <div className="flex items-center gap-4 text-xs text-slate-600">
               <span>Privacy Policy</span>
               <span>Terms of Service</span>
               <span>Security</span>

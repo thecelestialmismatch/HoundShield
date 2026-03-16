@@ -200,13 +200,13 @@ const recentEvents = [
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs shadow-lg">
-      <div className="text-slate-600 dark:text-slate-400 mb-1 font-mono">{label}</div>
+    <div className="bg-white border border-white/10 rounded-xl px-3 py-2 text-xs shadow-lg">
+      <div className="text-slate-400 mb-1 font-mono">{label}</div>
       {payload.map((item: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
           <span className="text-slate-500">{item.name}:</span>
-          <span className="text-slate-900 font-bold font-mono">
+          <span className="text-white font-bold font-mono">
             {item.value.toLocaleString()}
           </span>
         </div>
@@ -217,9 +217,9 @@ function ChartTooltip({ active, payload, label }: any) {
 
 /* ── Status badge colors ── */
 const statusColor: Record<string, string> = {
-  blocked: "bg-rose-50 text-rose-600 ring-rose-200",
-  warning: "bg-amber-50 text-amber-600 ring-amber-200",
-  passed: "bg-emerald-50 text-emerald-600 ring-emerald-200",
+  blocked: "bg-rose-500/10 text-rose-600 ring-rose-500/20",
+  warning: "bg-amber-500/10 text-amber-600 ring-amber-200",
+  passed: "bg-emerald-500/10 text-emerald-600 ring-emerald-200",
 };
 
 const riskColor: Record<string, string> = {
@@ -297,12 +297,12 @@ export default function CommandCenterOverview() {
         className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
       >
         <div>
-          <h1 className="font-display font-bold text-2xl text-slate-900 mb-1">
+          <h1 className="font-display font-bold text-2xl text-white mb-1">
             Dashboard Overview
           </h1>
-          <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-3 text-sm text-slate-400">
             <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-emerald-500/100 animate-pulse" />
               <span className="text-emerald-600 font-medium">Live</span>
             </div>
             <span>·</span>
@@ -312,10 +312,10 @@ export default function CommandCenterOverview() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors">
+          <button className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-white border border-white/10 text-slate-400 rounded-xl hover:bg-white/[0.03] transition-colors">
             <Calendar className="w-4 h-4" /> Last 7 days
           </button>
-          <button className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors">
+          <button className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-white border border-white/10 text-slate-400 rounded-xl hover:bg-white/[0.03] transition-colors">
             <RefreshCw className="w-4 h-4" /> Refresh
           </button>
         </div>
@@ -335,8 +335,8 @@ export default function CommandCenterOverview() {
             change: "+12%",
             trend: "up",
             icon: Activity,
-            color: "text-blue-600",
-            bg: "bg-blue-50",
+            color: "text-brand-500",
+            bg: "bg-brand-500/10",
           },
           {
             label: "Blocked",
@@ -345,7 +345,7 @@ export default function CommandCenterOverview() {
             trend: "down",
             icon: Shield,
             color: "text-rose-600",
-            bg: "bg-rose-50",
+            bg: "bg-rose-500/10",
           },
           {
             label: "Tokens Scanned",
@@ -354,7 +354,7 @@ export default function CommandCenterOverview() {
             trend: "up",
             icon: Zap,
             color: "text-amber-600",
-            bg: "bg-amber-50",
+            bg: "bg-amber-500/10",
           },
           {
             label: "SPRS Score",
@@ -363,7 +363,7 @@ export default function CommandCenterOverview() {
             trend: "up",
             icon: Target,
             color: "text-emerald-600",
-            bg: "bg-emerald-50",
+            bg: "bg-emerald-500/10",
           },
           {
             label: "Controls Met",
@@ -395,10 +395,10 @@ export default function CommandCenterOverview() {
                 {kpi.change}
               </span>
             </div>
-            <p className="font-display font-bold text-2xl text-slate-900 mb-0.5">
+            <p className="font-display font-bold text-2xl text-white mb-0.5">
               {kpi.value}
             </p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">{kpi.label}</p>
+            <p className="text-xs text-slate-400">{kpi.label}</p>
           </div>
         ))}
       </motion.div>
@@ -408,10 +408,10 @@ export default function CommandCenterOverview() {
         {/* Token Usage Chart */}
         <div className="lg:col-span-2 glass-card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-bold text-base text-slate-900">
+            <h3 className="font-display font-bold text-base text-white">
               Token Activity
             </h3>
-            <span className="text-xs text-slate-600 dark:text-slate-400 font-mono">7-day trend</span>
+            <span className="text-xs text-slate-400 font-mono">7-day trend</span>
           </div>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -453,7 +453,7 @@ export default function CommandCenterOverview() {
 
         {/* Threat Distribution */}
         <div className="glass-card p-5">
-          <h3 className="font-display font-bold text-base text-slate-900 mb-4">
+          <h3 className="font-display font-bold text-base text-white mb-4">
             Threat Distribution
           </h3>
           <div className="h-[180px]">
@@ -484,9 +484,9 @@ export default function CommandCenterOverview() {
                     className="w-2.5 h-2.5 rounded-full"
                     style={{ background: item.color }}
                   />
-                  <span className="text-slate-600">{item.name}</span>
+                  <span className="text-slate-400">{item.name}</span>
                 </div>
-                <span className="font-mono font-bold text-slate-900">{item.value}</span>
+                <span className="font-mono font-bold text-white">{item.value}</span>
               </div>
             ))}
           </div>
@@ -497,7 +497,7 @@ export default function CommandCenterOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* SPRS Gauge */}
         <div className="glass-card p-5 text-center">
-          <h3 className="font-display font-bold text-base text-slate-900 mb-4">
+          <h3 className="font-display font-bold text-base text-white mb-4">
             SPRS Score
           </h3>
           <SPRSGauge score={sprs.total} />
@@ -506,24 +506,24 @@ export default function CommandCenterOverview() {
               <p className="font-display font-bold text-lg text-emerald-600">
                 {statusCounts.met}
               </p>
-              <p className="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider">Met</p>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Met</p>
             </div>
             <div className="text-center">
               <p className="font-display font-bold text-lg text-amber-500">
                 {statusCounts.partial}
               </p>
-              <p className="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider">Partial</p>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Partial</p>
             </div>
             <div className="text-center">
               <p className="font-display font-bold text-lg text-rose-500">
                 {statusCounts.unmet}
               </p>
-              <p className="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider">Unmet</p>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Unmet</p>
             </div>
           </div>
           <Link
             href="/command-center/shield"
-            className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+            className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"
           >
             View Full Assessment <ArrowRight className="w-3.5 h-3.5" />
           </Link>
@@ -532,10 +532,10 @@ export default function CommandCenterOverview() {
         {/* Hourly Activity */}
         <div className="lg:col-span-2 glass-card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-bold text-base text-slate-900">
+            <h3 className="font-display font-bold text-base text-white">
               24h Activity
             </h3>
-            <span className="text-xs text-slate-600 dark:text-slate-400 font-mono">events per hour</span>
+            <span className="text-xs text-slate-400 font-mono">events per hour</span>
           </div>
           <div className="h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -574,10 +574,10 @@ export default function CommandCenterOverview() {
         {/* Compliance Trend */}
         <div className="lg:col-span-2 glass-card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-bold text-base text-slate-900">
+            <h3 className="font-display font-bold text-base text-white">
               SPRS Compliance Trend
             </h3>
-            <span className="text-xs text-slate-600 dark:text-slate-400 font-mono">12-month history</span>
+            <span className="text-xs text-slate-400 font-mono">12-month history</span>
           </div>
           <div className="h-[220px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -617,7 +617,7 @@ export default function CommandCenterOverview() {
 
         {/* Risk Radar */}
         <div className="glass-card p-5">
-          <h3 className="font-display font-bold text-base text-slate-900 mb-4">
+          <h3 className="font-display font-bold text-base text-white mb-4">
             Risk Assessment
           </h3>
           <div className="h-[250px]">
@@ -653,10 +653,10 @@ export default function CommandCenterOverview() {
       {/* ── Provider Breakdown ── */}
       <div className="glass-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display font-bold text-base text-slate-900">
+          <h3 className="font-display font-bold text-base text-white">
             Provider Breakdown
           </h3>
-          <span className="text-xs text-slate-600 dark:text-slate-400 font-mono">requests by LLM provider</span>
+          <span className="text-xs text-slate-400 font-mono">requests by LLM provider</span>
         </div>
         <div className="h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -677,7 +677,7 @@ export default function CommandCenterOverview() {
       {/* ── Live Events ── */}
       <div className="glass-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display font-bold text-base text-slate-900">
+          <h3 className="font-display font-bold text-base text-white">
             Live Events
           </h3>
           <div className="flex items-center gap-2">
@@ -687,8 +687,8 @@ export default function CommandCenterOverview() {
                 onClick={() => setActiveFilter(f)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                   activeFilter === f
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 hover:text-slate-600"
+                    ? "bg-brand-500/10 text-brand-500"
+                    : "text-slate-400 hover:bg-white/[0.03] hover:text-slate-400"
                 }`}
               >
                 {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -701,7 +701,7 @@ export default function CommandCenterOverview() {
           {filteredEvents.map((evt) => (
             <div
               key={evt.id}
-              className="flex items-center gap-4 px-4 py-3 rounded-xl bg-white border border-slate-100 hover:border-slate-200 transition-colors"
+              className="flex items-center gap-4 px-4 py-3 rounded-xl bg-white border border-white/[0.06] hover:border-white/10 transition-colors"
             >
               {/* Status icon */}
               <div className="flex-shrink-0">
@@ -716,8 +716,8 @@ export default function CommandCenterOverview() {
 
               {/* Details */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-slate-700 truncate">{evt.detail}</p>
-                <div className="flex items-center gap-3 mt-1 text-xs text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-slate-300 truncate">{evt.detail}</p>
+                <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
                   <span className="font-mono">{evt.id}</span>
                   <span>{evt.provider}/{evt.model}</span>
                   <span>{evt.tokens} tokens</span>
@@ -729,7 +729,7 @@ export default function CommandCenterOverview() {
                 <span className={`text-xs font-bold ${riskColor[evt.risk]}`}>
                   {evt.risk}
                 </span>
-                <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                <div className="flex items-center gap-1 text-xs text-slate-400 mt-0.5">
                   <Clock className="w-3 h-3" />
                   {evt.time}
                 </div>
@@ -749,7 +749,7 @@ export default function CommandCenterOverview() {
 
         <Link
           href="/command-center/events"
-          className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+          className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"
         >
           View All Events <ArrowRight className="w-3.5 h-3.5" />
         </Link>
@@ -762,13 +762,13 @@ export default function CommandCenterOverview() {
             label: "Run Full Scan",
             icon: Scan,
             href: "/command-center/scanner",
-            color: "bg-blue-50 text-blue-600",
+            color: "bg-brand-500/10 text-brand-500",
           },
           {
             label: "CMMC Assessment",
             icon: ShieldCheck,
             href: "/command-center/shield/assessment",
-            color: "bg-emerald-50 text-emerald-600",
+            color: "bg-emerald-500/10 text-emerald-600",
           },
           {
             label: "Agent Workspace",
@@ -780,7 +780,7 @@ export default function CommandCenterOverview() {
             label: "Generate Report",
             icon: BarChart3,
             href: "/command-center/shield/reports",
-            color: "bg-amber-50 text-amber-600",
+            color: "bg-amber-500/10 text-amber-600",
           },
         ].map((action) => (
           <Link
@@ -792,10 +792,10 @@ export default function CommandCenterOverview() {
               <action.icon className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+              <span className="text-sm font-semibold text-white group-hover:text-brand-500 transition-colors">
                 {action.label}
               </span>
-              <ArrowRight className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300 group-hover:text-blue-400 inline ml-2 transition-colors" />
+              <ArrowRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-300 group-hover:text-brand-400 inline ml-2 transition-colors" />
             </div>
           </Link>
         ))}

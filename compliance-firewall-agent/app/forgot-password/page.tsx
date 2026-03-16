@@ -36,17 +36,17 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-brand-50/30 to-slate-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <Logo className="w-9 h-9" />
-          <TextLogo />
+          <TextLogo variant="dark" />
         </div>
 
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700 transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors mb-8"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to login
@@ -57,36 +57,36 @@ export default function ForgotPasswordPage() {
             <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto">
               <CheckCircle className="w-6 h-6 text-emerald-400" />
             </div>
-            <h1 className="text-xl font-bold text-slate-900">Check your email</h1>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <h1 className="text-xl font-bold text-white">Check your email</h1>
+            <p className="text-sm text-slate-400 leading-relaxed">
               We sent a password reset link to{" "}
-              <span className="text-slate-700 font-medium">{email}</span>.
+              <span className="text-slate-300 font-medium">{email}</span>.
               <br />
               Click the link in the email to reset your password.
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 text-sm text-brand-500 hover:text-brand-400 transition-colors mt-4"
+              className="inline-flex items-center gap-1.5 text-sm text-brand-400 hover:text-brand-400 transition-colors mt-4"
             >
               Return to login
             </Link>
           </div>
         ) : (
           <>
-            <h1 className="text-xl font-bold text-slate-900 mb-1">Reset your password</h1>
-            <p className="text-sm text-slate-500 mb-6">
+            <h1 className="text-xl font-bold text-white mb-1">Reset your password</h1>
+            <p className="text-sm text-slate-400 mb-6">
               Enter your email and we&apos;ll send you a reset link.
             </p>
 
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-500/5 border border-red-500/10 text-red-400 text-xs">
+              <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleReset} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">
                   Email
                 </label>
                 <div className="relative">
@@ -97,7 +97,7 @@ export default function ForgotPasswordPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
                   />
                 </div>
               </div>

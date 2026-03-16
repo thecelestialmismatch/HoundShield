@@ -131,7 +131,7 @@ export function QuarantinePanel() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-slate-900">Quarantine Queue</h2>
+        <h2 className="text-lg font-semibold text-white">Quarantine Queue</h2>
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <SkeletonCard key={i} />
@@ -145,7 +145,7 @@ export function QuarantinePanel() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold text-slate-900">Quarantine Queue</h2>
+          <h2 className="text-lg font-semibold text-white">Quarantine Queue</h2>
           {items.length > 0 && (
             <span className="badge bg-warning-muted text-warning">
               {items.length} pending
@@ -172,7 +172,7 @@ export function QuarantinePanel() {
 
       {/* Reviewed count */}
       {reviewedItems.size > 0 && (
-        <div className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1">
+        <div className="text-xs text-slate-400 flex items-center gap-1">
           <CheckCircle2 className="w-3 h-3" />
           {reviewedItems.size} item{reviewedItems.size !== 1 ? "s" : ""} reviewed this session
         </div>
@@ -184,8 +184,8 @@ export function QuarantinePanel() {
             <ShieldCheck className="w-8 h-8 text-success" />
             <div className="absolute inset-0 rounded-full bg-success/10 animate-ping" style={{ animationDuration: "3s" }} />
           </div>
-          <p className="text-slate-600 font-medium text-lg">All Clear</p>
-          <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 max-w-xs">
+          <p className="text-slate-400 font-medium text-lg">All Clear</p>
+          <p className="text-slate-400 text-sm mt-1 max-w-xs">
             No items pending review. Your AI pipeline is clean and protected.
           </p>
         </div>
@@ -210,7 +210,7 @@ export function QuarantinePanel() {
                     <div className="relative z-10">
                       {/* Header row */}
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-4 text-xs text-slate-600 dark:text-slate-400 flex-wrap">
+                        <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
                           <span className="flex items-center gap-1.5">
                             <Clock className="w-3.5 h-3.5" />
                             {new Date(item.created_at).toLocaleString()}
@@ -232,19 +232,19 @@ export function QuarantinePanel() {
 
                       {/* Entities */}
                       <div className="mb-4">
-                        <p className="text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
+                        <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">
                           Detected Entities
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {item.detected_entities.map((entity, i) => (
                             <span
                               key={i}
-                              className="inline-flex items-center gap-1.5 text-xs bg-slate-50 border border-slate-200 text-slate-600 px-2.5 py-1 rounded-lg hover:border-white/10 transition-colors"
+                              className="inline-flex items-center gap-1.5 text-xs bg-white/[0.03] border border-white/10 text-slate-400 px-2.5 py-1 rounded-lg hover:border-white/10 transition-colors"
                             >
-                              <span className="font-mono text-slate-600 dark:text-slate-400">{entity.type}</span>
+                              <span className="font-mono text-slate-400">{entity.type}</span>
                               <span className="text-slate-500">|</span>
                               <span>{entity.value_redacted}</span>
-                              <span className="text-slate-600 dark:text-slate-400 font-mono">
+                              <span className="text-slate-400 font-mono">
                                 {Math.round(entity.confidence * 100)}%
                               </span>
                             </span>

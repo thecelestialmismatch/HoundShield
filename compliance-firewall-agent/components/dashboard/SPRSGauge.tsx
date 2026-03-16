@@ -25,12 +25,12 @@ export default function SPRSGauge({
 
   const getColor = () => {
     if (score >= 90)
-      return { stroke: "#10b981", text: "text-emerald-600", bg: "bg-emerald-50", ring: "ring-emerald-200" };
+      return { stroke: "#10b981", text: "text-emerald-600", bg: "bg-emerald-500/10", ring: "ring-emerald-200" };
     if (score >= 50)
-      return { stroke: "#2563eb", text: "text-brand-500", bg: "bg-brand-50", ring: "ring-brand-200" };
+      return { stroke: "#2563eb", text: "text-brand-500", bg: "bg-brand-500/10", ring: "ring-brand-500/20" };
     if (score >= 0)
-      return { stroke: "#f59e0b", text: "text-amber-600", bg: "bg-amber-50", ring: "ring-amber-200" };
-    return { stroke: "#ef4444", text: "text-rose-600", bg: "bg-rose-50", ring: "ring-rose-200" };
+      return { stroke: "#f59e0b", text: "text-amber-600", bg: "bg-amber-500/10", ring: "ring-amber-200" };
+    return { stroke: "#ef4444", text: "text-rose-600", bg: "bg-rose-500/10", ring: "ring-rose-500/20" };
   };
 
   const color = getColor();
@@ -83,7 +83,7 @@ export default function SPRSGauge({
           >
             {score}
           </motion.span>
-          <span className={`text-slate-600 dark:text-slate-400 ${size === "sm" ? "text-[10px]" : "text-xs"} mt-0.5`}>
+          <span className={`text-slate-400 ${size === "sm" ? "text-[10px]" : "text-xs"} mt-0.5`}>
             / {maxScore}
           </span>
         </div>
@@ -91,7 +91,7 @@ export default function SPRSGauge({
       {showLabel && (
         <div className="text-center mt-3">
           <span className={`text-sm font-semibold ${color.text}`}>SPRS Score</span>
-          <div className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{percentage}% of maximum</div>
+          <div className="text-slate-400 text-xs mt-0.5">{percentage}% of maximum</div>
         </div>
       )}
     </div>

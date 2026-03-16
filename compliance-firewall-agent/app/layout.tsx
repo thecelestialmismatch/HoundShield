@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { GlobalChat } from "@/components/GlobalChat";
+import { ClientShell } from "@/components/ClientShell";
 
 export const viewport: Viewport = {
-  themeColor: "#2563EB",
+  themeColor: "#07070b",
   width: "device-width",
   initialScale: 1,
 };
@@ -83,15 +84,11 @@ export default function RootLayout({
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
         />
       </head>
-      <body className="bg-surface text-slate-800 min-h-screen font-sans antialiased relative">
-        {/* Subtle ambient background orbs */}
-        <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-          <div className="absolute top-[-15%] left-[-5%] w-[45%] h-[45%] rounded-full bg-blue-400/[0.04] blur-[100px] animate-pulse-slow" />
-          <div className="absolute bottom-[-15%] right-[-5%] w-[40%] h-[40%] rounded-full bg-violet-400/[0.03] blur-[100px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
-          <div className="absolute top-[50%] left-[60%] w-[25%] h-[25%] rounded-full bg-cyan-400/[0.03] blur-[80px] animate-pulse-slow" style={{ animationDelay: '4s' }} />
-        </div>
-        {children}
-        <GlobalChat />
+      <body className="bg-[#07070b] text-white min-h-screen font-sans antialiased relative">
+        <ClientShell>
+          {children}
+          <GlobalChat />
+        </ClientShell>
       </body>
     </html>
   );
