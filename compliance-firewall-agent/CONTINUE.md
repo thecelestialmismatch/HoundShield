@@ -10,7 +10,7 @@
 **Product:** Kaelus.ai — AI compliance firewall for CMMC Level 2 defense contractors
 **Branch:** feat/branding-shieldready-polish
 **Phase:** 0→1 transition (nav cleaned, demo banner done, env vars still empty, first deploy pending)
-**Next action:** GAP 2 — Subscription gating on gateway API
+**Next action:** GAP 6 — PDF compliance reports (jsPDF)
 
 ---
 
@@ -20,9 +20,9 @@
 |---|-----|--------|-----------|
 | 5 | Nav cleanup | ✅ DONE (redirect stubs + layout.tsx cleaned) | — |
 | 1 | Demo mode banner | ✅ DONE (demo-banner.tsx + layout + checkout guard + assessment note) | — |
-| 2 | Subscription gating on gateway | ⬜ | 1 day |
-| 3 | Stripe webhook → Supabase sync | ⬜ | 4–6 hrs |
-| 4 | Pricing page + new tiers ($199/$499/$999/$2499) | ⬜ | 1 day |
+| 2 | Subscription gating on gateway | ✅ DONE | — |
+| 3 | Stripe webhook → Supabase sync | ✅ DONE | — |
+| 4 | Pricing page + new tiers ($199/$499/$999/$2499) | ✅ DONE | — |
 | 6 | PDF compliance reports (jsPDF) | ⬜ | 2–3 days |
 | 7 | Landing page — CMMC-specific copy | ⬜ | 1 day |
 | 8 | Onboarding + Resend activation emails | ⬜ | 1 day |
@@ -51,10 +51,10 @@ Reply with exactly this (under 8 lines):
 ```
 📍 KAELUS.AI — RESUMING
 Branch: feat/branding-shieldready-polish
-Last done: GAP 1 — Demo banner complete (demo-banner.tsx + layout wired + checkout guard + assessment warning)
-Next: GAP 2 — Subscription gating on gateway API
-Files to touch: lib/subscription/check.ts (NEW), app/api/gateway/intercept/route.ts (ADD tier check), app/api/gateway/stream/route.ts (ADD tier check)
-Blockers: Env vars still empty, Supabase migrations not applied, git lock file needs manual delete on Mac
+Last done: GAP 4 — Pricing page ($199/$499/$999/$2,499) + Growth tier added across DB/TS/Stripe/UI
+Next: GAP 6 — PDF compliance reports (lib/reports/pdf-generator.ts + jsPDF)
+Files to touch: lib/reports/pdf-generator.ts (NEW), app/api/reports/generate/route.ts (NEW or MOD)
+Blockers: Env vars still empty, Supabase migrations 004 not yet applied to production, need to run `npx supabase db push`
 Starting now.
 ```
 Then start coding immediately.

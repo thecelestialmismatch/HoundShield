@@ -25,3 +25,6 @@ Format: [YYYY-MM-DD] | what went wrong | rule to prevent next time
 
 ## TEMPLATE FOR NEW ENTRIES
 [YYYY-MM-DD] | [what failed or what the user corrected] | [exact rule to follow next time]
+[2026-03-16] | TASK: Gap 2 subscription gating | PATTERN: Import subscription check after API key validation, before body parse — keeps auth chain clean | ANTI-PATTERN: Don't trust x-user-id as authoritative identity — it's client-supplied; link to api_keys.user_id once that table has the column
+[2026-03-16] | TASK: Gap 3 webhook | PATTERN: invoice.paid is the recovery handler — without it, past_due stays stuck even after successful retry | ANTI-PATTERN: Don't assume customer.subscription.updated covers all recovery paths — Stripe event ordering can be non-deterministic
+[2026-03-16] | TASK: Gap 4 pricing + Growth tier | PATTERN: New tier needs 4 simultaneous changes — DB migration, TS type, Stripe price map, UI. Do all in one commit or you'll have a window where the code references a type the DB doesn't know about | ANTI-PATTERN: Don't use price*12 for annual display — always store annualTotal explicitly for exact pricing
