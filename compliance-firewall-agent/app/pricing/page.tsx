@@ -14,7 +14,6 @@ import {
   Zap,
   Crown,
   Building2,
-  Sparkles,
   ShieldCheck,
   BadgeCheck,
   Clock,
@@ -55,9 +54,9 @@ const plans = [
     icon: Crown,
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 199,
-    annualPrice: 166,
-    annualTotal: 1990,
+    monthlyPrice: 69,
+    annualPrice: 55,
+    annualTotal: 660,
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
@@ -77,40 +76,14 @@ const plans = [
     badge: "Most Popular",
   },
   {
-    id: "growth",
-    name: "Growth",
-    icon: Sparkles,
-    iconColor: "text-violet-400",
-    iconBg: "bg-violet-500/10 border-violet-500/20",
-    monthlyPrice: 499,
-    annualPrice: 416,
-    annualTotal: 4990,
-    description: "Higher scan limits, PDF reports, and 25-seat teams for growing orgs.",
-    features: [
-      "AI gateway — 200,000 scans/mo",
-      "Everything in Pro",
-      "25 user seats",
-      "PDF compliance reports",
-      "Custom detection rules",
-      "Audit trail export",
-      "Dedicated onboarding",
-      "Unlimited log retention",
-      "SSO & RBAC",
-    ],
-    cta: "Start 14-Day Trial",
-    ctaStyle: "btn-ghost",
-    highlighted: false,
-    badge: "Best Value",
-  },
-  {
     id: "enterprise",
     name: "Enterprise",
     icon: Building2,
     iconColor: "text-purple-400",
     iconBg: "bg-purple-500/10 border-purple-500/20",
-    monthlyPrice: 999,
-    annualPrice: 833,
-    annualTotal: 9990,
+    monthlyPrice: 249,
+    annualPrice: 199,
+    annualTotal: 2388,
     description: "Unlimited scans, unlimited seats, and on-prem deployment for large primes.",
     features: [
       "AI gateway — unlimited scans",
@@ -134,9 +107,9 @@ const plans = [
     icon: Users,
     iconColor: "text-amber-400",
     iconBg: "bg-amber-500/10 border-amber-500/20",
-    monthlyPrice: 2499,
-    annualPrice: 2083,
-    annualTotal: 24990,
+    monthlyPrice: 599,
+    annualPrice: 479,
+    annualTotal: 5748,
     description: "Multi-tenant platform for consultants managing multiple defense contractors.",
     features: [
       "Everything in Enterprise",
@@ -162,7 +135,6 @@ interface ComparisonRow {
   feature: string;
   free: FeatureValue;
   pro: FeatureValue;
-  growth: FeatureValue;
   enterprise: FeatureValue;
   agency: FeatureValue;
   category: string;
@@ -170,36 +142,36 @@ interface ComparisonRow {
 
 const comparisonFeatures: ComparisonRow[] = [
   // AI Gateway
-  { feature: "Monthly API scans", free: "None", pro: "50K", growth: "200K", enterprise: "Unlimited", agency: "Unlimited", category: "AI Gateway" },
-  { feature: "Detection patterns", free: false, pro: "16", growth: "16+ Custom", enterprise: "16+ Custom", agency: "16+ Custom", category: "AI Gateway" },
-  { feature: "Real-time threat feed", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "Custom detection rules", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "HITL quarantine review", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "Monthly API scans", free: "None", pro: "50K", enterprise: "Unlimited", agency: "Unlimited", category: "AI Gateway" },
+  { feature: "Detection patterns", free: false, pro: "16", enterprise: "16+ Custom", agency: "16+ Custom", category: "AI Gateway" },
+  { feature: "Real-time threat feed", free: false, pro: true, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "Custom detection rules", free: false, pro: false, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "HITL quarantine review", free: false, pro: false, enterprise: true, agency: true, category: "AI Gateway" },
   // CMMC & Compliance
-  { feature: "CMMC self-assessment", free: "Read-only", pro: true, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SPRS score calculator", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Gap analysis & remediation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "JSON compliance reports", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "PDF compliance reports", free: false, pro: false, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SSP document generation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Audit trail export", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "C3PAO coordination", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "CMMC self-assessment", free: "Read-only", pro: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
+  { feature: "SPRS score calculator", free: true, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "Gap analysis & remediation", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "JSON compliance reports", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "PDF compliance reports", free: false, pro: false, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
+  { feature: "SSP document generation", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "Audit trail export", free: false, pro: false, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "C3PAO coordination", free: false, pro: false, enterprise: true, agency: true, category: "CMMC & Compliance" },
   // Platform & Integrations
-  { feature: "Dashboard access", free: "Basic", pro: "Full", growth: "Full", enterprise: "Full", agency: "Multi-tenant", category: "Platform & Integrations" },
-  { feature: "Log retention", free: "7 days", pro: "90 days", growth: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Team seats", free: "1", pro: "10", growth: "25", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Client accounts", free: false, pro: false, growth: false, enterprise: false, agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Slack & webhook alerts", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "API access", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "SSO & RBAC", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "White-label reports", free: false, pro: false, growth: false, enterprise: false, agency: true, category: "Platform & Integrations" },
-  { feature: "On-prem / air-gapped", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "Dashboard access", free: "Basic", pro: "Full", enterprise: "Full", agency: "Multi-tenant", category: "Platform & Integrations" },
+  { feature: "Log retention", free: "7 days", pro: "90 days", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Team seats", free: "1", pro: "10", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Client accounts", free: false, pro: false, enterprise: false, agency: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Slack & webhook alerts", free: false, pro: true, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "API access", free: false, pro: true, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "SSO & RBAC", free: false, pro: false, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "White-label reports", free: false, pro: false, enterprise: false, agency: true, category: "Platform & Integrations" },
+  { feature: "On-prem / air-gapped", free: false, pro: false, enterprise: true, agency: true, category: "Platform & Integrations" },
   // Support
-  { feature: "Community support", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Priority support (< 4hr)", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated onboarding", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated account manager", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Support" },
-  { feature: "SLA guarantee", free: false, pro: false, growth: false, enterprise: "99.99%", agency: "99.99%", category: "Support" },
+  { feature: "Community support", free: true, pro: true, enterprise: true, agency: true, category: "Support" },
+  { feature: "Priority support (< 4hr)", free: false, pro: true, enterprise: true, agency: true, category: "Support" },
+  { feature: "Dedicated onboarding", free: false, pro: false, enterprise: true, agency: true, category: "Support" },
+  { feature: "Dedicated account manager", free: false, pro: false, enterprise: true, agency: true, category: "Support" },
+  { feature: "SLA guarantee", free: false, pro: false, enterprise: "99.99%", agency: "99.99%", category: "Support" },
 ];
 
 /* ===== FAQ DATA ===== */
@@ -601,14 +573,13 @@ export default function PricingPage() {
           <AnimatedSection delay={150}>
             <div className="glass-card overflow-x-auto">
               {/* Table header */}
-              <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.06]">
+              <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.06]">
                 <div className="p-5 text-sm font-medium text-slate-500">
                   Feature
                 </div>
                 {([
                   { name: "Starter", key: "free" },
                   { name: "Pro", key: "pro" },
-                  { name: "Growth", key: "growth" },
                   { name: "Enterprise", key: "enterprise" },
                   { name: "Agency", key: "agency" },
                 ] as const).map((tier) => (
@@ -633,7 +604,7 @@ export default function PricingPage() {
               {categories.map((category) => (
                 <div key={category}>
                   {/* Category header */}
-                  <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.04] bg-white/[0.015]">
+                  <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.04] bg-white/[0.015]">
                     <div className="col-span-6 p-4 px-5">
                       <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
                         {category}
@@ -647,13 +618,13 @@ export default function PricingPage() {
                     .map((row, ri) => (
                       <div
                         key={ri}
-                        className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
+                        className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
                       >
                         <div className="p-4 px-5 text-sm text-slate-400">
                           {row.feature}
                         </div>
                         {(
-                          ["free", "pro", "growth", "enterprise", "agency"] as const
+                          ["free", "pro", "enterprise", "agency"] as const
                         ).map((planKey) => {
                           const val = row[planKey];
                           return (

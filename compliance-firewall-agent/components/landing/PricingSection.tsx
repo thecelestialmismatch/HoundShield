@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 
@@ -32,6 +33,7 @@ function FadeIn({
 const PLANS = [
   {
     name: "FREE",
+    tier: "free",
     price: "$0",
     period: "/mo",
     desc: "Get started and know your SPRS score today",
@@ -44,11 +46,11 @@ const PLANS = [
     ],
     cta: "Get started →",
     ctaClass: "bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50",
-    href: "/signup",
     featured: false,
   },
   {
     name: "PRO",
+    tier: "pro",
     price: "$69",
     period: "/mo",
     desc: "Everything to get and stay CMMC certified",
@@ -63,18 +65,18 @@ const PLANS = [
     ],
     cta: "Start Pro →",
     ctaClass: "bg-indigo-600 hover:bg-indigo-500 text-white border-none",
-    href: "/signup?plan=pro",
     featured: true,
   },
   {
     name: "ENTERPRISE",
+    tier: "enterprise",
     price: "$249",
     period: "/mo",
     desc: "Full compliance stack for growing contractors",
     features: [
       "Everything in Pro",
       "Unlimited AI agents",
-      "5 team seats",
+      "25 team seats",
       "Audit trail export",
       "API gateway mode",
       "Slack/webhook integrations",
@@ -82,11 +84,11 @@ const PLANS = [
     ],
     cta: "Start Enterprise →",
     ctaClass: "bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50",
-    href: "/signup?plan=enterprise",
     featured: false,
   },
   {
     name: "AGENCY",
+    tier: "agency",
     price: "$599",
     period: "/mo",
     desc: "Multi-tenant dashboard for MSPs and consultants",
@@ -100,12 +102,35 @@ const PLANS = [
     ],
     cta: "Contact us →",
     ctaClass: "bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50",
-    href: "/contact?plan=agency",
     featured: false,
   },
 ];
 
 export function PricingSection() {
+  const router = useRouter();
+  const [loading, setLoading] = useState<string | null>(null);
+
+  async function handleCheckout(tier: string) {
+    try {
+      setLoading(tier);
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier, billing: "monthly" }),
+      });
+      if (res.status === 401) {
+        router.push("/login?redirect=/pricing");
+        return;
+      }
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      console.error("Checkout error:", err);
+    } finally {
+      setLoading(null);
+    }
+  }
+
   return (
     <section id="pricing" className="py-24 md:py-32 bg-[#F7F5F0]">
       <div className="max-w-6xl mx-auto px-6 text-center">
@@ -114,10 +139,10 @@ export function PricingSection() {
             Pricing
           </div>
           <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
-            Start free. Pay when it's worth it.
+            Start free. Pay when it&apos;s worth it.
           </h2>
           <p className="text-lg text-gray-600 max-w-[520px] mx-auto">
-            No contracts. No enterprise sales calls. No "contact us for pricing." Real prices for real defense contractors.
+            No contracts. No enterprise sales calls. No &ldquo;contact us for pricing.&rdquo; Real prices for real defense contractors.
           </p>
         </FadeIn>
 
@@ -154,12 +179,31 @@ export function PricingSection() {
                   ))}
                 </ul>
 
-                <Link
-                  href={plan.href}
-                  className={`block w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-all ${plan.ctaClass}`}
-                >
-                  {plan.cta}
-                </Link>
+                {plan.tier === "free" ? (
+                  <Link
+                    href="/signup"
+                    className={`block w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-all ${plan.ctaClass}`}
+                  >
+                    {plan.cta}
+                  </Link>
+                ) : plan.tier === "agency" ? (
+                  <Link
+                    href="/contact?plan=agency"
+                    className={`block w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-all ${plan.ctaClass}`}
+                  >
+                    {plan.cta}
+                  </Link>
+                ) : (
+                  <button
+                    onClick={() => handleCheckout(plan.tier)}
+                    disabled={loading === plan.tier}
+                    className={`block w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-all ${plan.ctaClass} ${
+                      loading === plan.tier ? "opacity-60 pointer-events-none" : ""
+                    }`}
+                  >
+                    {loading === plan.tier ? "Redirecting..." : plan.cta}
+                  </button>
+                )}
               </div>
             </FadeIn>
           ))}
