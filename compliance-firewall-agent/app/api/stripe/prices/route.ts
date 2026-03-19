@@ -1,9 +1,15 @@
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2022-11-15',
-});
+let stripeClient: Stripe | null = null;
+function getStripeClient(): Stripe {
+  if (!stripeClient) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error('STRIPE_SECRET_KEY not configured');
+    stripeClient = new Stripe(key, { apiVersion: '2022-11-15' as const });
+  }
+  return stripeClient;
+}
 
 export async function GET() {
   const priceIds = [
@@ -20,7 +26,8 @@ export async function GET() {
   const results = await Promise.all(
     priceIds.map(async (id) => {
       try {
-        const p: any = await stripe.prices.retrieve(id);
+        const s = getStripeClient();
+        const p: any = await s.prices.retrieve(id);
         const amount = p?.unit_amount ?? null; // in cents
         const currency = p?.currency ?? 'usd';
         return { id, amount, currency };
