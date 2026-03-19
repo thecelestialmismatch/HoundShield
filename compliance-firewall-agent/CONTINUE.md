@@ -7,7 +7,7 @@
 
 ## WHERE WE ARE
 
-**Product:** Kaelus.ai — AI compliance firewall for CMMC Level 2 defense contractors
+**Product:** Kaelus.online — AI compliance firewall for CMMC Level 2 defense contractors
 **Branch:** feat/branding-shieldready-polish
 **Phase:** 0→1 transition (nav cleaned, demo banner done, env vars still empty, first deploy pending)
 **Next action:** GAP 6 — PDF compliance reports (jsPDF)
@@ -49,7 +49,7 @@
 
 Reply with exactly this (under 8 lines):
 ```
-📍 KAELUS.AI — RESUMING
+📍 KAELUS.ONLINE — RESUMING
 Branch: feat/branding-shieldready-polish
 Last done: GAP 4 — Pricing page ($199/$499/$999/$2,499) + Growth tier added across DB/TS/Stripe/UI
 Next: GAP 6 — PDF compliance reports (lib/reports/pdf-generator.ts + jsPDF)

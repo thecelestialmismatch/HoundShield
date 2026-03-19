@@ -9,8 +9,8 @@ function getResend(): Resend | null {
   return new Resend(key);
 }
 
-const FROM = "Kaelus.ai <noreply@kaelus.ai>";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://kaelus.ai";
+const FROM = "Kaelus.online <noreply@kaelus.online>";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://kaelus.online";
 
 /**
  * POST /api/email/welcome
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 
     <!-- Header -->
     <div style="background: #1e40af; padding: 32px 40px;">
-      <h1 style="color: #fff; margin: 0; font-size: 22px; font-weight: 700;">Kaelus.ai</h1>
+      <h1 style="color: #fff; margin: 0; font-size: 22px; font-weight: 700;">Kaelus.online</h1>
       <p style="color: #bfdbfe; margin: 6px 0 0; font-size: 13px;">AI Compliance Firewall for Defense Contractors</p>
     </div>
 
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
     <!-- Footer -->
     <div style="border-top: 1px solid #e2e8f0; padding: 24px 40px; text-align: center;">
       <p style="color: #94a3b8; font-size: 12px; margin: 0;">
-        Kaelus.ai &mdash; AI Compliance Firewall<br />
+        Kaelus.online &mdash; AI Compliance Firewall<br />
         <a href="${APP_URL}/command-center/settings" style="color: #94a3b8;">Manage notifications</a>
       </p>
     </div>

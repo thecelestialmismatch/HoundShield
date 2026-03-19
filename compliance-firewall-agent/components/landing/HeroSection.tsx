@@ -47,7 +47,7 @@ export function HeroSection() {
 
         <FadeIn delay={0.2}>
           <p className="text-[clamp(16px,2vw,20px)] text-gray-600 max-w-[620px] mx-auto mb-10 leading-relaxed">
-            Kaelus.ai intercepts every AI query before it leaves your network.
+            Kaelus.online intercepts every AI query before it leaves your network.
             Protect CUI. Pass your C3PAO assessment. Keep your DoD contracts.
           </p>
         </FadeIn>
