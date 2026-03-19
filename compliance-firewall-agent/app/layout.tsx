@@ -11,8 +11,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Kaelus.ai | AI Compliance Firewall & CMMC Readiness Platform",
-    template: "%s | Kaelus.ai",
+    default: "Kaelus.online | AI Compliance Firewall & CMMC Readiness Platform",
+    template: "%s | Kaelus.online",
   },
   description:
     "The only AI compliance firewall built for defense contractors. CMMC Level 2 readiness, real-time AI traffic scanning, SPRS scoring, and automated policy generation. Start free.",
@@ -31,20 +31,20 @@ export const metadata: Metadata = {
     "PII detection",
     "audit trail",
   ],
-  authors: [{ name: "Kaelus.ai" }],
-  creator: "Kaelus.ai",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kaelus.ai"),
+  authors: [{ name: "Kaelus.online" }],
+  creator: "Kaelus.online",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kaelus.online"),
   openGraph: {
-    title: "Kaelus.ai | AI Compliance Firewall & CMMC Readiness",
+    title: "Kaelus.online | AI Compliance Firewall & CMMC Readiness",
     description:
       "Affordable CMMC compliance for defense contractors. AI-powered gap analysis, SPRS scoring, and automated document generation. Free tier available.",
     type: "website",
-    siteName: "Kaelus.ai",
+    siteName: "Kaelus.online",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kaelus.ai | AI Compliance Firewall",
+    title: "Kaelus.online | AI Compliance Firewall",
     description:
       "The affordable CMMC compliance platform for defense contractors. Free SPRS calculator, AI-powered remediation, and automated policy generation.",
   },

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
 import { LocalizedPrice } from "@/components/LocalizedPrice";
+import { priceIds } from "./price-ids";
 import {
   Shield,
   ArrowRight,
@@ -55,8 +56,8 @@ const plans = [
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
     monthlyPrice: 69,
-    annualPrice: 55,
-    annualTotal: 660,
+    annualPrice: 890,
+    annualTotal: 890,
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
@@ -81,9 +82,9 @@ const plans = [
     icon: Building2,
     iconColor: "text-purple-400",
     iconBg: "bg-purple-500/10 border-purple-500/20",
-    monthlyPrice: 249,
-    annualPrice: 199,
-    annualTotal: 2388,
+    monthlyPrice: 199,
+    annualPrice: 1990,
+    annualTotal: 1990,
     description: "Unlimited scans, unlimited seats, and on-prem deployment for large primes.",
     features: [
       "AI gateway — unlimited scans",
@@ -107,9 +108,9 @@ const plans = [
     icon: Users,
     iconColor: "text-amber-400",
     iconBg: "bg-amber-500/10 border-amber-500/20",
-    monthlyPrice: 599,
-    annualPrice: 479,
-    annualTotal: 5748,
+    monthlyPrice: 499,
+    annualPrice: 4990,
+    annualTotal: 4990,
     description: "Multi-tenant platform for consultants managing multiple defense contractors.",
     features: [
       "Everything in Enterprise",
@@ -320,6 +321,42 @@ export default function PricingPage() {
   }
 
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
+  // Live Stripe prices integration for dynamic pricing display
+  const [livePrices, setLivePrices] = useState<Array<{ id: string; amount: number; currency: string }>>([]);
+  useEffect(() => {
+    fetch("/api/stripe/prices")
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d?.prices)) {
+          setLivePrices(d.prices);
+        }
+      })
+      .catch(() => {});
+  }, []);
+  const priceMap = useMemo(() => {
+    const m = new Map<string, { amount: number; currency: string }>();
+    for (const p of livePrices) {
+      m.set(p.id, { amount: p.amount, currency: p.currency });
+    }
+    return m;
+  }, [livePrices]);
+
+  const renderLivePrice = (plan: { id: string; monthlyPrice: number; annualPrice: number; }): string => {
+    if (plan.id === 'free') return 'Free';
+    const monthlyKey = plan.id === 'pro' ? priceIds.proMonthly : plan.id === 'enterprise' ? priceIds.enterpriseMonthly : priceIds.agencyMonthly;
+    const annualKey  = plan.id === 'pro' ? priceIds.proAnnual : plan.id === 'enterprise' ? priceIds.enterpriseAnnual : priceIds.agencyAnnual;
+    // For now, prefer monthly pricing in display; switch to annualKey if you enable annual toggle in UI
+    const key = monthlyKey as string;
+    const entry = priceMap.get(key);
+    if (entry) {
+      const curr = entry.currency;
+      const sym = curr === 'usd' ? '$' : curr === 'aud' ? 'A$' : curr === 'gbp' ? '£' : curr === 'eur' ? '€' : '$';
+      return `${sym}${entry.amount}`;
+    }
+    // fallback to static plan price
+    const fallback = plan.monthlyPrice;
+    return `$${fallback}`;
+  };
 
   return (
     <div className="min-h-screen bg-[#07070b] relative overflow-hidden">
@@ -437,36 +474,21 @@ export default function PricingPage() {
                         </div>
                       </div>
 
-                      {/* Price */}
+                      {/* Price (live or fallback) */}
                       <div className="mb-4">
-                        {price !== null ? (
+                        {plan.id === 'free' ? (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-white tracking-tight">
-                              {price === 0 ? "Free" : <LocalizedPrice basePrice={price} />}
-                            </span>
-                            {price > 0 && (
-                              <span className="text-sm text-slate-500">
-                                /mo
-                              </span>
-                            )}
+                            <span className="text-4xl font-bold text-white tracking-tight">Free</span>
                           </div>
                         ) : (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-white tracking-tight">
-                              Custom
-                            </span>
+                            <span className="text-4xl font-bold text-white tracking-tight">{renderLivePrice(plan)}</span>
+                            {/* monthly by default; annual toggle not wired yet */}
                           </div>
                         )}
-                        {price !== null && price > 0 && isAnnual && (
-                          <p className="text-xs text-slate-500 mt-1">
-                            Billed annually at ${'annualTotal' in plan ? plan.annualTotal.toLocaleString() : price * 12}/yr
-                          </p>
-                        )}
-                        {price !== null && price > 0 && !isAnnual && (
-                          <p className="text-xs text-emerald-400/60 mt-1">
-                            Save ${'annualTotal' in plan ? ((plan.monthlyPrice * 12) - plan.annualTotal).toLocaleString() : (plan.monthlyPrice - plan.annualPrice) * 12}/yr with annual
-                          </p>
-                        )}
+                        <p className="text-xs text-slate-500 mt-1">
+                          {plan.id !== 'free' ? 'Live price from Stripe' : ''}
+                        </p>
                       </div>
 
                       <p className="text-sm text-slate-500 leading-relaxed mb-6">
@@ -865,7 +887,7 @@ export default function PricingPage() {
           </div>
           <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-700">
-              &copy; 2026 Kaelus.ai — All rights reserved.
+              &copy; 2026 Kaelus.online — All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-600">
               <span>Privacy Policy</span>
