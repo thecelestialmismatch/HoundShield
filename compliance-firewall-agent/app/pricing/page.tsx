@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
 import { LocalizedPrice } from "@/components/LocalizedPrice";
+import { priceIds } from "@/pricing/price-ids";
 import {
   Shield,
   ArrowRight,
@@ -55,8 +56,8 @@ const plans = [
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
     monthlyPrice: 69,
-    annualPrice: 55,
-    annualTotal: 660,
+    annualPrice: 890,
+    annualTotal: 890,
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
@@ -81,9 +82,9 @@ const plans = [
     icon: Building2,
     iconColor: "text-purple-400",
     iconBg: "bg-purple-500/10 border-purple-500/20",
-    monthlyPrice: 249,
-    annualPrice: 199,
-    annualTotal: 2388,
+    monthlyPrice: 199,
+    annualPrice: 1990,
+    annualTotal: 1990,
     description: "Unlimited scans, unlimited seats, and on-prem deployment for large primes.",
     features: [
       "AI gateway — unlimited scans",
@@ -107,9 +108,9 @@ const plans = [
     icon: Users,
     iconColor: "text-amber-400",
     iconBg: "bg-amber-500/10 border-amber-500/20",
-    monthlyPrice: 599,
-    annualPrice: 479,
-    annualTotal: 5748,
+    monthlyPrice: 499,
+    annualPrice: 4990,
+    annualTotal: 4990,
     description: "Multi-tenant platform for consultants managing multiple defense contractors.",
     features: [
       "Everything in Enterprise",
