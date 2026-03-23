@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Currently, the following versions of the Kaelus.ai compliance firewall are supported with security updates.
+Currently, the following versions of the Kaelus.online compliance firewall are supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -16,7 +16,7 @@ Kaelus maintains a **zero-tolerance policy** for vulnerabilities concerning data
 If you identify a security flaw in this software, **do not submit a public issue or pull request**.
 
 Please contact our security operations center immediately by emailing:
-**security@kaelus.ai**
+**info@kaelus.online**
 
 Please include:
 1. A descriptive subject line.
