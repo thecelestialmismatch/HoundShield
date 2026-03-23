@@ -35,7 +35,7 @@ const STEPS = [
     title: "Install in 1 Line",
     description:
       "Point your AI SDK to our gateway endpoint. No infrastructure changes, no config files, no agents to deploy. Works with OpenAI, Anthropic, Google, and Meta SDKs out of the box.",
-    code: { prefix: "→", color: "text-emerald-400", content: 'baseURL: "https://gateway.kaelus.ai/v1"' },
+    code: { prefix: "→", color: "text-emerald-400", content: 'baseURL: "https://gateway.kaelus.online/v1"' },
   },
   {
     num: "02",

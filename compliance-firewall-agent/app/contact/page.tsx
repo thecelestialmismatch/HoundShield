@@ -20,8 +20,8 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 
 const faqs = [
   { q: "What is CMMC Level 2?", a: "CMMC Level 2 requires organizations to implement 110 security practices from NIST SP 800-171 to protect Controlled Unclassified Information (CUI). It is mandatory for defense contractors handling CUI and requires third-party assessment." },
-  { q: "How long does compliance take?", a: "Timelines vary based on your current posture. Most organizations achieve CMMC Level 2 readiness in 3-6 months with Kaelus.ai. Our platform identifies gaps instantly and provides a prioritized remediation roadmap." },
-  { q: "Do I need a C3PAO assessment?", a: "Yes, CMMC Level 2 certification requires an assessment by a CMMC Third-Party Assessment Organization (C3PAO). Kaelus.ai prepares you for this assessment by running continuous self-assessments aligned to official scoring methodology." },
+  { q: "How long does compliance take?", a: "Timelines vary based on your current posture. Most organizations achieve CMMC Level 2 readiness in 3-6 months with Kaelus.online. Our platform identifies gaps instantly and provides a prioritized remediation roadmap." },
+  { q: "Do I need a C3PAO assessment?", a: "Yes, CMMC Level 2 certification requires an assessment by a CMMC Third-Party Assessment Organization (C3PAO). Kaelus.online prepares you for this assessment by running continuous self-assessments aligned to official scoring methodology." },
   { q: "What's included in the free tier?", a: "The free tier includes a baseline SPRS score, gap analysis for up to 25 NIST 800-171 controls, basic compliance reporting, and access to our AI compliance assistant. Upgrade to Pro for full 110-control coverage." },
   { q: "Can I export compliance reports?", a: "Absolutely. Export audit-ready PDF and CSV reports including your System Security Plan (SSP), Plan of Action & Milestones (POA&M), and SPRS scoring worksheets -- all formatted for C3PAO review." },
   { q: "Is my data secure?", a: "Your data is encrypted at rest (AES-256) and in transit (TLS 1.3). We use isolated tenancy, immutable audit logs with SHA-256 hashing, and never train AI models on your data. Infrastructure is hosted on FedRAMP-authorized cloud services." },
@@ -54,8 +54,8 @@ export default function ContactPage() {
   const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all duration-200";
 
   const cards = [
-    { icon: Mail, color: "text-indigo-400", label: "Email Us", value: "support@kaelus.ai", sub: "For general and technical inquiries" },
-    { icon: CalendarCheck, color: "text-emerald-400", label: "Schedule a Demo", value: "Book a 30-min call", sub: "See Kaelus.ai in action, live" },
+    { icon: Mail, color: "text-indigo-400", label: "Email Us", value: "info@kaelus.online", sub: "For general and technical inquiries" },
+    { icon: CalendarCheck, color: "text-emerald-400", label: "Schedule a Demo", value: "Book a 30-min call", sub: "See Kaelus.online in action, live" },
     { icon: Clock, color: "text-amber-400", label: "Response Time", value: "< 4 hours", sub: "During business hours (ET)" },
   ];
 
@@ -223,7 +223,7 @@ export default function ContactPage() {
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-slate-500">&copy; 2026 Kaelus.ai -- All rights reserved.</p>
+            <p className="text-xs text-slate-500">&copy; 2026 Kaelus.online -- All rights reserved.</p>
             <div className="flex items-center gap-4 text-xs text-slate-500">
               <Link href="/privacy" className="hover:text-slate-300 transition-colors cursor-pointer">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-slate-300 transition-colors cursor-pointer">Terms of Service</Link>

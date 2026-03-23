@@ -11,7 +11,7 @@ const CHAT_RESPONSES: Record<string, string> = {
   "How does the ReAct loop work?":
     "I don't just use regex. I use an autonomous ReAct loop: Observe the context, Think about the rules, Act using 8 specialized tools, and Iterate until I'm certain. I use up to 13 different AI models to make sure I get it right — 0.01% false positive rate.",
   "How do I install this?":
-    "It's literally 1 line of code! Just change your OpenAI or Anthropic API base URL to `gateway.kaelus.ai/v1`. We proxy everything transparently. No new dependencies, no infrastructure changes. Under 15 minutes to deploy.",
+    "It's literally 1 line of code! Just change your OpenAI or Anthropic API base URL to `gateway.kaelus.online/v1`. We proxy everything transparently. No new dependencies, no infrastructure changes. Under 15 minutes to deploy.",
 };
 
 const QUICK_ACTIONS = [

@@ -106,7 +106,7 @@ export default function ChangelogPage() {
           <FadeIn>
             <p className="text-xs uppercase tracking-[0.25em] text-indigo-400 font-semibold mb-4">Changelog</p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
-              What&apos;s new in <span className="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">Kaelus.ai</span>
+              What&apos;s new in <span className="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">Kaelus.online</span>
             </h1>
             <p className="text-lg text-slate-400 max-w-xl mx-auto">Every improvement, shipped fast.</p>
           </FadeIn>
@@ -209,8 +209,8 @@ export default function ChangelogPage() {
       {/* Footer */}
       <footer className="border-t border-white/10 py-10 px-6">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <Link href="/" className="text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer">Kaelus.ai</Link>
-          <p className="text-xs text-slate-500">&copy; 2026 Kaelus.ai. All rights reserved.</p>
+          <Link href="/" className="text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer">Kaelus.online</Link>
+          <p className="text-xs text-slate-500">&copy; 2026 Kaelus.online. All rights reserved.</p>
         </div>
       </footer>
     </div>

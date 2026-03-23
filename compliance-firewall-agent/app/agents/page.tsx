@@ -827,7 +827,7 @@ export default function AgentsPage() {
             </div>
           </div>
           <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-slate-600">&copy; 2026 Kaelus.ai — All rights reserved.</p>
+            <p className="text-xs text-slate-600">&copy; 2026 Kaelus.online — All rights reserved.</p>
             <div className="flex items-center gap-4">
               <span className="text-xs text-slate-600 hover:text-slate-500 cursor-pointer transition-colors">Privacy Policy</span>
               <span className="text-xs text-slate-600 hover:text-slate-500 cursor-pointer transition-colors">Terms of Service</span>

@@ -15,16 +15,16 @@
 <div align="center">
 
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Production_Ready-black?style=flat-square&logoColor=white)](https://kaelus.ai)
-[![Compliance](https://img.shields.io/badge/Compliance-SOC2_|_GDPR_|_HIPAA-black?style=flat-square&logoColor=white)](https://kaelus.ai)
-[![Latency](https://img.shields.io/badge/Latency-%3C50ms-black?style=flat-square&logoColor=white)](https://kaelus.ai)
-[![Architecture](https://img.shields.io/badge/Architecture-Zero_Trust-black?style=flat-square&logoColor=white)](https://kaelus.ai)
+[![Status](https://img.shields.io/badge/Status-Production_Ready-black?style=flat-square&logoColor=white)](https://kaelus.online)
+[![Compliance](https://img.shields.io/badge/Compliance-SOC2_|_GDPR_|_HIPAA-black?style=flat-square&logoColor=white)](https://kaelus.online)
+[![Latency](https://img.shields.io/badge/Latency-%3C50ms-black?style=flat-square&logoColor=white)](https://kaelus.online)
+[![Architecture](https://img.shields.io/badge/Architecture-Zero_Trust-black?style=flat-square&logoColor=white)](https://kaelus.online)
 
 </div>
 
 ---
 
-# Kaelus.ai Compliance Firewall
+# Kaelus.online Compliance Firewall
 
 As Generative AI adoption reaches critical mass within the enterprise, organizations are inadvertently exposing underlying infrastructure, intellectual property, and protected health information (PHI) to third-party Large Language Models. 
 
@@ -64,8 +64,8 @@ Compliance officers require definitive proof of data governance. Kaelus generate
 To deploy the Kaelus platform within your own isolated environment:
 
 ```bash
-git clone https://github.com/thecelestialmismatch/Kaelus.ai.git
-cd Kaelus.ai/compliance-firewall-agent
+git clone https://github.com/thecelestialmismatch/Kaelus.online.git
+cd Kaelus.online/compliance-firewall-agent
 
 npm install
 cp .env.example .env.local
@@ -90,7 +90,7 @@ client = OpenAI(api_key="sk-your-provider-key")
 from openai import OpenAI
 client = OpenAI(
     api_key="sk-your-provider-key", 
-    base_url="https://gateway.kaelus.ai/v1", 
+    base_url="https://gateway.kaelus.online/v1", 
     default_headers={"x-kaelus-token": "corp-your-organization-token"}
 )
 ```
@@ -103,7 +103,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: process.env.PROVIDER_API_KEY,      
-  baseURL: 'https://gateway.kaelus.ai/v1',
+  baseURL: 'https://gateway.kaelus.online/v1',
   defaultHeaders: { 'x-kaelus-token': process.env.KAELUS_ORG_TOKEN }
 });
 ```
@@ -119,7 +119,7 @@ Kaelus is engineered for extreme throughput and high availability:
 
 ## Security Protocols
 
-Kaelus maintains a zero-tolerance policy for vulnerabilities. If you identify a security flaw in this software, do not submit a public issue or pull request. Please contact our security operations center immediately at `security@kaelus.ai`. See our [Security Policy](SECURITY.md) for more details.
+Kaelus maintains a zero-tolerance policy for vulnerabilities. If you identify a security flaw in this software, do not submit a public issue or pull request. Please contact our security operations center immediately at `info@kaelus.online`. See our [Security Policy](SECURITY.md) for more details.
 
 ## Community
 
@@ -132,8 +132,8 @@ Kaelus maintains a zero-tolerance policy for vulnerabilities. If you identify a 
 <div align="center">
   <i>Engineering uncompromising security for the next generation of artificial intelligence.</i>
   <br>
-  <a href="https://kaelus.ai">Website</a> |
-  <a href="https://kaelus.ai/features">Capabilities</a> |
-  <a href="https://kaelus.ai/changelog">Changelog</a> |
-  <a href="https://kaelus.ai/docs">Documentation</a>
+  <a href="https://kaelus.online">Website</a> |
+  <a href="https://kaelus.online/features">Capabilities</a> |
+  <a href="https://kaelus.online/changelog">Changelog</a> |
+  <a href="https://kaelus.online/docs">Documentation</a>
 </div>

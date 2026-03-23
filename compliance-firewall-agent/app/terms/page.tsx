@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Kaelus.ai",
-  description: "Terms and conditions for using the Kaelus.ai compliance platform.",
+  title: "Terms of Service | Kaelus.online",
+  description: "Terms and conditions for using the Kaelus.online compliance platform.",
 };
 
 export default function TermsPage() {
@@ -18,12 +18,12 @@ export default function TermsPage() {
         <div className="prose-dark space-y-8 text-sm text-slate-400 leading-relaxed">
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">1. Acceptance of Terms</h2>
-            <p>By accessing or using Kaelus.ai ("the Service"), you agree to be bound by these Terms of Service. If you are using the Service on behalf of an organization, you represent that you have authority to bind that organization to these terms.</p>
+            <p>By accessing or using Kaelus.online ("the Service"), you agree to be bound by these Terms of Service. If you are using the Service on behalf of an organization, you represent that you have authority to bind that organization to these terms.</p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">2. Description of Service</h2>
-            <p>Kaelus.ai provides an AI compliance firewall and CMMC readiness platform that helps organizations monitor, classify, and secure their AI API traffic. The Service includes compliance assessments, SPRS scoring, AI-powered remediation guidance, and document generation.</p>
+            <p>Kaelus.online provides an AI compliance firewall and CMMC readiness platform that helps organizations monitor, classify, and secure their AI API traffic. The Service includes compliance assessments, SPRS scoring, AI-powered remediation guidance, and document generation.</p>
           </section>
 
           <section>
@@ -56,17 +56,17 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">6. Compliance Disclaimer</h2>
-            <p><strong className="text-slate-300">Important:</strong> Kaelus.ai is a compliance readiness tool, not a certification authority. Our CMMC assessments, SPRS scores, and generated documents are for self-assessment and preparation purposes only. They do not constitute legal advice or guarantee certification by a C3PAO (CMMC Third-Party Assessor Organization). You should consult with qualified compliance professionals for official certification guidance.</p>
+            <p><strong className="text-slate-300">Important:</strong> Kaelus.online is a compliance readiness tool, not a certification authority. Our CMMC assessments, SPRS scores, and generated documents are for self-assessment and preparation purposes only. They do not constitute legal advice or guarantee certification by a C3PAO (CMMC Third-Party Assessor Organization). You should consult with qualified compliance professionals for official certification guidance.</p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">7. Data Ownership</h2>
-            <p>You retain all rights to your data. Kaelus.ai does not claim ownership of your content, assessment responses, or compliance documents. You grant us a limited license to process your data solely for providing the Service.</p>
+            <p>You retain all rights to your data. Kaelus.online does not claim ownership of your content, assessment responses, or compliance documents. You grant us a limited license to process your data solely for providing the Service.</p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">8. Limitation of Liability</h2>
-            <p>To the maximum extent permitted by law, Kaelus.ai shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or business opportunities, arising from your use of the Service.</p>
+            <p>To the maximum extent permitted by law, Kaelus.online shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or business opportunities, arising from your use of the Service.</p>
           </section>
 
           <section>
@@ -81,7 +81,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">11. Contact</h2>
-            <p>Questions about these terms? Contact us at <a href="mailto:legal@kaelus.ai" className="text-brand-400 hover:text-brand-300">legal@kaelus.ai</a>.</p>
+            <p>Questions about these terms? Contact us at <a href="mailto:info@kaelus.online" className="text-brand-400 hover:text-brand-300">info@kaelus.online</a>.</p>
           </section>
         </div>
 
