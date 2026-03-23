@@ -2,7 +2,7 @@
   "name": "@kaelus/sdk",
   "version": "0.1.0",
   "description": "Kaelus AI Compliance Gateway SDK — Real-time streaming compliance for LLM traffic",
-  "author": "Kaelus <sdk@kaelus.ai>",
+  "author": "Kaelus <info@kaelus.online>",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -48,7 +48,7 @@
   "bugs": {
     "url": "https://github.com/kaelus/sdk/issues"
   },
-  "homepage": "https://kaelus.ai/docs/sdk",
+  "homepage": "https://kaelus.online/docs/sdk",
   "engines": {
     "node": ">=18.0.0"
   },

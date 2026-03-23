@@ -34,7 +34,7 @@ const testimonials = [
 ];
 
 const timeline = [
-    { date: "2024 Q3", title: "Founded", desc: "Kaelus.ai launched with a singular mission: make CMMC compliance accessible to every defense contractor." },
+    { date: "2024 Q3", title: "Founded", desc: "Kaelus.online launched with a singular mission: make CMMC compliance accessible to every defense contractor." },
     { date: "2024 Q4", title: "First Beta", desc: "Early access program with 20 defense subcontractors. Validated core assessment engine." },
     { date: "2025 Q1", title: "NIST 800-171 Engine", desc: "Full mapping of all 110 security controls with automated evidence collection." },
     { date: "2025 Q3", title: "Public Launch", desc: "General availability with AI-powered gap analysis, remediation plans, and audit trail generation." },
@@ -56,7 +56,7 @@ export default function AboutPage() {
                 <div className="absolute inset-0 bg-hero-glow" />
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
                     <AnimatedSection>
-                        <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4">About Kaelus.ai</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4">About Kaelus.online</p>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
                             Building the Future of{" "}
                             <span className="text-gradient-brand">Defense Compliance</span>
@@ -219,7 +219,7 @@ export default function AboutPage() {
                     <Link href="/" className="flex items-center gap-2 cursor-pointer">
                         <TextLogo variant="dark" />
                     </Link>
-                    <p className="text-xs text-slate-500">&copy; 2026 Kaelus.ai — All rights reserved.</p>
+                    <p className="text-xs text-slate-500">&copy; 2026 Kaelus.online — All rights reserved.</p>
                 </div>
             </footer>
         </div>

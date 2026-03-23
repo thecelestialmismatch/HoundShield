@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Kaelus.ai",
-  description: "How Kaelus.ai collects, uses, and protects your data.",
+  title: "Privacy Policy | Kaelus.online",
+  description: "How Kaelus.online collects, uses, and protects your data.",
 };
 
 export default function PrivacyPage() {
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">2. How We Use Your Information</h2>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Provide and maintain the Kaelus.ai platform</li>
+              <li>Provide and maintain the Kaelus.online platform</li>
               <li>Process CMMC/compliance assessments and generate reports</li>
               <li>Detect and classify sensitive data in AI API traffic</li>
               <li>Process payments and manage subscriptions</li>
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
               <li><strong className="text-slate-300">Vercel:</strong> Application hosting</li>
               <li><strong className="text-slate-300">OpenRouter:</strong> AI model inference (only when you use AI features)</li>
             </ul>
-            <p className="mt-2">We may disclose information if required by law or to protect the rights, safety, or property of Kaelus.ai or its users.</p>
+            <p className="mt-2">We may disclose information if required by law or to protect the rights, safety, or property of Kaelus.online or its users.</p>
           </section>
 
           <section>
@@ -83,7 +83,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">8. Contact</h2>
-            <p>For privacy-related inquiries, contact us at <a href="mailto:privacy@kaelus.ai" className="text-brand-400 hover:text-brand-300">privacy@kaelus.ai</a>.</p>
+            <p>For privacy-related inquiries, contact us at <a href="mailto:info@kaelus.online" className="text-brand-400 hover:text-brand-300">info@kaelus.online</a>.</p>
           </section>
         </div>
 

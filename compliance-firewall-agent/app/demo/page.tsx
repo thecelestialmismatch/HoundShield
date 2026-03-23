@@ -637,7 +637,7 @@ export default function FreeDemoPage() {
 
             <footer className="border-t border-white/10 bg-transparent py-8">
                 <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-                    &copy; {new Date().getFullYear()} Kaelus.ai — All rights reserved.
+                    &copy; {new Date().getFullYear()} Kaelus.online — All rights reserved.
                 </div>
             </footer>
         </div>

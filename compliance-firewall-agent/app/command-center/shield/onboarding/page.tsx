@@ -29,7 +29,7 @@ const STEPS = [
 
 const GATEWAY_URL = process.env.NEXT_PUBLIC_APP_URL
   ? `${process.env.NEXT_PUBLIC_APP_URL}/api/gateway/intercept`
-  : "https://kaelus.ai/api/gateway/intercept";
+  : "https://kaelus.online/api/gateway/intercept";
 
 const EMPLOYEE_RANGES = [
   { label: "1–10", value: 10 },

@@ -32,7 +32,7 @@ const HOW_STEPS = [
   {
     num: "02",
     title: "Deploy the compliance firewall",
-    desc: "Point your team's AI tools through gateway.kaelus.ai. Every request gets scanned for CUI, PII, credentials, and controlled data — in real time.",
+    desc: "Point your team's AI tools through gateway.kaelus.online. Every request gets scanned for CUI, PII, credentials, and controlled data — in real time.",
   },
   {
     num: "03",
