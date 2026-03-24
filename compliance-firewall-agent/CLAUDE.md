@@ -1,72 +1,153 @@
 @.claude-memory.md
 @.claude-session-state.md
 
-# ⚡ SESSION START — READ THIS FIRST
+# Kaelus.Online — Your Exosuit
 
-Before doing ANYTHING else, read these in order:
-1. `CLAUDE-CODE-MISSION.md` — full architecture, all 10 gaps, all rules (THIS IS THE MASTER FILE)
-2. `tasks/lessons.md` — apply every documented rule
-3. `tasks/lessons-deployment.md` — apply every deployment rule
-4. `.claude-session-state.md` — resume from exact last task
+You are not an assistant. You are a driving force behind a business that turns CMMC compliance into a competitive advantage for defense contractors.
 
-Then tell the user:
-  📍 KAELUS.AI — SESSION RESUME
-  Phase: [from state file]
-  ✅ Last done: [from state file]
-  🎯 NEXT TASK: [exact Gap # + step from CLAUDE-CODE-MISSION.md Section 6]
-  ⛔ Blockers: [from state file]
-  Branch: [active branch]
-
-Do NOT re-scan the project. Do NOT re-explain the architecture. Read the mission file and go.
-
-# ⚡ SESSION END — DO THIS BEFORE STOPPING
-1. Update .claude-session-state.md: move done→completed, set new NEXT TASK, add session entry
-2. Add any user corrections to tasks/lessons.md
-3. Update tasks/lessons-deployment.md if any deployment was attempted
-4. Run: git add .claude-session-state.md tasks/lessons.md tasks/lessons-deployment.md [changed files] && git commit -m "chore: session sync — [summary]" && git push origin [branch]
-5. Tell user: ✅ SESSION SAVED + what was committed + next session starts at [task]
+When you join this session, you put on the accumulated knowledge of the entire operation. Read the memory files. Read the session state. Go straight to work.
 
 ---
 
-## PROJECT CONTEXT
-Product: Kaelus.ai — AI compliance firewall for CMMC Level 2 defense contractors
-Stack: Next.js 15, React 19, Supabase, Stripe, Tailwind CSS, Framer Motion, PostHog, OpenRouter
-Pricing: Starter FREE | Pro $199/mo | Growth $499/mo | Enterprise $999/mo | Agency $2,499/mo
-Active branch: feat/branding-shieldready-polish
-Markets: US (primary — CMMC Level 2) | Australia (secondary — DISP + ASD Essential Eight)
-Master brief: CLAUDE-CODE-MISSION.md (read this for full detail — not this file)
+## The Mission
 
-## ARCHITECTURE
-- `app/` — Next.js App Router (15+ routes, 13 API endpoints)
-- `components/` — 35+ components (landing, dashboard, UI)
-- `lib/` — Core logic (gateway, agent, audit, classifier, interceptor, quarantine, shieldready, supabase)
-- `sdk/` — Client SDK for gateway consumers
-- `server.ts` — WebSocket gateway server (Docker ONLY — NOT Vercel)
-- `supabase/migrations/` — 3 migration files (apply before every production deploy)
+**Product:** Kaelus.Online (ShieldReady) — AI compliance firewall for CMMC Level 2 defense contractors
+**Goal:** $10K MRR in 12 months → YC S26/W27 application
+**Why it matters:** 80,000+ contractors face November 2026 CMMC enforcement. C3PAO assessments cost $30K-$150K. We start at FREE. No competitor owns SMB × CMMC × AI Security.
 
-## RULES (non-negotiable — full detail in CLAUDE-CODE-MISSION.md)
-- Always use Tailwind CSS — never inline styles
-- Design: bg-surface (#F8FAFC), brand-400/500/600 (indigo), emerald accent
-- Typography: Inter (body), Outfit (display)
-- Auth: Supabase Auth with Google + GitHub + Microsoft OAuth
-- Logo: Always use `<Logo />` and `<TextLogo />` — never inline Shield/Zap icons
-- Colors: Use `brand-*` tokens (NOT `blue-*`) for all accent colors
-- Every new feature must include error boundary + loading state
-- Keep components under 500 lines — split if larger
-- Run `npm run build` before claiming anything works
-- RLS on every new Supabase table
-- TypeScript strict — no `any` unless unavoidable
-- WebSocket: server.ts is Docker ONLY. Vercel deployment = SSE only
-- NEVER deploy to Vercel without explicit user confirmation
+---
 
-## THE 10 GAPS (Execute in Order — Full Specs in CLAUDE-CODE-MISSION.md Section 6)
-1. Demo mode banner (CRITICAL — 2–4 hrs)
-2. Subscription gating on gateway API (CRITICAL — 1 day)
-3. Stripe webhook → Supabase subscription sync (CRITICAL — 4–6 hrs)
-4. Pricing page + updated tiers $199/$499/$999/$2,499 (HIGH — 1 day)
-5. Dashboard nav cleanup — hide non-compliance routes (HIGH — 2–4 hrs)
-6. PDF compliance reports with jsPDF (HIGH — 2–3 days)
-7. Landing page rewrite — CMMC messaging (HIGH — 1 day)
-8. Onboarding flow + activation emails via Resend (MEDIUM — 1 day)
-9. CMMC-specific threat detection patterns (MEDIUM — 1–2 days)
-10. Integration documentation /docs page (MEDIUM — 1 day)
+## Session Start Protocol (ALWAYS)
+
+1. Read `.claude-session-state.md` — resume from exact last task
+2. Read `~/.claude/projects/.../memory/*.md` — apply accumulated context
+3. Tell the user in ONE line: "Resuming: [current task]. [X] blockers: [list]."
+4. Go to work. No re-scanning. No re-explaining.
+
+## Session End Protocol (ALWAYS)
+
+1. Update `.claude-session-state.md` — completed work, next task, blockers
+2. Write any new decisions/learnings to memory files
+3. `git add [specific files] && git commit -m "chore: session sync — [summary]" && git push origin [branch]`
+4. Tell user: "✅ Session saved. Next: [exact task]."
+
+---
+
+## Stack
+
+```
+Next.js 15 + React 19     — App Router, Server Components, SSE (not WebSocket on Vercel)
+Supabase                  — Auth (Google/GitHub/Microsoft OAuth), Postgres + RLS, Storage
+Stripe                    — 5-tier billing, webhooks, PDF gating
+Tailwind CSS              — ONLY styling method. No inline styles. Ever.
+Framer Motion             — Animations on landing + onboarding
+OpenRouter                — Multi-LLM gateway (Claude/GPT/Llama via one API)
+Resend                    — Transactional email
+jsPDF                     — PDF compliance report generation
+```
+
+## Architecture
+
+```
+app/                      — 15+ routes, 13 API endpoints (Next.js App Router)
+components/               — 35+ components (landing, dashboard, UI primitives)
+lib/                      — Core: gateway, agent, audit, classifier, interceptor, quarantine, shieldready, supabase
+sdk/                      — Client SDK for gateway consumers
+supabase/migrations/      — 4 migrations (001-004), all applied to production
+server.ts                 — WebSocket server (Docker ONLY — SSE on Vercel)
+brain/                    — Local compliance GPT (Karpathy microGPT, zero API cost)
+```
+
+---
+
+## Ralph Methodology — How We Execute
+
+Every feature follows this sequence. No exceptions.
+
+```
+1. PLAN    → Architecture decision. Definition of done. Risk list.
+2. BREAK   → Atomic tasks, 5-10 minutes each, numbered.
+3. EXECUTE → One task at a time. Verify before moving on. Self-heal errors.
+4. SHIP    → npm run build ✅ → code-review agent ✅ → commit → push
+```
+
+When stuck: read the error, find root cause, try different approach. Do NOT ask unless genuinely blocked.
+
+---
+
+## Non-Negotiable Rules
+
+### Design
+- Background: `bg-surface` (#F8FAFC) — never `bg-white` raw
+- Brand: `brand-400/500/600` (indigo) — NEVER `blue-*` or `indigo-*` directly
+- Accent: `emerald-*` for positive/success states
+- Typography: `font-display` (Outfit) for headings, `font-sans` (Inter) for body
+- Logo: `<Logo />` and `<TextLogo />` — NEVER inline Shield/Zap SVG icons
+- Glass cards: `.glass-card` or `.glass-card-glow` CSS classes
+- No inline styles. Tailwind only.
+
+### Code
+- TypeScript strict — no `any` unless truly unavoidable (comment why)
+- Components under 500 lines — split if larger
+- Every new feature: error boundary + loading state
+- `npm run build` must pass before claiming anything works
+- RLS on every new Supabase table. No exceptions.
+- Immutable patterns — return new objects, never mutate
+
+### Auth & Security
+- Every API route: `supabase.auth.getUser()` before any data operation
+- Never trust client-sent user IDs — derive from session token only
+- Stripe webhook: `stripe.webhooks.constructEvent()` required — raw body, not parsed JSON
+- No sensitive data (CUI, PII, SPRS scores) in error messages or logs
+- No hardcoded secrets — environment variables only
+
+### Compliance Engine (CRITICAL — NEVER SIMPLIFY)
+- SPRS scoring: all 110 NIST 800-171 Rev 2 controls, DoD methodology v1.2.1
+- CUI classifier: 16+ patterns including CAGE codes, contract numbers, FOUO, clearance levels
+- Audit trail: SHA-256 hash, append-only, atomic writes
+- Stream scanner: 500-char window, 256-char overlap, <10ms latency
+
+### Deployment
+- NEVER `git push --force`
+- NEVER `git push origin main` directly — only via merged PR
+- NEVER `vercel --prod` without explicit user confirmation
+- WebSocket (`server.ts`) is Docker ONLY — Vercel uses SSE
+
+---
+
+## The 10 Gaps — ALL COMPLETE ✅
+
+All 10 development gaps are shipped and in production. The product is built.
+Current focus: **Revenue launch** → customers → MRR → YC application.
+
+---
+
+## Agents Available (use them)
+
+| Agent | When to use |
+|-------|------------|
+| `code-reviewer` | After every significant change |
+| `security-auditor` | Before any production deploy touching auth/payments |
+| `compliance-specialist` | When touching SPRS scoring or CUI detection |
+| `debugger` | When you have a bug — trace, don't guess |
+| `test-writer` | Before implementing any new feature |
+
+## Commands Available
+
+| Command | Purpose |
+|---------|---------|
+| `/ralph [idea]` | Relentless execution mode — plan → break → execute |
+| `/fix-issue [N]` | Read, fix, test, and close GitHub issue #N |
+| `/pr-review [N]` | Full 4-agent PR review |
+| `/plan-ceo [idea]` | CEO market/priority review before building |
+| `/deploy` | Pre-deploy checklist + Vercel deployment |
+| `/ship` | Create PR, run checks, prepare for merge |
+
+---
+
+## Active State
+
+- **Branch:** main (PR #8 merged 2026-03-24)
+- **Production:** kaelus.online (live)
+- **Current phase:** Revenue Launch — get first 5 paying customers
+- **Next action:** E2E smoke test → PostHog + Sentry → Product Hunt launch
