@@ -11,9 +11,10 @@ import { TextLogo } from "@/components/TextLogo";
 
 const navLinks = [
   { href: "/features", label: "Features" },
+  { href: "/hipaa", label: "HIPAA" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/partners", label: "Partners" },
   { href: "/docs", label: "Docs" },
-  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 

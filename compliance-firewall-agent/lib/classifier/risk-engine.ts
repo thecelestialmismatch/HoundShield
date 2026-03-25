@@ -3,6 +3,7 @@ import {
   decodeObfuscation,
   type DetectionPattern,
 } from "./patterns";
+import { detectHIPAA, hasMedicalContext } from "./hipaa-patterns";
 import type {
   ClassificationResult,
   DetectedEntity,
@@ -215,4 +216,61 @@ function deduplicateEntities(entities: DetectedEntity[]): DetectedEntity[] {
     seen.add(key);
     return true;
   });
+}
+
+/**
+ * HIPAA-specific classification.
+ *
+ * Runs only HIPAA PHI patterns against the text. Use this for
+ * dedicated healthcare compliance scanning separate from the
+ * general-purpose classifyRisk() pipeline.
+ *
+ * The general classifyRisk() already includes HIPAA patterns in its
+ * BUILTIN_PATTERNS array, so this function is for when you want
+ * HIPAA-only results (e.g., the /hipaa landing page scanner,
+ * healthcare-specific dashboards, or HIPAA audit reports).
+ */
+export async function classifyHIPAA(
+  promptText: string
+): Promise<{
+  risk_level: RiskLevel;
+  found: boolean;
+  patterns: string[];
+  severity: "HIGH" | "CRITICAL";
+  matchCount: number;
+  hasMedicalContext: boolean;
+  confidence: number;
+}> {
+  let textToScan = promptText;
+  if (textToScan.length > 100_000) {
+    textToScan =
+      textToScan.slice(0, 50_000) + "\n...\n" + textToScan.slice(-50_000);
+  }
+
+  const result = detectHIPAA(textToScan);
+  const medicalCtx = hasMedicalContext(textToScan);
+
+  // Boost confidence if medical context is present
+  const baseConfidence = result.found
+    ? result.severity === "CRITICAL"
+      ? 0.9
+      : 0.75
+    : 0;
+  const confidence = result.found && medicalCtx
+    ? Math.min(baseConfidence + 0.1, 1.0)
+    : baseConfidence;
+
+  const riskLevel: RiskLevel = result.found
+    ? result.severity
+    : "NONE";
+
+  return {
+    risk_level: riskLevel,
+    found: result.found,
+    patterns: result.patterns,
+    severity: result.severity,
+    matchCount: result.matchCount,
+    hasMedicalContext: medicalCtx,
+    confidence: Math.round(confidence * 100) / 100,
+  };
 }

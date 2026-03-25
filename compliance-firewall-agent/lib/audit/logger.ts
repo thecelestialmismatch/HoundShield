@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/client";
 import { createSeedAnchor } from "./seed-anchor";
+import { anchorComplianceEvent } from "@/lib/blockchain/anchor-service";
 import type {
   RiskLevel,
   ActionTaken,
@@ -78,6 +79,11 @@ export async function logComplianceEvent(
         .from("compliance_events")
         .update({ seed_hash: seedHash })
         .eq("id", event.id);
+
+      // Blockchain anchoring (non-blocking, additive layer)
+      anchorComplianceEvent(event.id, seedHash).catch((bcErr) => {
+        console.error("Blockchain anchor failed (non-blocking):", bcErr);
+      });
     } catch (seedError) {
       // Seed anchoring failure must not prevent event logging.
       // Log the error but don't throw — the event is already recorded.

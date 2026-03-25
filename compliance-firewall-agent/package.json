@@ -13,6 +13,9 @@
     "db:reset": "npx supabase db reset"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.5.0",
+    "@remotion/player": "^4.0.438",
+    "@remotion/three": "^4.0.438",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.49.0",
     "date-fns": "^4.1.0",
@@ -28,8 +31,11 @@
     "react-hook-form": "^7.54.0",
     "react-markdown": "^10.1.0",
     "recharts": "^2.15.0",
+    "remotion": "^4.0.438",
     "resend": "^6.9.3",
     "stripe": "^20.4.1",
+    "three": "^0.183.2",
+    "viem": "^2.47.6",
     "ws": "^8.18.0",
     "zod": "^3.24.0"
   },

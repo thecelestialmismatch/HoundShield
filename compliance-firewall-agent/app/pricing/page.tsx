@@ -37,7 +37,7 @@ const plans = [
     annualTotal: 0,
     description: "CMMC self-assessment and gap scoring. No credit card required.",
     features: [
-      "ShieldReady CMMC assessment (read-only)",
+      "Kaelus CMMC assessment (read-only)",
       "110-control gap analysis",
       "Live SPRS score calculator",
       "Basic compliance dashboard",
@@ -61,7 +61,7 @@ const plans = [
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
-      "ShieldReady assessment (editable)",
+      "Kaelus assessment (editable)",
       "10 user seats",
       "Gap analysis + remediation roadmap",
       "JSON compliance reports",

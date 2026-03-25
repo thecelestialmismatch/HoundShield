@@ -1,4 +1,4 @@
-// ShieldReady Core Types
+// Kaelus CMMC Core Types
 
 export type ControlFamily =
   | 'AC' | 'AT' | 'AU' | 'CM' | 'IA'
