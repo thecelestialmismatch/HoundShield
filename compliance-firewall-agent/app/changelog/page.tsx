@@ -38,7 +38,7 @@ const releases: Release[] = [
       { tag: "Feature", text: "Complete 110-control CMMC Level 2 mapping with practice-level detail" },
       { tag: "Feature", text: "SPRS score calculator with real-time gap weighting" },
       { tag: "Feature", text: "C3PAO-ready report export (PDF + JSON)" },
-      { tag: "Improvement", text: "ShieldReady assessment engine refactored for sub-200ms scoring" },
+      { tag: "Improvement", text: "Kaelus assessment engine refactored for sub-200ms scoring" },
     ],
   },
   {

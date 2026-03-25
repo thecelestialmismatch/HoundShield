@@ -1,7 +1,29 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  weight: ["600", "700", "800", "900"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["700", "800"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   themeColor: "#07070b",
@@ -11,33 +33,39 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Kaelus.online | AI Compliance Firewall & CMMC Readiness Platform",
+    default: "Kaelus.online | AI Compliance Firewall for Regulated Industries",
     template: "%s | Kaelus.online",
   },
   description:
-    "The only AI compliance firewall built for defense contractors. CMMC Level 2 readiness, real-time AI traffic scanning, SPRS scoring, and automated policy generation. Start free.",
+    "The AI compliance firewall for defense, healthcare, and technology. CMMC Level 2, HIPAA, SOC 2 — real-time AI traffic scanning, tamper-proof audit trails, and automated compliance. Start free.",
   keywords: [
     "AI compliance firewall",
     "CMMC compliance",
     "CMMC Level 2",
+    "HIPAA compliance",
+    "HIPAA PHI protection",
+    "SOC 2 compliance",
     "NIST 800-171",
     "SPRS score calculator",
     "defense contractor compliance",
+    "healthcare AI compliance",
     "AI data leak prevention",
     "LLM firewall",
     "CUI protection",
+    "PHI detection",
+    "PII detection",
     "compliance automation",
     "AI security",
-    "PII detection",
     "audit trail",
+    "blockchain compliance",
   ],
   authors: [{ name: "Kaelus.online" }],
   creator: "Kaelus.online",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kaelus.online"),
   openGraph: {
-    title: "Kaelus.online | AI Compliance Firewall & CMMC Readiness",
+    title: "Kaelus.online | AI Compliance Firewall for Regulated Industries",
     description:
-      "Affordable CMMC compliance for defense contractors. AI-powered gap analysis, SPRS scoring, and automated document generation. Free tier available.",
+      "AI compliance firewall for defense, healthcare, and technology. CMMC, HIPAA, SOC 2 — real-time AI scanning, tamper-proof audit trails, blockchain-anchored evidence. Free tier available.",
     type: "website",
     siteName: "Kaelus.online",
     locale: "en_US",
@@ -46,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kaelus.online | AI Compliance Firewall",
     description:
-      "The affordable CMMC compliance platform for defense contractors. Free SPRS calculator, AI-powered remediation, and automated policy generation.",
+      "AI compliance firewall for regulated industries. CMMC, HIPAA, SOC 2 — real-time AI scanning, blockchain-anchored audit trails. Free tier available.",
   },
   robots: {
     index: true,
@@ -67,18 +95,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`scroll-smooth ${inter.variable} ${outfit.variable} ${playfair.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
         <link
           rel="icon"
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"

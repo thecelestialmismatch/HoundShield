@@ -1,5 +1,6 @@
 import type { RuleCategory, RiskLevel, RuleAction } from "@/lib/supabase/types";
 import { CMMC_PATTERNS } from "./cmmc-patterns";
+import { HIPAA_PATTERNS } from "./hipaa-patterns";
 
 /**
  * Built-in detection patterns.
@@ -144,6 +145,9 @@ export const BUILTIN_PATTERNS: DetectionPattern[] = [
 
   // ── CMMC / DEFENSE CONTRACTING ────────────────────────────────────────────
   ...CMMC_PATTERNS,
+
+  // ── HIPAA / HEALTHCARE PHI ──────────────────────────────────────────────
+  ...HIPAA_PATTERNS,
 ];
 
 /**

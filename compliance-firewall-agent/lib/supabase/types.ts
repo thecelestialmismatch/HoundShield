@@ -3,7 +3,7 @@
 export type RiskLevel = "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 export type ActionTaken = "ALLOWED" | "BLOCKED" | "QUARANTINED";
 export type ReviewStatus = "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
-export type RuleCategory = "PII" | "FINANCIAL" | "STRATEGIC" | "IP";
+export type RuleCategory = "PII" | "FINANCIAL" | "STRATEGIC" | "IP" | "HIPAA_PHI";
 export type PatternType = "REGEX" | "KEYWORD" | "SEMANTIC";
 export type RuleAction = "ALLOW" | "WARN" | "BLOCK" | "QUARANTINE";
 export type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";

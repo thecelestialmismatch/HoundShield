@@ -68,28 +68,28 @@ const FEATURES = [
 
 export function FeaturesGrid() {
   return (
-    <section id="features" className="py-24 md:py-32 bg-[#F7F5F0]">
+    <section id="features" className="py-24 md:py-32 bg-[#07070b]">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn className="text-center mb-14">
-          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
+          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
             Features
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white">
             Everything you need.
             <br />
-            Nothing you don't.
+            <span className="italic text-brand-400">Nothing you don&apos;t.</span>
           </h2>
         </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {FEATURES.map((feature, i) => (
             <FadeIn key={feature.title} delay={i * 0.09}>
-              <div className="p-7 bg-white border border-gray-200 rounded-2xl hover:border-indigo-200 hover:shadow-sm hover:-translate-y-1 transition-all duration-300">
+              <div className="p-7 bg-white/[0.04] border border-white/[0.08] rounded-2xl hover:border-brand-400/30 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300">
                 <div className={`w-11 h-11 rounded-[10px] flex items-center justify-center text-xl mb-4 ${feature.iconBg}`}>
                   {feature.icon}
                 </div>
-                <h3 className="text-base font-bold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{feature.desc}</p>
+                <h3 className="text-base font-bold text-white mb-2">{feature.title}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">{feature.desc}</p>
               </div>
             </FadeIn>
           ))}
