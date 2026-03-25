@@ -35,7 +35,7 @@ const TESTIMONIALS = [
     author: "Sarah Chen",
     role: "VP of Engineering · Series C FinTech Startup",
     initials: "SC",
-    avatarClass: "bg-indigo-100 text-indigo-600",
+    avatarClass: "bg-brand-400/15 text-brand-400",
   },
   {
     quote:
@@ -44,7 +44,7 @@ const TESTIMONIALS = [
     author: "Marcus Williams",
     role: "CISO · Healthcare SaaS Platform",
     initials: "MW",
-    avatarClass: "bg-emerald-100 text-emerald-600",
+    avatarClass: "bg-emerald-500/15 text-emerald-400",
   },
   {
     quote:
@@ -53,7 +53,7 @@ const TESTIMONIALS = [
     author: "Dr. Keiko Tanaka",
     role: "Head of AI Safety · Enterprise Cloud Provider",
     initials: "KT",
-    avatarClass: "bg-purple-100 text-purple-600",
+    avatarClass: "bg-purple-500/15 text-purple-400",
   },
   {
     quote:
@@ -62,25 +62,23 @@ const TESTIMONIALS = [
     author: "James Rodriguez",
     role: "CTO · Legal Tech Unicorn",
     initials: "JR",
-    avatarClass: "bg-rose-100 text-rose-600",
+    avatarClass: "bg-rose-500/15 text-rose-400",
   },
 ];
 
 export function Testimonials() {
   return (
-    <section className="py-24 md:py-32 bg-[#F7F5F0]">
+    <section className="py-24 md:py-32 bg-[#07070b]">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn className="text-center mb-14">
-          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
+          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
             Customer Stories
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
             Loved by{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              Security Teams
-            </span>
+            <span className="italic text-brand-400">Security Teams</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-[520px] mx-auto">
+          <p className="text-lg text-slate-400 max-w-[520px] mx-auto">
             See why enterprise security leaders trust Kaelus to protect their most sensitive data.
           </p>
         </FadeIn>
@@ -88,8 +86,8 @@ export function Testimonials() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {TESTIMONIALS.map((t, i) => (
             <FadeIn key={t.author} delay={i * 0.1}>
-              <div className="relative p-8 rounded-[20px] bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-300">
-                <div className="absolute top-6 right-6 text-[40px] text-gray-200 leading-none select-none font-serif">
+              <div className="relative p-8 rounded-[20px] bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.06] hover:border-brand-400/30 hover:-translate-y-0.5 transition-all duration-300">
+                <div className="absolute top-6 right-6 text-[40px] text-white/10 leading-none select-none font-serif">
                   &rdquo;
                 </div>
                 <div className="flex gap-1 mb-4">
@@ -97,17 +95,17 @@ export function Testimonials() {
                     <span key={j} className="text-amber-400 text-sm">★</span>
                   ))}
                 </div>
-                <p className="text-sm text-gray-600 leading-[1.75] italic mb-4">&ldquo;{t.quote}&rdquo;</p>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-600 mb-5">
+                <p className="text-sm text-slate-400 leading-[1.75] italic mb-4">&ldquo;{t.quote}&rdquo;</p>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/20 text-[11px] font-bold text-emerald-400 mb-5">
                   ✓ {t.metric}
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[13px] font-bold border border-gray-200 flex-shrink-0 ${t.avatarClass}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[13px] font-bold border border-white/10 flex-shrink-0 ${t.avatarClass}`}>
                     {t.initials}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-gray-900">{t.author}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{t.role}</div>
+                    <div className="text-sm font-semibold text-white">{t.author}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">{t.role}</div>
                   </div>
                 </div>
               </div>

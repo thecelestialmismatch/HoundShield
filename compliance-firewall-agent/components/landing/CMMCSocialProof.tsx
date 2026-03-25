@@ -61,14 +61,14 @@ export function CMMCSocialProof() {
       <section className="relative py-24 px-6 bg-[#07070b] overflow-hidden">
         <div className="relative z-10 max-w-4xl mx-auto">
           <FadeIn>
-            <p className="text-center text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">
+            <p className="text-center text-xs uppercase tracking-widest text-brand-400 font-semibold mb-3">
               The Hidden Risk
             </p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 text-center mb-4 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-editorial font-bold text-white text-center mb-4 leading-tight">
               3 things defense contractors leak to{" "}
-              <span className="text-red-600">ChatGPT</span> every day
+              <span className="text-red-400">ChatGPT</span> every day
             </h2>
-            <p className="text-center text-gray-600 mb-14 max-w-xl mx-auto">
+            <p className="text-center text-slate-400 mb-14 max-w-xl mx-auto">
               These aren&apos;t hypotheticals. These are patterns Kaelus detects across real enterprise deployments.
             </p>
           </FadeIn>
@@ -76,19 +76,19 @@ export function CMMCSocialProof() {
           <div className="grid md:grid-cols-3 gap-5">
             {LEAKS.map((item, i) => (
               <FadeIn key={item.label} delay={i * 0.1}>
-                <div className="border border-red-200 bg-red-50 rounded-2xl p-6 hover:border-red-300 transition-colors">
+                <div className="border border-red-500/20 bg-red-500/[0.06] rounded-2xl p-6 hover:border-red-400/30 transition-colors">
                   <div className="text-2xl font-black text-red-400 mb-3">0{i + 1}</div>
-                  <p className="text-gray-900 font-semibold mb-2 leading-snug">{item.label}</p>
-                  <p className="text-sm text-gray-600">{item.detail}</p>
+                  <p className="text-white font-semibold mb-2 leading-snug">{item.label}</p>
+                  <p className="text-sm text-slate-400">{item.detail}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
 
           <FadeIn delay={0.35}>
-            <p className="text-center text-gray-700 font-semibold mt-12 text-lg">
+            <p className="text-center text-slate-300 font-semibold mt-12 text-lg">
               Kaelus catches all of it.{" "}
-              <span className="text-emerald-600">Before it&apos;s too late.</span>
+              <span className="text-emerald-400">Before it&apos;s too late.</span>
             </p>
           </FadeIn>
         </div>

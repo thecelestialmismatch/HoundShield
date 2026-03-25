@@ -99,10 +99,10 @@ export function DashboardMockup() {
 
           {/* Dashboard Mockup */}
           <div
-            className="rounded-2xl overflow-hidden border border-indigo-500/10 bg-[#0d0d14]"
+            className="rounded-2xl overflow-hidden border border-brand-400/15 bg-[#0d0d14]"
             style={{
               transform: "perspective(1200px) rotateY(-8deg) rotateX(4deg)",
-              boxShadow: "0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(99,102,241,0.12)",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(200,125,62,0.15)",
               transition: "transform 0.4s ease",
             }}
             onMouseEnter={(e) => {
@@ -113,7 +113,7 @@ export function DashboardMockup() {
             }}
           >
             {/* Window bar */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.03] border-b border-indigo-500/15">
+            <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.03] border-b border-white/[0.08]">
               <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
               <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
@@ -126,7 +126,7 @@ export function DashboardMockup() {
                 {SCORE_CARDS.map((card) => (
                   <div
                     key={card.label}
-                    className="flex-1 p-3.5 rounded-xl bg-white/[0.03] border border-indigo-500/15"
+                    className="flex-1 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08]"
                   >
                     <div className="text-[11px] text-slate-500 mb-1 font-mono">{card.label}</div>
                     <div className={`text-[22px] font-extrabold font-mono ${card.className}`}>
