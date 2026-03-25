@@ -59,19 +59,17 @@ const STEPS = [
 
 export function SetupSteps() {
   return (
-    <section id="setup" className="py-24 md:py-32 bg-[#F7F5F0]">
+    <section id="setup" className="py-24 md:py-32 bg-[#07070b]">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn className="mb-14">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
             Dead Simple Setup
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
             Three Steps to{" "}
-            <span className="bg-gradient-to-r from-emerald-600 via-indigo-600 to-rose-600 bg-clip-text text-transparent">
-              Total Security
-            </span>
+            <span className="italic text-brand-400">Total Security</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-xl">
+          <p className="text-lg text-slate-400 max-w-xl">
             No complicated setup. No learning curve. If you can change a URL, you can deploy Kaelus.
           </p>
         </FadeIn>
@@ -79,15 +77,15 @@ export function SetupSteps() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
           {STEPS.map((step, i) => (
             <FadeIn key={step.num} delay={i * 0.12}>
-              <div className="relative p-8 rounded-2xl bg-white border border-gray-200 overflow-hidden group hover:border-indigo-200 hover:shadow-sm transition-all duration-300 hover:-translate-y-1">
-                <div className="absolute top-3 right-5 text-[72px] font-black text-gray-100 leading-none pointer-events-none select-none">
+              <div className="relative p-8 rounded-2xl bg-white/[0.04] border border-white/[0.08] overflow-hidden group hover:border-brand-400/30 hover:bg-white/[0.06] transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-3 right-5 text-[72px] font-black text-white/[0.04] leading-none pointer-events-none select-none">
                   {step.num}
                 </div>
                 <div className={`w-[52px] h-[52px] rounded-[14px] flex items-center justify-center text-[22px] mb-5 ${step.iconClass}`}>
                   {step.icon}
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-3">{step.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed mb-5">{step.description}</p>
+                <h3 className="text-lg font-bold text-white mb-3">{step.title}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed mb-5">{step.description}</p>
                 <div className="bg-gray-900 border border-gray-800 rounded-lg px-3.5 py-2.5 font-mono text-xs text-gray-400">
                   <span className={step.code.color}>{step.code.prefix} </span>
                   {step.code.content}

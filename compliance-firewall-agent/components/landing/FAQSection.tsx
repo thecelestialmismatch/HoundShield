@@ -45,16 +45,16 @@ function FAQItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
   return (
     <div
       className={`rounded-[14px] overflow-hidden border transition-colors duration-200 ${
-        open ? "bg-white border-indigo-200" : "bg-white border-gray-200"
+        open ? "bg-brand-400/[0.05] border-brand-400/30" : "bg-white/[0.03] border-white/[0.08]"
       }`}
     >
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-white/[0.04] transition-colors"
       >
-        <span className="text-sm font-semibold text-gray-900">{q}</span>
+        <span className="text-sm font-semibold text-white">{q}</span>
         <ChevronDown
-          className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -68,8 +68,8 @@ function FAQItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
             className="overflow-hidden"
           >
             <div className="px-6 pb-5">
-              <div className="pt-3.5 border-t border-gray-200">
-                <p className="text-sm text-gray-600 leading-[1.75]">{a}</p>
+              <div className="pt-3.5 border-t border-white/[0.06]">
+                <p className="text-sm text-slate-400 leading-[1.75]">{a}</p>
               </div>
             </div>
           </motion.div>
@@ -84,19 +84,17 @@ export function FAQSection() {
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section id="faq" className="py-24 md:py-32 bg-white">
+    <section id="faq" className="py-24 md:py-32 bg-[#0d0d14]">
       <div className="max-w-3xl mx-auto px-6">
         <div ref={ref} className="text-center mb-14">
-          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
+          <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
             Common Questions
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
             Frequently Asked{" "}
-            <span className="bg-gradient-to-r from-indigo-600 to-indigo-500 bg-clip-text text-transparent">
-              Questions
-            </span>
+            <span className="italic text-brand-400">Questions</span>
           </h2>
-          <p className="text-lg text-gray-600">Everything you need to know about Kaelus.</p>
+          <p className="text-lg text-slate-400">Everything you need to know about Kaelus.</p>
         </div>
 
         <div className="flex flex-col gap-3">

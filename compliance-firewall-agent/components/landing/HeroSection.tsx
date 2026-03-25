@@ -27,26 +27,29 @@ function FadeIn({
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-20 bg-[#F7F5F0]">
+    <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-20">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-dot-grid opacity-[0.15] pointer-events-none" />
+
       <div className="relative z-10 max-w-5xl mx-auto px-6">
         <FadeIn>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 text-xs font-semibold uppercase tracking-widest mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-400/20 bg-brand-400/[0.08] text-brand-400 text-xs font-semibold uppercase tracking-widest mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             CMMC Level 2 · NIST 800-171 · 87,000+ DIB Contractors
           </div>
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <h1 className="text-[clamp(38px,6.5vw,80px)] font-extrabold leading-[1.05] tracking-[-2px] max-w-[900px] mx-auto mb-6 text-gray-900">
+          <h1 className="font-editorial text-[clamp(40px,6.5vw,82px)] font-bold leading-[1.05] tracking-[-1px] max-w-[900px] mx-auto mb-6 text-white">
             Your team is one ChatGPT session away from a{" "}
-            <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-600 bg-clip-text text-transparent">
+            <span className="italic bg-gradient-to-r from-brand-400 via-accent to-emerald-400 bg-clip-text text-transparent">
               CMMC violation.
             </span>
           </h1>
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          <p className="text-[clamp(16px,2vw,20px)] text-gray-600 max-w-[620px] mx-auto mb-10 leading-relaxed">
+          <p className="text-[clamp(16px,2vw,20px)] text-slate-400 max-w-[620px] mx-auto mb-10 leading-relaxed">
             Kaelus.online intercepts every AI query before it leaves your network.
             Protect CUI. Pass your C3PAO assessment. Keep your DoD contracts.
           </p>
@@ -56,14 +59,14 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Link
               href="/command-center/shield/onboarding"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.3)] text-base"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-dark text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(200,125,62,0.35)] text-base"
             >
               Start Free Assessment
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/demo"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 text-gray-900 font-semibold rounded-xl border border-gray-200 hover:border-gray-300 transition-all hover:-translate-y-0.5 text-base"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white/[0.06] hover:bg-white/[0.10] text-white font-semibold rounded-xl border border-white/10 hover:border-white/20 transition-all hover:-translate-y-0.5 text-base"
             >
               See a Live Demo
               <ChevronRight className="w-4 h-4" />
@@ -73,10 +76,10 @@ export function HeroSection() {
 
         {/* Trust bar */}
         <FadeIn delay={0.38}>
-          <div className="flex flex-wrap items-center justify-center gap-6 mb-14 text-xs text-gray-500 uppercase tracking-widest font-semibold">
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-14 text-xs text-slate-500 uppercase tracking-widest font-semibold">
             {["CMMC Level 2", "NIST SP 800-171", "Real-time Protection", "<50ms Latency"].map((item, i) => (
               <span key={item} className="flex items-center gap-2">
-                {i > 0 && <span className="w-1 h-1 rounded-full bg-gray-300" />}
+                {i > 0 && <span className="w-1 h-1 rounded-full bg-white/20" />}
                 {item}
               </span>
             ))}
@@ -92,10 +95,10 @@ export function HeroSection() {
               { num: "<50ms", label: "Kaelus intercept latency" },
             ].map(({ num, label }) => (
               <div key={label} className="text-center">
-                <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-1">
+                <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-1">
                   {num}
                 </div>
-                <div className="text-sm text-gray-500">{label}</div>
+                <div className="text-sm text-slate-400">{label}</div>
               </div>
             ))}
           </div>

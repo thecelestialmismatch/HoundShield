@@ -18,8 +18,8 @@ const NEW_EVENTS = [
 ];
 
 const SCORE_CARDS = [
-  { label: "SPRS SCORE", value: "+47", className: "text-amber-400" },
-  { label: "EVENTS TODAY", value: "1,284", className: "text-indigo-400" },
+  { label: "SPRS SCORE", value: "+47", className: "text-brand-400" },
+  { label: "EVENTS TODAY", value: "1,284", className: "text-[#818cf8]" },
   { label: "BLOCKED", value: "23", className: "text-red-400" },
 ];
 
@@ -65,16 +65,16 @@ export function DashboardMockup() {
   }, [isInView, eventIdx]);
 
   return (
-    <section id="how" className="py-24 md:py-32 bg-white">
+    <section id="how" className="py-24 md:py-32 bg-[#0d0d14]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="mb-14">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
             How It Works
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white">
             Two products.
             <br />
-            One compliance stack.
+            <span className="italic text-brand-400">One compliance stack.</span>
           </h2>
         </div>
 
@@ -84,14 +84,14 @@ export function DashboardMockup() {
             {HOW_STEPS.map((step) => (
               <div
                 key={step.num}
-                className="flex gap-4 items-start p-5 rounded-[14px] bg-gray-50 border border-gray-200 hover:bg-indigo-50 hover:border-indigo-200 transition-all cursor-default"
+                className="flex gap-4 items-start p-5 rounded-[14px] bg-white/[0.03] border border-white/[0.07] hover:bg-brand-400/[0.05] hover:border-brand-400/25 transition-all cursor-default"
               >
-                <div className="w-[34px] h-[34px] flex-shrink-0 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-[13px] font-bold text-indigo-600">
+                <div className="w-[34px] h-[34px] flex-shrink-0 rounded-lg bg-brand-400/[0.1] border border-brand-400/25 flex items-center justify-center text-[13px] font-bold text-brand-400">
                   {step.num}
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-bold text-gray-900 mb-1">{step.title}</h3>
-                  <p className="text-[13px] text-gray-600 leading-relaxed">{step.desc}</p>
+                  <h3 className="text-[15px] font-bold text-white mb-1">{step.title}</h3>
+                  <p className="text-[13px] text-slate-400 leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}
