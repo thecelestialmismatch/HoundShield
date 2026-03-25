@@ -351,12 +351,12 @@ export default function AuthPage() {
 
         <div className="relative z-10 w-full max-w-[420px]">
           {/* Mobile logo */}
-          <div className="flex items-center gap-2.5 mb-10 lg:hidden">
+          <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden hover:opacity-80 transition-opacity">
             <Logo className="w-10 h-10" />
             <div>
               <TextLogo variant="dark" />
             </div>
-          </div>
+          </Link>
 
           {/* Header */}
           <div className="mb-8">

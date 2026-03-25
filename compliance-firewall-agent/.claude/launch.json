@@ -2,11 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "dev",
-      "runtimeExecutable": "/Users/yantr/.nvm/versions/node/v24.13.1/bin/node",
-      "runtimeArgs": ["-e", "process.chdir('/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent'); require('/Users/yantr/Desktop/Kaelus.ai-main/compliance-firewall-agent/node_modules/next/dist/bin/next')"],
-      "port": 3000,
-      "autoPort": true
+      "name": "kaelus-landing",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }
