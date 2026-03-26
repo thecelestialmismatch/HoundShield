@@ -111,6 +111,8 @@ module.exports = {
         "orbit": "orbit 20s linear infinite",
         "scale-pulse": "scale-pulse 4s ease-in-out infinite",
         "gradient-shift": "gradient-shift 6s ease infinite",
+        "marquee": "marquee 30s linear infinite",
+        "marquee-fast": "marquee 15s linear infinite",
       },
       keyframes: {
         "glow-pulse": {
@@ -157,6 +159,10 @@ module.exports = {
           "0%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
+        },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
       },
       boxShadow: {

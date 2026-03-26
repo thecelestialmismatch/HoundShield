@@ -697,3 +697,79 @@
 @media (max-width: 640px) {
   .chat-window { right: 0.75rem; left: 0.75rem; width: auto; bottom: 5rem; max-height: 70vh; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   Targets dark-first hardcoded Tailwind classes via attribute selectors.
+   html.dark = dark mode (default). No .dark class = light mode.
+   ═══════════════════════════════════════════════════════════════════ */
+
+html:not(.dark) body {
+  background-color: #f0f4f8 !important;
+  color: #0f172a !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Override hardcoded dark section/div backgrounds */
+html:not(.dark) [class*="[#07070b]"],
+html:not(.dark) [class*="[#0a0a10]"],
+html:not(.dark) [class*="[#0e0e18]"],
+html:not(.dark) [class*="[#07070b]/"] {
+  background-color: #f0f4f8 !important;
+}
+
+/* Section wrappers */
+html:not(.dark) section {
+  background-color: #f0f4f8 !important;
+}
+
+/* White / near-white text → dark in light mode */
+html:not(.dark) [class*="text-white"] {
+  color: #0f172a !important;
+}
+html:not(.dark) [class*="text-slate-100"],
+html:not(.dark) [class*="text-slate-200"],
+html:not(.dark) [class*="text-slate-300"] {
+  color: #334155 !important;
+}
+html:not(.dark) [class*="text-slate-400"],
+html:not(.dark) [class*="text-slate-500"] {
+  color: #475569 !important;
+}
+
+/* Frosted navbar → light glass */
+html:not(.dark) .nav-frosted {
+  background: rgba(240, 244, 248, 0.92) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not(.dark) [class*="bg-\\[#07070b\\]\\/85"],
+html:not(.dark) [class*="/85"] [class*="backdrop-blur"] {
+  background-color: rgba(240, 244, 248, 0.85) !important;
+}
+
+/* Border colors: white/5, white/8, white/10 → slate/20 */
+html:not(.dark) [class*="border-white/"] {
+  border-color: rgba(100, 116, 139, 0.2) !important;
+}
+
+/* Dark card backgrounds */
+html:not(.dark) [class*="bg-black"],
+html:not(.dark) [class*="bg-black/"] {
+  background-color: rgba(15, 23, 42, 0.06) !important;
+}
+html:not(.dark) [class*="bg-white/"][class*="0.02"],
+html:not(.dark) [class*="bg-white/0"] {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Dark-on-dark text (white/30, white/50 etc.) → readable */
+html:not(.dark) [class*="text-white/20"],
+html:not(.dark) [class*="text-white/25"],
+html:not(.dark) [class*="text-white/30"] {
+  color: rgba(71, 85, 105, 0.7) !important;
+}
+html:not(.dark) [class*="text-white/40"],
+html:not(.dark) [class*="text-white/50"],
+html:not(.dark) [class*="text-white/60"] {
+  color: rgba(71, 85, 105, 0.85) !important;
+}

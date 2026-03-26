@@ -4,24 +4,23 @@ import { useState, useRef, useEffect } from "react";
 import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
-/* ── Smart responses for quick actions and free-text ── */
-const CHAT_RESPONSES: Record<string, string> = {
-  "What can you detect?":
-    "I detect 16 sensitive patterns like SSNs, credit cards, API keys, medical records, CUI, and M&A data — all in under 50 milliseconds! Every request your team sends to any AI provider gets scanned.",
-  "How does the ReAct loop work?":
-    "I don't just use regex. I use an autonomous ReAct loop: Observe the context, Think about the rules, Act using 8 specialized tools, and Iterate until I'm certain. I use up to 13 different AI models to make sure I get it right — 0.01% false positive rate.",
-  "How do I install this?":
-    "It's literally 1 line of code! Just change your OpenAI or Anthropic API base URL to `gateway.kaelus.online/v1`. We proxy everything transparently. No new dependencies, no infrastructure changes. Under 15 minutes to deploy.",
-};
-
 const QUICK_ACTIONS = [
   "What can you detect?",
   "How does the ReAct loop work?",
   "How do I install this?",
 ];
 
-const DEFAULT_REPLY =
-  "That's a great question! Our full platform has a massive knowledge base and autonomous reasoning to answer anything about AI compliance, CMMC, and data security. Sign up free to explore!";
+const KAELUS_SYSTEM = `You are Kaelus AI, the intelligent compliance assistant embedded in the Kaelus.Online platform. You are a friendly, concise expert in:
+- AI security: detecting API keys, secrets, PII, CUI, PHI, and proprietary source code before they reach AI providers
+- CMMC Level 2 compliance for US defense contractors (NIST 800-171, 110 controls, SPRS scoring)
+- HIPAA compliance and PHI detection (all 18 Safe Harbor identifiers)
+- SOC 2, code security, and IP protection for tech companies
+
+Keep responses concise (under 150 words). Use bullet points for lists.
+For installation questions always say: "Just change your AI API base URL to gateway.kaelus.online/v1 — 1 line of code, under 15 minutes."
+For detection questions: "I scan for 16+ sensitive patterns including SSNs, API keys, credit cards, CUI, PHI, medical records, and proprietary code — all in under 10ms."
+For pricing: "Free tier available. Pro at $199/mo. Sign up at kaelus.online."
+Be warm, expert, and focused on compliance value.`;
 
 type Message = { role: "user" | "bot"; text: string };
 
@@ -48,6 +47,7 @@ export function GlobalChat() {
   const [showQuickActions, setShowQuickActions] = useState(true);
   const [hasGreeted, setHasGreeted] = useState(false);
   const msgsRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -71,21 +71,125 @@ export function GlobalChat() {
     }
   };
 
-  const sendMessage = (text: string) => {
-    if (!text.trim()) return;
+  const sendMessage = async (text: string) => {
+    if (!text.trim() || isTyping) return;
 
-    // Add user message
-    setMessages((prev) => [...prev, { role: "user", text }]);
+    const userMsg: Message = { role: "user", text };
+    const allMessages = [...messages, userMsg];
+
+    setMessages(allMessages);
     setShowQuickActions(false);
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    // Build API history (skip the initial greeting bot message)
+    const history = allMessages
+      .slice(messages.length === 1 && messages[0].role === "bot" ? 1 : 0)
+      .map((m) => ({
+        role: m.role === "bot" ? "assistant" : "user",
+        content: m.text,
+      }));
+
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: abortRef.current.signal,
+        body: JSON.stringify({
+          messages: history,
+          system: KAELUS_SYSTEM,
+          model: "gemini-flash",
+          temperature: 0.7,
+          scanInput: false,
+        }),
+      });
+
+      // Compliance block
+      if (res.status === 451) {
+        const data = await res.json();
+        setIsTyping(false);
+        setMessages((prev) => [
+          ...prev,
+          { role: "bot", text: data.message || "Your message was flagged by the compliance engine." },
+        ]);
+        return;
+      }
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || `HTTP ${res.status}`);
+      }
+
+      // Stream SSE response — build the bot reply token by token
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No response stream");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let botText = "";
+      let appended = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith("data: ")) continue;
+          const data = trimmed.slice(6);
+          if (data === "[DONE]") continue;
+
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.compliance) continue;
+            const chunk = parsed.content;
+            if (!chunk) continue;
+
+            botText += chunk;
+
+            if (!appended) {
+              appended = true;
+              setIsTyping(false);
+              setMessages((prev) => [...prev, { role: "bot", text: botText }]);
+            } else {
+              setMessages((prev) => {
+                const next = [...prev];
+                next[next.length - 1] = { role: "bot", text: botText };
+                return next;
+              });
+            }
+          } catch {
+            // Skip malformed chunks
+          }
+        }
+      }
+
       setIsTyping(false);
-      const reply = CHAT_RESPONSES[text] || DEFAULT_REPLY;
-      setMessages((prev) => [...prev, { role: "bot", text: reply }]);
-    }, 1200);
+    } catch (err: unknown) {
+      setIsTyping(false);
+      if (err instanceof Error && err.name === "AbortError") return;
+
+      const isNoKey =
+        err instanceof Error &&
+        (err.message.includes("no_api_key") || err.message.includes("503"));
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: isNoKey
+            ? "The AI brain needs an OpenRouter API key to answer free-form questions. Try the quick action buttons — those work instantly!"
+            : "Something went wrong on my end. The firewall is still scanning in the background — try again in a moment!",
+        },
+      ]);
+    }
   };
 
   return (

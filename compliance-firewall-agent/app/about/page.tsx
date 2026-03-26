@@ -170,7 +170,7 @@ export default function AboutPage() {
                             <AnimatedSection key={i} delay={i * 80}>
                                 <div className="flex gap-6">
                                     <div className="flex flex-col items-center">
-                                        <div className="w-3 h-3 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] flex-shrink-0 mt-1" />
+                                        <div className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0 mt-1" />
                                         {i < timeline.length - 1 && (
                                             <div className="w-px flex-1 bg-gradient-to-b from-brand-500/30 to-transparent mt-2" />
                                         )}

@@ -19,10 +19,10 @@ export function TickerSection() {
   const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS];
 
   return (
-    <div className="relative bg-white border-t border-b border-gray-200 py-3 overflow-hidden">
+    <div className="relative bg-[#07070b] border-t border-b border-white/[0.05] py-3 overflow-hidden">
       <div className="flex gap-12 animate-marquee whitespace-nowrap" style={{ width: "max-content" }}>
         {doubled.map((item, i) => (
-          <div key={i} className="flex items-center gap-2 flex-shrink-0 text-gray-500 text-[13px]">
+          <div key={i} className="flex items-center gap-2 flex-shrink-0 text-white/40 text-[13px] font-mono">
             <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.color}`} />
             {item.text}
           </div>

@@ -383,7 +383,7 @@ export default function AuthPage() {
                     setShowPassword(false);
                   }}
                   className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === tab
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    ? "bg-brand-500 text-white"
                     : "text-slate-400 hover:text-slate-300"
                     }`}
                 >

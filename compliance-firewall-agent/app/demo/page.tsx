@@ -400,7 +400,7 @@ export default function FreeDemoPage() {
                             <button
                                 onClick={runScan}
                                 disabled={!inputText.trim() || isScanning}
-                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary shadow-[0_0_30px_rgba(99,102,241,0.4)]" : "bg-white/5 text-slate-400 cursor-not-allowed border border-white/10"}`}
+                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary" : "bg-white/5 text-slate-400 cursor-not-allowed border border-white/10"}`}
                             >
                                 {isScanning ? (
                                     <>

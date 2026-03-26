@@ -374,7 +374,7 @@ export default function SettingsPage() {
             ) : (
               <a
                 href="/pricing"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-600 text-white text-sm font-semibold hover:from-brand-500 hover:to-emerald-500 transition-all shadow-lg shadow-brand-200"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-600 text-white text-sm font-semibold hover:from-brand-500 hover:to-emerald-500 transition-all"
               >
                 Upgrade
               </a>

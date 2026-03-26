@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
-import { LocalizedPrice } from "@/components/LocalizedPrice";
-import { priceIds } from "./price-ids";
 import {
   Shield,
   ArrowRight,
@@ -35,7 +33,7 @@ const plans = [
     monthlyPrice: 0,
     annualPrice: 0,
     annualTotal: 0,
-    description: "CMMC self-assessment and gap scoring. No credit card required.",
+    description: "7-day free trial — no credit card required. Explore CMMC tools and see your SPRS score.",
     features: [
       "Kaelus CMMC assessment (read-only)",
       "110-control gap analysis",
@@ -44,7 +42,7 @@ const plans = [
       "Community support",
       "No AI gateway access",
     ],
-    cta: "Start Free",
+    cta: "Start 7-Day Trial",
     ctaStyle: "btn-ghost",
     highlighted: false,
     badge: null,
@@ -71,7 +69,7 @@ const plans = [
       "90-day log retention",
       "API access",
     ],
-    cta: "Start 14-Day Trial",
+    cta: "Start 7-Day Trial",
     ctaStyle: "btn-primary",
     highlighted: true,
     badge: "Most Popular",
@@ -97,7 +95,7 @@ const plans = [
       "HITL quarantine review",
       "C3PAO assessment coordination",
     ],
-    cta: "Start 14-Day Trial",
+    cta: "Start 7-Day Trial",
     ctaStyle: "btn-ghost",
     highlighted: false,
     badge: null,
@@ -178,20 +176,20 @@ const comparisonFeatures: ComparisonRow[] = [
 /* ===== FAQ DATA ===== */
 const faqData = [
   {
-    q: "Is the Starter plan really free forever?",
-    a: "Yes, absolutely. The Starter plan includes 1,000 scans per month, basic dashboard access, and email alerts at zero cost. No credit card required to sign up. You can use it indefinitely and upgrade whenever you need more capacity.",
+    q: "What's included in the 7-day free trial?",
+    a: "Full access to the Starter tier — CMMC self-assessment, 110-control gap analysis, live SPRS calculator, and basic compliance dashboard. No credit card required. After 7 days, choose a paid plan to keep your data and continue scanning.",
   },
   {
-    q: "What happens if I exceed 1,000 scans on the free plan?",
-    a: "You'll receive an email alert at 80% and 100% of your quota. Once you hit the limit, additional requests will pass through without scanning until the next billing cycle. We never block your API traffic \u2014 we just pause the compliance layer. Upgrade to Pro for unlimited scans.",
+    q: "What happens when the free trial ends?",
+    a: "After 7 days, your account is paused until you select a paid plan. Your assessment data and scores are saved. Upgrade to Pro for unlimited scans, AI gateway access, and PDF compliance reports. We'll remind you by email before the trial expires.",
   },
   {
     q: "Can I switch between monthly and annual billing?",
     a: "Yes. You can switch from monthly to annual billing at any time and the savings (20% off) apply immediately. If you switch from annual to monthly, the change takes effect at the end of your current annual period. No penalties or hidden fees.",
   },
   {
-    q: "What's included in the 14-day Pro trial?",
-    a: "Full access to every Pro feature: unlimited scans, 16 detection patterns, encrypted quarantine, CFO-ready reports, Slack/webhook integrations, and priority support. No credit card required. If you don't upgrade after 14 days, you automatically move to the Starter plan.",
+    q: "What's included in the 7-day Pro trial?",
+    a: "Full access to every Pro feature: unlimited scans, 16 detection patterns, encrypted quarantine, CFO-ready reports, Slack/webhook integrations, and priority support. No credit card required. If you don't upgrade after 7 days, you automatically move to the Starter plan.",
   },
   {
     q: "How does self-hosted deployment work on Enterprise?",
@@ -321,45 +319,9 @@ export default function PricingPage() {
   }
 
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
-  // Live Stripe prices integration for dynamic pricing display
-  const [livePrices, setLivePrices] = useState<Array<{ id: string; amount: number; currency: string }>>([]);
-  useEffect(() => {
-    fetch("/api/stripe/prices")
-      .then((r) => r.json())
-      .then((d) => {
-        if (Array.isArray(d?.prices)) {
-          setLivePrices(d.prices);
-        }
-      })
-      .catch(() => {});
-  }, []);
-  const priceMap = useMemo(() => {
-    const m = new Map<string, { amount: number; currency: string }>();
-    for (const p of livePrices) {
-      m.set(p.id, { amount: p.amount, currency: p.currency });
-    }
-    return m;
-  }, [livePrices]);
-
-  const renderLivePrice = (plan: { id: string; monthlyPrice: number; annualPrice: number; }): string => {
-    if (plan.id === 'free') return 'Free';
-    const monthlyKey = plan.id === 'pro' ? priceIds.proMonthly : plan.id === 'enterprise' ? priceIds.enterpriseMonthly : priceIds.agencyMonthly;
-    const annualKey  = plan.id === 'pro' ? priceIds.proAnnual : plan.id === 'enterprise' ? priceIds.enterpriseAnnual : priceIds.agencyAnnual;
-    // For now, prefer monthly pricing in display; switch to annualKey if you enable annual toggle in UI
-    const key = monthlyKey as string;
-    const entry = priceMap.get(key);
-    if (entry) {
-      const curr = entry.currency;
-      const sym = curr === 'usd' ? '$' : curr === 'aud' ? 'A$' : curr === 'gbp' ? '£' : curr === 'eur' ? '€' : '$';
-      return `${sym}${entry.amount}`;
-    }
-    // fallback to static plan price
-    const fallback = plan.monthlyPrice;
-    return `$${fallback}`;
-  };
 
   return (
-    <div className="min-h-screen bg-[#07070b] relative overflow-hidden">
+    <div className="dark min-h-screen bg-[#07070b] relative overflow-hidden">
       {/* ===== FLOATING ORBS ===== */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
@@ -395,7 +357,7 @@ export default function PricingPage() {
               <button
                 onClick={() => setIsAnnual(false)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!isAnnual
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    ? "bg-brand-500 text-white "
                     : "text-slate-400 hover:text-slate-300"
                   }`}
               >
@@ -404,7 +366,7 @@ export default function PricingPage() {
               <button
                 onClick={() => setIsAnnual(true)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${isAnnual
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    ? "bg-brand-500 text-white "
                     : "text-slate-400 hover:text-slate-300"
                   }`}
               >
@@ -447,7 +409,7 @@ export default function PricingPage() {
                     {/* Badge */}
                     {plan.badge && (
                       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-white text-xs font-semibold shadow-lg shadow-brand-500/30">
+                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-white text-xs font-semibold">
                           <Star className="w-3 h-3" />
                           {plan.badge}
                         </div>
@@ -474,20 +436,25 @@ export default function PricingPage() {
                         </div>
                       </div>
 
-                      {/* Price (live or fallback) */}
+                      {/* Price */}
                       <div className="mb-4">
                         {plan.id === 'free' ? (
                           <div className="flex items-baseline gap-1">
                             <span className="text-4xl font-bold text-white tracking-tight">Free</span>
+                            <span className="text-base font-normal text-slate-500 ml-1">7 days</span>
                           </div>
                         ) : (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-white tracking-tight">{renderLivePrice(plan)}</span>
-                            {/* monthly by default; annual toggle not wired yet */}
+                            <span className="text-4xl font-bold text-white tracking-tight">
+                              ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                            </span>
+                            <span className="text-base font-normal text-slate-500 ml-1">
+                              {isAnnual ? "/yr" : "/mo"}
+                            </span>
                           </div>
                         )}
                         <p className="text-xs text-slate-500 mt-1">
-                          {plan.id !== 'free' ? 'Live price from Stripe' : ''}
+                          {plan.id === 'free' ? 'No credit card required' : isAnnual ? 'Billed annually · save 20%' : 'Billed monthly'}
                         </p>
                       </div>
 
