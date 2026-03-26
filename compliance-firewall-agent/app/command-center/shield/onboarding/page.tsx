@@ -121,7 +121,7 @@ export default function OnboardingPage() {
                     isDone
                       ? "bg-emerald-500/100/20 border-emerald-500 text-emerald-400"
                       : isActive
-                      ? "bg-brand-500/100/20 border-brand-500 text-brand-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                      ? "bg-brand-500/100/20 border-brand-500 text-brand-400 "
                       : "bg-white/[0.05]/50 border-slate-600 text-slate-500"
                   }`}
                 >
@@ -187,7 +187,7 @@ export default function OnboardingPage() {
                           onClick={() => setEmployeeCount(range.value)}
                           className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
                             employeeCount === range.value
-                              ? "bg-brand-500/100/20 border-brand-500 text-brand-400 shadow-[0_0_10px_rgba(59,130,246,0.15)]"
+                              ? "bg-brand-500/100/20 border-brand-500 text-brand-400 "
                               : "bg-white/[0.05]/50 border-slate-600 text-slate-400 hover:border-slate-500"
                           }`}
                         >
@@ -206,7 +206,7 @@ export default function OnboardingPage() {
                           onClick={() => setContractType(type)}
                           className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
                             contractType === type
-                              ? "bg-brand-500/100/20 border-brand-500 text-brand-400 shadow-[0_0_10px_rgba(59,130,246,0.15)]"
+                              ? "bg-brand-500/100/20 border-brand-500 text-brand-400 "
                               : "bg-white/[0.05]/50 border-slate-600 text-slate-400 hover:border-slate-500"
                           }`}
                         >
@@ -345,7 +345,7 @@ const response = await client.chat.completions.create({
                       onClick={() => setCmmcLevel(1)}
                       className={`relative p-6 rounded-2xl border text-left transition-all ${
                         cmmcLevel === 1
-                          ? "bg-brand-500/100/10 border-brand-500 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
+                          ? "bg-brand-500/100/10 border-brand-500 "
                           : "bg-white/[0.05]/50 border-slate-600 hover:border-slate-500"
                       }`}
                     >
@@ -377,7 +377,7 @@ const response = await client.chat.completions.create({
                       onClick={() => setCmmcLevel(2)}
                       className={`relative p-6 rounded-2xl border text-left transition-all ${
                         cmmcLevel === 2
-                          ? "bg-emerald-500/100/10 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+                          ? "bg-emerald-500/100/10 border-emerald-500 "
                           : "bg-white/[0.05]/50 border-slate-600 hover:border-slate-500"
                       }`}
                     >
@@ -493,7 +493,7 @@ const response = await client.chat.completions.create({
                     disabled={!canProceed()}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium transition-all ${
                       canProceed()
-                        ? "bg-brand-500/100 hover:bg-brand-400 text-white shadow-lg shadow-brand-500/20"
+                        ? "bg-brand-500/100 hover:bg-brand-400 text-white"
                         : "bg-slate-700 text-slate-500 cursor-not-allowed"
                     }`}
                   >

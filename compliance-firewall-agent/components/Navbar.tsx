@@ -4,9 +4,37 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight, Sun, Moon } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
+import { useTheme } from "@/components/theme-provider";
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const dark = theme === "dark";
+
+  return (
+    <button
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+      className={`relative w-14 h-7 rounded-full transition-all duration-300 cursor-pointer flex-shrink-0 ${
+        dark
+          ? "bg-brand-500/20 border border-brand-500/30"
+          : "bg-slate-200 border border-slate-300"
+      }`}
+    >
+      <span
+        className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
+          dark
+            ? "translate-x-7 bg-brand-500 text-white"
+            : "translate-x-0 bg-white text-amber-500 shadow-sm"
+        }`}
+      >
+        {dark ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
+      </span>
+    </button>
+  );
+}
 
 
 const navLinks = [
@@ -94,6 +122,7 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
             <Link href="/login" className={signInClass}>
               Sign in
             </Link>
+            <ThemeToggle />
             <Link
               href="/signup"
               className="btn-primary text-sm px-5 py-2.5"

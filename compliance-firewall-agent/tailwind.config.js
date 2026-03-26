@@ -111,6 +111,14 @@ module.exports = {
         "orbit": "orbit 20s linear infinite",
         "scale-pulse": "scale-pulse 4s ease-in-out infinite",
         "gradient-shift": "gradient-shift 6s ease infinite",
+        "marquee": "marquee 30s linear infinite",
+        "marquee-slow": "marquee 35s linear infinite",
+        "marquee-fast": "marquee 15s linear infinite",
+        "marquee-reverse": "marquee-reverse 30s linear infinite",
+        "marquee-reverse-slow": "marquee-reverse 45s linear infinite",
+        "reveal-up": "reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "reveal-left": "reveal-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "reveal-right": "reveal-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       },
       keyframes: {
         "glow-pulse": {
@@ -157,6 +165,26 @@ module.exports = {
           "0%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
+        },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "marquee-reverse": {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        "reveal-up": {
+          "0%": { opacity: "0", transform: "translateY(40px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "reveal-left": {
+          "0%": { opacity: "0", transform: "translateX(-40px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "reveal-right": {
+          "0%": { opacity: "0", transform: "translateX(40px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
         },
       },
       boxShadow: {

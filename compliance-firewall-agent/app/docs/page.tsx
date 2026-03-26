@@ -3,6 +3,7 @@
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 import { useState } from "react";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import Link from "next/link";
 import {
   Shield,
@@ -382,6 +383,7 @@ export default function DocsPage() {
 
   return (
     <div className="min-h-screen bg-[#07070b]">
+      <ScrollProgressBar />
       {/* Nav */}
       <nav className="sticky top-0 z-50 h-16 bg-[#07070b]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-6">
         <div className="flex items-center gap-4">

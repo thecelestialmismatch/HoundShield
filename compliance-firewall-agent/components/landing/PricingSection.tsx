@@ -53,11 +53,11 @@ interface PlanDef {
 const PLANS_BY_INDUSTRY: Record<IndustryTab, PlanDef[]> = {
   defense: [
     {
-      name: "FREE",
+      name: "FREE TRIAL",
       tier: "free",
-      price: "$0",
-      period: "/mo",
-      desc: "Get started and know your SPRS score today",
+      price: "Free",
+      period: "7-day trial",
+      desc: "Try the full platform free for 7 days — no credit card required",
       features: [
         "100 API scans / month",
         "Full CMMC self-assessment",
@@ -65,7 +65,7 @@ const PLANS_BY_INDUSTRY: Record<IndustryTab, PlanDef[]> = {
         "1 AI compliance agent",
         "Community support",
       ],
-      cta: "Get started →",
+      cta: "Start free trial →",
       ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
       featured: false,
     },
@@ -128,11 +128,11 @@ const PLANS_BY_INDUSTRY: Record<IndustryTab, PlanDef[]> = {
   ],
   healthcare: [
     {
-      name: "FREE",
+      name: "FREE TRIAL",
       tier: "free",
-      price: "$0",
-      period: "/mo",
-      desc: "Scan your AI risk and assess HIPAA posture",
+      price: "Free",
+      period: "7-day trial",
+      desc: "Try the full platform free for 7 days — no credit card required",
       features: [
         "100 AI scans / month",
         "HIPAA control assessment",
@@ -140,7 +140,7 @@ const PLANS_BY_INDUSTRY: Record<IndustryTab, PlanDef[]> = {
         "1 AI compliance agent",
         "Community support",
       ],
-      cta: "Get started →",
+      cta: "Start free trial →",
       ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
       featured: false,
     },
@@ -203,11 +203,11 @@ const PLANS_BY_INDUSTRY: Record<IndustryTab, PlanDef[]> = {
   ],
   technology: [
     {
-      name: "FREE",
+      name: "FREE TRIAL",
       tier: "free",
-      price: "$0",
-      period: "/mo",
-      desc: "Scan your AI tools for data leak risks",
+      price: "Free",
+      period: "7-day trial",
+      desc: "Try the full platform free for 7 days — no credit card required",
       features: [
         "100 AI scans / month",
         "PII & IP risk assessment",
@@ -215,7 +215,7 @@ const PLANS_BY_INDUSTRY: Record<IndustryTab, PlanDef[]> = {
         "1 AI compliance agent",
         "Community support",
       ],
-      cta: "Get started →",
+      cta: "Start free trial →",
       ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
       featured: false,
     },
@@ -314,16 +314,16 @@ export function PricingSection() {
             Pricing
           </div>
           <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
-            Start free. <span className="italic text-brand-400">Pay when it&apos;s worth it.</span>
+            7 days free. <span className="italic text-brand-400">Pay when it&apos;s worth it.</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-[520px] mx-auto">
-            No contracts. No enterprise sales calls. Real prices for regulated industries.
+            Start with a 7-day free trial — no credit card required. No contracts. Real prices for regulated industries.
           </p>
         </FadeIn>
 
         {/* Industry tabs */}
         <FadeIn delay={0.05} className="mb-10">
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
             {INDUSTRY_TABS.map(({ key, label, icon: Icon, subtitle }) => {
               const isActive = key === activeTab;
               return (
@@ -367,7 +367,11 @@ export function PricingSection() {
                 </div>
                 <div className="text-[36px] font-extrabold tracking-tight text-white mb-1">
                   {plan.price}
-                  <span className="text-base font-normal text-slate-500">{plan.period}</span>
+                  {plan.tier === "free" ? (
+                    <span className="ml-2 text-sm font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">{plan.period}</span>
+                  ) : (
+                    <span className="text-base font-normal text-slate-500">{plan.period}</span>
+                  )}
                 </div>
                 <div className="text-[13px] text-slate-400 leading-relaxed mb-5">{plan.desc}</div>
 

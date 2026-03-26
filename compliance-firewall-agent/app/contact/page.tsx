@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import { Mail, CalendarCheck, Clock, Send, ChevronDown, CheckCircle2, Shield, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Logo } from "@/components/Logo";
@@ -61,6 +62,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#07070b] text-white">
+      <ScrollProgressBar />
       <Navbar variant="dark" />
 
       {/* Hero */}

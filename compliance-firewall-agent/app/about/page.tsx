@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
 import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-section";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
     Shield, Lock, Bot, Eye, DollarSign, CheckCircle,
     ArrowRight, Quote, Calendar,
@@ -47,6 +48,7 @@ const timeline = [
 export default function AboutPage() {
     return (
         <div className="min-h-screen bg-[#07070b] text-white relative overflow-hidden">
+            <ScrollProgressBar />
             <div className="orb orb-1" />
             <div className="orb orb-2" />
             <Navbar variant="dark" />
@@ -170,7 +172,7 @@ export default function AboutPage() {
                             <AnimatedSection key={i} delay={i * 80}>
                                 <div className="flex gap-6">
                                     <div className="flex flex-col items-center">
-                                        <div className="w-3 h-3 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] flex-shrink-0 mt-1" />
+                                        <div className="w-3 h-3 rounded-full bg-brand-500 flex-shrink-0 mt-1" />
                                         {i < timeline.length - 1 && (
                                             <div className="w-px flex-1 bg-gradient-to-b from-brand-500/30 to-transparent mt-2" />
                                         )}

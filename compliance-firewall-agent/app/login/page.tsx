@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
 import { Logo } from '@/components/Logo';
@@ -51,6 +52,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4">
+      <ScrollProgressBar />
       {/* Subtle background blurs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-[30%] -left-[15%] h-[60%] w-[50%] rounded-full bg-brand-200/20 blur-[150px]" />
@@ -137,7 +139,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-brand-200"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
