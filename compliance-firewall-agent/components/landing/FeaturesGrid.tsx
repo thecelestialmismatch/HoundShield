@@ -9,6 +9,7 @@ import {
   Bot,
   FileText,
   KeyRound,
+  ArrowUpRight,
 } from "lucide-react";
 
 function FadeIn({
@@ -116,11 +117,20 @@ export function FeaturesGrid() {
             const Icon = feature.icon;
             return (
               <FadeIn key={feature.title} delay={i * 0.08} className={feature.span}>
-                <div className="h-full p-7 bg-white/[0.03] border border-white/[0.07] rounded-2xl hover:border-brand-400/25 hover:bg-white/[0.05] hover:-translate-y-1 transition-all duration-300 group">
-                  <div className={`w-11 h-11 rounded-[10px] flex items-center justify-center mb-4 ${feature.iconBg}`}>
+                <div className="group h-full p-7 bg-white/[0.025] border border-white/[0.06] rounded-2xl relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-400/25 hover:bg-white/[0.045] hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(245,200,66,0.08)]">
+                  {/* Hover glow sweep */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(245,200,66,0.04) 0%, transparent 70%)" }}
+                  />
+                  {/* Icon */}
+                  <div className={`relative w-11 h-11 rounded-[10px] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 ${feature.iconBg}`}>
                     <Icon className={`w-5 h-5 ${feature.iconColor}`} />
                   </div>
-                  <h3 className="text-base font-bold text-white mb-2">{feature.title}</h3>
+                  {/* Arrow reveal */}
+                  <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0">
+                    <ArrowUpRight className="w-4 h-4 text-slate-500" />
+                  </div>
+                  <h3 className="text-base font-bold text-white mb-2 group-hover:text-brand-400 transition-colors duration-200">{feature.title}</h3>
                   <p className="text-sm text-slate-400 leading-relaxed">{feature.desc}</p>
                 </div>
               </FadeIn>
