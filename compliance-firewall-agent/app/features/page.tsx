@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   ShieldCheck,
   Brain,
@@ -137,6 +138,7 @@ const integrations = [
 export default function FeaturesPage() {
   return (
     <div className="min-h-screen bg-[#07070b] text-white relative overflow-hidden">
+      <ScrollProgressBar />
       <Navbar variant="dark" />
 
       {/* ── Hero ──────────────────────────────────────────────── */}

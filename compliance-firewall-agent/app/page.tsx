@@ -20,28 +20,80 @@ import { FAQSection } from "@/components/landing/FAQSection";
 import { NewsletterSection } from "@/components/landing/NewsletterSection";
 import { CTASection } from "@/components/landing/CTASection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
+import { ScrollReveal, ScrollProgressBar } from "@/components/scroll-effects";
+
 export default function LandingPage() {
   return (
     <div className="bg-[#07070b] min-h-screen relative">
+      <ScrollProgressBar />
       <Navbar variant="dark" />
       <HeroSection />
       <TickerSection />
-      <TrustedMarquee />
-      <CMMCSocialProof />
-      <SetupSteps />
-      <DetectionGrid />
-      <ReActLoop />
-      <ArchitectureAccordion />
-      <CodeBlock />
-      <PipelineSimulator />
-      <DashboardMockup />
-      <FeaturesGrid />
-      <Testimonials />
-      <AgencySection />
-      <PricingSection />
-      <FAQSection />
-      <NewsletterSection />
-      <CTASection />
+
+      <ScrollReveal direction="up" delay={0}>
+        <TrustedMarquee />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <CMMCSocialProof />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <SetupSteps />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <DetectionGrid />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <ReActLoop />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <ArchitectureAccordion />
+      </ScrollReveal>
+
+      <ScrollReveal direction="left" delay={0}>
+        <CodeBlock />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <PipelineSimulator />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <DashboardMockup />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <FeaturesGrid />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <Testimonials />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <AgencySection />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <PricingSection />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <FAQSection />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <NewsletterSection />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={0}>
+        <CTASection />
+      </ScrollReveal>
+
       <LandingFooter />
     </div>
   );

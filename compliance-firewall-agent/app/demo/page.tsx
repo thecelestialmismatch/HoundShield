@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
+import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import {
     ShieldCheck, AlertTriangle, Lock, ArrowRight, CheckCircle2,
     Key, Mail, CreditCard, Globe, Database, Fingerprint,
@@ -318,6 +319,7 @@ export default function FreeDemoPage() {
 
     return (
         <div className="min-h-screen bg-[#07070b] text-white font-sans overflow-x-hidden">
+            <ScrollProgressBar />
             <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
             <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
 

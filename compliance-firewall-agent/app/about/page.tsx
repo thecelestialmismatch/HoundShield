@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
 import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-section";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
     Shield, Lock, Bot, Eye, DollarSign, CheckCircle,
     ArrowRight, Quote, Calendar,
@@ -47,6 +48,7 @@ const timeline = [
 export default function AboutPage() {
     return (
         <div className="min-h-screen bg-[#07070b] text-white relative overflow-hidden">
+            <ScrollProgressBar />
             <div className="orb orb-1" />
             <div className="orb orb-2" />
             <Navbar variant="dark" />

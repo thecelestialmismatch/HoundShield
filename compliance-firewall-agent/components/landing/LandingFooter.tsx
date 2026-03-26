@@ -49,10 +49,10 @@ export function LandingFooter() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
+            <Link href="/" className="flex items-center gap-2 mb-4 w-fit">
               <Logo />
               <TextLogo className="text-lg" variant="dark" />
-            </div>
+            </Link>
             <p className="text-sm text-slate-500 leading-relaxed mb-4">
               AI compliance firewall for regulated industries.
             </p>

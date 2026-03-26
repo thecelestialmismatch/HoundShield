@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   Shield, Cpu, CreditCard, LayoutDashboard, KeyRound, Blocks,
   Sparkles, Zap, Wrench, Calendar, Rocket, FolderSearch,
@@ -97,6 +98,7 @@ const roadmap = [
 export default function ChangelogPage() {
   return (
     <div className="min-h-screen bg-[#07070b] text-white">
+      <ScrollProgressBar />
       <Navbar variant="dark" />
 
       {/* Hero */}

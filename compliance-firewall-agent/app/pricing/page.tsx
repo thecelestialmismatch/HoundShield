@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
@@ -322,6 +323,7 @@ export default function PricingPage() {
 
   return (
     <div className="dark min-h-screen bg-[#07070b] relative overflow-hidden">
+      <ScrollProgressBar />
       {/* ===== FLOATING ORBS ===== */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />

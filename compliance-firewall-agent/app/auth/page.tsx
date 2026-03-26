@@ -3,6 +3,7 @@
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 import { useState, useEffect, useCallback } from "react";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
@@ -279,6 +280,7 @@ export default function AuthPage() {
 
   return (
     <div className="flex min-h-screen bg-[#07070b]">
+      <ScrollProgressBar />
       {/* ─── LEFT BRANDING PANEL ─── */}
       <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-[#07070b] items-center justify-center p-12 xl:p-16">
         {/* Background textures */}

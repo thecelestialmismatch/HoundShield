@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 const TICKER_ITEMS = [
   { color: "bg-emerald-400", text: "ALLOWED · user prompt scanned · 0 threats detected · 12ms" },
   { color: "bg-red-400", text: "BLOCKED · API key detected in prompt · sk-proj-*** · 8ms" },
@@ -20,14 +22,18 @@ export function TickerSection() {
 
   return (
     <div className="relative bg-[#07070b] border-t border-b border-white/[0.05] py-3 overflow-hidden">
-      <div className="flex gap-12 animate-marquee whitespace-nowrap" style={{ width: "max-content" }}>
+      <motion.div
+        className="flex gap-12 whitespace-nowrap w-max"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 30, ease: "linear", repeat: Infinity }}
+      >
         {doubled.map((item, i) => (
           <div key={i} className="flex items-center gap-2 flex-shrink-0 text-white/40 text-[13px] font-mono">
             <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.color}`} />
             {item.text}
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

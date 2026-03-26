@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 const TRUSTED_COMPANIES = [
   { initials: "DT", name: "DefenseTech Systems" },
   { initials: "AS", name: "AeroShield Corp" },
@@ -22,15 +24,13 @@ export function TrustedMarquee() {
         Trusted by industry leaders worldwide
       </p>
       <div className="relative overflow-hidden">
-        <div
-          className="absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to right, #07070b 0%, transparent 100%)" }}
-        />
-        <div
-          className="absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to left, #07070b 0%, transparent 100%)" }}
-        />
-        <div className="flex animate-marquee" style={{ width: "max-content" }}>
+        <div className="absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none bg-gradient-to-r from-[#07070b] to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none bg-gradient-to-l from-[#07070b] to-transparent" />
+        <motion.div
+          className="flex w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 35, ease: "linear", repeat: Infinity }}
+        >
           {doubled.map((company, i) => (
             <div key={i} className="flex items-center gap-3 px-8 flex-shrink-0">
               <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center flex-shrink-0">
@@ -43,7 +43,7 @@ export function TrustedMarquee() {
               </span>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
