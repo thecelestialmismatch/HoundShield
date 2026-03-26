@@ -1,29 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  weight: ["600", "700", "800", "900"],
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  weight: ["700", "800"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
 
 export const viewport: Viewport = {
   themeColor: "#07070b",
@@ -97,7 +75,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark scroll-smooth ${inter.variable} ${outfit.variable} ${playfair.variable}`}
+      className="dark scroll-smooth"
       suppressHydrationWarning
     >
       <head>

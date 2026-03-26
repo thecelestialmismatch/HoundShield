@@ -192,7 +192,6 @@ export function TechDashboard() {
                   ) : (
                     <div className="h-[88px] rounded bg-white/[0.03] animate-pulse" />
                   )}
-                  {/* Center label — always visible */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="text-center">
                       <div className="text-[10px] font-mono font-bold text-white">16</div>
