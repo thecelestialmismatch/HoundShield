@@ -10,11 +10,11 @@ module.exports = {
       colors: {
         /* ── Chanel Luxury Dark Theme ────────────────────── */
         surface: {
-          DEFAULT: "#FAFAF8",
-          50: "#FFFFFF",
-          100: "#F5F0E8",
-          200: "#E8DDD0",
-          300: "#D4C4B0",
+          DEFAULT: "#EDE7DE",
+          50: "#F5F0E8",
+          100: "#EDE7DE",
+          200: "#E0D8CE",
+          300: "#D0C5B8",
         },
         brand: {
           50: "#FDF8ED",
@@ -72,31 +72,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: [
-          "Inter",
-          "ui-sans-serif",
-          "system-ui",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "sans-serif",
-        ],
-        display: [
-          "Outfit",
-          "Inter",
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-        ],
-        mono: [
-          "ui-monospace",
-          "SFMono-Regular",
-          "SF Mono",
-          "Menlo",
-          "Consolas",
-          "monospace",
-        ],
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
+        display: ["var(--font-outfit)", "var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        editorial: ["var(--font-playfair)", "Georgia", "ui-serif", "serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
       },
       fontSize: {
         "display-lg": [

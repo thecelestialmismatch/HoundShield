@@ -48,7 +48,7 @@ export function ReActLoop() {
   }, [isInView]);
 
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-[#F7F5F0]">
+    <section ref={ref} className="py-24 md:py-32 bg-[#07070b]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
