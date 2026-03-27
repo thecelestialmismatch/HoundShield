@@ -336,12 +336,12 @@ export function PlatformDashboard() {
           </div>
 
           {/* RIGHT — live threat feed + framework status */}
-          <div className="w-[230px] flex-shrink-0 p-4 space-y-4">
+          <div className="w-[230px] flex-shrink-0 flex flex-col divide-y divide-white/[0.04]">
 
             {/* 1 ── Live threat feed */}
-            <div>
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2.5 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse inline-block" />
+            <div className="flex-1 p-3.5 min-h-0">
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse inline-block flex-shrink-0" />
                 Live threat feed
               </p>
               <div className="space-y-1.5">
@@ -351,7 +351,7 @@ export function PlatformDashboard() {
                     return (
                       <motion.div
                         key={entry.id}
-                        initial={{ opacity: 0, x: 16, height: 0 }}
+                        initial={{ opacity: 0, x: 12, height: 0 }}
                         animate={{ opacity: 1, x: 0, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.28, ease: [0.25, 0.4, 0.25, 1] }}
@@ -376,18 +376,42 @@ export function PlatformDashboard() {
               </div>
             </div>
 
-            {/* 2 ── Framework split (donut) */}
-            <div>
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Framework split</p>
-              <div className="flex items-center gap-2">
+            {/* 2 ── Framework status pills (was #3) */}
+            <div className="p-3.5">
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Framework status</p>
+              <div className="space-y-1.5">
+                {[
+                  { key: "SOC 2", Icon: Lock,       color: "text-indigo-400",  bg: "bg-indigo-500/10",  border: "border-indigo-500/20"  },
+                  { key: "HIPAA", Icon: HeartPulse, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+                  { key: "CMMC",  Icon: Shield,     color: "text-amber-400",   bg: "bg-amber-500/10",   border: "border-amber-500/20"   },
+                ].map((fw) => {
+                  const Icon = fw.Icon;
+                  return (
+                    <div key={fw.key} className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg ${fw.bg} border ${fw.border}`}>
+                      <Icon className={`w-2.5 h-2.5 flex-shrink-0 ${fw.color}`} />
+                      <span className={`text-[8px] font-mono font-bold ${fw.color}`}>{fw.key}</span>
+                      <div className="ml-auto flex items-center gap-0.5">
+                        <CheckCircle2 className="w-2 h-2 text-emerald-400" />
+                        <span className="text-[7px] font-mono text-emerald-500">active</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 3 ── Framework split donut (was #2) */}
+            <div className="p-3.5">
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2.5">Framework split</p>
+              <div className="flex items-center gap-2.5">
                 {mounted ? (
-                  <PieChart width={68} height={68}>
+                  <PieChart width={64} height={64}>
                     <Pie
                       data={pieData}
-                      cx={32}
-                      cy={32}
-                      innerRadius={20}
-                      outerRadius={32}
+                      cx={30}
+                      cy={30}
+                      innerRadius={18}
+                      outerRadius={30}
                       dataKey="value"
                       strokeWidth={0}
                       isAnimationActive={false}
@@ -398,39 +422,18 @@ export function PlatformDashboard() {
                     </Pie>
                   </PieChart>
                 ) : (
-                  <div className="w-[68px] h-[68px] rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
+                  <div className="w-[64px] h-[64px] rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
                 )}
-                <div className="flex flex-col gap-1.5 flex-1">
+                <div className="flex flex-col gap-1.5 flex-1 min-w-0">
                   {pieData.map((d) => (
-                    <div key={d.name} className="flex items-center gap-1">
+                    <div key={d.name} className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                      <span className="text-[8px] font-mono text-slate-500 flex-1">{d.name}</span>
-                      <span className="text-[8px] font-mono font-bold tabular-nums" style={{ color: d.color }}>{d.value}%</span>
+                      <span className="text-[8px] font-mono text-slate-500 flex-1 truncate">{d.name}</span>
+                      <span className="text-[8px] font-mono font-bold tabular-nums flex-shrink-0" style={{ color: d.color }}>{d.value}%</span>
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* 3 ── Framework status pills */}
-            <div className="space-y-1">
-              {[
-                { key: "SOC 2",  Icon: Lock,       color: "text-indigo-400",  bg: "bg-indigo-500/10",  border: "border-indigo-500/20"  },
-                { key: "HIPAA",  Icon: HeartPulse, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-                { key: "CMMC",   Icon: Shield,     color: "text-amber-400",   bg: "bg-amber-500/10",   border: "border-amber-500/20"   },
-              ].map((fw) => {
-                const Icon = fw.Icon;
-                return (
-                  <div key={fw.key} className={`flex items-center gap-1.5 px-2 py-1 rounded-lg ${fw.bg} border ${fw.border}`}>
-                    <Icon className={`w-2.5 h-2.5 flex-shrink-0 ${fw.color}`} />
-                    <span className={`text-[8px] font-mono font-bold ${fw.color}`}>{fw.key}</span>
-                    <div className="ml-auto flex items-center gap-0.5">
-                      <CheckCircle2 className="w-2 h-2 text-emerald-400" />
-                      <span className="text-[7px] font-mono text-emerald-500">active</span>
-                    </div>
-                  </div>
-                );
-              })}
             </div>
           </div>
         </div>
