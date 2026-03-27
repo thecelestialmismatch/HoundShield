@@ -190,7 +190,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Value Props ──────────────────────────── */}
-      <section className="py-24 md:py-32 border-t border-white/[0.06]">
+      <section id="msp" className="py-24 md:py-32 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* MSP Value */}
@@ -259,7 +259,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Partner Tiers ─────────────────────────── */}
-      <section className="py-24 md:py-32 border-t border-white/[0.06]">
+      <section id="reseller" className="py-24 md:py-32 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
             <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">

@@ -74,8 +74,8 @@ const PRODUCTS = [
 /* ── Nav Flyout Panel Data ───────────────────────────────── */
 const FEATURES_ITEMS = [
   { icon: Eye,       color: "text-indigo-400", bg: "bg-indigo-500/10", label: "AI Prompt Interception",  desc: "Every LLM request inspected before it leaves the network",       href: "/features#interception" },
-  { icon: Zap,       color: "text-amber-400",  bg: "bg-amber-500/10",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#detection" },
-  { icon: Clock,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#latency" },
+  { icon: Zap,       color: "text-amber-400",  bg: "bg-amber-500/10",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#interception" },
+  { icon: Clock,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#interception" },
   { icon: FileCheck, color: "text-violet-400", bg: "bg-violet-500/10", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit",               href: "/features#audit" },
   { icon: Layers,    color: "text-sky-400",    bg: "bg-sky-500/10",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/docs#quickstart" },
   { icon: Activity,  color: "text-rose-400",   bg: "bg-rose-500/10",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },

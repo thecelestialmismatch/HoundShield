@@ -16,13 +16,6 @@
   --my: -500px;
 }
 
-/* ── Custom cursor (desktop pointer-fine only) ────────────── */
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
-
 /* ── Section spotlight — add .spotlight class to any section ── */
 .spotlight {
   position: relative;

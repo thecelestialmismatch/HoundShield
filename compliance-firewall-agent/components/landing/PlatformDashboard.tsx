@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Lock, HeartPulse, Shield, AlertTriangle, CheckCircle2, Activity } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import {
-  BarChart, Bar, XAxis, Tooltip,
+  BarChart, Bar, XAxis, YAxis, Tooltip, Cell,
   ResponsiveContainer, AreaChart, Area,
+  PieChart, Pie,
 } from "recharts";
 
 /* ── Event pool ────────────────────────────────────────── */
@@ -22,11 +23,26 @@ const EVENT_POOL = [
   { framework: "CMMC",   color: "#F5C842", detail: "CAGE code 3GTK7 in AI proposal draft",      status: "QUARANTINED" as const, engine: "CUI" },
 ];
 
-const FRAMEWORK_COLORS = {
-  "SOC 2": "#6366F1",
-  "HIPAA": "#10B981",
-  "CMMC":  "#F5C842",
-};
+const ENGINE_COLORS = ["#6366F1", "#10B981", "#F5C842", "#F87171"];
+
+function initBar() {
+  return [
+    { engine: "PHI",  count: rand(3, 18) },
+    { engine: "PII",  count: rand(2, 12) },
+    { engine: "CUI",  count: rand(1, 9)  },
+    { engine: "KEYS", count: rand(4, 22) },
+  ];
+}
+
+function initPie() {
+  const soc = rand(35, 50);
+  const hipaa = rand(22, 36);
+  return [
+    { name: "SOC 2", value: soc,               color: "#6366F1" },
+    { name: "HIPAA", value: hipaa,             color: "#10B981" },
+    { name: "CMMC",  value: 100 - soc - hipaa, color: "#F5C842" },
+  ];
+}
 
 const STATUS_STYLES = {
   BLOCKED:     { text: "text-red-400",    bg: "bg-red-500/10",    border: "border-red-500/20"    },
@@ -68,6 +84,8 @@ export function PlatformDashboard() {
   const [mounted, setMounted]           = useState(false);
   const [totalBlocked, setTotalBlocked] = useState(14_388);
   const [chartData, setChartData]       = useState(initChart);
+  const [barData, setBarData]           = useState(initBar);
+  const [pieData, setPieData]           = useState(initPie);
   const [log, setLog]                   = useState<LogEntry[]>([]);
   const [scanPct, setScanPct]           = useState(0);
   const counterRef                      = useRef(0);
@@ -101,6 +119,33 @@ export function PlatformDashboard() {
         { t: (prev[prev.length - 1]?.t ?? 0) + 1, soc2: rand(4, 22), hipaa: rand(2, 15), cmmc: rand(1, 11) },
       ]);
     }, 1800);
+    return () => clearInterval(t);
+  }, []);
+
+  /* Bar chart — updates every 1.6s (animated bars = "moving") */
+  useEffect(() => {
+    const t = setInterval(() => {
+      setBarData([
+        { engine: "PHI",  count: rand(3, 18) },
+        { engine: "PII",  count: rand(2, 12) },
+        { engine: "CUI",  count: rand(1, 9)  },
+        { engine: "KEYS", count: rand(4, 22) },
+      ]);
+    }, 1600);
+    return () => clearInterval(t);
+  }, []);
+
+  /* Donut pie — framework split updates every 2.8s */
+  useEffect(() => {
+    const t = setInterval(() => {
+      const soc   = rand(35, 50);
+      const hipaa = rand(22, 36);
+      setPieData([
+        { name: "SOC 2", value: soc,               color: "#6366F1" },
+        { name: "HIPAA", value: hipaa,             color: "#10B981" },
+        { name: "CMMC",  value: 100 - soc - hipaa, color: "#F5C842" },
+      ]);
+    }, 2800);
     return () => clearInterval(t);
   }, []);
 
@@ -209,14 +254,14 @@ export function PlatformDashboard() {
           </div>
 
           {/* Right — charts */}
-          <div className="w-[220px] flex-shrink-0 p-4 space-y-4">
+          <div className="w-[230px] flex-shrink-0 p-3 space-y-3">
 
-            {/* Live area chart */}
+            {/* 1 ── Live area chart */}
             <div>
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Real-time blocks</p>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Real-time blocks</p>
               {mounted ? (
-                <ResponsiveContainer width="100%" height={80}>
-                  <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -30, bottom: 0 }}>
+                <ResponsiveContainer width="100%" height={62}>
+                  <AreaChart data={chartData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }}>
                     <defs>
                       <linearGradient id="soc2g" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%"  stopColor="#6366F1" stopOpacity={0.3} />
@@ -239,13 +284,69 @@ export function PlatformDashboard() {
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-[80px] rounded bg-white/[0.03] animate-pulse" />
+                <div className="h-[62px] rounded bg-white/[0.03] animate-pulse" />
               )}
             </div>
 
-            {/* Framework status pills */}
-            <div className="space-y-1.5">
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Framework status</p>
+            {/* 2 ── Moving bar chart — detection engine breakdown */}
+            <div>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Engine activity</p>
+              {mounted ? (
+                <ResponsiveContainer width="100%" height={58}>
+                  <BarChart data={barData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }} barCategoryGap="28%">
+                    <XAxis dataKey="engine" tick={{ fontSize: 7, fill: "#475569", fontFamily: "monospace" }} axisLine={false} tickLine={false} />
+                    <YAxis hide />
+                    <Tooltip content={<ChartTip />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                    <Bar dataKey="count" radius={[2, 2, 0, 0]} isAnimationActive animationDuration={380} animationEasing="ease-out">
+                      {barData.map((_, i) => (
+                        <Cell key={i} fill={ENGINE_COLORS[i % ENGINE_COLORS.length]} fillOpacity={0.85} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-[58px] rounded bg-white/[0.03] animate-pulse" />
+              )}
+            </div>
+
+            {/* 3 ── Donut — framework split */}
+            <div>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Framework split</p>
+              <div className="flex items-center gap-2">
+                {mounted ? (
+                  <PieChart width={64} height={64}>
+                    <Pie
+                      data={pieData}
+                      cx={30}
+                      cy={30}
+                      innerRadius={20}
+                      outerRadius={30}
+                      dataKey="value"
+                      strokeWidth={0}
+                      isAnimationActive={false}
+                    >
+                      {pieData.map((entry, i) => (
+                        <Cell key={i} fill={entry.color} fillOpacity={0.9} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
+                )}
+                <div className="flex flex-col gap-1 flex-1">
+                  {pieData.map((d) => (
+                    <div key={d.name} className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
+                      <span className="text-[8px] font-mono text-slate-600 flex-1">{d.name}</span>
+                      <span className="text-[8px] font-mono font-bold tabular-nums" style={{ color: d.color }}>{d.value}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* 4 ── Framework status pills */}
+            <div className="space-y-1">
               {[
                 { key: "SOC 2",  Icon: Lock,       color: "text-indigo-400",  bg: "bg-indigo-500/10",  border: "border-indigo-500/20"  },
                 { key: "HIPAA",  Icon: HeartPulse, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
@@ -253,12 +354,12 @@ export function PlatformDashboard() {
               ].map((fw) => {
                 const Icon = fw.Icon;
                 return (
-                  <div key={fw.key} className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg ${fw.bg} border ${fw.border}`}>
+                  <div key={fw.key} className={`flex items-center gap-1.5 px-2 py-1 rounded-lg ${fw.bg} border ${fw.border}`}>
                     <Icon className={`w-2.5 h-2.5 flex-shrink-0 ${fw.color}`} />
-                    <span className={`text-[9px] font-mono font-bold ${fw.color}`}>{fw.key}</span>
-                    <div className="ml-auto flex items-center gap-1">
-                      <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
-                      <span className="text-[8px] font-mono text-emerald-500">active</span>
+                    <span className={`text-[8px] font-mono font-bold ${fw.color}`}>{fw.key}</span>
+                    <div className="ml-auto flex items-center gap-0.5">
+                      <CheckCircle2 className="w-2 h-2 text-emerald-400" />
+                      <span className="text-[7px] font-mono text-emerald-500">active</span>
                     </div>
                   </div>
                 );

@@ -4,13 +4,12 @@ import { useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 /**
- * Vanta-style cursor:
- * - Small sharp dot tracking cursor exactly
- * - Larger ring following with spring lag
- * - Global ambient glow that moves lazily
+ * Ambient cursor glow:
+ * - Large lazy radial glow that follows the mouse
  * - Fades in on first move, fades out when leaving window
  * - Sets CSS vars --mx/--my on :root for section spotlights
  * - Only active on pointer-fine (desktop) devices
+ * - Normal system cursor is preserved (no cursor: none)
  */
 export function CursorGlow() {
   // Position — starts far off-screen so springs don't launch visibly
@@ -21,20 +20,12 @@ export function CursorGlow() {
   const visible = useMotionValue(0);
   const smoothVisible = useSpring(visible, { stiffness: 300, damping: 28 });
 
-  // Sharp dot — snappy
-  const dotX = useSpring(mouseX, { stiffness: 900, damping: 45 });
-  const dotY = useSpring(mouseY, { stiffness: 900, damping: 45 });
-
-  // Ring — slight lag
-  const ringX = useSpring(mouseX, { stiffness: 200, damping: 22 });
-  const ringY = useSpring(mouseY, { stiffness: 200, damping: 22 });
-
   // Ambient glow — very lazy
   const glowX = useSpring(mouseX, { stiffness: 50, damping: 20 });
   const glowY = useSpring(mouseY, { stiffness: 50, damping: 20 });
 
-  // Scale the glow's base opacity (0.08) by visibility
-  const glowOpacity = useTransform(smoothVisible, [0, 1], [0, 0.08]);
+  // Scale the glow's base opacity (0.06) by visibility
+  const glowOpacity = useTransform(smoothVisible, [0, 1], [0, 0.06]);
 
   useEffect(() => {
     // Only enable on pointer-fine (mouse) devices
@@ -74,7 +65,7 @@ export function CursorGlow() {
 
   return (
     <>
-      {/* Ambient glow — large, lazy, behind everything */}
+      {/* Ambient glow — large, lazy, sits behind all content */}
       <motion.div
         aria-hidden="true"
         className="fixed pointer-events-none z-0 rounded-full"
@@ -88,39 +79,6 @@ export function CursorGlow() {
           opacity: glowOpacity,
           background:
             "radial-gradient(circle, rgba(99,102,241,1) 0%, rgba(99,102,241,0.4) 30%, transparent 70%)",
-        }}
-      />
-
-      {/* Ring — spring lag */}
-      <motion.div
-        aria-hidden="true"
-        className="fixed pointer-events-none z-[9998] rounded-full"
-        style={{
-          x: ringX,
-          y: ringY,
-          translateX: "-50%",
-          translateY: "-50%",
-          width: 36,
-          height: 36,
-          opacity: smoothVisible,
-          border: "1.5px solid rgba(255,255,255,0.25)",
-          mixBlendMode: "difference" as const,
-        }}
-      />
-
-      {/* Dot — sharp */}
-      <motion.div
-        aria-hidden="true"
-        className="fixed pointer-events-none z-[9999] rounded-full bg-white"
-        style={{
-          x: dotX,
-          y: dotY,
-          translateX: "-50%",
-          translateY: "-50%",
-          width: 6,
-          height: 6,
-          opacity: smoothVisible,
-          mixBlendMode: "difference" as const,
         }}
       />
     </>
