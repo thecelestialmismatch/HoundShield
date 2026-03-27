@@ -178,7 +178,7 @@ export async function GET(req: NextRequest) {
       const { generateCompliancePDF } = await import("@/lib/reports/pdf-generator");
       const pdfBuffer = generateCompliancePDF(reportData);
       const dateStr = new Date(from).toISOString().slice(0, 10);
-      return new Response(pdfBuffer, {
+      return new Response(new Uint8Array(pdfBuffer), {
         status: 200,
         headers: {
           "Content-Type": "application/pdf",

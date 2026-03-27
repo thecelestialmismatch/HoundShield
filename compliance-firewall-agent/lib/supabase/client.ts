@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
@@ -19,12 +19,21 @@ export function isSupabaseConfigured(): boolean {
 
 // Server-side client with service role (full access) — use in API routes only
 export function createServiceClient() {
-  return createClient(supabaseUrl, supabaseServiceKey, {
+  return createSupabaseClient(supabaseUrl, supabaseServiceKey, {
     auth: { persistSession: false },
   });
 }
 
 // Client-side client with anon key (RLS enforced)
 export function createBrowserClient() {
-  return createClient(supabaseUrl, supabaseAnonKey);
+  return createSupabaseClient(supabaseUrl, supabaseAnonKey);
+}
+
+// Zero-arg factory alias — for older routes that call createClient() with no args.
+// Returns a service-role client pre-wired with env vars.
+// Prefer createServiceClient() or createBrowserClient() for new code.
+export function createClient() {
+  return createSupabaseClient(supabaseUrl, supabaseServiceKey, {
+    auth: { persistSession: false },
+  });
 }

@@ -10,6 +10,7 @@ import { PricingSection } from "@/components/landing/PricingSection";
 import { CTASection } from "@/components/landing/CTASection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { ScrollReveal, ScrollProgressBar } from "@/components/scroll-effects";
+import { SectionSpotlight } from "@/components/SectionSpotlight";
 
 export default function LandingPage() {
   return (
@@ -17,27 +18,35 @@ export default function LandingPage() {
       <ScrollProgressBar />
       <Navbar variant="dark" />
 
-      {/* Above the fold: tight hero with live counter */}
-      <HeroSection />
+      {/* Above the fold: tight hero with live counter + 3D dashboard */}
+      <SectionSpotlight as="div" color="rgba(245,200,66,0.06)" radius={700}>
+        <HeroSection />
+      </SectionSpotlight>
 
-      {/* Social proof: logo marquee */}
+      {/* Social proof: dual-direction logo marquee */}
       <ScrollReveal direction="up" delay={0}>
         <TrustedMarquee />
       </ScrollReveal>
 
       {/* Why Kaelus: 3 differentiators vs. alternatives */}
       <ScrollReveal direction="up" delay={0}>
-        <WhyKaelus />
+        <SectionSpotlight color="rgba(99,102,241,0.07)" radius={600}>
+          <WhyKaelus />
+        </SectionSpotlight>
       </ScrollReveal>
 
-      {/* How it works: 3 steps */}
+      {/* How it works: 3 steps with animated connectors */}
       <ScrollReveal direction="up" delay={0}>
-        <SetupSteps />
+        <SectionSpotlight color="rgba(16,185,129,0.06)" radius={600}>
+          <SetupSteps />
+        </SectionSpotlight>
       </ScrollReveal>
 
       {/* Social proof: testimonials */}
       <ScrollReveal direction="up" delay={0}>
-        <Testimonials />
+        <SectionSpotlight color="rgba(99,102,241,0.06)" radius={550}>
+          <Testimonials />
+        </SectionSpotlight>
       </ScrollReveal>
 
       {/* The gate: pricing */}
@@ -47,7 +56,9 @@ export default function LandingPage() {
 
       {/* Final CTA */}
       <ScrollReveal direction="up" delay={0}>
-        <CTASection />
+        <SectionSpotlight color="rgba(245,200,66,0.08)" radius={700}>
+          <CTASection />
+        </SectionSpotlight>
       </ScrollReveal>
 
       <LandingFooter />

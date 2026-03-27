@@ -14,9 +14,10 @@ export function ParticleField() {
     if (!canvas) return;
 
     const glOpts = { alpha: true, premultipliedAlpha: false };
-    const gl =
+    const gl = (
       canvas.getContext("webgl", glOpts) ||
-      canvas.getContext("experimental-webgl", glOpts);
+      canvas.getContext("experimental-webgl", glOpts)
+    ) as WebGLRenderingContext | null;
     if (!gl) return;
 
     /* ── Resize ──────────────────────────────────── */

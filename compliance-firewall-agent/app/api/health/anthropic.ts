@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getAnthropicApiKey } from '../../lib/secrets-manager'
+import { getAnthropicApiKey } from '@/lib/secrets-manager'
 
 export async function GET() {
   const apiKey = await getAnthropicApiKey()

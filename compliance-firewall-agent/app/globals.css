@@ -11,6 +11,41 @@
   --font-playfair: 'Playfair Display', ui-serif, Georgia, serif;
   --font-sans: var(--font-inter);
   --font-display: var(--font-outfit);
+  /* Cursor position for section spotlights */
+  --mx: -500px;
+  --my: -500px;
+}
+
+/* ── Section spotlight — add .spotlight class to any section ── */
+.spotlight {
+  position: relative;
+}
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    500px circle at var(--mx) var(--my),
+    rgba(99, 102, 241, 0.07),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ── Card glow on hover (border lights up from cursor) ──────── */
+.card-glow {
+  position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.card-glow:hover {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.15), 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
