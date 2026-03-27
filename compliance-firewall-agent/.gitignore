@@ -33,3 +33,40 @@ next-env.d.ts
 
 # Claude session state
 .claude-session-state.md
+
+# ── Secret & key files (never commit) ─────────────────────────────────────
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+*.der
+*.jks
+*.keystore
+id_rsa
+id_rsa*
+id_ed25519
+id_ed25519*
+*.secret
+secrets.json
+secrets.yaml
+secrets.yml
+service-account*.json
+gcp-*.json
+firebase-adminsdk*.json
+credentials.json
+auth.json
+token.json
+*.token
+
+# ── Local overrides ────────────────────────────────────────────────────────
+.env.production
+.env.staging
+.env.development
+
+# ── Database dumps ─────────────────────────────────────────────────────────
+*.sql
+*.dump
+*.sqlite
+*.db

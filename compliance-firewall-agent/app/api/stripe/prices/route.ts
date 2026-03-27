@@ -6,7 +6,7 @@ function getStripeClient(): Stripe {
   if (!stripeClient) {
     const key = process.env.STRIPE_SECRET_KEY;
     if (!key) throw new Error('STRIPE_SECRET_KEY not configured');
-    stripeClient = new Stripe(key, { apiVersion: '2022-11-15' as const });
+    stripeClient = new Stripe(key, { apiVersion: '2025-01-27.acacia' as Stripe.LatestApiVersion });
   }
   return stripeClient;
 }

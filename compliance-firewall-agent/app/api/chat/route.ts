@@ -43,7 +43,7 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 export async function POST(request: NextRequest) {
   try {
-    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || request.ip || "anonymous";
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "anonymous";
     const rateLimitResult = limiter(ip);
     
     if (!rateLimitResult.success) {
