@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Lock, HeartPulse, Shield } from "lucide-react";
+import { ArrowRight, ChevronRight, Lock, HeartPulse, Shield, Zap } from "lucide-react";
 
 // Dynamic import — recharts uses browser APIs incompatible with SSR
 const PlatformDashboard = dynamic(
@@ -36,9 +36,10 @@ function LiveCounter() {
 }
 
 const FRAMEWORKS = [
-  { icon: Lock,       label: "SOC 2",   color: "text-indigo-400",  ring: "ring-indigo-500/30 bg-indigo-500/10"   },
-  { icon: HeartPulse, label: "HIPAA",   color: "text-emerald-400", ring: "ring-emerald-500/30 bg-emerald-500/10" },
-  { icon: Shield,     label: "CMMC L2", color: "text-amber-400",   ring: "ring-amber-500/30 bg-amber-500/10"    },
+  { icon: Lock,       label: "SOC 2",          color: "text-indigo-400",  ring: "ring-indigo-500/30 bg-indigo-500/10"   },
+  { icon: HeartPulse, label: "HIPAA",          color: "text-emerald-400", ring: "ring-emerald-500/30 bg-emerald-500/10" },
+  { icon: Shield,     label: "CMMC L2",        color: "text-amber-400",   ring: "ring-amber-500/30 bg-amber-500/10"    },
+  { icon: Zap,        label: "One Deployment", color: "text-violet-400",  ring: "ring-violet-500/30 bg-violet-500/10"  },
 ];
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
@@ -78,9 +79,6 @@ export function HeroSection() {
                   <span className={color}>{label}</span>
                 </div>
               ))}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full ring-1 ring-white/10 bg-white/[0.04] text-xs font-semibold uppercase tracking-wider text-slate-500">
-                One Deployment
-              </div>
             </motion.div>
 
             {/* Headline */}
