@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronRight, Lock, Activity, Shield } from "lucide-react";
+import { ArrowRight, ChevronRight, Lock, Activity, Shield, Layers } from "lucide-react";
 import { TechDashboard } from "./TechDashboard";
 import { HealthcareDashboard } from "./HealthcareDashboard";
 import { DefenseDashboard } from "./DefenseDashboard";
+import { PlatformDashboard } from "./PlatformDashboard";
 
 function FadeIn({
   children,
@@ -29,8 +30,7 @@ function FadeIn({
   );
 }
 
-// Technology first → Healthcare → Defense (defense of contractors last)
-type Vertical = "technology" | "healthcare" | "defense";
+type Vertical = "platform" | "technology" | "healthcare" | "defense";
 
 const VERTICALS: Record<
   Vertical,
@@ -43,10 +43,28 @@ const VERTICALS: Record<
     cta: string;
     ctaHref: string;
     trustBar: string[];
-    accentColor: string;
     dashboard: React.ComponentType;
   }
 > = {
+  platform: {
+    pill: "Platform",
+    icon: Layers,
+    badge: "SOC 2 · HIPAA · CMMC · One Deployment",
+    headline: (
+      <>
+        One firewall.{" "}
+        <span className="italic bg-gradient-to-r from-brand-400 via-emerald-400 to-indigo-400 bg-clip-text text-transparent">
+          Every framework.
+        </span>{" "}
+        Zero switching.
+      </>
+    ),
+    sub: "The only AI compliance firewall that simultaneously enforces SOC 2, HIPAA, and CMMC Level 2 — one deployment, one dashboard, every regulation covered.",
+    cta: "Start Free — All Frameworks",
+    ctaHref: "/signup",
+    trustBar: ["SOC 2 + HIPAA + CMMC", "One Deployment", "16 Detection Engines", "<10ms"],
+    dashboard: PlatformDashboard,
+  },
   technology: {
     pill: "Technology",
     icon: Lock,
@@ -63,7 +81,6 @@ const VERTICALS: Record<
     cta: "Start Free Assessment",
     ctaHref: "/signup",
     trustBar: ["SOC 2 Ready", "PII Detection", "IP Protection", "<10ms Latency"],
-    accentColor: "brand-400",
     dashboard: TechDashboard,
   },
   healthcare: {
@@ -82,7 +99,6 @@ const VERTICALS: Record<
     cta: "Scan Your AI Risk Free",
     ctaHref: "/hipaa",
     trustBar: ["HIPAA Compliant", "18 PHI Identifiers", "Real-time Scanning", "<10ms Latency"],
-    accentColor: "emerald-400",
     dashboard: HealthcareDashboard,
   },
   defense: {
@@ -101,13 +117,14 @@ const VERTICALS: Record<
     cta: "Start Free Assessment",
     ctaHref: "/command-center/shield/onboarding",
     trustBar: ["CMMC Level 2", "NIST SP 800-171", "Real-time Protection", "<10ms Latency"],
-    accentColor: "brand-400",
     dashboard: DefenseDashboard,
   },
 };
 
+const TAB_ORDER: Vertical[] = ["platform", "technology", "healthcare", "defense"];
+
 export function HeroSection() {
-  const [active, setActive] = useState<Vertical>("technology");
+  const [active, setActive] = useState<Vertical>("platform");
   const v = VERTICALS[active];
   const DashboardComponent = v.dashboard;
 
@@ -131,9 +148,10 @@ export function HeroSection() {
             {/* Vanta-style tab strip */}
             <FadeIn>
               <div className="inline-flex items-center gap-1 p-1 mb-7 rounded-xl bg-white/[0.04] border border-white/[0.06]">
-                {(Object.keys(VERTICALS) as Vertical[]).map((key) => {
+                {TAB_ORDER.map((key) => {
                   const Icon = VERTICALS[key].icon;
                   const isActive = key === active;
+                  const isPlatform = key === "platform";
                   return (
                     <button
                       key={key}
@@ -151,8 +169,13 @@ export function HeroSection() {
                           transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                         />
                       )}
-                      <Icon className={`relative w-3.5 h-3.5 ${isActive ? "text-brand-400" : ""}`} />
+                      <Icon className={`relative w-3.5 h-3.5 ${isActive ? (isPlatform ? "text-emerald-400" : "text-brand-400") : ""}`} />
                       <span className="relative">{VERTICALS[key].pill}</span>
+                      {isPlatform && !isActive && (
+                        <span className="relative ml-0.5 px-1 py-0.5 rounded text-[8px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                          ALL
+                        </span>
+                      )}
                     </button>
                   );
                 })}
@@ -258,7 +281,7 @@ export function HeroSection() {
             </AnimatePresence>
           </div>
 
-          {/* ── Right column: Live Dashboard (changes per vertical) ── */}
+          {/* ── Right column: Live Dashboard ── */}
           <div className="hidden lg:block">
             <AnimatePresence mode="wait">
               <motion.div
