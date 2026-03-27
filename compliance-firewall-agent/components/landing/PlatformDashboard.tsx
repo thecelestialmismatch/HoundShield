@@ -25,6 +25,10 @@ const EVENT_POOL = [
 
 const ENGINE_COLORS = ["#6366F1", "#10B981", "#F5C842", "#F87171"];
 
+function rand(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function initBar() {
   return [
     { engine: "PHI",  count: rand(3, 18) },
@@ -44,14 +48,19 @@ function initPie() {
   ];
 }
 
+function initCoverage() {
+  return [
+    { label: "API Key Protection", pct: rand(95, 100), color: "#6366F1" },
+    { label: "PHI / PII Coverage", pct: rand(89, 97),  color: "#10B981" },
+    { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#F5C842" },
+    { label: "SPRS Score",         pct: rand(78, 91),  color: "#F87171" },
+  ];
+}
+
 const STATUS_STYLES = {
   BLOCKED:     { text: "text-red-400",    bg: "bg-red-500/10",    border: "border-red-500/20"    },
   QUARANTINED: { text: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20" },
 };
-
-function rand(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 function initChart() {
   return Array.from({ length: 10 }, (_, i) => ({
@@ -72,11 +81,28 @@ function ChartTip({ active, payload }: { active?: boolean; payload?: Array<{ val
 }
 
 /* ── Live log entry ────────────────────────────────────── */
-type LogEntry = { id: number; framework: string; color: string; detail: string; status: "BLOCKED" | "QUARANTINED"; engine: string; ts: string };
+type LogEntry = {
+  id: number; framework: string; color: string;
+  detail: string; status: "BLOCKED" | "QUARANTINED"; engine: string; ts: string;
+};
 
 function getTs() {
   const now = new Date();
   return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+}
+
+/* ── Animated coverage bar ─────────────────────────────── */
+function CoverageBar({ pct, color }: { pct: number; color: string }) {
+  return (
+    <div className="h-[5px] w-full bg-white/[0.06] rounded-full overflow-hidden">
+      <motion.div
+        className="h-full rounded-full"
+        style={{ background: color }}
+        animate={{ width: `${pct}%` }}
+        transition={{ duration: 0.9, ease: [0.25, 0.4, 0.25, 1] }}
+      />
+    </div>
+  );
 }
 
 /* ── Component ─────────────────────────────────────────── */
@@ -86,6 +112,7 @@ export function PlatformDashboard() {
   const [chartData, setChartData]       = useState(initChart);
   const [barData, setBarData]           = useState(initBar);
   const [pieData, setPieData]           = useState(initPie);
+  const [coverageData, setCoverageData] = useState(initCoverage);
   const [log, setLog]                   = useState<LogEntry[]>([]);
   const [scanPct, setScanPct]           = useState(0);
   const counterRef                      = useRef(0);
@@ -94,9 +121,7 @@ export function PlatformDashboard() {
 
   /* Seed initial log entries */
   useEffect(() => {
-    const seed = EVENT_POOL.slice(0, 3).map((e, i) => ({
-      ...e, id: i, ts: getTs(),
-    }));
+    const seed = EVENT_POOL.slice(0, 4).map((e, i) => ({ ...e, id: i, ts: getTs() }));
     setLog(seed);
   }, []);
 
@@ -105,7 +130,7 @@ export function PlatformDashboard() {
     const t = setInterval(() => {
       const ev = EVENT_POOL[counterRef.current % EVENT_POOL.length];
       counterRef.current += 1;
-      setLog((prev) => [{ ...ev, id: Date.now(), ts: getTs() }, ...prev].slice(0, 5));
+      setLog((prev) => [{ ...ev, id: Date.now(), ts: getTs() }, ...prev].slice(0, 4));
       setTotalBlocked((n) => n + rand(1, 4));
     }, 2200);
     return () => clearInterval(t);
@@ -122,7 +147,7 @@ export function PlatformDashboard() {
     return () => clearInterval(t);
   }, []);
 
-  /* Bar chart — updates every 1.6s (animated bars = "moving") */
+  /* Bar chart — updates every 1.6s */
   useEffect(() => {
     const t = setInterval(() => {
       setBarData([
@@ -149,6 +174,19 @@ export function PlatformDashboard() {
     return () => clearInterval(t);
   }, []);
 
+  /* Coverage metrics — updates every 4s (smooth bar animations) */
+  useEffect(() => {
+    const t = setInterval(() => {
+      setCoverageData([
+        { label: "API Key Protection", pct: rand(95, 100), color: "#6366F1" },
+        { label: "PHI / PII Coverage", pct: rand(89, 97),  color: "#10B981" },
+        { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#F5C842" },
+        { label: "SPRS Score",         pct: rand(78, 91),  color: "#F87171" },
+      ]);
+    }, 4000);
+    return () => clearInterval(t);
+  }, []);
+
   /* Scan progress bar — loops 0→100 every 3s */
   useEffect(() => {
     const t = setInterval(() => {
@@ -166,7 +204,6 @@ export function PlatformDashboard() {
           <div className="flex items-center gap-3">
             <Logo className="!w-5 !h-5 !rounded-md" />
             <span className="text-[11px] font-mono text-slate-500">kaelus — command center</span>
-            {/* Scanning pill */}
             <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
               <Activity className="w-2.5 h-2.5 text-emerald-400" />
               <span className="text-[9px] font-mono text-emerald-400 font-semibold uppercase tracking-wider">Scanning</span>
@@ -198,7 +235,9 @@ export function PlatformDashboard() {
             <div key={m.label} className="px-4 py-2.5">
               <span className="block text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-0.5">{m.label}</span>
               <AnimatePresence mode="wait">
-                <motion.span key={m.value} initial={{ opacity: 0.4, y: 3 }} animate={{ opacity: 1, y: 0 }}
+                <motion.span
+                  key={m.value}
+                  initial={{ opacity: 0.4, y: 3 }} animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }} transition={{ duration: 0.25 }}
                   className={`text-sm font-mono font-bold tabular-nums ${m.color}`}
                 >
@@ -210,57 +249,19 @@ export function PlatformDashboard() {
         </div>
 
         {/* ── Body ──────────────────────────────────────── */}
-        <div className="flex min-h-[280px]">
+        <div className="flex min-h-[320px]">
 
-          {/* Left — live event log */}
-          <div className="flex-1 border-r border-white/[0.04] p-4 overflow-hidden">
-            <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse inline-block" />
-              Live threat feed
-            </p>
-            <div className="space-y-2">
-              <AnimatePresence initial={false}>
-                {log.map((entry) => {
-                  const sc = STATUS_STYLES[entry.status];
-                  return (
-                    <motion.div
-                      key={entry.id}
-                      initial={{ opacity: 0, x: -16, height: 0 }}
-                      animate={{ opacity: 1, x: 0, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
-                      className={`flex items-start gap-2 p-2.5 rounded-lg border ${sc.border} ${sc.bg}`}
-                    >
-                      <AlertTriangle className={`w-3 h-3 flex-shrink-0 mt-0.5 ${sc.text}`} />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
-                          <span
-                            className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded flex-shrink-0"
-                            style={{ color: entry.color, background: `${entry.color}18`, border: `1px solid ${entry.color}30` }}
-                          >
-                            {entry.framework}
-                          </span>
-                          <span className="text-[8px] font-mono text-slate-600 flex-shrink-0">{entry.engine}</span>
-                          <span className={`ml-auto text-[8px] font-mono font-bold flex-shrink-0 ${sc.text}`}>{entry.status}</span>
-                        </div>
-                        <p className="text-[9px] font-mono text-slate-400 truncate">{entry.detail}</p>
-                      </div>
-                      <span className="text-[8px] font-mono text-slate-700 flex-shrink-0 mt-0.5">{entry.ts}</span>
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
-            </div>
-          </div>
+          {/* LEFT — charts + coverage metrics */}
+          <div className="flex-1 border-r border-white/[0.04] p-4 overflow-hidden space-y-4">
 
-          {/* Right — charts */}
-          <div className="w-[290px] flex-shrink-0 p-4 space-y-4">
-
-            {/* 1 ── Live area chart */}
+            {/* 1 ── Real-time blocks (area chart) */}
             <div>
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Real-time blocks</p>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse inline-block" />
+                Real-time blocks
+              </p>
               {mounted ? (
-                <ResponsiveContainer width="100%" height={86}>
+                <ResponsiveContainer width="100%" height={80}>
                   <AreaChart data={chartData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }}>
                     <defs>
                       <linearGradient id="soc2g" x1="0" y1="0" x2="0" y2="1">
@@ -284,15 +285,15 @@ export function PlatformDashboard() {
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-[86px] rounded bg-white/[0.03] animate-pulse" />
+                <div className="h-[80px] rounded bg-white/[0.03] animate-pulse" />
               )}
             </div>
 
-            {/* 2 ── Moving bar chart — detection engine breakdown */}
+            {/* 2 ── Engine activity (moving bar chart) */}
             <div>
               <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Engine activity</p>
               {mounted ? (
-                <ResponsiveContainer width="100%" height={76}>
+                <ResponsiveContainer width="100%" height={66}>
                   <BarChart data={barData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }} barCategoryGap="28%">
                     <XAxis dataKey="engine" tick={{ fontSize: 7, fill: "#475569", fontFamily: "monospace" }} axisLine={false} tickLine={false} />
                     <YAxis hide />
@@ -305,22 +306,88 @@ export function PlatformDashboard() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-[76px] rounded bg-white/[0.03] animate-pulse" />
+                <div className="h-[66px] rounded bg-white/[0.03] animate-pulse" />
               )}
             </div>
 
-            {/* 3 ── Donut — framework split */}
+            {/* 3 ── Coverage metrics (animated progress bars) */}
+            <div>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-3">Coverage metrics</p>
+              <div className="space-y-2.5">
+                {coverageData.map((m) => (
+                  <div key={m.label}>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[9px] font-mono text-slate-500">{m.label}</span>
+                      <motion.span
+                        key={m.pct}
+                        initial={{ opacity: 0.4 }} animate={{ opacity: 1 }}
+                        transition={{ duration: 0.4 }}
+                        className="text-[9px] font-mono font-bold tabular-nums"
+                        style={{ color: m.color }}
+                      >
+                        {m.pct}%
+                      </motion.span>
+                    </div>
+                    <CoverageBar pct={m.pct} color={m.color} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT — live threat feed + framework status */}
+          <div className="w-[230px] flex-shrink-0 p-4 space-y-4">
+
+            {/* 1 ── Live threat feed */}
+            <div>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2.5 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse inline-block" />
+                Live threat feed
+              </p>
+              <div className="space-y-1.5">
+                <AnimatePresence initial={false}>
+                  {log.map((entry) => {
+                    const sc = STATUS_STYLES[entry.status];
+                    return (
+                      <motion.div
+                        key={entry.id}
+                        initial={{ opacity: 0, x: 16, height: 0 }}
+                        animate={{ opacity: 1, x: 0, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.28, ease: [0.25, 0.4, 0.25, 1] }}
+                        className={`p-2 rounded-lg border ${sc.border} ${sc.bg}`}
+                      >
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <span
+                            className="text-[7px] font-mono font-bold px-1 py-0.5 rounded flex-shrink-0"
+                            style={{ color: entry.color, background: `${entry.color}18`, border: `1px solid ${entry.color}30` }}
+                          >
+                            {entry.framework}
+                          </span>
+                          <span className="text-[7px] font-mono text-slate-600 flex-shrink-0">{entry.engine}</span>
+                          <span className={`ml-auto text-[7px] font-mono font-bold flex-shrink-0 ${sc.text}`}>{entry.status}</span>
+                        </div>
+                        <p className="text-[8px] font-mono text-slate-400 leading-tight truncate">{entry.detail}</p>
+                        <span className="text-[7px] font-mono text-slate-700 mt-0.5 block">{entry.ts}</span>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* 2 ── Framework split (donut) */}
             <div>
               <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Framework split</p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 {mounted ? (
-                  <PieChart width={84} height={84}>
+                  <PieChart width={68} height={68}>
                     <Pie
                       data={pieData}
-                      cx={40}
-                      cy={40}
-                      innerRadius={27}
-                      outerRadius={40}
+                      cx={32}
+                      cy={32}
+                      innerRadius={20}
+                      outerRadius={32}
                       dataKey="value"
                       strokeWidth={0}
                       isAnimationActive={false}
@@ -331,21 +398,21 @@ export function PlatformDashboard() {
                     </Pie>
                   </PieChart>
                 ) : (
-                  <div className="w-[84px] h-[84px] rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
+                  <div className="w-[68px] h-[68px] rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
                 )}
                 <div className="flex flex-col gap-1.5 flex-1">
                   {pieData.map((d) => (
-                    <div key={d.name} className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                      <span className="text-[9px] font-mono text-slate-500 flex-1">{d.name}</span>
-                      <span className="text-[9px] font-mono font-bold tabular-nums" style={{ color: d.color }}>{d.value}%</span>
+                    <div key={d.name} className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
+                      <span className="text-[8px] font-mono text-slate-500 flex-1">{d.name}</span>
+                      <span className="text-[8px] font-mono font-bold tabular-nums" style={{ color: d.color }}>{d.value}%</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* 4 ── Framework status pills */}
+            {/* 3 ── Framework status pills */}
             <div className="space-y-1">
               {[
                 { key: "SOC 2",  Icon: Lock,       color: "text-indigo-400",  bg: "bg-indigo-500/10",  border: "border-indigo-500/20"  },
