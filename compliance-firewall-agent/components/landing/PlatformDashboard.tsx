@@ -254,13 +254,13 @@ export function PlatformDashboard() {
           </div>
 
           {/* Right — charts */}
-          <div className="w-[230px] flex-shrink-0 p-3 space-y-3">
+          <div className="w-[290px] flex-shrink-0 p-4 space-y-4">
 
             {/* 1 ── Live area chart */}
             <div>
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Real-time blocks</p>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Real-time blocks</p>
               {mounted ? (
-                <ResponsiveContainer width="100%" height={62}>
+                <ResponsiveContainer width="100%" height={86}>
                   <AreaChart data={chartData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }}>
                     <defs>
                       <linearGradient id="soc2g" x1="0" y1="0" x2="0" y2="1">
@@ -284,15 +284,15 @@ export function PlatformDashboard() {
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-[62px] rounded bg-white/[0.03] animate-pulse" />
+                <div className="h-[86px] rounded bg-white/[0.03] animate-pulse" />
               )}
             </div>
 
             {/* 2 ── Moving bar chart — detection engine breakdown */}
             <div>
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Engine activity</p>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Engine activity</p>
               {mounted ? (
-                <ResponsiveContainer width="100%" height={58}>
+                <ResponsiveContainer width="100%" height={76}>
                   <BarChart data={barData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }} barCategoryGap="28%">
                     <XAxis dataKey="engine" tick={{ fontSize: 7, fill: "#475569", fontFamily: "monospace" }} axisLine={false} tickLine={false} />
                     <YAxis hide />
@@ -305,22 +305,22 @@ export function PlatformDashboard() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-[58px] rounded bg-white/[0.03] animate-pulse" />
+                <div className="h-[76px] rounded bg-white/[0.03] animate-pulse" />
               )}
             </div>
 
             {/* 3 ── Donut — framework split */}
             <div>
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Framework split</p>
-              <div className="flex items-center gap-2">
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Framework split</p>
+              <div className="flex items-center gap-3">
                 {mounted ? (
-                  <PieChart width={64} height={64}>
+                  <PieChart width={84} height={84}>
                     <Pie
                       data={pieData}
-                      cx={30}
-                      cy={30}
-                      innerRadius={20}
-                      outerRadius={30}
+                      cx={40}
+                      cy={40}
+                      innerRadius={27}
+                      outerRadius={40}
                       dataKey="value"
                       strokeWidth={0}
                       isAnimationActive={false}
@@ -331,14 +331,14 @@ export function PlatformDashboard() {
                     </Pie>
                   </PieChart>
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
+                  <div className="w-[84px] h-[84px] rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
                 )}
-                <div className="flex flex-col gap-1 flex-1">
+                <div className="flex flex-col gap-1.5 flex-1">
                   {pieData.map((d) => (
-                    <div key={d.name} className="flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                      <span className="text-[8px] font-mono text-slate-600 flex-1">{d.name}</span>
-                      <span className="text-[8px] font-mono font-bold tabular-nums" style={{ color: d.color }}>{d.value}%</span>
+                    <div key={d.name} className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: d.color }} />
+                      <span className="text-[9px] font-mono text-slate-500 flex-1">{d.name}</span>
+                      <span className="text-[9px] font-mono font-bold tabular-nums" style={{ color: d.color }}>{d.value}%</span>
                     </div>
                   ))}
                 </div>
