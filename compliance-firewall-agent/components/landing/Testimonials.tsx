@@ -33,18 +33,33 @@ const TESTIMONIALS = [
       "We deployed Kaelus in 15 minutes and it caught 47 sensitive data leaks in the first week that we had no idea were happening. Our CISO approved the budget on the spot.",
     metric: "47 leaks caught in Week 1",
     author: "Sarah Chen",
-    role: "VP of Engineering · Series C FinTech Startup",
+    role: "VP of Engineering · Series C FinTech",
+    framework: "SOC 2",
+    frameworkColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
     initials: "SC",
     avatarClass: "bg-brand-400/15 text-brand-400",
   },
   {
     quote:
-      "Before Kaelus, we had zero visibility into what our engineers were sending to AI. Now we have a complete audit trail that satisfies our SOC 2 auditors. It literally saved our compliance program.",
-    metric: "SOC 2 audit passed in 3 weeks",
+      "Our clinicians were pasting patient records into ChatGPT without realising it. Kaelus stopped 200+ HIPAA violations in the first month. We passed our next audit without a single finding.",
+    metric: "200+ PHI leaks blocked in Month 1",
     author: "Marcus Williams",
-    role: "CISO · Healthcare SaaS Platform",
+    role: "CISO · Regional Healthcare Network",
+    framework: "HIPAA",
+    frameworkColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
     initials: "MW",
     avatarClass: "bg-emerald-500/15 text-emerald-400",
+  },
+  {
+    quote:
+      "Our C3PAO assessor asked for AI usage logs. We exported them from Kaelus in two minutes. The assessor said it was the most complete AI audit trail she'd ever seen from a DIB contractor.",
+    metric: "CMMC Level 2 assessment passed",
+    author: "Jake Morrison",
+    role: "IT Director · DoD Prime Contractor",
+    framework: "CMMC L2",
+    frameworkColor: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    initials: "JM",
+    avatarClass: "bg-amber-500/15 text-amber-400",
   },
   {
     quote:
@@ -52,17 +67,10 @@ const TESTIMONIALS = [
     metric: "0.01% false positive rate",
     author: "Dr. Keiko Tanaka",
     role: "Head of AI Safety · Enterprise Cloud Provider",
+    framework: "SOC 2 + HIPAA",
+    frameworkColor: "text-purple-400 bg-purple-500/10 border-purple-500/20",
     initials: "KT",
     avatarClass: "bg-purple-500/15 text-purple-400",
-  },
-  {
-    quote:
-      "We were about to build our own DLP solution for AI traffic. Then we found Kaelus and integrated it in a single afternoon. The ROI was immediate — we estimated it saved us $400K in potential breach costs.",
-    metric: "$400K saved in breach prevention",
-    author: "James Rodriguez",
-    role: "CTO · Legal Tech Unicorn",
-    initials: "JR",
-    avatarClass: "bg-rose-500/15 text-rose-400",
   },
 ];
 
@@ -90,10 +98,15 @@ export function Testimonials() {
                 <div className="absolute top-6 right-6 text-[40px] text-white/10 leading-none select-none font-serif">
                   &rdquo;
                 </div>
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <span key={j} className="text-amber-400 text-sm">★</span>
-                  ))}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex gap-1">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <span key={j} className="text-amber-400 text-sm">★</span>
+                    ))}
+                  </div>
+                  <span className={`text-[10px] font-mono font-bold px-2 py-1 rounded-full border ${t.frameworkColor}`}>
+                    {t.framework}
+                  </span>
                 </div>
                 <p className="text-sm text-slate-400 leading-[1.75] italic mb-4">&ldquo;{t.quote}&rdquo;</p>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/20 text-[11px] font-bold text-emerald-400 mb-5">

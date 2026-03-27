@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+const DEADLINES = [
+  { label: "CMMC", deadline: "Nov 2026", color: "text-amber-400" },
+  { label: "HIPAA", deadline: "Active now", color: "text-emerald-400" },
+  { label: "SOC 2", deadline: "Active now", color: "text-indigo-400" },
+];
+
 export function CTASection() {
   return (
     <section className="relative py-32 text-center overflow-hidden">
@@ -19,27 +25,35 @@ export function CTASection() {
       <div className="absolute inset-0 bg-dot-grid opacity-[0.04] pointer-events-none" />
 
       <div className="relative z-10 max-w-3xl mx-auto px-6">
-        {/* Urgency badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/20 bg-red-500/[0.08] text-red-400 text-xs font-semibold uppercase tracking-widest mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-          CMMC Enforcement: November 2026
+        {/* Framework deadline badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+          {DEADLINES.map(({ label, deadline, color }) => (
+            <div
+              key={label}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04] text-xs font-semibold uppercase tracking-wider"
+            >
+              <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${color.replace("text-", "bg-")}`} />
+              <span className="text-slate-400">{label}</span>
+              <span className={`font-bold ${color}`}>{deadline}</span>
+            </div>
+          ))}
         </div>
 
         <h2 className="text-[clamp(32px,5vw,56px)] font-editorial font-bold tracking-tight leading-[1.1] text-white max-w-[720px] mx-auto mb-5">
           Your compliance audit is coming.
           <br />
-          <span className="italic text-brand-400">Are you ready?</span>
+          <span className="italic text-brand-400">All frameworks. One platform.</span>
         </h2>
-        <p className="text-lg text-slate-400 max-w-[500px] mx-auto mb-10">
-          Get your free SPRS score in 10 minutes. No credit card, no sales call, no consultant required.
+        <p className="text-lg text-slate-400 max-w-[540px] mx-auto mb-10">
+          Get protected across SOC 2, HIPAA, and CMMC Level 2 in one 15-minute deployment. No consultant required. No switching between tools.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 px-10 py-4.5 bg-accent hover:bg-accent-dark text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(200,125,62,0.35)] text-lg"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-accent hover:bg-accent-dark text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(200,125,62,0.35)] text-lg"
           >
-            Start your free assessment
+            Start free — all frameworks included
             <ArrowRight className="w-5 h-5" />
           </Link>
           <Link
@@ -52,7 +66,7 @@ export function CTASection() {
 
         {/* Trust line */}
         <p className="mt-8 text-sm text-slate-600">
-          Free forever plan available \u00b7 No credit card required \u00b7 SOC 2 compliant infrastructure
+          Free forever plan available · No credit card required · SOC 2 + HIPAA + CMMC in one deployment
         </p>
       </div>
     </section>
