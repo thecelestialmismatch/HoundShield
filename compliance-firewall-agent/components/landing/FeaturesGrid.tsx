@@ -39,10 +39,10 @@ function FadeIn({
 const FEATURES = [
   {
     icon: ShieldAlert,
-    iconColor: "text-red-400",
-    iconBg: "bg-red-500/10 border border-red-500/20",
-    title: "Real-Time AI Firewall",
-    desc: "Intercept and scan every AI API call before it leaves your network. Blocks CUI, PII, SSN, credentials, source code, and 12 other data categories in milliseconds.",
+    iconColor: "text-emerald-400",
+    iconBg: "bg-emerald-500/10 border border-emerald-500/20",
+    title: "One Platform. All Frameworks.",
+    desc: "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously — not separate products, not separate deployments. One firewall agent covers every regulatory obligation your organization faces today and as you grow.",
     span: "md:col-span-2", // wide card
   },
   {
@@ -105,9 +105,9 @@ export function FeaturesGrid() {
             Features
           </div>
           <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white">
-            Everything you need.
+            One platform.
             <br />
-            <span className="italic text-brand-400">Nothing you don&apos;t.</span>
+            <span className="italic text-brand-400">Every compliance framework.</span>
           </h2>
         </FadeIn>
 
