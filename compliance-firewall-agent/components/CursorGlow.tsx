@@ -64,7 +64,7 @@ export function CursorGlow() {
       {/* Ambient glow — large, lazy, behind everything */}
       <motion.div
         aria-hidden="true"
-        className="fixed pointer-events-none z-0 rounded-full opacity-0 cursor-active:opacity-100"
+        className="fixed pointer-events-none z-0 rounded-full"
         style={{
           x: glowX,
           y: glowY,
@@ -72,12 +72,13 @@ export function CursorGlow() {
           translateY: "-50%",
           width: 700,
           height: 700,
+          opacity: 0.08,
           background:
-            "radial-gradient(circle, rgba(99,102,241,0.09) 0%, rgba(99,102,241,0.04) 35%, transparent 70%)",
+            "radial-gradient(circle, rgba(99,102,241,1) 0%, rgba(99,102,241,0.4) 30%, transparent 70%)",
         }}
       />
 
-      {/* Ring */}
+      {/* Ring — spring lag */}
       <motion.div
         aria-hidden="true"
         className="fixed pointer-events-none z-[9998] rounded-full"
@@ -86,26 +87,25 @@ export function CursorGlow() {
           y: ringY,
           translateX: "-50%",
           translateY: "-50%",
-          width: 34,
-          height: 34,
-          border: "1px solid rgba(255,255,255,0.18)",
-          mixBlendMode: "difference",
+          width: 36,
+          height: 36,
+          border: "1.5px solid rgba(255,255,255,0.25)",
+          mixBlendMode: "difference" as const,
         }}
       />
 
-      {/* Dot */}
+      {/* Dot — sharp */}
       <motion.div
         aria-hidden="true"
-        className="fixed pointer-events-none z-[9999] rounded-full"
+        className="fixed pointer-events-none z-[9999] rounded-full bg-white"
         style={{
           x: dotX,
           y: dotY,
           translateX: "-50%",
           translateY: "-50%",
-          width: 5,
-          height: 5,
-          backgroundColor: "white",
-          mixBlendMode: "difference",
+          width: 6,
+          height: 6,
+          mixBlendMode: "difference" as const,
         }}
       />
     </>

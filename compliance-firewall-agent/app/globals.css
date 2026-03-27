@@ -18,7 +18,7 @@
 
 /* ── Custom cursor (desktop pointer-fine only) ────────────── */
 @media (pointer: fine) {
-  html.cursor-active * {
+  * {
     cursor: none !important;
   }
 }
