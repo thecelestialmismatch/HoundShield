@@ -2,8 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronRight, Lock, HeartPulse, Shield } from "lucide-react";
+
+// Dynamic import — recharts uses browser APIs (ResizeObserver) incompatible with SSR
+const PlatformDashboard = dynamic(
+  () => import("@/components/landing/PlatformDashboard").then((m) => m.PlatformDashboard),
+  { ssr: false, loading: () => <div className="h-[500px] bg-[#0d0d16] animate-pulse rounded-b-2xl" /> }
+);
 
 /* ── Live counter (animates up every 4s) ───────────────── */
 function LiveCounter() {
@@ -29,14 +36,14 @@ function LiveCounter() {
 }
 
 const FRAMEWORKS = [
-  { icon: Lock,       label: "SOC 2",    color: "text-indigo-400",  ring: "ring-indigo-500/30 bg-indigo-500/10"  },
-  { icon: HeartPulse, label: "HIPAA",    color: "text-emerald-400", ring: "ring-emerald-500/30 bg-emerald-500/10" },
-  { icon: Shield,     label: "CMMC L2",  color: "text-amber-400",   ring: "ring-amber-500/30 bg-amber-500/10"   },
+  { icon: Lock,       label: "SOC 2",   color: "text-indigo-400",  ring: "ring-indigo-500/30 bg-indigo-500/10"  },
+  { icon: HeartPulse, label: "HIPAA",   color: "text-emerald-400", ring: "ring-emerald-500/30 bg-emerald-500/10" },
+  { icon: Shield,     label: "CMMC L2", color: "text-amber-400",   ring: "ring-amber-500/30 bg-amber-500/10"   },
 ];
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden pt-24 pb-20 px-6">
+    <section className="relative overflow-hidden pt-28 pb-0 px-6">
       {/* Layered bg */}
       <div className="absolute inset-0 bg-dot-grid opacity-[0.06] pointer-events-none" />
       <div
@@ -47,7 +54,8 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 max-w-4xl mx-auto text-center">
+      {/* Hero text — centered */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center mb-14">
 
         {/* Framework badges */}
         <motion.div
@@ -57,10 +65,7 @@ export function HeroSection() {
           className="flex flex-wrap items-center justify-center gap-2 mb-8"
         >
           {FRAMEWORKS.map(({ icon: Icon, label, color, ring }) => (
-            <div
-              key={label}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full ring-1 ${ring} text-xs font-semibold uppercase tracking-wider`}
-            >
+            <div key={label} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full ring-1 ${ring} text-xs font-semibold uppercase tracking-wider`}>
               <Icon className={`w-3 h-3 ${color}`} />
               <span className={color}>{label}</span>
             </div>
@@ -101,7 +106,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.28 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12"
         >
           <Link
             href="/signup"
@@ -130,14 +135,47 @@ export function HeroSection() {
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">Live</span>
           </span>
-          <span className="text-sm font-mono text-white">
-            <LiveCounter />
-          </span>
+          <span className="text-sm font-mono text-white"><LiveCounter /></span>
           <span className="text-xs font-mono text-slate-500">AI threats blocked today</span>
           <span className="hidden sm:block w-px h-4 bg-white/10" />
-          <span className="hidden sm:block text-xs font-mono text-slate-600">&lt;10ms · 16 detection engines</span>
+          <span className="hidden sm:block text-xs font-mono text-slate-600">&lt;10ms · 16 engines</span>
         </motion.div>
       </div>
+
+      {/* ── Floating Dashboard Mockup (Vanta-style) ──── */}
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 1.0, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 max-w-6xl mx-auto"
+      >
+        {/* Browser chrome bar */}
+        <div className="flex items-center gap-2 px-4 py-3 bg-[#111118] border border-white/[0.07] rounded-t-2xl border-b-0">
+          <div className="flex gap-1.5">
+            <span className="w-3 h-3 rounded-full bg-red-500/60" />
+            <span className="w-3 h-3 rounded-full bg-yellow-500/60" />
+            <span className="w-3 h-3 rounded-full bg-emerald-500/60" />
+          </div>
+          <div className="flex-1 mx-4">
+            <div className="max-w-xs mx-auto flex items-center gap-2 px-3 py-1 rounded-md bg-white/[0.05] border border-white/[0.06]">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="text-[11px] font-mono text-slate-500">app.kaelus.online/command-center</span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-3.5 h-1 rounded-full bg-white/10" />
+            <span className="w-3.5 h-1 rounded-full bg-white/10" />
+          </div>
+        </div>
+
+        {/* Dashboard content */}
+        <div className="border border-white/[0.07] border-t-0 rounded-b-2xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.85)]">
+          <PlatformDashboard />
+        </div>
+
+        {/* Bottom fade — blends into next section */}
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#07070b] via-[#07070b]/80 to-transparent pointer-events-none z-20" />
+      </motion.div>
     </section>
   );
 }
