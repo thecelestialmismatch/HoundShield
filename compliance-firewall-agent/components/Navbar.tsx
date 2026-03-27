@@ -73,26 +73,26 @@ const PRODUCTS = [
 
 /* ── Nav Flyout Panel Data ───────────────────────────────── */
 const FEATURES_ITEMS = [
-  { icon: Eye,       color: "text-indigo-400", bg: "bg-indigo-500/10", label: "AI Prompt Interception",  desc: "Every LLM request inspected before it leaves the network" },
-  { icon: Zap,       color: "text-amber-400",  bg: "bg-amber-500/10",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances" },
-  { icon: Clock,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee" },
-  { icon: FileCheck, color: "text-violet-400", bg: "bg-violet-500/10", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit" },
-  { icon: Layers,    color: "text-sky-400",    bg: "bg-sky-500/10",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once" },
-  { icon: Activity,  color: "text-rose-400",   bg: "bg-rose-500/10",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture" },
+  { icon: Eye,       color: "text-indigo-400", bg: "bg-indigo-500/10", label: "AI Prompt Interception",  desc: "Every LLM request inspected before it leaves the network",       href: "/features#interception" },
+  { icon: Zap,       color: "text-amber-400",  bg: "bg-amber-500/10",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#detection" },
+  { icon: Clock,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#latency" },
+  { icon: FileCheck, color: "text-violet-400", bg: "bg-violet-500/10", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit",               href: "/features#audit" },
+  { icon: Layers,    color: "text-sky-400",    bg: "bg-sky-500/10",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/docs#quickstart" },
+  { icon: Activity,  color: "text-rose-400",   bg: "bg-rose-500/10",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },
 ];
 
 const PRICING_TIERS = [
-  { label: "Free",       price: "$0",    note: "Up to 1,000 prompts/mo", color: "text-slate-400" },
-  { label: "Pro",        price: "$199",  note: "SOC 2 + HIPAA coverage",  color: "text-indigo-400" },
-  { label: "Growth",     price: "$499",  note: "PDF compliance reports",  color: "text-emerald-400" },
-  { label: "Enterprise", price: "$999",  note: "Unlimited orgs + CMMC",   color: "text-amber-400" },
-  { label: "Agency",     price: "$2,499",note: "White-label for MSPs",    color: "text-violet-400" },
+  { label: "Free",       price: "$0",    note: "Up to 1,000 prompts/mo", color: "text-slate-400",   href: "/signup" },
+  { label: "Pro",        price: "$199",  note: "SOC 2 + HIPAA coverage",  color: "text-indigo-400",  href: "/signup?plan=pro" },
+  { label: "Growth",     price: "$499",  note: "PDF compliance reports",  color: "text-emerald-400", href: "/signup?plan=growth" },
+  { label: "Enterprise", price: "$999",  note: "Unlimited orgs + CMMC",   color: "text-amber-400",   href: "/contact" },
+  { label: "Agency",     price: "$2,499",note: "White-label for MSPs",    color: "text-violet-400",  href: "/contact" },
 ];
 
 const PARTNER_ITEMS = [
-  { icon: Users,    color: "text-indigo-400", bg: "bg-indigo-500/10", label: "MSP / Agency",   desc: "20% revenue share · White-label option · $599/mo base" },
-  { icon: Plug,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "Integrations",   desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama" },
-  { icon: DollarSign,color:"text-amber-400",  bg: "bg-amber-500/10",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports" },
+  { icon: Users,    color: "text-indigo-400", bg: "bg-indigo-500/10", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
+  { icon: Plug,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
+  { icon: DollarSign,color:"text-amber-400",  bg: "bg-amber-500/10",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
 ];
 
 const DOC_ITEMS = [
@@ -323,13 +323,20 @@ function PricingFlyout({ open }: { open: boolean }) {
           </div>
           <div className="p-3 space-y-1">
             {PRICING_TIERS.map((t) => (
-              <div key={t.label} className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/[0.04] transition-colors group cursor-pointer">
+              <Link
+                key={t.label}
+                href={t.href}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/[0.04] transition-colors group"
+              >
                 <div>
-                  <span className={`text-sm font-bold ${t.color}`}>{t.label}</span>
+                  <span className={`text-sm font-bold group-hover:brightness-125 transition-all ${t.color}`}>{t.label}</span>
                   <p className="text-[11px] text-slate-500">{t.note}</p>
                 </div>
-                <span className="text-sm font-mono font-bold text-white">{t.price}<span className="text-slate-600 text-[10px] font-normal">/mo</span></span>
-              </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-mono font-bold text-white">{t.price}<span className="text-slate-600 text-[10px] font-normal">/mo</span></span>
+                  <ArrowRight className="w-3 h-3 text-slate-700 group-hover:text-brand-400 group-hover:translate-x-0.5 transition-all" />
+                </div>
+              </Link>
             ))}
           </div>
           <div className="px-4 py-3 border-t border-white/[0.06] bg-white/[0.01]">
