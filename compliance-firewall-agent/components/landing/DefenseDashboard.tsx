@@ -242,7 +242,7 @@ export function DefenseDashboard() {
           <span className="text-[10px] font-mono text-slate-600">NIST 800-171 Rev 2 · 110 controls · DoD v1.2.1</span>
           <div className="flex items-center gap-1.5">
             <Logo className="!w-4 !h-4 !rounded-md" />
-            <span className="text-[10px] font-mono text-brand-400">kealus.online</span>
+            <span className="text-[10px] font-mono text-brand-400">kaelus.online</span>
             <ChevronRight className="w-3 h-3 text-slate-600" />
           </div>
         </div>

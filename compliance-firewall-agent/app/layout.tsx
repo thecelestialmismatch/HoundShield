@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Kaelus.online" }],
   creator: "Kaelus.online",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kealus.online"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kaelus.online"),
   openGraph: {
     title: "Kaelus.online | AI Compliance Firewall for Regulated Industries",
     description:

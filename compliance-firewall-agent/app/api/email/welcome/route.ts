@@ -9,8 +9,8 @@ function getResend(): Resend | null {
   return new Resend(key);
 }
 
-const FROM = "Kaelus.online <noreply@kealus.online>";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://kealus.online";
+const FROM = "Kaelus.online <noreply@kaelus.online>";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://kaelus.online";
 
 /**
  * POST /api/email/welcome

@@ -227,7 +227,7 @@ export function HealthcareDashboard() {
           <span className="text-[10px] font-mono text-slate-600">HIPAA Safe Harbor · 18 identifier scanner · &lt;10ms</span>
           <div className="flex items-center gap-1.5">
             <Logo className="!w-4 !h-4 !rounded-md" />
-            <span className="text-[10px] font-mono text-brand-400">kealus.online</span>
+            <span className="text-[10px] font-mono text-brand-400">kaelus.online</span>
             <ChevronRight className="w-3 h-3 text-slate-600" />
           </div>
         </div>

@@ -85,7 +85,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">8. Contact</h2>
-            <p>For privacy-related inquiries, contact us at <a href="mailto:info@kealus.online" className="text-brand-400 hover:text-brand-300">info@kealus.online</a>.</p>
+            <p>For privacy-related inquiries, contact us at <a href="mailto:info@kaelus.online" className="text-brand-400 hover:text-brand-300">info@kaelus.online</a>.</p>
           </section>
         </div>
 

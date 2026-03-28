@@ -83,7 +83,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">11. Contact</h2>
-            <p>Questions about these terms? Contact us at <a href="mailto:info@kealus.online" className="text-brand-400 hover:text-brand-300">info@kealus.online</a>.</p>
+            <p>Questions about these terms? Contact us at <a href="mailto:info@kaelus.online" className="text-brand-400 hover:text-brand-300">info@kaelus.online</a>.</p>
           </section>
         </div>
 

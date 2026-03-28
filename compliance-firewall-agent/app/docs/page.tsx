@@ -22,7 +22,7 @@ import {
   BookOpen,
 } from "lucide-react";
 
-const GATEWAY_BASE = "https://kealus.online/api/gateway/intercept";
+const GATEWAY_BASE = "https://kaelus.online/api/gateway/intercept";
 
 const QUICKSTART_STEPS = [
   {
@@ -277,7 +277,7 @@ const SDK_EXAMPLES = {
 
 # Drop-in replacement — just change base_url
 client = openai.OpenAI(
-    base_url="https://kealus.online/api/gateway/intercept",
+    base_url="https://kaelus.online/api/gateway/intercept",
     api_key="your-openai-key",
     default_headers={"X-Kaelus-Org": "acme-defense"},
 )
@@ -295,7 +295,7 @@ response = client.chat.completions.create(
 
 // Drop-in replacement — just change baseURL
 const client = new OpenAI({
-  baseURL: "https://kealus.online/api/gateway/intercept",
+  baseURL: "https://kaelus.online/api/gateway/intercept",
   apiKey: process.env.OPENAI_API_KEY,
   defaultHeaders: { "X-Kaelus-Org": "acme-defense" },
 });
@@ -310,7 +310,7 @@ const response = await client.chat.completions.create({
 // ↑ Kaelus intercepts this, detects the CAGE code,
 //   blocks or quarantines before it reaches OpenAI`,
   curl: `# Using the gateway as an OpenAI-compatible proxy
-curl -X POST https://kealus.online/api/gateway/intercept \\
+curl -X POST https://kaelus.online/api/gateway/intercept \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer $OPENAI_API_KEY" \\
   -H "X-Kaelus-Org: acme-defense" \\
@@ -320,7 +320,7 @@ curl -X POST https://kealus.online/api/gateway/intercept \\
   }'
 
 # Direct intercept API (non-OpenAI-compatible)
-curl -X POST https://kealus.online/api/gateway/intercept \\
+curl -X POST https://kaelus.online/api/gateway/intercept \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: your-api-key" \\
   -H "x-user-id: developer@acme.co" \\
@@ -330,10 +330,10 @@ curl -X POST https://kealus.online/api/gateway/intercept \\
   }'
 
 # Get compliance events
-curl https://kealus.online/api/compliance/events?limit=10
+curl https://kaelus.online/api/compliance/events?limit=10
 
 # Health check
-curl https://kealus.online/api/health`,
+curl https://kaelus.online/api/health`,
 };
 
 function CopyButton({ text }: { text: string }) {

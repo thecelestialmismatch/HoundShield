@@ -83,7 +83,7 @@ export async function executeAgentLoop(
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://kealus.online',
+          'HTTP-Referer': 'https://kaelus.online',
           'X-Title': 'Kaelus Agent',
         },
         body: JSON.stringify({

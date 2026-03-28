@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
-        "HTTP-Referer": "https://kealus.online",
+        "HTTP-Referer": "https://kaelus.online",
         "X-Title": "Kaelus AI Platform",
       },
       body: JSON.stringify({

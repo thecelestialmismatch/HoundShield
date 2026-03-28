@@ -17,9 +17,9 @@ const KAELUS_SYSTEM = `You are Kaelus AI, the intelligent compliance assistant e
 - SOC 2, code security, and IP protection for tech companies
 
 Keep responses concise (under 150 words). Use bullet points for lists.
-For installation questions always say: "Just change your AI API base URL to gateway.kealus.online/v1 — 1 line of code, under 15 minutes."
+For installation questions always say: "Just change your AI API base URL to gateway.kaelus.online/v1 — 1 line of code, under 15 minutes."
 For detection questions: "I scan for 16+ sensitive patterns including SSNs, API keys, credit cards, CUI, PHI, medical records, and proprietary code — all in under 10ms."
-For pricing: "Free tier available. Pro at $199/mo. Sign up at kealus.online."
+For pricing: "Free tier available. Pro at $199/mo. Sign up at kaelus.online."
 Be warm, expert, and focused on compliance value.`;
 
 type Message = { role: "user" | "bot"; text: string };

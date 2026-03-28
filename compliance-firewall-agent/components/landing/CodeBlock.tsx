@@ -19,7 +19,7 @@ const CODE_CONTENT: Record<TabKey, string> = {
 
 // After: Route through Kaelus (1 line change)
 const client = new OpenAI({
-  baseURL: 'https://gateway.kealus.online/v1',
+  baseURL: 'https://gateway.kaelus.online/v1',
   apiKey: process.env.OPENAI_API_KEY,
   defaultHeaders: {
     'X-Kaelus-Key': process.env.KAELUS_API_KEY,
@@ -44,7 +44,7 @@ const response = await client.chat.completions.create({
 
 # After: Route through Kaelus (1 line change)
 client = openai.OpenAI(
-    base_url="https://gateway.kealus.online/v1",
+    base_url="https://gateway.kaelus.online/v1",
     api_key=os.environ["OPENAI_API_KEY"],
     default_headers={
         "X-Kaelus-Key": os.environ["KAELUS_API_KEY"],
@@ -65,7 +65,7 @@ response = client.chat.completions.create(
 # POST https://api.openai.com/v1/chat/completions
 
 # After: Route through Kaelus (1 line change)
-curl https://gateway.kealus.online/v1/chat/completions \\
+curl https://gateway.kaelus.online/v1/chat/completions \\
   -H "Authorization: Bearer $OPENAI_API_KEY" \\
   -H "X-Kaelus-Key: $KAELUS_API_KEY" \\
   -H "X-Kaelus-Policy: strict" \\

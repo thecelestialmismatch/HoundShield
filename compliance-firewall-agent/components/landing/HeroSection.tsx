@@ -192,7 +192,7 @@ export function HeroSection() {
                 <div className="flex-1 mx-3">
                   <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/[0.06]">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    <span className="text-[10px] font-mono text-slate-500">app.kealus.online/command-center</span>
+                    <span className="text-[10px] font-mono text-slate-500">app.kaelus.online/command-center</span>
                   </div>
                 </div>
               </div>
