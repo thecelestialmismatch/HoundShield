@@ -101,7 +101,7 @@ export const openrouterAdapter: ProviderAdapter = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${req.api_key}`,
       // OpenRouter analytics headers — these help with rate limits
-      "HTTP-Referer": "https://kaelus.online",
+      "HTTP-Referer": "https://kealus.online",
       "X-Title": "Kaelus AI Compliance Gateway",
     };
 

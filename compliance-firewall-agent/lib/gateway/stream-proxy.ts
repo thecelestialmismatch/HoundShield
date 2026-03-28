@@ -127,7 +127,7 @@ const PROVIDERS: Record<StreamProvider, ProviderConfig> = {
     buildHeaders: (apiKey) => ({
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
-      "HTTP-Referer": "https://kaelus.online",
+      "HTTP-Referer": "https://kealus.online",
       "X-Title": "Kaelus AI Compliance Gateway",
     }),
     buildBody: (req) => ({
