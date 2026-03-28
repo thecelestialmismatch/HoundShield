@@ -65,7 +65,7 @@ export function GlobalChat() {
       setMessages([
         {
           role: "bot",
-          text: "Hi! I'm Kaelus AI — a compliance firewall that stops your team from accidentally leaking secrets to AI tools. Ask me anything!",
+          text: "Hi! I'm Kaelus Bot — a compliance firewall that stops your team from accidentally leaking secrets to AI tools. Ask me anything!",
         },
       ]);
     }
@@ -204,7 +204,7 @@ export function GlobalChat() {
             "0 4px 24px rgba(99,102,241,0.45), 0 0 0 0 rgba(99,102,241,0.3)",
           animation: isOpen ? "none" : "chatPulse 3s ease infinite",
         }}
-        title="Chat with Kaelus AI"
+        title="Chat with Kaelus Bot"
       >
         {isOpen ? (
           <X className="w-5 h-5 text-white" />
@@ -238,7 +238,7 @@ export function GlobalChat() {
                 <Logo className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-sm font-bold text-white">Kaelus AI</div>
+                <div className="text-sm font-bold text-white">Kaelus Bot</div>
                 <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Online and Scanning

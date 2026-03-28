@@ -283,6 +283,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
   const [loading, setLoading] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const router = useRouter();
 
   async function handleCheckout(tier: string, billing: "monthly" | "annual") {
@@ -295,6 +296,7 @@ export default function PricingPage() {
       return;
     }
 
+    setCheckoutError(null);
     try {
       setLoading(tier);
       const res = await fetch("/api/stripe/checkout", {
@@ -311,9 +313,11 @@ export default function PricingPage() {
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else {
+        setCheckoutError(data.error || "Checkout failed. Please try again.");
       }
-    } catch (err) {
-      console.error("Checkout error:", err);
+    } catch {
+      setCheckoutError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(null);
     }
@@ -331,6 +335,14 @@ export default function PricingPage() {
 
       {/* ===== NAV ===== */}
       <Navbar variant="dark" />
+
+      {/* ===== CHECKOUT ERROR BANNER ===== */}
+      {checkoutError && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-5 py-3 rounded-xl backdrop-blur-sm shadow-lg">
+          <span>{checkoutError}</span>
+          <button onClick={() => setCheckoutError(null)} className="text-red-400/60 hover:text-red-400 ml-2">&#10005;</button>
+        </div>
+      )}
 
       {/* ===== HERO ===== */}
       <section className="relative pt-32 pb-16 px-6 overflow-hidden">
