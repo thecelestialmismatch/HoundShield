@@ -54,6 +54,27 @@ test_reports/
 .claude-memory.md
 .claude-session-state.md
 
+# AI prompt / session files (never commit)
+CLAUDE.md
+CLAUDE-CODE-MISSION.md
+CONTINUE.md
+PR_BODY.md
+*-session-state.md
+tasks/
+
+# Strategy & planning docs (keep local, not in repo)
+*-EVOLUTION-STRATEGY*.md
+*-BLUEPRINT*.md
+TECHNICAL_ANALYSIS.md
+"AI Coding*.md"
+
+# MCP config (may contain auth tokens)
+.mcp.json
+
+# Debug logs
+firebase-debug.log
+*.log
+
 # Session reports & scripts (keep repo clean)
 *-REPORT.md
 *-BEAST-MODE.md

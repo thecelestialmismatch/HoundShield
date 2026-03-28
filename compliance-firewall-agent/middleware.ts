@@ -35,8 +35,8 @@ if (typeof globalThis !== 'undefined') {
 
 /* ── Check if Supabase is configured ──────────────────────────── */
 function isSupabaseReady(): boolean {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+  const url = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim();
+  const key = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').trim();
   return url.startsWith('https://') && !url.includes('YOUR-PROJECT-ID') && key.length > 20;
 }
 
@@ -95,8 +95,8 @@ export async function middleware(request: NextRequest) {
   // ── Auth: Refresh session + protect /command-center ──
   if (isSupabaseReady()) {
     const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim(),
+      (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').trim(),
       {
         cookies: {
           getAll() {

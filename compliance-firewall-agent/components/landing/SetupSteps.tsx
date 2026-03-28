@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Terminal, Radar, ShieldCheck } from "lucide-react";
 
@@ -77,7 +77,7 @@ function ConnectorLine({ color }: { color: string }) {
   return (
     <div
       ref={ref}
-      className={`hidden md:flex items-center flex-1 mx-2 relative h-px bg-gradient-to-r ${color} opacity-40`}
+      className={`w-full relative h-px bg-gradient-to-r ${color} opacity-40`}
       aria-hidden="true"
     >
       {/* Travelling dot */}
@@ -132,50 +132,45 @@ export function SetupSteps() {
           </p>
         </FadeIn>
 
-        {/* Cards + animated connectors on desktop */}
-        <div className="flex flex-col md:flex-row items-stretch gap-0">
+        {/* Cards + animated connectors */}
+        <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 lg:gap-0">
           {STEPS.map((step, i) => {
             const Icon = step.icon;
             return (
-              <div key={step.num} className="flex flex-col md:flex-row items-stretch flex-1 min-w-0">
-                <FadeIn delay={i * 0.12} className="flex-1">
-                  <div className="relative h-full p-8 rounded-2xl bg-white/[0.03] border border-white/[0.07] overflow-hidden group hover:border-brand-400/30 hover:bg-white/[0.05] transition-all duration-300 hover:-translate-y-1">
+              <React.Fragment key={step.num}>
+                {/* Card */}
+                <FadeIn delay={i * 0.12} className="flex-1 min-w-0">
+                  <div className="relative h-full p-7 rounded-2xl bg-white/[0.03] border border-white/[0.07] overflow-hidden group hover:border-brand-400/30 hover:bg-white/[0.05] transition-all duration-300 hover:-translate-y-1">
                     {/* Ghost step number */}
                     <div className="absolute top-3 right-5 text-[72px] font-black text-white/[0.03] leading-none pointer-events-none select-none">
                       {step.num}
                     </div>
-
                     {/* Time badge */}
                     <div className="absolute top-4 left-4">
                       <span className={`text-[10px] font-mono font-semibold uppercase tracking-widest ${step.accentColor} opacity-60`}>
                         {step.time}
                       </span>
                     </div>
-
-                    <div className={`w-[52px] h-[52px] rounded-[14px] flex items-center justify-center mb-5 mt-4 ${step.iconClass}`}>
-                      <Icon className="w-6 h-6" />
+                    <div className={`w-[48px] h-[48px] rounded-[12px] flex items-center justify-center mb-4 mt-4 ${step.iconClass}`}>
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-3">{step.title}</h3>
-                    <p className="text-sm text-slate-400 leading-relaxed mb-5">{step.description}</p>
-
+                    <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>
+                    <p className="text-sm text-slate-400 leading-relaxed mb-4">{step.description}</p>
                     {/* Code snippet */}
-                    <div className="bg-[#0a0a12] border border-white/[0.06] rounded-lg px-3.5 py-2.5 font-mono text-xs">
+                    <div className="bg-[#0a0a12] border border-white/[0.06] rounded-lg px-3 py-2.5 font-mono text-[11px]">
                       <span className={step.codeColor}>→ </span>
                       <span className="text-slate-500">{step.code}</span>
                     </div>
                   </div>
                 </FadeIn>
 
-                {/* Animated connector line (between cards, not after last) */}
+                {/* Connector — only between cards, hidden on mobile */}
                 {i < STEPS.length - 1 && (
-                  <div className="hidden md:flex items-center px-3 flex-shrink-0 self-center">
+                  <div key={`connector-${i}`} className="hidden lg:flex items-center w-12 flex-shrink-0 self-center">
                     <ConnectorLine color={step.connectorColor} />
-                    <div className="w-16">
-                      {/* visible connector dash */}
-                    </div>
                   </div>
                 )}
-              </div>
+              </React.Fragment>
             );
           })}
         </div>
