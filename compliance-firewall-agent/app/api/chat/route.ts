@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             error: "compliance_block",
-            message: `⚠️ Compliance Alert: Your message was blocked because it contains ${scanResult.classifications.join(", ")} data (Risk: ${scanResult.risk_level}). Kaelus protects sensitive data from being sent to AI providers.`,
+            message: `️ Compliance Alert: Your message was blocked because it contains ${scanResult.classifications.join(", ")} data (Risk: ${scanResult.risk_level}). Kaelus protects sensitive data from being sent to AI providers.`,
             scan: {
               risk_level: scanResult.risk_level,
               classifications: scanResult.classifications,

@@ -101,7 +101,7 @@ export function Testimonials() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex gap-1">
                     {Array.from({ length: 5 }).map((_, j) => (
-                      <span key={j} className="text-amber-400 text-sm">★</span>
+                      <span key={j} className="text-amber-400 text-sm"></span>
                     ))}
                   </div>
                   <span className={`text-[10px] font-mono font-bold px-2 py-1 rounded-full border ${t.frameworkColor}`}>
@@ -110,7 +110,7 @@ export function Testimonials() {
                 </div>
                 <p className="text-sm text-slate-400 leading-[1.75] italic mb-4">&ldquo;{t.quote}&rdquo;</p>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/20 text-[11px] font-bold text-emerald-400 mb-5">
-                  ✓ {t.metric}
+                   {t.metric}
                 </div>
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[13px] font-bold border border-white/10 flex-shrink-0 ${t.avatarClass}`}>

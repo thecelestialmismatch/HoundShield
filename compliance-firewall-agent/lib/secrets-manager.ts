@@ -110,6 +110,6 @@ export function auditSecrets(): void {
   const missing = Object.entries(checks).filter(([, ok]) => !ok).map(([k]) => k);
   const present = Object.entries(checks).filter(([, ok]) => ok).map(([k]) => k);
 
-  if (present.length) console.log(`[secrets] ✅ Configured: ${present.join(", ")}`);
-  if (missing.length) console.warn(`[secrets] ⚠️  Missing: ${missing.join(", ")}`);
+  if (present.length) console.log(`[secrets]  Configured: ${present.join(", ")}`);
+  if (missing.length) console.warn(`[secrets] ️  Missing: ${missing.join(", ")}`);
 }

@@ -284,7 +284,7 @@ function ProductsMenu({ isDark }: { isDark: boolean }) {
                     </div>
                     <div className="mt-auto">
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                        ✓ Saves: {p.saves}
+                         Saves: {p.saves}
                       </span>
                     </div>
                   </Link>

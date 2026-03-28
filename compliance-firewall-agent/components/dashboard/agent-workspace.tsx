@@ -238,10 +238,10 @@ export default function AgentWorkspace({
           const last = updated[updated.length - 1];
           if (last.role === 'assistant') {
             last.content = error.error === 'compliance_block'
-              ? `🛡️ **Compliance Block:** ${error.message}`
+              ? `️ **Compliance Block:** ${error.message}`
               : error.error === 'no_api_key'
-                ? '⚙️ **API Key Required.** Go to Settings and add your OpenRouter API key to use the agent.'
-                : `❌ **Error:** ${error.message || 'Something went wrong'}`;
+                ? '️ **API Key Required.** Go to Settings and add your OpenRouter API key to use the agent.'
+                : ` **Error:** ${error.message || 'Something went wrong'}`;
           }
           return updated;
         });
@@ -352,7 +352,7 @@ export default function AgentWorkspace({
                 const callId = event.callId;
                 currentToolCalls = (currentToolCalls || []).map(tc =>
                   tc.id === callId
-                    ? { ...tc, result: event.result, status: event.content === '❌' ? 'error' as const : 'complete' as const }
+                    ? { ...tc, result: event.result, status: event.content === '' ? 'error' as const : 'complete' as const }
                     : tc
                 );
 
@@ -367,7 +367,7 @@ export default function AgentWorkspace({
 
                 setTraceSteps(prev => prev.map(s =>
                   s.id === `trace_call_${callId}`
-                    ? { ...s, toolResult: event.result, status: event.content === '❌' ? 'error' as const : 'complete' as const }
+                    ? { ...s, toolResult: event.result, status: event.content === '' ? 'error' as const : 'complete' as const }
                     : s
                 ));
                 break;
@@ -421,7 +421,7 @@ export default function AgentWorkspace({
                   const updated = [...prev];
                   const last = updated[updated.length - 1];
                   if (last.role === 'assistant') {
-                    last.content += `\n\n❌ **Error:** ${event.message}`;
+                    last.content += `\n\n **Error:** ${event.message}`;
                   }
                   return [...updated];
                 });
@@ -445,7 +445,7 @@ export default function AgentWorkspace({
           const updated = [...prev];
           const last = updated[updated.length - 1];
           if (last.role === 'assistant') {
-            last.content = `❌ **Connection Error:** ${(error as Error).message}`;
+            last.content = ` **Connection Error:** ${(error as Error).message}`;
           }
           return [...updated];
         });

@@ -239,7 +239,7 @@ export async function executeAgentLoop(
             callId: tc.id,
             tool: tc.name,
             result: result.result,
-            content: result.success ? '✅' : '❌',
+            content: result.success ? '' : '',
           });
 
           // Add tool result to conversation

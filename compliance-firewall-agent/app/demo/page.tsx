@@ -619,7 +619,7 @@ export default function FreeDemoPage() {
 
                     {/* ═══ BOTTOM STATS ═══ */}
                     <div className="mt-14 text-center">
-                        <p className="text-sm text-slate-400 mb-6">🔒 This demo runs 100% in your browser. No data is sent to any server.</p>
+                        <p className="text-sm text-slate-400 mb-6"> This demo runs 100% in your browser. No data is sent to any server.</p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
                             {[
                                 { label: "Patterns Checked", value: "9" },

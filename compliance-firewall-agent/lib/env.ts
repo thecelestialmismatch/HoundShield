@@ -31,18 +31,18 @@ export function validateEnv(): EnvConfig {
 
   if (isDemo) {
     console.log(
-      "\n🛡️  Kaelus running in DEMO MODE — configure Supabase in .env.local for production\n"
+      "\n️  Kaelus running in DEMO MODE — configure Supabase in .env.local for production\n"
     );
   }
 
   if (!encryptionKey || encryptionKey.length < 64) {
     console.warn(
-      "⚠️  ENCRYPTION_KEY is missing or too short (need 64 hex chars). Quarantine encryption will fail."
+      "️  ENCRYPTION_KEY is missing or too short (need 64 hex chars). Quarantine encryption will fail."
     );
   }
 
   if (bytezApiKey) {
-    console.log("✅ Bytez AI classification enabled (free tier)");
+    console.log(" Bytez AI classification enabled (free tier)");
   }
 
   return {
