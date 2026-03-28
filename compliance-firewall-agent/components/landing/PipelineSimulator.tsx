@@ -29,14 +29,14 @@ const SEQUENCES: Array<{ stage: number; logs: LogEntry[] }> = [
     stage: 1,
     logs: [
       { time: "00:00:01", type: "info", msg: "→ Running 16 detection engines in parallel..." },
-      { time: "00:00:02", type: "warn", msg: "⚠ API key pattern detected: sk-proj-***" },
+      { time: "00:00:02", type: "warn", msg: " API key pattern detected: sk-proj-***" },
     ],
   },
   {
     stage: 2,
     logs: [
       { time: "00:00:02", type: "info", msg: "→ ReAct agent classifying threat..." },
-      { time: "00:00:03", type: "danger", msg: "✗ HIGH RISK: OpenAI API key in plaintext" },
+      { time: "00:00:03", type: "danger", msg: " HIGH RISK: OpenAI API key in plaintext" },
     ],
   },
   {
@@ -49,8 +49,8 @@ const SEQUENCES: Array<{ stage: number; logs: LogEntry[] }> = [
   {
     stage: 4,
     logs: [
-      { time: "00:00:04", type: "success", msg: "✓ Quarantine saved. SHA-256 hash generated." },
-      { time: "00:00:05", type: "success", msg: "✓ Audit log entry written. Request BLOCKED." },
+      { time: "00:00:04", type: "success", msg: " Quarantine saved. SHA-256 hash generated." },
+      { time: "00:00:05", type: "success", msg: " Audit log entry written. Request BLOCKED." },
     ],
   },
 ];
@@ -164,7 +164,7 @@ export function PipelineSimulator() {
                 onClick={toggle}
                 className="w-[34px] h-[34px] rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/60 hover:bg-white/[0.08] hover:scale-105 transition-all flex items-center justify-center text-sm"
               >
-                {running ? "⏸" : "▶"}
+                {running ? "" : "▶"}
               </button>
               <button
                 onClick={() => { reset(); setTimeout(runPipeline, 50); }}
@@ -236,7 +236,7 @@ export function PipelineSimulator() {
               <div className="p-4 min-h-[200px] max-h-[240px] overflow-hidden flex flex-col gap-1.5 font-mono">
                 {logEntries.length === 0 ? (
                   <div className="flex items-center justify-center h-[180px] text-white/20 text-sm gap-2">
-                    🔍 Waiting for intercept...
+                     Waiting for intercept...
                   </div>
                 ) : (
                   logEntries.map((entry, i) => (

@@ -14,7 +14,7 @@ function createSandbox() {
     console: {
       log: (...args: unknown[]) => logs.push(args.map(a => formatValue(a)).join(' ')),
       error: (...args: unknown[]) => errors.push(args.map(a => formatValue(a)).join(' ')),
-      warn: (...args: unknown[]) => logs.push(`⚠️ ${args.map(a => formatValue(a)).join(' ')}`),
+      warn: (...args: unknown[]) => logs.push(`️ ${args.map(a => formatValue(a)).join(' ')}`),
       info: (...args: unknown[]) => logs.push(`ℹ️ ${args.map(a => formatValue(a)).join(' ')}`),
       table: (data: unknown) => logs.push(formatTable(data)),
     },
@@ -146,31 +146,31 @@ const codeExecuteTool: ToolHandler = {
       const output: string[] = [];
 
       if (logs.length > 0) {
-        output.push('📋 **Console Output:**');
+        output.push(' **Console Output:**');
         output.push('```');
         output.push(logs.join('\n'));
         output.push('```');
       }
 
       if (errors.length > 0) {
-        output.push('⚠️ **Console Errors:**');
+        output.push('️ **Console Errors:**');
         output.push('```');
         output.push(errors.join('\n'));
         output.push('```');
       }
 
       if (result !== undefined) {
-        output.push('✅ **Return Value:**');
+        output.push(' **Return Value:**');
         output.push('```');
         output.push(formatValue(result));
         output.push('```');
       }
 
       if (output.length === 0) {
-        output.push('✅ Code executed successfully (no output)');
+        output.push(' Code executed successfully (no output)');
       }
 
-      output.push(`\n⏱️ Execution time: ${executionTime}ms`);
+      output.push(`\n️ Execution time: ${executionTime}ms`);
 
       return {
         success: true,
@@ -187,7 +187,7 @@ const codeExecuteTool: ToolHandler = {
 
       return {
         success: false,
-        result: `❌ **Execution Error:**\n\`\`\`\n${message}\n\`\`\`\n\n⏱️ Execution time: ${executionTime}ms`,
+        result: ` **Execution Error:**\n\`\`\`\n${message}\n\`\`\`\n\n️ Execution time: ${executionTime}ms`,
         metadata: {
           executionTime,
           language: 'javascript',

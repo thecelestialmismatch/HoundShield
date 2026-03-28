@@ -33,9 +33,9 @@ const response = await client.chat.completions.create({
   messages: [{ role: 'user', content: userPrompt }],
 });
 
-// ✓ Kaelus scanned for CUI, PII, credentials
-// ✓ Audit log entry written with SHA-256 hash
-// ✓ P99 latency added: <50ms`,
+//  Kaelus scanned for CUI, PII, credentials
+//  Audit log entry written with SHA-256 hash
+//  P99 latency added: <50ms`,
 
   py: `import openai
 
@@ -58,8 +58,8 @@ response = client.chat.completions.create(
     messages=[{"role": "user", "content": user_prompt}]
 )
 
-# ✓ Kaelus scanned for CUI, PII, credentials
-# ✓ Audit log written with SHA-256 hash`,
+#  Kaelus scanned for CUI, PII, credentials
+#  Audit log written with SHA-256 hash`,
 
   curl: `# Before: Direct to OpenAI
 # POST https://api.openai.com/v1/chat/completions
@@ -77,9 +77,9 @@ curl https://gateway.kaelus.online/v1/chat/completions \\
     ]
   }'
 
-# ✓ Scanned for 16 data categories
-# ✓ SHA-256 audit log entry written
-# ✓ Latency overhead: <50ms P99`,
+#  Scanned for 16 data categories
+#  SHA-256 audit log entry written
+#  Latency overhead: <50ms P99`,
 };
 
 const TOKEN_COLORS: Record<string, string> = {

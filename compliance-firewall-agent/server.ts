@@ -102,7 +102,7 @@ app.prepare().then(() => {
     console.log(`
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
-║   ⚡ KAELUS AI Compliance Gateway                           ║
+║    KAELUS AI Compliance Gateway                           ║
 ║                                                              ║
 ║   HTTP  → http://${hostname}:${port}                              ║
 ║   WS    → ws://${hostname}:${port}/ws/gateway                     ║

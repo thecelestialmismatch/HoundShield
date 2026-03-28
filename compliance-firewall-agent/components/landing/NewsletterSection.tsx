@@ -24,7 +24,7 @@ export function NewsletterSection() {
         >
           <div className="relative z-10">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-400/[0.08] border border-brand-400/20 text-[12px] font-bold text-brand-400 mb-5">
-              ✨ Stay Ahead
+               Stay Ahead
             </div>
             <h3 className="text-[28px] font-editorial font-bold tracking-tight text-white mb-2.5">
               AI Security Intelligence
@@ -35,12 +35,12 @@ export function NewsletterSection() {
 
             {submitted ? (
               <div className="text-emerald-400 text-base font-semibold py-3">
-                ✓ You&apos;re on the list!
+                 You&apos;re on the list!
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex gap-3 max-w-[420px] mx-auto">
                 <div className="relative flex-1">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm pointer-events-none">✉️</span>
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm pointer-events-none">️</span>
                   <input
                     type="email"
                     value={email}

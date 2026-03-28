@@ -64,16 +64,30 @@ Compliance officers require definitive proof of data governance. Kaelus generate
 To deploy the Kaelus platform within your own isolated environment:
 
 ```bash
-git clone https://github.com/thecelestialmismatch/Kaelus.online.git
-cd Kaelus.online/compliance-firewall-agent
+git clone https://github.com/thecelestialmismatch/Kaelus.Online.git
+cd Kaelus.Online/compliance-firewall-agent
 
 npm install
 cp .env.example .env.local
-
+# Fill in the required values — see Environment Variables below
 npm run dev
 ```
 
 The dashboard and gateway will establish listeners on `http://localhost:3000`.
+
+### Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in these required values:
+
+| Variable | Source | Required |
+|----------|--------|----------|
+| `NEXT_PUBLIC_SUPABASE_URL` | [Supabase Dashboard](https://supabase.com/dashboard) → Settings → API | ✅ |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Dashboard → Settings → API | ✅ |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Dashboard → Settings → API | ✅ |
+| `OPENROUTER_API_KEY` | [OpenRouter](https://openrouter.ai/keys) | ✅ |
+| `RESEND_API_KEY` | [Resend](https://resend.com/api-keys) | For emails |
+| `STRIPE_SECRET_KEY` | [Stripe Dashboard](https://dashboard.stripe.com/apikeys) | For billing |
+| `NEXT_PUBLIC_APP_URL` | Your deployment URL | ✅ |
 
 ## Integration Examples
 
@@ -123,9 +137,8 @@ Kaelus maintains a zero-tolerance policy for vulnerabilities. If you identify a 
 
 ## Community
 
-- Read our [Contribution Guidelines](CONTRIBUTING.md)
-- Check our [Changelog](CHANGELOG.md)
 - File a [Bug Report](.github/ISSUE_TEMPLATE/bug_report.md) or [Feature Request](.github/ISSUE_TEMPLATE/feature_request.md)
+- Review our [Security Policy](SECURITY.md)
 
 ---
 

@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
 
     <!-- Body -->
     <div style="padding: 40px;">
-      <h2 style="color: #1e293b; font-size: 20px; margin: 0 0 16px;">Welcome to Kaelus, ${orgName} 👋</h2>
+      <h2 style="color: #1e293b; font-size: 20px; margin: 0 0 16px;">Welcome to Kaelus, ${orgName} </h2>
 
       <p style="color: #475569; line-height: 1.6; margin: 0 0 20px;">
         You&apos;re set up. Now let&apos;s get your CMMC gap score — it takes about 15 minutes and tells you exactly where you stand before a C3PAO assessment.

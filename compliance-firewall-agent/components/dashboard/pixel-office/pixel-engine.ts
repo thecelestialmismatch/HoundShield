@@ -278,7 +278,7 @@ export class PixelOfficeEngine {
                 ch.status = agent.status;
                 ch.name = agent.name;
                 ch.isActive = agent.status === 'typing' || agent.status === 'running';
-                ch.bubbleText = agent.status === 'waiting' ? '💬' : '';
+                ch.bubbleText = agent.status === 'waiting' ? '' : '';
             }
         }
 

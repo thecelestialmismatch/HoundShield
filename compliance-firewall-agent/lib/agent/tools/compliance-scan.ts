@@ -37,20 +37,20 @@ const complianceScanTool: ToolHandler = {
       const scanResult = await classifyRisk(text);
 
       const riskEmoji: Record<string, string> = {
-        NONE: '✅',
-        LOW: '🟢',
-        MEDIUM: '🟡',
-        HIGH: '🟠',
-        CRITICAL: '🔴',
+        NONE: '',
+        LOW: '',
+        MEDIUM: '',
+        HIGH: '',
+        CRITICAL: '',
       };
 
       const output: string[] = [
-        `🛡️ **Kaelus Compliance Scan Report**`,
+        `️ **Kaelus Compliance Scan Report**`,
         `Context: ${context}`,
         '',
-        `**Risk Level:** ${riskEmoji[scanResult.risk_level] || '❓'} ${scanResult.risk_level}`,
+        `**Risk Level:** ${riskEmoji[scanResult.risk_level] || ''} ${scanResult.risk_level}`,
         `**Confidence:** ${(scanResult.confidence * 100).toFixed(1)}%`,
-        `**Action:** ${scanResult.should_block ? '🚫 BLOCK' : scanResult.should_quarantine ? '⏸️ QUARANTINE' : '✅ ALLOW'}`,
+        `**Action:** ${scanResult.should_block ? ' BLOCK' : scanResult.should_quarantine ? '️ QUARANTINE' : ' ALLOW'}`,
         '',
       ];
 

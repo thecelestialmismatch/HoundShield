@@ -133,7 +133,7 @@ function Sidebar({
             <Search className="w-3.5 h-3.5" />
             <span>Search...</span>
             <kbd className="ml-auto text-[10px] bg-white/5 px-1.5 py-0.5 rounded border border-white/10 text-slate-500 font-mono">
-              ⌘K
+              K
             </kbd>
           </div>
         </div>

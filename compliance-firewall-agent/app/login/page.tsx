@@ -30,7 +30,10 @@ export default function LoginPage() {
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (authError) {
-      setError(authError.message);
+      const msg = authError.message === 'Invalid login credentials'
+        ? 'Invalid login credentials — if you just signed up, please confirm your email first.'
+        : authError.message;
+      setError(msg);
       setLoading(false);
       return;
     }
@@ -51,7 +54,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4 overflow-hidden">
       <ScrollProgressBar />
       {/* Subtle background blurs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
