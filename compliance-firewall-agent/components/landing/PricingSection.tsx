@@ -63,13 +63,13 @@ const PLANS: PlanDef[] = [
   {
     name: "PRO",
     tier: "pro",
-    price: "$69",
+    price: "$199",
     period: "/mo",
     desc: "AI governance for engineering teams",
     features: [
       "Unlimited AI scanning",
       "Source code & API key detection",
-      "SOC 2 compliance reports (PDF)",
+      "SOC 2 + HIPAA reports (PDF)",
       "5 AI compliance agents",
       "Real-time data leak alerts",
       "Email notifications",
@@ -80,19 +80,38 @@ const PLANS: PlanDef[] = [
     featured: true,
   },
   {
-    name: "ENTERPRISE",
-    tier: "enterprise",
-    price: "$249",
+    name: "GROWTH",
+    tier: "growth",
+    price: "$499",
     period: "/mo",
-    desc: "Full AI governance for growing tech companies",
+    desc: "CMMC Level 2 enforcement for defense contractors",
     features: [
       "Everything in Pro",
-      "Unlimited AI agents",
-      "25 team seats",
+      "CMMC Level 2 enforcement",
+      "15 team seats",
       "Blockchain-anchored audit trail",
       "API gateway mode",
       "Slack/webhook integrations",
+      "Priority support",
+    ],
+    cta: "Start Growth →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+  {
+    name: "ENTERPRISE",
+    tier: "enterprise",
+    price: "$999",
+    period: "/mo",
+    desc: "Full AI governance for regulated industries",
+    features: [
+      "Everything in Growth",
+      "Unlimited AI agents",
+      "50 team seats",
       "Custom security policies",
+      "SSO / SAML",
+      "SLA guarantee",
+      "Dedicated CSM",
     ],
     cta: "Start Enterprise →",
     ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
@@ -101,7 +120,7 @@ const PLANS: PlanDef[] = [
   {
     name: "AGENCY",
     tier: "agency",
-    price: "$599",
+    price: "$2,499",
     period: "/mo",
     desc: "Multi-tenant dashboard for IT consultancies",
     features: [
@@ -158,7 +177,7 @@ export function PricingSection() {
           </p>
         </FadeIn>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {PLANS.map((plan, i) => (
             <FadeIn key={plan.name} delay={i * 0.08}>
               <div
