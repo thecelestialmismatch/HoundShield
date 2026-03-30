@@ -71,6 +71,10 @@ TECHNICAL_ANALYSIS.md
 # MCP config (may contain auth tokens)
 .mcp.json
 
+# Google Cloud SDK (do not commit)
+google-cloud-sdk/
+google-cloud-cli-darwin-arm.tar.gz
+
 # Debug logs
 firebase-debug.log
 *.log
