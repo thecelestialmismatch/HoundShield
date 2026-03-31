@@ -59,7 +59,7 @@ export function HeroSection() {
       />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-28 lg:py-36">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
           {/* ── LEFT — text ──────────────────────────────── */}
           <div>
@@ -164,12 +164,12 @@ export function HeroSection() {
           </div>
 
           {/* ── RIGHT — live dashboard ────────────────────── */}
-          <div style={{ perspective: "1200px" }} className="relative hidden lg:block">
+          <div style={{ perspective: "1200px" }} className="relative hidden lg:block h-[580px]">
             <motion.div
               initial={{ opacity: 0, x: 60, rotateY: -8, rotateX: 4 }}
               animate={{ opacity: 1, x: 0,  rotateY: -3, rotateX: 2 }}
               transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative"
+              className="relative h-full"
             >
               {/* Glow behind the card */}
               <div
@@ -197,8 +197,8 @@ export function HeroSection() {
                 </div>
               </div>
 
-              {/* Dashboard */}
-              <div className="border border-white/[0.08] border-t-0 rounded-b-2xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.85)]">
+              {/* Dashboard — fixed container so live data updates never shift the hero text */}
+              <div className="border border-white/[0.08] border-t-0 rounded-b-2xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.85)]" style={{ height: "calc(100% - 40px)" }}>
                 <PlatformDashboard />
               </div>
             </motion.div>
