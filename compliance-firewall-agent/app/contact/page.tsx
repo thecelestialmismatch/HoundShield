@@ -55,8 +55,8 @@ export default function ContactPage() {
   const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all duration-200";
 
   const cards = [
-    { icon: Mail, color: "text-indigo-400", label: "Email Us", value: "info@kaelus.online", sub: "For general and technical inquiries" },
-    { icon: CalendarCheck, color: "text-emerald-400", label: "Schedule a Demo", value: "Book a 30-min call", sub: "See Kaelus.online in action, live" },
+    { icon: Mail, color: "text-indigo-400", label: "General Inquiries", value: "contact@kaelus.online", sub: "Sales, partnerships, and general questions" },
+    { icon: CalendarCheck, color: "text-emerald-400", label: "Technical Support", value: "support@kaelus.online", sub: "Integration help and troubleshooting" },
     { icon: Clock, color: "text-amber-400", label: "Response Time", value: "< 4 hours", sub: "During business hours (ET)" },
   ];
 
