@@ -164,7 +164,8 @@ export function HeroSection() {
           </div>
 
           {/* ── RIGHT — live dashboard ────────────────────── */}
-          <div style={{ perspective: "1200px" }} className="relative hidden lg:block h-[580px]">
+          {/* contain:layout isolates Recharts ResizeObserver mutations from affecting hero text / sections below */}
+          <div style={{ perspective: "1200px", contain: "layout" }} className="relative hidden lg:block h-[580px]">
             <motion.div
               initial={{ opacity: 0, x: 60, rotateY: -8, rotateX: 4 }}
               animate={{ opacity: 1, x: 0,  rotateY: -3, rotateX: 2 }}

@@ -115,6 +115,12 @@ export function PlatformDashboard() {
   const [coverageData, setCoverageData] = useState(initCoverage);
   const [log, setLog]                   = useState<LogEntry[]>([]);
   const [scanPct, setScanPct]           = useState(0);
+  const [severityData, setSeverityData] = useState([
+    { level: "HIGH", count: rand(3, 12),  color: "text-red-400",   bg: "bg-red-500/10",    border: "border-red-500/20"   },
+    { level: "MED",  count: rand(8, 24),  color: "text-amber-400", bg: "bg-amber-500/10",  border: "border-amber-500/20" },
+    { level: "LOW",  count: rand(15, 40), color: "text-slate-400", bg: "bg-white/[0.04]",  border: "border-white/[0.06]" },
+  ]);
+  const [latencyMs, setLatencyMs]       = useState(rand(6, 11));
   const counterRef                      = useRef(0);
 
   useEffect(() => { setMounted(true); }, []);
@@ -192,6 +198,24 @@ export function PlatformDashboard() {
     const t = setInterval(() => {
       setScanPct((p) => (p >= 100 ? 0 : p + 4));
     }, 120);
+    return () => clearInterval(t);
+  }, []);
+
+  /* Severity counts — updates every 2.5s */
+  useEffect(() => {
+    const t = setInterval(() => {
+      setSeverityData([
+        { level: "HIGH", count: rand(3, 12),  color: "text-red-400",   bg: "bg-red-500/10",    border: "border-red-500/20"   },
+        { level: "MED",  count: rand(8, 24),  color: "text-amber-400", bg: "bg-amber-500/10",  border: "border-amber-500/20" },
+        { level: "LOW",  count: rand(15, 40), color: "text-slate-400", bg: "bg-white/[0.04]",  border: "border-white/[0.06]" },
+      ]);
+    }, 2500);
+    return () => clearInterval(t);
+  }, []);
+
+  /* Detection latency ticker — updates every 1.4s */
+  useEffect(() => {
+    const t = setInterval(() => setLatencyMs(rand(6, 13)), 1400);
     return () => clearInterval(t);
   }, []);
 
@@ -310,7 +334,31 @@ export function PlatformDashboard() {
               )}
             </div>
 
-            {/* 3 ── Coverage metrics (animated progress bars) */}
+            {/* 3 ── Threat severity strip */}
+            <div>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Threat severity</p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {severityData.map((s) => (
+                  <div key={s.level} className={`flex flex-col items-center py-1.5 rounded-lg ${s.bg} border ${s.border}`}>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={s.count}
+                        initial={{ opacity: 0.4, y: 2 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.22 }}
+                        className={`text-[11px] font-mono font-bold tabular-nums ${s.color}`}
+                      >
+                        {s.count}
+                      </motion.span>
+                    </AnimatePresence>
+                    <span className={`text-[7px] font-mono uppercase tracking-wider mt-0.5 ${s.color} opacity-70`}>{s.level}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 4 ── Coverage metrics (animated progress bars) */}
             <div>
               <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-3">Coverage metrics</p>
               <div className="space-y-2.5">
@@ -331,6 +379,41 @@ export function PlatformDashboard() {
                     <CoverageBar pct={m.pct} color={m.color} />
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* 5 ── Detection latency + AI tools */}
+            <div className="space-y-2">
+              {/* Latency ticker */}
+              <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">Avg detection</span>
+                <div className="flex items-center gap-1">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={latencyMs}
+                      initial={{ opacity: 0.4, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-[10px] font-mono font-bold text-emerald-400 tabular-nums"
+                    >
+                      {latencyMs}ms
+                    </motion.span>
+                  </AnimatePresence>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+              </div>
+              {/* AI tools monitored */}
+              <div>
+                <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">AI tools monitored</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {["ChatGPT", "Copilot", "Claude", "Gemini"].map((tool) => (
+                    <div key={tool} className="flex items-center gap-1 px-2 py-1 rounded-md bg-white/[0.04] border border-white/[0.06]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+                      <span className="text-[8px] font-mono text-slate-400">{tool}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
