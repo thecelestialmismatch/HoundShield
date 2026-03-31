@@ -115,6 +115,12 @@ export function PlatformDashboard() {
   const [coverageData, setCoverageData] = useState(initCoverage);
   const [log, setLog]                   = useState<LogEntry[]>([]);
   const [scanPct, setScanPct]           = useState(0);
+  const [severityData, setSeverityData] = useState([
+    { level: "HIGH", count: rand(3, 12),  color: "text-red-400",   bg: "bg-red-500/10",    border: "border-red-500/20"   },
+    { level: "MED",  count: rand(8, 24),  color: "text-amber-400", bg: "bg-amber-500/10",  border: "border-amber-500/20" },
+    { level: "LOW",  count: rand(15, 40), color: "text-slate-400", bg: "bg-white/[0.04]",  border: "border-white/[0.06]" },
+  ]);
+  const [latencyMs, setLatencyMs]       = useState(rand(6, 11));
   const counterRef                      = useRef(0);
 
   useEffect(() => { setMounted(true); }, []);
@@ -192,6 +198,24 @@ export function PlatformDashboard() {
     const t = setInterval(() => {
       setScanPct((p) => (p >= 100 ? 0 : p + 4));
     }, 120);
+    return () => clearInterval(t);
+  }, []);
+
+  /* Severity counts — updates every 2.5s */
+  useEffect(() => {
+    const t = setInterval(() => {
+      setSeverityData([
+        { level: "HIGH", count: rand(3, 12),  color: "text-red-400",   bg: "bg-red-500/10",    border: "border-red-500/20"   },
+        { level: "MED",  count: rand(8, 24),  color: "text-amber-400", bg: "bg-amber-500/10",  border: "border-amber-500/20" },
+        { level: "LOW",  count: rand(15, 40), color: "text-slate-400", bg: "bg-white/[0.04]",  border: "border-white/[0.06]" },
+      ]);
+    }, 2500);
+    return () => clearInterval(t);
+  }, []);
+
+  /* Detection latency ticker — updates every 1.4s */
+  useEffect(() => {
+    const t = setInterval(() => setLatencyMs(rand(6, 13)), 1400);
     return () => clearInterval(t);
   }, []);
 
@@ -310,7 +334,31 @@ export function PlatformDashboard() {
               )}
             </div>
 
-            {/* 3 ── Coverage metrics (animated progress bars) */}
+            {/* 3 ── Threat severity strip */}
+            <div>
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Threat severity</p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {severityData.map((s) => (
+                  <div key={s.level} className={`flex flex-col items-center py-1.5 rounded-lg ${s.bg} border ${s.border}`}>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={s.count}
+                        initial={{ opacity: 0.4, y: 2 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.22 }}
+                        className={`text-[11px] font-mono font-bold tabular-nums ${s.color}`}
+                      >
+                        {s.count}
+                      </motion.span>
+                    </AnimatePresence>
+                    <span className={`text-[7px] font-mono uppercase tracking-wider mt-0.5 ${s.color} opacity-70`}>{s.level}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 4 ── Coverage metrics (animated progress bars) */}
             <div>
               <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-3">Coverage metrics</p>
               <div className="space-y-2.5">
@@ -333,12 +381,104 @@ export function PlatformDashboard() {
                 ))}
               </div>
             </div>
+
+            {/* 5 ── Detection latency + AI tools */}
+            <div className="space-y-2">
+              {/* Latency ticker */}
+              <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">Avg detection</span>
+                <div className="flex items-center gap-1">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={latencyMs}
+                      initial={{ opacity: 0.4, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-[10px] font-mono font-bold text-emerald-400 tabular-nums"
+                    >
+                      {latencyMs}ms
+                    </motion.span>
+                  </AnimatePresence>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+              </div>
+              {/* AI tools monitored */}
+              <div>
+                <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">AI tools monitored</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {["ChatGPT", "Copilot", "Claude", "Gemini"].map((tool) => (
+                    <div key={tool} className="flex items-center gap-1 px-2 py-1 rounded-md bg-white/[0.04] border border-white/[0.06]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+                      <span className="text-[8px] font-mono text-slate-400">{tool}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* RIGHT — live threat feed + framework status */}
+          {/* RIGHT — donut chart → live threat feed → framework status */}
           <div className="w-[230px] flex-shrink-0 flex flex-col divide-y divide-white/[0.04]">
 
-            {/* 1 ── Live threat feed */}
+            {/* 1 ── Framework split donut (top — most visual impact) */}
+            <div className="p-3.5">
+              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse inline-block flex-shrink-0" />
+                Framework split
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="relative flex-shrink-0">
+                  {mounted ? (
+                    <PieChart width={80} height={80}>
+                      <Pie
+                        data={pieData}
+                        cx={38}
+                        cy={38}
+                        innerRadius={24}
+                        outerRadius={38}
+                        dataKey="value"
+                        strokeWidth={0}
+                        isAnimationActive={false}
+                      >
+                        {pieData.map((entry, i) => (
+                          <Cell key={i} fill={entry.color} fillOpacity={0.92} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  ) : (
+                    <div className="w-[80px] h-[80px] rounded-full bg-white/[0.03] animate-pulse" />
+                  )}
+                  {/* Center label */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-[8px] font-mono font-bold text-white leading-none">3</span>
+                    <span className="text-[6px] font-mono text-slate-600 leading-none mt-0.5">active</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 flex-1 min-w-0">
+                  {pieData.map((d) => (
+                    <div key={d.name} className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
+                      <span className="text-[8px] font-mono text-slate-500 flex-1 truncate">{d.name}</span>
+                      <AnimatePresence mode="wait">
+                        <motion.span
+                          key={d.value}
+                          initial={{ opacity: 0.4, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.3 }}
+                          className="text-[8px] font-mono font-bold tabular-nums flex-shrink-0"
+                          style={{ color: d.color }}
+                        >
+                          {d.value}%
+                        </motion.span>
+                      </AnimatePresence>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* 2 ── Live threat feed (below donut) */}
             <div className="flex-1 p-3.5 min-h-0">
               <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse inline-block flex-shrink-0" />
@@ -376,7 +516,7 @@ export function PlatformDashboard() {
               </div>
             </div>
 
-            {/* 2 ── Framework status pills (was #3) */}
+            {/* 3 ── Framework status pills (bottom) */}
             <div className="p-3.5">
               <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Framework status</p>
               <div className="space-y-1.5">
@@ -397,42 +537,6 @@ export function PlatformDashboard() {
                     </div>
                   );
                 })}
-              </div>
-            </div>
-
-            {/* 3 ── Framework split donut (was #2) */}
-            <div className="p-3.5">
-              <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2.5">Framework split</p>
-              <div className="flex items-center gap-2.5">
-                {mounted ? (
-                  <PieChart width={64} height={64}>
-                    <Pie
-                      data={pieData}
-                      cx={30}
-                      cy={30}
-                      innerRadius={18}
-                      outerRadius={30}
-                      dataKey="value"
-                      strokeWidth={0}
-                      isAnimationActive={false}
-                    >
-                      {pieData.map((entry, i) => (
-                        <Cell key={i} fill={entry.color} fillOpacity={0.9} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                ) : (
-                  <div className="w-[64px] h-[64px] rounded-full bg-white/[0.03] animate-pulse flex-shrink-0" />
-                )}
-                <div className="flex flex-col gap-1.5 flex-1 min-w-0">
-                  {pieData.map((d) => (
-                    <div key={d.name} className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                      <span className="text-[8px] font-mono text-slate-500 flex-1 truncate">{d.name}</span>
-                      <span className="text-[8px] font-mono font-bold tabular-nums flex-shrink-0" style={{ color: d.color }}>{d.value}%</span>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>

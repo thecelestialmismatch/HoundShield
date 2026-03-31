@@ -88,10 +88,10 @@ export function HeroSection() {
               transition={{ duration: 0.65, delay: 0.08, ease }}
               className="font-editorial text-[clamp(38px,5.5vw,72px)] font-bold leading-[1.0] tracking-[-2px] text-white mb-6"
             >
-              Stop AI data leaks.
+              Block AI data leaks
               <br />
               <span className="bg-gradient-to-r from-brand-400 via-emerald-400 to-indigo-400 bg-clip-text text-transparent">
-                Pass every audit.
+                before they happen.
               </span>
             </motion.h1>
 
@@ -102,9 +102,11 @@ export function HeroSection() {
               transition={{ duration: 0.55, delay: 0.16, ease }}
               className="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-9 leading-relaxed"
             >
-              Kaelus intercepts every AI prompt before it leaves your network —
-              simultaneously enforcing SOC&nbsp;2, HIPAA, and CMMC Level&nbsp;2.
-              One 15-minute deployment. No switching between tools.
+              Kaelus sits inline between your team and every AI tool —
+              scanning every prompt for PII, PHI, CUI, and secrets in under 10ms,
+              before it reaches ChatGPT, Copilot, or Claude.
+              SOC&nbsp;2, HIPAA, and CMMC Level&nbsp;2 enforced simultaneously.
+              One proxy URL. No code changes.
             </motion.p>
 
             {/* CTAs */}
@@ -164,7 +166,8 @@ export function HeroSection() {
           </div>
 
           {/* ── RIGHT — live dashboard ────────────────────── */}
-          <div style={{ perspective: "1200px" }} className="relative hidden lg:block h-[580px]">
+          {/* contain:layout isolates Recharts ResizeObserver mutations from affecting hero text / sections below */}
+          <div style={{ perspective: "1200px", contain: "layout" }} className="relative hidden lg:block h-[580px]">
             <motion.div
               initial={{ opacity: 0, x: 60, rotateY: -8, rotateX: 4 }}
               animate={{ opacity: 1, x: 0,  rotateY: -3, rotateX: 2 }}
