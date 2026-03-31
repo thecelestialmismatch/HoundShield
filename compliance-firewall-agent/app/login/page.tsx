@@ -42,13 +42,12 @@ export default function LoginPage() {
     router.refresh();
   };
 
-  const handleOAuthLogin = async (provider: 'google' | 'github' | 'azure') => {
+  const handleOAuthLogin = async (provider: 'google' | 'github') => {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirect)}`,
-        ...(provider === 'azure' && { scopes: 'email profile openid' }),
       },
     });
   };
@@ -188,19 +187,6 @@ export default function LoginPage() {
               Continue with GitHub
             </button>
 
-            <button
-              onClick={() => handleOAuthLogin('azure')}
-              aria-label="Sign in with Microsoft"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/5 hover:text-white transition-all"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 23 23" fill="none" aria-hidden="true">
-                <path d="M1 1h10v10H1V1z" fill="#F25022" />
-                <path d="M12 1h10v10H12V1z" fill="#7FBA00" />
-                <path d="M1 12h10v10H1V12z" fill="#00A4EF" />
-                <path d="M12 12h10v10H12V12z" fill="#FFB900" />
-              </svg>
-              Continue with Microsoft
-            </button>
           </div>
         </div>
 
