@@ -48,7 +48,7 @@ const PLANS: PlanDef[] = [
     tier: "free",
     price: "Free",
     period: "7-day trial",
-    desc: "Try the full platform free for 7 days — no credit card required",
+    desc: "Try the full platform — no credit card required",
     features: [
       "100 AI scans / month",
       "PII & IP risk assessment",
@@ -61,18 +61,34 @@ const PLANS: PlanDef[] = [
     featured: false,
   },
   {
+    name: "SOLO",
+    tier: "solo",
+    price: "$29",
+    period: "/mo",
+    desc: "For freelancers & individual developers",
+    features: [
+      "1,000 AI scans / month",
+      "PII, IP & secret detection",
+      "SOC 2 PDF report",
+      "1 seat",
+      "Email support",
+    ],
+    cta: "Start Solo →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+  {
     name: "PRO",
     tier: "pro",
-    price: "$69",
+    price: "$99",
     period: "/mo",
-    desc: "AI governance for engineering teams",
+    desc: "AI governance for growing teams",
     features: [
       "Unlimited AI scanning",
       "Source code & API key detection",
-      "SOC 2 compliance reports (PDF)",
-      "5 AI compliance agents",
+      "SOC 2 + HIPAA reports (PDF)",
+      "5 team seats",
       "Real-time data leak alerts",
-      "Email notifications",
       "Priority support",
     ],
     cta: "Start Pro →",
@@ -80,19 +96,37 @@ const PLANS: PlanDef[] = [
     featured: true,
   },
   {
-    name: "ENTERPRISE",
-    tier: "enterprise",
+    name: "GROWTH",
+    tier: "growth",
     price: "$249",
     period: "/mo",
-    desc: "Full AI governance for growing tech companies",
+    desc: "CMMC Level 2 for defense contractors",
     features: [
       "Everything in Pro",
-      "Unlimited AI agents",
-      "25 team seats",
-      "Blockchain-anchored audit trail",
+      "CMMC Level 2 enforcement",
+      "15 team seats",
+      "Blockchain audit trail",
       "API gateway mode",
       "Slack/webhook integrations",
+    ],
+    cta: "Start Growth →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+  {
+    name: "ENTERPRISE",
+    tier: "enterprise",
+    price: "$599",
+    period: "/mo",
+    desc: "Full AI governance for regulated industries",
+    features: [
+      "Everything in Growth",
+      "Unlimited AI agents",
+      "50 team seats",
       "Custom security policies",
+      "SSO / SAML",
+      "SLA guarantee",
+      "Dedicated CSM",
     ],
     cta: "Start Enterprise →",
     ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
@@ -101,7 +135,7 @@ const PLANS: PlanDef[] = [
   {
     name: "AGENCY",
     tier: "agency",
-    price: "$599",
+    price: "$1,499",
     period: "/mo",
     desc: "Multi-tenant dashboard for IT consultancies",
     features: [
@@ -158,7 +192,7 @@ export function PricingSection() {
           </p>
         </FadeIn>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4">
           {PLANS.map((plan, i) => (
             <FadeIn key={plan.name} delay={i * 0.08}>
               <div
