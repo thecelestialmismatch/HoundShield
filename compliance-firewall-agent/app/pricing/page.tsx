@@ -816,7 +816,7 @@ export default function PricingPage() {
                   Pricing
                 </Link>
                 <Link
-                  href="/dashboard"
+                  href="/command-center"
                   className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
                 >
                   Dashboard

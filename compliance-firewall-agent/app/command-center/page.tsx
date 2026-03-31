@@ -62,6 +62,7 @@ import {
   getRemediationPriorities,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses } from "@/lib/shieldready/storage";
+import { BarLineChartPlayer } from "@/components/remotion/BarLineChartPlayer";
 
 /* ── Chart Colors ──────────────────────────────────────────────── */
 const CHART_BLUE = "#2563EB";
@@ -753,6 +754,18 @@ export default function CommandCenterOverview() {
         >
           View All Events <ArrowRight className="w-3.5 h-3.5" />
         </Link>
+      </div>
+
+      {/* ── Revenue & Conversion Chart ── */}
+      <div className="glass-card p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-base font-semibold text-white">Revenue & Conversion Rate</h3>
+            <p className="text-xs text-slate-400 mt-0.5">Monthly revenue vs conversion — Jan to Jun 2025</p>
+          </div>
+          <span className="text-xs font-mono text-brand-400 bg-brand-400/10 px-2 py-1 rounded-lg">LIVE</span>
+        </div>
+        <BarLineChartPlayer />
       </div>
 
       {/* ── Quick Actions ── */}
