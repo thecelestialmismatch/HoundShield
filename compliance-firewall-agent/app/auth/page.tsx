@@ -3,6 +3,7 @@
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 import { useState, useEffect, useCallback } from "react";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
@@ -57,16 +58,6 @@ function GitHubLogo({ className }: { className?: string }) {
   );
 }
 
-function MicrosoftLogo({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 21 21">
-      <rect x="1" y="1" width="9" height="9" fill="#f25022" />
-      <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
-      <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
-      <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
-    </svg>
-  );
-}
 
 /* ──────────────────────────────────────────────
    Live scanner animation component
@@ -239,17 +230,14 @@ export default function AuthPage() {
     [signUpEmail, signUpPassword, fullName]
   );
 
-  const handleSocialAuth = useCallback(async (provider: "google" | "github" | "microsoft" | "sso") => {
+  const handleSocialAuth = useCallback(async (provider: "google" | "github" | "sso") => {
     setLoading(true);
     try {
       const supabase = createClient();
-      // Map "microsoft" to "azure" (Supabase provider name) and "sso" to SAML
-      const supabaseProvider = provider === "microsoft" ? "azure" : provider === "sso" ? "azure" : provider;
       await supabase.auth.signInWithOAuth({
-        provider: supabaseProvider as 'google' | 'github' | 'azure',
+        provider: provider as 'google' | 'github',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
-          ...(supabaseProvider === 'azure' && { scopes: 'email profile openid' }),
         },
       });
     } catch {
@@ -279,6 +267,7 @@ export default function AuthPage() {
 
   return (
     <div className="flex min-h-screen bg-[#07070b]">
+      <ScrollProgressBar />
       {/* ─── LEFT BRANDING PANEL ─── */}
       <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-[#07070b] items-center justify-center p-12 xl:p-16">
         {/* Background textures */}
@@ -351,12 +340,12 @@ export default function AuthPage() {
 
         <div className="relative z-10 w-full max-w-[420px]">
           {/* Mobile logo */}
-          <div className="flex items-center gap-2.5 mb-10 lg:hidden">
+          <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden hover:opacity-80 transition-opacity">
             <Logo className="w-10 h-10" />
             <div>
               <TextLogo variant="dark" />
             </div>
-          </div>
+          </Link>
 
           {/* Header */}
           <div className="mb-8">
@@ -383,7 +372,7 @@ export default function AuthPage() {
                     setShowPassword(false);
                   }}
                   className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === tab
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
+                    ? "bg-brand-500 text-white"
                     : "text-slate-400 hover:text-slate-300"
                     }`}
                 >
@@ -594,15 +583,6 @@ export default function AuthPage() {
                 <GoogleLogo className="w-4 h-4" />
                 Continue with Google
               </button>
-              <button
-                onClick={() => handleSocialAuth("microsoft")}
-                disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-200 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
-              >
-                <MicrosoftLogo className="w-4 h-4" />
-                Continue with Microsoft
-              </button>
-
               <button
                 onClick={() => handleSocialAuth("github")}
                 disabled={loading}

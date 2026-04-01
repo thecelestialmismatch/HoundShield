@@ -74,7 +74,7 @@ const generateChartTool: ToolHandler = {
 
       // Generate text representation for the AI to reference
       const textRepresentation: string[] = [
-        `📊 **Chart: ${title}** (${chartType})`,
+        ` **Chart: ${title}** (${chartType})`,
         '',
       ];
 

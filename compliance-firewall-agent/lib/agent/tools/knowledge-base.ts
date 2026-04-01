@@ -142,7 +142,7 @@ const knowledgeBaseTool: ToolHandler = {
         return {
           success: true,
           result: [
-            `📚 **Document Added Successfully**`,
+            ` **Document Added Successfully**`,
             `• ID: ${id}`,
             `• Title: ${title}`,
             `• Type: ${type}`,
@@ -165,7 +165,7 @@ const knowledgeBaseTool: ToolHandler = {
         if (docs.length === 0) {
           return {
             success: true,
-            result: '📚 Knowledge base is empty. Use action "add" to store documents first.',
+            result: ' Knowledge base is empty. Use action "add" to store documents first.',
           };
         }
 
@@ -174,12 +174,12 @@ const knowledgeBaseTool: ToolHandler = {
         if (results.length === 0) {
           return {
             success: true,
-            result: `📚 No documents found matching "${query}". Try different keywords.\n\nAvailable documents:\n${docs.map(d => `• ${d.title} (${d.id})`).join('\n')}`,
+            result: ` No documents found matching "${query}". Try different keywords.\n\nAvailable documents:\n${docs.map(d => `• ${d.title} (${d.id})`).join('\n')}`,
           };
         }
 
         const output: string[] = [
-          `📚 **Knowledge Base Search Results** for "${query}"`,
+          ` **Knowledge Base Search Results** for "${query}"`,
           `Found ${results.length} relevant document(s):`,
           '',
         ];
@@ -218,12 +218,12 @@ const knowledgeBaseTool: ToolHandler = {
         if (docs.length === 0) {
           return {
             success: true,
-            result: '📚 Knowledge base is empty. Use action "add" to store documents.',
+            result: ' Knowledge base is empty. Use action "add" to store documents.',
           };
         }
 
         const output: string[] = [
-          `📚 **Knowledge Base** (${docs.length} documents)`,
+          ` **Knowledge Base** (${docs.length} documents)`,
           '',
           '| ID | Title | Type | Size | Added |',
           '| --- | --- | --- | --- | --- |',
@@ -259,7 +259,7 @@ const knowledgeBaseTool: ToolHandler = {
         return {
           success: true,
           result: [
-            `📄 **${doc.title}**`,
+            ` **${doc.title}**`,
             `ID: ${doc.id} | Type: ${doc.type} | Size: ${doc.size.toLocaleString()} chars`,
             '',
             '---',

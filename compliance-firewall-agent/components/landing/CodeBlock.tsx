@@ -33,9 +33,9 @@ const response = await client.chat.completions.create({
   messages: [{ role: 'user', content: userPrompt }],
 });
 
-// ✓ Kaelus scanned for CUI, PII, credentials
-// ✓ Audit log entry written with SHA-256 hash
-// ✓ P99 latency added: <50ms`,
+//  Kaelus scanned for CUI, PII, credentials
+//  Audit log entry written with SHA-256 hash
+//  P99 latency added: <50ms`,
 
   py: `import openai
 
@@ -58,8 +58,8 @@ response = client.chat.completions.create(
     messages=[{"role": "user", "content": user_prompt}]
 )
 
-# ✓ Kaelus scanned for CUI, PII, credentials
-# ✓ Audit log written with SHA-256 hash`,
+#  Kaelus scanned for CUI, PII, credentials
+#  Audit log written with SHA-256 hash`,
 
   curl: `# Before: Direct to OpenAI
 # POST https://api.openai.com/v1/chat/completions
@@ -77,9 +77,9 @@ curl https://gateway.kaelus.online/v1/chat/completions \\
     ]
   }'
 
-# ✓ Scanned for 16 data categories
-# ✓ SHA-256 audit log entry written
-# ✓ Latency overhead: <50ms P99`,
+#  Scanned for 16 data categories
+#  SHA-256 audit log entry written
+#  Latency overhead: <50ms P99`,
 };
 
 const TOKEN_COLORS: Record<string, string> = {
@@ -137,7 +137,7 @@ export function CodeBlock() {
         </div>
 
         <div
-          className="relative rounded-[18px] overflow-hidden border border-white/[0.08] shadow-[0_0_60px_rgba(99,102,241,0.12),0_32px_60px_rgba(0,0,0,0.5)]"
+          className="relative rounded-[18px] overflow-hidden border border-white/[0.08] shadow-[0_32px_60px_rgba(0,0,0,0.5)]"
           style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.12) -1px, rgba(168,85,247,0.06) -1px, transparent 40%)" }}
         >
           <div className="absolute inset-0 rounded-[18px] border border-transparent"
@@ -162,7 +162,7 @@ export function CodeBlock() {
                   onClick={() => setActiveTab(tab.key)}
                   className={`px-3.5 py-1.5 rounded-lg text-[11px] font-mono font-bold border transition-all ${
                     activeTab === tab.key
-                      ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/30 shadow-[0_0_12px_rgba(99,102,241,0.2)]"
+                      ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/30"
                       : "text-white/30 border-transparent hover:text-white/60 hover:bg-white/[0.05]"
                   }`}
                 >

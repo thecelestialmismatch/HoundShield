@@ -31,7 +31,7 @@ function FadeIn({
 const LAYERS = [
   {
     num: "LAYER 1",
-    icon: "🌐",
+    icon: "",
     iconClass: "bg-indigo-500/12 border-indigo-500/25",
     title: "The Employees (Client Layer)",
     subtitle: "Your team doing their normal work. They don't even know we're there.",
@@ -47,7 +47,7 @@ const LAYERS = [
   },
   {
     num: "LAYER 2",
-    icon: "🛡️",
+    icon: "️",
     iconClass: "bg-emerald-500/12 border-emerald-500/25",
     title: "The Security Guard (Firewall Engine)",
     subtitle: "The split-second check of the backpack before it leaves the building.",
@@ -63,7 +63,7 @@ const LAYERS = [
   },
   {
     num: "LAYER 3",
-    icon: "🧠",
+    icon: "",
     iconClass: "bg-purple-500/12 border-purple-500/25",
     title: "The Detective (Agentic AI)",
     subtitle: "If the guard is confused, the detective investigates the context to be sure.",
@@ -79,7 +79,7 @@ const LAYERS = [
   },
   {
     num: "LAYER 4",
-    icon: "🔒",
+    icon: "",
     iconClass: "bg-amber-500/12 border-amber-500/25",
     title: "The Safe (Security Vault)",
     subtitle: "Instead of going to ChatGPT, the secret gets locked in a box only you can open.",
@@ -169,7 +169,7 @@ export function ArchitectureAccordion() {
                                     key={tag.label}
                                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.06] border border-white/[0.08] text-sm"
                                   >
-                                    <span className={`font-bold ${tag.color}`}>✓</span>
+                                    <span className={`font-bold ${tag.color}`}></span>
                                     <span className="text-slate-300">{tag.label}</span>
                                   </div>
                                 ))}

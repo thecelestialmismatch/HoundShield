@@ -1,245 +1,220 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronRight, Shield, Activity, Lock } from "lucide-react";
+import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
+import { ArrowRight, ChevronRight, Lock, HeartPulse, Shield, Zap } from "lucide-react";
 
-function FadeIn({
-  children,
-  className = "",
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) {
+// Dynamic import — recharts uses browser APIs incompatible with SSR
+const PlatformDashboard = dynamic(
+  () => import("@/components/landing/PlatformDashboard").then((m) => m.PlatformDashboard),
+  { ssr: false, loading: () => <div className="h-full w-full bg-[#0d0d16] animate-pulse rounded-b-2xl min-h-[360px]" /> }
+);
+
+/* ── Live counter ──────────────────────────────────────── */
+function LiveCounter() {
+  const [blocked, setBlocked] = useState(14_388);
+  useEffect(() => {
+    const t = setInterval(
+      () => setBlocked((n) => n + Math.floor(Math.random() * 4) + 1),
+      3500
+    );
+    return () => clearInterval(t);
+  }, []);
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
+    <motion.span
+      key={blocked}
+      initial={{ opacity: 0.4, y: 3 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay, ease: [0.25, 0.4, 0.25, 1] }}
-      className={className}
+      transition={{ duration: 0.35 }}
+      className="tabular-nums"
     >
-      {children}
-    </motion.div>
+      {blocked.toLocaleString()}
+    </motion.span>
   );
 }
 
-type Vertical = "defense" | "healthcare" | "technology";
+const FRAMEWORKS = [
+  { icon: Lock,       label: "SOC 2",          color: "text-indigo-400",  ring: "ring-indigo-500/30 bg-indigo-500/10"   },
+  { icon: HeartPulse, label: "HIPAA",          color: "text-emerald-400", ring: "ring-emerald-500/30 bg-emerald-500/10" },
+  { icon: Shield,     label: "CMMC L2",        color: "text-amber-400",   ring: "ring-amber-500/30 bg-amber-500/10"    },
+  { icon: Zap,        label: "One Deployment", color: "text-violet-400",  ring: "ring-violet-500/30 bg-violet-500/10"  },
+];
 
-const VERTICALS: Record<
-  Vertical,
-  {
-    pill: string;
-    icon: typeof Shield;
-    badge: string;
-    headline: React.ReactNode;
-    sub: string;
-    cta: string;
-    ctaHref: string;
-    trustBar: string[];
-    stats: { num: string; label: string }[];
-  }
-> = {
-  defense: {
-    pill: "Defense",
-    icon: Shield,
-    badge: "CMMC Level 2 · NIST 800-171 · 87,000+ DIB Contractors",
-    headline: (
-      <>
-        Your team is one ChatGPT session away from a{" "}
-        <span className="italic bg-gradient-to-r from-brand-400 via-accent to-emerald-400 bg-clip-text text-transparent">
-          CMMC violation.
-        </span>
-      </>
-    ),
-    sub: "Kaelus.online intercepts every AI query before it leaves your network. Protect CUI. Pass your C3PAO assessment. Keep your DoD contracts.",
-    cta: "Start Free Assessment",
-    ctaHref: "/command-center/shield/onboarding",
-    trustBar: ["CMMC Level 2", "NIST SP 800-171", "Real-time Protection", "<50ms Latency"],
-    stats: [
-      { num: "80,000+", label: "DIB contractors must certify" },
-      { num: "0.5%", label: "certified today" },
-      { num: "$76K", label: "avg C3PAO assessment cost" },
-      { num: "<50ms", label: "Kaelus intercept latency" },
-    ],
-  },
-  healthcare: {
-    pill: "Healthcare",
-    icon: Activity,
-    badge: "HIPAA Security Rule · 45 CFR Part 164 · PHI Protection",
-    headline: (
-      <>
-        Your clinicians are pasting PHI into{" "}
-        <span className="italic bg-gradient-to-r from-emerald-400 via-brand-400 to-emerald-400 bg-clip-text text-transparent">
-          ChatGPT right now.
-        </span>
-      </>
-    ),
-    sub: "Kaelus.online intercepts every AI query before it leaves your network. Block PHI leaks. Pass HIPAA audits. Avoid $1.9M penalties.",
-    cta: "Scan Your AI Risk Free",
-    ctaHref: "/hipaa",
-    trustBar: ["HIPAA Compliant", "18 PHI Identifiers", "Real-time Scanning", "<50ms Latency"],
-    stats: [
-      { num: "$1.9M", label: "avg healthcare breach cost" },
-      { num: "800K+", label: "practices using AI" },
-      { num: "$50K", label: "per HIPAA violation" },
-      { num: "<50ms", label: "Kaelus intercept latency" },
-    ],
-  },
-  technology: {
-    pill: "Technology",
-    icon: Lock,
-    badge: "SOC 2 · AI Governance · IP & Source Code Protection",
-    headline: (
-      <>
-        Your engineers are leaking{" "}
-        <span className="italic bg-gradient-to-r from-brand-400 via-emerald-400 to-brand-400 bg-clip-text text-transparent">
-          source code to AI.
-        </span>
-      </>
-    ),
-    sub: "Kaelus.online intercepts every AI query before it leaves your network. Protect IP, API keys, and proprietary code. Stay SOC 2 compliant.",
-    cta: "Start Free Assessment",
-    ctaHref: "/signup",
-    trustBar: ["SOC 2 Ready", "PII Detection", "IP Protection", "<50ms Latency"],
-    stats: [
-      { num: "$4.5M", label: "avg data breach cost" },
-      { num: "92%", label: "of devs use AI tools daily" },
-      { num: "40%", label: "paste proprietary code" },
-      { num: "<50ms", label: "Kaelus intercept latency" },
-    ],
-  },
-};
+const ease = [0.25, 0.4, 0.25, 1] as const;
 
 export function HeroSection() {
-  const [active, setActive] = useState<Vertical>("defense");
-  const v = VERTICALS[active];
-
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-20">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-dot-grid opacity-[0.15] pointer-events-none" />
+    <section className="relative overflow-hidden min-h-screen flex items-center">
+      {/* Background */}
+      <div className="absolute inset-0 bg-dot-grid opacity-[0.06] pointer-events-none" />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 60% at 0% 50%, rgba(245,200,66,0.05) 0%, transparent 55%)," +
+            "radial-gradient(ellipse 55% 60% at 100% 30%, rgba(99,102,241,0.06) 0%, transparent 55%)",
+        }}
+      />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6">
-        {/* Vertical selector pills */}
-        <FadeIn>
-          <div className="flex items-center justify-center gap-2 mb-8">
-            {(Object.keys(VERTICALS) as Vertical[]).map((key) => {
-              const Icon = VERTICALS[key].icon;
-              const isActive = key === active;
-              return (
-                <button
-                  key={key}
-                  onClick={() => setActive(key)}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest transition-all ${
-                    isActive
-                      ? "bg-brand-400/20 text-brand-400 border border-brand-400/30"
-                      : "bg-white/[0.04] text-slate-500 border border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.08]"
-                  }`}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-28 lg:py-36">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          {/* ── LEFT — text ──────────────────────────────── */}
+          <div>
+            {/* Framework badges */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease }}
+              className="flex flex-wrap gap-2 mb-7"
+            >
+              {FRAMEWORKS.map(({ icon: Icon, label, color, ring }) => (
+                <div
+                  key={label}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full ring-1 ${ring} text-xs font-semibold uppercase tracking-wider`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  {VERTICALS[key].pill}
-                </button>
-              );
-            })}
-          </div>
-        </FadeIn>
-
-        {/* Badge */}
-        <FadeIn delay={0.05}>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-400/20 bg-brand-400/[0.08] text-brand-400 text-xs font-semibold uppercase tracking-widest mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            {v.badge}
-          </div>
-        </FadeIn>
-
-        {/* Main headline — AI Compliance Firewall */}
-        <FadeIn delay={0.1}>
-          <h1 className="font-editorial text-[clamp(40px,6.5vw,82px)] font-bold leading-[1.05] tracking-[-1px] max-w-[900px] mx-auto mb-3 text-white">
-            AI Compliance Firewall
-          </h1>
-        </FadeIn>
-
-        {/* Vertical-specific subheadline */}
-        <AnimatePresence mode="wait">
-          <motion.h2
-            key={active}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35 }}
-            className="font-editorial text-[clamp(22px,3.5vw,40px)] font-bold leading-[1.15] tracking-[-0.5px] max-w-[800px] mx-auto mb-6 text-white"
-          >
-            {v.headline}
-          </motion.h2>
-        </AnimatePresence>
-
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={`sub-${active}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-[clamp(16px,2vw,20px)] text-slate-400 max-w-[620px] mx-auto mb-10 leading-relaxed"
-          >
-            {v.sub}
-          </motion.p>
-        </AnimatePresence>
-
-        <FadeIn delay={0.3}>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Link
-              href={v.ctaHref}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-dark text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(200,125,62,0.35)] text-base"
-            >
-              {v.cta}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/demo"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white/[0.06] hover:bg-white/[0.10] text-white font-semibold rounded-xl border border-white/10 hover:border-white/20 transition-all hover:-translate-y-0.5 text-base"
-            >
-              See a Live Demo
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </FadeIn>
-
-        {/* Trust bar */}
-        <FadeIn delay={0.38}>
-          <div className="flex flex-wrap items-center justify-center gap-6 mb-14 text-xs text-slate-500 uppercase tracking-widest font-semibold">
-            {v.trustBar.map((item, i) => (
-              <span key={item} className="flex items-center gap-2">
-                {i > 0 && <span className="w-1 h-1 rounded-full bg-white/20" />}
-                {item}
-              </span>
-            ))}
-          </div>
-        </FadeIn>
-
-        {/* Stats */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`stats-${active}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-wrap items-center justify-center gap-8 md:gap-12"
-          >
-            {v.stats.map(({ num, label }) => (
-              <div key={label} className="text-center">
-                <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-1">
-                  {num}
+                  <Icon className={`w-3 h-3 ${color}`} />
+                  <span className={color}>{label}</span>
                 </div>
-                <div className="text-sm text-slate-400">{label}</div>
+              ))}
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.08, ease }}
+              className="font-editorial text-[clamp(38px,5.5vw,72px)] font-bold leading-[1.0] tracking-[-2px] text-white mb-6"
+            >
+              Block AI data leaks
+              <br />
+              <span className="bg-gradient-to-r from-brand-400 via-emerald-400 to-indigo-400 bg-clip-text text-transparent">
+                before they happen.
+              </span>
+            </motion.h1>
+
+            {/* Sub */}
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.16, ease }}
+              className="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-9 leading-relaxed"
+            >
+              Kaelus sits inline between your team and every AI tool —
+              scanning every prompt for PII, PHI, CUI, and secrets in under 10ms,
+              before it reaches ChatGPT, Copilot, or Claude.
+              SOC&nbsp;2, HIPAA, and CMMC Level&nbsp;2 enforced simultaneously.
+              One proxy URL. No code changes.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.24 }}
+              className="flex flex-col sm:flex-row gap-3 mb-10"
+            >
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-accent hover:bg-accent-dark text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(200,125,62,0.4)] text-[15px]"
+              >
+                Start Free — All Frameworks
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/demo"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/[0.05] hover:bg-white/[0.09] text-white font-semibold rounded-xl border border-white/10 hover:border-white/20 transition-all hover:-translate-y-0.5 text-[15px]"
+              >
+                Watch Demo
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+
+            {/* Live counter pill */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.38 }}
+              className="inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/[0.03] border border-white/[0.07]"
+            >
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] font-mono text-slate-500 uppercase tracking-widest">Live</span>
+              </span>
+              <span className="text-sm font-mono text-white font-bold"><LiveCounter /></span>
+              <span className="text-[11px] font-mono text-slate-500">threats blocked today</span>
+              <span className="hidden sm:block w-px h-4 bg-white/10" />
+              <span className="hidden sm:block text-[11px] font-mono text-slate-600">&lt;10ms · 16 engines</span>
+            </motion.div>
+
+            {/* Proof dots */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8"
+            >
+              {["SOC 2 ready", "HIPAA covered", "CMMC Level 2", "<10ms latency"].map((t) => (
+                <span key={t} className="flex items-center gap-1.5 text-[11px] font-mono text-slate-600 uppercase tracking-wider">
+                  <span className="w-1 h-1 rounded-full bg-brand-400/60" />
+                  {t}
+                </span>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ── RIGHT — live dashboard ────────────────────── */}
+          {/* contain:layout isolates Recharts ResizeObserver mutations from affecting hero text / sections below */}
+          <div style={{ perspective: "1200px", contain: "layout" }} className="relative hidden lg:block h-[580px]">
+            <motion.div
+              initial={{ opacity: 0, x: 60, rotateY: -8, rotateX: 4 }}
+              animate={{ opacity: 1, x: 0,  rotateY: -3, rotateX: 2 }}
+              transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="relative h-full"
+            >
+              {/* Glow behind the card */}
+              <div
+                aria-hidden="true"
+                className="absolute -inset-4 rounded-3xl pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 80% 70% at 60% 50%, rgba(99,102,241,0.14) 0%, transparent 65%)",
+                  filter: "blur(20px)",
+                }}
+              />
+
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-[#111118] border border-white/[0.08] rounded-t-2xl">
+                <div className="flex gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+                </div>
+                <div className="flex-1 mx-3">
+                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/[0.06]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span className="text-[10px] font-mono text-slate-500">app.kaelus.online/command-center</span>
+                  </div>
+                </div>
               </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+
+              {/* Dashboard — fixed container so live data updates never shift the hero text */}
+              <div className="border border-white/[0.08] border-t-0 rounded-b-2xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.85)]" style={{ height: "calc(100% - 40px)" }}>
+                <PlatformDashboard />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Mobile-only: dashboard below text */}
+          <div className="lg:hidden mt-4">
+            <div className="rounded-2xl border border-white/[0.08] overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.7)]">
+              <PlatformDashboard />
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   );

@@ -51,7 +51,7 @@ const webSearchTool: ToolHandler = {
 
         const results: string[] = [];
         if (data.Abstract) {
-          results.push(`📄 ${data.AbstractSource}: ${data.Abstract}`);
+          results.push(` ${data.AbstractSource}: ${data.Abstract}`);
           if (data.AbstractURL) results.push(`   URL: ${data.AbstractURL}`);
         }
         if (data.RelatedTopics) {
@@ -108,7 +108,7 @@ const webSearchTool: ToolHandler = {
         );
         const data = await apiResponse.json();
         if (data.Abstract) {
-          results.push(`📄 ${data.Abstract}`);
+          results.push(` ${data.Abstract}`);
           if (data.AbstractURL) results.push(`URL: ${data.AbstractURL}`);
         }
         if (data.RelatedTopics) {

@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
+import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import {
     ShieldCheck, AlertTriangle, Lock, ArrowRight, CheckCircle2,
     Key, Mail, CreditCard, Globe, Database, Fingerprint,
@@ -318,6 +319,7 @@ export default function FreeDemoPage() {
 
     return (
         <div className="min-h-screen bg-[#07070b] text-white font-sans overflow-x-hidden">
+            <ScrollProgressBar />
             <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
             <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
 
@@ -400,7 +402,7 @@ export default function FreeDemoPage() {
                             <button
                                 onClick={runScan}
                                 disabled={!inputText.trim() || isScanning}
-                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary shadow-[0_0_30px_rgba(99,102,241,0.4)]" : "bg-white/5 text-slate-400 cursor-not-allowed border border-white/10"}`}
+                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary" : "bg-white/5 text-slate-400 cursor-not-allowed border border-white/10"}`}
                             >
                                 {isScanning ? (
                                     <>
@@ -617,7 +619,7 @@ export default function FreeDemoPage() {
 
                     {/* ═══ BOTTOM STATS ═══ */}
                     <div className="mt-14 text-center">
-                        <p className="text-sm text-slate-400 mb-6">🔒 This demo runs 100% in your browser. No data is sent to any server.</p>
+                        <p className="text-sm text-slate-400 mb-6"> This demo runs 100% in your browser. No data is sent to any server.</p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
                             {[
                                 { label: "Patterns Checked", value: "9" },

@@ -84,7 +84,6 @@ export function GlobalChat() {
     setIsTyping(true);
 
     // Add empty bot message to stream into
-    const botIdx = (msgs: Message[]) => msgs.length;
     setMessages((prev) => [...prev, { role: "bot", text: "", streaming: true }]);
 
     try {
@@ -156,7 +155,7 @@ export function GlobalChat() {
         text.toLowerCase().includes("cmmc")
           ? "CMMC Level 2 requires implementing 110 security practices across 14 domains. The November 2026 enforcement deadline is approaching fast. Sign up free at kaelus.online to start your assessment!"
           : text.toLowerCase().includes("detect") || text.toLowerCase().includes("scan")
-          ? "Brain AI detects 16+ sensitive patterns: SSNs, credit cards, API keys, medical records, CUI markings, CAGE codes, contract numbers, clearance levels, and more — all in under 50ms."
+          ? "Brain AI detects 16+ sensitive patterns: SSNs, credit cards, API keys, medical records, CUI markings, CAGE codes, contract numbers, clearance levels, and more — all in under 10ms."
           : "Brain AI is your CMMC compliance co-pilot. Sign up free at kaelus.online to unlock the full intelligence layer including compliance assessments, PDF reports, and real-time threat scanning.";
 
       setMessages((prev) =>
@@ -326,4 +325,3 @@ export function GlobalChat() {
     </>
   );
 }
-

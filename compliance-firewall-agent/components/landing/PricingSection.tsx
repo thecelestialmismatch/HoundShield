@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
-import { CheckCircle2, Shield, Activity, Lock } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 function FadeIn({
   children,
@@ -30,14 +30,6 @@ function FadeIn({
   );
 }
 
-type IndustryTab = "defense" | "healthcare" | "technology";
-
-const INDUSTRY_TABS: { key: IndustryTab; label: string; icon: typeof Shield; subtitle: string }[] = [
-  { key: "defense", label: "Defense", icon: Shield, subtitle: "CMMC · NIST 800-171" },
-  { key: "healthcare", label: "Healthcare", icon: Activity, subtitle: "HIPAA · PHI Protection" },
-  { key: "technology", label: "Technology", icon: Lock, subtitle: "SOC 2 · IP Protection" },
-];
-
 interface PlanDef {
   name: string;
   tier: string;
@@ -50,240 +42,119 @@ interface PlanDef {
   featured: boolean;
 }
 
-const PLANS_BY_INDUSTRY: Record<IndustryTab, PlanDef[]> = {
-  defense: [
-    {
-      name: "FREE",
-      tier: "free",
-      price: "$0",
-      period: "/mo",
-      desc: "Get started and know your SPRS score today",
-      features: [
-        "100 API scans / month",
-        "Full CMMC self-assessment",
-        "Live SPRS calculator",
-        "1 AI compliance agent",
-        "Community support",
-      ],
-      cta: "Get started →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-    {
-      name: "PRO",
-      tier: "pro",
-      price: "$69",
-      period: "/mo",
-      desc: "Everything to get and stay CMMC certified",
-      features: [
-        "Unlimited API scanning",
-        "PDF compliance reports",
-        "Gap analysis + roadmap",
-        "5 AI compliance agents",
-        "Real-time CUI threat alerts",
-        "Email notifications",
-        "Priority support",
-      ],
-      cta: "Start Pro →",
-      ctaClass: "bg-accent hover:bg-accent-dark text-white border-none",
-      featured: true,
-    },
-    {
-      name: "ENTERPRISE",
-      tier: "enterprise",
-      price: "$249",
-      period: "/mo",
-      desc: "Full compliance stack for defense contractors",
-      features: [
-        "Everything in Pro",
-        "Unlimited AI agents",
-        "25 team seats",
-        "Blockchain-anchored audit trail",
-        "API gateway mode",
-        "Slack/webhook integrations",
-        "Custom CMMC policies",
-      ],
-      cta: "Start Enterprise →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-    {
-      name: "AGENCY",
-      tier: "agency",
-      price: "$599",
-      period: "/mo",
-      desc: "Multi-tenant dashboard for MSPs and C3PAOs",
-      features: [
-        "Everything in Enterprise",
-        "25 client accounts",
-        "White-label option",
-        "Bulk compliance reports",
-        "Partner API access",
-        "Dedicated onboarding",
-      ],
-      cta: "Contact us →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-  ],
-  healthcare: [
-    {
-      name: "FREE",
-      tier: "free",
-      price: "$0",
-      period: "/mo",
-      desc: "Scan your AI risk and assess HIPAA posture",
-      features: [
-        "100 AI scans / month",
-        "HIPAA control assessment",
-        "PHI risk scoring",
-        "1 AI compliance agent",
-        "Community support",
-      ],
-      cta: "Get started →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-    {
-      name: "PRO",
-      tier: "pro",
-      price: "$69",
-      period: "/mo",
-      desc: "Complete HIPAA AI compliance for healthcare orgs",
-      features: [
-        "Unlimited AI scanning",
-        "All 18 PHI identifier detection",
-        "HIPAA compliance reports (PDF)",
-        "5 AI compliance agents",
-        "Real-time PHI leak alerts",
-        "Email notifications",
-        "Priority support",
-      ],
-      cta: "Start Pro →",
-      ctaClass: "bg-accent hover:bg-accent-dark text-white border-none",
-      featured: true,
-    },
-    {
-      name: "ENTERPRISE",
-      tier: "enterprise",
-      price: "$249",
-      period: "/mo",
-      desc: "Full HIPAA compliance stack for health systems",
-      features: [
-        "Everything in Pro",
-        "Unlimited AI agents",
-        "25 team seats",
-        "Blockchain-anchored audit trail",
-        "API gateway mode",
-        "Slack/webhook integrations",
-        "Custom HIPAA policies",
-      ],
-      cta: "Start Enterprise →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-    {
-      name: "AGENCY",
-      tier: "agency",
-      price: "$599",
-      period: "/mo",
-      desc: "Multi-tenant dashboard for healthcare MSPs",
-      features: [
-        "Everything in Enterprise",
-        "25 client accounts",
-        "White-label option",
-        "Bulk HIPAA reports",
-        "Partner API access",
-        "Dedicated onboarding",
-      ],
-      cta: "Contact us →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-  ],
-  technology: [
-    {
-      name: "FREE",
-      tier: "free",
-      price: "$0",
-      period: "/mo",
-      desc: "Scan your AI tools for data leak risks",
-      features: [
-        "100 AI scans / month",
-        "PII & IP risk assessment",
-        "SOC 2 control mapping",
-        "1 AI compliance agent",
-        "Community support",
-      ],
-      cta: "Get started →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-    {
-      name: "PRO",
-      tier: "pro",
-      price: "$69",
-      period: "/mo",
-      desc: "AI governance for engineering teams",
-      features: [
-        "Unlimited AI scanning",
-        "Source code & API key detection",
-        "SOC 2 compliance reports (PDF)",
-        "5 AI compliance agents",
-        "Real-time data leak alerts",
-        "Email notifications",
-        "Priority support",
-      ],
-      cta: "Start Pro →",
-      ctaClass: "bg-accent hover:bg-accent-dark text-white border-none",
-      featured: true,
-    },
-    {
-      name: "ENTERPRISE",
-      tier: "enterprise",
-      price: "$249",
-      period: "/mo",
-      desc: "Full AI governance for growing tech companies",
-      features: [
-        "Everything in Pro",
-        "Unlimited AI agents",
-        "25 team seats",
-        "Blockchain-anchored audit trail",
-        "API gateway mode",
-        "Slack/webhook integrations",
-        "Custom security policies",
-      ],
-      cta: "Start Enterprise →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-    {
-      name: "AGENCY",
-      tier: "agency",
-      price: "$599",
-      period: "/mo",
-      desc: "Multi-tenant dashboard for IT consultancies",
-      features: [
-        "Everything in Enterprise",
-        "25 client accounts",
-        "White-label option",
-        "Bulk compliance reports",
-        "Partner API access",
-        "Dedicated onboarding",
-      ],
-      cta: "Contact us →",
-      ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
-      featured: false,
-    },
-  ],
-};
+const PLANS: PlanDef[] = [
+  {
+    name: "FREE TRIAL",
+    tier: "free",
+    price: "Free",
+    period: "7-day trial",
+    desc: "Try the full platform — no credit card required",
+    features: [
+      "100 AI scans / month",
+      "PII & IP risk assessment",
+      "SOC 2 control mapping",
+      "1 AI compliance agent",
+      "Community support",
+    ],
+    cta: "Start free trial →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+  {
+    name: "SOLO",
+    tier: "solo",
+    price: "$29",
+    period: "/mo",
+    desc: "For freelancers & individual developers",
+    features: [
+      "1,000 AI scans / month",
+      "PII, IP & secret detection",
+      "SOC 2 PDF report",
+      "1 seat",
+      "Email support",
+    ],
+    cta: "Start Solo →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+  {
+    name: "PRO",
+    tier: "pro",
+    price: "$99",
+    period: "/mo",
+    desc: "AI governance for growing teams",
+    features: [
+      "Unlimited AI scanning",
+      "Source code & API key detection",
+      "SOC 2 + HIPAA reports (PDF)",
+      "5 team seats",
+      "Real-time data leak alerts",
+      "Priority support",
+    ],
+    cta: "Start Pro →",
+    ctaClass: "bg-accent hover:bg-accent-dark text-white border-none",
+    featured: true,
+  },
+  {
+    name: "GROWTH",
+    tier: "growth",
+    price: "$249",
+    period: "/mo",
+    desc: "CMMC Level 2 for defense contractors",
+    features: [
+      "Everything in Pro",
+      "CMMC Level 2 enforcement",
+      "15 team seats",
+      "Blockchain audit trail",
+      "API gateway mode",
+      "Slack/webhook integrations",
+    ],
+    cta: "Start Growth →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+  {
+    name: "ENTERPRISE",
+    tier: "enterprise",
+    price: "$599",
+    period: "/mo",
+    desc: "Full AI governance for regulated industries",
+    features: [
+      "Everything in Growth",
+      "Unlimited AI agents",
+      "50 team seats",
+      "Custom security policies",
+      "SSO / SAML",
+      "SLA guarantee",
+      "Dedicated CSM",
+    ],
+    cta: "Start Enterprise →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+  {
+    name: "AGENCY",
+    tier: "agency",
+    price: "$1,499",
+    period: "/mo",
+    desc: "Multi-tenant dashboard for IT consultancies",
+    features: [
+      "Everything in Enterprise",
+      "25 client accounts",
+      "White-label option",
+      "Bulk compliance reports",
+      "Partner API access",
+      "Dedicated onboarding",
+    ],
+    cta: "Contact us →",
+    ctaClass: "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]",
+    featured: false,
+  },
+];
 
 export function PricingSection() {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<IndustryTab>("defense");
-
-  const plans = PLANS_BY_INDUSTRY[activeTab];
 
   async function handleCheckout(tier: string) {
     try {
@@ -314,48 +185,21 @@ export function PricingSection() {
             Pricing
           </div>
           <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
-            Start free. <span className="italic text-brand-400">Pay when it&apos;s worth it.</span>
+            7 days free. <span className="italic text-brand-400">Pay when it&apos;s worth it.</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-[520px] mx-auto">
-            No contracts. No enterprise sales calls. Real prices for regulated industries.
+            Start with a 7-day free trial — no credit card required. No contracts. Real prices for regulated industries.
           </p>
         </FadeIn>
 
-        {/* Industry tabs */}
-        <FadeIn delay={0.05} className="mb-10">
-          <div className="flex items-center justify-center gap-2">
-            {INDUSTRY_TABS.map(({ key, label, icon: Icon, subtitle }) => {
-              const isActive = key === activeTab;
-              return (
-                <button
-                  key={key}
-                  onClick={() => setActiveTab(key)}
-                  className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-left transition-all ${
-                    isActive
-                      ? "bg-brand-400/[0.12] border border-brand-400/30 text-white"
-                      : "bg-white/[0.03] border border-white/[0.06] text-slate-500 hover:text-slate-300 hover:bg-white/[0.06]"
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? "text-brand-400" : "text-slate-600"}`} />
-                  <div>
-                    <div className="text-sm font-semibold">{label}</div>
-                    <div className="text-[10px] text-slate-500">{subtitle}</div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </FadeIn>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {plans.map((plan, i) => (
-            <FadeIn key={`${activeTab}-${plan.name}`} delay={i * 0.08}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4">
+          {PLANS.map((plan, i) => (
+            <FadeIn key={plan.name} delay={i * 0.08}>
               <div
-                className={`relative p-7 rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 ${
-                  plan.featured
+                className={`relative p-7 rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 ${plan.featured
                     ? "bg-brand-400/[0.06] border border-brand-400/40 hover:border-brand-400/60"
                     : "bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.15]"
-                }`}
+                  }`}
               >
                 {plan.featured && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-accent text-white text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
@@ -367,7 +211,11 @@ export function PricingSection() {
                 </div>
                 <div className="text-[36px] font-extrabold tracking-tight text-white mb-1">
                   {plan.price}
-                  <span className="text-base font-normal text-slate-500">{plan.period}</span>
+                  {plan.tier === "free" ? (
+                    <span className="ml-2 text-sm font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">{plan.period}</span>
+                  ) : (
+                    <span className="text-base font-normal text-slate-500">{plan.period}</span>
+                  )}
                 </div>
                 <div className="text-[13px] text-slate-400 leading-relaxed mb-5">{plan.desc}</div>
 
@@ -398,9 +246,8 @@ export function PricingSection() {
                   <button
                     onClick={() => handleCheckout(plan.tier)}
                     disabled={loading === plan.tier}
-                    className={`block w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-all ${plan.ctaClass} ${
-                      loading === plan.tier ? "opacity-60 pointer-events-none" : ""
-                    }`}
+                    className={`block w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-all ${plan.ctaClass} ${loading === plan.tier ? "opacity-60 pointer-events-none" : ""
+                      }`}
                   >
                     {loading === plan.tier ? "Redirecting..." : plan.cta}
                   </button>

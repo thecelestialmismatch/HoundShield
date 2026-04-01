@@ -75,16 +75,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="scroll-smooth"
+      className="dark scroll-smooth"
       suppressHydrationWarning
     >
       <head>
         <link
           rel="icon"
-          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>️</text></svg>"
         />
       </head>
-      <body className="bg-[#07070b] text-white min-h-screen font-sans antialiased relative">
+      <body className="min-h-screen font-sans antialiased relative">
         <ClientShell>
           {children}
           <GlobalChat />

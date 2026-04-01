@@ -29,6 +29,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem("kaelus-theme") as Theme | null;
     const initial = stored || "dark";
     document.documentElement.setAttribute("data-theme", initial);
+    document.documentElement.classList.toggle("dark", initial === "dark");
     setThemeState(initial);
   }, []);
 
@@ -36,6 +37,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setThemeState(newTheme);
     localStorage.setItem("kaelus-theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
   }, []);
 
   const toggleTheme = useCallback(() => {

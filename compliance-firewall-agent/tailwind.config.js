@@ -1,20 +1,22 @@
+const path = require("path");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    path.join(__dirname, "./app/**/*.{js,ts,jsx,tsx,mdx}"),
+    path.join(__dirname, "./components/**/*.{js,ts,jsx,tsx,mdx}"),
   ],
   theme: {
     extend: {
       colors: {
         /* ── Chanel Luxury Dark Theme ────────────────────── */
         surface: {
-          DEFAULT: "#FAFAF8",
-          50: "#FFFFFF",
-          100: "#F5F0E8",
-          200: "#E8DDD0",
-          300: "#D4C4B0",
+          DEFAULT: "#EDE7DE",
+          50: "#F5F0E8",
+          100: "#EDE7DE",
+          200: "#E0D8CE",
+          300: "#D0C5B8",
         },
         brand: {
           50: "#FDF8ED",
@@ -72,31 +74,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: [
-          "Inter",
-          "ui-sans-serif",
-          "system-ui",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "sans-serif",
-        ],
-        display: [
-          "Outfit",
-          "Inter",
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-        ],
-        mono: [
-          "ui-monospace",
-          "SFMono-Regular",
-          "SF Mono",
-          "Menlo",
-          "Consolas",
-          "monospace",
-        ],
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
+        display: ["var(--font-outfit)", "var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        editorial: ["var(--font-playfair)", "Georgia", "ui-serif", "serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
       },
       fontSize: {
         "display-lg": [
@@ -132,6 +113,14 @@ module.exports = {
         "orbit": "orbit 20s linear infinite",
         "scale-pulse": "scale-pulse 4s ease-in-out infinite",
         "gradient-shift": "gradient-shift 6s ease infinite",
+        "marquee": "marquee 30s linear infinite",
+        "marquee-slow": "marquee 35s linear infinite",
+        "marquee-fast": "marquee 15s linear infinite",
+        "marquee-reverse": "marquee-reverse 30s linear infinite",
+        "marquee-reverse-slow": "marquee-reverse 45s linear infinite",
+        "reveal-up": "reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "reveal-left": "reveal-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "reveal-right": "reveal-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       },
       keyframes: {
         "glow-pulse": {
@@ -178,6 +167,26 @@ module.exports = {
           "0%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
+        },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "marquee-reverse": {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        "reveal-up": {
+          "0%": { opacity: "0", transform: "translateY(40px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "reveal-left": {
+          "0%": { opacity: "0", transform: "translateX(-40px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "reveal-right": {
+          "0%": { opacity: "0", transform: "translateX(40px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
         },
       },
       boxShadow: {

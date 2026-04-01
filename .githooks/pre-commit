@@ -1,0 +1,40 @@
+#!/bin/sh
+# Pre-commit hook: Block commits containing secrets or sensitive files
+# Install: git config core.hooksPath .githooks
+
+RED='\033[0;31m'
+NC='\033[0m'
+
+# 1. Block .env files (except .env.example)
+STAGED_ENV=$(git diff --cached --name-only | grep -E '\.env($|\.)' | grep -v '\.env\.example$')
+if [ -n "$STAGED_ENV" ]; then
+  echo "${RED}❌ BLOCKED: Environment files staged for commit:${NC}"
+  echo "$STAGED_ENV"
+  echo "Remove with: git reset HEAD <file>"
+  exit 1
+fi
+
+# 2. Block key/cert files
+STAGED_KEYS=$(git diff --cached --name-only | grep -iE '\.(pem|key|p12|pfx|cer|crt|jks|keystore|secret)$')
+if [ -n "$STAGED_KEYS" ]; then
+  echo "${RED}❌ BLOCKED: Key/certificate files staged for commit:${NC}"
+  echo "$STAGED_KEYS"
+  exit 1
+fi
+
+# 3. Scan staged diffs for common secret patterns
+DIFF=$(git diff --cached -U0)
+
+# Patterns: AWS keys, Stripe keys, Supabase service role, OpenAI keys, generic tokens
+PATTERNS='(AKIA[0-9A-Z]{16}|sk_live_[a-zA-Z0-9]{20,}|sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|service_role.*eyJ[a-zA-Z0-9])'
+
+FOUND=$(echo "$DIFF" | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "$PATTERNS" || true)
+if [ -n "$FOUND" ]; then
+  echo "${RED}❌ BLOCKED: Possible secrets detected in staged changes:${NC}"
+  echo "$FOUND" | head -5
+  echo ""
+  echo "If this is a false positive, commit with: git commit --no-verify"
+  exit 1
+fi
+
+exit 0

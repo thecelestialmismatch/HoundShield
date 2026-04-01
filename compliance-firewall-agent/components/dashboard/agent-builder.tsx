@@ -677,7 +677,7 @@ export function AgentBuilder({
               : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
               }`}
           >
-            🦀 OpenClaw & Claude ({OPENCLAW_TEMPLATES.length})
+             OpenClaw & Claude ({OPENCLAW_TEMPLATES.length})
           </button>
           <button
             onClick={() => setTemplateCategory('enterprise')}
@@ -686,7 +686,7 @@ export function AgentBuilder({
               : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
               }`}
           >
-            🏢 McKinsey Enterprise ({MCKINSEY_TEMPLATES.length})
+             McKinsey Enterprise ({MCKINSEY_TEMPLATES.length})
           </button>
           <button
             onClick={() => setTemplateCategory('technical')}
@@ -695,7 +695,7 @@ export function AgentBuilder({
               : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
               }`}
           >
-            ⚡ Technical ({TECHNICAL_TEMPLATES.length})
+             Technical ({TECHNICAL_TEMPLATES.length})
           </button>
         </div>
 

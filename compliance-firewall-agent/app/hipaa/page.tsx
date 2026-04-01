@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { LandingFooter } from "@/components/landing/LandingFooter";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 
 function FadeIn({
   children,
@@ -87,6 +88,7 @@ const FEATURES = [
 export default function HIPAAPage() {
   return (
     <div className="bg-[#07070b] min-h-screen relative">
+      <ScrollProgressBar />
       <Navbar variant="dark" />
 
       {/* ── Hero ──────────────────────────────────── */}

@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useInView } from "framer-motion";
+import { Monitor, Search, Cpu, Shuffle, ClipboardList } from "lucide-react";
 
 const STAGES = [
-  { id: 0, icon: "🖥️", label: "Intercept" },
-  { id: 1, icon: "🔍", label: "Scan" },
-  { id: 2, icon: "🧠", label: "Classify" },
-  { id: 3, icon: "🔀", label: "Route" },
-  { id: 4, icon: "📋", label: "Log" },
+  { id: 0, Icon: Monitor,       label: "Intercept" },
+  { id: 1, Icon: Search,        label: "Scan" },
+  { id: 2, Icon: Cpu,           label: "Classify" },
+  { id: 3, Icon: Shuffle,       label: "Route" },
+  { id: 4, Icon: ClipboardList, label: "Log" },
 ];
 
 type LogType = "info" | "success" | "danger" | "warn";
@@ -28,14 +29,14 @@ const SEQUENCES: Array<{ stage: number; logs: LogEntry[] }> = [
     stage: 1,
     logs: [
       { time: "00:00:01", type: "info", msg: "→ Running 16 detection engines in parallel..." },
-      { time: "00:00:02", type: "warn", msg: "⚠ API key pattern detected: sk-proj-***" },
+      { time: "00:00:02", type: "warn", msg: " API key pattern detected: sk-proj-***" },
     ],
   },
   {
     stage: 2,
     logs: [
       { time: "00:00:02", type: "info", msg: "→ ReAct agent classifying threat..." },
-      { time: "00:00:03", type: "danger", msg: "✗ HIGH RISK: OpenAI API key in plaintext" },
+      { time: "00:00:03", type: "danger", msg: " HIGH RISK: OpenAI API key in plaintext" },
     ],
   },
   {
@@ -48,8 +49,8 @@ const SEQUENCES: Array<{ stage: number; logs: LogEntry[] }> = [
   {
     stage: 4,
     logs: [
-      { time: "00:00:04", type: "success", msg: "✓ Quarantine saved. SHA-256 hash generated." },
-      { time: "00:00:05", type: "success", msg: "✓ Audit log entry written. Request BLOCKED." },
+      { time: "00:00:04", type: "success", msg: " Quarantine saved. SHA-256 hash generated." },
+      { time: "00:00:05", type: "success", msg: " Audit log entry written. Request BLOCKED." },
     ],
   },
 ];
@@ -135,16 +136,16 @@ export function PipelineSimulator() {
   }, [isInView]);
 
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-[#F7F5F0]">
+    <section ref={ref} className="py-24 md:py-32 bg-[#07070b]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-4">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
             Live Simulator
           </div>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-gray-900 mb-4">
+          <h2 className="text-[clamp(28px,4vw,48px)] font-extrabold tracking-tight leading-[1.1] text-white mb-4">
             Watch the Firewall Work
           </h2>
-          <p className="text-lg text-gray-600 max-w-[520px] mx-auto">
+          <p className="text-lg text-slate-400 max-w-[520px] mx-auto">
             See every request get intercepted, scanned, classified, routed, and logged — in real time.
           </p>
         </div>
@@ -153,7 +154,7 @@ export function PipelineSimulator() {
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.05] bg-white/[0.02]">
             <div className="flex items-center gap-2.5">
-              <div className={`w-2.5 h-2.5 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.6)] ${running ? "bg-emerald-400 animate-pulse" : "bg-white/20"}`} />
+              <div className={`w-2.5 h-2.5 rounded-full ${running ? "bg-emerald-400 animate-pulse" : "bg-white/20"}`} />
               <span className="text-sm font-semibold text-white tracking-wider">
                 LIVE FIREWALL SIMULATOR
               </span>
@@ -163,7 +164,7 @@ export function PipelineSimulator() {
                 onClick={toggle}
                 className="w-[34px] h-[34px] rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/60 hover:bg-white/[0.08] hover:scale-105 transition-all flex items-center justify-center text-sm"
               >
-                {running ? "⏸" : "▶"}
+                {running ? "" : "▶"}
               </button>
               <button
                 onClick={() => { reset(); setTimeout(runPipeline, 50); }}
@@ -179,25 +180,26 @@ export function PipelineSimulator() {
             <div className="relative flex items-center justify-between mb-5">
               <div className="absolute left-6 right-6 h-[3px] bg-white/[0.05] rounded-full">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all duration-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"
+                  className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
               {STAGES.map((stage) => {
                 const isActive = activeStage === stage.id;
                 const isDone = doneStages.includes(stage.id);
+                const Icon = stage.Icon;
                 return (
                   <div key={stage.id} className="relative z-10 flex flex-col items-center gap-2">
                     <div
-                      className={`w-[52px] h-[52px] rounded-[14px] flex items-center justify-center text-xl border-2 transition-all duration-400 ${
+                      className={`w-[52px] h-[52px] rounded-[14px] flex items-center justify-center border-2 transition-all duration-400 ${
                         isActive
-                          ? "bg-indigo-500/15 border-indigo-500/45 shadow-[0_0_20px_rgba(99,102,241,0.35)] scale-110"
+                          ? "bg-indigo-500/15 border-indigo-500/45 scale-110"
                           : isDone
                           ? "bg-emerald-500/10 border-emerald-500/30"
                           : "bg-gray-800 border-gray-700"
                       }`}
                     >
-                      {stage.icon}
+                      <Icon className={`w-5 h-5 ${isActive ? "text-indigo-300" : isDone ? "text-emerald-400" : "text-white/30"}`} />
                     </div>
                     <span
                       className={`text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${
@@ -234,7 +236,7 @@ export function PipelineSimulator() {
               <div className="p-4 min-h-[200px] max-h-[240px] overflow-hidden flex flex-col gap-1.5 font-mono">
                 {logEntries.length === 0 ? (
                   <div className="flex items-center justify-center h-[180px] text-white/20 text-sm gap-2">
-                    🔍 Waiting for intercept...
+                     Waiting for intercept...
                   </div>
                 ) : (
                   logEntries.map((entry, i) => (

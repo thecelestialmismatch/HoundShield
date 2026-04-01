@@ -43,7 +43,7 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 export async function POST(request: NextRequest) {
   try {
-    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || request.ip || "anonymous";
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "anonymous";
     const rateLimitResult = limiter(ip);
     
     if (!rateLimitResult.success) {
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             error: "compliance_block",
-            message: `⚠️ Compliance Alert: Your message was blocked because it contains ${scanResult.classifications.join(", ")} data (Risk: ${scanResult.risk_level}). Kaelus protects sensitive data from being sent to AI providers.`,
+            message: `️ Compliance Alert: Your message was blocked because it contains ${scanResult.classifications.join(", ")} data (Risk: ${scanResult.risk_level}). Kaelus protects sensitive data from being sent to AI providers.`,
             scan: {
               risk_level: scanResult.risk_level,
               classifications: scanResult.classifications,

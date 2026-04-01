@@ -36,7 +36,6 @@ import type {
   ChatMessage,
 } from "./types";
 import { getAnthropicApiKey } from "../../secrets-manager";
-import { getAnthropicApiKey } from "../../secrets-manager";
 
 // ---------------------------------------------------------------------------
 // Anthropic SSE event types
@@ -125,14 +124,18 @@ export const anthropicAdapter: ProviderAdapter = {
    * - System message is a top-level `system` param, not a message
    * - Max tokens is required (not optional)
    */
-  async buildRequest(req: StreamRequest): {
+  buildRequest(req: StreamRequest): {
     url: string;
     headers: Record<string, string>;
     body: string;
   } {
     const url = "https://api.anthropic.com/v1/messages";
 
-    const apiKey = req.api_key || (await getAnthropicApiKey()) || "";
+    // getAnthropicApiKey reads process.env — no true async needed at build-request time.
+    const apiKey = req.api_key ||
+      process.env.ANTHROPIC_API_KEY_PRIMARY ||
+      process.env.ANTHROPIC_API_KEY ||
+      "";
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "x-api-key": apiKey,

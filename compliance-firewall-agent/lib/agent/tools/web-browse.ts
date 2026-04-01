@@ -124,9 +124,9 @@ const webBrowseTool: ToolHandler = {
       const metaDescription = metaMatch ? metaMatch[1] : '';
 
       const result = [
-        `📄 **${title}**`,
-        `🔗 ${url}`,
-        metaDescription ? `📝 ${metaDescription}` : '',
+        ` **${title}**`,
+        ` ${url}`,
+        metaDescription ? ` ${metaDescription}` : '',
         '',
         '---',
         '',

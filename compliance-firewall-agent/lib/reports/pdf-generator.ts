@@ -210,7 +210,7 @@ export function generateCompliancePDF(data: ReportData): Buffer {
     doc.setFontSize(8);
     doc.setTextColor(AMBER);
     doc.setFont("helvetica", "bold");
-    doc.text("⚠  DEMO MODE — This report contains sample data only. Connect Supabase for real data.", MARGIN + 5, y + 6.5);
+    doc.text("  DEMO MODE — This report contains sample data only. Connect Supabase for real data.", MARGIN + 5, y + 6.5);
     doc.setFont("helvetica", "normal");
   }
 

@@ -191,7 +191,7 @@ export default function AssessmentPage() {
         {/* Demo mode save warning */}
         {isDemo && (
           <div className="mb-5 flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-300">
-            <span className="mt-0.5 text-amber-400">⚠️</span>
+            <span className="mt-0.5 text-amber-400">️</span>
             <span>
               <span className="font-semibold text-amber-200">Results are not being saved.</span>{" "}
               Complete your account setup to persist assessment data across sessions.{" "}

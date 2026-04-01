@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
 import { Logo } from '@/components/Logo';
@@ -50,13 +51,12 @@ export default function SignupPage() {
     setLoading(false);
   };
 
-  const handleOAuthSignup = async (provider: 'google' | 'github' | 'azure') => {
+  const handleOAuthSignup = async (provider: 'google' | 'github') => {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
-        ...(provider === 'azure' && { scopes: 'email profile openid' }),
       },
     });
   };
@@ -79,7 +79,7 @@ export default function SignupPage() {
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 transition-all shadow-lg shadow-brand-200"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 transition-all"
           >
             Go to Login <ArrowRight className="w-4 h-4" />
           </Link>
@@ -90,6 +90,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4">
+      <ScrollProgressBar />
       {/* Subtle background blurs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-[30%] -left-[15%] h-[60%] w-[50%] rounded-full bg-brand-200/20 blur-[150px]" />
@@ -186,7 +187,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-brand-200"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -230,18 +231,6 @@ export default function SignupPage() {
               Continue with GitHub
             </button>
 
-            <button
-              onClick={() => handleOAuthSignup('azure')}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/5 hover:text-white transition-all"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 23 23" fill="none">
-                <path d="M1 1h10v10H1V1z" fill="#F25022" />
-                <path d="M12 1h10v10H12V1z" fill="#7FBA00" />
-                <path d="M1 12h10v10H1V12z" fill="#00A4EF" />
-                <path d="M12 12h10v10H12V12z" fill="#FFB900" />
-              </svg>
-              Continue with Microsoft
-            </button>
           </div>
 
           <p className="text-[10px] text-slate-400 text-center mt-4">

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
 import { Logo } from '@/components/Logo';
@@ -29,7 +30,10 @@ export default function LoginPage() {
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (authError) {
-      setError(authError.message);
+      const msg = authError.message === 'Invalid login credentials'
+        ? 'Invalid login credentials — if you just signed up, please confirm your email first.'
+        : authError.message;
+      setError(msg);
       setLoading(false);
       return;
     }
@@ -38,19 +42,19 @@ export default function LoginPage() {
     router.refresh();
   };
 
-  const handleOAuthLogin = async (provider: 'google' | 'github' | 'azure') => {
+  const handleOAuthLogin = async (provider: 'google' | 'github') => {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirect)}`,
-        ...(provider === 'azure' && { scopes: 'email profile openid' }),
       },
     });
   };
 
   return (
-    <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4 overflow-hidden">
+      <ScrollProgressBar />
       {/* Subtle background blurs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-[30%] -left-[15%] h-[60%] w-[50%] rounded-full bg-brand-200/20 blur-[150px]" />
@@ -137,7 +141,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-brand-200"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -183,19 +187,6 @@ export default function LoginPage() {
               Continue with GitHub
             </button>
 
-            <button
-              onClick={() => handleOAuthLogin('azure')}
-              aria-label="Sign in with Microsoft"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/5 hover:text-white transition-all"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 23 23" fill="none" aria-hidden="true">
-                <path d="M1 1h10v10H1V1z" fill="#F25022" />
-                <path d="M12 1h10v10H12V1z" fill="#7FBA00" />
-                <path d="M1 12h10v10H1V12z" fill="#00A4EF" />
-                <path d="M12 12h10v10H12V12z" fill="#FFB900" />
-              </svg>
-              Continue with Microsoft
-            </button>
           </div>
         </div>
 

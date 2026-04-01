@@ -380,7 +380,7 @@ export default function AgentsPage() {
               <Link href="/auth" className="btn-primary">
                 Deploy Your First Agent <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="/how-it-works" className="btn-ghost">
+              <Link href="/features" className="btn-ghost">
                 See How It Works <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -770,7 +770,7 @@ export default function AgentsPage() {
                   <Link href="/auth" className="btn-primary text-base !py-3 !px-8">
                     Get Started Free <ArrowRight className="w-4 h-4" />
                   </Link>
-                  <Link href="/dashboard" className="btn-ghost text-base !py-3 !px-8">
+                  <Link href="/command-center" className="btn-ghost text-base !py-3 !px-8">
                     Open Dashboard <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>

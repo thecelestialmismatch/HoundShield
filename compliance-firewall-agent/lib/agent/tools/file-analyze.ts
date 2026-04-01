@@ -105,7 +105,7 @@ function analyzeText(content: string): string {
     .map(([word, count]) => `${word} (${count})`);
 
   return [
-    `📊 **Text Analysis:**`,
+    ` **Text Analysis:**`,
     `• Characters: ${chars.toLocaleString()}`,
     `• Words: ${words.length.toLocaleString()}`,
     `• Lines: ${lines.length.toLocaleString()}`,
@@ -113,9 +113,9 @@ function analyzeText(content: string): string {
     `• Paragraphs: ${paragraphs.length}`,
     `• Avg words/sentence: ${(words.length / Math.max(sentences.length, 1)).toFixed(1)}`,
     '',
-    `📈 **Top Words:** ${topWords.join(', ')}`,
+    ` **Top Words:** ${topWords.join(', ')}`,
     '',
-    `📝 **Preview (first 500 chars):**`,
+    ` **Preview (first 500 chars):**`,
     content.slice(0, 500),
     content.length > 500 ? '...' : '',
   ].join('\n');
@@ -200,7 +200,7 @@ const fileAnalyzeTool: ToolHandler = {
           );
 
           result = [
-            `📊 **CSV Analysis** ${filename ? `(${filename})` : ''}`,
+            ` **CSV Analysis** ${filename ? `(${filename})` : ''}`,
             '',
             summary,
             '',
@@ -213,7 +213,7 @@ const fileAnalyzeTool: ToolHandler = {
           break;
         }
         case 'json': {
-          result = `📋 **JSON Analysis** ${filename ? `(${filename})` : ''}\n\n${parseJSON(content)}`;
+          result = ` **JSON Analysis** ${filename ? `(${filename})` : ''}\n\n${parseJSON(content)}`;
           break;
         }
         default: {

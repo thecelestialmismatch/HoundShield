@@ -235,7 +235,7 @@ const dataQueryTool: ToolHandler = {
       return {
         success: true,
         result: [
-          `📊 **Query Results** (${results.length} rows from ${data.length} total)`,
+          ` **Query Results** (${results.length} rows from ${data.length} total)`,
           '',
           formatted,
           '',

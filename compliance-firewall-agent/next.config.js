@@ -33,9 +33,15 @@ const nextConfig = {
   // Kill the "N" dev indicator
   devIndicators: false,
 
-  // Redirect old routes to unified Command Center
+  // Redirect old routes + HTTP → HTTPS
   async redirects() {
     return [
+      {
+        source: '/(.*)',
+        has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
+        destination: 'https://kaelus.online/:path*',
+        permanent: true,
+      },
       { source: '/dashboard', destination: '/command-center', permanent: true },
       { source: '/shieldready', destination: '/command-center', permanent: true },
       { source: '/shieldready/:path*', destination: '/command-center/shield/:path*', permanent: true },

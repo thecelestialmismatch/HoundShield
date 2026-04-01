@@ -54,12 +54,12 @@ interface ChatSession {
 // ---------------------------------------------------------------------------
 
 const MODELS = [
-  { id: "gemini-flash", name: "Gemini Flash", tag: "Free · Fast", icon: "⚡" },
-  { id: "llama-70b", name: "Llama 3.3 70B", tag: "Free · Smart", icon: "🦙" },
-  { id: "deepseek-v3", name: "DeepSeek V3", tag: "Free · Coder", icon: "🔮" },
-  { id: "qwen-72b", name: "Qwen 72B", tag: "Free · Powerful", icon: "🧠" },
-  { id: "gpt-4o-mini", name: "GPT-4o Mini", tag: "$0.15/M", icon: "🟢" },
-  { id: "claude-sonnet", name: "Claude Sonnet", tag: "$3/M", icon: "🟣" },
+  { id: "gemini-flash", name: "Gemini Flash", tag: "Free · Fast", icon: "" },
+  { id: "llama-70b", name: "Llama 3.3 70B", tag: "Free · Smart", icon: "" },
+  { id: "deepseek-v3", name: "DeepSeek V3", tag: "Free · Coder", icon: "" },
+  { id: "qwen-72b", name: "Qwen 72B", tag: "Free · Powerful", icon: "" },
+  { id: "gpt-4o-mini", name: "GPT-4o Mini", tag: "$0.15/M", icon: "" },
+  { id: "claude-sonnet", name: "Claude Sonnet", tag: "$3/M", icon: "" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -284,7 +284,7 @@ export function AIChat({
                     msgs[idx] = {
                       ...msgs[idx],
                       content:
-                        "⚙️ **Setup Required**\n\nTo use AI Chat, add your OpenRouter API key:\n\n1. Go to [openrouter.ai/keys](https://openrouter.ai/keys) and create a free key\n2. Add `OPENROUTER_API_KEY=your-key-here` to your `.env.local` file\n3. Restart the dev server\n\nFree models (Gemini Flash, Llama 70B, DeepSeek) require no payment.",
+                        "️ **Setup Required**\n\nTo use AI Chat, add your OpenRouter API key:\n\n1. Go to [openrouter.ai/keys](https://openrouter.ai/keys) and create a free key\n2. Add `OPENROUTER_API_KEY=your-key-here` to your `.env.local` file\n3. Restart the dev server\n\nFree models (Gemini Flash, Llama 70B, DeepSeek) require no payment.",
                     };
                   }
                   return { ...s, messages: msgs };
@@ -383,7 +383,7 @@ export function AIChat({
                   ...msgs[idx],
                   content:
                     msgs[idx].content ||
-                    "❌ Failed to get a response. Please check your API key and try again.",
+                    " Failed to get a response. Please check your API key and try again.",
                 };
               }
               return { ...s, messages: msgs };

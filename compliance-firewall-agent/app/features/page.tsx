@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   ShieldCheck,
   Brain,
@@ -137,6 +138,7 @@ const integrations = [
 export default function FeaturesPage() {
   return (
     <div className="min-h-screen bg-[#07070b] text-white relative overflow-hidden">
+      <ScrollProgressBar />
       <Navbar variant="dark" />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
@@ -163,7 +165,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* ── Bento Grid ────────────────────────────────────────── */}
-      <section className="py-16 px-6">
+      <section id="interception" className="py-16 px-6">
         <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {bentoFeatures.map((f, i) => {
             const Icon = f.icon;
@@ -196,7 +198,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* ── Comparison Table ───────────────────────────────────── */}
-      <section className="py-20 px-6">
+      <section id="audit" className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <FadeIn className="text-center mb-12">
             <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-3">
@@ -267,7 +269,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* ── Integrations ──────────────────────────────────────── */}
-      <section className="py-20 px-6">
+      <section id="integrations" className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <FadeIn className="text-center mb-12">
             <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-3">
