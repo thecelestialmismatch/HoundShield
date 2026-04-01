@@ -1,28 +1,16 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const QUICK_ACTIONS = [
   "What can you detect?",
-  "How does the ReAct loop work?",
+  "How does CMMC Level 2 work?",
   "How do I install this?",
 ];
 
-const KAELUS_SYSTEM = `You are Kaelus AI, the intelligent compliance assistant embedded in the Kaelus.Online platform. You are a friendly, concise expert in:
-- AI security: detecting API keys, secrets, PII, CUI, PHI, and proprietary source code before they reach AI providers
-- CMMC Level 2 compliance for US defense contractors (NIST 800-171, 110 controls, SPRS scoring)
-- HIPAA compliance and PHI detection (all 18 Safe Harbor identifiers)
-- SOC 2, code security, and IP protection for tech companies
-
-Keep responses concise (under 150 words). Use bullet points for lists.
-For installation questions always say: "Just change your AI API base URL to gateway.kaelus.online/v1 — 1 line of code, under 15 minutes."
-For detection questions: "I scan for 16+ sensitive patterns including SSNs, API keys, credit cards, CUI, PHI, medical records, and proprietary code — all in under 10ms."
-For pricing: "Free tier available. Pro at $199/mo. Sign up at kaelus.online."
-Be warm, expert, and focused on compliance value.`;
-
-type Message = { role: "user" | "bot"; text: string };
+type Message = { role: "user" | "bot"; text: string; streaming?: boolean };
 
 /* ── Typing indicator ── */
 function TypingDots() {
@@ -37,6 +25,17 @@ function TypingDots() {
       ))}
     </div>
   );
+}
+
+function getSessionId(): string {
+  if (typeof window === "undefined") return `brain-${Date.now()}`;
+  const key = "brain-ai-session-id";
+  let id = window.sessionStorage.getItem(key);
+  if (!id) {
+    id = `brain-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    window.sessionStorage.setItem(key, id);
+  }
+  return id;
 }
 
 export function GlobalChat() {
@@ -65,132 +64,110 @@ export function GlobalChat() {
       setMessages([
         {
           role: "bot",
-          text: "Hi! I'm Kaelus Bot — a compliance firewall that stops your team from accidentally leaking secrets to AI tools. Ask me anything!",
+          text: "Hi! I'm Brain AI — powered by Kaelus.online. I can help with CMMC Level 2 compliance, CUI detection, SPRS scoring, and anything about AI security for defense contractors. Ask me anything!",
         },
       ]);
     }
   };
 
-  const sendMessage = async (text: string) => {
+  const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isTyping) return;
 
-    const userMsg: Message = { role: "user", text };
-    const allMessages = [...messages, userMsg];
+    // Cancel any in-flight request
+    if (abortRef.current) abortRef.current.abort();
+    const abort = new AbortController();
+    abortRef.current = abort;
 
-    setMessages(allMessages);
+    setMessages((prev) => [...prev, { role: "user", text }]);
     setShowQuickActions(false);
     setInput("");
     setIsTyping(true);
 
-    // Build API history (skip the initial greeting bot message)
-    const history = allMessages
-      .slice(messages.length === 1 && messages[0].role === "bot" ? 1 : 0)
-      .map((m) => ({
-        role: m.role === "bot" ? "assistant" : "user",
-        content: m.text,
-      }));
-
-    abortRef.current?.abort();
-    abortRef.current = new AbortController();
+    // Add empty bot message to stream into
+    setMessages((prev) => [...prev, { role: "bot", text: "", streaming: true }]);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch("/api/brain-ai/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        signal: abortRef.current.signal,
-        body: JSON.stringify({
-          messages: history,
-          system: KAELUS_SYSTEM,
-          model: "gemini-flash",
-          temperature: 0.7,
-          scanInput: false,
-        }),
+        body: JSON.stringify({ sessionId: getSessionId(), message: text }),
+        signal: abort.signal,
       });
 
-      // Compliance block
-      if (res.status === 451) {
-        const data = await res.json();
-        setIsTyping(false);
-        setMessages((prev) => [
-          ...prev,
-          { role: "bot", text: data.message || "Your message was flagged by the compliance engine." },
-        ]);
-        return;
-      }
+      if (!res.ok || !res.body) throw new Error("Brain AI unavailable");
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || `HTTP ${res.status}`);
-      }
-
-      // Stream SSE response — build the bot reply token by token
-      const reader = res.body?.getReader();
-      if (!reader) throw new Error("No response stream");
-
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let botText = "";
-      let appended = false;
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = "";
+      let accumulated = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
+        buf += dec.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop() ?? "";
 
         for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed.startsWith("data: ")) continue;
-          const data = trimmed.slice(6);
-          if (data === "[DONE]") continue;
-
+          if (!line.startsWith("data: ")) continue;
+          const raw = line.slice(6).trim();
+          if (raw === "[DONE]") break;
           try {
-            const parsed = JSON.parse(data);
-            if (parsed.compliance) continue;
-            const chunk = parsed.content;
-            if (!chunk) continue;
-
-            botText += chunk;
-
-            if (!appended) {
-              appended = true;
-              setIsTyping(false);
-              setMessages((prev) => [...prev, { role: "bot", text: botText }]);
-            } else {
-              setMessages((prev) => {
-                const next = [...prev];
-                next[next.length - 1] = { role: "bot", text: botText };
-                return next;
-              });
+            const evt = JSON.parse(raw);
+            if (evt.type === "token" && evt.content) {
+              accumulated += evt.content;
+              setMessages((prev) =>
+                prev.map((m, i) =>
+                  i === prev.length - 1 ? { ...m, text: accumulated } : m
+                )
+              );
+            } else if (evt.type === "done" && evt.turnResult?.output) {
+              accumulated = evt.turnResult.output;
+              setMessages((prev) =>
+                prev.map((m, i) =>
+                  i === prev.length - 1
+                    ? { ...m, text: accumulated, streaming: false }
+                    : m
+                )
+              );
+            } else if (evt.type === "error") {
+              throw new Error(evt.message ?? "Brain AI error");
             }
           } catch {
-            // Skip malformed chunks
+            // skip malformed SSE line
           }
         }
       }
 
-      setIsTyping(false);
-    } catch (err: unknown) {
-      setIsTyping(false);
-      if (err instanceof Error && err.name === "AbortError") return;
+      // Finalize the streaming message
+      setMessages((prev) =>
+        prev.map((m, i) =>
+          i === prev.length - 1
+            ? { ...m, text: accumulated || "I couldn't generate a response. Please try again.", streaming: false }
+            : m
+        )
+      );
+    } catch (err) {
+      if ((err as Error).name === "AbortError") return;
 
-      const isNoKey =
-        err instanceof Error &&
-        (err.message.includes("no_api_key") || err.message.includes("503"));
+      // Fallback: static reply if Brain AI is unavailable (no API key configured)
+      const fallback =
+        text.toLowerCase().includes("cmmc")
+          ? "CMMC Level 2 requires implementing 110 security practices across 14 domains. The November 2026 enforcement deadline is approaching fast. Sign up free at kaelus.online to start your assessment!"
+          : text.toLowerCase().includes("detect") || text.toLowerCase().includes("scan")
+          ? "Brain AI detects 16+ sensitive patterns: SSNs, credit cards, API keys, medical records, CUI markings, CAGE codes, contract numbers, clearance levels, and more — all in under 10ms."
+          : "Brain AI is your CMMC compliance co-pilot. Sign up free at kaelus.online to unlock the full intelligence layer including compliance assessments, PDF reports, and real-time threat scanning.";
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: isNoKey
-            ? "The AI brain needs an OpenRouter API key to answer free-form questions. Try the quick action buttons — those work instantly!"
-            : "Something went wrong on my end. The firewall is still scanning in the background — try again in a moment!",
-        },
-      ]);
+      setMessages((prev) =>
+        prev.map((m, i) =>
+          i === prev.length - 1 ? { ...m, text: fallback, streaming: false } : m
+        )
+      );
+    } finally {
+      setIsTyping(false);
+      abortRef.current = null;
     }
-  };
+  }, [isTyping]);
 
   return (
     <>
@@ -204,7 +181,7 @@ export function GlobalChat() {
             "0 4px 24px rgba(99,102,241,0.45), 0 0 0 0 rgba(99,102,241,0.3)",
           animation: isOpen ? "none" : "chatPulse 3s ease infinite",
         }}
-        title="Chat with Kaelus Bot"
+        title="Chat with Brain AI"
       >
         {isOpen ? (
           <X className="w-5 h-5 text-white" />
@@ -238,10 +215,10 @@ export function GlobalChat() {
                 <Logo className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-sm font-bold text-white">Kaelus Bot</div>
+                <div className="text-sm font-bold text-white">Brain AI</div>
                 <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Online and Scanning
+                  {isTyping ? "Thinking..." : "Online · Kaelus.online"}
                 </div>
               </div>
             </div>
@@ -267,10 +244,10 @@ export function GlobalChat() {
                     : "self-start bg-white/[0.05] text-white/80 border border-white/[0.07] rounded-bl-sm"
                 }`}
               >
-                {msg.text}
+                {msg.text || (msg.streaming ? "▋" : "")}
               </div>
             ))}
-            {isTyping && <TypingDots />}
+            {isTyping && messages[messages.length - 1]?.role !== "bot" && <TypingDots />}
           </div>
 
           {/* Quick Actions */}
@@ -304,7 +281,7 @@ export function GlobalChat() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about compliance..."
+              placeholder="Ask Brain AI anything..."
               className="flex-1 bg-black/40 border border-white/[0.08] rounded-[10px] px-3 py-2.5 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 transition-colors"
             />
             <button
