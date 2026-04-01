@@ -18,7 +18,7 @@
     "@remotion/three": "^4.0.438",
     "@sentry/nextjs": "^10.46.0",
     "@supabase/ssr": "^0.7.0",
-    "@supabase/supabase-js": "^2.49.0",
+    "@supabase/supabase-js": "^2.101.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.6.0",
     "jspdf": "^4.2.0",
