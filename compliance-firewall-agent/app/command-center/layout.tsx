@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,7 +32,7 @@ import {
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 import { DemoBanner } from "@/components/ui/demo-banner";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { isSupabaseConfigured, createBrowserClient } from "@/lib/supabase/client";
 
 /* ── Nav Structure ──────────────────────────────────────────────── */
 type NavSection = {
@@ -252,6 +252,22 @@ function Sidebar({
 
 /* ── Topbar ─────────────────────────────────────────────────────── */
 function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
+  const [userInitial, setUserInitial] = useState("K");
+
+  useEffect(() => {
+    const supabase = createBrowserClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        const email = data.user.email ?? "";
+        const name =
+          (data.user.user_metadata?.full_name as string | undefined) ??
+          (data.user.user_metadata?.name as string | undefined) ??
+          email;
+        setUserInitial((name[0] ?? "K").toUpperCase());
+      }
+    });
+  }, []);
+
   return (
     <header
       className={`fixed top-0 right-0 z-40 h-14 border-b border-white/[0.06] bg-[#07070b]/80 backdrop-blur-xl flex items-center justify-between px-6 transition-all duration-300 ${
@@ -281,13 +297,16 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
         </button>
 
-        {/* User */}
-        <button className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors">
+        {/* User — links to settings */}
+        <Link
+          href="/command-center/settings"
+          className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
+        >
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-            K
+            {userInitial}
           </div>
           <ChevronDown className="w-3 h-3 text-slate-500" />
-        </button>
+        </Link>
       </div>
     </header>
   );

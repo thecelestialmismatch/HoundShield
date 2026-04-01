@@ -9,11 +9,12 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
  * When false, the app runs in demo mode with mock data.
  */
 export function isSupabaseConfigured(): boolean {
+  // Use NEXT_PUBLIC_ vars only — service role key is never available client-side
   return (
     supabaseUrl.startsWith("https://") &&
     !supabaseUrl.includes("YOUR-PROJECT-ID") &&
-    supabaseServiceKey.length > 20 &&
-    !supabaseServiceKey.includes("your-")
+    supabaseAnonKey.length > 20 &&
+    !supabaseAnonKey.includes("your-")
   );
 }
 

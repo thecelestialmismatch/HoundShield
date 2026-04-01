@@ -44,7 +44,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white border border-white/10 rounded-2xl overflow-hidden">
+    <div className="bg-[#0d0d14] border border-white/10 rounded-2xl overflow-hidden">
       <div className="px-6 py-5 border-b border-white/10 flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-200 flex items-center justify-center">
           <Icon className="w-4 h-4 text-brand-500" />
@@ -354,7 +354,7 @@ export default function SettingsPage() {
       {/* ── Billing Section ── */}
       <SectionCard title="Billing" description="Subscription and payment management" icon={CreditCard}>
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 rounded-xl bg-white border border-white/10">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-white/[0.05] border border-white/10">
             <div>
               <p className="text-sm font-medium text-white capitalize">{profile?.plan || 'Free'} Plan</p>
               <p className="text-xs text-slate-400 mt-0.5">
