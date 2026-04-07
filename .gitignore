@@ -86,3 +86,16 @@ MASTER-PRD.md
 decisions.csv
 context-guardian.html
 .vercel
+
+# VedicBrain / reverse-engineered AI internals (never commit)
+compliance-firewall-agent/brain/
+compliance-firewall-agent/setup.py
+
+# Supabase temp state (contains project-ref and DB connection string)
+compliance-firewall-agent/supabase/.temp/
+
+# Binary business documents
+*.docx
+
+# Compass/artifact analysis files (sensitive competitive content)
+compass_artifact_*.md

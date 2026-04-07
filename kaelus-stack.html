@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaelus.Online Stack</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161e;
+      --surface2: #1a1e2a;
+      --border: #252a38;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --free: #00c47a;
+      --paid: #ff6b6b;
+      --freemium: #f5a623;
+      --oss: #4fc3f7;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --tag-bg: rgba(108,99,255,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6c63ff, #00d4aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .category {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .category:hover {
+      border-color: var(--accent);
+    }
+
+    .cat-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cat-icon {
+      font-size: 1.3rem;
+    }
+
+    .cat-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text);
+    }
+
+    .tool-list {
+      padding: 12px 0;
+    }
+
+    .tool {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      transition: background 0.15s;
+    }
+
+    .tool:hover {
+      background: var(--surface2);
+    }
+
+    .tool-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tree-icon {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-family: monospace;
+    }
+
+    .tool-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .tool-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .badge-free {
+      background: rgba(0,196,122,0.15);
+      color: var(--free);
+      border: 1px solid rgba(0,196,122,0.3);
+    }
+
+    .badge-freemium {
+      background: rgba(245,166,35,0.15);
+      color: var(--freemium);
+      border: 1px solid rgba(245,166,35,0.3);
+    }
+
+    .badge-paid {
+      background: rgba(255,107,107,0.12);
+      color: var(--paid);
+      border: 1px solid rgba(255,107,107,0.25);
+    }
+
+    .badge-oss {
+      background: rgba(79,195,247,0.12);
+      color: var(--oss);
+      border: 1px solid rgba(79,195,247,0.25);
+    }
+
+    .badge-txn {
+      background: rgba(108,99,255,0.15);
+      color: #a89cff;
+      border: 1px solid rgba(108,99,255,0.3);
+    }
+
+    .signup-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      color: var(--accent2);
+      text-decoration: none;
+      border: 1px solid rgba(0,212,170,0.3);
+      padding: 2px 8px;
+      border-radius: 12px;
+      transition: all 0.15s;
+      background: rgba(0,212,170,0.06);
+    }
+
+    .signup-link:hover {
+      background: rgba(0,212,170,0.15);
+      border-color: var(--accent2);
+    }
+
+    .limit-note {
+      font-size: 0.68rem;
+      color: var(--muted);
+      max-width: 160px;
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    .tool-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 20px;
+      opacity: 0.5;
+    }
+
+    .email-note {
+      text-align: center;
+      margin-bottom: 32px;
+      padding: 14px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+
+    .email-note p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .email-note span {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .action-required {
+      border-color: rgba(108,99,255,0.4) !important;
+    }
+
+    .action-banner {
+      background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(0,212,170,0.08));
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 0 auto 36px;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    .action-banner h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .action-banner p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .action-banner strong {
+      color: var(--accent2);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📂 Kaelus.Online Stack</h1>
+    <p>Complete SaaS infrastructure reference — free tier status, limits & signup links</p>
+  </header>
+
+  <div class="action-banner">
+    <h3>⚡ Signup Email: thecelestialmismatch@gmail.com</h3>
+    <p>
+      Use this email for all free-tier signups below. Each service will send a <strong>verification email</strong> —
+      check your inbox after each signup. Password reset links are available directly on each service's login page,
+      or use the <strong>"Forgot Password"</strong> flow after signing up. Services marked
+      <strong style="color:#00c47a">FREE</strong> or <strong style="color:#f5a623">FREEMIUM</strong> require no credit card.
+    </p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#00c47a"></div> Free (no CC)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f5a623"></div> Freemium (limited free tier)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4fc3f7"></div> Open Source (self-host free)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a89cff"></div> Transaction fees only</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff6b6b"></div> Paid only</div>
+  </div>
+
+  <div class="grid">
+
+    <!-- FRONTEND -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🎨</span>
+        <span class="cat-title">Frontend</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">React</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Next.js</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Vue</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">TailwindCSS</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Shadcn UI</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACKEND -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">⚙️</span>
+        <span class="cat-title">Backend</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Node.js</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Django</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Laravel</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">FastAPI</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Express</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATABASE -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🗄️</span>
+        <span class="cat-title">Database</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">PostgreSQL</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">MySQL</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">MongoDB</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://www.mongodb.com/cloud/atlas/register" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Atlas Free: 512MB</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Redis</span></div>
+          <div class="tool-info">
+            <span class="badge badge-oss">Open Source</span>
+            <span class="limit-note">Redis Cloud: 30MB free</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Supabase</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://supabase.com/dashboard/sign-up" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 500MB DB, 1GB storage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTH -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🔐</span>
+        <span class="cat-title">Auth</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Clerk</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://dashboard.clerk.com/sign-up" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 10,000 MAU</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Auth0</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://auth0.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 7,500 MAU</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Firebase Auth</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <div class="tool-right">
+              <a href="https://console.firebase.google.com/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Spark plan: unlimited auth</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Supabase Auth</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <span class="limit-note">Included with Supabase free</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">NextAuth</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">💳</span>
+        <span class="cat-title">Payments</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Stripe</span></div>
+          <div class="tool-info">
+            <span class="badge badge-txn">Txn fees only</span>
+            <div class="tool-right">
+              <a href="https://dashboard.stripe.com/register" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">2.9% + 30¢ per txn, no monthly fee</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Paddle</span></div>
+          <div class="tool-info">
+            <span class="badge badge-txn">Txn fees only</span>
+            <span class="limit-note">5% + 50¢ per txn</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Dodo Payments</span></div>
+          <div class="tool-info">
+            <span class="badge badge-txn">Txn fees only</span>
+            <span class="limit-note">3.5% + fees per txn</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Lemon Squeezy</span></div>
+          <div class="tool-info">
+            <span class="badge badge-txn">Txn fees only</span>
+            <span class="limit-note">5% + fees per txn</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Polar</span></div>
+          <div class="tool-info">
+            <span class="badge badge-txn">Txn fees only</span>
+            <div class="tool-right">
+              <a href="https://polar.sh/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">OSS-friendly, 5% fee</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAILS -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">📧</span>
+        <span class="cat-title">Emails</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Resend</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://resend.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 3,000/mo, 100/day</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">SendGrid</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://signup.sendgrid.com/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 100 emails/day</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Mailgun</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://signup.mailgun.com/new/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 1,000/mo (Flex)</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Postmark</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://account.postmarkapp.com/sign_up" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">100 free credits on signup</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Amazon SES</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">62,000 free/mo from EC2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STORAGE -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">☁️</span>
+        <span class="cat-title">Storage</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">AWS S3</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">Free tier: 5GB for 12mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Cloudflare R2</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">Free: 10GB, 0 egress fees</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Google Cloud Storage</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">Free tier: 5GB for 12mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Supabase Storage</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <span class="limit-note">1GB included in free plan</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Uploadcare</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://app.uploadcare.com/accounts/signup/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 3GB storage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPLOYMENT -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🚀</span>
+        <span class="cat-title">Deployment</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Vercel</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://vercel.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Hobby: unlimited projects</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Netlify</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://app.netlify.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 100GB bandwidth/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Railway</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://railway.app/login" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">$5 free credits/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Render</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://dashboard.render.com/register" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free static sites + web services</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">AWS</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">Free tier for 12 months</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOMAINS & DNS -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🌐</span>
+        <span class="cat-title">Domains &amp; DNS</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Namecheap</span></div>
+          <div class="tool-info">
+            <span class="badge badge-paid">Paid (domains)</span>
+            <div class="tool-right">
+              <a href="https://www.namecheap.com/myaccount/signup/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Hostinger</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid (domains)</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Cloudflare DNS</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <div class="tool-right">
+              <a href="https://dash.cloudflare.com/sign-up" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">DNS management free forever</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Google Domains</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid (domains)</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">SiteGround</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">📊</span>
+        <span class="cat-title">Analytics</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Google Analytics</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <div class="tool-right">
+              <a href="https://analytics.google.com/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Plausible</span></div>
+          <div class="tool-info">
+            <span class="badge badge-oss">OSS / Self-host</span>
+            <span class="limit-note">Cloud is paid; self-host free</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">PostHog</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://app.posthog.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 1M events/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Mixpanel</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://mixpanel.com/register/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 20M events/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">DataFast</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONITORING -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🔍</span>
+        <span class="cat-title">Monitoring</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Sentry</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://sentry.io/signup/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 5K errors/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">LogRocket</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://app.logrocket.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 1K sessions/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Datadog</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid (trial only)</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">New Relic</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://newrelic.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 100GB data/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">UptimeRobot</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://uptimerobot.com/signUp" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 50 monitors</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVOPS -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🔧</span>
+        <span class="cat-title">DevOps</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Docker</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://hub.docker.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free for personal use</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Kubernetes</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">GitHub Actions</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://github.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 2,000 min/mo (public repos unlimited)</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">CI/CD</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Varies by tool</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Terraform</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🔎</span>
+        <span class="cat-title">Search</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Algolia</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://dashboard.algolia.com/users/sign_up" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 10K requests/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Meilisearch</span></div>
+          <div class="tool-info">
+            <span class="badge badge-oss">Open Source</span>
+            <div class="tool-right">
+              <a href="https://cloud.meilisearch.com/register" target="_blank" class="signup-link">Cloud ↗</a>
+            </div>
+            <span class="limit-note">Self-host free; cloud has free trial</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Elasticsearch</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Typesense</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">OpenSearch</span></div>
+          <div class="tool-info"><span class="badge badge-oss">Open Source</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI INTEGRATION -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🤖</span>
+        <span class="cat-title">AI Integration</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">OpenAI API</span></div>
+          <div class="tool-info">
+            <span class="badge badge-paid">Paid (pay-per-use)</span>
+            <div class="tool-right">
+              <a href="https://platform.openai.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Anthropic API</span></div>
+          <div class="tool-info">
+            <span class="badge badge-paid">Paid (pay-per-use)</span>
+            <div class="tool-right">
+              <a href="https://console.anthropic.com/login" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Replicate</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://replicate.com/signin" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free trial credits on signup</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">HuggingFace</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://huggingface.co/join" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free inference tier available</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Gemini API</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://aistudio.google.com/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free tier via AI Studio</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATIONS -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🔗</span>
+        <span class="cat-title">Integrations</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Zapier</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://zapier.com/sign-up" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 100 tasks/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Make</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://www.make.com/en/register" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 1,000 ops/mo</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">n8n</span></div>
+          <div class="tool-info">
+            <span class="badge badge-oss">Open Source</span>
+            <div class="tool-right">
+              <a href="https://app.n8n.cloud/register" target="_blank" class="signup-link">Cloud ↗</a>
+            </div>
+            <span class="limit-note">Self-host free forever</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Pabbly</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Webhooks</span></div>
+          <div class="tool-info"><span class="badge badge-free">Free (protocol)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">🛡️</span>
+        <span class="cat-title">Security</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">SSL (Let's Encrypt)</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <span class="limit-note">Free via Let's Encrypt</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Cloudflare</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <span class="limit-note">DDoS, SSL, CDN free forever</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">WAF</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">Basic WAF via Cloudflare free</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Rate Limiting</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">Basic via Cloudflare free tier</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Secrets Management</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <span class="limit-note">Infisical / Doppler have free tiers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">📣</span>
+        <span class="cat-title">Marketing</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Search Console</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <div class="tool-right">
+              <a href="https://search.google.com/search-console/about" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Outrank</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Buffer</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://buffer.com/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 3 channels, 10 scheduled posts</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Analytics</span></div>
+          <div class="tool-info"><span class="badge badge-free">Free (Google)</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">Kit (ConvertKit)</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://app.kit.com/users/signup" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: up to 10,000 subscribers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMER SUPPORT -->
+    <div class="category">
+      <div class="cat-header">
+        <span class="cat-icon">💬</span>
+        <span class="cat-title">Customer Support</span>
+      </div>
+      <div class="tool-list">
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Intercom</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Crisp</span></div>
+          <div class="tool-info">
+            <span class="badge badge-freemium">Freemium</span>
+            <div class="tool-right">
+              <a href="https://app.crisp.chat/initiate/signup/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">Free: 2 agents, basic chat</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Zendesk</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid</span></div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┣</span><span class="tool-name">Tawk.to</span></div>
+          <div class="tool-info">
+            <span class="badge badge-free">Free</span>
+            <div class="tool-right">
+              <a href="https://www.tawk.to/signup/" target="_blank" class="signup-link">Sign up ↗</a>
+            </div>
+            <span class="limit-note">100% free live chat forever</span>
+          </div>
+        </div>
+        <div class="tool">
+          <div class="tool-left"><span class="tree-icon">┗</span><span class="tool-name">HelpScout</span></div>
+          <div class="tool-info"><span class="badge badge-paid">Paid</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; margin-top: 48px; color: var(--muted); font-size: 0.78rem; line-height: 1.8;">
+    <p>📅 Last updated: March 2026 &nbsp;|&nbsp; 📧 Account email: thecelestialmismatch@gmail.com</p>
+    <p style="margin-top:6px;">Free tier info subject to change — always verify on the service's pricing page before committing.</p>
+  </div>
+
+</body>
+</html>

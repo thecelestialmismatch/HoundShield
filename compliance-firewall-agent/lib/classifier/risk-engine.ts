@@ -4,6 +4,7 @@ import {
   type DetectionPattern,
 } from "./patterns";
 import { detectHIPAA, hasMedicalContext } from "./hipaa-patterns";
+import { scanWithGeminiFlash, isGeminiConfigured } from "./gemini-scanner";
 import type {
   ClassificationResult,
   DetectedEntity,
@@ -23,17 +24,19 @@ const RISK_PRIORITY: Record<RiskLevel, number> = {
 /**
  * Multi-stage risk classification pipeline.
  *
+ * Stage 0 (optional): Gemini Flash intent scan with hard 10ms budget.
+ *   If GEMINI_API_KEY is set, fire the ML scan concurrently with regex.
+ *   If it returns within budget, it can elevate risk level for context-aware
+ *   leaks that regex misses (e.g. implicit trade secrets, conversational PII).
+ *   If it times out or fails, the result is ignored silently.
+ *
  * Stage 1: Decode potential obfuscation (base64, hex).
  * Stage 2: Run all regex patterns against the text and decoded variants.
- * Stage 3: Aggregate results — highest risk wins, entities are merged.
- * Stage 4: Compute confidence score based on match density and pattern specificity.
+ * Stage 3: Aggregate results, highest risk wins, entities are merged.
+ * Stage 4: Merge Gemini result (if available) with regex result.
+ * Stage 5: Compute confidence score.
  *
  * Performance target: <100ms for prompts up to 50K characters.
- * For prompts >100K chars, we truncate to first + last 50K and log a warning.
- *
- * Tradeoff: We use regex-only classification (no ML model) to keep this
- * free-tier compatible and sub-100ms. A future version could add an ML
- * classifier as a second stage for ambiguous cases.
  */
 export async function classifyRisk(
   promptText: string
@@ -41,10 +44,14 @@ export async function classifyRisk(
   // Handle extremely large prompts
   let textToScan = promptText;
   if (textToScan.length > 100_000) {
-    // Scan first and last 50K chars — sensitive data often appears at boundaries
     textToScan =
       textToScan.slice(0, 50_000) + "\n...\n" + textToScan.slice(-50_000);
   }
+
+  // Stage 0: Fire Gemini Flash concurrently (non-blocking, 10ms hard cap)
+  const geminiPromise = isGeminiConfigured()
+    ? scanWithGeminiFlash(textToScan).catch(() => null)
+    : Promise.resolve(null);
 
   // Stage 1: Generate text variants (original + decoded obfuscations)
   const variants = decodeObfuscation(textToScan);
@@ -65,7 +72,7 @@ export async function classifyRisk(
     }
   }
 
-  // Stage 3: Determine highest risk level
+  // Stage 3: Determine highest risk level from regex
   let highestRisk: RiskLevel = "NONE";
   let shouldBlock = false;
   let shouldQuarantine = false;
@@ -83,13 +90,39 @@ export async function classifyRisk(
     if (pattern.action === "QUARANTINE") shouldQuarantine = true;
   }
 
-  // If blocking, quarantine flag is redundant
   if (shouldBlock) shouldQuarantine = false;
 
-  // Stage 4: Confidence score
+  // Stage 4: Merge Gemini result if it finished within budget
+  // Use Promise.race with an immediate-resolve fallback so we never wait
+  // longer than the Gemini module's own AbortSignal timeout.
+  const geminiResult = await Promise.race([
+    geminiPromise,
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), 12)),
+  ]);
+
+  let geminiCategoryNames: string[] = [];
+  if (geminiResult) {
+    // Elevate risk if Gemini found higher risk than regex (context-aware upgrade)
+    if (RISK_PRIORITY[geminiResult.risk_level] > RISK_PRIORITY[highestRisk]) {
+      highestRisk = geminiResult.risk_level;
+      // Only block/quarantine if Gemini found it and confidence is high
+      if (geminiResult.risk_level === "CRITICAL" || geminiResult.risk_level === "HIGH") {
+        shouldBlock = true;
+      } else if (geminiResult.risk_level === "MEDIUM") {
+        shouldQuarantine = true;
+      }
+    }
+    geminiCategoryNames = geminiResult.detected_categories;
+    for (const cat of geminiCategoryNames) {
+      // Map Gemini category strings to our RuleCategory enum where possible
+      const mapped = mapGeminiCategory(cat);
+      if (mapped) categoriesFound.add(mapped);
+    }
+  }
+
+  // Stage 5: Confidence score
   const confidence = computeConfidence(allEntities, textToScan.length);
 
-  // Deduplicate entities by value
   const uniqueEntities = deduplicateEntities(allEntities);
 
   return {
@@ -100,7 +133,31 @@ export async function classifyRisk(
     should_block: shouldBlock,
     should_quarantine: shouldQuarantine,
     matched_rules: Array.from(new Set(matchedRules)),
+    // Attach Gemini metadata for audit visibility
+    ...(geminiResult
+      ? {
+          ml_scan: {
+            model: geminiResult.model,
+            inference_ms: geminiResult.inference_ms,
+            reasoning: geminiResult.reasoning,
+            categories: geminiResult.detected_categories,
+          },
+        }
+      : {}),
   };
+}
+
+/**
+ * Maps a Gemini category string to our canonical RuleCategory.
+ */
+function mapGeminiCategory(cat: string): RuleCategory | null {
+  const lower = cat.toLowerCase();
+  if (lower.includes("pii") || lower.includes("personal")) return "PII";
+  if (lower.includes("financial") || lower.includes("credit")) return "FINANCIAL";
+  if (lower.includes("trade") || lower.includes("strategic")) return "STRATEGIC";
+  if (lower.includes("credential") || lower.includes("secret") || lower.includes("key") || lower.includes("code")) return "IP";
+  if (lower.includes("phi") || lower.includes("medical") || lower.includes("health")) return "HIPAA_PHI";
+  return null;
 }
 
 /**
