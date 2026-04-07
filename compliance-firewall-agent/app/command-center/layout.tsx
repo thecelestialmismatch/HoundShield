@@ -28,6 +28,9 @@ import {
   Target,
   ScrollText,
   Wrench,
+  SlidersHorizontal,
+  BarChart3,
+  Download,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
@@ -58,6 +61,9 @@ const NAV_SECTIONS: NavSection[] = [
       { id: "scanner", label: "Live Scanner", icon: Scan, href: "/command-center/scanner" },
       { id: "events", label: "Audit Log", icon: ScrollText, href: "/command-center/events" },
       { id: "quarantine", label: "Quarantine", icon: AlertTriangle, href: "/command-center/quarantine", badge: "4" },
+      { id: "rules", label: "Firewall Rules", icon: SlidersHorizontal, href: "/command-center/rules" },
+      { id: "security", label: "Security Dashboard", icon: BarChart3, href: "/command-center/security" },
+      { id: "audit-export", label: "Export Audit Log", icon: Download, href: "/command-center/audit-export" },
     ],
   },
   {
@@ -78,6 +84,8 @@ const NAV_SECTIONS: NavSection[] = [
       { id: "chat", label: "Compliance AI", icon: MessageSquare, href: "/command-center/chat" },
       { id: "tasks", label: "Remediation Tasks", icon: ListChecks, href: "/command-center/tasks" },
       { id: "team", label: "Team", icon: Users, href: "/command-center/team" },
+      { id: "agents", label: "Agent Simulation", icon: Command, href: "/command-center/agents" },
+      { id: "sdk", label: "SDK Integration", icon: BookOpen, href: "/command-center/sdk" },
     ],
   },
 ];
