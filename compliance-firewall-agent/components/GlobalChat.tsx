@@ -5,14 +5,23 @@ import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const QUICK_ACTIONS = [
-  "What can you detect?",
   "How does CMMC Level 2 work?",
-  "How do I install this?",
+  "What can you detect?",
+  "How do I install Kaelus?",
 ];
+
+const KAELUS_SYSTEM =
+  "You are Brain AI, the intelligent compliance assistant embedded in Kaelus.Online. " +
+  "You are a concise expert in CMMC Level 2, NIST 800-171, SPRS scoring, HIPAA PHI, SOC 2, CUI detection, and AI security. " +
+  "Keep answers under 150 words. Use bullet points for lists. Be warm and focused on compliance value. " +
+  'For installation: "Change your AI base URL to gateway.kaelus.online/v1 — 1 line of code, 15 minutes." ' +
+  'For pricing: "Free tier available. Pro $199/mo. Start free at kaelus.online."';
+
+const GREETING =
+  "Hi! I'm Brain AI — powered by Kaelus.online. I can help with CMMC Level 2 compliance, CUI detection, SPRS scoring, and anything about AI security for defense contractors. Ask me anything!";
 
 type Message = { role: "user" | "bot"; text: string; streaming?: boolean };
 
-/* ── Typing indicator ── */
 function TypingDots() {
   return (
     <div className="flex gap-1 px-3.5 py-2.5 self-start bg-white/[0.04] rounded-2xl rounded-bl-sm">
@@ -48,25 +57,18 @@ export function GlobalChat() {
   const msgsRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (msgsRef.current) {
       msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
 
-  // Show greeting when first opened
   const handleOpen = () => {
     const opening = !isOpen;
     setIsOpen(opening);
     if (opening && !hasGreeted) {
       setHasGreeted(true);
-      setMessages([
-        {
-          role: "bot",
-          text: "Hi! I'm Brain AI — powered by Kaelus.online. I can help with CMMC Level 2 compliance, CUI detection, SPRS scoring, and anything about AI security for defense contractors. Ask me anything!",
-        },
-      ]);
+      setMessages([{ role: "bot", text: GREETING }]);
     }
   };
 
@@ -89,10 +91,33 @@ export function GlobalChat() {
     try {
       const res = await fetch("/api/brain-ai/execute", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-kaelus-system": KAELUS_SYSTEM,
+        },
         body: JSON.stringify({ sessionId: getSessionId(), message: text }),
         signal: abort.signal,
       });
+
+      // Compliance block (451 = content blocked)
+      if (res.status === 451) {
+        const data = await res.json().catch(() => ({}));
+        setIsTyping(false);
+        setMessages((prev) =>
+          prev.map((m, i) =>
+            i === prev.length - 1
+              ? {
+                  ...m,
+                  text:
+                    (data as { message?: string }).message ||
+                    "Your message was flagged by the compliance engine.",
+                  streaming: false,
+                }
+              : m
+          )
+        );
+        return;
+      }
 
       if (!res.ok || !res.body) throw new Error("Brain AI unavailable");
 
@@ -114,6 +139,8 @@ export function GlobalChat() {
           if (raw === "[DONE]") break;
           try {
             const evt = JSON.parse(raw);
+            // Skip compliance metadata chunks
+            if (evt.compliance) continue;
             if (evt.type === "token" && evt.content) {
               accumulated += evt.content;
               setMessages((prev) =>
@@ -139,11 +166,15 @@ export function GlobalChat() {
         }
       }
 
-      // Finalize the streaming message
+      // Guard: stream ended but no content was ever received
+      const finalText =
+        accumulated ||
+        "I didn't get a response. Try asking about CMMC Level 2, SPRS scoring, CUI detection, or how to install Kaelus — I can answer those instantly!";
+
       setMessages((prev) =>
         prev.map((m, i) =>
           i === prev.length - 1
-            ? { ...m, text: accumulated || "I couldn't generate a response. Please try again.", streaming: false }
+            ? { ...m, text: finalText, streaming: false }
             : m
         )
       );
@@ -156,7 +187,7 @@ export function GlobalChat() {
           ? "CMMC Level 2 requires implementing 110 security practices across 14 domains. The November 2026 enforcement deadline is approaching fast. Sign up free at kaelus.online to start your assessment!"
           : text.toLowerCase().includes("detect") || text.toLowerCase().includes("scan")
           ? "Brain AI detects 16+ sensitive patterns: SSNs, credit cards, API keys, medical records, CUI markings, CAGE codes, contract numbers, clearance levels, and more — all in under 10ms."
-          : "Brain AI is your CMMC compliance co-pilot. Sign up free at kaelus.online to unlock the full intelligence layer including compliance assessments, PDF reports, and real-time threat scanning.";
+          : "Something went wrong connecting to Brain AI. Try asking about CMMC, SPRS, CUI, or installation — those work offline!";
 
       setMessages((prev) =>
         prev.map((m, i) =>
@@ -171,17 +202,17 @@ export function GlobalChat() {
 
   return (
     <>
-      {/* ── Trigger Button ── */}
+      {/* Trigger Button */}
       <button
         onClick={handleOpen}
         className="fixed bottom-7 right-7 z-[200] w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
         style={{
           background: "linear-gradient(135deg, #6366f1, #818cf8)",
-          boxShadow:
-            "0 4px 24px rgba(99,102,241,0.45), 0 0 0 0 rgba(99,102,241,0.3)",
+          boxShadow: "0 4px 24px rgba(99,102,241,0.45), 0 0 0 0 rgba(99,102,241,0.3)",
           animation: isOpen ? "none" : "chatPulse 3s ease infinite",
         }}
-        title="Chat with Brain AI"
+        aria-label="Chat with Brain AI"
+        title="Brain AI — Compliance Assistant"
       >
         {isOpen ? (
           <X className="w-5 h-5 text-white" />
@@ -190,22 +221,21 @@ export function GlobalChat() {
         )}
       </button>
 
-      {/* ── Chat Window ── */}
+      {/* Chat Window */}
       {isOpen && (
         <div
           className="fixed bottom-24 right-7 z-[200] w-[340px] rounded-2xl overflow-hidden flex flex-col animate-chat-in"
           style={{
             background: "#0e0e18",
             border: "1px solid rgba(99,102,241,0.25)",
-            boxShadow:
-              "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1)",
+            boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1)",
           }}
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/[0.06] bg-white/[0.03]">
             <div className="flex items-center gap-2.5">
               <div
-                className="w-9 h-9 rounded-[10px] flex items-center justify-center text-lg"
+                className="w-9 h-9 rounded-[10px] flex items-center justify-center"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2))",
@@ -225,6 +255,7 @@ export function GlobalChat() {
             <button
               onClick={() => setIsOpen(false)}
               className="text-white/40 hover:text-white transition-colors p-1"
+              aria-label="Close chat"
             >
               <X className="w-4 h-4" />
             </button>
@@ -233,15 +264,15 @@ export function GlobalChat() {
           {/* Messages */}
           <div
             ref={msgsRef}
-            className="flex flex-col gap-2.5 px-3.5 py-3.5 max-h-[280px] overflow-y-auto"
+            className="flex flex-col gap-2.5 px-3.5 py-3.5 max-h-[300px] overflow-y-auto"
           >
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`max-w-[88%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
+                className={`max-w-[88%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed whitespace-pre-wrap ${
                   msg.role === "user"
-                    ? "self-end bg-indigo-500 text-white border border-indigo-500/40 rounded-br-sm"
-                    : "self-start bg-white/[0.05] text-white/80 border border-white/[0.07] rounded-bl-sm"
+                    ? "self-end bg-indigo-500 text-white rounded-br-sm"
+                    : "self-start bg-white/[0.05] text-white/85 border border-white/[0.07] rounded-bl-sm"
                 }`}
               >
                 {msg.text || (msg.streaming ? "▋" : "")}
@@ -295,32 +326,20 @@ export function GlobalChat() {
         </div>
       )}
 
-      {/* Keyframe animations */}
       <style jsx global>{`
         @keyframes chatPulse {
-          0%,
-          100% {
-            box-shadow: 0 4px 24px rgba(99, 102, 241, 0.45),
-              0 0 0 0 rgba(99, 102, 241, 0.3);
+          0%, 100% {
+            box-shadow: 0 4px 24px rgba(99,102,241,0.45), 0 0 0 0 rgba(99,102,241,0.3);
           }
           50% {
-            box-shadow: 0 4px 24px rgba(99, 102, 241, 0.45),
-              0 0 0 12px rgba(99, 102, 241, 0);
+            box-shadow: 0 4px 24px rgba(99,102,241,0.45), 0 0 0 12px rgba(99,102,241,0);
           }
         }
         @keyframes chatIn {
-          from {
-            opacity: 0;
-            transform: translateY(12px) scale(0.97);
-          }
-          to {
-            opacity: 1;
-            transform: none;
-          }
+          from { opacity: 0; transform: translateY(12px) scale(0.97); }
+          to   { opacity: 1; transform: none; }
         }
-        .animate-chat-in {
-          animation: chatIn 0.25s ease;
-        }
+        .animate-chat-in { animation: chatIn 0.25s ease; }
       `}</style>
     </>
   );
