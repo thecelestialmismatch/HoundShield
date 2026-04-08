@@ -2,10 +2,20 @@
  * Brain AI — QueryEnginePort
  *
  * Multi-turn conversation engine with token budget enforcement and turn limits.
- * adapted for TypeScript/Next.js streaming.
  *
- * Manages session lifecycle, persists sessions, and orchestrates the
- * Kaelus ReAct loop through a clean QueryEngine interface.
+ * Evolution highlights:
+ *
+ *   • Real-time streaming — `streamSubmitMessage` now yields every intermediate
+ *     event (thinking, token, tool_call, tool_result) as they arrive, not just
+ *     the final `done` event. An AsyncQueue bridges the callback-based
+ *     executeAgentLoop into the async-generator interface.
+ *
+ *   • Error isolation — if the agent loop throws, the error is yielded as a
+ *     `{ type: "error" }` event and the generator completes cleanly rather than
+ *     propagating an unhandled rejection.
+ *
+ *   • Session persistence unchanged — Supabase save still happens after the
+ *     loop finishes so partial writes on disconnects are avoided.
  */
 
 import {
@@ -45,6 +55,61 @@ export type QueryEngineEvent =
   | { type: "budget_exceeded"; tokensUsed: number; maxTokens: number }
   | { type: "max_turns_reached"; turnsUsed: number };
 
+// ---------------------------------------------------------------------------
+// AsyncQueue — bridges callback-based emitters into async generators
+//
+// Pattern: producer calls push() from synchronous callbacks; consumer calls
+// the async iterator to pull items one at a time. close() signals end-of-stream.
+// ---------------------------------------------------------------------------
+
+class AsyncQueue<T> {
+  private items: T[] = [];
+  private waiters: Array<(value: IteratorResult<T>) => void> = [];
+  private closed = false;
+
+  /** Push an item into the queue. Resolves a waiting consumer if one exists. */
+  push(item: T): void {
+    if (this.waiters.length > 0) {
+      // Direct hand-off: avoid queuing if a consumer is already waiting
+      this.waiters.shift()!({ value: item, done: false });
+    } else {
+      this.items.push(item);
+    }
+  }
+
+  /** Signal that no more items will be pushed. */
+  close(): void {
+    this.closed = true;
+    while (this.waiters.length > 0) {
+      this.waiters.shift()!({ value: undefined as unknown as T, done: true });
+    }
+  }
+
+  async next(): Promise<IteratorResult<T>> {
+    if (this.items.length > 0) {
+      return { value: this.items.shift()!, done: false };
+    }
+    if (this.closed) {
+      return { value: undefined as unknown as T, done: true };
+    }
+    return new Promise<IteratorResult<T>>((resolve) => {
+      this.waiters.push(resolve);
+    });
+  }
+
+  async *[Symbol.asyncIterator](): AsyncIterableIterator<T> {
+    while (true) {
+      const result = await this.next();
+      if (result.done) return;
+      yield result.value;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// QueryEnginePort
+// ---------------------------------------------------------------------------
+
 export class QueryEnginePort {
   private config: QueryEngineConfig;
 
@@ -53,20 +118,25 @@ export class QueryEnginePort {
   }
 
   /**
-   * Submit a message and stream events. Sessions are persisted automatically.
-   * Port of QueryEnginePort.stream_submit_message() from Brain AI.
+   * Submit a message and stream events in real-time.
+   *
+   * Every intermediate event from the agent loop (thinking tokens, tool calls,
+   * tool results) is yielded immediately as the loop produces it — not batched
+   * until the turn is complete. This enables responsive streaming UIs.
+   *
+   * Sessions are persisted to Supabase after the loop finishes.
    */
   async *streamSubmitMessage(options: SubmitOptions): AsyncGenerator<QueryEngineEvent> {
     const cfg = { ...this.config, ...options.config };
     const { sessionId, userMessage, onEvent, apiKey } = options;
 
-    // Load or create session
+    // ── Load or create session ──────────────────────────────────────────────
     let session = await loadSession(sessionId);
     if (!session) {
       session = createSession(sessionId, cfg.systemPrompt);
     }
 
-    // Check token budget before starting
+    // ── Guard: token budget ─────────────────────────────────────────────────
     const currentTokens = session.inputTokens + session.outputTokens;
     if (currentTokens >= cfg.maxBudgetTokens) {
       const event: QueryEngineEvent = {
@@ -79,7 +149,7 @@ export class QueryEnginePort {
       return;
     }
 
-    // Count turns from message history (user messages only)
+    // ── Guard: turn limit ───────────────────────────────────────────────────
     const turnCount = session.messages.filter((m) => m.role === "user").length;
     if (turnCount >= cfg.maxTurns) {
       const event: QueryEngineEvent = {
@@ -91,83 +161,102 @@ export class QueryEnginePort {
       return;
     }
 
-    // Append user message to session
+    // ── Append user message and save ────────────────────────────────────────
     session = appendMessage(session, { role: "user", content: userMessage });
     await saveSession(session);
 
-    // Build messages for the LLM call
+    // ── Build messages for the LLM call ─────────────────────────────────────
     const messages = session.messages;
-
-    // Execute agent loop with streaming
     const usage = createUsageSummary();
     let outputContent = "";
     const matchedTools: TurnResult["matchedTools"] = [];
 
-    try {
-      // Dynamic import to avoid circular deps
-      const { executeAgentLoop } = await import("../agent/orchestrator");
-      const { AgentStreamEvent } = await import("../agent/types");
+    // ── Async queue: bridges executeAgentLoop callbacks → async generator ───
+    const queue = new AsyncQueue<QueryEngineEvent>();
 
-      const openRouterMessages = messages
-        .filter((m) => m.role !== "system")
-        .map((m) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-        }));
+    const { executeAgentLoop } = await import("../agent/orchestrator");
+    const { AgentStreamEvent } = await import("../agent/types");
 
-      await executeAgentLoop(openRouterMessages, {
-        model: cfg.model,
-        systemPrompt: messages.find((m) => m.role === "system")?.content ?? cfg.systemPrompt,
-        maxIterations: Math.min(cfg.maxTurns - turnCount, 15),
-        temperature: cfg.temperature,
-        apiKey: apiKey ?? process.env.OPENROUTER_API_KEY ?? "",
-        sessionId,
-        onEvent: (agentEvent: typeof AgentStreamEvent) => {
-          // Map agent events to QueryEngine events
-          const evt = agentEvent as { type: string; content?: string; toolName?: string; args?: unknown; result?: unknown; usage?: { inputTokens: number; outputTokens: number } };
+    const openRouterMessages = messages
+      .filter((m) => m.role !== "system")
+      .map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      }));
 
-          if (evt.type === "thinking" && evt.content) {
-            const qEvent: QueryEngineEvent = { type: "thinking", content: evt.content };
-            if (onEvent) onEvent(qEvent);
-          } else if (evt.type === "content" && evt.content) {
-            outputContent += evt.content;
-            const qEvent: QueryEngineEvent = { type: "token", content: evt.content };
-            if (onEvent) onEvent(qEvent);
-          } else if (evt.type === "tool_call" && evt.toolName) {
-            const qEvent: QueryEngineEvent = {
-              type: "tool_call",
-              toolName: evt.toolName,
-              args: evt.args ?? {},
-            };
-            if (onEvent) onEvent(qEvent);
-          } else if (evt.type === "tool_result" && evt.toolName) {
-            matchedTools.push({
-              name: evt.toolName,
-              category: "unknown",
-              prompt: userMessage,
-              handled: true,
-              result: evt.result,
-            });
-            const qEvent: QueryEngineEvent = {
-              type: "tool_result",
-              toolName: evt.toolName,
-              result: evt.result,
-            };
-            if (onEvent) onEvent(qEvent);
-          } else if (evt.type === "usage" && evt.usage) {
-            Object.assign(usage, addTurn(usage, evt.usage.inputTokens, evt.usage.outputTokens));
-          }
-        },
-      });
-    } catch (err) {
+    // Start the agent loop in the background; it pushes events into the queue
+    const loopPromise = executeAgentLoop(openRouterMessages, {
+      model: cfg.model,
+      systemPrompt: messages.find((m) => m.role === "system")?.content ?? cfg.systemPrompt,
+      maxIterations: Math.min(cfg.maxTurns - turnCount, 15),
+      temperature: cfg.temperature,
+      apiKey: apiKey ?? process.env.OPENROUTER_API_KEY ?? "",
+      sessionId,
+      onEvent: (agentEvent: typeof AgentStreamEvent) => {
+        const evt = agentEvent as {
+          type: string;
+          content?: string;
+          tool?: string;
+          args?: unknown;
+          result?: string;
+          usage?: { inputTokens?: number; outputTokens?: number; prompt?: number; completion?: number };
+        };
+
+        let qEvent: QueryEngineEvent | null = null;
+
+        if (evt.type === "thinking" && evt.content) {
+          qEvent = { type: "thinking", content: evt.content };
+        } else if (evt.type === "content" && evt.content) {
+          outputContent += evt.content;
+          qEvent = { type: "token", content: evt.content };
+        } else if (evt.type === "tool_call" && evt.tool) {
+          qEvent = { type: "tool_call", toolName: evt.tool, args: evt.args ?? {} };
+        } else if (evt.type === "tool_result" && evt.tool) {
+          matchedTools.push({
+            name: evt.tool,
+            category: "unknown",
+            prompt: userMessage,
+            handled: true,
+            result: evt.result,
+          });
+          qEvent = { type: "tool_result", toolName: evt.tool, result: evt.result };
+        } else if (evt.type === "usage" && evt.usage) {
+          const inp = evt.usage.inputTokens ?? evt.usage.prompt ?? 0;
+          const out = evt.usage.outputTokens ?? evt.usage.completion ?? 0;
+          Object.assign(usage, addTurn(usage, inp, out));
+          // usage events are internal bookkeeping — not forwarded to consumer
+          return;
+        } else if (evt.type === "error" && (evt as { message?: string }).message) {
+          qEvent = { type: "error", message: (evt as { message: string }).message };
+        }
+
+        if (qEvent) {
+          if (onEvent) onEvent(qEvent);
+          queue.push(qEvent);
+        }
+      },
+    }).catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err);
-      const event: QueryEngineEvent = { type: "error", message };
-      if (onEvent) onEvent(event);
+      const errEvent: QueryEngineEvent = { type: "error", message };
+      if (onEvent) onEvent(errEvent);
+      queue.push(errEvent);
+    }).finally(() => {
+      queue.close();
+    });
+
+    // ── Yield events as they arrive ─────────────────────────────────────────
+    for await (const event of queue) {
       yield event;
-      return;
+      // Stop consuming if we hit a terminal event
+      if (event.type === "error") {
+        await loopPromise;
+        return;
+      }
     }
 
-    // Persist assistant reply to session
+    await loopPromise;
+
+    // ── Persist assistant reply ─────────────────────────────────────────────
     if (outputContent) {
       session = appendMessage(session, { role: "assistant", content: outputContent });
       session = addTokenUsage(session, usage.inputTokens, usage.outputTokens);
@@ -190,8 +279,7 @@ export class QueryEnginePort {
   }
 
   /**
-   * Non-streaming version — collects all events and returns final TurnResult.
-   * Port of QueryEnginePort.submit_message() from Brain AI.
+   * Non-streaming version — collects all events and returns the final TurnResult.
    */
   async submitMessage(options: SubmitOptions): Promise<TurnResult> {
     let finalResult: TurnResult | null = null;
@@ -214,12 +302,12 @@ export class QueryEnginePort {
     return finalResult;
   }
 
-  /** Load persisted session for inspection */
+  /** Load persisted session for inspection. */
   async getSession(sessionId: string): Promise<StoredSession | null> {
     return loadSession(sessionId);
   }
 
-  /** Create a fresh session (e.g. new conversation) */
+  /** Create a fresh session (e.g. new conversation). */
   async newSession(sessionId: string): Promise<StoredSession> {
     const session = createSession(sessionId, this.config.systemPrompt);
     await saveSession(session);

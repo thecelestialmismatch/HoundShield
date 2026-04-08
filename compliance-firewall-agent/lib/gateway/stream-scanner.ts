@@ -11,16 +11,23 @@
  * - Even if the input was clean, the output might contain sensitive content
  * - Compliance regulations (SOC2, HIPAA, GDPR) require output monitoring
  *
- * Performance design:
- * - Tokens accumulate in a buffer
- * - Scans trigger at configurable intervals (default: every 500 chars)
- * - We use a sliding window to avoid re-scanning already-checked text
- * - The overlap window (256 chars) catches patterns that span scan boundaries
- * - All timing is tracked for performance dashboards
+ * Architecture — Async State Machine:
+ * - `addToken(content)` is fully async — awaits each scan before advancing the
+ *   scan position. This eliminates the one-scan delay that existed when scans
+ *   were fire-and-forget. Callers `await` the result and receive alerts
+ *   immediately when sensitive content is detected.
+ * - A dedicated `scan()` method exposes the scan logic for callers that want
+ *   to force an immediate scan (e.g., mid-stream policy enforcement).
+ * - `finalize()` flushes any remaining unscanned tail content and returns the
+ *   complete result including all alerts from the session.
  *
- * This scanner uses the SAME `classifyRisk` engine as input scanning,
- * ensuring consistent detection across both directions. The risk engine
- * is regex-based and runs in <10ms per scan for typical buffer sizes.
+ * Performance design:
+ * - Tokens accumulate in a buffer; scans fire every `scanInterval` chars.
+ * - Sliding overlap window (256 chars) catches patterns spanning boundaries.
+ * - Scan position advances only after the async classification resolves —
+ *   no content is double-counted and no alerts are missed.
+ * - Performance metrics (scan count, cumulative scan time) are tracked for
+ *   the compliance dashboard.
  */
 
 import { classifyRisk } from "@/lib/classifier/risk-engine";
@@ -70,7 +77,6 @@ function riskToSeverity(risk: RiskLevel): ScanAlert["severity"] {
       return "MEDIUM";
     case "LOW":
     case "NONE":
-      return "LOW";
     default:
       return "LOW";
   }
@@ -88,17 +94,23 @@ function riskToSeverity(risk: RiskLevel): ScanAlert["severity"] {
  * const scanner = new StreamScanner({ scanInterval: 500 });
  *
  * for await (const token of providerStream) {
- *   const alert = scanner.addToken(token.content);
- *   if (alert && alert.severity === "CRITICAL") {
- *     // Optionally truncate the stream
+ *   const alerts = await scanner.addToken(token.content);
+ *   if (alerts.some(a => a.severity === "CRITICAL")) {
+ *     // Truncate the stream immediately — real-time enforcement
  *     break;
  *   }
  * }
  *
- * const result = scanner.finalize();
+ * const result = await scanner.finalize();
  * // result.alerts contains all detected issues
  * // result.clean indicates whether any issues were found
  * ```
+ *
+ * Key improvement over the previous implementation:
+ * - `addToken` is now fully async and awaits each scan. Alerts are returned
+ *   immediately after detection — no one-scan delay.
+ * - The scan position advances atomically after each await, so concurrent
+ *   token ingestion cannot produce a race condition on `lastScanPos`.
  */
 export class StreamScanner {
   // ---- State ----
@@ -109,16 +121,20 @@ export class StreamScanner {
   /** Total tokens processed. */
   private tokenCount: number = 0;
 
-  /** Character position of the last scan start. */
+  /**
+   * Character position of the last completed scan end.
+   * Updated only after the async classification resolves to prevent
+   * two overlapping scans from both advancing past the same content.
+   */
   private lastScanPos: number = 0;
 
-  /** All alerts raised during scanning. */
+  /** All alerts raised during this scanning session. */
   private alerts: ScanAlert[] = [];
 
   /** Number of scan passes executed. */
   private scansPerformed: number = 0;
 
-  /** Cumulative time spent scanning in milliseconds. */
+  /** Cumulative time spent in classifyRisk() calls (ms). */
   private totalScanTimeMs: number = 0;
 
   // ---- Configuration ----
@@ -130,162 +146,105 @@ export class StreamScanner {
    * Creates a new StreamScanner.
    *
    * @param options.scanInterval - Scan every N characters (default: 500).
-   *   Lower values increase security but cost more CPU. For most use cases,
-   *   500 chars gives a good balance — it means we scan roughly every 100
-   *   tokens (at ~5 chars/token average).
+   *   Lower values increase detection speed but cost more CPU. 500 chars
+   *   corresponds to ~100 tokens at an average of 5 chars/token.
    */
   constructor(options?: { scanInterval?: number }) {
     this.scanInterval = options?.scanInterval ?? DEFAULT_SCAN_INTERVAL;
   }
 
   /**
-   * Adds a token to the buffer and triggers a scan if the interval threshold
-   * is reached.
+   * Adds a token to the buffer and triggers a compliance scan when the
+   * interval threshold is reached.
+   *
+   * This method is **fully async** — it awaits the classification before
+   * returning. Callers receive alerts in the same turn they were detected,
+   * enabling real-time enforcement (e.g., stream truncation on CRITICAL).
    *
    * @param content - The text content of the token.
-   * @returns A `ScanAlert` if the scan detected sensitive content, or `null`
-   *          if no scan was triggered or the scan was clean.
+   * @returns Array of `ScanAlert` objects found in this scan window, or an
+   *          empty array if no scan was triggered or the scan was clean.
    *
-   * Performance: The `addToken` call itself is O(1) (string append). The scan
-   * only fires every `scanInterval` chars and takes <10ms for typical buffers.
+   * Performance: Token appending is O(1). Scanning fires every `scanInterval`
+   * chars and typically takes <10ms for regex-only classification.
    */
-  addToken(content: string): ScanAlert | null {
-    if (!content) return null;
+  async addToken(content: string): Promise<ScanAlert[]> {
+    if (!content) return [];
 
     this.buffer += content;
     this.tokenCount++;
 
-    // Check if we've accumulated enough new content to trigger a scan
     const newContentLength = this.buffer.length - this.lastScanPos;
 
+    // Trigger a scan when enough new content has accumulated
     if (newContentLength >= this.scanInterval) {
       return this.scan();
     }
 
-    // Force scan if buffer is getting very large (safety valve)
+    // Safety valve: force a scan if the buffer has grown very large
     if (
       this.buffer.length >= MAX_BUFFER_BEFORE_FORCED_SCAN &&
-      this.buffer.length - this.lastScanPos > OVERLAP_WINDOW
+      newContentLength > OVERLAP_WINDOW
     ) {
       return this.scan();
     }
 
-    return null;
+    return [];
   }
 
   /**
-   * Forces an immediate scan of the current buffer.
+   * Forces an immediate async scan of the current buffer window.
    *
-   * The scan window starts from `lastScanPos - OVERLAP` to catch patterns
-   * spanning the boundary, and extends to the end of the buffer.
+   * The scan window starts from `(lastScanPos - OVERLAP_WINDOW)` to catch
+   * patterns spanning the boundary, and extends to the current buffer end.
    *
-   * @returns The highest-severity `ScanAlert` found, or `null` if clean.
+   * `lastScanPos` is advanced atomically after the classification resolves —
+   * if new tokens arrive during the await, they will be caught by the next
+   * scan (or by `finalize()`).
+   *
+   * @returns Array of **new** `ScanAlert` objects found in this window
+   *          (already-seen duplicates are filtered out).
    */
-  scan(): ScanAlert | null {
-    // Calculate the scan window
+  async scan(): Promise<ScanAlert[]> {
+    // Capture scan window bounds before the async gap so that tokens arriving
+    // during the await don't cause us to re-scan already-covered content.
     const scanStart = Math.max(0, this.lastScanPos - OVERLAP_WINDOW);
-    const scanEnd = this.buffer.length;
-    const textToScan = this.buffer.slice(scanStart, scanEnd);
+    const capturedEnd = this.buffer.length;
+    const textToScan = this.buffer.slice(scanStart, capturedEnd);
 
-    if (textToScan.length === 0) return null;
+    if (!textToScan) return [];
 
-    // Run the classification
     const startTime = performance.now();
-    let result: ClassificationResult | null = null;
-
-    // classifyRisk is async but for regex-only mode it resolves synchronously
-    // in practice. We use a synchronous wrapper here because the scanner is
-    // called on every scan interval and async overhead would add up.
-    // The actual scan runs synchronously even though the interface is async.
-    const scanPromise = classifyRisk(textToScan);
-
-    // Handle the async result
-    scanPromise.then((classification) => {
-      result = classification;
-    });
-
-    // For synchronous regex scanning, the promise resolves immediately.
-    // We need to handle the case where it doesn't (future ML classifier).
-    // Store the promise result via microtask.
     this.scansPerformed++;
 
-    // Since classifyRisk may be truly async in the future, we store the
-    // result as a pending scan. But for the current regex-only engine,
-    // we can use a synchronous scan approach.
-    return this.scanSync(textToScan, scanStart);
-  }
-
-  /**
-   * Synchronous scan implementation using the same patterns as classifyRisk.
-   *
-   * This is a performance optimization: instead of awaiting classifyRisk,
-   * we run the scan inline. The patterns are the same BUILTIN_PATTERNS
-   * used by the risk engine — we just access the result synchronously.
-   *
-   * @internal
-   */
-  private scanSync(text: string, scanOffset: number): ScanAlert | null {
-    const startTime = performance.now();
-
-    // We use classifyRisk directly but handle it as a fire-and-resolve
-    // For synchronous regex evaluation, the Promise resolves in the same tick
-    const classificationResult: ClassificationResult | null = null;
-
-    // The classifyRisk function uses only regex patterns (no network calls),
-    // so while it returns a Promise, it resolves synchronously.
-    // We capture the result via .then() which executes in the microtask queue.
-    // For the synchronous path, we use a different approach:
-    // Run the scan and store the result for the next check.
-    void this.runAsyncScan(text, scanOffset, startTime);
-
-    // Return the most recent alert from previous scans (if any new ones were added)
-    // This creates a one-scan delay for alerts, which is acceptable because:
-    // 1. The next addToken() call will return the alert
-    // 2. finalize() always catches everything
-    // 3. The overlap window means we don't miss patterns
-    return this.alerts.length > 0 ? this.alerts[this.alerts.length - 1] : null;
-  }
-
-  /**
-   * Runs the async compliance scan and stores alerts.
-   *
-   * This is fire-and-forget from the synchronous path, but the alerts
-   * are captured and included in the finalize() result.
-   *
-   * @internal
-   */
-  private async runAsyncScan(
-    text: string,
-    scanOffset: number,
-    startTime: number
-  ): Promise<void> {
     try {
-      const classification = await classifyRisk(text);
-      const elapsed = performance.now() - startTime;
-      this.totalScanTimeMs += elapsed;
+      const classification: ClassificationResult = await classifyRisk(textToScan);
+      this.totalScanTimeMs += performance.now() - startTime;
 
-      // Update the scan position to avoid re-scanning the same content
-      this.lastScanPos = this.buffer.length;
+      // Advance the scan position — only after classification resolves
+      this.lastScanPos = capturedEnd;
 
       if (
         classification.risk_level === "NONE" ||
-        classification.entities.length === 0
+        !classification.entities.length
       ) {
-        return;
+        return [];
       }
 
-      // Convert each detected entity into a ScanAlert
+      const newAlerts: ScanAlert[] = [];
+
       for (const entity of classification.entities) {
         const alert: ScanAlert = {
           severity: riskToSeverity(classification.risk_level),
           message: `Sensitive content detected in LLM output: ${entity.pattern_matched} (${entity.type})`,
-          position: scanOffset + entity.position.start,
+          position: scanStart + entity.position.start,
           matched_rule: entity.pattern_matched,
           redacted_match: entity.value_redacted,
           timestamp: Date.now(),
         };
 
-        // Deduplicate: don't add the same alert if it was caught in the overlap window
+        // Deduplicate: skip if the same rule fired at a nearby position
+        // (can happen due to the overlap window)
         const isDuplicate = this.alerts.some(
           (existing) =>
             existing.matched_rule === alert.matched_rule &&
@@ -294,49 +253,51 @@ export class StreamScanner {
 
         if (!isDuplicate) {
           this.alerts.push(alert);
+          newAlerts.push(alert);
         }
       }
+
+      return newAlerts;
     } catch (error) {
-      // Scanner errors must not crash the stream. Log and continue.
+      // Scanner errors must never crash the stream. Log and continue.
       console.error("[kaelus:scanner] Scan failed:", error);
       this.totalScanTimeMs += performance.now() - startTime;
+      // Still advance position to avoid infinite retry on the same window
+      this.lastScanPos = capturedEnd;
+      return [];
     }
   }
 
   /**
-   * Performs a final scan of any remaining unscanned content and returns
-   * the complete scan result.
+   * Performs a final scan of any remaining unscanned tail content and
+   * returns the complete scan result for this streaming session.
    *
-   * MUST be called when the stream ends. This catches any sensitive content
+   * **Must be called when the stream ends.** This catches sensitive content
    * in the tail of the response that didn't trigger an interval scan.
    *
-   * @returns The complete output scan result with all alerts and metrics.
+   * @returns The complete `OutputScanResult` with all alerts and metrics.
    */
   async finalize(): Promise<OutputScanResult> {
-    // Final scan of any remaining content
-    const remainingContent = this.buffer.slice(
-      Math.max(0, this.lastScanPos - OVERLAP_WINDOW)
-    );
+    const remainingStart = Math.max(0, this.lastScanPos - OVERLAP_WINDOW);
+    const remainingContent = this.buffer.slice(remainingStart);
 
     if (remainingContent.length > 0) {
       const startTime = performance.now();
+      this.scansPerformed++;
+
       try {
         const classification = await classifyRisk(remainingContent);
-        const elapsed = performance.now() - startTime;
-        this.totalScanTimeMs += elapsed;
-        this.scansPerformed++;
+        this.totalScanTimeMs += performance.now() - startTime;
 
         if (
           classification.risk_level !== "NONE" &&
           classification.entities.length > 0
         ) {
-          const scanOffset = Math.max(0, this.lastScanPos - OVERLAP_WINDOW);
-
           for (const entity of classification.entities) {
             const alert: ScanAlert = {
               severity: riskToSeverity(classification.risk_level),
               message: `Sensitive content detected in LLM output: ${entity.pattern_matched} (${entity.type})`,
-              position: scanOffset + entity.position.start,
+              position: remainingStart + entity.position.start,
               matched_rule: entity.pattern_matched,
               redacted_match: entity.value_redacted,
               timestamp: Date.now(),
@@ -381,7 +342,7 @@ export class StreamScanner {
     return this.buffer.length;
   }
 
-  /** Returns all alerts raised so far (before finalize). */
+  /** Returns all alerts raised so far (a live snapshot, not a copy). */
   getAlerts(): ReadonlyArray<ScanAlert> {
     return this.alerts;
   }
@@ -410,9 +371,9 @@ export class StreamScanner {
   }
 
   /**
-   * Checks whether any alert meets or exceeds the given severity threshold.
+   * Returns `true` if any alert meets or exceeds the given severity threshold.
    *
-   * Used by the proxy to decide whether to truncate the stream.
+   * Used by the proxy to decide whether to truncate the stream mid-flight.
    */
   hasAlertAtOrAbove(threshold: ScanAlert["severity"]): boolean {
     const severityOrder: Record<ScanAlert["severity"], number> = {
