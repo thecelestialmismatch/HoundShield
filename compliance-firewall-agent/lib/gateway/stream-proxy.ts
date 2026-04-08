@@ -4,20 +4,34 @@
  * This module is the heart of the product. It:
  *   1. Runs an input compliance scan on the user's messages.
  *   2. Proxies the request to the upstream LLM provider in streaming mode.
- *   3. Accumulates the response tokens and runs an output scan.
+ *   3. Scans output tokens IN REAL-TIME using StreamScanner (not post-hoc).
  *   4. Yields typed events that callers (SSE route, WebSocket handler) can
  *      convert to their wire format.
+ *
+ * Evolution highlights vs. the previous implementation:
+ *
+ * - **Real-time output scanning**: StreamScanner is now integrated into the
+ *   token-streaming loop. Alerts surface mid-stream instead of at the end.
+ *   The proxy can truncate the stream immediately when a CRITICAL alert fires.
+ *
+ * - **Provider retry with exponential backoff**: 429 (rate-limit) and 503
+ *   (service unavailable) responses are retried up to 3 times before failing.
+ *
+ * - **`scan_alert` event type**: Callers receive real-time compliance alerts
+ *   as a new `scan_alert` event during streaming — not just a summary at done.
+ *
+ * - **First-token timeout**: If the provider doesn't produce the first token
+ *   within `firstTokenTimeoutMs` (default 30s), the stream is aborted.
  *
  * The function is an AsyncGenerator so it works naturally with both
  * `for await...of` loops (SSE) and imperative `.next()` calls (WebSocket).
  *
- * Provider support: OpenAI, Anthropic, Google (Gemini). Each has its own
- * request/response format and SSE dialect, abstracted behind provider
- * adapters below.
+ * Provider support: OpenAI, Anthropic, Google (Gemini), OpenRouter.
  */
 
 import { randomUUID } from "crypto";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
+import { StreamScanner } from "./stream-scanner";
 import { extractPromptFromBody } from "@/lib/interceptor/request-parser";
 import type { RiskLevel, ActionTaken } from "@/lib/supabase/types";
 
@@ -36,12 +50,24 @@ export interface StreamRequest {
   temperature?: number;
   max_tokens?: number;
   user_id?: string;
+  /** Truncate the stream when output scan finds content at or above this level. */
+  truncate_on_severity?: "HIGH" | "CRITICAL";
+}
+
+export interface StreamProxyOptions {
+  /** Scan output every N characters (default: 500). */
+  outputScanInterval?: number;
+  /** Milliseconds to wait for first token before aborting (default: 30 000). */
+  firstTokenTimeoutMs?: number;
+  /** Maximum retries on 429/503 from provider (default: 3). */
+  maxProviderRetries?: number;
 }
 
 /** Discriminated union of all event types emitted by the stream proxy. */
 export type StreamEvent =
   | { type: "compliance_check"; data: ComplianceCheckData }
   | { type: "token"; data: TokenData }
+  | { type: "scan_alert"; data: ScanAlertData }
   | { type: "output_scan"; data: OutputScanData }
   | { type: "done"; data: DoneData }
   | { type: "error"; data: ErrorData };
@@ -58,6 +84,15 @@ export interface TokenData {
   content: string;
   index: number;
   model: string;
+}
+
+export interface ScanAlertData {
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  matched_rule: string;
+  redacted_match: string;
+  position: number;
+  truncated: boolean;
+  request_id: string;
 }
 
 export interface OutputScanData {
@@ -83,6 +118,67 @@ export interface ErrorData {
   message: string;
   code?: string;
   request_id?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Retry delays for provider errors (ms)
+// ---------------------------------------------------------------------------
+
+/** Exponential backoff delays for provider 429 / 503 retries. */
+const RETRY_DELAYS_MS = [1_000, 2_000, 4_000];
+
+/**
+ * Fetches from `url` with automatic retry on 429 (Too Many Requests) and
+ * 503 (Service Unavailable). Respects the `Retry-After` header when present.
+ */
+async function fetchWithRetry(
+  url: string,
+  init: RequestInit,
+  maxRetries: number
+): Promise<Response> {
+  let lastResponse: Response | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    let response: Response;
+
+    try {
+      response = await fetch(url, init);
+    } catch (err) {
+      // Network error — retry if attempts remain
+      if (attempt < maxRetries) {
+        await delay(RETRY_DELAYS_MS[Math.min(attempt, RETRY_DELAYS_MS.length - 1)]);
+        continue;
+      }
+      throw err;
+    }
+
+    if (
+      (response.status === 429 || response.status === 503) &&
+      attempt < maxRetries
+    ) {
+      lastResponse = response;
+      // Honour Retry-After if provided, otherwise use exponential backoff
+      const retryAfterSec = parseInt(
+        response.headers.get("retry-after") ?? "0",
+        10
+      );
+      const waitMs =
+        retryAfterSec > 0
+          ? retryAfterSec * 1_000
+          : RETRY_DELAYS_MS[Math.min(attempt, RETRY_DELAYS_MS.length - 1)];
+      await delay(waitMs);
+      continue;
+    }
+
+    return response;
+  }
+
+  // Return the last received response (will be handled as an error downstream)
+  return lastResponse!;
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // ---------------------------------------------------------------------------
@@ -193,7 +289,6 @@ const PROVIDERS: Record<StreamProvider, ProviderConfig> = {
       },
     }),
     parseChunk: (line) => {
-      // Gemini streams JSON arrays; each chunk has candidates[0].content.parts[0].text
       if (!line.startsWith("data: ")) return null;
       try {
         const json = JSON.parse(line.slice(6));
@@ -213,21 +308,30 @@ const PROVIDERS: Record<StreamProvider, ProviderConfig> = {
  * Streams an LLM request through the compliance pipeline.
  *
  * Yields events in order:
- *   1. `compliance_check` — result of the input scan
- *   2. `token` (0..N)    — streamed response tokens from the provider
- *   3. `output_scan`     — result of scanning the assembled output
- *   4. `done`            — summary with timing and token counts
+ *   1. `compliance_check`      — result of the input scan
+ *   2. `token` (0..N)          — streamed response tokens from the provider
+ *   3. `scan_alert` (0..M)     — real-time output compliance alerts (NEW)
+ *   4. `output_scan`           — final output scan summary
+ *   5. `done`                  — overall summary with timing and token counts
  *
- * If the input scan blocks or quarantines the request, only
- * `compliance_check` and `done` are yielded (no provider call).
+ * If the input scan blocks/quarantines the request, only `compliance_check`
+ * and `done` are yielded (no provider call).
  *
- * If any error occurs, an `error` event is yielded and the generator returns.
+ * If the output scanner finds a CRITICAL alert and `truncate_on_severity`
+ * is set to `"CRITICAL"` (or `"HIGH"`), the stream is truncated immediately
+ * after that `scan_alert` event.
  */
 export async function* streamProxy(
-  request: StreamRequest
+  request: StreamRequest,
+  options: StreamProxyOptions = {}
 ): AsyncGenerator<StreamEvent, void, undefined> {
   const overallStart = performance.now();
   const requestId = request.request_id || randomUUID();
+  const {
+    outputScanInterval = 500,
+    firstTokenTimeoutMs = 30_000,
+    maxProviderRetries = 3,
+  } = options;
 
   // -----------------------------------------------------------------------
   // Step 1: Input compliance scan
@@ -282,7 +386,7 @@ export async function* streamProxy(
   }
 
   // -----------------------------------------------------------------------
-  // Step 2: Stream from the upstream LLM provider
+  // Step 2: Build and send the upstream provider request (with retry)
   // -----------------------------------------------------------------------
   const provider = PROVIDERS[request.provider];
   if (!provider) {
@@ -309,16 +413,18 @@ export async function* streamProxy(
   let response: Response;
 
   try {
-    response = await fetch(providerUrl, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(body),
-    });
+    response = await fetchWithRetry(
+      providerUrl,
+      { method: "POST", headers, body: JSON.stringify(body) },
+      maxProviderRetries
+    );
   } catch (fetchError) {
     yield {
       type: "error",
       data: {
-        message: `Failed to connect to ${request.provider}: ${fetchError instanceof Error ? fetchError.message : "Unknown error"}`,
+        message: `Failed to connect to ${request.provider}: ${
+          fetchError instanceof Error ? fetchError.message : "Unknown error"
+        }`,
         code: "PROVIDER_CONNECTION_ERROR",
         request_id: requestId,
       },
@@ -357,22 +463,40 @@ export async function* streamProxy(
   }
 
   // -----------------------------------------------------------------------
-  // Step 3: Read the SSE stream from the provider, yield token events
+  // Step 3: Stream tokens + real-time output scanning
   // -----------------------------------------------------------------------
+  const scanner = new StreamScanner({ scanInterval: outputScanInterval });
+  const truncateSeverity = request.truncate_on_severity;
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
   let tokenIndex = 0;
-  const outputParts: string[] = [];
+  let truncated = false;
+  let firstTokenReceived = false;
+
+  // First-token timeout: abort the stream if the provider stalls
+  let firstTokenTimer: ReturnType<typeof setTimeout> | null = null;
+  const firstTokenController = new AbortController();
+
+  const firstTokenTimeoutPromise = new Promise<never>((_, reject) => {
+    firstTokenTimer = setTimeout(() => {
+      firstTokenController.abort();
+      reject(new Error(`Provider did not produce the first token within ${firstTokenTimeoutMs}ms`));
+    }, firstTokenTimeoutMs);
+  });
 
   try {
-    while (true) {
-      const { done, value } = await reader.read();
+    outer: while (true) {
+      // Race the read against the first-token timeout (only until first token)
+      const readPromise = reader.read();
+      const { done, value } = firstTokenReceived
+        ? await readPromise
+        : await Promise.race([readPromise, firstTokenTimeoutPromise]);
+
       if (done) break;
 
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split("\n");
-      // Keep the last partial line in the buffer
       buffer = lines.pop() ?? "";
 
       for (const line of lines) {
@@ -381,67 +505,102 @@ export async function* streamProxy(
 
         const content = provider.parseChunk(trimmed);
         if (content !== null && content.length > 0) {
-          outputParts.push(content);
+          if (!firstTokenReceived) {
+            firstTokenReceived = true;
+            if (firstTokenTimer) clearTimeout(firstTokenTimer);
+          }
+
           yield {
             type: "token",
+            data: { content, index: tokenIndex++, model: request.model },
+          };
+
+          // Real-time output scan — await so alerts are immediate
+          const newAlerts = await scanner.addToken(content);
+          for (const alert of newAlerts) {
+            const isTruncating =
+              truncateSeverity !== undefined &&
+              (alert.severity === truncateSeverity ||
+                (truncateSeverity === "HIGH" && alert.severity === "CRITICAL"));
+
+            yield {
+              type: "scan_alert",
+              data: {
+                severity: alert.severity,
+                matched_rule: alert.matched_rule,
+                redacted_match: alert.redacted_match,
+                position: alert.position,
+                truncated: isTruncating,
+                request_id: requestId,
+              },
+            };
+
+            if (isTruncating) {
+              truncated = true;
+              break outer;
+            }
+          }
+        }
+      }
+    }
+
+    // Flush any remaining partial buffer line
+    if (!truncated && buffer.trim()) {
+      const content = provider.parseChunk(buffer.trim());
+      if (content !== null && content.length > 0) {
+        yield {
+          type: "token",
+          data: { content, index: tokenIndex++, model: request.model },
+        };
+        const newAlerts = await scanner.addToken(content);
+        for (const alert of newAlerts) {
+          yield {
+            type: "scan_alert",
             data: {
-              content,
-              index: tokenIndex++,
-              model: request.model,
+              severity: alert.severity,
+              matched_rule: alert.matched_rule,
+              redacted_match: alert.redacted_match,
+              position: alert.position,
+              truncated: false,
+              request_id: requestId,
             },
           };
         }
       }
     }
-
-    // Process any remaining buffer content
-    if (buffer.trim()) {
-      const content = provider.parseChunk(buffer.trim());
-      if (content !== null && content.length > 0) {
-        outputParts.push(content);
-        yield {
-          type: "token",
-          data: {
-            content,
-            index: tokenIndex++,
-            model: request.model,
-          },
-        };
-      }
-    }
   } catch (streamError) {
+    if (firstTokenTimer) clearTimeout(firstTokenTimer);
     yield {
       type: "error",
       data: {
-        message: `Stream read error: ${streamError instanceof Error ? streamError.message : "Unknown error"}`,
+        message: `Stream read error: ${
+          streamError instanceof Error ? streamError.message : "Unknown error"
+        }`,
         code: "STREAM_READ_ERROR",
         request_id: requestId,
       },
     };
     return;
+  } finally {
+    if (firstTokenTimer) clearTimeout(firstTokenTimer);
+    // Ensure reader is released even if we broke out of the loop early
+    reader.releaseLock();
   }
 
   const providerTimeMs = Math.round(performance.now() - providerStart);
 
   // -----------------------------------------------------------------------
-  // Step 4: Output compliance scan
+  // Step 4: Finalize output scan (catches any unscanned tail content)
   // -----------------------------------------------------------------------
-  const outputText = outputParts.join("");
-  const outputScanStart = performance.now();
-  const outputClassification = await classifyRisk(outputText);
-  const outputScanTimeMs = Math.round(performance.now() - outputScanStart);
+  const outputScanResult = await scanner.finalize();
 
-  const outputAlerts: string[] = [];
-  if (outputClassification.entities.length > 0) {
-    for (const entity of outputClassification.entities) {
-      outputAlerts.push(
-        `${entity.type}: ${entity.value_redacted} (${Math.round(entity.confidence * 100)}%)`
-      );
-    }
-  }
+  const outputAlerts: string[] = outputScanResult.alerts.map(
+    (a) =>
+      `${a.severity} [${a.matched_rule}]: ${a.redacted_match}`
+  );
 
   const outputStatus: "clean" | "warning" =
-    outputClassification.entities.length > 0 ? "warning" : "clean";
+    outputScanResult.alerts.length > 0 ? "warning" : "clean";
 
   yield {
     type: "output_scan",
@@ -449,7 +608,7 @@ export async function* streamProxy(
       status: outputStatus,
       tokens_scanned: tokenIndex,
       alerts: outputAlerts,
-      scan_time_ms: outputScanTimeMs,
+      scan_time_ms: outputScanResult.scan_time_ms,
     },
   };
 
