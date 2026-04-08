@@ -288,10 +288,10 @@ All 110 controls tracked. Live SPRS score calculation using DoD methodology v1.2
 - [x] PDF compliance reports
 - [x] Stripe billing (5 tiers)
 - [x] Multi-framework dashboard (SOC 2, HIPAA, CMMC)
-- [ ] Slack / Teams native integration
-- [ ] SIEM connector (Splunk, Sentinel)
-- [ ] On-prem Docker deployment
-- [ ] Blockchain-anchored audit trail
+- [x] Slack / Teams native integration
+- [x] SIEM connector (Splunk, Sentinel)
+- [x] On-prem Docker deployment
+- [x] Blockchain-anchored audit trail
 - [ ] Browser extension (Chrome, Edge)
 - [ ] Mobile app (iOS, Android)
 
