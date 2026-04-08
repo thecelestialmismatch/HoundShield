@@ -32,6 +32,7 @@
 import { randomUUID } from "crypto";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { StreamScanner } from "./stream-scanner";
+import { modelLeaderboard } from "./model-leaderboard";
 import { extractPromptFromBody } from "@/lib/interceptor/request-parser";
 import type { RiskLevel, ActionTaken } from "@/lib/supabase/types";
 
@@ -613,7 +614,23 @@ export async function* streamProxy(
   };
 
   // -----------------------------------------------------------------------
-  // Step 5: Done
+  // Step 5: Record to model leaderboard (non-blocking, O(1))
+  // -----------------------------------------------------------------------
+  modelLeaderboard.record({
+    model: request.model,
+    provider: request.provider,
+    action: inputStatus === "passed"
+      ? outputStatus === "warning" ? "QUARANTINED" : "ALLOWED"
+      : inputStatus === "blocked" ? "BLOCKED" : "QUARANTINED",
+    riskLevel: classification.risk_level,
+    categories: classification.classifications ?? [],
+    confidence: classification.confidence,
+    outputTruncated: truncated,
+    latencyMs: Math.round(performance.now() - overallStart),
+  });
+
+  // -----------------------------------------------------------------------
+  // Step 6: Done
   // -----------------------------------------------------------------------
   yield {
     type: "done",
