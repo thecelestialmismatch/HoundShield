@@ -67,6 +67,8 @@ token.json
 
 # ── Database dumps ─────────────────────────────────────────────────────────
 *.sql
+# Exception: Supabase migration files must be tracked
+!supabase/migrations/*.sql
 *.dump
 *.sqlite
 *.db
