@@ -156,6 +156,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // ── Known Bug Fix: /auth/signup returns 404 — redirect to /signup ────────
+  if (pathname === '/auth/signup') {
+    return NextResponse.redirect(new URL('/signup', request.url));
+  }
+
   // ── Auth: Refresh session + protect routes ────────────────────────────────
   // Only run Supabase logic on routes that actually need authentication.
   // Skipping it on pure API routes and public pages reduces cold-start

@@ -47,6 +47,7 @@ import {
   Bar,
   LineChart,
   Line,
+  ComposedChart,
   RadarChart,
   Radar,
   PolarGrid,
@@ -62,7 +63,7 @@ import {
   getRemediationPriorities,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses } from "@/lib/shieldready/storage";
-import { BarLineChartPlayer } from "@/components/remotion/BarLineChartPlayer";
+// BarLineChartPlayer (Remotion) moved to legacy — using Recharts ComposedChart instead
 
 /* ── Chart Colors ──────────────────────────────────────────────── */
 const CHART_BLUE = "#2563EB";
@@ -229,6 +230,32 @@ const riskColor: Record<string, string> = {
   MEDIUM: "text-amber-500",
   LOW: "text-emerald-500",
 };
+
+/* ── Revenue Chart (replaces Remotion BarLineChartPlayer) ──────── */
+const REVENUE_DATA = [
+  { month: "Jan", revenue: 0, conversion: 0 },
+  { month: "Feb", revenue: 800, conversion: 1.2 },
+  { month: "Mar", revenue: 2400, conversion: 2.8 },
+  { month: "Apr", revenue: 4100, conversion: 3.5 },
+  { month: "May", revenue: 6800, conversion: 4.9 },
+  { month: "Jun", revenue: 9200, conversion: 6.1 },
+];
+
+function RevenueChart() {
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <ComposedChart data={REVENUE_DATA} margin={{ top: 4, right: 16, left: 0, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+        <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }} axisLine={false} tickLine={false} />
+        <YAxis yAxisId="left" tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
+        <YAxis yAxisId="right" orientation="right" tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
+        <Tooltip contentStyle={{ background: "#0e0e18", border: "1px solid rgba(99,102,241,0.25)", borderRadius: 8, fontSize: 12 }} />
+        <Bar yAxisId="left" dataKey="revenue" fill={CHART_BLUE} fillOpacity={0.7} radius={[3, 3, 0, 0]} name="Revenue ($)" />
+        <Line yAxisId="right" type="monotone" dataKey="conversion" stroke={CHART_EMERALD} strokeWidth={2} dot={false} name="Conversion (%)" />
+      </ComposedChart>
+    </ResponsiveContainer>
+  );
+}
 
 /* ══════════════════════════════════════════════════════════════════
    COMMAND CENTER OVERVIEW
@@ -765,7 +792,7 @@ export default function CommandCenterOverview() {
           </div>
           <span className="text-xs font-mono text-brand-400 bg-brand-400/10 px-2 py-1 rounded-lg">LIVE</span>
         </div>
-        <BarLineChartPlayer />
+        <RevenueChart />
       </div>
 
       {/* ── Quick Actions ── */}
