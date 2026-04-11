@@ -461,12 +461,85 @@ curl https://kaelus.online/api/gateway/intercept/chat/completions \
   └──────────────────────────────────────────────────────────┘
 ```
 
+### Multi-Agent System
+
+Five specialized compliance agents powered by the Kaelus ReAct orchestrator:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                  Kaelus Multi-Agent System                       │
+│                                                                  │
+│  AgentRouter — classifies task → routes to best agent           │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐               │
+│  │  Scanner    │ │  Policy     │ │  Research   │               │
+│  │  Agent      │ │  Agent      │ │  Agent      │               │
+│  │  Real-time  │ │  Rule eval  │ │  Reg docs   │               │
+│  │  PHI/CUI    │ │  Exception  │ │  NIST/CMMC  │               │
+│  │  detection  │ │  requests   │ │  HIPAA/SOC2 │               │
+│  └─────────────┘ └─────────────┘ └─────────────┘               │
+│  ┌──────────────────────┐ ┌──────────────────┐                  │
+│  │  Optimization Agent  │ │  Auditor Agent   │                  │
+│  │  Latency profiling   │ │  SPRS scoring    │                  │
+│  │  Cost/model routing  │ │  SHA-256 chain   │                  │
+│  │  P50/P95/P99 metrics │ │  PDF evidence    │                  │
+│  └──────────────────────┘ └──────────────────┘                  │
+│                                                                  │
+│  Shared: agentMemory (conversation + insights + preferences)     │
+│  Brain AI knowledge index (queryKnowledge → context injection)   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+| Agent | Model | Tools | Use |
+|---|---|---|---|
+| **Scanner** | Gemini 2.0 Flash | compliance-scan, data-query, knowledge-base | PHI/CUI/PII detection |
+| **Policy** | Claude 3 Haiku | compliance-scan, data-query, web-search | Rule eval + exceptions |
+| **Research** | Llama 3.3 70B | web-search, web-browse, knowledge-base | Regulation research |
+| **Optimizer** | Gemini 2.0 Flash | data-query, generate-chart, code-execute | Latency + cost tuning |
+| **Auditor** | DeepSeek V3 | data-query, file-analyze, generate-chart | SPRS scoring + reports |
+
+### Brain AI — Knowledge Ingestion Pipeline
+
+```
+IngestionSource (URL or content)
+    │
+    ▼ fetchContent (10s timeout, 500KB limit)
+    │
+    ▼ normalizeContent (strip HTML/markdown noise)
+    │
+    ▼ chunkText (800-char chunks, 100-char overlap)
+    │
+    ▼ contentHash (SHA-256 dedup — never re-index)
+    │
+    ▼ extractTags (compliance · security · agents · performance)
+    │
+    ▼ knowledgeStore (global Map — zero external deps)
+    │
+    ▼ queryKnowledge (keyword scoring → agent context injection)
+```
+
+API: `POST /api/brain-ai/ingest` · `GET /api/brain-ai/ingest?q=<query>&domain=compliance`
+
+### Performance Enforcement
+
+Every gateway operation runs inside `withBudget()` — hard latency gates with P50/P95/P99 tracking:
+
+| Operation | Budget | Action on Breach |
+|---|---|---|
+| Regex scan | **5ms** | WARN log + counter increment |
+| ML/semantic scan | **10ms** | WARN log + counter increment |
+| Gateway total | **50ms** | ERROR log + violation event |
+| First token | **200ms** | WARN (provider-side) |
+
+SHA-256 audit chain: every log entry hashes `{id, timestamp, event_type, actor, data, prevHash}` — any tampering breaks all subsequent hashes.
+
+API: `GET /api/gateway/metrics` — live P50/P95/P99 + exceedance rates + health status
+
 **Stack:**
 
 | Layer | Technology |
 |---|---|
 | **Frontend** | Next.js 15, React 19, TypeScript 5.8, Tailwind CSS, Framer Motion |
-| **Backend** | Next.js API routes (Edge Runtime), Supabase PostgreSQL + RLS |
+| **Backend** | Next.js API routes (Node.js runtime), Supabase PostgreSQL + RLS |
 | **AI Engine** | OpenRouter (800+ models), Gemini Flash (ML scanning) |
 | **Auth** | Supabase Auth — Google, GitHub, Microsoft OAuth |
 | **Billing** | Stripe — 5 subscription tiers |
@@ -474,6 +547,8 @@ curl https://kaelus.online/api/gateway/intercept/chat/completions \
 | **Blockchain** | Viem + Base L2 (Ethereum L2) — ~$0.001 per anchor |
 | **Email** | Resend — transactional notifications |
 | **Deployment** | Vercel (cloud) · Docker + nginx (self-hosted) |
+| **Multi-Agent** | 5 specialized ReAct agents via OpenRouter (free + paid models) |
+| **Brain AI** | SHA-256 dedup knowledge index, keyword search, domain tagging |
 
 ---
 
