@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaelus AI Firewall</title>
+    <link rel="stylesheet" href="src/popup.css" />
+  </head>
+  <body>
+    <div class="popup">
+      <!-- Header -->
+      <header class="popup-header">
+        <div class="popup-logo">
+          <span class="popup-shield" aria-hidden="true">🛡️</span>
+          <span class="popup-brand">Kaelus</span>
+        </div>
+        <div class="popup-status" id="status-indicator">
+          <span class="status-dot" id="status-dot"></span>
+          <span class="status-label" id="status-label">Active</span>
+        </div>
+      </header>
+
+      <!-- Toggle row -->
+      <div class="toggle-row">
+        <label class="toggle-label" for="enabled-toggle">
+          AI Firewall
+        </label>
+        <button
+          id="enabled-toggle"
+          class="toggle-btn"
+          role="switch"
+          aria-checked="true"
+          aria-label="Toggle AI Firewall"
+        >
+          <span class="toggle-thumb"></span>
+        </button>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="stats-strip">
+        <div class="stat-item">
+          <span class="stat-value" id="stat-blocked">0</span>
+          <span class="stat-label">Blocked</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value" id="stat-warned">0</span>
+          <span class="stat-label">Warned</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value" id="stat-scanned">0</span>
+          <span class="stat-label">Scanned</span>
+        </div>
+      </div>
+
+      <!-- Recent findings -->
+      <div class="section-title">Recent findings</div>
+      <div id="findings-list" class="findings-list">
+        <div class="findings-empty" id="findings-empty">No findings this session</div>
+      </div>
+
+      <!-- Footer links -->
+      <footer class="popup-footer">
+        <a href="https://kaelus.online/dashboard" target="_blank" rel="noopener noreferrer" class="footer-link">
+          Dashboard
+        </a>
+        <span class="footer-sep">·</span>
+        <a href="options.html" target="_blank" class="footer-link">Settings</a>
+        <span class="footer-sep">·</span>
+        <a href="https://kaelus.online/docs" target="_blank" rel="noopener noreferrer" class="footer-link">
+          Docs
+        </a>
+      </footer>
+    </div>
+    <script src="src/popup.js"></script>
+  </body>
+</html>

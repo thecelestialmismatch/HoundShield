@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "Kaelus AI Firewall",
+  "version": "1.0.0",
+  "description": "Real-time compliance scanning for ChatGPT, Claude, Copilot, and Gemini. Blocks CUI, PII, and secrets before they reach AI providers.",
+  "homepage_url": "https://kaelus.online",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://copilot.microsoft.com/*",
+    "https://github.com/copilot*",
+    "https://www.bing.com/chat*",
+    "https://kaelus.online/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://copilot.microsoft.com/*",
+        "https://github.com/copilot*",
+        "https://www.bing.com/chat*"
+      ],
+      "js": ["src/content.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Kaelus AI Firewall",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "options.html"
+}
