@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
@@ -61,7 +61,7 @@ export function GlobalChat() {
     }
   };
 
-  const sendMessage = async (text: string) => {
+  const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isTyping) return;
 
     const userMsg: Message = { role: "user", text };
@@ -190,7 +190,7 @@ export function GlobalChat() {
         },
       ]);
     }
-  };
+  }, [messages, isTyping]);
 
   return (
     <>
