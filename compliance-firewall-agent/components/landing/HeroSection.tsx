@@ -12,16 +12,32 @@ const PlatformDashboard = dynamic(
   { ssr: false, loading: () => <div className="h-full w-full bg-[#0d0d16] animate-pulse rounded-b-2xl min-h-[360px]" /> }
 );
 
-/* ── Live counter ──────────────────────────────────────── */
+/* ── Live counter — seeded from /stats.json, increments locally ─────────── */
 function LiveCounter() {
-  const [blocked, setBlocked] = useState(14_388);
+  const [blocked, setBlocked] = useState<number | null>(null);
+
+  // Fetch real base count from stats.json on mount; fall back to 14 388.
+  // stats.json is a static file updated by a cron — no auth required.
   useEffect(() => {
+    fetch("/stats.json")
+      .then((r) => r.json())
+      .then((d) => setBlocked(Number(d.threats_blocked) || 14_388))
+      .catch(() => setBlocked(14_388));
+  }, []);
+
+  useEffect(() => {
+    if (blocked === null) return;
     const t = setInterval(
-      () => setBlocked((n) => n + Math.floor(Math.random() * 4) + 1),
+      () => setBlocked((n) => (n ?? 0) + Math.floor(Math.random() * 4) + 1),
       3500
     );
     return () => clearInterval(t);
-  }, []);
+  }, [blocked !== null]);
+
+  if (blocked === null) {
+    return <span className="tabular-nums opacity-0">–––</span>;
+  }
+
   return (
     <motion.span
       key={blocked}
