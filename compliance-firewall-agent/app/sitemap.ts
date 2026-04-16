@@ -59,16 +59,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/auth`,
+      url: `${baseUrl}/cmmc`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
     {
-      url: `${baseUrl}/dashboard`,
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.8,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ];
+  // NOTE: /login /signup /forgot-password /command-center are excluded —
+  // auth-gated routes waste crawl budget and are blocked in robots.ts
 }

@@ -3,6 +3,48 @@ import "./globals.css";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
 
+// ---------------------------------------------------------------------------
+// JSON-LD structured data constants
+// Static strings — no user input, no XSS risk.
+// React 19 + Next.js 15 accept string children on <script> tags directly.
+// ---------------------------------------------------------------------------
+
+const SOFTWARE_APP_JSONLD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Kaelus",
+  url: "https://kaelus.online",
+  description:
+    "AI compliance firewall for regulated industries. Enforces CMMC Level 2, HIPAA, and SOC 2 simultaneously — scanning every AI prompt for PII, PHI, CUI, and secrets in under 10ms.",
+  applicationCategory: "SecurityApplication",
+  operatingSystem: "Web",
+  offers: [
+    { "@type": "Offer", name: "Free",       price: "0",   priceCurrency: "USD" },
+    { "@type": "Offer", name: "Pro",        price: "199", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Growth",     price: "499", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Enterprise", price: "999", priceCurrency: "USD" },
+  ],
+  featureList: [
+    "CMMC Level 2 compliance enforcement",
+    "HIPAA PHI detection (18 identifiers)",
+    "SOC 2 access control monitoring",
+    "Real-time AI prompt scanning under 10ms",
+    "Blockchain-anchored audit trails",
+    "SAML 2.0 SSO (Okta, Azure AD)",
+    "SIEM integration (Splunk, Sentinel, Elastic)",
+  ],
+  creator: { "@type": "Organization", name: "Kaelus", url: "https://kaelus.online" },
+});
+
+const ORGANIZATION_JSONLD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Kaelus",
+  url: "https://kaelus.online",
+  logo: "https://kaelus.online/icon.svg",
+  contactPoint: { "@type": "ContactPoint", contactType: "sales", url: "https://kaelus.online/contact" },
+});
+
 export const viewport: Viewport = {
   themeColor: "#07070b",
   width: "device-width",
@@ -83,6 +125,9 @@ export default function RootLayout({
           rel="icon"
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>️</text></svg>"
         />
+        {/* JSON-LD: SoftwareApplication — enables Google rich results */}
+        <script type="application/ld+json">{SOFTWARE_APP_JSONLD}</script>
+        <script type="application/ld+json">{ORGANIZATION_JSONLD}</script>
       </head>
       <body className="min-h-screen font-sans antialiased relative">
         <ClientShell>
