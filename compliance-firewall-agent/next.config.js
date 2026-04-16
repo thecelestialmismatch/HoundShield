@@ -17,9 +17,13 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
-  // Image optimization
+  // Image optimization — enabled for Vercel (WebP, AVIF, auto-resize)
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "kaelus.online" },
+    ],
   },
 
   // Ignore ESLint errors to allow build to test UI
