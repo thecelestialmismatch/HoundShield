@@ -8,7 +8,16 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/dashboard/"],
+        // Block auth-gated routes (waste crawl budget, return 401/redirect)
+        // Block API routes (not indexable content)
+        disallow: [
+          "/api/",
+          "/command-center/",
+          "/dashboard/",
+          "/login",
+          "/signup",
+          "/forgot-password",
+        ],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
