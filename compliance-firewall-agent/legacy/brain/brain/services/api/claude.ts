@@ -148,6 +148,7 @@ import { getFeatureValue_CACHED_MAY_BE_STALE } from 'src/services/analytics/grow
 import type { AgentId } from 'src/types/ids.js'
 import {
   ADVISOR_TOOL_INSTRUCTIONS,
+  areAdvisorAndBaseModelCompatible,
   getExperimentAdvisorModels,
   isAdvisorEnabled,
   isValidAdvisorModel,
@@ -1105,6 +1106,12 @@ async function* queryModel(
       } else if (!isValidAdvisorModel(normalizedAdvisorModel)) {
         logForDebugging(
           `[AdvisorTool] Skipping advisor - ${normalizedAdvisorModel} is not a valid advisor model`,
+        )
+      } else if (
+        !areAdvisorAndBaseModelCompatible(options.model, normalizedAdvisorModel)
+      ) {
+        logForDebugging(
+          `[AdvisorTool] Skipping advisor - generation mismatch: base=${options.model}, advisor=${normalizedAdvisorModel}. Advisor model must be from the same version family.`,
         )
       } else {
         advisorModel = normalizedAdvisorModel

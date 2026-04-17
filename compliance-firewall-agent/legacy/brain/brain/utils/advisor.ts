@@ -91,6 +91,8 @@ export function modelSupportsAdvisor(model: string): boolean {
   return (
     m.includes('opus-4-6') ||
     m.includes('sonnet-4-6') ||
+    m.includes('opus-4-7') ||
+    m.includes('sonnet-4-7') ||
     process.env.USER_TYPE === 'ant'
   )
 }
@@ -101,8 +103,35 @@ export function isValidAdvisorModel(model: string): boolean {
   return (
     m.includes('opus-4-6') ||
     m.includes('sonnet-4-6') ||
+    m.includes('opus-4-7') ||
+    m.includes('sonnet-4-7') ||
     process.env.USER_TYPE === 'ant'
   )
+}
+
+/**
+ * Extracts the version generation suffix from a model string (e.g. '4-6', '4-7').
+ * Returns undefined if no parseable generation is found.
+ */
+function extractModelGeneration(model: string): string | undefined {
+  return model.toLowerCase().match(/(?:opus|sonnet|haiku)-(\d+-\d+)/)?.[1]
+}
+
+/**
+ * Checks whether the advisor model is from the same generation as the base model.
+ * Anthropic requires advisor and base models to be from the same version family.
+ * Returns true if generations match or if either model's generation cannot be parsed
+ * (to preserve backward-compat for internal/ant models without standard naming).
+ */
+export function areAdvisorAndBaseModelCompatible(
+  baseModel: string,
+  advisorModel: string,
+): boolean {
+  const baseGen = extractModelGeneration(baseModel)
+  const advisorGen = extractModelGeneration(advisorModel)
+  // If either generation is unparseable, allow (fallback for non-standard model IDs)
+  if (!baseGen || !advisorGen) return true
+  return baseGen === advisorGen
 }
 
 export function getInitialAdvisorSetting(): string | undefined {
