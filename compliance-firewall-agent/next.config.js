@@ -69,6 +69,7 @@ const nextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https:",
               "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://openrouter.ai https://bytez.com",
+              "media-src 'self' https://d8j0ntlcm91z4.cloudfront.net",
               "frame-ancestors 'none'",
             ].join("; "),
           },
