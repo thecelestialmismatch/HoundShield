@@ -10,6 +10,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        /* ── Space NFT Design System ─────────────────────── */
+        cream: "#EFF4FF",
+        neon: "#6FFF00",
         /* ── Chanel Luxury Dark Theme ────────────────────── */
         surface: {
           DEFAULT: "#EDE7DE",
@@ -78,6 +81,8 @@ module.exports = {
         display: ["var(--font-outfit)", "var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
         editorial: ["var(--font-playfair)", "Georgia", "ui-serif", "serif"],
         mono: ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
+        grotesk: ["Anton", "Impact", "ui-sans-serif", "system-ui", "sans-serif"],
+        condiment: ["Condiment", "cursive"],
       },
       fontSize: {
         "display-lg": [
