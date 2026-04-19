@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 
 interface CardData {
@@ -31,20 +32,46 @@ const CARDS: CardData[] = [
   },
 ];
 
-function VideoCard({ card }: { card: CardData }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+const ease = [0.16, 1, 0.3, 1] as const;
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.14 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 48 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease } },
+};
+
+function useLazyVideo() {
+  const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
-    videoRef.current?.play().catch(() => {});
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.play().catch(() => {});
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.05, rootMargin: "200px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
+  return ref;
+}
+
+function VideoCard({ card }: { card: CardData }) {
+  const videoRef = useLazyVideo();
 
   return (
     <div className="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition-colors duration-300 cursor-pointer">
-      {/* Square video via padding-bottom trick */}
       <div className="relative pb-[100%] rounded-[24px] overflow-hidden">
         <video
           ref={videoRef}
-          autoPlay
           loop
           muted
           playsInline
@@ -53,7 +80,6 @@ function VideoCard({ card }: { card: CardData }) {
           <source src={card.src} type="video/mp4" />
         </video>
 
-        {/* Score overlay bar */}
         <div className="absolute bottom-3 left-3 right-3 liquid-glass rounded-[20px] px-5 py-4 flex items-center justify-between">
           <div>
             <p className="text-[11px] text-cream/70 font-grotesk uppercase tracking-wider">
@@ -83,8 +109,13 @@ export function KaelusFeaturesV2() {
     <section className="bg-[#010828] py-20 lg:py-28">
       <div className="max-w-[1831px] mx-auto px-6 sm:px-10 lg:px-16">
         {/* Header row */}
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-8 mb-12 lg:mb-16">
-          {/* Title */}
+        <motion.div
+          className="flex flex-col lg:flex-row justify-between items-start gap-8 mb-12 lg:mb-16"
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease }}
+        >
           <h2 className="font-grotesk uppercase text-cream text-[32px] sm:text-[48px] lg:text-[60px] leading-[1.05]">
             Collection of
             <br />
@@ -96,7 +127,6 @@ export function KaelusFeaturesV2() {
             </span>
           </h2>
 
-          {/* See all button */}
           <div className="group cursor-pointer">
             <div className="flex items-end gap-2">
               <span className="font-grotesk text-[32px] sm:text-[48px] lg:text-[60px] uppercase text-cream">
@@ -113,14 +143,22 @@ export function KaelusFeaturesV2() {
             </div>
             <div className="h-[6px] sm:h-[8px] lg:h-[10px] bg-neon w-full mt-1 group-hover:scale-x-110 transition-transform duration-200 origin-left" />
           </div>
-        </div>
+        </motion.div>
 
-        {/* 3-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Staggered 3-column grid */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
           {CARDS.map((card) => (
-            <VideoCard key={card.id} card={card} />
+            <motion.div key={card.id} variants={cardVariants}>
+              <VideoCard card={card} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

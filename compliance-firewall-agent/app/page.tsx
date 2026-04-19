@@ -4,10 +4,15 @@ import { KaelusHeroV2 } from "@/components/landing/KaelusHeroV2";
 import { KaelusAboutV2 } from "@/components/landing/KaelusAboutV2";
 import { KaelusFeaturesV2 } from "@/components/landing/KaelusFeaturesV2";
 import { KaelusCTAV2 } from "@/components/landing/KaelusCTAV2";
+import { FloatingNav } from "@/components/FloatingNav";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 export default function LandingPage() {
   return (
     <div className="bg-[#010828] min-h-screen">
+      <ScrollProgress />
+      <FloatingNav />
+
       {/* Section 1 — Hero: full-viewport video + embedded nav */}
       <KaelusHeroV2 />
 
