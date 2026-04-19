@@ -1,13 +1,14 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Mail, Twitter, Github } from "lucide-react";
 import Link from "next/link";
 
 const NAV_LINKS = [
   { label: "Platform", href: "/features" },
   { label: "Solutions", href: "/hipaa" },
-  { label: "Pricing", href: "/#pricing" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Docs", href: "/docs" },
   { label: "Contact", href: "/contact" },
 ];
@@ -17,6 +18,8 @@ const SOCIAL = [
   { icon: Twitter, href: "https://twitter.com/kaelusonline", label: "Twitter" },
   { icon: Github, href: "https://github.com/kaelus-online", label: "GitHub" },
 ];
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 function SocialBtn({ icon: Icon, href, label }: { icon: typeof Mail; href: string; label: string }) {
   return (
@@ -38,8 +41,8 @@ export function KaelusHeroV2() {
   }, []);
 
   return (
-    <section className="relative min-h-screen overflow-hidden rounded-b-[32px]">
-      {/* Video background */}
+    <section className="relative min-h-screen overflow-hidden rounded-b-[32px] noise-overlay">
+      {/* Video background — hero loads immediately */}
       <video
         ref={videoRef}
         autoPlay
@@ -61,13 +64,21 @@ export function KaelusHeroV2() {
       <div className="relative z-10 max-w-[1831px] mx-auto px-6 sm:px-10 lg:px-16 min-h-screen flex flex-col">
         {/* Header */}
         <header className="flex items-center justify-between pt-8">
-          {/* Logo */}
-          <span className="font-grotesk text-[16px] uppercase text-cream tracking-widest">
+          <motion.span
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease }}
+            className="font-grotesk text-[16px] uppercase text-cream tracking-widest"
+          >
             Kaelus
-          </span>
+          </motion.span>
 
-          {/* Center nav — desktop only */}
-          <nav className="hidden lg:block liquid-glass rounded-[28px] px-[52px] py-[24px]">
+          <motion.nav
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease }}
+            className="hidden lg:block liquid-glass rounded-[28px] px-[52px] py-[24px]"
+          >
             <ul className="flex items-center gap-10">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
@@ -80,30 +91,36 @@ export function KaelusHeroV2() {
                 </li>
               ))}
             </ul>
-          </nav>
+          </motion.nav>
 
-          {/* Social icons — desktop stacked right */}
-          <div className="hidden lg:flex flex-col gap-3">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease }}
+            className="hidden lg:flex flex-col gap-3"
+          >
             {SOCIAL.map((s) => (
               <SocialBtn key={s.label} {...s} />
             ))}
-          </div>
+          </motion.div>
         </header>
 
         {/* Hero content */}
         <div className="flex-1 flex flex-col justify-center lg:ml-32 mt-16 lg:mt-0">
           <div className="relative max-w-[780px]">
-            {/* Cursive accent */}
-            <span
+            <motion.span
+              initial={{ opacity: 0, scale: 0.88 }}
+              animate={{ opacity: 0.9, scale: 1 }}
+              transition={{ duration: 0.9, delay: 1.0, ease }}
               className="
                 absolute -right-4 lg:-right-28 top-0
                 font-condiment text-neon normal-case
                 text-2xl sm:text-4xl lg:text-5xl
-                -rotate-1 mix-blend-exclusion opacity-90 select-none
+                -rotate-1 mix-blend-exclusion select-none
               "
             >
               AI Firewall
-            </span>
+            </motion.span>
 
             <h1
               className="
@@ -112,23 +129,32 @@ export function KaelusHeroV2() {
                 leading-[1.05] sm:leading-[1]
               "
             >
-              Beyond AI
-              <br />
-              and{" "}
-              <span className="text-cream/70">( its )</span>
-              <br />
-              compliance
-              <br />
-              failures
+              {(["Beyond AI", null, "compliance", "failures"] as const).map((line, i) => (
+                <motion.span
+                  key={i}
+                  className="block"
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 + i * 0.1, ease }}
+                >
+                  {i === 1 ? (
+                    <>and <span className="text-cream/70">( its )</span></>
+                  ) : line}
+                </motion.span>
+              ))}
             </h1>
           </div>
 
-          {/* Mobile social icons */}
-          <div className="flex lg:hidden gap-4 mt-10 justify-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+            className="flex lg:hidden gap-4 mt-10 justify-center"
+          >
             {SOCIAL.map((s) => (
               <SocialBtn key={s.label} {...s} />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
