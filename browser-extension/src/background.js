@@ -20,7 +20,7 @@ const tabFindings = new Map();
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
-    chrome.tabs.create({ url: "https://kaelus.online?ref=extension" });
+    chrome.tabs.create({ url: "https://houndshield.com?ref=extension" });
   }
 });
 

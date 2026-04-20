@@ -5,9 +5,9 @@
       "name": "dev",
       "runtimeExecutable": "/Users/yantr/.nvm/versions/node/v24.13.1/bin/node",
       "runtimeArgs": [
-        "/Users/yantr/Desktop/Hound Shield-main/compliance-firewall-agent/node_modules/next/dist/bin/next",
+        "/Users/yantr/Desktop/Kaelus.Online-main/compliance-firewall-agent/node_modules/next/dist/bin/next",
         "dev",
-        "/Users/yantr/Desktop/Hound Shield-main/compliance-firewall-agent"
+        "/Users/yantr/Desktop/Kaelus.Online-main/compliance-firewall-agent"
       ],
       "port": 3000
     }

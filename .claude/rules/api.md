@@ -5,7 +5,7 @@ paths:
   - "compliance-firewall-agent/lib/classifier/**"
 ---
 
-# API Rules — Hound Shield
+# API Rules — Kaelus.Online
 
 ## Auth (CRITICAL — every route)
 ```ts
