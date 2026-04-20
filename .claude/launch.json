@@ -7,7 +7,7 @@
       "runtimeArgs": [
         "/Users/yantr/Desktop/Kaelus.Online-main/compliance-firewall-agent/node_modules/next/dist/bin/next",
         "dev",
-        "/Users/yantr/Desktop/Kaelus.Online-main/compliance-firewall-agent"
+        "/Users/yantr/Desktop/Kaelus.Online-main/.claude/worktrees/dazzling-moser-a03b62/compliance-firewall-agent"
       ],
       "port": 3000
     }
