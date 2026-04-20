@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Kaelus.online",
-  description: "How Kaelus.online collects, uses, and protects your data.",
+  title: "Privacy Policy | Hound Shield",
+  description: "How Hound Shield collects, uses, and protects your data.",
 };
 
 export default function PrivacyPage() {
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">2. How We Use Your Information</h2>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Provide and maintain the Kaelus.online platform</li>
+              <li>Provide and maintain the Hound Shield platform</li>
               <li>Process CMMC/compliance assessments and generate reports</li>
               <li>Detect and classify sensitive data in AI API traffic</li>
               <li>Process payments and manage subscriptions</li>
@@ -59,7 +59,7 @@ export default function PrivacyPage() {
               <li><strong className="text-slate-300">Vercel:</strong> Application hosting</li>
               <li><strong className="text-slate-300">OpenRouter:</strong> AI model inference (only when you use AI features)</li>
             </ul>
-            <p className="mt-2">We may disclose information if required by law or to protect the rights, safety, or property of Kaelus.online or its users.</p>
+            <p className="mt-2">We may disclose information if required by law or to protect the rights, safety, or property of Hound Shield or its users.</p>
           </section>
 
           <section>
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">8. Contact</h2>
-            <p>For privacy-related inquiries, contact us at <a href="mailto:admin@kaelus.online" className="text-brand-400 hover:text-brand-300">admin@kaelus.online</a>.</p>
+            <p>For privacy-related inquiries, contact us at <a href="mailto:admin@houndshield.com" className="text-brand-400 hover:text-brand-300">admin@houndshield.com</a>.</p>
           </section>
         </div>
 

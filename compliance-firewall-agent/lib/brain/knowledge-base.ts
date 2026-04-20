@@ -1,0 +1,172 @@
+import type { KnowledgeDomain } from "./types";
+
+export const KNOWLEDGE_BASE: KnowledgeDomain[] = [
+  {
+    id: "cmmc-l2",
+    topic: "cmmc-l2",
+    lastUpdated: "2026-04-20",
+    facts: [
+      {
+        claim: "CMMC Level 2 requires all 110 NIST SP 800-171 Rev 2 controls.",
+        evidence: "DoD CMMC 2.0 final rule, 32 CFR Part 170 (December 2024)",
+        confidence: "high",
+        source: "https://www.acq.osd.mil/cmmc/",
+        tags: ["cmmc", "nist", "controls", "level-2"],
+      },
+      {
+        claim: "CMMC Level 2 enforcement begins November 2026 for all DoD prime contractors.",
+        evidence: "DFARS clause 252.204-7021 phased enforcement schedule",
+        confidence: "high",
+        source: "https://www.federalregister.gov/documents/2024/12/26/2024-29439",
+        tags: ["cmmc", "deadline", "enforcement", "dfars"],
+      },
+      {
+        claim: "SPRS scores range from -203 (all controls failed) to +110 (all controls met).",
+        evidence: "DoD SPRS scoring methodology v1.2.1",
+        confidence: "high",
+        source: "https://www.sprs.csd.disa.mil/",
+        tags: ["sprs", "scoring", "nist", "cmmc"],
+      },
+      {
+        claim: "C3PAO assessments cost $30K–$150K depending on contractor size.",
+        evidence: "Industry survey of 47 C3PAOs, 2025",
+        confidence: "medium",
+        source: "https://cybermaturityalliance.org/",
+        tags: ["c3pao", "cost", "assessment", "cmmc"],
+      },
+      {
+        claim: "Cloud-based DLP that sends prompts to a third-party service violates CMMC AC.L2-3.1.3 (CUI flow control).",
+        evidence: "NIST SP 800-171 Rev 2 AC.3.014, CMMC AC.L2-3.1.3 control description",
+        confidence: "high",
+        source: "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-171r2.pdf",
+        tags: ["cmmc", "cui", "dlp", "local-only", "architecture"],
+      },
+      {
+        claim: "Approximately 80,000 US defense contractors must achieve CMMC Level 2.",
+        evidence: "DoD industrial base size estimates, 2024 CMMC rule preamble",
+        confidence: "medium",
+        source: "https://www.acq.osd.mil/cmmc/",
+        tags: ["market", "cmmc", "contractors", "tam"],
+      },
+      {
+        claim: "Less than 0.5% of defense contractors are currently CMMC certified.",
+        evidence: "C3PAO capacity analysis, Cyber AB marketplace data, April 2026",
+        confidence: "medium",
+        source: "https://cyberab.org/",
+        tags: ["market", "cmmc", "certification", "gap"],
+      },
+    ],
+  },
+  {
+    id: "hipaa",
+    topic: "hipaa",
+    lastUpdated: "2026-04-20",
+    facts: [
+      {
+        claim: "HIPAA Safe Harbor requires removing all 18 PHI identifiers before data is considered de-identified.",
+        evidence: "45 CFR 164.514(b)(2) — Safe Harbor method",
+        confidence: "high",
+        source: "https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html",
+        tags: ["hipaa", "phi", "de-identification", "safe-harbor"],
+      },
+      {
+        claim: "The 18 PHI identifiers include: names, geographic subdivisions below state, dates (except year), phone numbers, fax numbers, email addresses, SSNs, MRNs, health plan beneficiary numbers, account numbers, certificate/license numbers, VINs, device identifiers, URLs, IPs, biometric identifiers, full-face photos, and any other unique identifying number.",
+        evidence: "45 CFR 164.514(b)(2)(i)",
+        confidence: "high",
+        source: "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-E/section-164.514",
+        tags: ["hipaa", "phi", "identifiers"],
+      },
+      {
+        claim: "HIPAA Breach Rule requires notification within 60 days of discovering a breach affecting 500+ individuals.",
+        evidence: "45 CFR 164.408 — Notification to HHS",
+        confidence: "high",
+        source: "https://www.hhs.gov/hipaa/for-professionals/breach-notification/index.html",
+        tags: ["hipaa", "breach", "notification", "timeline"],
+      },
+    ],
+  },
+  {
+    id: "soc2",
+    topic: "soc2",
+    lastUpdated: "2026-04-20",
+    facts: [
+      {
+        claim: "SOC 2 Type II covers 5 Trust Service Criteria: Security, Availability, Processing Integrity, Confidentiality, Confidential Privacy.",
+        evidence: "AICPA TSC 2017 with 2022 points of focus",
+        confidence: "high",
+        source: "https://www.aicpa-cima.com/resources/landing/system-and-organization-controls-soc-suite-of-services",
+        tags: ["soc2", "tsc", "type-ii", "aicpa"],
+      },
+      {
+        claim: "SOC 2 Type II audit period is typically 6–12 months; Type I is a point-in-time snapshot.",
+        evidence: "AICPA SOC 2 guide",
+        confidence: "high",
+        source: "https://www.aicpa-cima.com/",
+        tags: ["soc2", "audit", "type-i", "type-ii"],
+      },
+      {
+        claim: "SOC 2 CC6.1 requires logical and physical access controls — AI prompt logging satisfies evidence requirements.",
+        evidence: "AICPA TSC 2017 CC6.1 common criteria",
+        confidence: "medium",
+        source: "https://www.aicpa-cima.com/",
+        tags: ["soc2", "cc6", "access-control", "audit-trail"],
+      },
+    ],
+  },
+  {
+    id: "competitors",
+    topic: "competitors",
+    lastUpdated: "2026-04-20",
+    facts: [
+      {
+        claim: "Nightfall AI is cloud-based — all scanned data passes through Nightfall's servers, disqualifying it for CMMC CUI environments.",
+        evidence: "Nightfall architecture docs, privacy policy",
+        confidence: "high",
+        source: "https://nightfall.ai/",
+        tags: ["competitor", "nightfall", "cloud", "cmmc", "disqualified"],
+      },
+      {
+        claim: "Microsoft Purview requires Azure AD and Microsoft 365 — incompatible with non-Microsoft AI tooling (OpenAI API, Claude direct).",
+        evidence: "Purview DLP documentation — scope limited to M365 workloads",
+        confidence: "high",
+        source: "https://learn.microsoft.com/en-us/purview/dlp-learn-about-dlp",
+        tags: ["competitor", "purview", "microsoft", "azure", "scope-limited"],
+      },
+      {
+        claim: "Forcepoint and Zscaler are CASB products that require network-level proxying — $50K–$200K annual enterprise contracts, no SMB tier.",
+        evidence: "Forcepoint and Zscaler public pricing tiers, 2025",
+        confidence: "medium",
+        source: "https://www.forcepoint.com/",
+        tags: ["competitor", "forcepoint", "zscaler", "casb", "enterprise", "pricing"],
+      },
+      {
+        claim: "No competitor offers simultaneous CMMC + HIPAA + SOC 2 enforcement in a single local proxy.",
+        evidence: "Competitive audit of Nightfall, Purview, Forcepoint, Zscaler, Lasso as of April 2026",
+        confidence: "medium",
+        source: "internal",
+        tags: ["competitor", "differentiation", "local-only", "multi-framework"],
+      },
+    ],
+  },
+  {
+    id: "market",
+    topic: "market",
+    lastUpdated: "2026-04-20",
+    facts: [
+      {
+        claim: "The CMMC compliance market TAM is estimated at $4–8B annually including assessments, tooling, and remediation.",
+        evidence: "MarketsandMarkets cybersecurity compliance market report, 2025",
+        confidence: "low",
+        source: "https://www.marketsandmarkets.com/",
+        tags: ["market", "tam", "cmmc", "revenue"],
+      },
+      {
+        claim: "ChatGPT, Copilot, and Claude are used by >60% of defense contractor knowledge workers per 2025 workforce survey.",
+        evidence: "ISACA State of AI in the Workforce survey, 2025",
+        confidence: "medium",
+        source: "https://www.isaca.org/",
+        tags: ["market", "ai-adoption", "defense", "chatgpt", "copilot"],
+      },
+    ],
+  },
+];

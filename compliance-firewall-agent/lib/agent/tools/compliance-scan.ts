@@ -1,5 +1,5 @@
 // ============================================================================
-// Compliance Scan Tool — Scan text through Kaelus compliance engine
+// Compliance Scan Tool — Scan text through Hound Shield compliance engine
 // ============================================================================
 
 import { ToolHandler } from '../types';
@@ -8,7 +8,7 @@ import { classifyRisk } from '../../classifier/risk-engine';
 
 const complianceScanTool: ToolHandler = {
   name: 'compliance_scan',
-  description: 'Scan any text through the Kaelus compliance engine to detect PII (Personal Identifiable Information), sensitive data, security risks, and policy violations. Returns risk level, detected entities, and recommended actions. Use this to audit content before publishing, sending, or processing.',
+  description: 'Scan any text through the Hound Shield compliance engine to detect PII (Personal Identifiable Information), sensitive data, security risks, and policy violations. Returns risk level, detected entities, and recommended actions. Use this to audit content before publishing, sending, or processing.',
   category: 'compliance',
   icon: 'Shield',
   parameters: {
@@ -45,7 +45,7 @@ const complianceScanTool: ToolHandler = {
       };
 
       const output: string[] = [
-        `️ **Kaelus Compliance Scan Report**`,
+        `️ **Hound Shield Compliance Scan Report**`,
         `Context: ${context}`,
         '',
         `**Risk Level:** ${riskEmoji[scanResult.risk_level] || ''} ${scanResult.risk_level}`,

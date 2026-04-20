@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "generatedAt": "2026-04-01T00:00:00.000Z",
-  "description": "Brain AI command catalogue for Kaelus.online",
+  "description": "Brain AI command catalogue for houndshield.com",
   "commands": [
     {
       "name": "assess",
@@ -61,7 +61,7 @@
     },
     {
       "name": "pricing",
-      "description": "View Kaelus subscription plans and upgrade options",
+      "description": "View Hound Shield subscription plans and upgrade options",
       "sourceHint": "/pricing",
       "category": "utility",
       "requiresAuth": false
@@ -75,7 +75,7 @@
     },
     {
       "name": "demo",
-      "description": "Run the Kaelus compliance firewall demo",
+      "description": "Run the Hound Shield compliance firewall demo",
       "sourceHint": "/demo",
       "category": "utility",
       "requiresAuth": false

@@ -1,15 +1,15 @@
 /**
  * Brain AI — Port Manifest
  *
- * scans the Kaelus codebase
+ * scans the Hound Shield codebase
  * structure and generates a human-readable subsystem manifest.
  * Gives Brain AI "knowledge of itself" — its own architecture.
  */
 
 import { Subsystem, PortManifest } from "./models";
 
-// Static manifest of Kaelus subsystems (matches actual codebase structure)
-const KAELUS_SUBSYSTEMS: Subsystem[] = [
+// Static manifest of Hound Shield subsystems (matches actual codebase structure)
+const HOUNDSHIELD_SUBSYSTEMS: Subsystem[] = [
   {
     name: "Brain AI",
     path: "lib/brain-ai/",
@@ -62,7 +62,7 @@ const KAELUS_SUBSYSTEMS: Subsystem[] = [
     name: "Client SDK",
     path: "sdk/",
     fileCount: 2,
-    notes: "@kaelus/sdk — zero-dependency client for gateway consumers",
+    notes: "@houndshield/sdk — zero-dependency client for gateway consumers",
   },
   {
     name: "Compliance Brain (Local GPT)",
@@ -85,10 +85,10 @@ const KAELUS_SUBSYSTEMS: Subsystem[] = [
 ];
 
 export function buildPortManifest(): PortManifest {
-  const totalFiles = KAELUS_SUBSYSTEMS.reduce((sum, s) => sum + s.fileCount, 0);
+  const totalFiles = HOUNDSHIELD_SUBSYSTEMS.reduce((sum, s) => sum + s.fileCount, 0);
   return {
-    projectName: "Kaelus.online — Brain AI",
-    subsystems: KAELUS_SUBSYSTEMS,
+    projectName: "Hound Shield — Brain AI",
+    subsystems: HOUNDSHIELD_SUBSYSTEMS,
     totalFiles,
     generatedAt: Date.now(),
   };
@@ -135,11 +135,11 @@ export function manifestToMarkdown(manifest: PortManifest): string {
 }
 
 export function getSubsystem(name: string): Subsystem | undefined {
-  return KAELUS_SUBSYSTEMS.find(
+  return HOUNDSHIELD_SUBSYSTEMS.find(
     (s) => s.name.toLowerCase() === name.toLowerCase()
   );
 }
 
 export function getSubsystemByPath(path: string): Subsystem | undefined {
-  return KAELUS_SUBSYSTEMS.find((s) => path.startsWith(s.path));
+  return HOUNDSHIELD_SUBSYSTEMS.find((s) => path.startsWith(s.path));
 }

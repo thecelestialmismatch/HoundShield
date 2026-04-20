@@ -197,7 +197,7 @@ export default function ClientDetailPage() {
           {client.docker_api_key}
         </code>
         <p className="text-xs text-slate-500 mt-2">
-          Set as <code className="text-brand-400">KAELUS_LICENSE_KEY</code> in the Docker
+          Set as <code className="text-brand-400">HOUNDSHIELD_LICENSE_KEY</code> in the Docker
           container. Never share with other clients.
         </p>
       </div>

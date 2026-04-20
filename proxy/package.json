@@ -1,7 +1,7 @@
 {
-  "name": "kaelus-proxy",
+  "name": "houndshield-proxy",
   "version": "1.0.0",
-  "description": "Kaelus local AI compliance proxy — scans AI prompts for CUI/PII/PHI before they leave your network",
+  "description": "Hound Shield local AI DLP proxy — scans AI prompts for CUI/PII/PHI before they leave your network",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",

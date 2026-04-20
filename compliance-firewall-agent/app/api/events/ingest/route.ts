@@ -2,7 +2,7 @@
  * POST /api/events/ingest
  *
  * Docker proxy posts metadata-only scan events here.
- * Auth: Bearer <kaelus-license-key>  (raw key, validated against partner_organizations)
+ * Auth: Bearer <houndshield-license-key>  (raw key, validated against partner_organizations)
  *
  * Body: { events: ProxyEvent[] }
  * Each event: { request_id, action, risk_level, pattern_name, nist_control, scan_ms, source, timestamp }

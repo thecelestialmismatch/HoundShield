@@ -1,5 +1,5 @@
 /**
- * Kaelus Streaming Gateway — OpenAI Provider Adapter
+ * Hound Shield Streaming Gateway — OpenAI Provider Adapter
  *
  * Handles communication with the OpenAI Chat Completions API in streaming mode.
  *
@@ -8,7 +8,7 @@
  *   ...
  *   data: [DONE]
  *
- * The adapter normalizes this into Kaelus `StreamToken` objects, handling:
+ * The adapter normalizes this into Hound Shield `StreamToken` objects, handling:
  * - Content deltas from `choices[0].delta.content`
  * - Finish reasons ("stop", "length", "content_filter", "tool_calls")
  * - Usage extraction from the final chunk (when `stream_options.include_usage` is set)
@@ -72,7 +72,7 @@ export const openaiAdapter: ProviderAdapter = {
    * Builds an OpenAI Chat Completions API request.
    *
    * We always enable `stream_options.include_usage` so the final chunk
-   * contains token counts — this powers Kaelus usage dashboards without
+   * contains token counts — this powers Hound Shield usage dashboards without
    * requiring a separate API call.
    */
   buildRequest(req: StreamRequest): {
@@ -131,7 +131,7 @@ export const openaiAdapter: ProviderAdapter = {
     } catch {
       // Malformed chunk — log and skip rather than crashing the stream.
       // This handles edge cases like partial JSON from chunked transfer encoding.
-      console.warn("[kaelus:openai] Failed to parse SSE chunk:", trimmed.slice(0, 200));
+      console.warn("[houndshield:openai] Failed to parse SSE chunk:", trimmed.slice(0, 200));
       return null;
     }
 

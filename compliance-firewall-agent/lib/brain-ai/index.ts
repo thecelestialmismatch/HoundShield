@@ -1,12 +1,12 @@
 /**
  * Brain AI — Public API
  *
- * The central intelligence layer for Kaelus.online.
+ * The central intelligence layer for Hound Shield.
  * Connects the query engine, session store, runtime, commands, and tools
  * into a single cohesive "Brain" for the compliance firewall.
  *
  * Brain AI — original implementation.
- * Created for Kaelus.online. All rights reserved.
+ * Created for Hound Shield. All rights reserved.
  * 
  * 
  * 

@@ -373,7 +373,7 @@ export default function AgentsPage() {
               <span className="text-gradient-aurora">Think, Act & Protect</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Not just pattern matching. Kaelus agents use a ReAct reasoning loop with 8 tools
+              Not just pattern matching. Hound Shield agents use a ReAct reasoning loop with 8 tools
               and 13 AI models to autonomously handle compliance at scale.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
@@ -827,7 +827,7 @@ export default function AgentsPage() {
             </div>
           </div>
           <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-slate-600">&copy; 2026 Kaelus.online — All rights reserved.</p>
+            <p className="text-xs text-slate-600">&copy; 2026 Hound Shield — All rights reserved.</p>
             <div className="flex items-center gap-4">
               <span className="text-xs text-slate-600 hover:text-slate-500 cursor-pointer transition-colors">Privacy Policy</span>
               <span className="text-xs text-slate-600 hover:text-slate-500 cursor-pointer transition-colors">Terms of Service</span>

@@ -234,7 +234,7 @@ export default function MemoryView() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `kaelus-memory-dna-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `houndshield-memory-dna-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };

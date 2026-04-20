@@ -8,7 +8,7 @@
 
 ---
 
-You are the sole senior engineer on Kaelus.ai — an AI compliance firewall purpose-built for CMMC Level 2 defense contractors.
+You are the sole senior engineer on Hound Shield.ai — an AI compliance firewall purpose-built for CMMC Level 2 defense contractors.
 
 **SESSION PROTOCOL — do this first, nothing else:**
 
@@ -204,7 +204,7 @@ Say "continue" to resume.
 
 ## ABOUT THIS PRODUCT
 
-Kaelus.ai intercepts LLM API traffic before it exits the enterprise perimeter — purpose-built for 80,000+ US defense contractors who need CMMC Level 2 certification by November 2026. Only 0.5% are certified. The wave is just starting.
+Hound Shield.ai intercepts LLM API traffic before it exits the enterprise perimeter — purpose-built for 80,000+ US defense contractors who need CMMC Level 2 certification by November 2026. Only 0.5% are certified. The wave is just starting.
 
 Pricing: FREE | $199/mo | $499/mo | $999/mo | $2,499/mo
 Stack: Next.js 15, React 19, Supabase, Stripe, OpenRouter, Tailwind, Framer Motion

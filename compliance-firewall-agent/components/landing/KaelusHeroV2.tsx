@@ -14,9 +14,9 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL = [
-  { icon: Mail, href: "mailto:hello@kaelus.online", label: "Email" },
-  { icon: Twitter, href: "https://twitter.com/kaelusonline", label: "Twitter" },
-  { icon: Github, href: "https://github.com/kaelus-online", label: "GitHub" },
+  { icon: Mail, href: "mailto:hello@houndshield.com", label: "Email" },
+  { icon: Twitter, href: "https://twitter.com/houndshield", label: "Twitter" },
+  { icon: Github, href: "https://github.com/houndshield", label: "GitHub" },
 ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -33,7 +33,7 @@ function SocialBtn({ icon: Icon, href, label }: { icon: typeof Mail; href: strin
   );
 }
 
-export function KaelusHeroV2() {
+export function Hound ShieldHeroV2() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export function KaelusHeroV2() {
             transition={{ duration: 0.6, ease }}
             className="font-grotesk text-[16px] uppercase text-cream tracking-widest"
           >
-            Kaelus
+            Hound Shield
           </motion.span>
 
           <motion.nav

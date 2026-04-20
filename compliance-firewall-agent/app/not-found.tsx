@@ -13,7 +13,7 @@ export default function NotFound() {
         </p>
         <Link href="/" className="btn-primary inline-flex items-center gap-2">
           <ArrowLeft className="w-4 h-4" />
-          Back to Kaelus
+          Back to Hound Shield
         </Link>
       </div>
     </div>

@@ -1,4 +1,4 @@
-# Kaelus.Online — Hybrid Architecture PRD
+# Hound Shield — Hybrid Architecture PRD
 **Date:** 2026-04-16
 **Status:** Approved — Godmode execution
 **Goal:** Beat every competitor on every axis. First paying customer in 14 days.
@@ -7,11 +7,11 @@
 
 ## Problem Statement
 
-Current architecture: cloud SaaS. Prompts flow through kaelus.online servers.
+Current architecture: cloud SaaS. Prompts flow through houndshield.com servers.
 Marketing claim: "CUI never leaves your network."
 These contradict. Fix closes the largest competitive moat available.
 
-Every cloud-based competitor (Nightfall $25M ARR, Strac, Metomic, Cisco, Cloudflare) cannot legally claim CUI stays on-premises. Kaelus can — but only after this build.
+Every cloud-based competitor (Nightfall $25M ARR, Strac, Metomic, Cisco, Cloudflare) cannot legally claim CUI stays on-premises. Hound Shield can — but only after this build.
 
 WitnessAI ($58M raised) has on-prem but enterprise-only ($100K+). No SMB self-serve exists. This is the gap.
 
@@ -19,7 +19,7 @@ WitnessAI ($58M raised) has on-prem but enterprise-only ($100K+). No SMB self-se
 
 ## Competitive Moat Stack (After This Build)
 
-| Competitor | Their limit | Kaelus advantage |
+| Competitor | Their limit | Hound Shield advantage |
 |---|---|---|
 | Nightfall ($25M ARR) | Cloud only, browser extension | Local scan, API-level, CMMC-legal |
 | WitnessAI ($58M) | On-prem but enterprise $100K+ | Same local arch, $199/mo, 20-min install |
@@ -40,14 +40,14 @@ CUSTOMER ENVIRONMENT (on-premises, Docker)
 │  Employee device (browser, IDE, CLI, CI/CD)                     │
 │       │ AI API call (ChatGPT, Claude, Gemini, OpenRouter)       │
 │       ▼                                                         │
-│  Kaelus Proxy  ← docker run -p 8080:8080 kaelus/proxy          │
+│  Hound Shield Proxy  ← docker run -p 8080:8080 kaelus/proxy          │
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │ 1. Receive prompt (OpenAI-compatible API)                 │  │
 │  │ 2. Extract text from all message roles                    │  │
 │  │ 3. Run CUI/PII/PHI scanner (pure regex, <10ms)           │  │
 │  │ 4. BLOCK → return 403 error, log to local SQLite          │  │
 │  │    ALLOW → forward to upstream AI provider               │  │
-│  │ 5. POST metadata-only event → kaelus.online (async)      │  │
+│  │ 5. POST metadata-only event → houndshield.com (async)      │  │
 │  │    Metadata: {timestamp, action, pattern_name, risk_level}│  │
 │  │    NEVER: prompt text, CUI content, user data            │  │
 │  └───────────────────────────────────────────────────────────┘  │
@@ -55,7 +55,7 @@ CUSTOMER ENVIRONMENT (on-premises, Docker)
 └─────────────────────────────────────────────────────────────────┘
          │ metadata only (no content, no CUI)
          ▼
-KAELUS CLOUD (kaelus.online — Vercel)
+KAELUS CLOUD (houndshield.com — Vercel)
 ┌─────────────────────────────────────────────────────────────────┐
 │  Event ingestion: POST /api/events/ingest                       │
 │  Dashboard: SPRS score, timeline, block analytics               │
@@ -71,8 +71,8 @@ The Docker proxy:
 - Scans ALL prompt content locally (in-memory, no disk write of content)
 - Logs to local SQLite: timestamp, action, pattern_name, risk_level, request_id ONLY
 - Never stores prompt text, never transmits prompt text
-- Outbound call to kaelus.online: license key validation (HTTPS, key hash only)
-- Outbound call to kaelus.online: scan metadata (no content, async, non-blocking)
+- Outbound call to houndshield.com: license key validation (HTTPS, key hash only)
+- Outbound call to houndshield.com: scan metadata (no content, async, non-blocking)
 
 Verification: `tcpdump port 8080` during a CUI block — zero content in outbound traffic. Demonstrable to any auditor in 60 seconds.
 
@@ -99,7 +99,7 @@ proxy/
 │   ├── hipaa.ts       ← PHI patterns
 │   └── pii.ts         ← SSN, PII patterns
 ├── storage.ts         ← Local SQLite event log (better-sqlite3)
-├── webhook.ts         ← Metadata-only POST to kaelus.online/api/events/ingest
+├── webhook.ts         ← Metadata-only POST to houndshield.com/api/events/ingest
 ├── license.ts         ← License key validation (HTTPS, no content)
 └── install.sh         ← One-command install + start
 ```
@@ -115,16 +115,16 @@ Body: standard OpenAI ChatCompletionCreateParams
 Response: standard OpenAI ChatCompletion (streaming or non-streaming)
 
 Response headers added:
-  X-Kaelus-Risk-Level: NONE | LOW | MEDIUM | HIGH | CRITICAL
-  X-Kaelus-Action: ALLOWED | BLOCKED | QUARANTINED
-  X-Kaelus-Scan-Ms: <latency>
-  X-Kaelus-Request-Id: <uuid>
+  X-Hound Shield-Risk-Level: NONE | LOW | MEDIUM | HIGH | CRITICAL
+  X-Hound Shield-Action: ALLOWED | BLOCKED | QUARANTINED
+  X-Hound Shield-Scan-Ms: <latency>
+  X-Hound Shield-Request-Id: <uuid>
 ```
 
 Install experience:
 ```bash
 # One command install
-curl -sSL https://kaelus.online/install | bash
+curl -sSL https://houndshield.com/install | bash
 # OR
 docker run -d -p 8080:8080 \
   -e KAELUS_LICENSE_KEY=xxx \
@@ -182,7 +182,7 @@ Update `lib/reports/pdf-generator.ts`:
 - Add "CMMC Control Evidence" section
 - Per block event: control ID (e.g. AC.L2-3.1.3), control name, SPRS point impact
 - Add "DCSA Reportable Event" flag for CRITICAL blocks
-- Add cover page with SPRS score delta (before/after Kaelus)
+- Add cover page with SPRS score delta (before/after Hound Shield)
 - Add footer: "This report constitutes audit evidence for CMMC Level 2 practice AC.L2-3.1.3 (Control the flow of CUI in accordance with approved authorizations)"
 
 ### Phase 4: MCP Server Endpoint (Days 9-10)
@@ -231,7 +231,7 @@ MCP server exposes standard MCP tools that wrap the CUI scanner, blocking tool e
 - `docker run kaelus/proxy` starts in <30s on clean machine
 - CUI block fires within 10 min on fake CAGE code test
 - Block logged to local SQLite
-- Metadata POSTed to kaelus.online (verified via network tab)
+- Metadata POSTed to houndshield.com (verified via network tab)
 - Existing cloud dashboard shows the block event from Docker proxy
 - Install end-to-end under 20 minutes for non-technical user
 
@@ -280,5 +280,5 @@ MCP server exposes standard MCP tools that wrap the CUI scanner, blocking tool e
 
 ---
 
-*Spec by: Claude Code (Kaelus.Online worktree cool-jones, 2026-04-16)*
+*Spec by: Claude Code (Hound Shield worktree cool-jones, 2026-04-16)*
 *Next step: Execute Phase 1 immediately.*

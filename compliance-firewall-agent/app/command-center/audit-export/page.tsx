@@ -76,7 +76,7 @@ export default function AuditExportPage() {
       const filenameMatch = contentDisposition.match(/filename="([^"]+)"/);
       const filename =
         filenameMatch?.[1] ??
-        `kaelus-audit-${new Date().toISOString().slice(0, 10)}.${format}`;
+        `houndshield-audit-${new Date().toISOString().slice(0, 10)}.${format}`;
 
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");

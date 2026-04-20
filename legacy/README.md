@@ -14,7 +14,7 @@ Each entry explains what it was and why it was retired.
 optimization means Vercel serves raw PNG/JPEG instead of WebP/AVIF, wasting bandwidth
 on every page load.  
 **Replaced with:** `formats: ["image/avif", "image/webp"]` + `remotePatterns` for
-Supabase and kaelus.online. Vercel auto-serves smallest format the browser supports.
+Supabase and houndshield.com. Vercel auto-serves smallest format the browser supports.
 
 ---
 

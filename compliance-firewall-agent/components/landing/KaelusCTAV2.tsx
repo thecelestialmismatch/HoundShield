@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { Mail, Twitter, Github } from "lucide-react";
 
 const SOCIAL = [
-  { icon: Mail, href: "mailto:hello@kaelus.online", label: "Email" },
-  { icon: Twitter, href: "https://twitter.com/kaelusonline", label: "Twitter" },
-  { icon: Github, href: "https://github.com/kaelus-online", label: "GitHub" },
+  { icon: Mail, href: "mailto:hello@houndshield.com", label: "Email" },
+  { icon: Twitter, href: "https://twitter.com/houndshield", label: "Twitter" },
+  { icon: Github, href: "https://github.com/houndshield", label: "GitHub" },
 ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -42,7 +42,7 @@ function useLazyVideo() {
   return ref;
 }
 
-export function KaelusCTAV2() {
+export function Hound ShieldCTAV2() {
   const videoRef = useLazyVideo();
 
   return (

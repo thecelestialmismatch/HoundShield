@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Multi-Agent System — Five Specialized Compliance Agents v1.0
+// Hound Shield Multi-Agent System — Five Specialized Compliance Agents v1.0
 //
 // Architecture:
 //   Each agent is a specialized ReAct entity with:
@@ -26,11 +26,11 @@ import type { AgentConfig } from './types';
 // ---------------------------------------------------------------------------
 
 export const SCANNER_AGENT: AgentConfig = {
-  id: 'kaelus-scanner',
+  id: 'houndshield-scanner',
   name: 'Scanner Agent',
   description:
     'Real-time compliance scanner. Analyzes AI prompts and responses for PII, PHI, CUI, IP leakage, and policy violations across SOC 2, HIPAA, and CMMC Level 2.',
-  systemPrompt: `You are Kaelus Scanner, a specialized AI compliance scanning agent.
+  systemPrompt: `You are Hound Shield Scanner, a specialized AI compliance scanning agent.
 
 Your mission: Analyze input text (AI prompts and AI-generated responses) for compliance violations and sensitive data exposure.
 
@@ -78,11 +78,11 @@ Never expose raw sensitive data in your output. Always redact before reporting.`
 // ---------------------------------------------------------------------------
 
 export const POLICY_AGENT: AgentConfig = {
-  id: 'kaelus-policy',
+  id: 'houndshield-policy',
   name: 'Policy Agent',
   description:
     'Policy evaluation and enforcement agent. Manages compliance rules, evaluates exceptions, and ensures AI usage policies align with organizational security requirements.',
-  systemPrompt: `You are Kaelus Policy, a specialized AI policy management agent.
+  systemPrompt: `You are Hound Shield Policy, a specialized AI policy management agent.
 
 Your mission: Evaluate policy compliance, manage rule sets, and make enforcement decisions.
 
@@ -133,11 +133,11 @@ Your mission: Evaluate policy compliance, manage rule sets, and make enforcement
 // ---------------------------------------------------------------------------
 
 export const RESEARCH_AGENT: AgentConfig = {
-  id: 'kaelus-research',
+  id: 'houndshield-research',
   name: 'Research Agent',
   description:
     'Compliance regulation researcher. Tracks CMMC, HIPAA, SOC 2, and NIST framework updates, maps AI risks to control requirements, and provides authoritative guidance.',
-  systemPrompt: `You are Kaelus Research, a specialized AI compliance research agent.
+  systemPrompt: `You are Hound Shield Research, a specialized AI compliance research agent.
 
 Your mission: Research compliance regulations, track regulatory changes, and provide authoritative guidance on AI governance frameworks.
 
@@ -161,7 +161,7 @@ Your mission: Research compliance regulations, track regulatory changes, and pro
 - Provide source citations for all regulatory claims
 - Distinguish between mandatory requirements and recommended practices
 - Include effective dates and revision history when relevant
-- Summarize key implications for Kaelus customers
+- Summarize key implications for Hound Shield customers
 
 ## Tone: Expert, precise, cite-first. Never speculate on regulatory intent — stick to documented requirements.`,
   model: 'meta-llama/llama-3.3-70b-instruct:free',
@@ -187,13 +187,13 @@ Your mission: Research compliance regulations, track regulatory changes, and pro
 // ---------------------------------------------------------------------------
 
 export const OPTIMIZATION_AGENT: AgentConfig = {
-  id: 'kaelus-optimizer',
+  id: 'houndshield-optimizer',
   name: 'Optimization Agent',
   description:
     'Performance and cost optimization agent. Profiles gateway latency, recommends optimal model routing, analyzes token efficiency, and identifies scanning bottlenecks.',
-  systemPrompt: `You are Kaelus Optimizer, a specialized performance and cost optimization agent.
+  systemPrompt: `You are Hound Shield Optimizer, a specialized performance and cost optimization agent.
 
-Your mission: Analyze and optimize the Kaelus gateway for latency, cost efficiency, and throughput.
+Your mission: Analyze and optimize the Hound Shield gateway for latency, cost efficiency, and throughput.
 
 ## Performance budgets (HARD LIMITS):
 - Regex scan: < 5ms per request
@@ -250,11 +250,11 @@ Always quantify recommendations. "Reduce scan interval from 500→750 chars: sav
 // ---------------------------------------------------------------------------
 
 export const AUDITOR_AGENT: AgentConfig = {
-  id: 'kaelus-auditor',
+  id: 'houndshield-auditor',
   name: 'Auditor Agent',
   description:
     'Compliance audit and reporting agent. Generates SPRS scores, produces audit trails, creates compliance reports, and prepares evidence packages for assessments.',
-  systemPrompt: `You are Kaelus Auditor, a specialized compliance audit and reporting agent.
+  systemPrompt: `You are Hound Shield Auditor, a specialized compliance audit and reporting agent.
 
 Your mission: Generate comprehensive audit evidence, compliance reports, and SPRS scores for regulatory assessments.
 
@@ -332,9 +332,9 @@ export function getAgent(id: string): AgentConfig | undefined {
 
 /** All agent IDs for routing and validation. */
 export const AGENT_IDS = BUILTIN_AGENTS.map((a) => a.id) as [
-  'kaelus-scanner',
-  'kaelus-policy',
-  'kaelus-research',
-  'kaelus-optimizer',
-  'kaelus-auditor',
+  'houndshield-scanner',
+  'houndshield-policy',
+  'houndshield-research',
+  'houndshield-optimizer',
+  'houndshield-auditor',
 ];

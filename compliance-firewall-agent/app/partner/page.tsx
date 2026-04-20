@@ -239,7 +239,7 @@ export default function PartnerDashboard() {
             href: "/partner/clients",
             icon: Building2,
             title: "Add Client Org",
-            desc: "Onboard a new defense contractor to Kaelus in under 2 minutes",
+            desc: "Onboard a new defense contractor to Hound Shield in under 2 minutes",
           },
           {
             href: "/partner/billing",

@@ -126,7 +126,7 @@ function renderContent(content: string) {
 const SUGGESTIONS = [
   { icon: Code, text: "Write a Python FastAPI server with auth" },
   { icon: Shield, text: "Scan this text for PII: John Doe SSN 123-45-6789" },
-  { icon: Terminal, text: "Explain the Kaelus gateway architecture" },
+  { icon: Terminal, text: "Explain the Hound Shield gateway architecture" },
   { icon: Zap, text: "Write a React hook for real-time WebSocket data" },
 ];
 
@@ -515,7 +515,7 @@ export function AIChat({
                 <Sparkles className="w-7 h-7 text-brand-500" />
               </div>
               <h2 className="text-xl font-semibold text-white mb-2">
-                {agentName ? agentName : "Kaelus AI"}
+                {agentName ? agentName : "Hound Shield AI"}
               </h2>
               <p className="text-sm text-slate-400 mb-2">
                 {initialSystemPrompt
@@ -724,7 +724,7 @@ export function AIChat({
             </button>
           </div>
           <p className="text-center text-[10px] text-slate-300 dark:text-slate-300 mt-1.5">
-            Powered by OpenRouter · All messages scanned by Kaelus Compliance Engine
+            Powered by OpenRouter · All messages scanned by Hound Shield Compliance Engine
           </p>
         </div>
       </div>

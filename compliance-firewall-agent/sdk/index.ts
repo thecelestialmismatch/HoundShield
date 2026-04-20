@@ -1,20 +1,20 @@
 /**
- * @kaelus/sdk — Real-time AI Compliance Gateway SDK
+ * @houndshield/sdk — Real-time AI Compliance Gateway SDK
  *
- * Framework-agnostic SDK for integrating with the Kaelus AI Compliance Firewall.
+ * Framework-agnostic SDK for integrating with the Hound Shield AI Compliance Firewall.
  * Works in Node.js (>=18) and modern browsers. Zero external dependencies.
  *
  * @example
  * ```typescript
- * import { Kaelus } from "@kaelus/sdk";
+ * import { Hound Shield } from "@houndshield/sdk";
  *
- * const kaelus = new Kaelus({
- *   apiKey: "kaelus-key-...",
- *   gateway: "https://your-kaelus-instance.com",
+ * const houndshield = new Hound Shield({
+ *   apiKey: "houndshield-key-...",
+ *   gateway: "https://your-houndshield-instance.com",
  * });
  *
  * // SSE streaming
- * const stream = await kaelus.stream({
+ * const stream = await houndshield.stream({
  *   provider: "openai",
  *   model: "gpt-4o",
  *   apiKey: "sk-...",
@@ -28,7 +28,7 @@
  * }
  *
  * // Quick scan
- * const result = await kaelus.scan("Check this text for PII");
+ * const result = await houndshield.scan("Check this text for PII");
  * console.log(result.risk_level, result.entities);
  * ```
  *
@@ -61,11 +61,11 @@ export interface ChatMessage {
   content: string | Record<string, unknown>;
 }
 
-/** Configuration for the Kaelus client. */
-export interface KaelusConfig {
-  /** API key for authenticating with the Kaelus gateway. */
+/** Configuration for the Hound Shield client. */
+export interface HoundShieldConfig {
+  /** API key for authenticating with the Hound Shield gateway. */
   apiKey: string;
-  /** Base URL of the Kaelus gateway instance (no trailing slash). */
+  /** Base URL of the Hound Shield gateway instance (no trailing slash). */
   gateway: string;
   /** Request timeout in milliseconds. Defaults to 30000. */
   timeout?: number;
@@ -233,8 +233,8 @@ export type WSEvent = WSResponseDelta | WSComplianceEvent | WSDoneEvent | WSErro
 // Error classes
 // ---------------------------------------------------------------------------
 
-/** Base error for all Kaelus SDK errors. */
-export class KaelusError extends Error {
+/** Base error for all Hound Shield SDK errors. */
+export class HoundShieldError extends Error {
   readonly code: string;
   readonly statusCode: number | undefined;
   readonly retryable: boolean;
@@ -246,16 +246,16 @@ export class KaelusError extends Error {
     retryable = false
   ) {
     super(message);
-    this.name = "KaelusError";
+    this.name = "HoundShieldError";
     this.code = code;
     this.statusCode = statusCode;
     this.retryable = retryable;
-    Object.setPrototypeOf(this, KaelusError.prototype);
+    Object.setPrototypeOf(this, HoundShieldError.prototype);
   }
 }
 
 /** Thrown when authentication with the gateway fails. */
-export class AuthenticationError extends KaelusError {
+export class AuthenticationError extends HoundShieldError {
   constructor(message = "Invalid or missing API key") {
     super(message, "AUTH_ERROR", 401, false);
     this.name = "AuthenticationError";
@@ -264,7 +264,7 @@ export class AuthenticationError extends KaelusError {
 }
 
 /** Thrown when the gateway rate-limits the client. */
-export class RateLimitError extends KaelusError {
+export class RateLimitError extends HoundShieldError {
   readonly retryAfterMs: number;
 
   constructor(retryAfterMs = 60_000) {
@@ -281,7 +281,7 @@ export class RateLimitError extends KaelusError {
 }
 
 /** Thrown when the compliance firewall blocks a request. */
-export class ComplianceBlockError extends KaelusError {
+export class ComplianceBlockError extends HoundShieldError {
   readonly riskLevel: RiskLevel;
   readonly classifications: string[];
 
@@ -295,7 +295,7 @@ export class ComplianceBlockError extends KaelusError {
 }
 
 /** Thrown when the request times out. */
-export class TimeoutError extends KaelusError {
+export class TimeoutError extends HoundShieldError {
   constructor(timeoutMs: number) {
     super(`Request timed out after ${timeoutMs}ms`, "TIMEOUT", undefined, true);
     this.name = "TimeoutError";
@@ -370,9 +370,9 @@ async function handleResponseError(response: Response): Promise<never> {
       throw new RateLimitError(retryMs);
     }
     case 403:
-      throw new KaelusError(message, "FORBIDDEN", 403, false);
+      throw new HoundShieldError(message, "FORBIDDEN", 403, false);
     default:
-      throw new KaelusError(
+      throw new HoundShieldError(
         message,
         "REQUEST_FAILED",
         response.status,
@@ -454,7 +454,7 @@ async function* parseSSEStream<T>(
 }
 
 // ---------------------------------------------------------------------------
-// KaelusWebSocket
+// HoundShieldWebSocket
 // ---------------------------------------------------------------------------
 
 /** Internal pending request tracker. */
@@ -465,10 +465,10 @@ interface PendingRequest {
 }
 
 /**
- * Persistent WebSocket connection to the Kaelus gateway.
+ * Persistent WebSocket connection to the Hound Shield gateway.
  * Supports multiplexed streaming requests with async iteration.
  */
-export class KaelusWebSocket {
+export class HoundShieldWebSocket {
   private ws: WebSocket | null = null;
   private _connected = false;
   private pendingRequests = new Map<string, {
@@ -505,7 +505,7 @@ export class KaelusWebSocket {
    */
   async request(req: StreamRequest): Promise<AsyncIterable<WSEvent>> {
     if (!this.connected) {
-      throw new KaelusError(
+      throw new HoundShieldError(
         "WebSocket is not connected",
         "WS_NOT_CONNECTED",
         undefined,
@@ -547,7 +547,7 @@ export class KaelusWebSocket {
         const channel = this.pendingRequests.get(requestId);
         if (channel && !channel.done) {
           channel.done = true;
-          channel.error = new KaelusError(
+          channel.error = new HoundShieldError(
             "Request was cancelled",
             "CANCELLED",
             undefined,
@@ -705,7 +705,7 @@ export class KaelusWebSocket {
     this.ws.onclose = () => {
       this._connected = false;
       this.failAllPending(
-        new KaelusError("WebSocket connection closed", "WS_CLOSED", undefined, true)
+        new HoundShieldError("WebSocket connection closed", "WS_CLOSED", undefined, true)
       );
       this.attemptReconnect();
     };
@@ -775,42 +775,42 @@ export class KaelusWebSocket {
     }
     this._connected = false;
     this.failAllPending(
-      new KaelusError("Connection closed by client", "WS_CLOSED", undefined, false)
+      new HoundShieldError("Connection closed by client", "WS_CLOSED", undefined, false)
     );
   }
 }
 
 // ---------------------------------------------------------------------------
-// Kaelus Client
+// Hound Shield Client
 // ---------------------------------------------------------------------------
 
 /**
- * The main Kaelus SDK client.
+ * The main Hound Shield SDK client.
  *
  * Provides methods for streaming LLM requests through the compliance gateway,
  * scanning text for sensitive data, and managing persistent WebSocket connections.
  *
  * @example
  * ```typescript
- * const kaelus = new Kaelus({
- *   apiKey: "kaelus-key-...",
- *   gateway: "https://your-kaelus-instance.com",
+ * const houndshield = new Hound Shield({
+ *   apiKey: "houndshield-key-...",
+ *   gateway: "https://your-houndshield-instance.com",
  * });
  *
- * const result = await kaelus.scan("My SSN is 123-45-6789");
+ * const result = await houndshield.scan("My SSN is 123-45-6789");
  * console.log(result.risk_level); // "CRITICAL"
  * ```
  */
-export class Kaelus {
+export class Hound Shield {
   private readonly apiKey: string;
   private readonly gateway: string;
   private readonly timeout: number;
   private readonly defaultHeaders: Record<string, string>;
   private readonly userId: string | undefined;
 
-  constructor(config: KaelusConfig) {
+  constructor(config: HoundShieldConfig) {
     if (!config.apiKey) {
-      throw new KaelusError(
+      throw new HoundShieldError(
         "apiKey is required",
         "INVALID_CONFIG",
         undefined,
@@ -818,7 +818,7 @@ export class Kaelus {
       );
     }
     if (!config.gateway) {
-      throw new KaelusError(
+      throw new HoundShieldError(
         "gateway URL is required",
         "INVALID_CONFIG",
         undefined,
@@ -858,7 +858,7 @@ export class Kaelus {
    *
    * @example
    * ```typescript
-   * const stream = await kaelus.stream({
+   * const stream = await houndshield.stream({
    *   provider: "openai",
    *   model: "gpt-4o",
    *   apiKey: "sk-...",
@@ -910,7 +910,7 @@ export class Kaelus {
 
       if (!response.body) {
         clear();
-        throw new KaelusError(
+        throw new HoundShieldError(
           "Response body is empty — streaming not supported by gateway",
           "NO_STREAM",
           response.status,
@@ -948,10 +948,10 @@ export class Kaelus {
       };
     } catch (err) {
       clear();
-      if (err instanceof KaelusError) throw err;
+      if (err instanceof HoundShieldError) throw err;
       if (err instanceof DOMException && err.name === "AbortError") {
         if (request.signal?.aborted) {
-          throw new KaelusError(
+          throw new HoundShieldError(
             "Request was cancelled",
             "CANCELLED",
             undefined,
@@ -960,7 +960,7 @@ export class Kaelus {
         }
         throw new TimeoutError(this.timeout);
       }
-      throw new KaelusError(
+      throw new HoundShieldError(
         `Stream request failed: ${(err as Error).message}`,
         "NETWORK_ERROR",
         undefined,
@@ -980,12 +980,12 @@ export class Kaelus {
    * many requests. The connection is authenticated once and supports multiplexed
    * streaming with automatic heartbeat and reconnection.
    *
-   * @returns A KaelusWebSocket instance for sending streaming requests.
-   * @throws {KaelusError} If the WebSocket connection fails.
+   * @returns A HoundShieldWebSocket instance for sending streaming requests.
+   * @throws {HoundShieldError} If the WebSocket connection fails.
    *
    * @example
    * ```typescript
-   * const ws = await kaelus.connect();
+   * const ws = await houndshield.connect();
    *
    * const response = await ws.request({
    *   provider: "anthropic",
@@ -1001,12 +1001,12 @@ export class Kaelus {
    * ws.close();
    * ```
    */
-  async connect(): Promise<KaelusWebSocket> {
+  async connect(): Promise<HoundShieldWebSocket> {
     const wsUrl = this.gateway
       .replace(/^http/, "ws")
       .concat("/api/gateway/ws");
 
-    return new Promise<KaelusWebSocket>((resolve, reject) => {
+    return new Promise<HoundShieldWebSocket>((resolve, reject) => {
       try {
         const ws = new WebSocket(wsUrl);
         let authenticated = false;
@@ -1040,7 +1040,7 @@ export class Kaelus {
             if (msg.type === "auth.success") {
               authenticated = true;
               clearTimeout(connectionTimeout);
-              resolve(new KaelusWebSocket(ws, wsUrl, this.apiKey));
+              resolve(new HoundShieldWebSocket(ws, wsUrl, this.apiKey));
             } else if (msg.type === "auth.error") {
               clearTimeout(connectionTimeout);
               ws.close();
@@ -1055,7 +1055,7 @@ export class Kaelus {
           if (!authenticated) {
             clearTimeout(connectionTimeout);
             reject(
-              new KaelusError(
+              new HoundShieldError(
                 "WebSocket connection failed",
                 "WS_CONNECTION_FAILED",
                 undefined,
@@ -1066,7 +1066,7 @@ export class Kaelus {
         };
       } catch (err) {
         reject(
-          new KaelusError(
+          new HoundShieldError(
             `Failed to create WebSocket: ${(err as Error).message}`,
             "WS_CREATE_FAILED",
             undefined,
@@ -1095,7 +1095,7 @@ export class Kaelus {
    *
    * @example
    * ```typescript
-   * const result = await kaelus.scan("My SSN is 123-45-6789");
+   * const result = await houndshield.scan("My SSN is 123-45-6789");
    * console.log(result.risk_level);   // "CRITICAL"
    * console.log(result.entities);     // [{ type: "PII", value_redacted: "***-**-6789", ... }]
    * console.log(result.should_block); // true
@@ -1121,10 +1121,10 @@ export class Kaelus {
       return (await response.json()) as ScanResult;
     } catch (err) {
       clear();
-      if (err instanceof KaelusError) throw err;
+      if (err instanceof HoundShieldError) throw err;
       if (err instanceof DOMException && err.name === "AbortError") {
         if (signal?.aborted) {
-          throw new KaelusError(
+          throw new HoundShieldError(
             "Request was cancelled",
             "CANCELLED",
             undefined,
@@ -1133,7 +1133,7 @@ export class Kaelus {
         }
         throw new TimeoutError(this.timeout);
       }
-      throw new KaelusError(
+      throw new HoundShieldError(
         `Scan request failed: ${(err as Error).message}`,
         "NETWORK_ERROR",
         undefined,
@@ -1159,7 +1159,7 @@ export class Kaelus {
    *
    * @example
    * ```typescript
-   * const decision = await kaelus.intercept({
+   * const decision = await houndshield.intercept({
    *   messages: [{ role: "user", content: "My SSN is 123-45-6789" }],
    *   destination: "https://api.openai.com/v1/chat/completions",
    *   userId: "user-123",
@@ -1207,10 +1207,10 @@ export class Kaelus {
       return (await response.json()) as InterceptResult;
     } catch (err) {
       clear();
-      if (err instanceof KaelusError) throw err;
+      if (err instanceof HoundShieldError) throw err;
       if (err instanceof DOMException && err.name === "AbortError") {
         if (request.signal?.aborted) {
-          throw new KaelusError(
+          throw new HoundShieldError(
             "Request was cancelled",
             "CANCELLED",
             undefined,
@@ -1219,7 +1219,7 @@ export class Kaelus {
         }
         throw new TimeoutError(this.timeout);
       }
-      throw new KaelusError(
+      throw new HoundShieldError(
         `Intercept request failed: ${(err as Error).message}`,
         "NETWORK_ERROR",
         undefined,
@@ -1233,13 +1233,13 @@ export class Kaelus {
   // -----------------------------------------------------------------------
 
   /**
-   * Check the health of the Kaelus gateway.
+   * Check the health of the Hound Shield gateway.
    *
    * @returns Health status including uptime and component checks.
    *
    * @example
    * ```typescript
-   * const health = await kaelus.health();
+   * const health = await houndshield.health();
    * console.log(health.status); // "healthy"
    * ```
    */
@@ -1262,8 +1262,8 @@ export class Kaelus {
       return (await response.json()) as HealthResult;
     } catch (err) {
       clear();
-      if (err instanceof KaelusError) throw err;
-      throw new KaelusError(
+      if (err instanceof HoundShieldError) throw err;
+      throw new HoundShieldError(
         `Health check failed: ${(err as Error).message}`,
         "NETWORK_ERROR",
         undefined,
@@ -1277,4 +1277,4 @@ export class Kaelus {
 // Default export
 // ---------------------------------------------------------------------------
 
-export default Kaelus;
+export default Hound Shield;

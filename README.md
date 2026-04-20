@@ -1,28 +1,28 @@
 <div align="center">
   <picture>
-    <img alt="Kaelus.Online — AI Compliance Firewall" src="assets/kaelus-banner.png" width="100%">
+    <img alt="Hound Shield — AI Compliance Firewall" src="assets/houndshield-banner.png" width="100%">
   </picture>
 </div>
 
 <br />
 
 <div align="center">
-  <h1>Kaelus.Online</h1>
-  <p><strong>Every AI. Every Framework. One Firewall.</strong></p>
-  <p>The only AI gateway that gives your team access to 800+ models — with SOC 2, HIPAA, and CMMC Level 2 compliance enforced on every single prompt.</p>
+  <h1>Hound Shield</h1>
+  <p><strong>Stop your team from leaking CUI to ChatGPT.</strong></p>
+  <p>A local-only AI proxy that scans every prompt in under 10ms — before it leaves your network. One URL change. CMMC Level 2, HIPAA, and SOC 2 enforced simultaneously.</p>
 </div>
 
 <br />
 
 <div align="center">
 
-[![Live](https://img.shields.io/badge/Live-kaelus.online-6366f1?style=flat-square&logo=vercel)](https://kaelus.online)
+[![Live](https://img.shields.io/badge/Live-houndshield.com-6366f1?style=flat-square&logo=vercel)](https://houndshield.com)
 [![License](https://img.shields.io/badge/License-MIT-black?style=flat-square)](LICENSE)
-[![Latency](https://img.shields.io/badge/Latency-%3C10ms-00c896?style=flat-square)](https://kaelus.online)
-[![Models](https://img.shields.io/badge/Models-800%2B-6366f1?style=flat-square)](https://kaelus.online)
-[![Frameworks](https://img.shields.io/badge/Frameworks-SOC2_%7C_HIPAA_%7C_CMMC_L2-black?style=flat-square)](https://kaelus.online)
-[![Stack](https://img.shields.io/badge/Stack-Next.js_15_%7C_Supabase_%7C_Stripe-black?style=flat-square)](https://kaelus.online)
-[![Status](https://img.shields.io/badge/Status-Production-brightgreen?style=flat-square)](https://kaelus.online)
+[![Latency](https://img.shields.io/badge/Latency-%3C10ms-00c896?style=flat-square)](https://houndshield.com)
+[![Models](https://img.shields.io/badge/Models-800%2B-6366f1?style=flat-square)](https://houndshield.com)
+[![Frameworks](https://img.shields.io/badge/Frameworks-SOC2_%7C_HIPAA_%7C_CMMC_L2-black?style=flat-square)](https://houndshield.com)
+[![Stack](https://img.shields.io/badge/Stack-Next.js_15_%7C_Supabase_%7C_Stripe-black?style=flat-square)](https://houndshield.com)
+[![Status](https://img.shields.io/badge/Status-Production-brightgreen?style=flat-square)](https://houndshield.com)
 
 </div>
 
@@ -39,15 +39,15 @@
 
 ---
 
-## What Is Kaelus?
+## What Is Hound Shield?
 
 Every time your team uses ChatGPT, Claude, Copilot, or Gemini — they may be leaking **API keys, patient records, defense contract numbers, or trade secrets** to a third-party AI that stores your data indefinitely.
 
-**Kaelus is a single URL change.** It sits between your team and every AI provider in the world. Every prompt is scanned in under 10ms, classified across 16 risk categories, and either forwarded, blocked, or quarantined — before it ever reaches the model.
+**Hound Shield is a single URL change.** It sits between your team and every AI provider in the world. Every prompt is scanned in under 10ms, classified across 16 risk categories, and either forwarded, blocked, or quarantined — before it ever reaches the model.
 
 ```
 BEFORE:  Your Team → OpenAI / Claude / Gemini / Llama
-AFTER:   Your Team → Kaelus Gateway → OpenAI / Claude / Gemini / Llama
+AFTER:   Your Team → Hound Shield Gateway → OpenAI / Claude / Gemini / Llama
                           ↓ 16-engine scan ↓
                    Blocked · Quarantined · Logged · Anchored
 ```
@@ -58,7 +58,7 @@ One deployment. **800+ models.** Three compliance frameworks simultaneously: **S
 
 ## Demo
 
-> **Live demo:** [kaelus.online](https://kaelus.online) — interact with Brain AI (bottom right) for instant compliance answers.
+> **Live demo:** [houndshield.com](https://houndshield.com) — interact with Brain AI (bottom right) for instant compliance answers.
 
 ### Gateway in Action
 
@@ -69,7 +69,7 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // After — every prompt scanned, logged, compliance-enforced
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  baseURL: "https://kaelus.online/api/gateway/intercept",
+  baseURL: "https://houndshield.com/api/gateway/intercept",
 });
 
 // Same API. 800+ models. Three compliance frameworks. <10ms overhead.
@@ -107,9 +107,19 @@ const response = await client.chat.completions.create({
 
 ---
 
-## Why Teams Choose Kaelus
+## Why Local-Only Matters for CMMC
 
-| Challenge | Old Approach | Kaelus |
+Most DLP tools scan your data in the cloud. For CMMC compliance, that's the problem — not the solution.
+
+CMMC Level 2 control **AC.L2-3.1.3** (CUI Flow Control) requires that Controlled Unclassified Information not flow to unauthorized destinations. Sending prompts containing CUI to a third-party scanning service — even a well-intentioned security vendor — is itself a CUI disclosure. Cloud DLP is architecturally incompatible with CMMC.
+
+Hound Shield runs entirely within your infrastructure. The proxy sits on your network. Pattern matching runs in your process. Nothing leaves your perimeter except the sanitized prompt forwarded to the AI provider. The only external call Hound Shield makes is a SHA-256 hash of your license key alongside a prompt count — never the prompt content, never the matched patterns, never any data. Your SPRS score, your audit logs, your CUI — all stay inside your boundary.
+
+---
+
+## Why Teams Choose Hound Shield
+
+| Challenge | Old Approach | Hound Shield |
 |---|---|---|
 | AI prompt data leaks | Block all AI tools | Scan every prompt in <10ms |
 | Multi-framework compliance | Three separate tools, three audits | One gateway, all frameworks at once |
@@ -131,7 +141,7 @@ Access **every major AI model** — GPT-4o, Claude 4.6, Gemini 2.5 Pro, Llama 3.
 ```typescript
 // Switch any model without changing your code
 const client = new OpenAI({
-  baseURL: "https://kaelus.online/api/gateway/intercept",
+  baseURL: "https://houndshield.com/api/gateway/intercept",
   apiKey: process.env.OPENAI_API_KEY,
 });
 
@@ -167,7 +177,7 @@ Parallel scanning across 16 risk categories in a single sub-10ms pass:
 
 ### AI Agent Framework Support
 
-Kaelus intercepts compliance across modern agentic architectures:
+Hound Shield intercepts compliance across modern agentic architectures:
 
 | Framework | Integration Method |
 |---|---|
@@ -182,15 +192,15 @@ Every agent tool call, every LLM request — fully compliant.
 
 ### Anthropic Managed Agents Integration
 
-Kaelus routes compliance scanning for [Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents) — composable cloud-hosted agent APIs. When Claude agents autonomously fetch data, invoke tools, or generate outputs, every LLM call passes through the Kaelus 16-engine scan before reaching the model. No code changes required beyond the base URL.
+Hound Shield routes compliance scanning for [Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents) — composable cloud-hosted agent APIs. When Claude agents autonomously fetch data, invoke tools, or generate outputs, every LLM call passes through the Hound Shield 16-engine scan before reaching the model. No code changes required beyond the base URL.
 
 ### Model Compliance Leaderboard
 
-See exactly which AI models your team uses most — and how clean each one is. Kaelus tracks **compliance scores per model**: how often each model triggers violations, what categories fire most, and which models hallucinate sensitive data. Choose the right model for regulated workloads with full evidence.
+See exactly which AI models your team uses most — and how clean each one is. Hound Shield tracks **compliance scores per model**: how often each model triggers violations, what categories fire most, and which models hallucinate sensitive data. Choose the right model for regulated workloads with full evidence.
 
 ### Real-Time Stream Scanning
 
-Kaelus scans the **output stream token by token**, not just the input. If an LLM starts generating a credit card number mid-response, the stream is truncated immediately before the full number is delivered. Real-time alerts fire before the data leaves the gateway.
+Hound Shield scans the **output stream token by token**, not just the input. If an LLM starts generating a credit card number mid-response, the stream is truncated immediately before the full number is delivered. Real-time alerts fire before the data leaves the gateway.
 
 ### Blockchain-Anchored Audit Trail
 
@@ -222,7 +232,7 @@ Compliance events reach your security team wherever they work:
 | **Slack** | Block Kit cards with severity colors | Rich alerts, action buttons, multi-channel routing |
 | **Microsoft Teams** | Adaptive Cards v1.5 | FactSet tables, severity icons, review links |
 | **Splunk** | HTTP Event Collector (HEC) | NDJSON batch delivery, CIM-compatible fields |
-| **Azure Sentinel** | Log Analytics Workspace API | HMAC-signed, KQL-queryable `KaelusCompliance_CL` |
+| **Azure Sentinel** | Log Analytics Workspace API | HMAC-signed, KQL-queryable `Hound ShieldCompliance_CL` |
 | **CEF** | Common Event Format | QRadar, ArcSight, syslog-compatible |
 
 Every critical alert routes to your SOC simultaneously. Zero additional configuration per-tool.
@@ -237,7 +247,7 @@ Async generator streaming pipeline with 500-character scan windows, 256-characte
 
 ### Option 1: Cloud (Recommended — 15 minutes)
 
-1. Sign up at [kaelus.online](https://kaelus.online)
+1. Sign up at [houndshield.com](https://houndshield.com)
 2. Copy your gateway URL from the dashboard
 3. Change one line in your AI SDK:
 
@@ -248,7 +258,7 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // After — every prompt now scanned, logged, and compliance-enforced
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  baseURL: "https://kaelus.online/api/gateway/intercept",
+  baseURL: "https://houndshield.com/api/gateway/intercept",
 });
 ```
 
@@ -257,8 +267,8 @@ const client = new OpenAI({
 ### Option 2: Self-Host (On-Prem / Air-Gap)
 
 ```bash
-git clone https://github.com/thecelestialmismatch/Kaelus.Online.git
-cd Kaelus.Online/compliance-firewall-agent
+git clone https://github.com/thecelestialmismatch/Hound Shield.git
+cd Hound Shield/compliance-firewall-agent
 
 # Docker (recommended for production)
 cp .env.example .env
@@ -284,7 +294,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.environ["OPENAI_API_KEY"],
-    base_url="https://kaelus.online/api/gateway/intercept",
+    base_url="https://houndshield.com/api/gateway/intercept",
 )
 
 # GPT-4o, Claude 4.6, Gemini — all compliant through one endpoint
@@ -301,7 +311,7 @@ from langchain_openai import ChatOpenAI
 
 llm = ChatOpenAI(
     model="gpt-4o",
-    openai_api_base="https://kaelus.online/api/gateway/intercept",
+    openai_api_base="https://houndshield.com/api/gateway/intercept",
     openai_api_key=os.environ["OPENAI_API_KEY"],
 )
 ```
@@ -313,7 +323,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  baseURL: "https://kaelus.online/api/gateway/intercept",
+  baseURL: "https://houndshield.com/api/gateway/intercept",
 });
 ```
 
@@ -322,16 +332,16 @@ const openai = new OpenAI({
 ```yaml
 # ~/.config/goose/config.yaml
 GOOSE_PROVIDER: openai
-OPENAI_BASE_URL: https://kaelus.online/api/gateway/intercept
+OPENAI_BASE_URL: https://houndshield.com/api/gateway/intercept
 OPENAI_API_KEY: your-key-here
 ```
 
 ### cURL
 
 ```bash
-curl https://kaelus.online/api/gateway/intercept/chat/completions \
+curl https://houndshield.com/api/gateway/intercept/chat/completions \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -H "x-api-key: $KAELUS_API_KEY" \
+  -H "x-api-key: $HOUNDSHIELD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "model": "gpt-4o",
@@ -380,9 +390,9 @@ curl https://kaelus.online/api/gateway/intercept/chat/completions \
 |---|---|---|
 | `SPLUNK_HEC_URL` | — | HEC endpoint (`https://splunk.company.com:8088/services/collector/event`) |
 | `SPLUNK_HEC_TOKEN` | — | HEC authentication token |
-| `SPLUNK_INDEX` | `kaelus` | Target Splunk index |
+| `SPLUNK_INDEX` | `houndshield` | Target Splunk index |
 | `SPLUNK_SOURCETYPE` | `_json` | Set to `cef` for CEF format |
-| `SPLUNK_HOST` | `kaelus-gateway` | Host field value |
+| `SPLUNK_HOST` | `houndshield-gateway` | Host field value |
 
 ### SIEM — Azure Sentinel
 
@@ -390,7 +400,7 @@ curl https://kaelus.online/api/gateway/intercept/chat/completions \
 |---|---|
 | `SENTINEL_WORKSPACE_ID` | Log Analytics Workspace ID |
 | `SENTINEL_SHARED_KEY` | Primary or secondary workspace key |
-| `SENTINEL_LOG_TYPE` | Custom log type (default: `KaelusCompliance`) |
+| `SENTINEL_LOG_TYPE` | Custom log type (default: `Hound ShieldCompliance`) |
 
 ### Blockchain Anchoring
 
@@ -425,7 +435,7 @@ curl https://kaelus.online/api/gateway/intercept/chat/completions \
 └─────────────────────┬───────────────────────────────────────┘
                       │ HTTPS — OpenAI-compatible API
 ┌─────────────────────▼───────────────────────────────────────┐
-│              Kaelus Gateway  (Next.js 15 Edge)               │
+│              Hound Shield Gateway  (Next.js 15 Edge)               │
 │                                                              │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │         16-Engine Detection Matrix  (<10ms)            │  │
@@ -455,7 +465,7 @@ curl https://kaelus.online/api/gateway/intercept/chat/completions \
   └───────────────┬──────────────────────────────────────────┘
                   │
   ┌───────────────▼──────────────────────────────────────────┐
-  │              Kaelus Dashboard  (Next.js 15)               │
+  │              Hound Shield Dashboard  (Next.js 15)               │
   │  SPRS Score · Compliance Events · Model Leaderboard       │
   │  PDF Reports · API Keys · Team Management · Audit Export  │
   └──────────────────────────────────────────────────────────┘
@@ -463,11 +473,11 @@ curl https://kaelus.online/api/gateway/intercept/chat/completions \
 
 ### Multi-Agent System
 
-Five specialized compliance agents powered by the Kaelus ReAct orchestrator:
+Five specialized compliance agents powered by the Hound Shield ReAct orchestrator:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                  Kaelus Multi-Agent System                       │
+│                  Hound Shield Multi-Agent System                       │
 │                                                                  │
 │  AgentRouter — classifies task → routes to best agent           │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐               │
@@ -581,7 +591,7 @@ All 110 controls tracked in real time. Live SPRS score using DoD methodology v1.
 
 ## Industry Verticals
 
-| Vertical | What Kaelus Protects |
+| Vertical | What Hound Shield Protects |
 |---|---|
 | **Defense Contractors** | CUI, CAGE codes, CMMC enforcement, clearance level references |
 | **Healthcare Systems** | PHI, HIPAA audit trail, EHR prompt sanitization |
@@ -621,7 +631,7 @@ All 110 controls tracked in real time. Live SPRS score using DoD methodology v1.
 ### In Progress
 
 - [ ] Browser extension — Chrome, Edge (intercept browser-native AI tools)
-- [ ] Mobile app — iOS + Android (Kaelus dashboard + push alerts on the go)
+- [ ] Mobile app — iOS + Android (Hound Shield dashboard + push alerts on the go)
 - [ ] MCP Server endpoint — model context protocol for Claude Desktop, Cursor
 
 ### Planned
@@ -641,14 +651,14 @@ All 110 controls tracked in real time. Live SPRS score using DoD methodology v1.
 ### Azure Sentinel (KQL)
 ```kql
 // All blocked prompts in the last 24 hours
-KaelusCompliance_CL
+Hound ShieldCompliance_CL
 | where action_s == "BLOCKED"
 | where TimeGenerated > ago(24h)
 | project TimeGenerated, user_id_s, risk_level_s, entity_types_s, provider_s
 | order by TimeGenerated desc
 
 // CRITICAL events by user
-KaelusCompliance_CL
+Hound ShieldCompliance_CL
 | where risk_level_s == "CRITICAL"
 | summarize count() by user_id_s, bin(TimeGenerated, 1h)
 | render timechart
@@ -656,11 +666,11 @@ KaelusCompliance_CL
 
 ### Splunk SPL
 ```spl
-index=kaelus sourcetype=_json action=BLOCKED
+index=houndshield sourcetype=_json action=BLOCKED
 | stats count by user_id, risk_level, entity_types
 | sort - count
 
-index=kaelus risk_level=CRITICAL
+index=houndshield risk_level=CRITICAL
 | timechart span=1h count by provider
 ```
 
@@ -670,7 +680,7 @@ index=kaelus risk_level=CRITICAL
 
 We treat security issues seriously. **Do not open a public GitHub issue for vulnerabilities.**
 
-Contact: `info@kaelus.online`
+Contact: `info@houndshield.com`
 
 See [SECURITY.md](SECURITY.md) for our responsible disclosure policy.
 
@@ -687,7 +697,7 @@ See [SECURITY.md](SECURITY.md) for our responsible disclosure policy.
 
 ## Acknowledgements
 
-Kaelus integrates with and is informed by the following open-source ecosystems:
+Hound Shield integrates with and is informed by the following open-source ecosystems:
 
 - [OpenRouter](https://openrouter.ai) — 800+ model routing
 - [Supabase](https://supabase.com) — PostgreSQL + Auth + RLS
@@ -700,9 +710,25 @@ Kaelus integrates with and is informed by the following open-source ecosystems:
 
 ---
 
+## Contributing
+
+1. Fork the repo and create a branch: `git checkout -b feat/your-feature`
+2. Make changes. Run `cd compliance-firewall-agent && npm run build` — must pass.
+3. Tests are required: `npm test -- --coverage` must show 80%+ coverage on changed files.
+4. Open a PR against `main`. The code-reviewer agent runs on every PR.
+
+**Do not open PRs that:**
+- Reduce CUI/PHI detection pattern count below 16
+- Modify SPRS scoring deductions without citing the NIST 800-171 Rev 2 control
+- Add external network calls that could transmit prompt content
+
+Security issues: email `info@houndshield.com` — do not open public issues for vulnerabilities.
+
+---
+
 ## License
 
-[MIT](LICENSE) — free to self-host, fork, and modify. Commercial use of the hosted service at kaelus.online requires a paid plan.
+[MIT](LICENSE) — free to self-host, fork, and modify. Commercial use of the hosted service at houndshield.com requires a paid plan.
 
 ---
 
@@ -714,10 +740,10 @@ Kaelus integrates with and is informed by the following open-source ecosystems:
 
 <br />
 
-[![Website](https://img.shields.io/badge/Website-kaelus.online-6366f1?style=flat-square)](https://kaelus.online)
-[![Docs](https://img.shields.io/badge/Docs-kaelus.online%2Fdocs-black?style=flat-square)](https://kaelus.online/docs)
-[![Pricing](https://img.shields.io/badge/Pricing-kaelus.online%2Fpricing-black?style=flat-square)](https://kaelus.online/pricing)
-[![Email](https://img.shields.io/badge/Contact-info%40kaelus.online-black?style=flat-square)](mailto:info@kaelus.online)
+[![Website](https://img.shields.io/badge/Website-houndshield.com-6366f1?style=flat-square)](https://houndshield.com)
+[![Docs](https://img.shields.io/badge/Docs-houndshield.com%2Fdocs-black?style=flat-square)](https://houndshield.com/docs)
+[![Pricing](https://img.shields.io/badge/Pricing-houndshield.com%2Fpricing-black?style=flat-square)](https://houndshield.com/pricing)
+[![Email](https://img.shields.io/badge/Contact-info%40houndshield.com-black?style=flat-square)](mailto:info@houndshield.com)
 
 <br />
 

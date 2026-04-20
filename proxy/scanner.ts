@@ -1,5 +1,5 @@
 /**
- * Kaelus Proxy — CUI/PII/PHI scanner.
+ * Hound Shield Proxy — CUI/PII/PHI scanner.
  *
  * Pure function — no I/O, no Supabase, no Next.js.
  * Takes text → returns ScanResult in <10ms for typical prompts.

@@ -2,7 +2,7 @@
  * Brain AI — State Management
  *
  * Centralized runtime state for the Brain AI agent.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export type AgentStatus =

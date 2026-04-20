@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Gateway — Performance Budget Enforcer v1.0
+// Hound Shield Gateway — Performance Budget Enforcer v1.0
 //
 // Enforces hard latency budgets on every gateway operation:
 //
@@ -101,14 +101,14 @@ class RingBuffer<T> {
 // ---------------------------------------------------------------------------
 
 const globalPerf = globalThis as unknown as {
-  __kaelus_perf?: {
+  __houndshield_perf?: {
     samples: Map<OperationType, RingBuffer<number>>;
     violations: PerfSample[];
     counters: Map<OperationType, { total: number; exceeded: number }>;
   };
 };
 
-if (!globalPerf.__kaelus_perf) {
+if (!globalPerf.__houndshield_perf) {
   const samples = new Map<OperationType, RingBuffer<number>>();
   const counters = new Map<OperationType, { total: number; exceeded: number }>();
 
@@ -118,10 +118,10 @@ if (!globalPerf.__kaelus_perf) {
     counters.set(op, { total: 0, exceeded: 0 });
   }
 
-  globalPerf.__kaelus_perf = { samples, violations: [], counters };
+  globalPerf.__houndshield_perf = { samples, violations: [], counters };
 }
 
-const perfStore = globalPerf.__kaelus_perf!;
+const perfStore = globalPerf.__houndshield_perf!;
 
 // ---------------------------------------------------------------------------
 // Core: timed execution with budget enforcement

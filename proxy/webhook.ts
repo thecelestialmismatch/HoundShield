@@ -1,5 +1,5 @@
 /**
- * Kaelus Proxy — metadata-only webhook to kaelus.online.
+ * Hound Shield Proxy — metadata-only webhook to houndshield.com.
  *
  * Posts ONLY: { timestamp, action, pattern_name, risk_level, request_id, org_id, scan_ms }
  * NEVER transmits: prompt text, CUI content, user messages, response content.
@@ -25,9 +25,9 @@ export interface EventPayload {
 // ── Config ─────────────────────────────────────────────────────────────────
 
 const INGEST_URL =
-  process.env.KAELUS_API_URL
-    ? `${process.env.KAELUS_API_URL}/events/ingest`
-    : "https://kaelus.online/api/events/ingest";
+  process.env.HOUNDSHIELD_API_URL
+    ? `${process.env.HOUNDSHIELD_API_URL}/events/ingest`
+    : "https://houndshield.com/api/events/ingest";
 
 const BATCH_SIZE = 50;
 const BATCH_DELAY_MS = 5000;
@@ -53,7 +53,7 @@ async function flush(): Promise<void> {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${_licenseKey}`,
-        "X-Kaelus-Source": "docker-proxy",
+        "X-HoundShield-Source": "docker-proxy",
       },
       body: JSON.stringify({ events: batch }),
       signal: AbortSignal.timeout(8000),
@@ -70,7 +70,7 @@ function scheduleFlush(): void {
 }
 
 /**
- * Enqueues a metadata-only event for async delivery to kaelus.online.
+ * Enqueues a metadata-only event for async delivery to houndshield.com.
  * Returns immediately — does not await network call.
  */
 export function enqueueEvent(event: Omit<EventPayload, "timestamp" | "source">): void {

@@ -1,5 +1,5 @@
 /**
- * Kaelus Proxy — standalone pattern registry.
+ * Hound Shield Proxy — standalone pattern registry.
  * No Next.js, no Supabase. Pure regex + types.
  *
  * Covers: CMMC/CUI, HIPAA/PHI, general PII/IP.

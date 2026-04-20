@@ -35,7 +35,7 @@ export type KnowledgeDomain =
   | 'performance'   // latency, benchmarks, optimization techniques
   | 'scraping'      // web scraping, data extraction techniques
   | 'orchestration' // multi-agent coordination, workflow patterns
-  | 'product'       // Kaelus product docs, internal knowledge
+  | 'product'       // Hound Shield product docs, internal knowledge
   | 'general';      // everything else
 
 export interface IngestionSource {
@@ -91,19 +91,19 @@ export interface KnowledgeIndex {
 
 /** Global store — keyed by chunk ID */
 const globalStore = globalThis as unknown as {
-  __kaelus_knowledge?: Map<string, KnowledgeChunk>;
-  __kaelus_hashes?: Set<string>;
+  __houndshield_knowledge?: Map<string, KnowledgeChunk>;
+  __houndshield_hashes?: Set<string>;
 };
 
-if (!globalStore.__kaelus_knowledge) {
-  globalStore.__kaelus_knowledge = new Map();
+if (!globalStore.__houndshield_knowledge) {
+  globalStore.__houndshield_knowledge = new Map();
 }
-if (!globalStore.__kaelus_hashes) {
-  globalStore.__kaelus_hashes = new Set();
+if (!globalStore.__houndshield_hashes) {
+  globalStore.__houndshield_hashes = new Set();
 }
 
-const knowledgeStore = globalStore.__kaelus_knowledge;
-const contentHashes = globalStore.__kaelus_hashes;
+const knowledgeStore = globalStore.__houndshield_knowledge;
+const contentHashes = globalStore.__houndshield_hashes;
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -126,7 +126,7 @@ async function fetchContent(url: string): Promise<string> {
     const res = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'Kaelus-BrainAI-Ingestor/1.0',
+        'User-Agent': 'Hound Shield-BrainAI-Ingestor/1.0',
         Accept: 'text/html,text/plain,text/markdown,application/json',
       },
     });

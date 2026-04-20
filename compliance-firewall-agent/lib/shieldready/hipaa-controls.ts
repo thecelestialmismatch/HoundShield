@@ -1,5 +1,5 @@
 /**
- * HIPAA Security Rule Control Mapping — Kaelus.Online
+ * HIPAA Security Rule Control Mapping — Hound Shield
  *
  * Maps the HIPAA Security Rule controls (45 CFR Part 164) with
  * AI risk relevance annotations. Follows the same architectural
@@ -154,7 +154,7 @@ export const HIPAA_CONTROLS: HIPAAControl[] = [
     description:
       "Perform periodic technical and non-technical evaluations to establish the extent to which security policies meet the Security Rule requirements.",
     aiRiskRelevance:
-      "Evaluations must include AI tool usage patterns, PHI exposure incidents via AI, and effectiveness of AI security controls like Kaelus.",
+      "Evaluations must include AI tool usage patterns, PHI exposure incidents via AI, and effectiveness of AI security controls like Hound Shield.",
   },
 
   // ── Physical Safeguards (§164.310) ─────────────────────────────────
@@ -226,7 +226,7 @@ export const HIPAA_CONTROLS: HIPAAControl[] = [
     description:
       "Implement hardware, software, and/or procedural mechanisms to record and examine activity in systems containing ePHI.",
     aiRiskRelevance:
-      "Every AI interaction involving PHI must be logged. Kaelus provides this via its compliance event audit trail with SHA-256 hash chain integrity.",
+      "Every AI interaction involving PHI must be logged. Hound Shield provides this via its compliance event audit trail with SHA-256 hash chain integrity.",
   },
   {
     id: "HIPAA-164.312-c1",
@@ -237,7 +237,7 @@ export const HIPAA_CONTROLS: HIPAAControl[] = [
     description:
       "Implement policies to protect ePHI from improper alteration or destruction. Includes mechanism to authenticate ePHI.",
     aiRiskRelevance:
-      "AI-generated clinical content must be validated before use. AI tools must not modify source PHI. Kaelus blockchain anchoring provides tamper-proof evidence.",
+      "AI-generated clinical content must be validated before use. AI tools must not modify source PHI. Hound Shield blockchain anchoring provides tamper-proof evidence.",
   },
   {
     id: "HIPAA-164.312-d",
@@ -259,7 +259,7 @@ export const HIPAA_CONTROLS: HIPAAControl[] = [
     description:
       "Implement technical security measures to guard against unauthorized access to ePHI being transmitted over an electronic communications network.",
     aiRiskRelevance:
-      "PHI sent to AI APIs must use TLS 1.2+. Kaelus intercepts AI traffic before it leaves the network, blocking PHI before it reaches external AI services.",
+      "PHI sent to AI APIs must use TLS 1.2+. Hound Shield intercepts AI traffic before it leaves the network, blocking PHI before it reaches external AI services.",
   },
 ];
 
@@ -439,25 +439,25 @@ function generateRecommendations(
 
   if (techGaps.length > 2) {
     recs.push(
-      "Technical safeguards need attention — deploy Kaelus AI firewall for real-time PHI interception and audit trail compliance."
+      "Technical safeguards need attention — deploy Hound Shield AI firewall for real-time PHI interception and audit trail compliance."
     );
   }
 
   if (score < 60) {
     recs.push(
-      "Overall compliance is below 60% — consider engaging a HIPAA compliance consultant alongside Kaelus automated monitoring."
+      "Overall compliance is below 60% — consider engaging a HIPAA compliance consultant alongside Hound Shield automated monitoring."
     );
   }
 
   if (gaps.some((g) => g.controlId === "HIPAA-164.312-b")) {
     recs.push(
-      "Audit Controls (§164.312(b)) gap detected — Kaelus automatically logs all AI interactions with PHI for audit compliance."
+      "Audit Controls (§164.312(b)) gap detected — Hound Shield automatically logs all AI interactions with PHI for audit compliance."
     );
   }
 
   if (gaps.some((g) => g.controlId === "HIPAA-164.312-e1")) {
     recs.push(
-      "Transmission Security gap — Kaelus blocks PHI before it reaches external AI services, satisfying §164.312(e)(1)."
+      "Transmission Security gap — Hound Shield blocks PHI before it reaches external AI services, satisfying §164.312(e)(1)."
     );
   }
 

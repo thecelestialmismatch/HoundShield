@@ -2,7 +2,7 @@
  * Brain AI — Tool Definitions
  *
  * Formal tool definition schema compatible with OpenRouter / OpenAI function calling.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export interface ToolParameterSchema {

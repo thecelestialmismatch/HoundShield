@@ -1,21 +1,21 @@
 /**
- * Azure Sentinel SIEM Connector — Kaelus.Online
+ * Azure Sentinel SIEM Connector — Hound Shield
  *
  * Sends compliance events to Azure Sentinel via the Log Analytics Data Collector API.
- * Events appear in a custom table: KaelusCompliance_CL
+ * Events appear in a custom table: Hound ShieldCompliance_CL
  *
  * Required env vars:
  *   SENTINEL_WORKSPACE_ID   — Log Analytics workspace ID (GUID)
  *   SENTINEL_WORKSPACE_KEY  — Primary or secondary workspace key (base64)
  *
  * Optional env vars:
- *   SENTINEL_LOG_TYPE       — custom table name prefix (defaults to "KaelusCompliance")
+ *   SENTINEL_LOG_TYPE       — custom table name prefix (defaults to "Hound ShieldCompliance")
  *
  * Example KQL queries (Azure Sentinel / Log Analytics):
- *   KaelusCompliance_CL | where action_s == "BLOCKED" and severity_score_d >= 7
- *   KaelusCompliance_CL | where classifications_s contains "CUI"
- *   KaelusCompliance_CL | summarize count() by risk_level_s
- *   KaelusCompliance_CL | where TimeGenerated > ago(24h) | project id_g, action_s, provider_s
+ *   Hound ShieldCompliance_CL | where action_s == "BLOCKED" and severity_score_d >= 7
+ *   Hound ShieldCompliance_CL | where classifications_s contains "CUI"
+ *   Hound ShieldCompliance_CL | summarize count() by risk_level_s
+ *   Hound ShieldCompliance_CL | where TimeGenerated > ago(24h) | project id_g, action_s, provider_s
  */
 
 import { createHmac } from "crypto";
@@ -30,7 +30,7 @@ export interface SentinelConfig extends SiemConnectorConfig {
 
 const LOG_ANALYTICS_URL =
   "https://{workspaceId}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01";
-const DEFAULT_LOG_TYPE = "KaelusCompliance";
+const DEFAULT_LOG_TYPE = "Hound ShieldCompliance";
 const NON_RETRYABLE = new Set([400, 401, 403]);
 
 /** Build HMAC-SHA256 authorization header for Log Analytics Data Collector API. */

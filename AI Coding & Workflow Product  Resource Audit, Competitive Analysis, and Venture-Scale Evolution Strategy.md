@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This report synthesizes the existing Kaelus/ShieldReady architecture, the ACE and AutoResearch agent patterns, and the prior Kaelus evolution strategy V2 into a fresh strategy focused on an AI-powered coding and workflow product positioned for venture-scale growth. It reframes the compliance firewall capabilities as the secure backbone for autonomous development workflows, and evaluates Vanta and Struere as adjacent benchmarks for compliance automation and AI-native operations. The output is structured into three phases: resource audit and integration map, competitive analysis, and a venture-ready PRD and roadmap to $10K+ MRR on a zero-cash budget.[^1][^2][^3][^4][^5][^6]
+This report synthesizes the existing Hound Shield/ShieldReady architecture, the ACE and AutoResearch agent patterns, and the prior Hound Shield evolution strategy V2 into a fresh strategy focused on an AI-powered coding and workflow product positioned for venture-scale growth. It reframes the compliance firewall capabilities as the secure backbone for autonomous development workflows, and evaluates Vanta and Struere as adjacent benchmarks for compliance automation and AI-native operations. The output is structured into three phases: resource audit and integration map, competitive analysis, and a venture-ready PRD and roadmap to $10K+ MRR on a zero-cash budget.[^1][^2][^3][^4][^5][^6]
 
 ***
 
@@ -14,10 +14,10 @@ This report synthesizes the existing Kaelus/ShieldReady architecture, the ACE an
 |---------|--------------------|--------------------|--------------|------------------------|
 | ACE (Agentic Context Engine) | Token-efficient agent pattern learning, skill accumulation | Three-role system (Agent, Reflector, SkillManager), immutable step pipeline, Skillbook injection for context compression | Online/offline learning loops, LangChain/LiteLLM integrations, browser-use enhancement | 40–50%+ token savings, higher reliability on long agentic workflows, portable learning across tasks[^1] |
 | AutoResearch (Karpathy) | Autonomous research and optimization loops under time budgets | Single-file modification (`train.py`), git-backed iteration, strict 5-minute time-budget per experiment | Continuous loop of propose → train → measure → keep/revert, TSV logging, GPU-aware constraints | Reliable autonomous improvement under bounded cost, human-reviewable diffs, metric-driven iteration[^1] |
-| Kaelus.online Compliance Firewall | Real-time AI traffic firewall and compliance scanner | Node.js edge gateway, ReAct multi-agent detection, 16-vector risk matrix, Supabase Postgres, SHA-256 ledger | Sub-50ms stream interception, AES-256 quarantine, audit-report generation, SDK-level integration examples | Enterprise-grade AI data loss prevention with zero-trust enforcement and cryptographic auditability[^2] |
-| Kaelus Evolution Strategy V2 | Full CMMC-focused product strategy and roadmap | Comprehensive resource audit (32 assets), competitor analysis vs Vanta and others, phased roadmap | Detailed PRD, integration map (context-mode, GitNexus, Axon, etc.), immediate action checklist | Ready-made GTM and architecture patterns for compliance + AI security vertical[^3] |
+| Hound Shield Compliance Firewall | Real-time AI traffic firewall and compliance scanner | Node.js edge gateway, ReAct multi-agent detection, 16-vector risk matrix, Supabase Postgres, SHA-256 ledger | Sub-50ms stream interception, AES-256 quarantine, audit-report generation, SDK-level integration examples | Enterprise-grade AI data loss prevention with zero-trust enforcement and cryptographic auditability[^2] |
+| Hound Shield Evolution Strategy V2 | Full CMMC-focused product strategy and roadmap | Comprehensive resource audit (32 assets), competitor analysis vs Vanta and others, phased roadmap | Detailed PRD, integration map (context-mode, GitNexus, Axon, etc.), immediate action checklist | Ready-made GTM and architecture patterns for compliance + AI security vertical[^3] |
 
-The new product will treat ACE and AutoResearch patterns as the **agent substrate**, Kaelus as the **security and audit layer**, and the Evolution Strategy V2 as a library of patterns to selectively re-apply in a more general AI coding/workflow context.[^2][^3][^1]
+The new product will treat ACE and AutoResearch patterns as the **agent substrate**, Hound Shield as the **security and audit layer**, and the Evolution Strategy V2 as a library of patterns to selectively re-apply in a more general AI coding/workflow context.[^2][^3][^1]
 
 ### 1.2 Deep Dives: Core Functionality and Fit
 
@@ -45,7 +45,7 @@ The new product will treat ACE and AutoResearch patterns as the **agent substrat
 - AutoResearch’s pattern maps directly to **auto-refactor and auto-test cycles**: restrict the agent to a single file or bounded change set, run test suites under time budgets, and auto-revert failing changes, all while logging metrics like test coverage and runtime.[^1]
 - `program.md` becomes a reusable specification format for user-defined workflows (e.g., "hardening auth module" or "extracting services").
 
-#### Kaelus.online Compliance Firewall
+#### Hound Shield Compliance Firewall
 
 - **Core functionality:** Real-time detection and sanitization of sensitive data in AI traffic plus forensic-grade audit reporting.[^2]
 - **Technical approach:** Edge gateway in Node.js monitoring streams with a hybrid regex + NER detection engine across 16 risk categories, PostgreSQL with row-level security, zero-trust architecture, AES-256 encrypted quarantine, and SHA-256 hashing for all events.[^2]
@@ -54,10 +54,10 @@ The new product will treat ACE and AutoResearch patterns as the **agent substrat
 
 **Fit for AI coding/workflow product:**
 
-- Kaelus becomes the **secure gateway for all model calls** in the coding product, ensuring no code, secrets, or client data leaves allowed perimeters without policy checks.
+- Hound Shield becomes the **secure gateway for all model calls** in the coding product, ensuring no code, secrets, or client data leaves allowed perimeters without policy checks.
 - SHA-256 event hashing and ledgering can be adapted for **developer workflow provenance**, proving which changes were agent-made vs human-made.
 
-#### Kaelus Evolution Strategy V2
+#### Hound Shield Evolution Strategy V2
 
 - **Core functionality:** End-to-end go-to-market, resource audit, and roadmap for a CMMC-focused, AI compliance firewall SaaS, including competitor mapping and YC-ready narrative.[^3]
 - **Technical approach:** Multi-phase roadmap (MVP, scale, growth), detailed resource mapping (context-mode, GitNexus, Axon, etc.), and moat analysis around CMMC specificity and AI traffic monitoring.[^3]
@@ -83,7 +83,7 @@ The new product will treat ACE and AutoResearch patterns as the **agent substrat
    - Implement time-bounded loops for tasks like "improve test coverage" or "optimize hot path" (e.g., 5–10 minutes per run) to bound infrastructure usage.[^1]
    - Integration point: autonomous optimization engine for code and workflows.
 
-3. **Kaelus firewall core**
+3. **Hound Shield firewall core**
    - Reuse the real-time stream scanning and quarantine layer as a **security guardrail** for all model calls, particularly when code or secrets are in context.[^2]
    - Integrate AES-256 quarantine and event hashing as part of the product’s compliance-grade provenance log.
    - Integration point: multi-tenant secure gateway + audit subsystem.
@@ -122,14 +122,14 @@ The new product will treat ACE and AutoResearch patterns as the **agent substrat
 - **Workflow Engine:** Step-based pipelines implementing ACE-style immutable contexts and AutoResearch-style time-bounded loops.
 - **Repository Intelligence:** Graph-based code model (Axon/code-review-graph), local or browser-side RAG (GitNexus patterns), and SQLite/FTS context store.
 - **Agent Substrate:** ACE-style Agent/Reflector/SkillManager operating over workflows, with Skillbook as cross-session memory.
-- **Security & Compliance:** Kaelus-derived firewall and audit ledger, policy packs (SOC2, CCPA, etc.), secret detection.
+- **Security & Compliance:** Hound Shield-derived firewall and audit ledger, policy packs (SOC2, CCPA, etc.), secret detection.
 - **Storage & Infra:** Supabase Postgres or equivalent, Redis for queues, optional Base L2 contract for blockchain-anchored event hashes.
 
 #### Integration Map by Timeline
 
 - **Days 1–30 (MVP)**
   - Implement a minimal ACE-inspired Skillbook (YAML/JSON) and step pipeline around a single coding agent.
-  - Wrap all model calls through the Kaelus-inspired gateway with basic regex+NER detection for secrets and PII.[^2]
+  - Wrap all model calls through the Hound Shield-inspired gateway with basic regex+NER detection for secrets and PII.[^2]
   - Add a local SQLite/FTS context store for per-repo notes and past diffs.[^3]
 
 - **Months 2–3**
@@ -168,7 +168,7 @@ Assume the new product, tentatively named **ForgeFlow**, as a secure AI coding a
 | Primary users | Dev teams, agencies, startups | CTOs, security leaders, compliance teams[^5] | Ops leaders, GMs, cross-functional teams[^4] |
 | Key feature set | Code-aware agents, test-aware refactors, workflow pipelines, secure gateway, audit log | Evidence collection, framework templates, risk management, AI questionnaires, Trust Center[^5][^6] | Custom schemas, rule-based automations, AI summaries, data-driven alerts[^4] |
 | AI usage | Coding agents, planning agents, code graph analysis, policy packs | Vanta AI Agent for policies and questionnaires[^7][^6] | AI insights over operational data, possibly agent deployment[^4][^10] |
-| Security/compliance | Built-in secret and PII detection, blockchain-anchored provenance inspired by Kaelus | Deep compliance frameworks and audits; limited visibility into AI traffic today[^5][^9] | Not focused on compliance; more on operational correctness[^4] |
+| Security/compliance | Built-in secret and PII detection, blockchain-anchored provenance inspired by Hound Shield | Deep compliance frameworks and audits; limited visibility into AI traffic today[^5][^9] | Not focused on compliance; more on operational correctness[^4] |
 | Pricing | Free dev tier; usage-based and per-seat higher tiers | Custom, typically 10K–30K per year with no self-serve free plan[^7][^8][^9] | Early-stage; likely seat-based SaaS, not fully transparent yet[^4][^10] |
 | Go-to-market | Bottom-up dev adoption, self-serve onboarding, communities, content | Top-down sales-led with demos, partners, and auditors[^7][^8][^9] | Product-led with early adopter outreach and HN/indie-hacker channels[^10] |
 
@@ -202,22 +202,22 @@ For an AI coding/workflow product, a **bottom-up PLG motion** with a generous fr
 
 ### 2.6 Why ForgeFlow Will Succeed
 
-- **Developer-first, security-native**: While Vanta optimizes for compliance outcomes and Struere optimizes for business operations, ForgeFlow is built **from code upwards** with Kaelus-grade security, giving developers safe superpowers instead of adding friction.[^5][^4][^2]
+- **Developer-first, security-native**: While Vanta optimizes for compliance outcomes and Struere optimizes for business operations, ForgeFlow is built **from code upwards** with Hound Shield-grade security, giving developers safe superpowers instead of adding friction.[^5][^4][^2]
 - **Agent substrate with cost discipline**: By embedding ACE and AutoResearch patterns, ForgeFlow can run powerful autonomous refactors and tests with bounded costs, competing on capability and unit economics simultaneously.[^1]
 - **Free-to-paid ladder**: A fully usable free tier with local or browser-side code intelligence creates strong distribution, unlike Vanta’s demo-gated model.[^8][^3]
 - **Workflow flexibility**: Borrowing Struere’s data-logic separation, ForgeFlow allows teams to encode unique engineering workflows instead of forcing one-size-fits-all CI rules.[^10][^4]
 
 ### 2.7 Why It Won’t Fail (Defensibility)
 
-- **Security trust edge:** Kaelus-derived firewall plus blockchain-anchored provenance provides a higher bar of auditability than typical coding assistants.[^2][^3]
+- **Security trust edge:** Hound Shield-derived firewall plus blockchain-anchored provenance provides a higher bar of auditability than typical coding assistants.[^2][^3]
 - **Data and pattern moat:** Every agent-assisted refactor, test, and incident feeds Skillbook learning and graph data, compounding into unique per-tenant and cross-tenant insights (when anonymized).[^3][^1]
 - **Ecosystem embedding:** MCP tools and IDE integrations make ForgeFlow a **fabric** that underlies existing workflows rather than another standalone dashboard users must visit.[^4][^3]
 
 ### 2.8 What’s Missing Today and Where to Improve
 
-From the Kaelus V2 strategy and current assets, several gaps are evident when pivoting to an AI coding/workflow focus:
+From the Hound Shield V2 strategy and current assets, several gaps are evident when pivoting to an AI coding/workflow focus:
 
-- **Code-first UX:** Existing Kaelus UI is compliance-dashboard oriented; ForgeFlow requires repository-centric UX—diff views, test runs, pipelines, and workflow editors.[^2][^3]
+- **Code-first UX:** Existing Hound Shield UI is compliance-dashboard oriented; ForgeFlow requires repository-centric UX—diff views, test runs, pipelines, and workflow editors.[^2][^3]
 - **Language and framework coverage:** Initial implementations may only support a subset of languages; to compete, coverage for at least JS/TS, Python, and a major backend language is required.
 - **Developer GTM motions:** The current strategy targets defense contractors with direct sales and C3PAO partners; ForgeFlow needs community channels (open-source, content, devtools ecosystems) and strong documentation.
 - **Operational analytics:** Struere-like insights (bottlenecks in PR review, flakiness in tests, etc.) must be layered in to make workflows self-optimizing.[^4]
@@ -236,7 +236,7 @@ From the Kaelus V2 strategy and current assets, several gaps are evident when pi
 
 **Vision:** ForgeFlow is the secure AI operating system for engineering teams—autonomous agents that refactor, test, and maintain code under human guidance, with full security, provenance, and workflow control.
 
-**Thesis:** Generic coding copilots are rapidly commoditizing, but **secure, workflow-aware, and organization-specific** agents remain underserved. A product that combines Kaelus-grade security, ACE/AutoResearch agent patterns, and Struere-style workflow modeling can reach venture scale by directly generating and protecting revenue for teams.
+**Thesis:** Generic coding copilots are rapidly commoditizing, but **secure, workflow-aware, and organization-specific** agents remain underserved. A product that combines Hound Shield-grade security, ACE/AutoResearch agent patterns, and Struere-style workflow modeling can reach venture scale by directly generating and protecting revenue for teams.
 
 ### 3.2 Core PRD
 
@@ -248,7 +248,7 @@ From the Kaelus V2 strategy and current assets, several gaps are evident when pi
 
 #### 3.2.2 MVP Feature Set (Phase 1, Days 1–30)
 
-- **Secure Coding Gateway (Kaelus-derived)**
+- **Secure Coding Gateway (Hound Shield-derived)**
   - All LLM calls go through a gateway implementing secret and PII detection, basic AES-256 quarantine, and SHA-256 event hashing for logs.[^2]
   - Policy editor to block or redact outbound content containing secrets or customer identifiers.
 
@@ -281,7 +281,7 @@ From the Kaelus V2 strategy and current assets, several gaps are evident when pi
 
 **Features to build:**
 
-- Secure gateway with detection rules and event hashing (reuse Kaelus patterns).[^2]
+- Secure gateway with detection rules and event hashing (reuse Hound Shield patterns).[^2]
 - Basic Skillbook and pipeline engine for Plan/Edit/Test.
 - IDE extension for VS Code offering guided refactor commands.
 - Simple Base L2 contract for event hash anchoring.
@@ -375,7 +375,7 @@ From the Kaelus V2 strategy and current assets, several gaps are evident when pi
 
 The product is intentionally structured as **modular layers**—gateway, agent substrate, workflow engine, and UX—so that the core security and provenance stack can be reused or spun out even if the initial coding workflow niche needs adjustment. Blockchain is applied surgically where it creates real defensibility and value: anchoring change and policy histories for high-trust environments, not as a buzzword feature.[^2][^3]
 
-By grounding the roadmap in existing Kaelus assets and ACE/AutoResearch patterns, and by learning positioning and GTM lessons from Vanta and Struere, this strategy presents a credible path to a venture-scale AI coding/workflow platform with zero-cash execution and clear steps to 10K+ MRR.
+By grounding the roadmap in existing Hound Shield assets and ACE/AutoResearch patterns, and by learning positioning and GTM lessons from Vanta and Struere, this strategy presents a credible path to a venture-scale AI coding/workflow platform with zero-cash execution and clear steps to 10K+ MRR.
 
 ---
 
@@ -389,7 +389,7 @@ Two complem...
 
 2. [README.md]([URL REDACTED — credentials removed]) - <div align="center">
   <picture>
-    <img alt="Kaelus AI Security Framework" src="assets/kaelus-bann...
+    <img alt="Hound Shield AI Security Framework" src="assets/kaelus-bann...
 
 3. [KAELUS-EVOLUTION-STRATEGY-V2.md]([URL REDACTED — credentials removed]) - # KAELUS.Online — EVOLUTION STRATEGY V2
 ## Resource Audit · Competitive Analysis · Venture-Ready PRD...

@@ -1,4 +1,4 @@
-# Kaelus.Online — Lessons Learned
+# Hound Shield — Lessons Learned
 
 Self-improvement loop. Updated after every correction or resolved escalation.
 Pattern: **what happened → root cause → rule that prevents recurrence**

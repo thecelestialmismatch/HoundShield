@@ -55,7 +55,7 @@ export default function KnowledgeBase() {
   // Load from localStorage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('kaelus_kb_docs');
+      const stored = localStorage.getItem('houndshield_kb_docs');
       if (stored) setDocuments(JSON.parse(stored));
     } catch { /* ignore */ }
   }, []);
@@ -63,7 +63,7 @@ export default function KnowledgeBase() {
   const saveDocuments = (docs: KBDocument[]) => {
     setDocuments(docs);
     try {
-      localStorage.setItem('kaelus_kb_docs', JSON.stringify(docs));
+      localStorage.setItem('houndshield_kb_docs', JSON.stringify(docs));
     } catch { /* ignore */ }
   };
 
@@ -83,7 +83,7 @@ export default function KnowledgeBase() {
 
     // Also add to server-side knowledge base via a lightweight call
     try {
-      const apiKey = localStorage.getItem('kaelus_openrouter_key') || '';
+      const apiKey = localStorage.getItem('houndshield_openrouter_key') || '';
       if (apiKey) {
         await fetch('/api/agent/execute', {
           method: 'POST',

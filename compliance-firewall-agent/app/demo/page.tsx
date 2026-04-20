@@ -261,10 +261,10 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                             <p className="text-xs text-slate-500 leading-relaxed">{result.fix}</p>
                         </div>
                     </div>
-                    {/* Kaelus Pro upgrade prompt */}
+                    {/* Hound Shield Pro upgrade prompt */}
                     <div className="bg-brand-500/10 border border-brand-500/20 rounded-lg p-3 mt-2">
                         <p className="text-[11px] text-brand-300 leading-relaxed">
-                            <strong>With Kaelus Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
+                            <strong>With Hound Shield Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
                         </p>
                     </div>
                 </div>
@@ -482,7 +482,7 @@ export default function FreeDemoPage() {
                                             )}
                                         </div>
 
-                                        <p className="text-xs text-slate-400 mb-2">Click each threat to see impact, fix tips, and why you need Kaelus Pro ↓</p>
+                                        <p className="text-xs text-slate-400 mb-2">Click each threat to see impact, fix tips, and why you need Hound Shield Pro ↓</p>
 
                                         {results.map((r, i) => (
                                             <ThreatCard key={i} result={r} companyName={companyName} />
@@ -492,10 +492,10 @@ export default function FreeDemoPage() {
                                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-purple-500/15 border border-brand-500/25">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Package className="w-4 h-4 text-brand-400" />
-                                                <p className="text-sm font-bold text-white">Kaelus Pro Package</p>
+                                                <p className="text-sm font-bold text-white">Hound Shield Pro Package</p>
                                             </div>
                                             <p className="text-xs text-slate-500 mb-3 leading-relaxed">
-                                                This free scanner shows you the problem. <strong className="text-slate-300">Kaelus Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
+                                                This free scanner shows you the problem. <strong className="text-slate-300">Hound Shield Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
                                             </p>
                                             <Link href="/auth" className="btn-primary w-full text-center text-sm !py-3 mb-2">
                                                 Get Full Protection <ArrowRight className="w-4 h-4" />
@@ -514,7 +514,7 @@ export default function FreeDemoPage() {
                     <div className="mt-20">
                         <div className="text-center mb-10">
                             <h2 className="text-3xl font-bold tracking-tight mb-3">What Our AI Scans For</h2>
-                            <p className="text-sm text-slate-400 max-w-2xl mx-auto">Kaelus uses 13 AI models to detect 9 categories of sensitive data. Here&apos;s every threat pattern we check — and what makes our detection smarter than regex-only tools.</p>
+                            <p className="text-sm text-slate-400 max-w-2xl mx-auto">Hound Shield uses 13 AI models to detect 9 categories of sensitive data. Here&apos;s every threat pattern we check — and what makes our detection smarter than regex-only tools.</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
@@ -564,11 +564,11 @@ export default function FreeDemoPage() {
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">5. Understand What You Need</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-300">Kaelus Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
+                                    <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-300">Hound Shield Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-emerald-300 mb-2">6. Get the Full Package</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">Ready to protect your company? Sign up for Kaelus Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
+                                    <p className="text-xs text-slate-500 leading-relaxed">Ready to protect your company? Sign up for Hound Shield Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
                                 </div>
                             </div>
                         </div>
@@ -595,7 +595,7 @@ export default function FreeDemoPage() {
                             </ul>
                         </div>
                         <div className="glass-card-glow p-6 border-brand-500/20">
-                            <h3 className="text-sm font-bold text-brand-300 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-400" /> Kaelus Pro Package</h3>
+                            <h3 className="text-sm font-bold text-brand-300 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-400" /> Hound Shield Pro Package</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "13 AI models with context awareness",
@@ -639,7 +639,7 @@ export default function FreeDemoPage() {
 
             <footer className="border-t border-white/10 bg-transparent py-8">
                 <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-                    &copy; {new Date().getFullYear()} Kaelus.online — All rights reserved.
+                    &copy; {new Date().getFullYear()} Hound Shield — All rights reserved.
                 </div>
             </footer>
         </div>

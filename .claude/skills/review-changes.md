@@ -1,7 +1,6 @@
 ---
 name: Review Changes
 description: Perform a structured code review using change detection and impact
-user-invocable: true
 ---
 
 ## Review Changes

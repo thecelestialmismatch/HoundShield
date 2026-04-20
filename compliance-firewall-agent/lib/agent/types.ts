@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Agentic AI — Type System v3.0
+// Hound Shield Agentic AI — Type System v3.0
 // ============================================================================
 
 export type AgentEventType =

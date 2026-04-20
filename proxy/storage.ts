@@ -1,5 +1,5 @@
 /**
- * Kaelus Proxy — local SQLite event log.
+ * Hound Shield Proxy — local SQLite event log.
  *
  * Stores metadata ONLY. Never stores prompt text, CUI content, or user data.
  * Schema fields: timestamp, action, pattern_name, risk_level, request_id, org_id, scan_ms.
@@ -24,8 +24,8 @@ export interface ProxyEvent {
 
 // ── Init ────────────────────────────────────────────────────────────────────
 
-const DB_DIR = process.env.KAELUS_DATA_DIR ?? path.join(process.cwd(), "data");
-const DB_PATH = path.join(DB_DIR, "kaelus-events.db");
+const DB_DIR = process.env.HOUNDSHIELD_DATA_DIR ?? path.join(process.cwd(), "data");
+const DB_PATH = path.join(DB_DIR, "houndshield-events.db");
 
 function openDb(): Database.Database {
   fs.mkdirSync(DB_DIR, { recursive: true });

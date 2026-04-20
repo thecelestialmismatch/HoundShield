@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Kaelus Proxy — one-command install
-# Usage: curl -sSL https://kaelus.online/install | bash
+# Hound Shield Proxy — one-command install
+# Usage: curl -sSL https://houndshield.com/install | bash
 set -euo pipefail
 
 PROXY_PORT="${PROXY_PORT:-8080}"
 IMAGE="kaelus/proxy:latest"
 
 echo ""
-echo "  Kaelus Compliance Proxy — Installer"
+echo "  Hound Shield Compliance Proxy — Installer"
 echo "  ======================================"
 echo ""
 
@@ -27,17 +27,17 @@ fi
 
 # ── Collect credentials ──────────────────────────────────────────────────────
 
-if [ -z "${KAELUS_LICENSE_KEY:-}" ]; then
-  echo "  Step 1: Enter your Kaelus license key."
-  echo "  (Get one at https://kaelus.online/dashboard)"
+if [ -z "${HOUNDSHIELD_LICENSE_KEY:-}" ]; then
+  echo "  Step 1: Enter your Hound Shield license key."
+  echo "  (Get one at https://houndshield.com/dashboard)"
   echo ""
-  read -rp "  License key: " KAELUS_LICENSE_KEY
+  read -rp "  License key: " HOUNDSHIELD_LICENSE_KEY
 fi
 
 if [ -z "${UPSTREAM_API_KEY:-}" ]; then
   echo ""
   echo "  Step 2: Enter your AI provider API key."
-  echo "  (This is your existing OpenAI/Anthropic/etc. key — Kaelus never stores it)"
+  echo "  (This is your existing OpenAI/Anthropic/etc. key — Hound Shield never stores it)"
   echo ""
   read -rp "  Provider API key: " UPSTREAM_API_KEY
 fi
@@ -47,7 +47,7 @@ UPSTREAM_PROVIDER="${UPSTREAM_PROVIDER:-openai}"
 # ── Pull image ───────────────────────────────────────────────────────────────
 
 echo ""
-echo "  Pulling Kaelus proxy image..."
+echo "  Pulling Hound Shield proxy image..."
 docker pull "$IMAGE"
 
 # ── Stop existing container if running ──────────────────────────────────────
@@ -60,12 +60,12 @@ fi
 
 # ── Start container ──────────────────────────────────────────────────────────
 
-echo "  Starting Kaelus proxy on port ${PROXY_PORT}..."
+echo "  Starting Hound Shield proxy on port ${PROXY_PORT}..."
 docker run -d \
   --name kaelus-proxy \
   --restart unless-stopped \
   -p "${PROXY_PORT}:8080" \
-  -e KAELUS_LICENSE_KEY="$KAELUS_LICENSE_KEY" \
+  -e HOUNDSHIELD_LICENSE_KEY="$HOUNDSHIELD_LICENSE_KEY" \
   -e UPSTREAM_API_KEY="$UPSTREAM_API_KEY" \
   -e UPSTREAM_PROVIDER="$UPSTREAM_PROVIDER" \
   -v kaelus-data:/data \
@@ -84,7 +84,7 @@ done
 STATUS=$(curl -sf "http://localhost:${PROXY_PORT}/health" 2>/dev/null || echo "failed")
 if [[ "$STATUS" == *"ok"* ]]; then
   echo ""
-  echo "  Kaelus proxy is running!"
+  echo "  Hound Shield proxy is running!"
   echo ""
   echo "  ── One change in your AI client ────────────────────────────────"
   echo "  Set: baseURL = \"http://localhost:${PROXY_PORT}/v1\""
@@ -101,7 +101,7 @@ if [[ "$STATUS" == *"ok"* ]]; then
   echo "      -d '{\"messages\":[{\"role\":\"user\",\"content\":\"CAGE 1ABC2 project\"}]}'"
   echo "  ──────────────────────────────────────────────────────────────────"
   echo ""
-  echo "  Dashboard: https://kaelus.online/dashboard"
+  echo "  Dashboard: https://houndshield.com/dashboard"
   echo ""
 else
   echo "  WARNING: Health check failed. Check logs: docker logs kaelus-proxy"

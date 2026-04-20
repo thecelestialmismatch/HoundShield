@@ -3,13 +3,13 @@
  *
  * Direct connection, deep-link, and remote execution modes.
  * Describes how Brain AI can be invoked from different contexts.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export type RuntimeMode =
   | "standard"      // Normal SSE streaming via /api/brain-ai/execute
   | "direct"        // Direct API call, no streaming
-  | "deep_link"     // Launched via URL deep-link (e.g. kaelus.online/chat?q=...)
+  | "deep_link"     // Launched via URL deep-link (e.g. houndshield.com/chat?q=...)
   | "remote"        // Proxied through external gateway
   | "ssh"           // SSH tunnel mode (Docker only)
   | "embedded";     // Embedded in another app via SDK
@@ -65,11 +65,11 @@ const RUNTIME_MODES: DirectModeReport[] = [
     supportsTools: false,
     maxTokens: 16384,
     latencyClass: "standard",
-    notes: "Routes through Kaelus compliance gateway with full scanning.",
+    notes: "Routes through Hound Shield compliance gateway with full scanning.",
   },
   {
     mode: "embedded",
-    endpoint: "https://gateway.kaelus.online/v1",
+    endpoint: "https://gateway.houndshield.com/v1",
     supportsStreaming: true,
     supportsTools: false,
     maxTokens: 16384,

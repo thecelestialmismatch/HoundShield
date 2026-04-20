@@ -28,7 +28,7 @@ function useLazyVideo() {
   return ref;
 }
 
-export function KaelusAboutV2() {
+export function Hound ShieldAboutV2() {
   const videoRef = useLazyVideo();
 
   return (
@@ -66,7 +66,7 @@ export function KaelusAboutV2() {
                 mix-blend-exclusion opacity-90 select-none -rotate-[4deg]
               "
             >
-              Kaelus
+              Hound Shield
             </span>
             <h2
               className="
@@ -77,7 +77,7 @@ export function KaelusAboutV2() {
             >
               Hello!
               <br />
-              I&apos;m Kaelus
+              I&apos;m Hound Shield
             </h2>
           </motion.div>
 

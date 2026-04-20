@@ -2,7 +2,7 @@
 // Agents — List API
 //
 // GET /api/agents/list
-//   Returns all 5 built-in Kaelus agents with their configs.
+//   Returns all 5 built-in Hound Shield agents with their configs.
 //   Used by the frontend agents page to populate the agent cards.
 //
 // POST /api/agents/list
