@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
+import { HeroSection } from "@/components/landing/HeroSection";
 
 /* ── Fade-in wrapper (same as features/about pages) ─────── */
 function FadeIn({
@@ -43,13 +44,6 @@ function FadeIn({
 }
 
 /* ── Data ─────────────────────────────────────────────────── */
-const metrics = [
-  { value: "16", label: "Detection engines" },
-  { value: "<10ms", label: "Scan latency" },
-  { value: "110", label: "NIST 800-171 controls" },
-  { value: "99.9%", label: "Uptime SLA" },
-];
-
 const steps = [
   {
     number: "01",
@@ -116,51 +110,8 @@ export default function HomePage() {
       <ScrollProgressBar />
       <Navbar variant="dark" />
 
-      {/* ── Hero ───────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28">
-        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <FadeIn>
-            <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4">
-              CMMC Level 2 · HIPAA · SOC 2
-            </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-[1.1]">
-              Stop your team from leaking<br className="hidden md:block" /> CUI to ChatGPT.
-            </h1>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Hound Shield sits between your team and every AI provider. Prompts are scanned
-              on your machine in under 10ms — they never reach our servers. If a prompt
-              contains CUI, FOUO, or PHI, it&apos;s blocked before it reaches the model.
-              One URL change. CMMC Level 2.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-2 bg-[#F5C842] hover:bg-[#e8b830] text-[#07070b] font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
-              >
-                Start free — no card required <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/docs"
-                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors px-8 py-3.5 rounded-xl border border-white/10 hover:border-white/20"
-              >
-                See how it works →
-              </Link>
-            </div>
-          </FadeIn>
-
-          {/* Metrics strip */}
-          <FadeIn delay={0.15}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/8 rounded-2xl overflow-hidden border border-white/10">
-              {metrics.map((m) => (
-                <div key={m.label} className="bg-[#07070b] px-6 py-6 text-center">
-                  <p className="text-2xl sm:text-3xl font-extrabold text-[#F5C842] font-mono mb-1">{m.value}</p>
-                  <p className="text-xs text-slate-500">{m.label}</p>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+      {/* ── Hero — 2-col with live dashboard ───────────────── */}
+      <HeroSection />
 
       {/* ── How it works ───────────────────────────────────── */}
       <section className="py-20 px-6 bg-[#0a0a12]">
