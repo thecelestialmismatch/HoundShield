@@ -5,7 +5,7 @@ paths:
   - "compliance-firewall-agent/app/**/*.ts"
 ---
 
-# Frontend Rules — Hound Shield
+# Frontend Rules — Kaelus.Online
 
 ## Design System (NEVER violate)
 - Background: `bg-surface` (#F8FAFC) — never raw `bg-white`

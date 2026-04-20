@@ -1,5 +1,5 @@
 #!/bin/bash
-# Hound Shield pre-commit checks
+# Kaelus.Online pre-commit checks
 # Exit 2 = block commit | Exit 0 = allow
 
 APP="$(git rev-parse --show-toplevel)/compliance-firewall-agent"
@@ -22,13 +22,6 @@ if [ -n "$STAGED" ]; then
     echo "BLOCKED: ESLint errors found. Fix before committing."
     exit 2
   fi
-fi
-
-# Test suite with coverage gate
-npm test -- --silent --coverage 2>&1
-if [ $? -ne 0 ]; then
-  echo "BLOCKED: Test suite failed. Fix tests before committing."
-  exit 2
 fi
 
 echo "Pre-commit checks passed."

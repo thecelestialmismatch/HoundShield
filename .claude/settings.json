@@ -45,7 +45,7 @@
         "timeout": 10000
       },
       {
-        "command": "/Users/yantr/Desktop/Hound Shield-main/.claude/hooks/pre-commit.sh",
+        "command": "/Users/yantr/Desktop/Kaelus.Online-main/.claude/hooks/pre-commit.sh",
         "timeout": 60000
       }
     ]

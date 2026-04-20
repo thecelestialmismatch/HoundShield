@@ -79,13 +79,13 @@ let SETTINGS = {
   enabled: true,
   blockOnRisk: ["CRITICAL", "HIGH"],
   apiKey: null,
-  endpoint: "https://kaelus.online/api/v1/scan",
+  endpoint: "https://houndshield.com/api/v1/scan",
 };
 
 function loadSettings() {
   if (typeof chrome !== "undefined" && chrome.storage) {
     chrome.storage.sync.get(
-      { enabled: true, blockOnRisk: ["CRITICAL", "HIGH"], apiKey: null, endpoint: "https://kaelus.online/api/v1/scan" },
+      { enabled: true, blockOnRisk: ["CRITICAL", "HIGH"], apiKey: null, endpoint: "https://houndshield.com/api/v1/scan" },
       (items) => { Object.assign(SETTINGS, items); }
     );
   }
@@ -285,7 +285,7 @@ function showBanner(findings, blocked, onSendAnyway) {
   footer.className = "kaelus-footer";
 
   const footerLink = document.createElement("a");
-  footerLink.href = "https://kaelus.online/dashboard";
+  footerLink.href = "https://houndshield.com/dashboard";
   footerLink.target = "_blank";
   footerLink.rel = "noopener noreferrer";
   footerLink.className = "kaelus-footer-link";
