@@ -1,8 +1,8 @@
 /**
  * Brain AI — Core Data Models
  *
- * Brain AI — original TypeScript implementation for Kaelus.online.py (kaelus/Brain AI).
- * Original Brain AI implementation for Kaelus.online.
+ * Brain AI — original TypeScript implementation for Hound Shield.py (houndshield/Brain AI).
+ * Original Brain AI implementation for Hound Shield.
  * 
  */
 
@@ -126,7 +126,7 @@ export function defaultQueryEngineConfig(): QueryEngineConfig {
     maxBudgetTokens: 8192,
     model: "google/gemini-flash-1.5",
     systemPrompt:
-      "You are Brain AI — the intelligent core of Kaelus.online, an AI compliance firewall for defense contractors and regulated industries. You help users achieve CMMC Level 2, HIPAA, and SOC 2 compliance through intelligent guidance, threat analysis, and automated documentation.",
+      "You are Brain AI — the intelligent core of Hound Shield, an AI compliance firewall for defense contractors and regulated industries. You help users achieve CMMC Level 2, HIPAA, and SOC 2 compliance through intelligent guidance, threat analysis, and automated documentation.",
     temperature: 0.7,
   };
 }

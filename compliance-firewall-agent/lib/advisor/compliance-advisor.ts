@@ -91,7 +91,7 @@ interface AnthropicResponse {
 // the text content block — no tool_use required for the output format.
 // ---------------------------------------------------------------------------
 
-const SYSTEM_PROMPT = `You are a compliance classification engine for Kaelus AI Firewall.
+const SYSTEM_PROMPT = `You are a compliance classification engine for Hound Shield AI Firewall.
 
 Your mission: determine the exact compliance risk of the given text across:
   - SOC 2: access control, credential exposure, audit log gaps
@@ -203,7 +203,7 @@ export async function classifyWithAdvisor(
         return null;
       }
       console.warn(
-        `[kaelus:advisor] Anthropic API error ${response.status}: ${errorText.slice(0, 200)}`
+        `[houndshield:advisor] Anthropic API error ${response.status}: ${errorText.slice(0, 200)}`
       );
       return null;
     }
@@ -225,7 +225,7 @@ export async function classifyWithAdvisor(
     try {
       parsed = JSON.parse(jsonText) as Record<string, unknown>;
     } catch {
-      console.warn("[kaelus:advisor] Failed to parse JSON from response:", jsonText.slice(0, 200));
+      console.warn("[houndshield:advisor] Failed to parse JSON from response:", jsonText.slice(0, 200));
       return null;
     }
 
@@ -247,7 +247,7 @@ export async function classifyWithAdvisor(
     // AbortError from timeout or network failure — non-fatal
     const errMsg = err instanceof Error ? err.message : String(err);
     if (!errMsg.includes("AbortError") && !errMsg.includes("abort")) {
-      console.warn("[kaelus:advisor] Classification failed:", errMsg);
+      console.warn("[houndshield:advisor] Classification failed:", errMsg);
     }
     return null;
   }

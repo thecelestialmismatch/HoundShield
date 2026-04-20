@@ -146,7 +146,7 @@ export function LiveScanner() {
               <div className="w-2.5 h-2.5 rounded-full bg-warning/60" />
               <div className="w-2.5 h-2.5 rounded-full bg-success/60" />
             </div>
-            <span className="text-[10px] font-mono text-slate-400">kaelus-scanner</span>
+            <span className="text-[10px] font-mono text-slate-400">houndshield-scanner</span>
           </div>
           <textarea
             value={text}

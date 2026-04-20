@@ -36,7 +36,7 @@ const plans = [
     annualTotal: 0,
     description: "7-day free trial — no credit card required. Explore CMMC tools and see your SPRS score.",
     features: [
-      "Kaelus CMMC assessment (read-only)",
+      "Hound Shield CMMC assessment (read-only)",
       "110-control gap analysis",
       "Live SPRS score calculator",
       "Basic compliance dashboard",
@@ -60,7 +60,7 @@ const plans = [
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
-      "Kaelus assessment (editable)",
+      "Hound Shield assessment (editable)",
       "10 user seats",
       "Gap analysis + remediation roadmap",
       "JSON compliance reports",
@@ -549,7 +549,7 @@ export default function PricingPage() {
                   Try any paid plan risk-free. If you&apos;re not completely satisfied
                   within the first 30 days, we&apos;ll refund every penny. No
                   questions asked, no hoops to jump through. We&apos;re that
-                  confident you&apos;ll love Kaelus.
+                  confident you&apos;ll love Hound Shield.
                 </p>
               </div>
             </div>
@@ -722,7 +722,7 @@ export default function PricingPage() {
                 <span className="text-gradient-brand">Questions</span>
               </h2>
               <p className="text-slate-400">
-                Everything you need to know about Kaelus pricing and plans.
+                Everything you need to know about Hound Shield pricing and plans.
               </p>
             </div>
           </AnimatedSection>
@@ -759,7 +759,7 @@ export default function PricingPage() {
                   </span>
                 </h2>
                 <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ teams that trust Kaelus to protect their most
+                  Join 500+ teams that trust Hound Shield to protect their most
                   sensitive data from unauthorized AI exposure. Deploy in
                   under 15 minutes.
                 </p>
@@ -868,7 +868,7 @@ export default function PricingPage() {
           </div>
           <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-700">
-              &copy; 2026 Kaelus.online — All rights reserved.
+              &copy; 2026 Hound Shield — All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-600">
               <span>Privacy Policy</span>

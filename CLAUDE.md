@@ -1,4 +1,4 @@
-# Kaelus.Online — Project Brain
+# Hound Shield — Project Brain
 
 ## Product
 Local-only AI compliance firewall. Intercepts every AI prompt (ChatGPT, Copilot, Claude) before it leaves the network. Simultaneously enforces SOC 2, HIPAA, CMMC Level 2. 16 detection engines. <10ms latency. One proxy URL change to deploy.

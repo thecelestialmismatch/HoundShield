@@ -43,7 +43,7 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const FALLBACK_MESSAGE =
   "I'm having trouble connecting to my AI brain right now. " +
-  "For CMMC, SPRS, and compliance questions I can answer instantly — try asking about CUI detection, SPRS scoring, or how to install Kaelus. " +
+  "For CMMC, SPRS, and compliance questions I can answer instantly — try asking about CUI detection, SPRS scoring, or how to install Hound Shield. " +
   "For complex questions, make sure OPENROUTER_API_KEY is set in your Vercel environment variables.";
 
 // ---------------------------------------------------------------------------
@@ -88,8 +88,8 @@ async function callOpenRouter(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
-        "HTTP-Referer": "https://kaelus.online",
-        "X-Title": "Kaelus Brain AI",
+        "HTTP-Referer": "https://houndshield.com",
+        "X-Title": "Hound Shield Brain AI",
       },
       body: JSON.stringify({
         model,
@@ -236,7 +236,7 @@ export async function POST(request: NextRequest) {
             message:
               `Compliance Alert: Your message was blocked — it contains ` +
               `${scanResult.classifications.join(", ")} data (Risk: ${scanResult.risk_level}). ` +
-              `Kaelus protects sensitive data from reaching AI providers.`,
+              `Hound Shield protects sensitive data from reaching AI providers.`,
             scan: {
               risk_level: scanResult.risk_level,
               classifications: scanResult.classifications,
@@ -283,7 +283,7 @@ export async function POST(request: NextRequest) {
       const resolvedModel = MODEL_MAP[model] ?? model;
       const systemPrompt =
         system ||
-        "You are Brain AI, the intelligent compliance assistant embedded in Kaelus.Online. " +
+        "You are Brain AI, the intelligent compliance assistant embedded in Hound Shield. " +
         "You are a concise expert in CMMC Level 2, NIST 800-171, SPRS scoring, HIPAA PHI, SOC 2, CUI detection, and AI security. " +
         "Keep answers under 150 words. Use bullet points for lists. Be warm and expert.";
 
@@ -304,7 +304,7 @@ export async function POST(request: NextRequest) {
     // ── 4. Final fallback — always return something useful ─────────────────
     const fallbackText = apiKey
       ? FALLBACK_MESSAGE
-      : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install Kaelus — I can answer those instantly! For free-form AI questions, an OpenRouter API key is required (set OPENROUTER_API_KEY in Vercel).";
+      : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install Hound Shield — I can answer those instantly! For free-form AI questions, an OpenRouter API key is required (set OPENROUTER_API_KEY in Vercel).";
 
     return new Response(streamTextAsSSE(fallbackText), { headers: sseHeaders });
   } catch (err) {

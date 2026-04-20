@@ -33,10 +33,10 @@ Then ask ONE question if genuinely ambiguous. Start working immediately after.
 
 ## IDENTITY
 
-Product: Kaelus.online — one AI compliance firewall enforcing SOC 2, HIPAA, and CMMC Level 2 simultaneously.
+Product: Hound Shield — one AI compliance firewall enforcing SOC 2, HIPAA, and CMMC Level 2 simultaneously.
 Stack: Next.js 15, React 19, TypeScript, Supabase, Stripe, Tailwind, Framer Motion, Recharts
 App root: `compliance-firewall-agent/`
-Live URL: https://kaelus.online
+Live URL: https://houndshield.com
 Revenue target: $10K MRR, YC S26/W27
 Market: 80,000+ US contractors need CMMC L2. November 2026 enforcement deadline.
 
@@ -201,7 +201,7 @@ If any are missing, stop and set them before doing anything else.
 
 ## WHAT THIS PRODUCT IS (never re-explain this — just know it)
 
-One proxy URL change. Zero code changes for the customer. Every prompt from ChatGPT, Copilot, and Claude goes through Kaelus first. 16 detection engines. Under 10ms. SOC 2, HIPAA, and CMMC Level 2 simultaneously. Defense contractor angle: November 2026 CMMC enforcement, $30K-$150K C3PAO alternative, starting at free.
+One proxy URL change. Zero code changes for the customer. Every prompt from ChatGPT, Copilot, and Claude goes through Hound Shield first. 16 detection engines. Under 10ms. SOC 2, HIPAA, and CMMC Level 2 simultaneously. Defense contractor angle: November 2026 CMMC enforcement, $30K-$150K C3PAO alternative, starting at free.
 
 ---
 

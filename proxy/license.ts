@@ -1,12 +1,12 @@
 /**
- * Kaelus Proxy — license key validation.
+ * Hound Shield Proxy — license key validation.
  *
- * Validates the Kaelus license key against kaelus.online/api/license/validate.
+ * Validates the Hound Shield license key against houndshield.com/api/license/validate.
  * Sends: { key_hash } — SHA-256 hash of the license key. Never the raw key.
  * Receives: { valid, org_id, plan, expires_at }
  *
  * Caches a valid result for 1 hour to avoid repeated network calls.
- * Falls back to OFFLINE_GRACE_HOURS if kaelus.online is unreachable.
+ * Falls back to OFFLINE_GRACE_HOURS if houndshield.com is unreachable.
  */
 
 import { createHash } from "node:crypto";
@@ -25,7 +25,7 @@ interface CacheEntry {
 }
 
 const VALIDATE_URL =
-  process.env.KAELUS_API_URL ?? "https://kaelus.online/api/license/validate";
+  process.env.HOUNDSHIELD_API_URL ?? "https://houndshield.com/api/license/validate";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 const OFFLINE_GRACE_MS = 72 * 60 * 60 * 1000; // 72 hours
 

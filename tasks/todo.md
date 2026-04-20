@@ -1,4 +1,4 @@
-# Kaelus.Online — Task Queue
+# Hound Shield — Task Queue
 
 ## Active
 <!-- Move items here when starting work -->

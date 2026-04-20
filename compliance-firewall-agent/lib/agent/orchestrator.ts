@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Agent Orchestrator — ReAct Loop v2
+// Hound Shield Agent Orchestrator — ReAct Loop v2
 //
 // Evolution highlights:
 //
@@ -76,8 +76,8 @@ async function fetchOpenRouter(
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://kaelus.online',
-      'X-Title': 'Kaelus Agent',
+      'HTTP-Referer': 'https://houndshield.com',
+      'X-Title': 'Hound Shield Agent',
     },
     body,
   };

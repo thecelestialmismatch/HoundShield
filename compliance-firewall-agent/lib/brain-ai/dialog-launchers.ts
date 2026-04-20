@@ -3,7 +3,7 @@
  *
  * Pre-built dialog flows for common Brain AI interactions.
  * Each launcher defines a structured conversation starter.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export interface DialogLauncher {

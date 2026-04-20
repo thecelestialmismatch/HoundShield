@@ -16,14 +16,14 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 // Code snippet data
 // ---------------------------------------------------------------------------
 
-const PYTHON_INSTALL = `pip install kaelus`;
+const PYTHON_INSTALL = `pip install houndshield`;
 
-const PYTHON_SNIPPET = `import kaelus
+const PYTHON_SNIPPET = `import houndshield
 
 # 1-line integration: wrap any OpenAI call
-client = kaelus.Client(
-    gateway_url="https://kaelus.online/api/gateway/intercept",
-    api_key="your-kaelus-api-key",
+client = houndshield.Client(
+    gateway_url="https://houndshield.com/api/gateway/intercept",
+    api_key="your-houndshield-api-key",
     user_id="user-123"
 )
 
@@ -33,36 +33,36 @@ response = client.chat.completions.create(
     messages=[{"role": "user", "content": "Summarize this document"}]
 )
 
-# Blocked requests raise kaelus.ComplianceError
+# Blocked requests raise houndshield.ComplianceError
 # result.compliance_meta contains risk_level, entities, latency
 print(response.choices[0].message.content)`;
 
-const NODE_INSTALL = `npm install @kaelus/sdk`;
+const NODE_INSTALL = `npm install @houndshield/sdk`;
 
-const NODE_SNIPPET = `import { KaelusClient } from "@kaelus/sdk";
+const NODE_SNIPPET = `import { Hound ShieldClient } from "@houndshield/sdk";
 
 // 1-line integration
-const kaelus = new KaelusClient({
-  gatewayUrl: "https://kaelus.online/api/gateway/intercept",
-  apiKey: process.env.KAELUS_API_KEY,
+const houndshield = new Hound ShieldClient({
+  gatewayUrl: "https://houndshield.com/api/gateway/intercept",
+  apiKey: process.env.HOUNDSHIELD_API_KEY,
   userId: "user-123",
 });
 
 // Wraps any fetch-compatible LLM call
-const response = await kaelus.chat.completions.create({
+const response = await houndshield.chat.completions.create({
   model: "claude-3-5-sonnet-20241022",
   provider: "anthropic",
   messages: [{ role: "user", content: "Draft a contract" }],
 });
 
-// Throws KaelusComplianceError if blocked
+// Throws Hound ShieldComplianceError if blocked
 console.log(response.content[0].text);
 console.log(response.compliance_meta); // { risk_level, scan_ms, action }`;
 
 const CURL_SNIPPET = `# Direct API usage — no SDK required
-curl -X POST https://kaelus.online/api/gateway/intercept \\
+curl -X POST https://houndshield.com/api/gateway/intercept \\
   -H "Content-Type: application/json" \\
-  -H "x-api-key: your-kaelus-api-key" \\
+  -H "x-api-key: your-houndshield-api-key" \\
   -H "x-user-id: user-123" \\
   -d '{
     "messages": [{"role": "user", "content": "Your prompt here"}],
@@ -152,13 +152,13 @@ export default function SDKPage() {
           </div>
           <div>
             <h1 className="text-xl font-semibold text-white">SDK Integration</h1>
-            <p className="text-sm text-white/40">Add Kaelus compliance scanning in one line</p>
+            <p className="text-sm text-white/40">Add Hound Shield compliance scanning in one line</p>
           </div>
         </div>
         <div className="mt-3 p-3.5 rounded-xl bg-brand-500/10 border border-brand-400/20">
           <p className="text-sm text-brand-200">
             <span className="font-semibold">Gateway URL:</span>{" "}
-            <code className="font-mono text-brand-300">https://kaelus.online/api/gateway/intercept</code>
+            <code className="font-mono text-brand-300">https://houndshield.com/api/gateway/intercept</code>
           </p>
         </div>
       </div>
@@ -278,7 +278,7 @@ export default function SDKPage() {
             All requests are scanned in real-time before reaching the LLM provider.
             Blocked requests return HTTP 403 with a violation summary.
             Latency overhead is typically 8-50ms depending on content length.
-            Set <code className="text-brand-300 bg-brand-500/10 px-1 rounded">KAELUS_API_KEY</code> in your environment.
+            Set <code className="text-brand-300 bg-brand-500/10 px-1 rounded">HOUNDSHIELD_API_KEY</code> in your environment.
           </p>
         </div>
       </div>

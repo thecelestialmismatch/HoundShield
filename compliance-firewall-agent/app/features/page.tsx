@@ -336,7 +336,7 @@ export default function FeaturesPage() {
           </div>
         </div>
         <div className="mt-8 text-center text-xs text-slate-600">
-          &copy; {new Date().getFullYear()} Kaelus.online — All rights reserved.
+          &copy; {new Date().getFullYear()} Hound Shield — All rights reserved.
         </div>
       </footer>
     </div>

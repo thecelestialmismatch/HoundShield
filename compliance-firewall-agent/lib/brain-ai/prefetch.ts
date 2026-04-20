@@ -2,7 +2,7 @@
  * Brain AI — Prefetch & Project Scan
  *
  * Pre-loads compliance data, scans project structure, and warms caches
- * before the first user interaction. Brain AI original implementation for Kaelus.online.
+ * before the first user interaction. Brain AI original implementation for Hound Shield.
  */
 
 export interface PrefetchEntry {

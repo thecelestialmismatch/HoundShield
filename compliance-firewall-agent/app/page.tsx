@@ -54,13 +54,13 @@ const steps = [
   {
     number: "01",
     title: "Change one URL",
-    desc: "Replace api.openai.com with proxy.kaelus.online in your environment config. Works with ChatGPT, Copilot, Claude, Gemini — any OpenAI-compatible tool. No code changes, no agents to install.",
-    code: "OPENAI_BASE_URL=https://proxy.kaelus.online",
+    desc: "Replace api.openai.com with proxy.houndshield.com in your environment config. Works with ChatGPT, Copilot, Claude, Gemini — any OpenAI-compatible tool. No code changes, no agents to install.",
+    code: "OPENAI_BASE_URL=https://proxy.houndshield.com",
     icon: Terminal,
   },
   {
     number: "02",
-    title: "Kaelus scans every prompt",
+    title: "Hound Shield scans every prompt",
     desc: "16 detection engines check each request against CMMC, HIPAA, and SOC 2 patterns in under 10ms. Your team doesn't notice anything different. The models don't know.",
     icon: Eye,
   },
@@ -89,7 +89,7 @@ const proofCards = [
     color: "text-emerald-400",
     bg: "bg-emerald-500/10 border-emerald-500/20",
     title: "Every patient identifier blocked before it reaches the model.",
-    body: "Names, SSNs, MRNs, dates of birth, device IDs, IP addresses, and 12 more. If a prompt contains PHI, Kaelus quarantines it and logs the event. You set the policy; Kaelus enforces it.",
+    body: "Names, SSNs, MRNs, dates of birth, device IDs, IP addresses, and 12 more. If a prompt contains PHI, Hound Shield quarantines it and logs the event. You set the policy; Hound Shield enforces it.",
   },
   {
     badge: "SOC 2 Type II",
@@ -103,7 +103,7 @@ const proofCards = [
 ];
 
 const featureStrip = [
-  { icon: Eye,       color: "text-indigo-400", bg: "bg-indigo-500/10 border-indigo-500/20",  label: "AI Prompt Interception", desc: "Every LLM request inspected before it leaves the network" },
+  { icon: Eye,       color: "text-brand-400",  bg: "bg-brand-500/10 border-brand-500/20",   label: "AI Prompt Interception", desc: "Every LLM request inspected before it leaves the network" },
   { icon: Zap,       color: "text-amber-400",  bg: "bg-amber-500/10 border-amber-500/20",    label: "16 Detection Engines",   desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances — all matched" },
   { icon: FileCheck, color: "text-emerald-400",bg: "bg-emerald-500/10 border-emerald-500/20",label: "Immutable Audit Trail",  desc: "SHA-256 tamper-evident logs ready for any compliance audit" },
   { icon: Terminal,  color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20",  label: "One Proxy URL Deploy",   desc: "Works with ChatGPT, Copilot, Claude, Gemini — all simultaneously" },
@@ -124,12 +124,13 @@ export default function HomePage() {
               CMMC Level 2 · HIPAA · SOC 2
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-[1.1]">
-              Your AI tools are leaking<br className="hidden md:block" /> sensitive data.
+              Stop your team from leaking<br className="hidden md:block" /> CUI to ChatGPT.
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Kaelus sits between your team and every AI tool. One proxy URL.
-              Every prompt scanned for PII, PHI, CUI, and secrets in under 10ms.
-              Nothing reaches the model if it shouldn&apos;t.
+              Hound Shield sits between your team and every AI provider. Prompts are scanned
+              on your machine in under 10ms — they never reach our servers. If a prompt
+              contains CUI, FOUO, or PHI, it&apos;s blocked before it reaches the model.
+              One URL change. CMMC Level 2.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <Link
@@ -285,7 +286,7 @@ export default function HomePage() {
             <p className="text-slate-400 mb-8 max-w-lg mx-auto">
               Defense contractors who start now have 6–8 months to close gaps before assessments.
               The average SPRS score for an unprepared contractor is −68.
-              Kaelus shows you exactly where you stand — for free.
+              Hound Shield shows you exactly where you stand — for free.
             </p>
             <Link
               href="/signup"
@@ -312,7 +313,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="mt-8 text-center text-xs text-slate-600">
-          &copy; {new Date().getFullYear()} Kaelus.online — All rights reserved.
+          &copy; {new Date().getFullYear()} Hound Shield — All rights reserved.
         </div>
       </footer>
     </div>

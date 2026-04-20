@@ -1,5 +1,5 @@
 /**
- * Kaelus Streaming Gateway — Real-Time Output Stream Scanner
+ * Hound Shield Streaming Gateway — Real-Time Output Stream Scanner
  *
  * This module scans LLM output tokens IN REAL-TIME as they stream through the
  * gateway, detecting sensitive data (PII, financial data, API keys, etc) that
@@ -260,7 +260,7 @@ export class StreamScanner {
       return newAlerts;
     } catch (error) {
       // Scanner errors must never crash the stream. Log and continue.
-      console.error("[kaelus:scanner] Scan failed:", error);
+      console.error("[houndshield:scanner] Scan failed:", error);
       this.totalScanTimeMs += performance.now() - startTime;
       // Still advance position to avoid infinite retry on the same window
       this.lastScanPos = capturedEnd;
@@ -315,7 +315,7 @@ export class StreamScanner {
           }
         }
       } catch (error) {
-        console.error("[kaelus:scanner] Final scan failed:", error);
+        console.error("[houndshield:scanner] Final scan failed:", error);
         this.totalScanTimeMs += performance.now() - startTime;
       }
     }

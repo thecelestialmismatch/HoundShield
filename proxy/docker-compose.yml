@@ -10,8 +10,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Required: your Kaelus license key from https://kaelus.online/dashboard
-      KAELUS_LICENSE_KEY: ${KAELUS_LICENSE_KEY}
+      # Required: your Hound Shield license key from https://houndshield.com/dashboard
+      HOUNDSHIELD_LICENSE_KEY: ${HOUNDSHIELD_LICENSE_KEY}
       # Required: your AI provider API key (the one your team normally uses)
       UPSTREAM_API_KEY: ${UPSTREAM_API_KEY}
       # Optional: openai | anthropic | google | openrouter  (default: openai)

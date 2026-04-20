@@ -22,7 +22,7 @@ import {
   BookOpen,
 } from "lucide-react";
 
-const GATEWAY_BASE = "https://kaelus.online/api/gateway/intercept";
+const GATEWAY_BASE = "https://houndshield.com/api/gateway/intercept";
 
 const QUICKSTART_STEPS = [
   {
@@ -32,7 +32,7 @@ const QUICKSTART_STEPS = [
   },
   {
     step: "2",
-    title: "Point your AI SDK at Kaelus",
+    title: "Point your AI SDK at Hound Shield",
     body: "Replace the baseURL in any OpenAI-compatible client. Zero behavior change for your team.",
   },
   {
@@ -65,7 +65,7 @@ const API_SECTIONS = [
   {
     id: "quickstart",
     title: "Quickstart",
-    description: "Set up the Kaelus CMMC gateway in under 60 seconds",
+    description: "Set up the Hound Shield CMMC gateway in under 60 seconds",
     method: "GUIDE",
     path: "",
     auth: "",
@@ -277,9 +277,9 @@ const SDK_EXAMPLES = {
 
 # Drop-in replacement — just change base_url
 client = openai.OpenAI(
-    base_url="https://kaelus.online/api/gateway/intercept",
+    base_url="https://houndshield.com/api/gateway/intercept",
     api_key="your-openai-key",
-    default_headers={"X-Kaelus-Org": "acme-defense"},
+    default_headers={"X-Hound Shield-Org": "acme-defense"},
 )
 
 # Your existing code works unchanged
@@ -289,15 +289,15 @@ response = client.chat.completions.create(
         {"role": "user", "content": "Draft a proposal using contract W911NF-23-C-0001"}
     ],
 )
-# ↑ Kaelus intercepts this, detects the contract number,
+# ↑ Hound Shield intercepts this, detects the contract number,
 #   blocks or quarantines before it reaches OpenAI`,
   javascript: `import OpenAI from "openai";
 
 // Drop-in replacement — just change baseURL
 const client = new OpenAI({
-  baseURL: "https://kaelus.online/api/gateway/intercept",
+  baseURL: "https://houndshield.com/api/gateway/intercept",
   apiKey: process.env.OPENAI_API_KEY,
-  defaultHeaders: { "X-Kaelus-Org": "acme-defense" },
+  defaultHeaders: { "X-Hound Shield-Org": "acme-defense" },
 });
 
 // Your existing code works unchanged
@@ -307,20 +307,20 @@ const response = await client.chat.completions.create({
     { role: "user", content: "Summarize our CAGE code 1ABC2 contract" }
   ],
 });
-// ↑ Kaelus intercepts this, detects the CAGE code,
+// ↑ Hound Shield intercepts this, detects the CAGE code,
 //   blocks or quarantines before it reaches OpenAI`,
   curl: `# Using the gateway as an OpenAI-compatible proxy
-curl -X POST https://kaelus.online/api/gateway/intercept \\
+curl -X POST https://houndshield.com/api/gateway/intercept \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer $OPENAI_API_KEY" \\
-  -H "X-Kaelus-Org: acme-defense" \\
+  -H "X-Hound Shield-Org: acme-defense" \\
   -d '{
     "model": "gpt-4o",
     "messages": [{"role": "user", "content": "Hello"}]
   }'
 
 # Direct intercept API (non-OpenAI-compatible)
-curl -X POST https://kaelus.online/api/gateway/intercept \\
+curl -X POST https://houndshield.com/api/gateway/intercept \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: your-api-key" \\
   -H "x-user-id: developer@acme.co" \\
@@ -330,10 +330,10 @@ curl -X POST https://kaelus.online/api/gateway/intercept \\
   }'
 
 # Get compliance events
-curl https://kaelus.online/api/compliance/events?limit=10
+curl https://houndshield.com/api/compliance/events?limit=10
 
 # Health check
-curl https://kaelus.online/api/health`,
+curl https://houndshield.com/api/health`,
 };
 
 function CopyButton({ text }: { text: string }) {
@@ -466,7 +466,7 @@ export default function DocsPage() {
                   CMMC gateway in 60 seconds
                 </h1>
                 <p className="text-sm text-slate-400 leading-relaxed">
-                  Kaelus is an OpenAI-compatible proxy. Every AI query from your team passes through
+                  Hound Shield is an OpenAI-compatible proxy. Every AI query from your team passes through
                   it first. CUI, CAGE codes, contract numbers, and clearance data are detected and
                   blocked before they reach any AI provider.
                 </p>
@@ -517,7 +517,7 @@ export default function DocsPage() {
               </div>
 
               <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 text-sm text-indigo-300">
-                <span className="font-semibold">No infrastructure change required.</span> Your employees keep using ChatGPT, Copilot, or Claude — Kaelus sits in the middle transparently.
+                <span className="font-semibold">No infrastructure change required.</span> Your employees keep using ChatGPT, Copilot, or Claude — Hound Shield sits in the middle transparently.
               </div>
             </div>
           ) : activeSection === "detected" ? (
@@ -525,7 +525,7 @@ export default function DocsPage() {
               <div>
                 <h1 className="text-2xl font-bold text-white mb-2">What Gets Detected</h1>
                 <p className="text-sm text-slate-400 leading-relaxed">
-                  Kaelus runs 30+ pattern matchers against every message. CMMC-specific patterns target
+                  Hound Shield runs 30+ pattern matchers against every message. CMMC-specific patterns target
                   artifacts unique to defense contracting — CAGE codes, CUI markings, contract numbers,
                   and clearance data that generic DLP tools miss entirely.
                 </p>
@@ -565,7 +565,7 @@ export default function DocsPage() {
               <div>
                 <h1 className="text-2xl font-bold text-white mb-2">SDK Examples</h1>
                 <p className="text-sm text-slate-500">
-                  Integrate Kaelus into your application with these code examples.
+                  Integrate Hound Shield into your application with these code examples.
                 </p>
               </div>
 

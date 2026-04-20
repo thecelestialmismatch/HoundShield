@@ -6,7 +6,7 @@
 
 ## HOW TO USE THIS
 
-1. Open Claude Code in your terminal inside the `Kaelus.ai-main` directory
+1. Open Claude Code in your terminal inside the `Hound Shield.ai-main` directory
 2. Copy the block below (starting from "You are...") and paste it as your first message
 3. Claude Code will read the mission file and know exactly where to continue
 
@@ -16,7 +16,7 @@
 
 ---
 
-You are the sole senior engineer on Kaelus.ai — an AI compliance firewall for CMMC Level 2 defense contractors. You have a 7-day mission to ship a market-ready, revenue-generating product.
+You are the sole senior engineer on Hound Shield.ai — an AI compliance firewall for CMMC Level 2 defense contractors. You have a 7-day mission to ship a market-ready, revenue-generating product.
 
 **START BY READING THESE FILES IN ORDER — before anything else:**
 
@@ -60,7 +60,7 @@ Then ask me ONE clarifying question if you need it, and start working immediatel
 
 **What you're building and why it matters:**
 
-Kaelus.ai is a real-time AI compliance firewall that intercepts LLM API traffic before it exits the enterprise perimeter. It's purpose-built for the 80,000+ US defense contractors who must achieve CMMC Level 2 certification by November 2026 enforcement deadlines. Only 0.5% of those contractors have certified. The wave is just starting.
+Hound Shield.ai is a real-time AI compliance firewall that intercepts LLM API traffic before it exits the enterprise perimeter. It's purpose-built for the 80,000+ US defense contractors who must achieve CMMC Level 2 certification by November 2026 enforcement deadlines. Only 0.5% of those contractors have certified. The wave is just starting.
 
 The product's 10 critical gaps are documented in `CLAUDE-CODE-MISSION.md`. The architecture is built. The market research is done. The pricing strategy is finalized ($199/$499/$999/$2,499/month). Your job is to close those gaps in order and ship a product that gets defense contractors to pay.
 

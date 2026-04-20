@@ -3,7 +3,7 @@
  *
  * QueryRequest/QueryResponse types and the QueryEngineRuntime
  * that routes prompts to the best-matching handler.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 import { RoutedMatch } from "./models";

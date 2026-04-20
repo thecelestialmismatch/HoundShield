@@ -1,4 +1,4 @@
-# Kaelus.Online — Revenue Roadmap
+# Hound Shield — Revenue Roadmap
 ## From $0 to $10K MRR → YC S26/W27
 
 **Written for:** A founder who built the product but knows nothing about the defense contracting ecosystem.
@@ -13,21 +13,21 @@ You built an AI compliance firewall. Before you talk to a single customer, you n
 
 ### The Vocabulary
 
-| Term | What It Means | Why It Matters to Kaelus |
+| Term | What It Means | Why It Matters to Hound Shield |
 |---|---|---|
-| **CMMC** | Cybersecurity Maturity Model Certification — a DoD cybersecurity standard | This is the regulation that makes customers need Kaelus |
+| **CMMC** | Cybersecurity Maturity Model Certification — a DoD cybersecurity standard | This is the regulation that makes customers need Hound Shield |
 | **CMMC Level 2** | The middle tier — 110 security controls, required for most contractors handling CUI | Your target buyer is trying to reach this level |
-| **CUI** | Controlled Unclassified Information — government data that isn't classified but still needs protection | When an employee pastes a CUI document into ChatGPT, that's a violation. Kaelus prevents it. |
+| **CUI** | Controlled Unclassified Information — government data that isn't classified but still needs protection | When an employee pastes a CUI document into ChatGPT, that's a violation. Hound Shield prevents it. |
 | **NIST 800-171** | The underlying security standard CMMC Level 2 is built on — 110 controls | Your SPRS scoring engine maps to these controls |
-| **SPRS** | Supplier Performance Risk System — DoD system where contractors self-report their security score | Score ranges from -203 to +110. Most contractors have negative scores. Kaelus helps raise it. |
+| **SPRS** | Supplier Performance Risk System — DoD system where contractors self-report their security score | Score ranges from -203 to +110. Most contractors have negative scores. Hound Shield helps raise it. |
 | **C3PAO** | Certified Third-Party Assessor Organization — companies certified by DoD to audit contractors | **This is your sales channel.** Each C3PAO has 20-100 contractor clients. One C3PAO = many customers. |
 | **CRP** | CMMC Registered Practitioner — individual consultant, one tier below C3PAO | Also part of your sales channel. More numerous than C3PAOs. |
 | **OSC** | Organization Seeking Certification — the defense contractor trying to get CMMC certified | This is your end customer. |
-| **DFARS 7012** | Defense Federal Acquisition Regulation — the contract clause that makes CMMC mandatory | When a contractor says "I got a 7012 clause," they need CMMC. They need Kaelus. |
+| **DFARS 7012** | Defense Federal Acquisition Regulation — the contract clause that makes CMMC mandatory | When a contractor says "I got a 7012 clause," they need CMMC. They need Hound Shield. |
 | **DCSA** | Defense Counterintelligence and Security Agency — the federal agency that investigates security violations | A CUI spill via ChatGPT can trigger a DCSA investigation. This is the existential fear you're selling against. |
 | **Prime contractor** | Large defense company (Raytheon, Lockheed, Boeing) that has DoD contracts | They push CMMC requirements down to their subcontractors. When a prime says "get certified," subcontractors panic-buy tools. |
 | **Subcontractor / OSC** | Smaller company (5-500 employees) working for a prime | Your actual buyer. They have the fear. They have the budget. They don't know what to do. |
-| **C3PAO Assessment** | The actual audit — costs $30K-$150K, takes months, schedules are full | Kaelus is NOT a replacement. It's a preparatory and ongoing compliance tool. |
+| **C3PAO Assessment** | The actual audit — costs $30K-$150K, takes months, schedules are full | Hound Shield is NOT a replacement. It's a preparatory and ongoing compliance tool. |
 
 ### The Regulation Timeline
 
@@ -42,9 +42,9 @@ CMMC Level 2 includes controls that specifically require:
 - **AU.L2-3.3.1**: Audit and log actions on systems processing CUI — includes AI tool usage logs
 - **SI.L2-3.14.1**: Identify, report, and correct information system flaws — includes CUI leaks via AI
 
-Every cloud-based competitor (Nightfall, Strac, Cisco, Cloudflare) violates CMMC by sending CUI to their cloud for scanning. Kaelus scans locally. This is not a feature — it's a regulatory requirement that your competitors literally cannot comply with for this use case. Learn to say this clearly and quickly.
+Every cloud-based competitor (Nightfall, Strac, Cisco, Cloudflare) violates CMMC by sending CUI to their cloud for scanning. Hound Shield scans locally. This is not a feature — it's a regulatory requirement that your competitors literally cannot comply with for this use case. Learn to say this clearly and quickly.
 
-**The exact sentence:** "Every cloud-based AI DLP tool sends your CUI to their servers to scan it. That's itself a potential CUI spill under DFARS 7012. Kaelus scans everything locally. Nothing leaves your network."
+**The exact sentence:** "Every cloud-based AI DLP tool sends your CUI to their servers to scan it. That's itself a potential CUI spill under DFARS 7012. Hound Shield scans everything locally. Nothing leaves your network."
 
 ---
 
@@ -98,7 +98,7 @@ Communities:
 
 Do NOT start outreach until you can answer YES to all of these:
 
-- [ ] Install Kaelus on a clean Windows machine in under 30 minutes (most contractors use Windows)
+- [ ] Install Hound Shield on a clean Windows machine in under 30 minutes (most contractors use Windows)
 - [ ] Within 10 minutes of install, trigger a CUI block by typing a fake CAGE code into ChatGPT
 - [ ] Download a PDF report showing the block event
 - [ ] The PDF says "Controlled Unclassified Information block event" with a timestamp and reference to AC.L2-3.1.3
@@ -129,9 +129,9 @@ Fill Tab 1 from the CMMC-AB Marketplace. Fill Tab 2 from LinkedIn searches.
 Record a single Loom video (free at loom.com). Max 5 minutes. No slides. No deck.
 
 **Exact script:**
-1. (30 sec) "Defense contractors lose their contracts when employees paste CUI into ChatGPT. No cloud-based tool can safely scan that data — they'd be creating a second CUI spill. Kaelus is the only AI data protection tool that scans everything locally."
+1. (30 sec) "Defense contractors lose their contracts when employees paste CUI into ChatGPT. No cloud-based tool can safely scan that data — they'd be creating a second CUI spill. Hound Shield is the only AI data protection tool that scans everything locally."
 2. (60 sec) Show the install: terminal, one command, proxy running
-3. (90 sec) Open a fake ChatGPT session, type a fake contract number (format: W52P1J-24-C-0001), show Kaelus block it in real time
+3. (90 sec) Open a fake ChatGPT session, type a fake contract number (format: W52P1J-24-C-0001), show Hound Shield block it in real time
 4. (60 sec) Click "Download Report" — show the PDF with the control reference (AC.L2-3.1.3)
 5. (30 sec) "This is what you show your C3PAO auditor. $199/month. Local install. No data leaves your network."
 
@@ -152,7 +152,7 @@ Built a tool your defense contractor clients probably need right now.
 
 The problem: employees using ChatGPT and Copilot to process CUI is now a documented CMMC gap. Every cloud-based DLP tool (Nightfall, Strac, etc.) actually makes it worse — they send CUI to their cloud to scan it, creating a second potential spill.
 
-Kaelus runs entirely on the client's own server. Zero data leaves their network. It blocks CUI in real time before it reaches any AI tool, and generates a PDF audit log that maps directly to AC.L2-3.1.3 and AU.L2-3.3.1.
+Hound Shield runs entirely on the client's own server. Zero data leaves their network. It blocks CUI in real time before it reaches any AI tool, and generates a PDF audit log that maps directly to AC.L2-3.1.3 and AU.L2-3.3.1.
 
 [5-min demo video: INSERT LOOM LINK]
 
@@ -161,7 +161,7 @@ $199/month per organization. I'd give you a free license to test with one client
 Worth a 15-minute call?
 
 [Your name]
-kaelus.online
+houndshield.com
 
 ---
 
@@ -242,7 +242,7 @@ Defense contractors talk to each other constantly. One referral from a satisfied
 Post something genuinely useful (not a pitch). Example:
 > "CMMC assessors are starting to ask specifically about AI tool CUI controls — AC.L2-3.1.3 and AU.L2-3.3.1. Here's what documentation they're expecting and why cloud-based DLP tools actually fail this control. Happy to answer questions."
 
-Post the content. Don't mention Kaelus in the post. When someone asks "what tool do you use?" — answer then.
+Post the content. Don't mention Hound Shield in the post. When someone asks "what tool do you use?" — answer then.
 
 **4. End of Month 1 target: 5 paying customers = $995/month.**
 
@@ -256,11 +256,11 @@ If below target: check whether outreach volume is high enough (should be 50+ C3P
 
 This is the highest-leverage move available at $0 cost.
 
-A C3PAO firm with 50 defense contractor clients could theoretically resell Kaelus to all 50. At $99/client/month through a reseller arrangement, that's $4,950/month from one partnership.
+A C3PAO firm with 50 defense contractor clients could theoretically resell Hound Shield to all 50. At $99/client/month through a reseller arrangement, that's $4,950/month from one partnership.
 
 How to propose this:
 
-> "I want to make it easy for you to include AI CUI protection in your service offering. I'll give you Kaelus at $75/client/month — you invoice your clients at whatever rate works for your business. I just need a list of client domains and I'll provision their accounts. Monthly billing, no contracts."
+> "I want to make it easy for you to include AI CUI protection in your service offering. I'll give you Hound Shield at $75/client/month — you invoice your clients at whatever rate works for your business. I just need a list of client domains and I'll provision their accounts. Monthly billing, no contracts."
 
 C3PAO economics: They bill contractors at $150-$300/hour for assessment and remediation work. Adding a $75/month/client tool to their stack is trivial. They mark it up to $150-$200/month and keep the margin.
 
@@ -290,9 +290,9 @@ The reseller path is faster. Target 5 C3PAO resellers by Month 6.
 ### Product Milestones That Enable the Reseller Path
 
 These features make C3PAOs more likely to resell:
-1. **Multi-tenant dashboard** — C3PAO can see all their clients' Kaelus status in one view
-2. **White-label option** — C3PAO can offer "Our AI CUI Protection Service (Powered by Kaelus)" under their brand
-3. **SPRS score impact report** — shows the contractor exactly which CMMC control Kaelus satisfies and the point impact on their SPRS score
+1. **Multi-tenant dashboard** — C3PAO can see all their clients' Hound Shield status in one view
+2. **White-label option** — C3PAO can offer "Our AI CUI Protection Service (Powered by Hound Shield)" under their brand
+3. **SPRS score impact report** — shows the contractor exactly which CMMC control Hound Shield satisfies and the point impact on their SPRS score
 
 These are the only three features that drive revenue at this stage. Build them in this order.
 
@@ -351,7 +351,7 @@ Every sales call will have one of these objections. Know the answer before it's 
 
 ### "This is expensive. We can just write a policy."
 
-> "A policy costs nothing and fails your CMMC audit. A C3PAO assessment to fix one failed control costs $10K-$30K to redo. Kaelus is $199/month — cheaper than two hours of your C3PAO's time."
+> "A policy costs nothing and fails your CMMC audit. A C3PAO assessment to fix one failed control costs $10K-$30K to redo. Hound Shield is $199/month — cheaper than two hours of your C3PAO's time."
 
 ### "How do we know data doesn't leave our network?"
 

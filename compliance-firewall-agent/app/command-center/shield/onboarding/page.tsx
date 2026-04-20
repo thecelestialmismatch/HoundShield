@@ -29,7 +29,7 @@ const STEPS = [
 
 const GATEWAY_URL = process.env.NEXT_PUBLIC_APP_URL
   ? `${process.env.NEXT_PUBLIC_APP_URL}/api/gateway/intercept`
-  : "https://kaelus.online/api/gateway/intercept";
+  : "https://houndshield.com/api/gateway/intercept";
 
 const EMPLOYEE_RANGES = [
   { label: "1–10", value: 10 },
@@ -255,7 +255,7 @@ export default function OnboardingPage() {
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-1">Connect Your AI Tool</h2>
                     <p className="text-slate-400">
-                      Route your AI queries through Kaelus in under 60 seconds.
+                      Route your AI queries through Hound Shield in under 60 seconds.
                     </p>
                   </div>
 
@@ -279,7 +279,7 @@ export default function OnboardingPage() {
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Python (OpenAI SDK)</p>
                       <button
-                        onClick={() => handleCopySnippet("python", `import openai\n\nclient = openai.OpenAI(\n    base_url="${GATEWAY_URL}",\n    api_key="your-openai-key",\n)\n\nresponse = client.chat.completions.create(\n    model="gpt-4o",\n    messages=[{"role": "user", "content": "Hello"}],\n    extra_headers={"X-Kaelus-Org": "${orgName || "your-org"}"},\n)`)}
+                        onClick={() => handleCopySnippet("python", `import openai\n\nclient = openai.OpenAI(\n    base_url="${GATEWAY_URL}",\n    api_key="your-openai-key",\n)\n\nresponse = client.chat.completions.create(\n    model="gpt-4o",\n    messages=[{"role": "user", "content": "Hello"}],\n    extra_headers={"X-Hound Shield-Org": "${orgName || "your-org"}"},\n)`)}
                         className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
                       >
                         {copiedSnippet === "python" ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
@@ -296,7 +296,7 @@ client = openai.OpenAI(
 response = client.chat.completions.create(
     model="gpt-4o",
     messages=[{"role": "user", "content": "Hello"}],
-    extra_headers={"X-Kaelus-Org": "${orgName || "your-org"}"},
+    extra_headers={"X-Hound Shield-Org": "${orgName || "your-org"}"},
 )`}</pre>
                   </div>
 
@@ -305,7 +305,7 @@ response = client.chat.completions.create(
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">JavaScript / TypeScript</p>
                       <button
-                        onClick={() => handleCopySnippet("js", `import OpenAI from "openai";\n\nconst client = new OpenAI({\n  baseURL: "${GATEWAY_URL}",\n  apiKey: process.env.OPENAI_API_KEY,\n  defaultHeaders: { "X-Kaelus-Org": "${orgName || "your-org"}" },\n});\n\nconst response = await client.chat.completions.create({\n  model: "gpt-4o",\n  messages: [{ role: "user", content: "Hello" }],\n});`)}
+                        onClick={() => handleCopySnippet("js", `import OpenAI from "openai";\n\nconst client = new OpenAI({\n  baseURL: "${GATEWAY_URL}",\n  apiKey: process.env.OPENAI_API_KEY,\n  defaultHeaders: { "X-Hound Shield-Org": "${orgName || "your-org"}" },\n});\n\nconst response = await client.chat.completions.create({\n  model: "gpt-4o",\n  messages: [{ role: "user", content: "Hello" }],\n});`)}
                         className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
                       >
                         {copiedSnippet === "js" ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
@@ -317,7 +317,7 @@ response = client.chat.completions.create(
 const client = new OpenAI({
   baseURL: "${GATEWAY_URL}",
   apiKey: process.env.OPENAI_API_KEY,
-  defaultHeaders: { "X-Kaelus-Org": "${orgName || "your-org"}" },
+  defaultHeaders: { "X-Hound Shield-Org": "${orgName || "your-org"}" },
 });
 
 const response = await client.chat.completions.create({

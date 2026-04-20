@@ -1,4 +1,4 @@
-# Kaelus — Research Materials & Feature Inspirations
+# Hound Shield — Research Materials & Feature Inspirations
 
 Resources consulted during development. Each entry: URL, what was taken from it.
 

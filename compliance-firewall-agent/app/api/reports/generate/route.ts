@@ -182,7 +182,7 @@ export async function GET(req: NextRequest) {
         status: 200,
         headers: {
           "Content-Type": "application/pdf",
-          "Content-Disposition": `attachment; filename="kaelus-compliance-report-${dateStr}.pdf"`,
+          "Content-Disposition": `attachment; filename="houndshield-compliance-report-${dateStr}.pdf"`,
           "Cache-Control": "no-store",
         },
       });

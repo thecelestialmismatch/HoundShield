@@ -1,5 +1,5 @@
 /**
- * Splunk HEC SIEM Connector — Kaelus.Online
+ * Splunk HEC SIEM Connector — Hound Shield
  *
  * Sends compliance events via the Splunk HTTP Event Collector (HEC).
  *
@@ -8,14 +8,14 @@
  *   SPLUNK_HEC_TOKEN    — HEC token (from Settings → Data Inputs → HTTP Event Collector)
  *
  * Optional env vars:
- *   SPLUNK_INDEX        — target index, defaults to "kaelus"
- *   SPLUNK_SOURCE       — source field, defaults to "kaelus:compliance"
+ *   SPLUNK_INDEX        — target index, defaults to "houndshield"
+ *   SPLUNK_SOURCE       — source field, defaults to "houndshield:compliance"
  *   SPLUNK_SOURCETYPE   — "cef" for CEF format, defaults to "_json"
  *
  * Example SPL queries (Splunk Search):
- *   index=kaelus action=BLOCKED severity=CRITICAL
- *   index=kaelus | stats count by risk_level
- *   index=kaelus classifications="CUI" | timechart count
+ *   index=houndshield action=BLOCKED severity=CRITICAL
+ *   index=houndshield | stats count by risk_level
+ *   index=houndshield classifications="CUI" | timechart count
  */
 
 import type { SiemConnector, SiemEvent, SiemConnectorConfig } from "./types";
@@ -30,7 +30,7 @@ export interface SplunkConfig extends SiemConnectorConfig {
 }
 
 const NON_RETRYABLE = new Set([400, 401, 403]);
-const DEFAULT_INDEX = "kaelus";
+const DEFAULT_INDEX = "houndshield";
 
 export class SplunkConnector implements SiemConnector {
   private readonly endpoint: string;
@@ -45,7 +45,7 @@ export class SplunkConnector implements SiemConnector {
     this.endpoint = `${cfg.url.replace(/\/$/, "")}/services/collector/event`;
     this.authHeader = `Splunk ${cfg.hecToken}`;
     this.index = cfg.index ?? DEFAULT_INDEX;
-    this.source = cfg.source ?? "kaelus:compliance";
+    this.source = cfg.source ?? "houndshield:compliance";
     this.sourcetype = cfg.sourcetype ?? "_json";
     this.maxRetries = cfg.maxRetries ?? 3;
     this.retryDelayMs = cfg.retryDelayMs ?? 1000;

@@ -1,5 +1,5 @@
 /**
- * Kaelus Proxy — Express server.
+ * Hound Shield Proxy — Express server.
  *
  * OpenAI-compatible API surface:
  *   POST /v1/chat/completions
@@ -8,7 +8,7 @@
  *   GET  /v1/stats           (local stats)
  *
  * Intercepts prompts, scans for CUI/PII/PHI, blocks or forwards to upstream AI.
- * Metadata (never content) is forwarded async to kaelus.online dashboard.
+ * Metadata (never content) is forwarded async to houndshield.com dashboard.
  */
 
 import express, { type Request, type Response, type NextFunction } from "express";
@@ -24,12 +24,12 @@ import { validateLicense } from "./license.js";
 // ── Environment ─────────────────────────────────────────────────────────────
 
 const PORT = parseInt(process.env.PORT ?? "8080", 10);
-const LICENSE_KEY = process.env.KAELUS_LICENSE_KEY ?? "";
+const LICENSE_KEY = process.env.HOUNDSHIELD_LICENSE_KEY ?? "";
 const UPSTREAM_API_KEY = process.env.UPSTREAM_API_KEY ?? "";
 const DEFAULT_PROVIDER = (process.env.UPSTREAM_PROVIDER ?? "openai") as Provider;
 
 if (!LICENSE_KEY) {
-  console.warn("[kaelus] KAELUS_LICENSE_KEY not set — running in evaluation mode");
+  console.warn("[houndshield] HOUNDSHIELD_LICENSE_KEY not set — running in evaluation mode");
 }
 
 setWebhookLicenseKey(LICENSE_KEY);
@@ -72,7 +72,7 @@ app.use(express.json({ limit: "4mb" }));
 // ── Health ──────────────────────────────────────────────────────────────────
 
 app.get("/health", (_req: Request, res: Response) => {
-  res.json({ status: "ok", version: "1.0.0", source: "kaelus-proxy" });
+  res.json({ status: "ok", version: "1.0.0", source: "houndshield-proxy" });
 });
 
 // ── Main proxy endpoint ─────────────────────────────────────────────────────
@@ -140,17 +140,17 @@ app.post("/v1/chat/completions", async (req: Request, res: Response) => {
   });
 
   // Set response headers before any branching
-  res.setHeader("X-Kaelus-Request-Id", requestId);
-  res.setHeader("X-Kaelus-Risk-Level", scanResult.risk_level);
-  res.setHeader("X-Kaelus-Action", actionMapped);
-  res.setHeader("X-Kaelus-Scan-Ms", String(Math.round(scanMs)));
+  res.setHeader("X-HoundShield-Request-Id", requestId);
+  res.setHeader("X-HoundShield-Risk-Level", scanResult.risk_level);
+  res.setHeader("X-HoundShield-Action", actionMapped);
+  res.setHeader("X-HoundShield-Scan-Ms", String(Math.round(scanMs)));
 
   // ── BLOCK ─────────────────────────────────────────────────────────────────
   if (scanResult.action === "BLOCK") {
     res.status(403).json({
       error: {
-        message: "Request blocked by Kaelus compliance firewall",
-        code: "KAELUS_BLOCKED",
+        message: "Request blocked by Hound Shield compliance firewall",
+        code: "HOUNDSHIELD_BLOCKED",
         risk_level: scanResult.risk_level,
         pattern: patternName ?? "unknown",
         nist_control: nistControl,
@@ -225,14 +225,14 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 // ── Start ────────────────────────────────────────────────────────────────────
 
 const server = app.listen(PORT, () => {
-  console.log(`[kaelus] Proxy listening on http://localhost:${PORT}`);
-  console.log(`[kaelus] Set baseURL = "http://localhost:${PORT}/v1" in your AI client`);
-  console.log(`[kaelus] Provider: ${DEFAULT_PROVIDER}`);
+  console.log(`[houndshield] Proxy listening on http://localhost:${PORT}`);
+  console.log(`[houndshield] Set baseURL = "http://localhost:${PORT}/v1" in your AI client`);
+  console.log(`[houndshield] Provider: ${DEFAULT_PROVIDER}`);
 });
 
 // Graceful shutdown
 async function shutdown(signal: string): Promise<void> {
-  console.log(`[kaelus] ${signal} — flushing events and shutting down`);
+  console.log(`[houndshield] ${signal} — flushing events and shutting down`);
   await flushWebhook();
   server.close(() => process.exit(0));
   setTimeout(() => process.exit(1), 5000);

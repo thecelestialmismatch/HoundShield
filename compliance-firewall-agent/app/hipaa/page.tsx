@@ -159,7 +159,7 @@ export default function HIPAAPage() {
               { num: "$100–$50K", label: "fine per HIPAA violation" },
               { num: "$1.9M", label: "annual penalty cap" },
               { num: "800K+", label: "healthcare practices using AI" },
-              { num: "<50ms", label: "Kaelus intercept latency" },
+              { num: "<50ms", label: "Hound Shield intercept latency" },
             ].map(({ num, label }) => (
               <div key={label} className="text-center">
                 <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-1">
@@ -205,7 +205,7 @@ export default function HIPAAPage() {
               {
                 stat: "0",
                 label: "AI compliance tools exist",
-                detail: "No HIPAA-specific tool monitors AI usage in real-time. Until Kaelus.",
+                detail: "No HIPAA-specific tool monitors AI usage in real-time. Until Hound Shield.",
               },
             ].map(({ stat, label, detail }, i) => (
               <FadeIn key={label} delay={i * 0.1}>
@@ -220,7 +220,7 @@ export default function HIPAAPage() {
         </div>
       </section>
 
-      {/* ── Solution — How Kaelus Works ─────────── */}
+      {/* ── Solution — How Hound Shield Works ─────────── */}
       <section className="py-24 md:py-32 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-16">
@@ -231,7 +231,7 @@ export default function HIPAAPage() {
               Intercept. Classify. Protect.
             </h2>
             <p className="text-lg text-slate-400 max-w-[560px] mx-auto">
-              Kaelus sits between your workforce and every AI tool — scanning for PHI in real-time before it ever leaves your environment.
+              Hound Shield sits between your workforce and every AI tool — scanning for PHI in real-time before it ever leaves your environment.
             </p>
           </FadeIn>
 
@@ -264,7 +264,7 @@ export default function HIPAAPage() {
               All 18 HIPAA Safe Harbor Identifiers
             </h2>
             <p className="text-lg text-slate-400 max-w-[560px] mx-auto">
-              Kaelus detects every PHI category defined in 45 CFR §164.514(b)(2) — the standard for de-identification.
+              Hound Shield detects every PHI category defined in 45 CFR §164.514(b)(2) — the standard for de-identification.
             </p>
           </FadeIn>
 

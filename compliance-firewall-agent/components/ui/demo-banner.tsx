@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { AlertTriangle, X, ArrowRight } from "lucide-react";
 
-const DISMISS_KEY = "kaelus_demo_banner_dismissed";
+const DISMISS_KEY = "houndshield_demo_banner_dismissed";
 
 interface DemoBannerProps {
   /** If true, renders the banner. If false, renders nothing. */

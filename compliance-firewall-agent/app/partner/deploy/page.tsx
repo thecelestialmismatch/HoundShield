@@ -46,16 +46,16 @@ export default function DeployPage() {
   const apiKey = selected?.docker_api_key ?? "<your-docker-api-key>";
   const clientName = selected?.client_name ?? "Client";
 
-  const curlInstall = `curl -sSL https://kaelus.online/install | bash`;
+  const curlInstall = `curl -sSL https://houndshield.com/install | bash`;
 
   const dockerRun = `docker run -d \\
-  --name kaelus-proxy \\
+  --name houndshield-proxy \\
   --restart unless-stopped \\
   -p 8080:8080 \\
-  -e KAELUS_LICENSE_KEY="${apiKey}" \\
+  -e HOUNDSHIELD_LICENSE_KEY="${apiKey}" \\
   -e UPSTREAM_API_KEY="<their-ai-provider-key>" \\
-  -v kaelus-data:/data \\
-  kaelus/proxy:latest`;
+  -v houndshield-data:/data \\
+  houndshield/proxy:latest`;
 
   const sdkExample = `// Change ONE line in the AI client
 const openai = new OpenAI({
@@ -197,7 +197,7 @@ const openai = new OpenAI({
             <code className="text-brand-400 font-mono">http://localhost:8080/v1</code>
           </li>
           <li>Test: send &quot;CAGE 1ABC2 project update&quot; — should get a 403 block response</li>
-          <li>Login to kaelus.online/command-center — block event should appear within seconds</li>
+          <li>Login to houndshield.com/command-center — block event should appear within seconds</li>
         </ol>
       </div>
     </div>

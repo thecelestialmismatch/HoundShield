@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea for the Kaelus.ai platform
+about: Suggest an idea for the Hound Shield.ai platform
 title: 'feat: '
 labels: 'enhancement'
 assignees: ''

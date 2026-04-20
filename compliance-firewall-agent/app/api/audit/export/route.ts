@@ -276,7 +276,7 @@ export async function GET(req: NextRequest) {
 
     if (format === "csv") {
       const csv = buildCSV(rows);
-      const filename = `kaelus-audit-${exportedAt.slice(0, 10)}.csv`;
+      const filename = `houndshield-audit-${exportedAt.slice(0, 10)}.csv`;
       return new NextResponse(csv, {
         status: 200,
         headers: {

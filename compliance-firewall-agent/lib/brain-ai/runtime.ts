@@ -140,7 +140,7 @@ export class PortRuntime {
     return {
       sessionId,
       prompt: "",
-      setup: context ?? "Kaelus.online Brain AI — CMMC Compliance Firewall",
+      setup: context ?? "Hound Shield Brain AI — CMMC Compliance Firewall",
       history: [],
       totalUsage: createUsageSummary(),
       createdAt: storedSession.createdAt,

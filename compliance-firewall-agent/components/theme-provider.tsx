@@ -26,7 +26,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("kaelus-theme") as Theme | null;
+    const stored = localStorage.getItem("houndshield-theme") as Theme | null;
     const initial = stored || "dark";
     document.documentElement.setAttribute("data-theme", initial);
     document.documentElement.classList.toggle("dark", initial === "dark");
@@ -35,7 +35,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem("kaelus-theme", newTheme);
+    localStorage.setItem("houndshield-theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
   }, []);

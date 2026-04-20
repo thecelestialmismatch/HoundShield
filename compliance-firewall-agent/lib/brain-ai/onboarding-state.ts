@@ -2,14 +2,14 @@
  * Brain AI — Project Onboarding State
  *
  * Tracks and persists the user's CMMC onboarding progress.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export interface ProjectOnboardingState {
   hasReadme: boolean;
   hasTests: boolean;
   pythonFirst: boolean;
-  // Kaelus-specific onboarding fields
+  // Hound Shield-specific onboarding fields
   orgNameSet: boolean;
   assessmentStarted: boolean;
   assessmentCompleted: boolean;
@@ -58,7 +58,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: "gatewayConnected",
     label: "Connect AI gateway",
-    description: "Route your AI traffic through Kaelus for real-time compliance scanning.",
+    description: "Route your AI traffic through Hound Shield for real-time compliance scanning.",
     required: false,
     actionUrl: "/docs",
     actionLabel: "View Integration Docs",

@@ -29,13 +29,13 @@ const values = [
 ];
 
 const testimonials = [
-    { quote: "We went from zero documentation to assessment-ready in six weeks. Our C3PAO was genuinely impressed with the evidence packages Kaelus generated.", name: "Sarah Mitchell", title: "VP of Cybersecurity", company: "Ridgeline Defense Systems" },
-    { quote: "As a 30-person shop, we thought CMMC Level 2 was out of reach. Kaelus made the 110 controls approachable and showed us exactly what to fix first.", name: "James Thornton", title: "CTO", company: "Apex Tactical Solutions" },
+    { quote: "We went from zero documentation to assessment-ready in six weeks. Our C3PAO was genuinely impressed with the evidence packages Hound Shield generated.", name: "Sarah Mitchell", title: "VP of Cybersecurity", company: "Ridgeline Defense Systems" },
+    { quote: "As a 30-person shop, we thought CMMC Level 2 was out of reach. Hound Shield made the 110 controls approachable and showed us exactly what to fix first.", name: "James Thornton", title: "CTO", company: "Apex Tactical Solutions" },
     { quote: "The AI gap analysis found policy gaps our internal audit missed. The automated POA&M tracking alone saves us 15 hours a week.", name: "Maria Chen", title: "Compliance Director", company: "Vanguard Aero Engineering" },
 ];
 
 const timeline = [
-    { date: "2024 Q3", title: "Founded", desc: "Kaelus.online launched with a singular mission: make CMMC compliance accessible to every defense contractor." },
+    { date: "2024 Q3", title: "Founded", desc: "Hound Shield launched with a singular mission: make CMMC compliance accessible to every defense contractor." },
     { date: "2024 Q4", title: "First Beta", desc: "Early access program with 20 defense subcontractors. Validated core assessment engine." },
     { date: "2025 Q1", title: "NIST 800-171 Engine", desc: "Full mapping of all 110 security controls with automated evidence collection." },
     { date: "2025 Q3", title: "Public Launch", desc: "General availability with AI-powered gap analysis, remediation plans, and audit trail generation." },
@@ -58,14 +58,14 @@ export default function AboutPage() {
                 <div className="absolute inset-0 bg-hero-glow" />
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
                     <AnimatedSection>
-                        <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4">About Kaelus.online</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4">About Hound Shield</p>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
                             Building the Future of{" "}
                             <span className="text-gradient-brand">Defense Compliance</span>
                         </h1>
                         <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
                             87,000 defense contractors need CMMC certification. Most can't afford six-figure consulting fees.
-                            We built Kaelus to change that.
+                            We built Hound Shield to change that.
                         </p>
                     </AnimatedSection>
                 </div>
@@ -221,7 +221,7 @@ export default function AboutPage() {
                     <Link href="/" className="flex items-center gap-2 cursor-pointer">
                         <TextLogo variant="dark" />
                     </Link>
-                    <p className="text-xs text-slate-500">&copy; 2026 Kaelus.online — All rights reserved.</p>
+                    <p className="text-xs text-slate-500">&copy; 2026 Hound Shield — All rights reserved.</p>
                 </div>
             </footer>
         </div>

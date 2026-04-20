@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Agent Memory System
+// Hound Shield Agent Memory System
 // Short-term (conversation), medium-term (session insights), long-term (knowledge)
 // ============================================================================
 
@@ -21,16 +21,16 @@ interface MemoryStore {
 }
 
 // Singleton memory store
-const globalMem = globalThis as unknown as { __kaelus_memory?: MemoryStore };
-if (!globalMem.__kaelus_memory) {
-  globalMem.__kaelus_memory = {
+const globalMem = globalThis as unknown as { __houndshield_memory?: MemoryStore };
+if (!globalMem.__houndshield_memory) {
+  globalMem.__houndshield_memory = {
     conversations: new Map(),
     insights: [],
     preferences: new Map(),
     executionHistory: [],
   };
 }
-const memory = globalMem.__kaelus_memory;
+const memory = globalMem.__houndshield_memory;
 
 export const agentMemory = {
   // ---- Conversation Memory ----

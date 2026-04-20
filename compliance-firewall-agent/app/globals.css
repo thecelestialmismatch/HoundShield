@@ -49,7 +49,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   KAELUS.ONLINE — Chanel Luxury Dark Design System
+   HOUND SHIELD — Dark Design System
    Dual theme · Gold/copper accents · Defense-grade authority
    Palette: #0D0B0B · #F5C842 · #C87D3E · #6B3A1F · #FFFFFF
    ═══════════════════════════════════════════════════════════════════ */
@@ -64,6 +64,7 @@
   body {
     background-color: #07070b;
     color: #FAFAF8;
+    line-height: 1.6;
   }
 
   .dark body,

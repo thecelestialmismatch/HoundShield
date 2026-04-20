@@ -2,11 +2,11 @@
  * POST /api/gateway/ollama — Compliance-gated Ollama (air-gap) proxy
  *
  * Drop-in replacement for Ollama's /api/chat endpoint.
- * Every request passes through Kaelus compliance scanning before
+ * Every request passes through Hound Shield compliance scanning before
  * reaching the local Ollama instance.
  *
  * Body: Ollama /api/chat format (messages, model, stream, options)
- * Response: Kaelus SSE format (data: { content }..., data: [DONE])
+ * Response: Hound Shield SSE format (data: { content }..., data: [DONE])
  *
  * Usage — point your Ollama client at this endpoint:
  *   curl http://localhost:3000/api/gateway/ollama \
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
           {
             error: "compliance_block",
             message:
-              `Kaelus blocked this prompt: contains ${scan.classifications.join(", ")} ` +
+              `Hound Shield blocked this prompt: contains ${scan.classifications.join(", ")} ` +
               `(Risk: ${scan.risk_level}). Air-gap mode still enforces compliance.`,
             scan: {
               risk_level: scan.risk_level,
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
           },
           {
             status: 451,
-            headers: { "X-Kaelus-Action": "BLOCKED" },
+            headers: { "X-Hound Shield-Action": "BLOCKED" },
           }
         );
       }
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
             result.error ??
             "Ollama is not running. Start it with: ollama serve",
         },
-        { status: 503, headers: { "X-Kaelus-Ollama": "offline" } }
+        { status: 503, headers: { "X-Hound Shield-Ollama": "offline" } }
       );
     }
 
@@ -107,8 +107,8 @@ export async function POST(request: NextRequest) {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache, no-transform",
         Connection: "keep-alive",
-        "X-Kaelus-Action": "ALLOWED",
-        "X-Kaelus-Mode": "air-gap",
+        "X-Hound Shield-Action": "ALLOWED",
+        "X-Hound Shield-Mode": "air-gap",
       },
     });
   } catch (err) {

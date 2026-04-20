@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Multi-Agent Router — Task Classification + Agent Dispatch v1.0
+// Hound Shield Multi-Agent Router — Task Classification + Agent Dispatch v1.0
 //
 // Responsibilities:
 //   1. Classify incoming tasks into an agent domain
@@ -29,31 +29,31 @@ const DOMAIN_KEYWORDS: Array<{ keywords: string[]; agentId: string; weight: numb
   // Scanner domain — real-time detection tasks
   {
     keywords: ['scan', 'detect', 'check', 'pii', 'phi', 'cui', 'hipaa', 'sensitive', 'contains', 'exposure', 'leak', 'credential', 'api key', 'secret'],
-    agentId: 'kaelus-scanner',
+    agentId: 'houndshield-scanner',
     weight: 3,
   },
   // Policy domain — rule and enforcement tasks
   {
     keywords: ['policy', 'rule', 'allow', 'block', 'permit', 'deny', 'exception', 'enforcement', 'approved', 'prohibited', 'whitelist', 'blacklist', 'access control'],
-    agentId: 'kaelus-policy',
+    agentId: 'houndshield-policy',
     weight: 3,
   },
   // Research domain — regulatory and knowledge tasks
   {
     keywords: ['research', 'regulation', 'requirement', 'guidance', 'nist', 'cmmc', 'soc2', 'framework', 'standard', 'control', 'what does', 'explain', 'define', 'overview'],
-    agentId: 'kaelus-research',
+    agentId: 'houndshield-research',
     weight: 2,
   },
   // Optimization domain — performance and cost tasks
   {
     keywords: ['latency', 'performance', 'optimize', 'speed', 'cost', 'token', 'throughput', 'slow', 'profile', 'bottleneck', 'efficiency', 'metrics', 'p99'],
-    agentId: 'kaelus-optimizer',
+    agentId: 'houndshield-optimizer',
     weight: 3,
   },
   // Auditor domain — reporting and audit tasks
   {
     keywords: ['audit', 'report', 'sprs', 'score', 'evidence', 'assessment', 'trail', 'log', 'export', 'compliance report', 'gap analysis', 'readiness', 'prepare'],
-    agentId: 'kaelus-auditor',
+    agentId: 'houndshield-auditor',
     weight: 3,
   },
 ];
@@ -106,7 +106,7 @@ export function classifyTask(task: string, explicitAgentId?: string): RoutingDec
   }
 
   // Find winner
-  let topAgentId = 'kaelus-research'; // safest default
+  let topAgentId = 'houndshield-research'; // safest default
   let topScore = 0;
 
   for (const [agentId, score] of scores.entries()) {
@@ -208,18 +208,18 @@ export interface PipelineResult {
 export const BUILTIN_PIPELINES = {
   /** Scan content then generate audit entry */
   'scan-and-audit': [
-    { stepId: 'scan', agentId: 'kaelus-scanner' },
-    { stepId: 'audit', agentId: 'kaelus-auditor', dependsOn: ['scan'] },
+    { stepId: 'scan', agentId: 'houndshield-scanner' },
+    { stepId: 'audit', agentId: 'houndshield-auditor', dependsOn: ['scan'] },
   ],
   /** Research a regulation then produce a policy recommendation */
   'research-and-policy': [
-    { stepId: 'research', agentId: 'kaelus-research' },
-    { stepId: 'policy', agentId: 'kaelus-policy', dependsOn: ['research'] },
+    { stepId: 'research', agentId: 'houndshield-research' },
+    { stepId: 'policy', agentId: 'houndshield-policy', dependsOn: ['research'] },
   ],
   /** Profile performance then produce optimization plan */
   'profile-and-optimize': [
-    { stepId: 'profile', agentId: 'kaelus-optimizer' },
-    { stepId: 'report', agentId: 'kaelus-auditor', dependsOn: ['profile'] },
+    { stepId: 'profile', agentId: 'houndshield-optimizer' },
+    { stepId: 'report', agentId: 'houndshield-auditor', dependsOn: ['profile'] },
   ],
 } as const;
 

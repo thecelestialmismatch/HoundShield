@@ -37,7 +37,7 @@ const webSearchTool: ToolHandler = {
         `https://html.duckduckgo.com/html/?q=${encodedQuery}`,
         {
           headers: {
-            'User-Agent': 'Kaelus-Agent/1.0 (Enterprise AI Platform)',
+            'User-Agent': 'Hound Shield-Agent/1.0 (Enterprise AI Platform)',
           },
         }
       );

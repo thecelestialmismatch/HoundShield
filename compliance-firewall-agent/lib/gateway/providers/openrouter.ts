@@ -1,11 +1,11 @@
 /**
- * Kaelus Streaming Gateway — OpenRouter Provider Adapter
+ * Hound Shield Streaming Gateway — OpenRouter Provider Adapter
  *
  * OpenRouter (https://openrouter.ai) is a unified API that provides access to
  * 200+ LLM models from OpenAI, Anthropic, Google, Meta, Mistral, and more
  * through a single endpoint and API key.
  *
- * This is a STRATEGIC provider for Kaelus because:
+ * This is a STRATEGIC provider for Hound Shield because:
  * 1. Users only need ONE API key (OpenRouter) to access all models
  * 2. OpenRouter handles provider-level rate limits and fallbacks
  * 3. It supports the OpenAI-compatible format, so we reuse parsing logic
@@ -101,8 +101,8 @@ export const openrouterAdapter: ProviderAdapter = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${req.api_key}`,
       // OpenRouter analytics headers — these help with rate limits
-      "HTTP-Referer": "https://kaelus.online",
-      "X-Title": "Kaelus AI Compliance Gateway",
+      "HTTP-Referer": "https://houndshield.com",
+      "X-Title": "Hound Shield AI Compliance Gateway",
     };
 
     const body: Record<string, unknown> = {
@@ -136,7 +136,7 @@ export const openrouterAdapter: ProviderAdapter = {
     try {
       parsed = JSON.parse(trimmed) as OpenRouterStreamChunk;
     } catch {
-      console.warn("[kaelus:openrouter] Failed to parse SSE chunk:", trimmed.slice(0, 200));
+      console.warn("[houndshield:openrouter] Failed to parse SSE chunk:", trimmed.slice(0, 200));
       return null;
     }
 

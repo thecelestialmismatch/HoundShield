@@ -36,7 +36,7 @@ const MAX_BODY_SIZE = 1_048_576;
 // ---------------------------------------------------------------------------
 
 /**
- * Validates a Kaelus API key against stored keys in the database,
+ * Validates a Hound Shield API key against stored keys in the database,
  * or accepts any non-empty key when running in demo mode.
  */
 async function validateApiKey(apiKey: string): Promise<boolean> {
@@ -107,7 +107,7 @@ export async function OPTIONS() {
  *   - `error`            — emitted on failures, then stream closes
  *
  * Headers:
- *   x-api-key (required): Kaelus API key
+ *   x-api-key (required): Hound Shield API key
  *   x-user-id (optional): caller identifier, defaults to "anonymous"
  */
 export async function POST(req: NextRequest) {

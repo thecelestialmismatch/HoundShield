@@ -1,11 +1,11 @@
-# Kaelus + Uploadcare
+# Hound Shield + Uploadcare
 
-**One-line integration:** point your Uploadcare AI calls at the Kaelus proxy URL.
+**One-line integration:** point your Uploadcare AI calls at the Hound Shield proxy URL.
 
 ## Setup
 
 ```bash
-KAELUS_PROXY_URL=https://your-tenant.kaelus.online/proxy
+KAELUS_PROXY_URL=https://your-tenant.houndshield.com/proxy
 ```
 
 ## How It Works
@@ -17,6 +17,6 @@ KAELUS_PROXY_URL=https://your-tenant.kaelus.online/proxy
 
 ## Learn More
 
-- [Kaelus Documentation](https://kaelus.online/docs)
-- [Quick Start Guide](https://kaelus.online/docs/quickstart)
-- [Pricing](https://kaelus.online/pricing)
+- [Hound Shield Documentation](https://houndshield.com/docs)
+- [Quick Start Guide](https://houndshield.com/docs/quickstart)
+- [Pricing](https://houndshield.com/pricing)

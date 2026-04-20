@@ -1,7 +1,6 @@
 ---
 name: Refactor Safely
 description: Plan and execute safe refactoring using dependency analysis
-user-invocable: true
 ---
 
 ## Refactor Safely

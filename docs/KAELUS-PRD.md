@@ -6,11 +6,11 @@
 
 ## EXECUTIVE SUMMARY
 
-Kaelus.ai is an AI compliance firewall purpose-built for CMMC Level 2 defense contractors. The core technical architecture is sound and genuinely differentiated. The problem is that the codebase has drifted: significant engineering effort has gone into features (PixelOffice, memory, workspace, agents, calendar, pipeline) that have no relevance to the CMMC buyer. Meanwhile, the features that actually convert defense contractors to paying customers — PDF compliance reports, subscription-gated feature access, a functional onboarding flow, and CMMC-specific threat patterns in the scanner — are either missing, incomplete, or not wired together.
+Hound Shield.ai is an AI compliance firewall purpose-built for CMMC Level 2 defense contractors. The core technical architecture is sound and genuinely differentiated. The problem is that the codebase has drifted: significant engineering effort has gone into features (PixelOffice, memory, workspace, agents, calendar, pipeline) that have no relevance to the CMMC buyer. Meanwhile, the features that actually convert defense contractors to paying customers — PDF compliance reports, subscription-gated feature access, a functional onboarding flow, and CMMC-specific threat patterns in the scanner — are either missing, incomplete, or not wired together.
 
 This PRD defines:
 1. What the market needs (with specifics)
-2. What Kaelus currently offers (honest assessment)
+2. What Hound Shield currently offers (honest assessment)
 3. Every gap between them
 4. How to fix each gap (prioritized)
 5. What gets cut entirely
@@ -108,7 +108,7 @@ These are the specific gaps between what the market needs and what's currently b
 ### GAP 1: No PDF Compliance Reports
 **Impact: CRITICAL — Biggest single conversion driver missing**
 
-**What the market needs:** CMMC auditors require printed/signed documentation. A compliance officer cannot hand a C3PAO auditor a JSON file. They need a PDF that says: "Kaelus.ai monitored AI traffic for this organization from [date] to [date], detected [X] potential CUI exposure events, took [Y] actions, and the following CMMC controls were tested."
+**What the market needs:** CMMC auditors require printed/signed documentation. A compliance officer cannot hand a C3PAO auditor a JSON file. They need a PDF that says: "Hound Shield.ai monitored AI traffic for this organization from [date] to [date], detected [X] potential CUI exposure events, took [Y] actions, and the following CMMC controls were tested."
 
 **What exists:** `app/api/reports/generate/` returns JSON with event breakdown and compliance status. `app/command-center/shield/reports/` has a UI. The architecture notes explicitly flag this as the "biggest conversion driver."
 
@@ -119,7 +119,7 @@ These are the specific gaps between what the market needs and what's currently b
 Priority: P0 — build in Week 2 (Day 8–14)
 Approach: Use jsPDF (already likely a known dependency) or react-pdf
 Output: /api/reports/generate?format=pdf returns a signed PDF
-PDF includes: Executive summary, threat breakdown table, CMMC control mapping, Merkle root for tamper-evidence, Kaelus.ai logo, client org name, date range
+PDF includes: Executive summary, threat breakdown table, CMMC control mapping, Merkle root for tamper-evidence, Hound Shield.ai logo, client org name, date range
 Time estimate: 2–3 days engineering
 ```
 
@@ -146,9 +146,9 @@ Time estimate: 1 day engineering
 ---
 
 ### GAP 3: No Integration Guide / SDK Documentation
-**Impact: HIGH — Customers can't self-onboard without knowing how to route AI traffic through Kaelus**
+**Impact: HIGH — Customers can't self-onboard without knowing how to route AI traffic through Hound Shield**
 
-**What the market needs:** A defense contractor's IT lead needs a clear, step-by-step guide to configure their team's AI tools to route through Kaelus. If they can't integrate in 30 minutes, they churn. The SDK exists but there are no docs showing how to use it.
+**What the market needs:** A defense contractor's IT lead needs a clear, step-by-step guide to configure their team's AI tools to route through Hound Shield. If they can't integrate in 30 minutes, they churn. The SDK exists but there are no docs showing how to use it.
 
 **What exists:** `sdk/` client SDK. `app/docs/page.tsx` exists (docs page). `app/api/health/route.ts` exists.
 
@@ -303,14 +303,14 @@ Time estimate: 1 day (landing page only); 1 week (Essential Eight mapping)
 ### GAP 10: No "How Am I Protected?" Explainer for Non-Technical Buyers
 **Impact: MEDIUM — Sales friction**
 
-**What the market needs:** A compliance officer (not a developer) needs to understand how Kaelus works without reading API documentation. "Your employees' AI queries pass through our firewall before reaching OpenAI. We scan each one in <50ms. Anything containing sensitive data is flagged, logged, and optionally blocked. You see it all in the dashboard."
+**What the market needs:** A compliance officer (not a developer) needs to understand how Hound Shield works without reading API documentation. "Your employees' AI queries pass through our firewall before reaching OpenAI. We scan each one in <50ms. Anything containing sensitive data is flagged, logged, and optionally blocked. You see it all in the dashboard."
 
 **What's missing:** A simple visual explainer on the landing page and inside the dashboard onboarding.
 
 **How to fix:**
 ```
 Priority: P1 — content/design work only
-Approach: Add a 3-step visual to the landing page: [Employee uses AI] → [Kaelus scans in real-time] → [CUI blocked/logged, you stay compliant]
+Approach: Add a 3-step visual to the landing page: [Employee uses AI] → [Hound Shield scans in real-time] → [CUI blocked/logged, you stay compliant]
 Add the same explainer to the onboarding flow
 Time estimate: 2–4 hours
 ```

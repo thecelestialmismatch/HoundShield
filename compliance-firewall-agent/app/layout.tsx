@@ -12,10 +12,10 @@ import { ClientShell } from "@/components/ClientShell";
 const SOFTWARE_APP_JSONLD = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Kaelus",
-  url: "https://kaelus.online",
+  name: "Hound Shield",
+  url: "https://houndshield.com",
   description:
-    "AI compliance firewall for regulated industries. Enforces CMMC Level 2, HIPAA, and SOC 2 simultaneously — scanning every AI prompt for PII, PHI, CUI, and secrets in under 10ms.",
+    "Local-only AI data loss prevention proxy. Intercepts every AI prompt before it leaves your network — scanning for CUI, PII, PHI, and secrets in under 10ms. CMMC Level 2, HIPAA, and SOC 2 enforced simultaneously.",
   applicationCategory: "SecurityApplication",
   operatingSystem: "Web",
   offers: [
@@ -29,20 +29,20 @@ const SOFTWARE_APP_JSONLD = JSON.stringify({
     "HIPAA PHI detection (18 identifiers)",
     "SOC 2 access control monitoring",
     "Real-time AI prompt scanning under 10ms",
-    "Blockchain-anchored audit trails",
+    "Local-only — prompts never leave your infrastructure",
     "SAML 2.0 SSO (Okta, Azure AD)",
     "SIEM integration (Splunk, Sentinel, Elastic)",
   ],
-  creator: { "@type": "Organization", name: "Kaelus", url: "https://kaelus.online" },
+  creator: { "@type": "Organization", name: "Hound Shield", url: "https://houndshield.com" },
 });
 
 const ORGANIZATION_JSONLD = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Kaelus",
-  url: "https://kaelus.online",
-  logo: "https://kaelus.online/icon.svg",
-  contactPoint: { "@type": "ContactPoint", contactType: "sales", url: "https://kaelus.online/contact" },
+  name: "Hound Shield",
+  url: "https://houndshield.com",
+  logo: "https://houndshield.com/icon.svg",
+  contactPoint: { "@type": "ContactPoint", contactType: "sales", url: "https://houndshield.com/contact" },
 });
 
 export const viewport: Viewport = {
@@ -53,11 +53,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Kaelus.online | AI Compliance Firewall for Regulated Industries",
-    template: "%s | Kaelus.online",
+    default: "Hound Shield | Stop AI Data Leaks. CMMC Level 2 Compliant.",
+    template: "%s | Hound Shield",
   },
   description:
-    "The AI compliance firewall for defense, healthcare, and technology. CMMC Level 2, HIPAA, SOC 2 — real-time AI traffic scanning, tamper-proof audit trails, and automated compliance. Start free.",
+    "Local-only AI proxy that blocks CUI, PHI, and secrets before they reach ChatGPT, Copilot, or Claude. One URL change. CMMC Level 2, HIPAA, and SOC 2 enforced simultaneously. Start free.",
   keywords: [
     "AI compliance firewall",
     "CMMC compliance",
@@ -68,33 +68,32 @@ export const metadata: Metadata = {
     "NIST 800-171",
     "SPRS score calculator",
     "defense contractor compliance",
-    "healthcare AI compliance",
-    "AI data leak prevention",
-    "LLM firewall",
+    "AI data loss prevention",
+    "AI DLP proxy",
+    "local AI proxy",
     "CUI protection",
     "PHI detection",
     "PII detection",
-    "compliance automation",
     "AI security",
     "audit trail",
-    "blockchain compliance",
+    "houndshield",
   ],
-  authors: [{ name: "Kaelus.online" }],
-  creator: "Kaelus.online",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://kaelus.online"),
+  authors: [{ name: "Hound Shield" }],
+  creator: "Hound Shield",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://houndshield.com"),
   openGraph: {
-    title: "Kaelus.online | AI Compliance Firewall for Regulated Industries",
+    title: "Hound Shield | Stop AI Data Leaks. CMMC Level 2 Compliant.",
     description:
-      "AI compliance firewall for defense, healthcare, and technology. CMMC, HIPAA, SOC 2 — real-time AI scanning, tamper-proof audit trails, blockchain-anchored evidence. Free tier available.",
+      "Local-only AI proxy that blocks CUI, PHI, and secrets before they reach any AI provider. One URL change. CMMC, HIPAA, SOC 2 enforced simultaneously.",
     type: "website",
-    siteName: "Kaelus.online",
+    siteName: "Hound Shield",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kaelus.online | AI Compliance Firewall",
+    title: "Hound Shield | Stop AI Data Leaks",
     description:
-      "AI compliance firewall for regulated industries. CMMC, HIPAA, SOC 2 — real-time AI scanning, blockchain-anchored audit trails. Free tier available.",
+      "Local-only AI proxy. Blocks CUI, PHI, and secrets before they reach ChatGPT or Copilot. CMMC Level 2 compliant. Start free.",
   },
   robots: {
     index: true,

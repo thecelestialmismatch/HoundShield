@@ -1,4 +1,4 @@
-# Kaelus — Architectural Decisions
+# Hound Shield — Architectural Decisions
 
 Decisions recorded here explain WHY the architecture is shaped this way.
 Code explains what. This explains why.

@@ -1,4 +1,4 @@
-# Kaelus.Online — Post-Implementation Research Report
+# Hound Shield.Online — Post-Implementation Research Report
 
 Generated: 2026-04-08. All links accessed directly. Inaccessible links flagged for manual paste.
 
@@ -20,10 +20,10 @@ Generated: 2026-04-08. All links accessed directly. Inaccessible links flagged f
 - D3.js interactive dependency graph visualization
 - `.code-review-graphignore` for excluding noise
 
-**Kaelus integration:**
+**Hound Shield integration:**
 Already configured in `CLAUDE.md` via the `code-review-graph` MCP tools section. No additional work needed — the knowledge graph is the primary navigation tool for this codebase.
 
-**Impact:** Directly reduces token cost of every future Claude session working on Kaelus.
+**Impact:** Directly reduces token cost of every future Claude session working on Hound Shield.
 
 ---
 
@@ -32,14 +32,14 @@ Already configured in `CLAUDE.md` via the `code-review-graph` MCP tools section.
 
 **What it is:** Rust implementation of a multi-agent coding harness. Human sets direction via Discord; autonomous agents execute, coordinate, and push. Three-part system: OmX (workflow), clawhip (event routing), OmO (multi-agent coordination).
 
-**Key patterns for Kaelus:**
+**Key patterns for Hound Shield:**
 - Clawable architecture: deterministic startup, machine-readable state, recovery loops
 - Event-first design: structured events over log-shaped output
 - Plugin/MCP lifecycle management
 - Discord as the human interface layer — enables async, mobile-first direction-setting
 
 **Integration recommendation:**
-The event-bus pattern from claw-code maps directly to `lib/gateway/event-bus.ts` (already implemented). The "clawable" principle (machine-readable state exports) should inform how Kaelus exposes audit logs — structured JSON events, not raw text.
+The event-bus pattern from claw-code maps directly to `lib/gateway/event-bus.ts` (already implemented). The "clawable" principle (machine-readable state exports) should inform how Hound Shield exposes audit logs — structured JSON events, not raw text.
 
 ---
 
@@ -53,8 +53,8 @@ The event-bus pattern from claw-code maps directly to `lib/gateway/event-bus.ts`
 - Local-first credential management
 - `PERFORMANCE.md` regression tracking
 
-**Kaelus integration:**
-The provider abstraction pattern mirrors `lib/gateway/providers/` (OpenAI, Anthropic, Google, OpenRouter). The telemetry-removal principle aligns with Kaelus compliance posture — no telemetry on compliance data.
+**Hound Shield integration:**
+The provider abstraction pattern mirrors `lib/gateway/providers/` (OpenAI, Anthropic, Google, OpenRouter). The telemetry-removal principle aligns with Hound Shield compliance posture — no telemetry on compliance data.
 
 ---
 
@@ -71,10 +71,10 @@ AI Tool → Lynkr (port 8081) → any LLM provider
 - Format conversion between OpenAI and Anthropic specs
 - Local/private mode (Ollama, llama.cpp)
 
-**Kaelus integration:**
-Lynkr validates the Kaelus gateway design. The `/api/v1/chat/completions` endpoint (Day 2) is essentially Kaelus's own version of Lynkr with compliance scanning added. The Prometheus metrics pattern should be adopted: add `X-Kaelus-Latency-Histogram` headers and expose `/metrics` endpoint for Grafana integration.
+**Hound Shield integration:**
+Lynkr validates the Hound Shield gateway design. The `/api/v1/chat/completions` endpoint (Day 2) is essentially Hound Shield's own version of Lynkr with compliance scanning added. The Prometheus metrics pattern should be adopted: add `X-Hound Shield-Latency-Histogram` headers and expose `/metrics` endpoint for Grafana integration.
 
-**Concrete improvement:** Add Prometheus-compatible `/api/metrics` endpoint to Kaelus for enterprise monitoring dashboards.
+**Concrete improvement:** Add Prometheus-compatible `/api/metrics` endpoint to Hound Shield for enterprise monitoring dashboards.
 
 ---
 
@@ -92,8 +92,8 @@ Lynkr validates the Kaelus gateway design. The `/api/v1/chat/completions` endpoi
 - Loop detection for stuck agents
 - Exponential backoff retry
 
-**Kaelus integration:**
-The multi-agent pattern maps directly to the SimulationGraph visualization (Day 6). The approval gate mechanism should inform Kaelus's quarantine workflow — when content is quarantined, a human-in-the-loop gate holds the response until a reviewer approves/denies.
+**Hound Shield integration:**
+The multi-agent pattern maps directly to the SimulationGraph visualization (Day 6). The approval gate mechanism should inform Hound Shield's quarantine workflow — when content is quarantined, a human-in-the-loop gate holds the response until a reviewer approves/denies.
 
 **Concrete improvement:** Wire the HITL approval workflow in `lib/hitl/` to send webhook notifications when quarantine events occur.
 
@@ -110,8 +110,8 @@ The multi-agent pattern maps directly to the SimulationGraph visualization (Day 
 - Test-first development with red-green-refactor enforcement
 - Git worktree isolation for parallel feature development
 
-**Kaelus integration:**
-The skill template pattern is what Kaelus's `.claude/skills/` directory implements. The worktree pattern should be adopted for the next major feature: create `git worktree add` based feature branches automatically via the kaelus-dev skill.
+**Hound Shield integration:**
+The skill template pattern is what Hound Shield's `.claude/skills/` directory implements. The worktree pattern should be adopted for the next major feature: create `git worktree add` based feature branches automatically via the houndshield-dev skill.
 
 ---
 
@@ -126,7 +126,7 @@ The skill template pattern is what Kaelus's `.claude/skills/` directory implemen
 - Port 37777 worker service handles search
 - 3-layer workflow: index → chronological → full detail
 
-**Kaelus integration:**
+**Hound Shield integration:**
 This pattern should inform the memory architecture in `app/command-center/memory/`. Implement progressive disclosure: the memory endpoint returns a compact index first, with full content fetched on demand. This keeps the context window lean during compliance assessments.
 
 ---
@@ -143,8 +143,8 @@ This pattern should inform the memory architecture in `app/command-center/memory
 - `.gitignore` aware — never indexes sensitive files
 - SQLite for millions of files without degradation
 
-**Kaelus integration:**
-The "dreaming" pattern (idle-time summarization) should be applied to Kaelus audit logs — during low-traffic periods, run a background job that summarizes recent compliance events and updates the security dashboard metrics cache. This avoids expensive real-time aggregation queries.
+**Hound Shield integration:**
+The "dreaming" pattern (idle-time summarization) should be applied to Hound Shield audit logs — during low-traffic periods, run a background job that summarizes recent compliance events and updates the security dashboard metrics cache. This avoids expensive real-time aggregation queries.
 
 ---
 
@@ -153,10 +153,10 @@ The "dreaming" pattern (idle-time summarization) should be applied to Kaelus aud
 
 **What it is:** AI-assisted autonomous trading platform on Kalshi/Polymarket. "Paperclip Pattern" spawns Claude Code as subprocess. SOUL.md defines agent identity and risk rules. Hard position-sizing constraints.
 
-**Key patterns for Kaelus:**
+**Key patterns for Hound Shield:**
 - SOUL.md pattern: a declarative file defining agent constraints and identity — directly applicable as a compliance policy format
-- Hard constraints enforced at framework level (not agent-discretion): maps to Kaelus's immutable block rules
-- Strategy_notes.md: persistent lessons learned file — Kaelus should implement an equivalent `scan-learnings.md` updated after each ML scan cycle
+- Hard constraints enforced at framework level (not agent-discretion): maps to Hound Shield's immutable block rules
+- Strategy_notes.md: persistent lessons learned file — Hound Shield should implement an equivalent `scan-learnings.md` updated after each ML scan cycle
 
 ---
 
@@ -170,8 +170,8 @@ The "dreaming" pattern (idle-time summarization) should be applied to Kaelus aud
 - Red-teaming methodologies for agentic systems
 - Multi-agent security challenges (prompt injection, agent hijacking)
 
-**Kaelus integration:**
-The threat models from agentic-web research should inform Kaelus's ML scanner patterns. Specifically: indirect prompt injection (where malicious content in a retrieved document tries to hijack the agent) is a gap in current regex patterns. Add detection patterns for prompt injection attempts in RAG contexts.
+**Hound Shield integration:**
+The threat models from agentic-web research should inform Hound Shield's ML scanner patterns. Specifically: indirect prompt injection (where malicious content in a retrieved document tries to hijack the agent) is a gap in current regex patterns. Add detection patterns for prompt injection attempts in RAG contexts.
 
 ---
 
@@ -180,7 +180,7 @@ The threat models from agentic-web research should inform Kaelus's ML scanner pa
 
 **What it is:** 58 ready-to-use DESIGN.md files for popular products (Claude, Stripe, Linear, Vercel, Figma, Apple, Tesla, etc.). AI-readable design specs with color palettes, typography, component patterns.
 
-**Kaelus integration:**
+**Hound Shield integration:**
 Use the Stripe DESIGN.md as reference when building the billing/pricing UI updates. Use the Linear DESIGN.md for the task management and pipeline views. These give Claude deterministic design constraints instead of guessing.
 
 ---
@@ -190,7 +190,7 @@ Use the Stripe DESIGN.md as reference when building the billing/pricing UI updat
 
 **What it is:** Pure JS/TS text layout engine. Measures and positions multiline text via arithmetic (not DOM). 2ms for 1,000 blocks vs 94ms with DOM. Framework-agnostic, zero dependencies.
 
-**Kaelus integration:**
+**Hound Shield integration:**
 Use in the security dashboard's violation feed — pre-compute bubble heights for the scrolling threat log. Eliminates layout thrashing when the live feed updates rapidly.
 
 ---
@@ -207,7 +207,7 @@ Use in the security dashboard's violation feed — pre-compute bubble heights fo
 - Session quality monitoring: detect when context has degraded
 - Anti-patterns: "Kitchen Sink" (too many loaded skills)
 
-**Kaelus integration:**
+**Hound Shield integration:**
 Apply directly to this project. The CLAUDE.md files should be audited for redundancy. Skills should be loaded only when triggered, not globally.
 
 ---
@@ -229,8 +229,8 @@ Apply directly to this project. The CLAUDE.md files should be audited for redund
 9. Work during off-peak hours
 10. Enable overage protection as safety net
 
-**Kaelus integration:**
-For Kaelus's ML scanner (Day 5), implement strategies 6-7: use Gemini Flash (cheapest/fastest) for compliance scans, fall back to regex. Batch multiple short prompts within a single Gemini call when possible.
+**Hound Shield integration:**
+For Hound Shield's ML scanner (Day 5), implement strategies 6-7: use Gemini Flash (cheapest/fastest) for compliance scans, fall back to regex. Batch multiple short prompts within a single Gemini call when possible.
 
 ---
 
@@ -241,7 +241,7 @@ For Kaelus's ML scanner (Day 5), implement strategies 6-7: use Gemini Flash (che
 
 **Phases:** Reconnaissance → Foundation → Component Specs → Parallel Build (multiple worktrees) → Assembly and QA
 
-**Kaelus integration:**
+**Hound Shield integration:**
 The parallel git worktree pattern is directly applicable to implementing multiple Day 2-7 features simultaneously. When building multiple unrelated components, use `git worktree add` for each, then merge. Already the recommended pattern for major feature work.
 
 ---
@@ -251,7 +251,7 @@ The parallel git worktree pattern is directly applicable to implementing multipl
 
 **What it is:** Qwen 3.6 Plus — free model with 1M context, multimodal (text + image + video), strong on coding (78.8 SWE-bench). $0/M tokens. Hybrid linear attention + MoE routing.
 
-**Kaelus integration:**
+**Hound Shield integration:**
 Add Qwen 3.6 Plus as an additional free-tier provider option in the gateway. Register it under the `openrouter` provider with model ID `qwen/qwen3.6-plus:free`. Users who don't have paid API keys can use this for testing compliance scans at zero cost.
 
 ---
@@ -261,8 +261,8 @@ Add Qwen 3.6 Plus as an additional free-tier provider option in the gateway. Reg
 
 **What it is:** Methodology for building AI apps: Wireframe → Validate → Document → Build → Test. Emphasizes 10-day MVP structure with one feature per Claude conversation.
 
-**Kaelus integration:**
-This methodology should inform Kaelus's development process going forward. Specifically: each new feature should begin with a wireframe step and a dedicated `/docs/[feature].md` spec before any code is written.
+**Hound Shield integration:**
+This methodology should inform Hound Shield's development process going forward. Specifically: each new feature should begin with a wireframe step and a dedicated `/docs/[feature].md` spec before any code is written.
 
 ---
 
@@ -271,8 +271,8 @@ This methodology should inform Kaelus's development process going forward. Speci
 
 **What it is:** OpenClaw starter kit for founders. 7-layer separation of concerns: priorities, resolution policy, meeting-note ingestion, task state, archive, local config, recurring schedules.
 
-**Kaelus integration:**
-The heartbeat/cron pattern for recurring operations maps to Kaelus's scheduled compliance checks. The canonical task file pattern is implemented in this codebase's `tasks/` directory. The separation between live task state and archived completions should be applied to audit logs.
+**Hound Shield integration:**
+The heartbeat/cron pattern for recurring operations maps to Hound Shield's scheduled compliance checks. The canonical task file pattern is implemented in this codebase's `tasks/` directory. The separation between live task state and archived completions should be applied to audit logs.
 
 ---
 
@@ -306,7 +306,7 @@ The following links returned JS-only rendering, auth walls, or empty content:
 
 ---
 
-## 3. Top Integrations for Kaelus — Ranked by Impact
+## 3. Top Integrations for Hound Shield — Ranked by Impact
 
 ### Rank 1: Prometheus /metrics Endpoint (from Lynkr pattern)
 **Impact:** Enterprise sales enabler. Every CMMC/SOC 2 customer has Grafana or Datadog. A `/api/metrics` endpoint unlocks this immediately.
@@ -315,10 +315,10 @@ The following links returned JS-only rendering, auth walls, or empty content:
 ```typescript
 // app/api/metrics/route.ts
 // Export Prometheus-compatible counters:
-// kaelus_requests_total{provider, action, risk_level}
-// kaelus_scan_latency_ms{stage: "regex" | "ml"}
-// kaelus_blocked_total{category}
-// kaelus_quarantine_pending
+// houndshield_requests_total{provider, action, risk_level}
+// houndshield_scan_latency_ms{stage: "regex" | "ml"}
+// houndshield_blocked_total{category}
+// houndshield_quarantine_pending
 ```
 Use the `prom-client` npm package. Wire to existing `event-bus.ts` stats.
 
@@ -426,7 +426,7 @@ GET /api/memory/:id         // returns full content — only when needed
 
 ---
 
-## 5. Before vs. After: Kaelus Without and With These Integrations
+## 5. Before vs. After: Hound Shield Without and With These Integrations
 
 ### Without
 

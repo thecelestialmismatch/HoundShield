@@ -3,7 +3,7 @@
  *
  * Detects and validates the Brain AI workspace configuration.
  * Reports what's ready, what's missing, and what needs action.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export interface WorkspaceSetup {

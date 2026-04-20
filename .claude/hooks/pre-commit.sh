@@ -1,5 +1,5 @@
 #!/bin/bash
-# Kaelus.Online pre-commit checks
+# Hound Shield pre-commit checks
 # Exit 2 = block commit | Exit 0 = allow
 
 APP="$(git rev-parse --show-toplevel)/compliance-firewall-agent"
@@ -24,10 +24,10 @@ if [ -n "$STAGED" ]; then
   fi
 fi
 
-# Test suite
-npm test -- --silent 2>&1
+# Test suite with coverage gate
+npm test -- --silent --coverage 2>&1
 if [ $? -ne 0 ]; then
-  echo "BLOCKED: Tests failed. Fix before committing."
+  echo "BLOCKED: Test suite failed. Fix tests before committing."
   exit 2
 fi
 

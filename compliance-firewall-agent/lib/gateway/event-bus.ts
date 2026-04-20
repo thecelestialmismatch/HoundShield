@@ -184,12 +184,12 @@ class ComplianceEventBus {
  * during development. In production the module cache handles this.
  */
 const globalForBus = globalThis as unknown as {
-  __kaelusEventBus?: ComplianceEventBus;
+  __houndshieldEventBus?: ComplianceEventBus;
 };
 
 export const eventBus: ComplianceEventBus =
-  globalForBus.__kaelusEventBus ?? new ComplianceEventBus();
+  globalForBus.__houndshieldEventBus ?? new ComplianceEventBus();
 
 if (process.env.NODE_ENV !== "production") {
-  globalForBus.__kaelusEventBus = eventBus;
+  globalForBus.__houndshieldEventBus = eventBus;
 }
