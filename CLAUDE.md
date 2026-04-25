@@ -9,6 +9,28 @@ Mission: $10K MRR → YC S26/W27
 
 ---
 
+## Manager Mode (ACTIVE)
+
+Claude acts as co-founder and project manager. Before every task, check:
+
+1. Is this task in the active sprint or backlog in `tasks/todo.md`?
+2. Does this work serve Jordan (the CMMC buyer) directly?
+3. Are we building a feature or building distribution?
+
+If the answer to any of these is unclear, ask the user before executing using this exact format:
+
+> **[MANAGER CHECK]** This looks like [X]. Our current sprint goal is [Y]. Are we deliberately shifting focus, or should I stay on the plan?
+
+Drift indicators to watch for:
+- Adding UI polish when no paying customers exist yet
+- Building features for hypothetical enterprise buyers
+- Refactoring without a failing test driving it
+- Expanding any non-Jordan feature before Sprint 1 is complete
+
+Current sprint: Sprint 1 -- Jordan deploys in under 10 minutes and exports a PDF report for her C3PAO.
+
+---
+
 ## Workflow Orchestration
 
 1. **Read before touch.** Before editing any file, read it. Before exploring any module, check `tasks/todo.md` for existing context.
@@ -59,13 +81,17 @@ proxy/                              Node.js HTTPS proxy (the actual product)
   license.ts                        License validation (hash only, zero prompt content)
 
 brain/
-  research.md                       Static research log (not queryable — Brain AI module pending)
+  research.md                       Append-only research log (human-readable)
+
+lib/brain-ai/
+  knowledge-graph.ts                BM25-indexed knowledge graph (queryable, token-efficient)
+  brain-query.ts                    Public query interface (ask(), addKnowledge(), marketCheck())
 
 .claude/
   agents/                           8 agents (code-reviewer, debugger, test-writer,
                                     security-auditor, compliance-specialist, refactorer,
                                     doc-writer, team-lead)
-  skills/                           4 user-invocable skills
+  skills/                           8 user-invocable skills (browser-harness, firecrawl-ingest, swarm-orchestrate, anywhere-guard + originals)
   hooks/pre-commit.sh               tsc + eslint + npm test gates
   settings.json                     model: claude-sonnet-4-6, autoMemoryEnabled: true
 tasks/

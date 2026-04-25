@@ -5,6 +5,40 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-04-25
+
+### OODA Analysis: Cloud DLP architecture is a CMMC disqualifier
+
+**What:** Full competitive analysis revealed every major AI DLP vendor (Nightfall, Strac, Cyberhaven, Netskope) sends CUI to their cloud for scanning, which is itself a potential DFARS 7012 violation.
+**Root cause:** Cloud vendors optimize for SaaS economics, not on-premise compliance requirements.
+**Rule:** In every sales conversation and in all copy, use the exact sentence: "Every cloud-based AI DLP tool sends your CUI to their servers to scan it. That is itself a potential CUI spill under DFARS 7012. HoundShield scans everything locally. Nothing leaves your network." Never abbreviate this to a vague "local-only" claim.
+
+### OODA Analysis: PDF report is the purchase unlock, not the dashboard
+
+**What:** Jordan's primary need is evidence she can hand to a C3PAO auditor, not a real-time dashboard. The dashboard has features Jordan doesn't need. The PDF report doesn't exist yet.
+**Root cause:** Engineering effort went toward impressive features, not evidence-grade compliance artifacts.
+**Rule:** Sprint 1 does not ship any new dashboard features until PDF report generation works end-to-end. PDF first. Dashboard polish never.
+
+### OODA Analysis: C3PAO channel beats cold outreach 10-to-1
+
+**What:** C3PAOs each have 20-100 defense contractor clients who are actively seeking compliance tools. One C3PAO conversation = 10-50 potential customers. Cold contractor outreach is slow and unscalable.
+**Root cause:** No explicit channel strategy before this analysis.
+**Rule:** Sprint 2 goal is one signed C3PAO referral partner. Measure pipeline by C3PAO partners, not individual contractors contacted.
+
+### Brain AI: static research.md was not queryable
+
+**What:** brain/research.md existed as a well-documented static file but could not be queried programmatically by agents or founder during development.
+**Root cause:** Initial implementation documented knowledge for humans to read, not for agents to query.
+**Rule:** All new knowledge is written to the knowledge-graph via `addKnowledge()` in `lib/brain-ai/brain-query.ts`. The static research.md is append-only for human reference. Agents query the graph, not the markdown file.
+
+### External repos: features extracted via research, not full integration
+
+**What:** User provided 20+ repo URLs for feature extraction. Attempting to clone and fully integrate all of them would take weeks and introduce scope creep.
+**Root cause:** Maximalist feature requests without a priority filter.
+**Rule:** External repos are extracted into skills (.claude/skills/) with documentation of what each provides and when to invoke it. Full code integration only happens when a specific sprint task requires it. Skills are documentation-as-code; they don't increase bundle size.
+
+---
+
 ## 2026-04-20
 
 ### SSR crash with Recharts
