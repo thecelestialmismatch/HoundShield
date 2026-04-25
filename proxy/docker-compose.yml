@@ -1,11 +1,11 @@
 version: "3.9"
 
 services:
-  kaelus-proxy:
-    image: kaelus/proxy:latest
+  houndshield-proxy:
+    image: ghcr.io/thecelestialmismatch/houndshield-proxy:latest
     # Uncomment to build locally instead:
     # build: .
-    container_name: kaelus-proxy
+    container_name: houndshield-proxy
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -19,7 +19,7 @@ services:
       NODE_ENV: production
     volumes:
       # Persistent local event log — never leave your machine
-      - kaelus-data:/data
+      - houndshield-data:/data
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:8080/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
@@ -28,5 +28,5 @@ services:
       start_period: 15s
 
 volumes:
-  kaelus-data:
+  houndshield-data:
     driver: local
