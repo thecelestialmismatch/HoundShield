@@ -63,7 +63,9 @@ export function ask(question: string): BrainResponse {
   const domains = routeDomains(question);
   const results = graph.query({ query: question, domains, limit: 5 });
 
-  if (results.length === 0) {
+  // Discard low-signal results — BM25 incidental common-word matches stay below 2
+  const relevant = results.filter(r => r.score >= 2);
+  if (relevant.length === 0) {
     return {
       answer: `No knowledge found for: "${question}". Run /firecrawl-ingest to add sources, or add a node manually via addKnowledge().`,
       sources: [],
@@ -72,17 +74,17 @@ export function ask(question: string): BrainResponse {
     };
   }
 
-  const answer = results
+  const answer = relevant
     .map(r => `[${r.node.domain.toUpperCase()}] **${r.node.title}**\n${r.node.content}`)
     .join("\n\n---\n\n");
 
-  const staleCount = results.filter(r => r.stale).length;
+  const staleCount = relevant.filter(r => r.stale).length;
   const confidence: "high" | "medium" | "low" =
-    results[0].score > 5 ? "high" : results[0].score > 2 ? "medium" : "low";
+    relevant[0].score > 5 ? "high" : relevant[0].score > 2 ? "medium" : "low";
 
   return {
     answer,
-    sources: results.map(r => ({
+    sources: relevant.map(r => ({
       domain: r.node.domain,
       title: r.node.title,
       stale: r.stale,

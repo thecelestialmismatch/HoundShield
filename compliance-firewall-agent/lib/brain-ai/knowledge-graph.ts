@@ -59,12 +59,22 @@ export interface KnowledgeResult {
 // Fast enough for in-memory graph with <10K nodes
 // ---------------------------------------------------------------------------
 
+const STOPWORDS = new Set([
+  "a","an","the","and","or","but","in","on","at","to","for","of","with","by",
+  "is","it","its","this","that","these","those","are","was","were","be","been",
+  "have","has","had","do","does","did","will","would","could","should","may",
+  "might","can","not","no","nor","so","yet","both","either","neither","each",
+  "few","more","most","other","some","such","than","then","than","too","very",
+  "just","also","only","ever","never","always","often","asks","tell","about",
+  "from","into","over","under","after","before","between","through","during",
+]);
+
 function tokenize(text: string): string[] {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
-    .filter(Boolean);
+    .filter(t => t.length > 2 && !STOPWORDS.has(t));
 }
 
 function bm25Score(
