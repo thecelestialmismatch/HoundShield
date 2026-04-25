@@ -2,25 +2,17 @@
  * POST /api/brain/ingest
  *
  * Adds a knowledge node to the BM25 graph.
- * Accepts either raw text content or a URL to scrape (via firecrawl).
- *
- * Auth: required in production, open in demo mode.
- * Rate: consumers should not call this more than 10x/min.
+ * Auth: session token (production) or x-ingest-key header (local/demo).
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { createClient } from "@/lib/supabase/server";
 import { addKnowledge } from "@/lib/brain-ai/brain-query";
-import type { KnowledgeDomain } from "@/lib/brain-ai/knowledge-graph";
 import { z } from "zod";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const VALID_DOMAINS: KnowledgeDomain[] = [
-  "cmmc", "hipaa", "soc2", "nist", "competitor", "market", "architecture", "pricing", "customer",
-];
 
 const bodySchema = z.object({
   domain: z.enum(["cmmc", "hipaa", "soc2", "nist", "competitor", "market", "architecture", "pricing", "customer"]),
@@ -32,11 +24,18 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  // Auth gate — only in production
   if (isSupabaseConfigured()) {
+    // Production: require user session
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+  } else {
+    // Demo/local: require INGEST_API_KEY header to prevent unauthenticated graph poisoning
+    const apiKey = req.headers.get("x-ingest-key");
+    const expected = process.env.INGEST_API_KEY;
+    if (!expected || apiKey !== expected) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
   }
@@ -51,19 +50,7 @@ export async function POST(req: NextRequest) {
   const parsed = bodySchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
-      {
-        success: false,
-        error: parsed.error.issues[0]?.message ?? "Invalid request",
-        schema: {
-          domain: VALID_DOMAINS,
-          title: "string (3-200 chars)",
-          content: "string (10-5000 chars)",
-          keywords: "string[] (1-20 items)",
-          source: "url (optional)",
-          ttlDays: "number 0-365 (optional, 0=permanent)",
-          weight: "number 0.1-3 (optional, default 1.0)",
-        },
-      },
+      { success: false, error: parsed.error.issues[0]?.message ?? "Invalid request" },
       { status: 400 }
     );
   }
@@ -92,26 +79,11 @@ export async function POST(req: NextRequest) {
   });
 }
 
-/** GET — schema + usage docs */
+/** GET — usage hint (no schema enumeration) */
 export async function GET() {
   return NextResponse.json({
     success: true,
     endpoint: "POST /api/brain/ingest",
-    description: "Add a knowledge node to the BM25 graph. Queryable immediately.",
-    schema: {
-      domain: VALID_DOMAINS,
-      title: "string (3-200 chars)",
-      content: "string (10-5000 chars)",
-      keywords: "string[] — used for BM25 boost",
-      source: "url (optional) — attribution",
-      ttlDays: "0=permanent, 7=week, 30=month",
-    },
-    example: {
-      domain: "cmmc",
-      title: "CMMC Level 2 requires 110 NIST 800-171 controls",
-      content: "CMMC Level 2 assessment covers all 110 practices from NIST SP 800-171 Rev 2. Third-party C3PAO assessment required for prime contractors handling CUI.",
-      keywords: ["cmmc", "level 2", "c3pao", "nist", "800-171", "cui"],
-      ttlDays: 0,
-    },
+    description: "Add a knowledge node to the BM25 graph. Requires x-ingest-key header or user session.",
   });
 }

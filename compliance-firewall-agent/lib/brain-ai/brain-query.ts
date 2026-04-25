@@ -67,7 +67,7 @@ export function ask(question: string): BrainResponse {
   const relevant = results.filter(r => r.score >= 2);
   if (relevant.length === 0) {
     return {
-      answer: `No knowledge found for: "${question}". Run /firecrawl-ingest to add sources, or add a node manually via addKnowledge().`,
+      answer: "No matching knowledge found. Run /firecrawl-ingest to add sources, or add a node manually via addKnowledge().",
       sources: [],
       confidence: "low",
       suggestion: "Use /firecrawl-ingest to ingest relevant documentation.",
