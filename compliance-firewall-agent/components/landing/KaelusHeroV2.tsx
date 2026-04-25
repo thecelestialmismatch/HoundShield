@@ -33,7 +33,7 @@ function SocialBtn({ icon: Icon, href, label }: { icon: typeof Mail; href: strin
   );
 }
 
-export function Hound ShieldHeroV2() {
+export function HoundShieldHeroV2() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {

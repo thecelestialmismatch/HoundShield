@@ -801,7 +801,7 @@ export class HoundShieldWebSocket {
  * console.log(result.risk_level); // "CRITICAL"
  * ```
  */
-export class Hound Shield {
+export class HoundShield {
   private readonly apiKey: string;
   private readonly gateway: string;
   private readonly timeout: number;
@@ -1277,4 +1277,4 @@ export class Hound Shield {
 // Default export
 // ---------------------------------------------------------------------------
 
-export default Hound Shield;
+export default HoundShield;

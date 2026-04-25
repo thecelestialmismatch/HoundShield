@@ -26,18 +26,8 @@ export async function GET(req: NextRequest) {
 
     const format = req.nextUrl.searchParams.get("format"); // "pdf" | null
 
-    // PDF format requires Growth tier or higher
-    if (format === "pdf") {
-      if (!isSupabaseConfigured()) {
-        return NextResponse.json(
-          {
-            error: "PDF reports require a configured Supabase environment",
-            upgrade_url: "/pricing",
-          },
-          { status: 503 }
-        );
-      }
-
+    // PDF format requires Growth tier or higher (production only — demo mode always allows)
+    if (format === "pdf" && isSupabaseConfigured()) {
       const userClient = await createClient();
       const { data: { user } } = await userClient.auth.getUser();
 
@@ -77,7 +67,7 @@ export async function GET(req: NextRequest) {
         if (event.action_taken !== "ALLOWED") totalViolations++;
       }
 
-      return NextResponse.json({
+      const demoReport = {
         summary: {
           period: { start: from, end: to },
           total_events: allEvents.length,
@@ -88,16 +78,34 @@ export async function GET(req: NextRequest) {
           ),
         },
         breakdown: { by_risk_level: eventsByRisk, by_category: eventsByCategory, by_action: eventsByAction },
-        integrity: { merkle_root: "demo-merkle-root", events_with_seeds: 0, events_without_seeds: allEvents.length },
+        integrity: { merkle_root: "demo-merkle-root-sha256", events_with_seeds: 0, events_without_seeds: allEvents.length },
         compliance_status: {
-          eu_ai_act_article_12: "COMPLIANT",
-          record_keeping: "All events immutably logged with cryptographic anchors",
+          cmmc_ac_l2_3_1_3: "ENFORCED — CUI flow control active, all AI prompts scanned",
+          cmmc_au_l2_3_3_1: "COMPLIANT — All events immutably logged with cryptographic anchors",
+          cmmc_si_l2_3_14_1: "ACTIVE — Real-time threat detection, quarantine, and alerting",
           human_oversight: "HITL gating active for all destructive operations",
-          risk_management: `${totalViolations} violations detected and handled`,
+          risk_management: `${totalViolations} violations detected and blocked`,
         },
         generated_at: new Date().toISOString(),
+        organization: "Demo Organization",
         demo: true,
-      });
+      };
+
+      if (format === "pdf") {
+        const { generateCompliancePDF } = await import("@/lib/reports/pdf-generator");
+        const pdfBuffer = generateCompliancePDF(demoReport);
+        const dateStr = new Date(from).toISOString().slice(0, 10);
+        return new Response(new Uint8Array(pdfBuffer), {
+          status: 200,
+          headers: {
+            "Content-Type": "application/pdf",
+            "Content-Disposition": `attachment; filename="houndshield-demo-report-${dateStr}.pdf"`,
+            "Cache-Control": "no-store",
+          },
+        });
+      }
+
+      return NextResponse.json(demoReport);
     }
 
     // Production mode
