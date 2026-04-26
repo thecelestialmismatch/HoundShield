@@ -25,7 +25,8 @@ export function queryBrain(question: string): BrainResponse {
   for (const domain of store) {
     for (const fact of domain.facts) {
       const score = scoreMatch(question, fact);
-      if (score > 0) scored.push({ fact, domain, score });
+      // Require ≥40% keyword coverage — single common-word matches are noise
+      if (score >= 0.4) scored.push({ fact, domain, score });
     }
   }
 

@@ -27,7 +27,7 @@ RUN npm install -D typescript@^5.8.3 tsx@^4.19.3 \
 RUN mkdir -p /data && chown node:node /data
 
 ENV NODE_ENV=production
-ENV KAELUS_DATA_DIR=/data
+ENV HOUNDSHIELD_DATA_DIR=/data
 ENV PORT=8080
 
 USER node

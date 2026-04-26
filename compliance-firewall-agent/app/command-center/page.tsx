@@ -549,9 +549,21 @@ export default function CommandCenterOverview() {
               <p className="text-[10px] text-slate-400 uppercase tracking-wider">Unmet</p>
             </div>
           </div>
+          {/* SPRS improvement from HoundShield */}
+          <div className="mt-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-3 py-2">
+            <p className="text-[11px] font-mono text-emerald-400 font-semibold uppercase tracking-wider mb-0.5">
+              HoundShield Impact
+            </p>
+            <p className="text-xs text-emerald-300">
+              <span className="font-bold">+18 pts</span> protected — AC.L2-3.1.3, AU.L2-3.3.1, SI.L2-3.14.1
+            </p>
+            <p className="text-[10px] text-emerald-500/70 mt-0.5">
+              CUI flow control · audit logging · flaw remediation
+            </p>
+          </div>
           <Link
             href="/command-center/shield"
-            className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"
+            className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"
           >
             View Full Assessment <ArrowRight className="w-3.5 h-3.5" />
           </Link>

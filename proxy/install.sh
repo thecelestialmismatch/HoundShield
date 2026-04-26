@@ -4,7 +4,7 @@
 set -euo pipefail
 
 PROXY_PORT="${PROXY_PORT:-8080}"
-IMAGE="kaelus/proxy:latest"
+IMAGE="ghcr.io/thecelestialmismatch/houndshield-proxy:latest"
 
 echo ""
 echo "  Hound Shield Compliance Proxy — Installer"
@@ -52,23 +52,23 @@ docker pull "$IMAGE"
 
 # ── Stop existing container if running ──────────────────────────────────────
 
-if docker ps -q --filter "name=kaelus-proxy" | grep -q .; then
-  echo "  Stopping existing kaelus-proxy container..."
-  docker stop kaelus-proxy >/dev/null
-  docker rm kaelus-proxy >/dev/null
+if docker ps -q --filter "name=houndshield-proxy" | grep -q .; then
+  echo "  Stopping existing houndshield-proxy container..."
+  docker stop houndshield-proxy >/dev/null
+  docker rm houndshield-proxy >/dev/null
 fi
 
 # ── Start container ──────────────────────────────────────────────────────────
 
 echo "  Starting Hound Shield proxy on port ${PROXY_PORT}..."
 docker run -d \
-  --name kaelus-proxy \
+  --name houndshield-proxy \
   --restart unless-stopped \
   -p "${PROXY_PORT}:8080" \
   -e HOUNDSHIELD_LICENSE_KEY="$HOUNDSHIELD_LICENSE_KEY" \
   -e UPSTREAM_API_KEY="$UPSTREAM_API_KEY" \
   -e UPSTREAM_PROVIDER="$UPSTREAM_PROVIDER" \
-  -v kaelus-data:/data \
+  -v houndshield-data:/data \
   "$IMAGE"
 
 # ── Health check ─────────────────────────────────────────────────────────────
@@ -104,6 +104,6 @@ if [[ "$STATUS" == *"ok"* ]]; then
   echo "  Dashboard: https://houndshield.com/dashboard"
   echo ""
 else
-  echo "  WARNING: Health check failed. Check logs: docker logs kaelus-proxy"
+  echo "  WARNING: Health check failed. Check logs: docker logs houndshield-proxy"
   exit 1
 fi

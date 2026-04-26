@@ -42,7 +42,7 @@ function useLazyVideo() {
   return ref;
 }
 
-export function Hound ShieldCTAV2() {
+export function HoundShieldCTAV2() {
   const videoRef = useLazyVideo();
 
   return (
