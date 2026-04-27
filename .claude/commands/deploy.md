@@ -30,7 +30,7 @@ If yes: `vercel --prod`
 Watch build logs.
 
 ## 6. POST-DEPLOY SMOKE TEST
-- https://houndshield.com loads
+- https://kaelus.online loads
 - Auth flow: signup → onboarding
 - Stripe webhook receiving events
 - Monitor Sentry first 10 minutes

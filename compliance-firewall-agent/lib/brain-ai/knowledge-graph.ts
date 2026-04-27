@@ -212,7 +212,7 @@ export class KnowledgeGraph {
 }
 
 // ---------------------------------------------------------------------------
-// Singleton export
+// Singleton export + convenience wrappers
 // ---------------------------------------------------------------------------
 
 let _graph: KnowledgeGraph | null = null;
@@ -220,6 +220,15 @@ let _graph: KnowledgeGraph | null = null;
 export function getKnowledgeGraph(): KnowledgeGraph {
   if (!_graph) _graph = new KnowledgeGraph();
   return _graph;
+}
+
+export async function queryKnowledgeGraph(params: KnowledgeQuery): Promise<KnowledgeResult[]> {
+  return getKnowledgeGraph().query(params);
+}
+
+export function addKnowledgeNode(node: KnowledgeNode): void {
+  const graph = getKnowledgeGraph();
+  (graph as unknown as { nodes: Map<string, KnowledgeNode> }).nodes.set(node.id, node);
 }
 
 // ---------------------------------------------------------------------------
@@ -461,6 +470,271 @@ The real enemy is inertia. The behavior to replace: "we wrote a policy and calle
 C3PAOs are now specifically asking for evidence, not policy documents.
 This is the forcing function that converts inertia into purchase intent.`,
       ["workaround", "dns", "block", "policy", "purview", "inertia", "behavior", "c3pao"]
+    ),
+
+    // ---- NIST 800-171 Rev 2 Domain Summaries ----
+    // Source: NIST SP 800-171 Rev 2 (permanent, ttl: 0, confidence: 1.0)
+    // csrc.nist.gov/publications/detail/sp/800-171/rev-2/final
+    Object.assign(node(
+      "nist_ac",
+      "nist",
+      "NIST 800-171 Rev 2 — Access Control (AC) Domain",
+      `Domain: Access Control (AC). Controls: 3.1.1 through 3.1.22. Count: 22 controls.
+SPRS deduction if failed: significant — AC family is heavily weighted.
+Key controls for AI tool governance:
+3.1.3: Control the flow of CUI in accordance with approved authorizations — AI tools sending CUI externally violates this.
+3.1.11: Terminate sessions after a defined period of inactivity.
+3.1.13: Employ cryptographic mechanisms to protect the confidentiality of remote access sessions.
+HoundShield directly addresses: 3.1.3, 3.1.1, 3.1.2 by proxying and controlling AI-bound traffic.`,
+      ["access control", "ac", "3.1", "cui flow", "authorization", "session", "remote access"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_at",
+      "nist",
+      "NIST 800-171 Rev 2 — Awareness and Training (AT) Domain",
+      `Domain: Awareness and Training (AT). Controls: 3.2.1 through 3.2.3. Count: 3 controls.
+3.2.1: Ensure personnel are aware of security risks associated with CUI.
+3.2.2: Ensure personnel are trained to carry out assigned security responsibilities.
+3.2.3: Provide security awareness training on recognizing and reporting threats.
+HoundShield supports AT by generating reports that demonstrate employee training records are backed by technical enforcement — not just policy acknowledgements.`,
+      ["awareness", "training", "at", "3.2", "personnel", "security risk", "cui awareness"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_au",
+      "nist",
+      "NIST 800-171 Rev 2 — Audit and Accountability (AU) Domain",
+      `Domain: Audit and Accountability (AU). Controls: 3.3.1 through 3.3.9. Count: 9 controls.
+3.3.1: Create and retain system audit logs — the PDF audit report is the primary evidence artifact.
+3.3.2: Ensure the actions of individual users can be traced to those users — per-user logging.
+3.3.7: Provide a system capability to compare and synchronize internal clocks.
+HoundShield directly addresses: 3.3.1 and 3.3.2 with per-user, per-request immutable audit log (SHA-256 chain).
+The PDF export maps each logged event to the relevant AU control.`,
+      ["audit", "accountability", "au", "3.3", "log", "retain", "trace", "user", "sha256", "immutable"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_cm",
+      "nist",
+      "NIST 800-171 Rev 2 — Configuration Management (CM) Domain",
+      `Domain: Configuration Management (CM). Controls: 3.4.1 through 3.4.9. Count: 9 controls.
+3.4.6: Employ the principle of least functionality — restrict use of unauthorized AI tools.
+3.4.7: Restrict, disable, or prevent the use of nonessential programs and functions.
+3.4.8: Apply deny-by-exception policy to prevent unauthorized software use.
+HoundShield supports CM by providing a configurable allowlist of approved AI endpoints — unrecognized AI providers are blocked by default.`,
+      ["configuration", "cm", "3.4", "least functionality", "restrict", "allowlist", "deny", "software"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_ia",
+      "nist",
+      "NIST 800-171 Rev 2 — Identification and Authentication (IA) Domain",
+      `Domain: Identification and Authentication (IA). Controls: 3.5.1 through 3.5.11. Count: 11 controls.
+3.5.3: Use multifactor authentication for local and network access to privileged accounts.
+3.5.10: Store and transmit only cryptographically-protected passwords.
+3.5.11: Obscure feedback of authentication information during authentication process.
+HoundShield integration: proxy enforces authenticated sessions before forwarding to AI providers.`,
+      ["identification", "authentication", "ia", "3.5", "mfa", "multifactor", "password", "credential"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_ir",
+      "nist",
+      "NIST 800-171 Rev 2 — Incident Response (IR) Domain",
+      `Domain: Incident Response (IR). Controls: 3.6.1 through 3.6.3. Count: 3 controls.
+3.6.1: Establish an incident-handling capability that includes preparation, detection, analysis, containment, recovery, and user response activities.
+3.6.2: Track, document, and report incidents to officials within the organization and appropriate authorities.
+3.6.3: Test the incident response capability.
+HoundShield supports IR: when a CUI spill via AI is detected, it generates an incident record that feeds directly into the 3.6.2 reporting requirement.`,
+      ["incident", "response", "ir", "3.6", "detection", "containment", "reporting", "track"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_ma",
+      "nist",
+      "NIST 800-171 Rev 2 — Maintenance (MA) Domain",
+      `Domain: Maintenance (MA). Controls: 3.7.1 through 3.7.6. Count: 6 controls.
+3.7.1: Perform maintenance on organizational systems.
+3.7.5: Require MFA to establish remote maintenance sessions.
+HoundShield: Docker deployment enables easy maintenance without downtime — update container, restart. No CUI leaves the network during updates.`,
+      ["maintenance", "ma", "3.7", "remote", "update", "docker", "downtime"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_mp",
+      "nist",
+      "NIST 800-171 Rev 2 — Media Protection (MP) Domain",
+      `Domain: Media Protection (MP). Controls: 3.8.1 through 3.8.9. Count: 9 controls.
+3.8.1: Protect (i.e., physically control and securely store) CUI in paper and digital form.
+3.8.3: Sanitize or destroy information system media before disposal.
+3.8.7: Control the use of removable media.
+HoundShield context: AI prompts containing CUI are a form of uncontrolled media transfer. Blocking them satisfies 3.8.1 intent.`,
+      ["media", "protection", "mp", "3.8", "sanitize", "removable", "disposal", "cui storage"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_pe",
+      "nist",
+      "NIST 800-171 Rev 2 — Personnel Security (PS) Domain",
+      `Domain: Personnel Security (PS). Controls: 3.9.1 through 3.9.2. Count: 2 controls.
+3.9.1: Screen individuals prior to authorizing access to organizational systems.
+3.9.2: Ensure CUI is protected during and after personnel actions such as terminations.
+HoundShield: user-level audit logs support 3.9.2 — when an employee is terminated, logs show their AI usage history.`,
+      ["personnel", "security", "ps", "3.9", "screening", "termination", "offboarding"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_ra",
+      "nist",
+      "NIST 800-171 Rev 2 — Risk Assessment (RA) Domain",
+      `Domain: Risk Assessment (RA). Controls: 3.11.1 through 3.11.3. Count: 3 controls.
+3.11.1: Periodically assess risk to organizational operations, assets, individuals, and other organizations resulting from CUI processing.
+3.11.2: Scan for vulnerabilities in organizational systems periodically.
+3.11.3: Remediate vulnerabilities per risk assessments.
+HoundShield supports: scan history + blocked query analytics show AI risk surface over time.`,
+      ["risk", "assessment", "ra", "3.11", "vulnerability", "scan", "remediate", "periodic"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_ca",
+      "nist",
+      "NIST 800-171 Rev 2 — Security Assessment (CA) Domain",
+      `Domain: Security Assessment (CA). Controls: 3.12.1 through 3.12.4. Count: 4 controls.
+3.12.1: Periodically assess security controls to determine effectiveness.
+3.12.2: Develop and implement plans of action to correct deficiencies.
+3.12.4: Develop, document, and periodically update a system security plan (SSP).
+HoundShield: the audit PDF serves as evidence of ongoing CA-level monitoring and SSP documentation.`,
+      ["security assessment", "ca", "3.12", "ssp", "plan of action", "poam", "deficiency", "sssp"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_sc",
+      "nist",
+      "NIST 800-171 Rev 2 — System and Communications Protection (SC) Domain",
+      `Domain: System and Communications Protection (SC). Controls: 3.13.1 through 3.13.16. Count: 16 controls.
+3.13.2: Employ architectural designs, software development techniques, and systems engineering principles promoting security in organizational systems.
+3.13.8: Implement cryptographic mechanisms to prevent unauthorized disclosure of CUI.
+3.13.16: Protect the confidentiality of CUI at rest.
+HoundShield: proxy enforces encrypted connections to AI providers (TLS). Audit logs encrypted at rest in Supabase.`,
+      ["system", "communications", "sc", "3.13", "encryption", "tls", "cryptographic", "architectural"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    Object.assign(node(
+      "nist_si",
+      "nist",
+      "NIST 800-171 Rev 2 — System and Information Integrity (SI) Domain",
+      `Domain: System and Information Integrity (SI). Controls: 3.14.1 through 3.14.7. Count: 7 controls.
+3.14.1: Identify, report, and correct information system flaws in a timely manner.
+3.14.6: Monitor organizational systems to detect attacks and indicators of potential attacks.
+3.14.7: Identify unauthorized use of organizational systems.
+HoundShield directly addresses: 3.14.6 (real-time CUI detection = attack indicator monitoring) and 3.14.7 (unauthorized AI tool use detection).`,
+      ["system integrity", "si", "3.14", "flaw", "monitor", "detect", "attack", "unauthorized"]
+    ), { source: "NIST SP 800-171 Rev 2", sourceType: "static", weight: 1.0, ttl: 0 }),
+
+    // ---- Additional competitor nodes ----
+    node(
+      "competitor_cloudflare_ai_gw",
+      "competitor",
+      "Cloudflare AI Gateway — free tier threat",
+      `Cloudflare AI Gateway is a free AI proxy product.
+Architecture: cloud-based (Cloudflare edge network). CUI leaves the customer network.
+CMMC compliance: NOT compliant — all traffic processed by Cloudflare's infrastructure.
+Strengths: free, easy setup, Cloudflare's distribution network, developer-friendly.
+Weaknesses: cloud-only, no CMMC patterns, no PDF audit report, no on-premise option.
+Threat: free tier creates "why pay?" objection. Response: free tier has no CMMC evidence package.
+HoundShield advantage: C3PAO-ready PDF, CMMC-specific detection patterns, local processing.`,
+      ["cloudflare", "ai gateway", "free", "edge", "competitor", "proxy"]
+    ),
+
+    node(
+      "competitor_forcepoint",
+      "competitor",
+      "Forcepoint DLP — enterprise on-premise (indirect competitor)",
+      `Forcepoint DLP is an enterprise data loss prevention platform with on-premise option.
+Architecture: on-premise available, but complex deployment (months, not minutes).
+CMMC compliance: can be configured for CMMC but requires specialized integrators.
+Pricing: $100K+ implementation + $50K+/yr. Out of reach for 50-250 person contractors.
+Strengths: established brand, true on-premise, government sector experience.
+Weaknesses: not AI-native, no ChatGPT/Copilot specific patterns, no C3PAO PDF, months to deploy.
+HoundShield advantage: AI-native, Docker deploy in 15 minutes, 1/10th the price.`,
+      ["forcepoint", "enterprise", "on-premise", "dlp", "competitor", "government"]
+    ),
+
+    // ---- Market nodes ----
+    node(
+      "market_open_source",
+      "market",
+      "Open-source distribution strategy (Cal.com / Supabase model)",
+      `Open-source core → paid cloud: proven model for developer-focused compliance tools.
+Examples: Supabase ($80M ARR), PostHog (50K self-hosted installs → 3% paid cloud conversion), Cal.com (40K GitHub stars → enterprise sales).
+HoundShield open-source: proxy engine + scanner + 16 CMMC patterns (MIT licensed on GitHub).
+HoundShield paid cloud: dashboard + Brain AI + compliance reports + Stripe + Supabase managed.
+Why it works for HoundShield: defense contractors want to audit the code before trusting it with CUI. Open source IS the trust signal for security products.
+GitHub discoverability: "CMMC AI scanner" search → HoundShield → install → upgrade to paid dashboard.
+Expected conversion: 1-3% of self-hosted users upgrade to paid within 6 months.`,
+      ["open source", "github", "cal.com", "supabase", "posthog", "distribution", "self-hosted", "mit"]
+    ),
+
+    node(
+      "market_yc",
+      "market",
+      "YC application strategy and traction requirements",
+      `YC S26 application window: approx March-April 2026. Deadline: early April 2026.
+Traction needed for acceptance: $5K-$15K MRR or 10+ paying customers preferred.
+Our target: $10K MRR by October 2026 (YC W27 if S26 missed).
+YC fit: B2B SaaS, compliance tech, defense contractor market, clear regulatory forcing function.
+Comparable YC companies: Vanta (SOC 2 automation), Drata (compliance), Andesite (defense).
+What to emphasize in application: local-only architecture moat, CMMC legal requirement (not just feature), C3PAO as distribution channel.`,
+      ["yc", "y combinator", "s26", "w27", "traction", "application", "mrr", "b2b", "saas"]
+    ),
+
+    node(
+      "market_pricing_psychology",
+      "pricing",
+      "Pricing psychology for CMMC compliance buyers",
+      `Reference points Jordan uses to evaluate $199-$499/mo:
+- C3PAO assessment fee: $30K-$150K (one-time). HoundShield: $2.4K-$6K/yr = <5% of assessment cost.
+- DFARS violation: potential contract loss ($500K-$50M contract at risk). HoundShield: rounding error.
+- One hour of compliance attorney time: $300-$600. HoundShield monthly = 1 attorney hour.
+- Nightfall: $75K+/yr. HoundShield: $2.4K-$6K/yr. 10-30x cheaper.
+Framing that works: "It costs less than one attorney consultation and gives you the PDF your C3PAO assessor needs."
+Do NOT compete on features. Compete on evidence. Audit PDF = the purchase justification.`,
+      ["pricing", "value", "reference point", "c3pao", "attorney", "comparison", "justification", "199", "499"]
+    ),
+
+    // ---- Security nodes ----
+    node(
+      "security_owasp_api",
+      "nist",
+      "OWASP API Security Top 10 — checklist for HoundShield endpoints",
+      `OWASP API Security Top 10 (2023) applied to HoundShield:
+API1: Broken Object Level Authorization — each user can only see their own scan logs.
+API2: Broken Authentication — all API routes require valid Supabase session.
+API3: Broken Object Property Level Authorization — PDF download requires Growth tier check.
+API4: Unrestricted Resource Consumption — rate limiting on /api/scan/* (100 req/min per tenant).
+API5: Broken Function Level Authorization — admin routes require service role key.
+API6: Unrestricted Access to Sensitive Business Flows — scan API requires license validation.
+API7: Server Side Request Forgery — proxy validates destination URL against allowlist.
+API8: Security Misconfiguration — CORS restricted to houndshield.com origin.
+API9: Improper Inventory Management — all routes documented in api.md.
+API10: Unsafe Consumption of APIs — all AI provider responses validated before forwarding.`,
+      ["owasp", "api", "security", "top 10", "authorization", "authentication", "rate limit", "cors"]
+    ),
+
+    node(
+      "security_threat_model",
+      "architecture",
+      "HoundShield threat model — top attack vectors",
+      `Primary threats ranked by likelihood × impact:
+1. API key theft via scan response exfiltration — CRITICAL. Mitigated: patterns strip keys before forwarding.
+2. Bypass via direct AI provider URL — HIGH. Mitigated: firewall rule blocks direct traffic, enforces proxy.
+3. Audit log tampering — HIGH. Mitigated: SHA-256 hash chain, immutable Supabase rows.
+4. License key spoofing — MEDIUM. Mitigated: license validated server-side, never client-only.
+5. SSRF via proxy target — MEDIUM. Mitigated: allowlist of approved AI endpoints.
+6. Tenant data leakage — MEDIUM. Mitigated: RLS policies on all Supabase tables.
+NIST controls addressed: 3.13.8 (cryptographic protection), 3.14.6 (attack monitoring), 3.1.3 (CUI flow control).`,
+      ["threat model", "attack", "bypass", "ssrf", "tenant isolation", "rls", "sha256", "api key"]
     ),
   ];
 }
