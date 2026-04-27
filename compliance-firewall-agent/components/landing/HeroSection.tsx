@@ -46,12 +46,10 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.08, ease }}
-              className="font-editorial text-[clamp(38px,5.5vw,70px)] font-bold leading-[1.02] tracking-[-2px] text-white mb-6"
+              className="font-editorial text-[clamp(38px,5.5vw,70px)] font-bold leading-[1.02] tracking-[-2px] text-white mb-5"
             >
-              Stop your team from<br />
-              leaking CUI to ChatGPT.
-              <br />
-              <span className="text-brand-400">One URL change.</span>
+              Proof,{" "}
+              <span className="text-brand-400">not policy.</span>
             </motion.h1>
 
             {/* Sub */}
@@ -59,33 +57,42 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.16, ease }}
-              className="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-9 leading-[1.6]"
+              className="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-4 leading-[1.6]"
             >
-              Every cloud-based AI DLP tool sends your prompts to their servers to scan them.
-              That is itself a potential DFARS 7012 violation.
-              Hound Shield scans locally — nothing leaves your network.
-              Point your AI tools at our proxy URL. Done.
+              The only AI firewall that generates the audit PDF your C3PAO assessor
+              actually accepts. Local-only. One URL change. Deploy in 15 minutes.
+            </motion.p>
+
+            {/* SVA callout */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.22 }}
+              className="text-[13px] text-brand-400/70 font-mono mb-8"
+            >
+              Built for ISSO/ISSM at CMMC Level 2 defense contractors.
+              November 2026 enforcement is 6 months away.
             </motion.p>
 
             {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.24 }}
+              transition={{ duration: 0.45, delay: 0.28 }}
               className="flex flex-col sm:flex-row gap-3 mb-10"
             >
               <Link
-                href="/signup"
+                href="/docs/quickstart"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-brand-400 hover:bg-brand-400/90 text-[#07070b] font-semibold rounded-lg transition-colors text-[15px]"
               >
-                Start Free — No Card Required
+                Deploy in 15 minutes
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                href="/docs"
+                href="/demo"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-white font-semibold rounded-lg border border-white/15 hover:border-white/30 transition-colors text-[15px]"
               >
-                See How It Works
+                Book a demo
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </motion.div>

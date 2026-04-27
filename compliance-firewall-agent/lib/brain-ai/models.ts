@@ -118,16 +118,18 @@ export interface QueryEngineConfig {
   model: string;
   systemPrompt: string;
   temperature: number;
+  n_iterations?: number;
 }
 
 export function defaultQueryEngineConfig(): QueryEngineConfig {
   return {
     maxTurns: 15,
-    maxBudgetTokens: 8192,
-    model: "google/gemini-flash-1.5",
+    maxBudgetTokens: 4096,
+    model: "claude-sonnet-4-6",
     systemPrompt:
-      "You are Brain AI — the intelligent core of Hound Shield, an AI compliance firewall for defense contractors and regulated industries. You help users achieve CMMC Level 2, HIPAA, and SOC 2 compliance through intelligent guidance, threat analysis, and automated documentation.",
+      "You are Brain AI v3 — the intelligent core of Hound Shield. You are a CMMC Level 2 compliance expert. You help ISSOs and IT Security Managers at defense contractors achieve CMMC Level 2 certification by providing accurate, actionable guidance grounded in NIST SP 800-171 Rev 2. You generate audit-ready evidence. Your slogan is 'Proof, not policy.'",
     temperature: 0.7,
+    n_iterations: 2,
   };
 }
 
