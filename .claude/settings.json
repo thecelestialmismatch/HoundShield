@@ -1,23 +1,10 @@
 {
-  "model": "claude-sonnet-4-6",
-  "autoMemoryEnabled": true,
-  "defaultModel": "sonnet",
-  "extendedThinking": {
-    "maxTokens": 8000
-  },
-  "statusLine": {
-    "enabled": true,
-    "format": "{model} · {tokens_used}/{context_limit} · ${cost_usd}",
-    "refreshMs": 2000
-  },
   "permissions": {
     "allow": [
       "Bash(npm run *)",
-      "Bash(npm test *)",
       "Bash(npx tsc *)",
       "Bash(npx eslint *)",
       "Bash(npx prettier *)",
-      "Bash(npx jest *)",
       "Bash(npx supabase *)",
       "Bash(git diff *)",
       "Bash(git log *)",
@@ -25,10 +12,9 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git push *)",
-      "Bash(find * -type f *)",
-      "Bash(grep -r *)",
-      "Bash(sed -n *)",
-      "Bash(wc -l *)"
+      "Bash(gh issue *)",
+      "Bash(gh pr *)",
+      "Bash(vercel env *)"
     ],
     "deny": [
       "Read(.env)",
@@ -42,16 +28,54 @@
   "hooks": {
     "PostToolUse": [
       {
+        "matcher": "Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yantr/.local/bin/code-review-graph update --skip-flows",
+            "timeout": 5000
+          }
+        ]
+      },
+      {
         "matcher": "Edit|Write",
-        "command": "cd /home/user/HoundShield/compliance-firewall-agent && npx tsc --noEmit --incremental 2>&1 | grep 'error TS' | head -3 || true",
-        "timeout": 15000
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yantr/Desktop/Kaelus.Online-main/.claude/hooks/lint-on-save.sh",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yantr/.local/bin/code-review-graph status --json",
+            "timeout": 3000
+          }
+        ]
       }
     ],
     "PreCommit": [
       {
-        "command": "/home/user/HoundShield/.claude/hooks/pre-commit.sh",
-        "timeout": 60000
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yantr/.local/bin/code-review-graph detect-changes --brief",
+            "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "/Users/yantr/Desktop/Kaelus.Online-main/.claude/hooks/pre-commit.sh",
+            "timeout": 60000
+          }
+        ]
       }
     ]
-  }
+  },
+  "model": "claude-sonnet-4-6",
+  "autoMemoryEnabled": true
 }
