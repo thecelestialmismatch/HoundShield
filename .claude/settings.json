@@ -55,6 +55,11 @@
             "type": "command",
             "command": "/Users/yantr/.local/bin/code-review-graph status --json",
             "timeout": 3000
+          },
+          {
+            "type": "command",
+            "command": "echo 'AUTO-RECAP: Continuing prior work? Run /recap for full context restore.'",
+            "timeout": 1000
           }
         ]
       }
