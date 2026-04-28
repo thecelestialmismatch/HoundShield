@@ -397,7 +397,7 @@ export default function PricingPage() {
       {/* ===== PRICING CARDS ===== */}
       <section className="relative px-6 pb-24">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5 lg:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6 pt-6">
             {plans.map((plan, i) => {
               const price =
                 plan.monthlyPrice === -1
@@ -468,7 +468,11 @@ export default function PricingPage() {
                           </div>
                         )}
                         <p className="text-xs text-slate-500 mt-1">
-                          {plan.id === 'free' ? 'No credit card required' : isAnnual ? 'Billed annually · save 20%' : 'Billed monthly'}
+                          {plan.id === 'free'
+                            ? 'No credit card required'
+                            : isAnnual && plan.annualPrice
+                              ? `~$${Math.round(plan.annualPrice / 12)}/mo · billed annually`
+                              : 'Billed monthly'}
                         </p>
                       </div>
 
