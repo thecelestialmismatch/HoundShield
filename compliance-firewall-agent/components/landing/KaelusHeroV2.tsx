@@ -58,7 +58,7 @@ export function HoundShieldHeroV2() {
       </video>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-[#010828]/40" />
+      <div className="absolute inset-0 bg-[#0a0a0a]/40" />
 
       {/* Content */}
       <div className="relative z-10 max-w-[1831px] mx-auto px-6 sm:px-10 lg:px-16 min-h-screen flex flex-col">

@@ -106,7 +106,7 @@ function VideoCard({ card }: { card: CardData }) {
 
 export function HoundShieldFeaturesV2() {
   return (
-    <section className="bg-[#010828] py-20 lg:py-28">
+    <section className="bg-[#0a0a0a] py-20 lg:py-28">
       <div className="max-w-[1831px] mx-auto px-6 sm:px-10 lg:px-16">
         {/* Header row */}
         <motion.div

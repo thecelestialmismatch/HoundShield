@@ -87,7 +87,7 @@ const FEATURES = [
 
 export default function HIPAAPage() {
   return (
-    <div className="bg-[#07070b] min-h-screen relative">
+    <div className="bg-[#0a0a0a] min-h-screen relative">
       <ScrollProgressBar />
       <Navbar variant="dark" />
 

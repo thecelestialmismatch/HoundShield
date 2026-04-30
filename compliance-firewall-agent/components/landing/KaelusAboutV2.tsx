@@ -46,7 +46,7 @@ export function HoundShieldAboutV2() {
         />
       </video>
 
-      <div className="absolute inset-0 bg-[#010828]/50" />
+      <div className="absolute inset-0 bg-[#0a0a0a]/50" />
 
       <div className="relative z-10 max-w-[1831px] mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-20 lg:py-24 min-h-screen flex flex-col justify-center">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
@@ -106,8 +106,8 @@ export function HoundShieldAboutV2() {
             <p className="font-mono text-[14px] uppercase text-cream opacity-10">{DESC}</p>
           </div>
           <div className="hidden lg:flex flex-col gap-4 max-w-[300px]">
-            <p className="font-mono text-[14px] uppercase text-[#010828] opacity-10">{DESC}</p>
-            <p className="font-mono text-[14px] uppercase text-[#010828] opacity-10">{DESC}</p>
+            <p className="font-mono text-[14px] uppercase text-[#0a0a0a] opacity-10">{DESC}</p>
+            <p className="font-mono text-[14px] uppercase text-[#0a0a0a] opacity-10">{DESC}</p>
           </div>
         </motion.div>
       </div>

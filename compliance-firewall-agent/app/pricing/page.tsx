@@ -105,8 +105,8 @@ const plans = [
     id: "agency",
     name: "Agency / MSP",
     icon: Users,
-    iconColor: "text-amber-400",
-    iconBg: "bg-amber-500/10 border-amber-500/20",
+    iconColor: "text-brand-400",
+    iconBg: "bg-brand-500/10 border-brand-500/20",
     monthlyPrice: 499,
     annualPrice: 4990,
     annualTotal: 4990,
@@ -326,7 +326,7 @@ export default function PricingPage() {
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
 
   return (
-    <div className="dark min-h-screen bg-[#07070b] relative overflow-hidden">
+    <div className="dark min-h-screen bg-[#0a0a0a] relative overflow-hidden">
       <ScrollProgressBar />
       {/* ===== FLOATING ORBS ===== */}
       <div className="orb orb-1" />
@@ -432,7 +432,7 @@ export default function PricingPage() {
 
                     <div
                       className={`relative h-full flex flex-col p-8 rounded-2xl ${plan.highlighted
-                          ? "bg-[#0d0d14]"
+                          ? "bg-[#111111]"
                           : "glass-card-glow"
                         }`}
                     >
@@ -690,7 +690,7 @@ export default function PricingPage() {
                 icon: Lock,
                 stat: "99.99%",
                 label: "Uptime SLA",
-                color: "text-amber-400",
+                color: "text-brand-400",
               },
               {
                 icon: Users,
