@@ -83,7 +83,7 @@ const FAQ_DB: FaqEntry[] = [
 
   // ── INSTALLATION ────────────────────────────────────────────────────
   {
-    keywords: ["install", "setup", "integrate", "how to use", "get started", "quickstart", "base url", "gateway", "onboard"],
+    keywords: ["install", "setup", "integrate", "how to use", "get started", "quickstart", "base url", "gateway", "onboard", "how do i install", "how to install", "deploy hound shield", "start hound shield"],
     answer:
       "**One line of code** — change your AI API base URL:\n\n```\nbaseURL: 'https://gateway.houndshield.com/v1'\n```\n\nWorks with OpenAI SDK, LangChain, LlamaIndex, and any HTTP client. Supports ChatGPT, Copilot, Claude, Gemini, and 800+ models via OpenRouter. Takes under 15 minutes. No agents to install, no firewall rules, no user training.",
   },
@@ -238,6 +238,11 @@ const FAQ_DB: FaqEntry[] = [
 /**
  * Score a query against a FAQ entry using keyword overlap.
  * Returns 0–1 (higher = better match).
+ *
+ * Normalization: divide by 40% of keyword count (rounded up), not 100%.
+ * This prevents entries with many synonyms from being unfairly penalised
+ * when the user's query only contains one or two of them.
+ * Example: 1 hit out of 13 keywords → 1/ceil(13*0.4) = 1/6 ≈ 0.17 (passes 0.15 threshold).
  */
 function scoreEntry(query: string, entry: FaqEntry): number {
   const q = query.toLowerCase();
@@ -245,8 +250,9 @@ function scoreEntry(query: string, entry: FaqEntry): number {
   for (const kw of entry.keywords) {
     if (q.includes(kw)) hits++;
   }
-  // Normalize by keyword count to avoid bias toward long keyword lists
-  return hits / entry.keywords.length;
+  if (hits === 0) return 0;
+  const divisor = Math.max(1, Math.ceil(entry.keywords.length * 0.4));
+  return Math.min(1, hits / divisor);
 }
 
 /**

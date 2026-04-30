@@ -45,6 +45,24 @@
 - [ ] Multi-tenant C3PAO portal
 - [ ] HITL review workflow improvements
 - [ ] Mobile app
+- [ ] OWASP Top 10 full security review + automated dependency scanning
+- [ ] Load testing: verify <10ms latency at 1,000 req/sec (k6 or autocannon)
+- [ ] Gemini Flash as secondary scanner for speed-sensitive paths (sub-5ms deterministic)
+- [ ] CI/CD GitHub Actions: lint + tsc + jest gates on every PR (see `.github/workflows/`)
+
+## Backlog — REPO_INTEGRATION_MAP (external repos, post $10K MRR)
+
+> See `docs/REPO_INTEGRATION_MAP.md` for full context on each repo.
+
+- [ ] browser-use — browser automation for Jordan's proxy setup walkthrough
+- [ ] firecrawl — ingest CMMC/NIST docs into Brain AI knowledge graph
+- [ ] ai-website-cloner — competitive intelligence ingestion
+- [ ] space-agent — multi-agent orchestration for compliance audit flows
+- [ ] swarm-forge — swarm-style agent patterns for parallel compliance checks
+- [ ] OpenMythos / OpenHarness — agent harness patterns for proxy pipeline
+- [ ] anywhere-agents — cross-platform agent deployment (Windows/Mac/Linux support)
+- [ ] little-coder — lightweight in-browser coding agent for C3PAO portal
+- [ ] ruflo — workflow automation for onboarding email sequences
 
 ## Done
 - [x] `.claude/settings.json` — model, autoMemoryEnabled

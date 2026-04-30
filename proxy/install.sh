@@ -1,14 +1,28 @@
 #!/usr/bin/env bash
 # Hound Shield Proxy — one-command install
 # Usage: curl -sSL https://houndshield.com/install | bash
+#   -y / --yes    Non-interactive: uses env vars, skips all prompts
+#   --version     Print image tag and exit
 set -euo pipefail
 
 PROXY_PORT="${PROXY_PORT:-8080}"
 IMAGE="ghcr.io/thecelestialmismatch/houndshield-proxy:latest"
+IMAGE_VERSION="latest"
+NON_INTERACTIVE=false
+
+# ── Flags ────────────────────────────────────────────────────────────────────
+
+for arg in "$@"; do
+  case "$arg" in
+    -y|--yes)         NON_INTERACTIVE=true ;;
+    --version)        echo "houndshield-proxy:${IMAGE_VERSION}"; exit 0 ;;
+    --port=*)         PROXY_PORT="${arg#--port=}" ;;
+  esac
+done
 
 echo ""
 echo "  Hound Shield Compliance Proxy — Installer"
-echo "  ======================================"
+echo "  ==========================================="
 echo ""
 
 # ── Dependency checks ────────────────────────────────────────────────────────
@@ -28,6 +42,11 @@ fi
 # ── Collect credentials ──────────────────────────────────────────────────────
 
 if [ -z "${HOUNDSHIELD_LICENSE_KEY:-}" ]; then
+  if [ "$NON_INTERACTIVE" = true ]; then
+    echo "  ERROR: HOUNDSHIELD_LICENSE_KEY env var required in non-interactive mode."
+    echo "  Run: HOUNDSHIELD_LICENSE_KEY=<key> bash install.sh -y"
+    exit 1
+  fi
   echo "  Step 1: Enter your Hound Shield license key."
   echo "  (Get one at https://houndshield.com/dashboard)"
   echo ""
@@ -35,14 +54,45 @@ if [ -z "${HOUNDSHIELD_LICENSE_KEY:-}" ]; then
 fi
 
 if [ -z "${UPSTREAM_API_KEY:-}" ]; then
+  if [ "$NON_INTERACTIVE" = true ]; then
+    echo "  ERROR: UPSTREAM_API_KEY env var required in non-interactive mode."
+    echo "  Supported env vars:"
+    echo "    OPENAI_API_KEY       — OpenAI / ChatGPT"
+    echo "    ANTHROPIC_API_KEY    — Anthropic / Claude"
+    echo "    GOOGLE_API_KEY       — Google / Gemini"
+    echo "    OPENROUTER_API_KEY   — OpenRouter (800+ models)"
+    echo "  Set UPSTREAM_API_KEY=<key> UPSTREAM_PROVIDER=<openai|anthropic|google|openrouter>"
+    exit 1
+  fi
   echo ""
   echo "  Step 2: Enter your AI provider API key."
-  echo "  (This is your existing OpenAI/Anthropic/etc. key — Hound Shield never stores it)"
+  echo "  (Your existing key — OpenAI, Anthropic, Google, or OpenRouter)"
+  echo "  (Hound Shield never stores it — passed directly to your provider)"
+  echo ""
+  echo "  Provider hints:"
+  echo "    OPENAI_API_KEY     → set UPSTREAM_PROVIDER=openai"
+  echo "    ANTHROPIC_API_KEY  → set UPSTREAM_PROVIDER=anthropic"
+  echo "    GOOGLE_API_KEY     → set UPSTREAM_PROVIDER=google"
+  echo "    OPENROUTER_API_KEY → set UPSTREAM_PROVIDER=openrouter (800+ models)"
   echo ""
   read -rp "  Provider API key: " UPSTREAM_API_KEY
 fi
 
-UPSTREAM_PROVIDER="${UPSTREAM_PROVIDER:-openai}"
+# Auto-detect provider from env var names if not set
+if [ -z "${UPSTREAM_PROVIDER:-}" ]; then
+  if [ -n "${ANTHROPIC_API_KEY:-}" ] && [ -z "${UPSTREAM_API_KEY:-}" ]; then
+    UPSTREAM_API_KEY="$ANTHROPIC_API_KEY"
+    UPSTREAM_PROVIDER="anthropic"
+  elif [ -n "${GOOGLE_API_KEY:-}" ] && [ -z "${UPSTREAM_API_KEY:-}" ]; then
+    UPSTREAM_API_KEY="$GOOGLE_API_KEY"
+    UPSTREAM_PROVIDER="google"
+  elif [ -n "${OPENROUTER_API_KEY:-}" ] && [ -z "${UPSTREAM_API_KEY:-}" ]; then
+    UPSTREAM_API_KEY="$OPENROUTER_API_KEY"
+    UPSTREAM_PROVIDER="openrouter"
+  else
+    UPSTREAM_PROVIDER="openai"
+  fi
+fi
 
 # ── Pull image ───────────────────────────────────────────────────────────────
 
@@ -71,29 +121,40 @@ docker run -d \
   -v houndshield-data:/data \
   "$IMAGE"
 
-# ── Health check ─────────────────────────────────────────────────────────────
+# ── Health check (30s timeout) ───────────────────────────────────────────────
 
 echo "  Waiting for proxy to start..."
-for i in {1..12}; do
-  if curl -sf "http://localhost:${PROXY_PORT}/health" >/dev/null 2>&1; then
+HEALTH_TIMEOUT=15
+for i in $(seq 1 $HEALTH_TIMEOUT); do
+  if curl -sf --max-time 2 "http://localhost:${PROXY_PORT}/health" >/dev/null 2>&1; then
     break
+  fi
+  if [ "$i" -eq "$HEALTH_TIMEOUT" ]; then
+    echo ""
+    echo "  ERROR: Health check timed out after 30s."
+    echo "  Check container logs: docker logs houndshield-proxy"
+    echo "  Check port conflicts: lsof -i :${PROXY_PORT}"
+    exit 1
   fi
   sleep 2
 done
 
-STATUS=$(curl -sf "http://localhost:${PROXY_PORT}/health" 2>/dev/null || echo "failed")
+STATUS=$(curl -sf --max-time 5 "http://localhost:${PROXY_PORT}/health" 2>/dev/null || echo "failed")
 if [[ "$STATUS" == *"ok"* ]]; then
   echo ""
-  echo "  Hound Shield proxy is running!"
+  echo "  ✓ Hound Shield proxy running on port ${PROXY_PORT}"
   echo ""
   echo "  ── One change in your AI client ────────────────────────────────"
   echo "  Set: baseURL = \"http://localhost:${PROXY_PORT}/v1\""
   echo ""
-  echo "  OpenAI SDK example:"
+  echo "  OpenAI SDK:"
   echo "    const openai = new OpenAI({"
-  echo "      apiKey: '<your-key>',"
+  echo "      apiKey: process.env.OPENAI_API_KEY,"
   echo "      baseURL: 'http://localhost:${PROXY_PORT}/v1'"
   echo "    })"
+  echo ""
+  echo "  Python / LangChain:"
+  echo "    client = OpenAI(base_url='http://localhost:${PROXY_PORT}/v1', api_key=os.environ['OPENAI_API_KEY'])"
   echo ""
   echo "  Test a CUI block:"
   echo "    curl -X POST http://localhost:${PROXY_PORT}/v1/chat/completions \\"
@@ -102,8 +163,10 @@ if [[ "$STATUS" == *"ok"* ]]; then
   echo "  ──────────────────────────────────────────────────────────────────"
   echo ""
   echo "  Dashboard: https://houndshield.com/dashboard"
+  echo "  Docs:      https://houndshield.com/docs"
   echo ""
 else
-  echo "  WARNING: Health check failed. Check logs: docker logs houndshield-proxy"
+  echo "  ERROR: Health check failed. Container may have crashed."
+  echo "  Logs: docker logs houndshield-proxy"
   exit 1
 fi

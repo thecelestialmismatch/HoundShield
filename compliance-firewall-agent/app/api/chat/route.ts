@@ -42,9 +42,8 @@ const MODEL_MAP: Record<string, string> = {
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const FALLBACK_MESSAGE =
-  "I'm having trouble connecting to my AI brain right now. " +
-  "For CMMC, SPRS, and compliance questions I can answer instantly — try asking about CUI detection, SPRS scoring, or how to install Hound Shield. " +
-  "For complex questions, make sure OPENROUTER_API_KEY is set in your Vercel environment variables.";
+  "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA PHI, SOC 2, or how to install Hound Shield — " +
+  "I can answer those instantly. For open-ended AI questions, set OPENROUTER_API_KEY in your Vercel environment variables to enable full LLM responses.";
 
 // ---------------------------------------------------------------------------
 // Helpers
