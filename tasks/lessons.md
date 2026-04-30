@@ -65,3 +65,22 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 **What:** Fetching LeadGenMan resource URLs returned only page title — no content.
 **Root cause:** Pages are React SPAs. WebFetch fetches raw HTML; JavaScript has not executed, so the content is absent from the response body.
 **Rule:** For JS-rendered pages, use Playwright MCP (`browser_navigate` + `browser_snapshot`) instead of WebFetch. WebFetch is only reliable for static HTML and JSON APIs.
+
+---
+
+## 2026-04-29
+
+### TypeScript strict mode is not optional
+**What:** Using `any` types to "move faster" caused runtime errors in scanning paths that TypeScript would have caught.
+**Root cause:** Time pressure → unsafe casts → undefined behaviour in production.
+**Rule:** Zero tolerance for `any` in compliance-critical code. Use `unknown` + Zod `.parse()` at every external boundary. Run `tsc --strict --noEmit` before every commit.
+
+### Sub-10ms latency is an architectural constraint, not a target
+**What:** Features added without measuring latency impact pushed scanning above 10ms threshold.
+**Root cause:** Treating latency as a post-implementation concern rather than a design input.
+**Rule:** Every new feature must answer "what is the latency cost?" before implementation. Benchmark critical paths before and after. Regex fallback is mandatory for deterministic high-frequency paths.
+
+### Test coverage is compliance evidence, not a metric
+**What:** Skipping tests on CUI detection paths left audit trail gaps that would fail a C3PAO review.
+**Root cause:** Treating test coverage as a quality metric rather than a compliance artifact.
+**Rule:** 100% coverage of all CUI/PII/PHI detection functions. Test both detection (true positive) and non-detection (false positive) cases. Audit log paths must have integration tests.
