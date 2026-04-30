@@ -46,7 +46,7 @@ const ORGANIZATION_JSONLD = JSON.stringify({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#07070b",
+  themeColor: "#0a0a0a",
   width: "device-width",
   initialScale: 1,
 };

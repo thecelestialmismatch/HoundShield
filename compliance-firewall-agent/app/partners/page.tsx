@@ -132,7 +132,7 @@ export default function PartnersPage() {
   }
 
   return (
-    <div className="bg-[#07070b] min-h-screen relative">
+    <div className="bg-[#0a0a0a] min-h-screen relative">
       <ScrollProgressBar />
       <Navbar variant="dark" />
 
@@ -411,9 +411,9 @@ export default function PartnersPage() {
                     onChange={(e) => setFormState((s) => ({ ...s, partnerType: e.target.value }))}
                     className="w-full px-4 py-2.5 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white focus:outline-none focus:border-brand-400/50 transition"
                   >
-                    <option value="referral" className="bg-[#07070b]">Referral Partner</option>
-                    <option value="reseller" className="bg-[#07070b]">Reseller Partner</option>
-                    <option value="technology" className="bg-[#07070b]">Technology Partner</option>
+                    <option value="referral" className="bg-[#0a0a0a]">Referral Partner</option>
+                    <option value="reseller" className="bg-[#0a0a0a]">Reseller Partner</option>
+                    <option value="technology" className="bg-[#0a0a0a]">Technology Partner</option>
                   </select>
                 </div>
 

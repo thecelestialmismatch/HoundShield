@@ -99,11 +99,11 @@ function AgentSimulator() {
   const execution = [
     { phase: "OBSERVE", thought: "Received request: 'Analyze Q3 financials for compliance risks'. Gathering context from knowledge base...", tool: null, color: "text-brand-400" },
     { phase: "THINK", thought: "This involves financial data analysis. I need to: (1) scan for PII, (2) check regulatory compliance, (3) identify risk patterns.", tool: null, color: "text-purple-400" },
-    { phase: "ACT", thought: "Running compliance scan on input data...", tool: "Compliance Scan", color: "text-amber-400" },
+    { phase: "ACT", thought: "Running compliance scan on input data...", tool: "Compliance Scan", color: "text-brand-400" },
     { phase: "OBSERVE", thought: "Scan complete: 0 PII violations found. Document contains revenue figures and M&A projections.", tool: null, color: "text-brand-400" },
     { phase: "THINK", thought: "Revenue data is sensitive but allowed under company policy. M&A projections need quarantine-level review. Routing to classification.", tool: null, color: "text-purple-400" },
-    { phase: "ACT", thought: "Classifying sensitivity levels and generating compliance report...", tool: "Data Query", color: "text-amber-400" },
-    { phase: "ACT", thought: "Generating visual compliance summary...", tool: "Chart Gen", color: "text-amber-400" },
+    { phase: "ACT", thought: "Classifying sensitivity levels and generating compliance report...", tool: "Data Query", color: "text-brand-400" },
+    { phase: "ACT", thought: "Generating visual compliance summary...", tool: "Chart Gen", color: "text-brand-400" },
     { phase: "RESULT", thought: "Analysis complete. 2 items flagged for review. Compliance report generated with risk assessment.", tool: null, color: "text-emerald-400" },
   ];
 
@@ -137,7 +137,7 @@ function AgentSimulator() {
   const phaseColors: Record<string, string> = {
     OBSERVE: "bg-brand-500/20 text-brand-400 border-brand-500/30",
     THINK: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-    ACT: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    ACT: "bg-brand-500/20 text-brand-400 border-brand-500/30",
     RESULT: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   };
 
@@ -192,9 +192,9 @@ function AgentSimulator() {
             </p>
           </div>
           {current.tool && (
-            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
-              <Wrench className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-xs font-mono text-amber-400">Tool: {current.tool}</span>
+            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-500/10 border border-brand-500/20">
+              <Wrench className="w-3.5 h-3.5 text-brand-400" />
+              <span className="text-xs font-mono text-brand-400">Tool: {current.tool}</span>
             </div>
           )}
         </div>
@@ -203,7 +203,7 @@ function AgentSimulator() {
       {/* Progress Bar */}
       <div className="mt-4 h-1 rounded-full bg-white/[0.06] overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-brand-500 via-purple-500 via-amber-500 to-emerald-500 transition-all duration-500"
+          className="h-full rounded-full bg-gradient-to-r from-brand-500 via-purple-500 via-brand-500 to-emerald-500 transition-all duration-500"
           style={{ width: `${((step + 1) / execution.length) * 100}%` }}
         />
       </div>
@@ -230,7 +230,7 @@ export default function AgentsPage() {
     { icon: Code2, name: "Code Execution", desc: "Sandboxed code runner for data processing, validation, and automated scripts", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
     { icon: Shield, name: "Compliance Scan", desc: "Instant PII and sensitive data detection across 16 pattern types", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
     { icon: Database, name: "Data Query", desc: "Structured data analysis with SQL-like queries on compliance events", color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20" },
-    { icon: Eye, name: "File Analysis", desc: "Deep document parsing for contracts, policies, and regulatory filings", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
+    { icon: Eye, name: "File Analysis", desc: "Deep document parsing for contracts, policies, and regulatory filings", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
     { icon: LineChart, name: "Chart Generation", desc: "Visual data reporting with auto-generated compliance dashboards", color: "text-rose-400", bg: "bg-rose-500/10 border-rose-500/20" },
     { icon: BookOpen, name: "Knowledge Base", desc: "RAG-powered retrieval from your organization's compliance documentation", color: "text-cyan-400", bg: "bg-cyan-500/10 border-cyan-500/20" },
     { icon: Globe, name: "Web Browsing", desc: "Autonomous web navigation for regulatory monitoring and updates", color: "text-teal-400", bg: "bg-teal-500/10 border-teal-500/20" },
@@ -340,16 +340,16 @@ export default function AgentsPage() {
     brand: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
     purple: { bg: "bg-purple-500/5", border: "border-purple-500/30", text: "text-purple-400", iconBg: "bg-purple-500/10 border-purple-500/20" },
     emerald: { bg: "bg-emerald-500/5", border: "border-emerald-500/30", text: "text-emerald-400", iconBg: "bg-emerald-500/10 border-emerald-500/20" },
-    amber: { bg: "bg-amber-500/5", border: "border-amber-500/30", text: "text-amber-400", iconBg: "bg-amber-500/10 border-amber-500/20" },
+    amber: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
     rose: { bg: "bg-rose-500/5", border: "border-rose-500/30", text: "text-rose-400", iconBg: "bg-rose-500/10 border-rose-500/20" },
     cyan: { bg: "bg-cyan-500/5", border: "border-cyan-500/30", text: "text-cyan-400", iconBg: "bg-cyan-500/10 border-cyan-500/20" },
     orange: { bg: "bg-orange-500/5", border: "border-orange-500/30", text: "text-orange-400", iconBg: "bg-orange-500/10 border-orange-500/20" },
     teal: { bg: "bg-teal-500/5", border: "border-teal-500/30", text: "text-teal-400", iconBg: "bg-teal-500/10 border-teal-500/20" },
-    indigo: { bg: "bg-indigo-500/5", border: "border-indigo-500/30", text: "text-indigo-400", iconBg: "bg-indigo-500/10 border-indigo-500/20" },
+    indigo: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
   };
 
   return (
-    <div className="min-h-screen bg-[#07070b] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
       {/* Floating Orbs */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
@@ -457,7 +457,7 @@ export default function AgentsPage() {
               const colors: Record<string, { bg: string; text: string; border: string }> = {
                 brand: { bg: "bg-brand-500/10", text: "text-brand-400", border: "border-brand-500/20" },
                 purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/20" },
-                amber: { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/20" },
+                amber: { bg: "bg-brand-500/10", text: "text-brand-400", border: "border-brand-500/20" },
                 emerald: { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/20" },
               };
               const c = colors[step.color];
@@ -495,7 +495,7 @@ export default function AgentsPage() {
         <div className="bg-aurora absolute inset-0" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center mb-12">
-            <span className="text-xs font-medium tracking-widest uppercase text-amber-400 mb-4 block">Toolbox</span>
+            <span className="text-xs font-medium tracking-widest uppercase text-brand-400 mb-4 block">Toolbox</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               8 Built-in <span className="text-gradient-brand">Agent Tools</span>
             </h2>
@@ -547,9 +547,9 @@ export default function AgentsPage() {
                 <div className="glass-card p-4 flex items-center justify-between group hover:border-white/10 transition-all">
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                      model.type === "Premium" ? "bg-amber-500/10 border border-amber-500/20" : "bg-emerald-500/10 border border-emerald-500/20"
+                      model.type === "Premium" ? "bg-brand-500/10 border border-brand-500/20" : "bg-emerald-500/10 border border-emerald-500/20"
                     }`}>
-                      <Cpu className={`w-4 h-4 ${model.type === "Premium" ? "text-amber-400" : "text-emerald-400"}`} />
+                      <Cpu className={`w-4 h-4 ${model.type === "Premium" ? "text-brand-400" : "text-emerald-400"}`} />
                     </div>
                     <div>
                       <div className="text-sm font-medium text-white">{model.name}</div>
@@ -559,7 +559,7 @@ export default function AgentsPage() {
                   <div className="flex items-center gap-2">
                     <span className={`text-[10px] px-2 py-0.5 rounded-full border ${
                       model.type === "Premium"
-                        ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
+                        ? "text-brand-400 bg-brand-500/10 border-brand-500/20"
                         : "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
                     }`}>
                       {model.type === "Premium" ? "PRO" : "FREE"}

@@ -24,11 +24,11 @@ function ThemeToggle() {
       onClick={toggleTheme}
       aria-label="Toggle theme"
       className={`relative w-14 h-7 rounded-full transition-all duration-300 cursor-pointer flex-shrink-0 ${
-        dark ? "bg-brand-500/20 border border-brand-500/30" : "bg-slate-200 border border-slate-300"
+        dark ? "bg-brand-600/20 border border-brand-600/30" : "bg-slate-200 border border-slate-300"
       }`}
     >
       <span className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-        dark ? "translate-x-7 bg-brand-500 text-white" : "translate-x-0 bg-white text-amber-500 shadow-sm"
+        dark ? "translate-x-7 bg-brand-600 text-white" : "translate-x-0 bg-white text-brand-500 shadow-sm"
       }`}>
         {dark ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
       </span>
@@ -63,49 +63,49 @@ function LiveShieldBadge() {
 
 /* ── Products Mega-Menu Data ─────────────────────────────── */
 const PRODUCTS = [
-  { icon: Lock,      color: "text-indigo-400", bg: "bg-indigo-500/10",  border: "border-indigo-500/20",  label: "Technology",    framework: "SOC 2 · AI Governance",        useCase: "Engineers pasting API keys and source code into Copilot and ChatGPT daily.", saves: "Avg. $400K breach cost", href: "/features", live: true },
-  { icon: HeartPulse,color: "text-emerald-400",bg: "bg-emerald-500/10", border: "border-emerald-500/20", label: "Healthcare",    framework: "HIPAA · 45 CFR Part 164",      useCase: "Clinicians pasting patient records into AI tools for documentation and billing.", saves: "Avg. $1.9M HIPAA penalty", href: "/hipaa", live: true },
-  { icon: Shield,    color: "text-amber-400",  bg: "bg-amber-500/10",   border: "border-amber-500/20",   label: "Defense",       framework: "CMMC Level 2 · NIST 800-171",  useCase: "DoD contractors leaking CUI and contract data into AI proposal tools.", saves: "Avg. $150K C3PAO cost", href: "/command-center/shield/onboarding", live: true },
-  { icon: Briefcase, color: "text-violet-400", bg: "bg-violet-500/10",  border: "border-violet-500/20",  label: "Legal & Finance",framework: "SOC 2 · PCI DSS",             useCase: "Lawyers and analysts sharing privileged client data with AI assistants.", saves: "Avg. $200K per breach", href: "/features", live: true },
-  { icon: Globe,     color: "text-sky-400",    bg: "bg-sky-500/10",     border: "border-sky-500/20",     label: "Five Eyes / Global",framework: "DISP · ASD Essential Eight", useCase: "International defence suppliers navigating AUKUS and allied compliance.", saves: "DISP audit costs", href: "/partners", live: true },
-  { icon: Landmark,  color: "text-rose-400",   bg: "bg-rose-500/10",    border: "border-rose-500/20",    label: "Government",    framework: "FedRAMP · FISMA",              useCase: "Federal agencies adopting AI without a compliant data handling framework.", saves: "Authorization costs", href: "/signup", live: false },
+  { icon: Lock,      color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]",  border: "border-[rgba(234,88,12,0.15)]",  label: "Technology",    framework: "SOC 2 · AI Governance",        useCase: "Engineers pasting API keys and source code into Copilot and ChatGPT daily.", saves: "Avg. $400K breach cost", href: "/features", live: true },
+  { icon: HeartPulse,color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]", border: "border-[rgba(234,88,12,0.12)]", label: "Healthcare",    framework: "HIPAA · 45 CFR Part 164",      useCase: "Clinicians pasting patient records into AI tools for documentation and billing.", saves: "Avg. $1.9M HIPAA penalty", href: "/hipaa", live: true },
+  { icon: Shield,    color: "text-brand-600",  bg: "bg-[rgba(234,88,12,0.12)]",   border: "border-[rgba(234,88,12,0.18)]",   label: "Defense",       framework: "CMMC Level 2 · NIST 800-171",  useCase: "DoD contractors leaking CUI and contract data into AI proposal tools.", saves: "Avg. $150K C3PAO cost", href: "/command-center/shield/onboarding", live: true },
+  { icon: Briefcase, color: "text-brand-700", bg: "bg-[rgba(234,88,12,0.14)]",  border: "border-[rgba(234,88,12,0.20)]",  label: "Legal & Finance",framework: "SOC 2 · PCI DSS",             useCase: "Lawyers and analysts sharing privileged client data with AI assistants.", saves: "Avg. $200K per breach", href: "/features", live: true },
+  { icon: Globe,     color: "text-orange-300",    bg: "bg-[rgba(234,88,12,0.06)]",     border: "border-[rgba(234,88,12,0.10)]",     label: "Five Eyes / Global",framework: "DISP · ASD Essential Eight", useCase: "International defence suppliers navigating AUKUS and allied compliance.", saves: "DISP audit costs", href: "/partners", live: true },
+  { icon: Landmark,  color: "text-brand-800",   bg: "bg-[rgba(234,88,12,0.16)]",    border: "border-[rgba(234,88,12,0.22)]",    label: "Government",    framework: "FedRAMP · FISMA",              useCase: "Federal agencies adopting AI without a compliant data handling framework.", saves: "Authorization costs", href: "/signup", live: false },
 ];
 
 /* ── Nav Flyout Panel Data ───────────────────────────────── */
 const FEATURES_ITEMS = [
-  { icon: Eye,       color: "text-indigo-400", bg: "bg-indigo-500/10", label: "AI Prompt Interception",  desc: "Every LLM request inspected before it leaves the network",       href: "/features#interception" },
-  { icon: Zap,       color: "text-amber-400",  bg: "bg-amber-500/10",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#interception" },
-  { icon: Clock,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#interception" },
-  { icon: FileCheck, color: "text-violet-400", bg: "bg-violet-500/10", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit",               href: "/features#audit" },
-  { icon: Layers,    color: "text-sky-400",    bg: "bg-sky-500/10",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/docs#quickstart" },
-  { icon: Activity,  color: "text-rose-400",   bg: "bg-rose-500/10",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },
+  { icon: Eye,       color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "AI Prompt Interception",  desc: "Every LLM request inspected before it leaves the network",       href: "/features#interception" },
+  { icon: Zap,       color: "text-brand-600",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#interception" },
+  { icon: Clock,     color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#interception" },
+  { icon: FileCheck, color: "text-brand-700", bg: "bg-[rgba(234,88,12,0.14)]", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit",               href: "/features#audit" },
+  { icon: Layers,    color: "text-orange-300",    bg: "bg-[rgba(234,88,12,0.06)]",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/docs#quickstart" },
+  { icon: Activity,  color: "text-brand-800",   bg: "bg-[rgba(234,88,12,0.16)]",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },
 ];
 
 const PRICING_TIERS = [
   { label: "Free",       price: "$0",    note: "Up to 1,000 prompts/mo", color: "text-slate-400",   href: "/signup" },
-  { label: "Pro",        price: "$199",  note: "SOC 2 + HIPAA coverage",  color: "text-indigo-400",  href: "/signup?plan=pro" },
-  { label: "Growth",     price: "$499",  note: "PDF compliance reports",  color: "text-emerald-400", href: "/signup?plan=growth" },
-  { label: "Enterprise", price: "$999",  note: "Unlimited orgs + CMMC",   color: "text-amber-400",   href: "/contact" },
-  { label: "Agency",     price: "$2,499",note: "White-label for MSPs",    color: "text-violet-400",  href: "/contact" },
+  { label: "Pro",        price: "$199",  note: "SOC 2 + HIPAA coverage",  color: "text-brand-400",  href: "/signup?plan=pro" },
+  { label: "Growth",     price: "$499",  note: "PDF compliance reports",  color: "text-brand-500", href: "/signup?plan=growth" },
+  { label: "Enterprise", price: "$999",  note: "Unlimited orgs + CMMC",   color: "text-brand-600",   href: "/contact" },
+  { label: "Agency",     price: "$2,499",note: "White-label for MSPs",    color: "text-brand-700",  href: "/contact" },
 ];
 
 const PARTNER_ITEMS = [
-  { icon: Users,    color: "text-indigo-400", bg: "bg-indigo-500/10", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
-  { icon: Plug,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
-  { icon: DollarSign,color:"text-amber-400",  bg: "bg-amber-500/10",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
+  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
+  { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
+  { icon: DollarSign,color:"text-amber-400",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
 ];
 
 const DOC_ITEMS = [
-  { icon: Zap,      color: "text-emerald-400", bg: "bg-emerald-500/10", label: "5-min Quickstart",         desc: "One URL change → full compliance", href: "/docs#quickstart" },
-  { icon: Terminal, color: "text-indigo-400",  bg: "bg-indigo-500/10",  label: "API Reference",            desc: "Gateway, classifier, and audit endpoints", href: "/docs#api" },
-  { icon: Shield,   color: "text-amber-400",   bg: "bg-amber-500/10",   label: "CMMC Configuration Guide", desc: "NIST 800-171 pattern reference", href: "/docs#cmmc" },
-  { icon: BookOpen, color: "text-violet-400",  bg: "bg-violet-500/10",  label: "Detection Engine Docs",    desc: "16 engine patterns, thresholds, overrides", href: "/docs#detection" },
+  { icon: Zap,      color: "text-brand-500", bg: "bg-[rgba(234,88,12,0.08)]", label: "5-min Quickstart",         desc: "One URL change → full compliance", href: "/docs#quickstart" },
+  { icon: Terminal, color: "text-brand-400",  bg: "bg-[rgba(234,88,12,0.10)]",  label: "API Reference",            desc: "Gateway, classifier, and audit endpoints", href: "/docs#api" },
+  { icon: Shield,   color: "text-brand-600",   bg: "bg-[rgba(234,88,12,0.12)]",   label: "CMMC Configuration Guide", desc: "NIST 800-171 pattern reference", href: "/docs#cmmc" },
+  { icon: BookOpen, color: "text-brand-700",  bg: "bg-[rgba(234,88,12,0.14)]",  label: "Detection Engine Docs",    desc: "16 engine patterns, thresholds, overrides", href: "/docs#detection" },
 ];
 
 const CONTACT_ITEMS = [
-  { icon: Calendar, color: "text-indigo-400", bg: "bg-indigo-500/10", label: "Book a Demo",     desc: "30-min live walkthrough · No commitment", href: "/contact" },
-  { icon: Mail,     color: "text-emerald-400",bg: "bg-emerald-500/10",label: "Enterprise Sales", desc: "Custom pricing · SLA · Dedicated CSM",    href: "/contact" },
-  { icon: Users,    color: "text-amber-400",  bg: "bg-amber-500/10",  label: "Partner Inquiry", desc: "MSP, reseller, and integration partnerships", href: "/partners" },
+  { icon: Calendar, color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "Book a Demo",     desc: "30-min live walkthrough · No commitment", href: "/contact" },
+  { icon: Mail,     color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]",label: "Enterprise Sales", desc: "Custom pricing · SLA · Dedicated CSM",    href: "/contact" },
+  { icon: Users,    color: "text-brand-600",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "Partner Inquiry", desc: "MSP, reseller, and integration partnerships", href: "/partners" },
 ];
 
 /* ── Generic Flyout Panel ────────────────────────────────── */
@@ -131,7 +131,7 @@ function FlyoutPanel<T extends { icon: React.ElementType; color: string; bg: str
           exit={{ opacity: 0, y: 6, scale: 0.98 }}
           transition={{ duration: 0.18, ease: [0.25, 0.4, 0.25, 1] }}
           style={{ width }}
-          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] rounded-2xl border border-white/[0.08] bg-[#0d0d16]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
+          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
         >
           <div className="px-5 pt-4 pb-3 border-b border-white/[0.06]">
             <p className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-brand-400">{header.eyebrow}</p>
@@ -251,7 +251,7 @@ function ProductsMenu({ isDark }: { isDark: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
-            className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[740px] rounded-2xl border border-white/[0.08] bg-[#0d0d16]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
+            className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[740px] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
           >
             <div className="px-5 pt-4 pb-3 border-b border-white/[0.06]">
               <p className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-brand-400">Products by Industry</p>
@@ -266,7 +266,7 @@ function ProductsMenu({ isDark }: { isDark: boolean }) {
                     key={p.label}
                     href={p.href}
                     onClick={() => setOpen(false)}
-                    className={`group relative flex flex-col gap-2 p-4 bg-[#0d0d16] transition-colors hover:bg-white/[0.04] ${!p.live ? "opacity-60 pointer-events-none" : ""}`}
+                    className={`group relative flex flex-col gap-2 p-4 bg-[#0a0a0a] transition-colors hover:bg-white/[0.04] ${!p.live ? "opacity-60 pointer-events-none" : ""}`}
                   >
                     {!p.live && (
                       <span className="absolute top-3 right-3 text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-700/60 text-slate-500 border border-slate-600/40">Soon</span>
@@ -315,7 +315,7 @@ function PricingFlyout({ open }: { open: boolean }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 6, scale: 0.98 }}
           transition={{ duration: 0.18 }}
-          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[320px] rounded-2xl border border-white/[0.08] bg-[#0d0d16]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
+          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[320px] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
         >
           <div className="px-4 pt-4 pb-3 border-b border-white/[0.06]">
             <p className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-brand-400">Pricing</p>
@@ -425,13 +425,13 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
   }, []);
 
   const frostedClass = isDark
-    ? "bg-[#07070b]/85 backdrop-blur-xl border-b border-indigo-500/15"
+    ? "bg-[#0a0a0a]/85 backdrop-blur-xl border-b border-brand-600/15"
     : "nav-frosted shadow-sm";
   const linkActive  = isDark ? "text-brand-400 bg-brand-500/10" : "text-brand-500 bg-brand-50";
   const linkDefault = isDark ? "text-slate-400 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-slate-900 hover:bg-slate-50";
   const linkOpenStyle = isDark ? "text-white bg-white/8" : "text-slate-900 bg-slate-100";
   const signInClass = isDark ? "text-sm font-medium text-slate-400 hover:text-white px-3 py-2 transition-colors" : "text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-2 transition-colors";
-  const mobileBg    = isDark ? "bg-[#0e0e18]/95 backdrop-blur-xl border-b border-indigo-500/15" : "bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-lg";
+  const mobileBg    = isDark ? "bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-brand-600/15" : "bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-lg";
   const mobileLinkDefault = isDark ? "text-slate-400 hover:bg-white/5 hover:text-white" : "text-slate-600 hover:bg-slate-50";
   const mobileDivider     = isDark ? "pt-3 border-t border-white/5 flex flex-col gap-2" : "pt-3 border-t border-slate-100 flex flex-col gap-2";
 

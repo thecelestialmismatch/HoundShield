@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CursorGlow > mounts a glow element 1`] = `
+<div
+  aria-hidden="true"
+  class="fixed pointer-events-none z-0 rounded-full"
+  style="width: 700px; height: 700px; background: radial-gradient(circle, rgb(234, 88, 12) 0%, rgba(234, 88, 12, 0.4) 30%, transparent 70%); opacity: 0; transform: translateX(-1000px) translateY(-1000px) translateX(-50%) translateY(-50%);"
+/>
+`;

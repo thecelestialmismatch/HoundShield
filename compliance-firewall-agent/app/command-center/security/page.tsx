@@ -167,7 +167,7 @@ export default function SecurityDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07070b] p-6">
+    <div className="min-h-screen bg-[#0a0a0a] p-6">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -194,7 +194,7 @@ export default function SecurityDashboardPage() {
       {/* Metric cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Total Blocked" value={totalBlocked.toLocaleString()} icon={XCircle} color="bg-red-500/20 text-red-400" trend="+8%" trendUp={false} />
-        <StatCard label="Quarantined" value={totalQuarantined.toLocaleString()} icon={AlertTriangle} color="bg-violet-500/20 text-violet-400" trend="-2%" trendUp={true} />
+        <StatCard label="Quarantined" value={totalQuarantined.toLocaleString()} icon={AlertTriangle} color="bg-brand-500/20 text-brand-400" trend="-2%" trendUp={true} />
         <StatCard label="Avg Scan Latency" value={`${avgLatency}ms`} icon={Clock} color="bg-amber-500/20 text-amber-400" trend="-3ms" trendUp={true} />
         <StatCard label="Critical Violations" value={criticalCount} icon={Shield} color="bg-red-500/20 text-red-400" />
       </div>
@@ -215,7 +215,7 @@ export default function SecurityDashboardPage() {
                 <XAxis dataKey="time" tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} interval={3} />
                 <YAxis tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} unit="ms" />
                 <Tooltip
-                  contentStyle={{ background: "#0d0d14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
+                  contentStyle={{ background: "#111111", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
                   labelStyle={{ color: "rgba(255,255,255,0.6)" }}
                 />
                 <Line type="monotone" dataKey="avg_ms" stroke="#818cf8" strokeWidth={2} dot={false} name="Avg" />
@@ -241,7 +241,7 @@ export default function SecurityDashboardPage() {
                   ))}
                 </Pie>
                 <Tooltip
-                  contentStyle={{ background: "#0d0d14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
+                  contentStyle={{ background: "#111111", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -273,7 +273,7 @@ export default function SecurityDashboardPage() {
                 <XAxis type="number" tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} />
                 <YAxis type="category" dataKey="category" tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }} tickLine={false} axisLine={false} width={68} />
                 <Tooltip
-                  contentStyle={{ background: "#0d0d14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
+                  contentStyle={{ background: "#111111", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
                 />
                 <Bar dataKey="count" fill="#818cf8" radius={[0, 4, 4, 0]} name="Violations" />
               </BarChart>
@@ -294,7 +294,7 @@ export default function SecurityDashboardPage() {
                   {v.action === "BLOCKED" ? (
                     <XCircle className="w-4 h-4 text-red-400" />
                   ) : (
-                    <AlertTriangle className="w-4 h-4 text-violet-400" />
+                    <AlertTriangle className="w-4 h-4 text-brand-400" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

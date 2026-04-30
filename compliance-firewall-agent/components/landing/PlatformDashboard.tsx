@@ -12,18 +12,18 @@ import {
 
 /* ── Event pool ────────────────────────────────────────── */
 const EVENT_POOL = [
-  { framework: "SOC 2",  color: "#6366F1", detail: "GitHub token in Copilot prompt body",       status: "BLOCKED"     as const, engine: "secrets" },
+  { framework: "SOC 2",  color: "#FB923C", detail: "GitHub token in Copilot prompt body",       status: "BLOCKED"     as const, engine: "secrets" },
   { framework: "HIPAA",  color: "#10B981", detail: "Patient DOB + MRN in ChatGPT session",      status: "BLOCKED"     as const, engine: "PHI" },
-  { framework: "CMMC",   color: "#F5C842", detail: "CUI contract FA8802-24-C-0031 detected",    status: "QUARANTINED" as const, engine: "CUI" },
-  { framework: "SOC 2",  color: "#6366F1", detail: "Stripe secret key in code review prompt",   status: "BLOCKED"     as const, engine: "secrets" },
+  { framework: "CMMC",   color: "#EA580C", detail: "CUI contract FA8802-24-C-0031 detected",    status: "QUARANTINED" as const, engine: "CUI" },
+  { framework: "SOC 2",  color: "#FB923C", detail: "Stripe secret key in code review prompt",   status: "BLOCKED"     as const, engine: "secrets" },
   { framework: "HIPAA",  color: "#10B981", detail: "Discharge summary pasted to AI tool",       status: "QUARANTINED" as const, engine: "PHI" },
-  { framework: "CMMC",   color: "#F5C842", detail: "Export-controlled ITAR tech data flagged",  status: "BLOCKED"     as const, engine: "CUI" },
-  { framework: "SOC 2",  color: "#6366F1", detail: "AWS access key in Claude.ai message",       status: "BLOCKED"     as const, engine: "secrets" },
+  { framework: "CMMC",   color: "#EA580C", detail: "Export-controlled ITAR tech data flagged",  status: "BLOCKED"     as const, engine: "CUI" },
+  { framework: "SOC 2",  color: "#FB923C", detail: "AWS access key in Claude.ai message",       status: "BLOCKED"     as const, engine: "secrets" },
   { framework: "HIPAA",  color: "#10B981", detail: "SSN + insurance ID in AI billing prompt",   status: "BLOCKED"     as const, engine: "PII" },
-  { framework: "CMMC",   color: "#F5C842", detail: "CAGE code 3GTK7 in AI proposal draft",      status: "QUARANTINED" as const, engine: "CUI" },
+  { framework: "CMMC",   color: "#EA580C", detail: "CAGE code 3GTK7 in AI proposal draft",      status: "QUARANTINED" as const, engine: "CUI" },
 ];
 
-const ENGINE_COLORS = ["#6366F1", "#10B981", "#F5C842", "#F87171"];
+const ENGINE_COLORS = ["#EA580C", "#10B981", "#FB923C", "#F87171"];
 
 function rand(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -42,24 +42,24 @@ function initPie() {
   const soc = rand(35, 50);
   const hipaa = rand(22, 36);
   return [
-    { name: "SOC 2", value: soc,               color: "#6366F1" },
+    { name: "SOC 2", value: soc,               color: "#FB923C" },
     { name: "HIPAA", value: hipaa,             color: "#10B981" },
-    { name: "CMMC",  value: 100 - soc - hipaa, color: "#F5C842" },
+    { name: "CMMC",  value: 100 - soc - hipaa, color: "#EA580C" },
   ];
 }
 
 function initCoverage() {
   return [
-    { label: "API Key Protection", pct: rand(95, 100), color: "#6366F1" },
+    { label: "API Key Protection", pct: rand(95, 100), color: "#EA580C" },
     { label: "PHI / PII Coverage", pct: rand(89, 97),  color: "#10B981" },
-    { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#F5C842" },
+    { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#FB923C" },
     { label: "SPRS Score",         pct: rand(78, 91),  color: "#F87171" },
   ];
 }
 
 const STATUS_STYLES = {
   BLOCKED:     { text: "text-red-400",    bg: "bg-red-500/10",    border: "border-red-500/20"    },
-  QUARANTINED: { text: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20" },
+  QUARANTINED: { text: "text-brand-700",  bg: "bg-brand-700/10",  border: "border-brand-700/20"  },
 };
 
 function initChart() {
@@ -74,7 +74,7 @@ function initChart() {
 function ChartTip({ active, payload }: { active?: boolean; payload?: Array<{ value: number }> }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="px-2 py-1 rounded bg-[#16161f] border border-white/[0.08] text-[9px] font-mono text-white">
+    <div className="px-2 py-1 rounded bg-[#111111] border border-white/[0.08] text-[9px] font-mono text-white">
       {payload.reduce((s, p) => s + (p.value || 0), 0)} blocked
     </div>
   );
@@ -167,9 +167,9 @@ export function PlatformDashboard() {
       const soc   = rand(35, 50);
       const hipaa = rand(22, 36);
       setPieData([
-        { name: "SOC 2", value: soc,               color: "#6366F1" },
+        { name: "SOC 2", value: soc,               color: "#FB923C" },
         { name: "HIPAA", value: hipaa,             color: "#10B981" },
-        { name: "CMMC",  value: 100 - soc - hipaa, color: "#F5C842" },
+        { name: "CMMC",  value: 100 - soc - hipaa, color: "#EA580C" },
       ]);
     }, 2800);
     return () => clearInterval(t);
@@ -178,9 +178,9 @@ export function PlatformDashboard() {
   useEffect(() => {
     const t = setInterval(() => {
       setCoverageData([
-        { label: "API Key Protection", pct: rand(95, 100), color: "#6366F1" },
+        { label: "API Key Protection", pct: rand(95, 100), color: "#EA580C" },
         { label: "PHI / PII Coverage", pct: rand(89, 97),  color: "#10B981" },
-        { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#F5C842" },
+        { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#FB923C" },
         { label: "SPRS Score",         pct: rand(78, 91),  color: "#F87171" },
       ]);
     }, 4000);
@@ -211,7 +211,7 @@ export function PlatformDashboard() {
   }, []);
 
   return (
-    <div className="w-full bg-[#080810]">
+    <div className="w-full bg-[#0a0a0a]">
       <div className="flex flex-col">
 
         {/* ── Top bar ─────────────────────────────────────── */}
@@ -233,7 +233,7 @@ export function PlatformDashboard() {
         {/* ── Scan progress bar ─────────────────────────── */}
         <div className="h-[2px] bg-white/[0.04] relative overflow-hidden">
           <motion.div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-emerald-500/80 via-brand-400/80 to-indigo-500/80"
+            className="absolute left-0 top-0 h-full bg-gradient-to-r from-brand-600/80 via-brand-400/80 to-emerald-500/80"
             style={{ width: `${scanPct}%` }}
             transition={{ duration: 0 }}
           />
@@ -243,7 +243,7 @@ export function PlatformDashboard() {
         <div className="grid grid-cols-4 divide-x divide-white/[0.04] border-b border-white/[0.04]">
           {[
             { label: "Blocked today", value: totalBlocked.toLocaleString(), color: "text-red-400"     },
-            { label: "SOC 2",         value: "Active",                       color: "text-indigo-400"  },
+            { label: "SOC 2",         value: "Active",                       color: "text-brand-500"   },
             { label: "HIPAA",         value: "Active",                       color: "text-emerald-400" },
             { label: "CMMC L2",       value: "Active",                       color: "text-brand-400"   },
           ].map((m) => (
@@ -280,23 +280,23 @@ export function PlatformDashboard() {
                   <AreaChart data={chartData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }}>
                     <defs>
                       <linearGradient id="soc2g" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#6366F1" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#6366F1" stopOpacity={0}   />
+                        <stop offset="5%"  stopColor="#FB923C" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#FB923C" stopOpacity={0}   />
                       </linearGradient>
                       <linearGradient id="hipaag" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%"  stopColor="#10B981" stopOpacity={0.3} />
                         <stop offset="95%" stopColor="#10B981" stopOpacity={0}   />
                       </linearGradient>
                       <linearGradient id="cmmcg" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#F5C842" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#F5C842" stopOpacity={0}   />
+                        <stop offset="5%"  stopColor="#EA580C" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#EA580C" stopOpacity={0}   />
                       </linearGradient>
                     </defs>
                     <XAxis dataKey="t" hide />
                     <Tooltip content={<ChartTip />} cursor={{ stroke: "rgba(255,255,255,0.06)" }} />
-                    <Area type="monotone" dataKey="soc2"  stroke="#6366F1" fill="url(#soc2g)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                    <Area type="monotone" dataKey="soc2"  stroke="#FB923C" fill="url(#soc2g)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
                     <Area type="monotone" dataKey="hipaa" stroke="#10B981" fill="url(#hipaag)" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-                    <Area type="monotone" dataKey="cmmc"  stroke="#F5C842" fill="url(#cmmcg)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                    <Area type="monotone" dataKey="cmmc"  stroke="#EA580C" fill="url(#cmmcg)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
@@ -509,9 +509,9 @@ export function PlatformDashboard() {
               <p className="text-[9px] font-mono text-slate-600 uppercase tracking-wider mb-2">Framework status</p>
               <div className="space-y-1.5">
                 {[
-                  { key: "SOC 2", Icon: Lock,       color: "text-indigo-400",  bg: "bg-indigo-500/10",  border: "border-indigo-500/20"  },
+                  { key: "SOC 2", Icon: Lock,       color: "text-brand-500",   bg: "bg-brand-500/10",   border: "border-brand-500/20"   },
                   { key: "HIPAA", Icon: HeartPulse, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-                  { key: "CMMC",  Icon: Shield,     color: "text-amber-400",   bg: "bg-amber-500/10",   border: "border-amber-500/20"   },
+                  { key: "CMMC",  Icon: Shield,     color: "text-brand-600",   bg: "bg-brand-600/10",   border: "border-brand-600/20"   },
                 ].map((fw) => {
                   const Icon = fw.Icon;
                   return (

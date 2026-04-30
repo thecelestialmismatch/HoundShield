@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#07070b]">
+    <div className="min-h-screen bg-[#0a0a0a]">
       <ScrollProgressBar />
       <Navbar variant="dark" />
       <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">

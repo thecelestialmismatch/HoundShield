@@ -22,7 +22,7 @@ const ease = [0.25, 0.4, 0.25, 1] as const;
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center bg-[#07070b]">
+    <section className="relative min-h-screen flex items-center bg-[#0a0a0a]">
       <div className="w-full max-w-7xl mx-auto px-6 py-28 lg:py-36">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
@@ -83,7 +83,7 @@ export function HeroSection() {
             >
               <Link
                 href="/docs/quickstart"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-brand-400 hover:bg-brand-400/90 text-[#07070b] font-semibold rounded-lg transition-colors text-[15px]"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition-colors text-[15px]"
               >
                 Deploy in 15 minutes
                 <ArrowRight className="w-4 h-4" />

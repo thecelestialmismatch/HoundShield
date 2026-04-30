@@ -399,8 +399,8 @@ export default function CommandCenterOverview() {
             change: `${completion.toFixed(0)}%`,
             trend: "up",
             icon: ClipboardCheck,
-            color: "text-violet-600",
-            bg: "bg-violet-50",
+            color: "text-brand-600",
+            bg: "bg-brand-50",
           },
           {
             label: "Active Agents",
@@ -826,7 +826,7 @@ export default function CommandCenterOverview() {
             label: "Agent Workspace",
             icon: Brain,
             href: "/command-center/workspace",
-            color: "bg-violet-50 text-violet-600",
+            color: "bg-brand-50 text-brand-600",
           },
           {
             label: "Generate Report",

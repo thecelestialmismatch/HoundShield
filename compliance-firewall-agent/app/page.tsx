@@ -71,8 +71,8 @@ const proofCards = [
     badge: "CMMC Level 2",
     stat: "SPRS: −203 to 110",
     icon: Shield,
-    color: "text-amber-400",
-    bg: "bg-amber-500/10 border-amber-500/20",
+    color: "text-brand-400",
+    bg: "bg-brand-500/10 border-brand-500/20",
     title: "Know your SPRS score before your assessor does.",
     body: "We map all 110 NIST SP 800-171 Rev 2 controls to your actual AI usage. Every blocked prompt records which control it affects. Your SPRS score updates in real time.",
   },
@@ -98,15 +98,15 @@ const proofCards = [
 
 const featureStrip = [
   { icon: Eye,       color: "text-brand-400",  bg: "bg-brand-500/10 border-brand-500/20",   label: "AI Prompt Interception", desc: "Every LLM request inspected before it leaves the network" },
-  { icon: Zap,       color: "text-amber-400",  bg: "bg-amber-500/10 border-amber-500/20",    label: "16 Detection Engines",   desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances — all matched" },
+  { icon: Zap,       color: "text-brand-400",  bg: "bg-brand-500/10 border-brand-500/20",    label: "16 Detection Engines",   desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances — all matched" },
   { icon: FileCheck, color: "text-emerald-400",bg: "bg-emerald-500/10 border-emerald-500/20",label: "Immutable Audit Trail",  desc: "SHA-256 tamper-evident logs ready for any compliance audit" },
-  { icon: Terminal,  color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20",  label: "One Proxy URL Deploy",   desc: "Works with ChatGPT, Copilot, Claude, Gemini — all simultaneously" },
+  { icon: Terminal,  color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20",  label: "One Proxy URL Deploy",   desc: "Works with ChatGPT, Copilot, Claude, Gemini — all simultaneously" },
 ];
 
 /* ── Page ─────────────────────────────────────────────────── */
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#07070b] text-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
       <ScrollProgressBar />
       <Navbar variant="dark" />
 
@@ -241,7 +241,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/signup"
-              className="inline-flex items-center gap-2 bg-[#F5C842] hover:bg-[#e8b830] text-[#07070b] font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
+              className="inline-flex items-center gap-2 bg-[#EA580C] hover:bg-[#e8b830] text-[#0a0a0a] font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
             >
               Get Started Free <ArrowRight className="w-4 h-4" />
             </Link>
