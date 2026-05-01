@@ -64,7 +64,7 @@ export default function AboutPage() {
                             <span className="text-gradient-brand">Defense Compliance</span>
                         </h1>
                         <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                            87,000 defense contractors need CMMC certification. Most can't afford six-figure consulting fees.
+                            87,000 defense contractors need CMMC certification. Most can&apos;t afford six-figure consulting fees.
                             We built Hound Shield to change that.
                         </p>
                     </AnimatedSection>
