@@ -102,6 +102,45 @@ interception — what prompt injections does the compliance scanner need to catc
 
 ---
 
+## OODA Ingestion — 2026-04-30
+
+8 new knowledge nodes added to Brain AI from full product data review (ALL MY DATA ingestion).
+Nodes cover gaps not previously in either KB store.
+
+### Product Roadmap (`product_roadmap`)
+**Source:** OODA product roadmap analysis, April 2026  
+**Added:** Planned capabilities in priority order: Shannon entropy engine, browser extension paste interception, extended AI provider support (Perplexity/Grok/Mistral/Meta AI), demo mode guard, subscription gating.
+
+### Browser Extension (`product_extension`)
+**Source:** Product roadmap + architecture decision  
+**Added:** Paste interception at UI layer via WASM scanner. Complementary to proxy (network layer). BYOD deployment path. Target: Chrome/Edge. Safe redact mode replaces CUI tokens inline.
+
+### Shannon Entropy Engine (`product_entropy`)
+**Source:** Information-theoretic secret detection research  
+**Added:** H > 3.5 threshold for strings >16 chars = probable secret. Catches zero-day API key formats regex can't. Addresses NIST 3.13.10 (cryptographic protection of key material).
+
+### Sprint 1 MVP Flow (`product_sprint1_mvp`)
+**Source:** CLAUDE.md Sprint 1 definition  
+**Added:** End-to-end Jordan flow: signup → Docker pull → one env var → proxy running → 3 test prompts → PDF export. Target: <10 minutes for non-technical IT manager.
+
+### Customer Discovery Questions (`market_customer_discovery`)
+**Source:** OODA Phase 2 validated framework  
+**Added:** 5 open-ended discovery questions + 4 urgency signals (no C3PAO answer, DNS bypass via hotspot, <90 days to assessment, prime contractor mandate).
+
+### OODA BUILD Verdict (`market_ooda_verdict`)
+**Source:** OODA Phase 1-5 Paul Graham pressure test, April 2026  
+**Added:** STRONG verdict. DFARS 7012 = law not preference. Local-only moat uncopiable. Painkiller. Top 3 failure modes: Microsoft GCC High ships local AI DLP, enterprise DLP adds CMMC-local, enforcement deadline extends.
+
+### Product Evolution (`product_evolution`)
+**Source:** Rebranding project (April 2026, ~295 files renamed)  
+**Added:** Kaelus → HoundShield rationale. Pending blockers: Stripe webhook still on kaelus.online (update at dashboard.stripe.com/webhooks), Supabase migrations 003+004 not pushed to prod.
+
+### Tool Ecosystem (`tool_ecosystem`)
+**Source:** Development workflow audit  
+**Added:** Firecrawl (Brain AI ingestion), Context7 (live docs), claude-mem (persistent memory), browser-harness (AI provider testing), code-review-graph MCP (6.8x token reduction), Superpowers, GSD, caveman mode.
+
+---
+
 ## Deferred / Not Applied
 
 | Resource | Why Not Applied |

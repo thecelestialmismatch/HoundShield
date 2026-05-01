@@ -736,5 +736,132 @@ API10: Unsafe Consumption of APIs — all AI provider responses validated before
 NIST controls addressed: 3.13.8 (cryptographic protection), 3.14.6 (attack monitoring), 3.1.3 (CUI flow control).`,
       ["threat model", "attack", "bypass", "ssrf", "tenant isolation", "rls", "sha256", "api key"]
     ),
+
+    // ---- Product Roadmap ----
+    node(
+      "product_roadmap",
+      "architecture",
+      "HoundShield product roadmap — next capability layer",
+      `Planned features in priority order:
+1. Shannon entropy engine — detects API keys, tokens, secrets via statistical analysis. Shannon entropy H > 3.5 for strings >16 chars = likely secret/key. Complements the 16 regex patterns for secrets with no known format.
+2. Paste interception (browser extension) — intercepts clipboard paste events before text reaches the AI chat UI. Safe redact mode: strips detected CUI inline, lets clean text through. Target browsers: Chrome, Edge.
+3. Extended AI provider support — Perplexity, Grok, Mistral, Meta AI (Llama.ai) added as recognized proxy targets. Current coverage: ChatGPT, Copilot, Claude, OpenAI API.
+4. Demo mode guard — full compliance dashboard accessible without Supabase/Stripe credentials. Jordan can evaluate before committing.
+5. Subscription gating validation — Free/Pro/Growth/Enterprise tiers enforced at feature level (currently partial).`,
+      ["roadmap", "entropy", "extension", "paste", "perplexity", "grok", "mistral", "meta", "demo", "tier"]
+    ),
+
+    node(
+      "product_extension",
+      "architecture",
+      "Browser extension — paste interception and safe redact mode",
+      `Complementary deployment path to the network proxy. Proxy intercepts at network layer (all AI traffic). Extension intercepts at UI layer (paste events in AI chat windows).
+Architecture: content script listens for paste events on known AI chat URLs. Runs the same 16-pattern scanner locally via WASM. Safe redact mode: replaces detected PII/CUI with tokens like [REDACTED-SSN], [REDACTED-CUI], and lets the user paste clean text.
+Use case: contractors who cannot change network proxy (BYOD, home office). Extension is the fallback deployment path that requires zero IT involvement.
+Supported sites planned: chat.openai.com, copilot.microsoft.com, claude.ai, perplexity.ai, grok.x.ai, mistral.ai.
+Deployment: publish to Chrome Web Store and Microsoft Edge Add-ons. MDM-deployable for enterprise.`,
+      ["extension", "chrome", "edge", "paste", "clipboard", "wasm", "redact", "content-script", "byod"]
+    ),
+
+    node(
+      "product_entropy",
+      "architecture",
+      "Shannon entropy engine — statistical secret and API key detection",
+      `API keys and secrets have high entropy (near-random character distribution). Shannon entropy: H = -sum(p_i * log2(p_i)) where p_i is probability of character i in the string.
+Detection threshold: H > 3.5 for strings longer than 16 characters = probable secret/key.
+Implementation: sliding window scan over prompt tokens. Flags strings resembling API keys (sk-proj-xxx, ghp_xxx, AKIA-xxx), JWTs (three base64 segments separated by dots), private keys (PEM headers), and database connection strings.
+Why this matters: regex patterns require knowing the key format in advance. Entropy catches zero-day API key formats and novel secret structures the 16-pattern set has never seen.
+NIST 800-171 control: 3.13.10 — Employ FIPS-validated cryptography. Preventing key material from leaving the network satisfies this control.`,
+      ["entropy", "shannon", "api-key", "secret", "token", "jwt", "private-key", "detection", "zero-day"]
+    ),
+
+    node(
+      "product_sprint1_mvp",
+      "customer",
+      "Sprint 1 MVP — Jordan's 10-minute deploy and PDF flow",
+      `Sprint 1 goal: Jordan deploys HoundShield in under 10 minutes and exports a PDF she can hand to her C3PAO assessor.
+Required flow end-to-end:
+1. Visit houndshield.com → sign up (Stripe Free tier)
+2. Dashboard shows Docker pull command: docker pull houndshield/proxy:latest
+3. Set one environment variable: OPENAI_API_KEY=<her-key>
+4. docker run -p 8080:8080 houndshield/proxy — proxy is running
+5. Change ChatGPT proxy URL to http://localhost:8080
+6. Send 3 test prompts: one with SSN, one with CUI phrase, one clean
+7. Dashboard shows 3 events: 2 blocked, 1 allowed
+8. Click "Export PDF" — C3PAO-ready audit report downloads
+Total time target: under 10 minutes for a non-technical IT manager.
+PDF contents: timestamped event log, NIST 800-171 control mapping (AC.L2-3.1.3, AU.L2-3.3.1, SI.L2-3.14.6), SPRS score improvement estimate (+15 to +30 points).`,
+      ["jordan", "sprint", "mvp", "docker", "deploy", "pdf", "c3pao", "10-minutes", "flow", "onboarding"]
+    ),
+
+    node(
+      "market_customer_discovery",
+      "customer",
+      "Customer discovery framework — 5 validated open-ended questions",
+      `Five questions that reveal truth without leading the witness. Open-ended — no yes/no answers.
+1. "Walk me through what happens when one of your engineers pastes something into ChatGPT today — who knows about it, who doesn't?"
+2. "When your C3PAO assessor asks about AI tool controls, what do you currently show them?"
+3. "How many people in your org use ChatGPT or Copilot? How many are supposed to?"
+4. "What would happen if a CUI document was pasted into ChatGPT by mistake — would anyone know?"
+5. "If you could prove to your C3PAO that no CUI ever reached an external AI server, what would that be worth to your next assessment?"
+Validation signals that prove urgency and purchase intent:
+- Jordan says "I have no answer for my C3PAO" (immediate pain)
+- Engineers admit using personal hotspots to bypass DNS block (policy is already failing)
+- C3PAO pre-assessment is booked within 90 days (deadline urgency)
+- Prime contractor has issued a mandate (external forcing function)`,
+      ["discovery", "questions", "c3pao", "validation", "jordan", "chatgpt", "signals", "urgency", "interview"]
+    ),
+
+    node(
+      "market_ooda_verdict",
+      "market",
+      "OODA Phase 1-5 analysis verdict — BUILD",
+      `Paul Graham-style pressure test results (OODA analysis, April 2026):
+Core testable hypothesis: DoD contractors pay $199-$499/month for local-only AI DLP that produces C3PAO audit evidence.
+Verdict: STRONG. Paul Graham would fund this in current form.
+Reasons:
+- Forcing function is federal law (DFARS 7012), not a preference. Enforcement date: November 2026.
+- Architecture moat: local-only cannot be copied without rebuilding competitors' entire cloud stack.
+- Distribution: C3PAO channel gives multiplied reach (each C3PAO = 10-50 contractor clients).
+- Painkiller, not vitamin: CMMC failure = potential contract loss on renewal ($500K-$50M contracts at risk).
+Top three failure modes ranked by severity:
+1. Enterprise DLP vendor (Microsoft, Broadcom) ships local CMMC-specific AI scanning before Nov 2026.
+2. Microsoft GCC High adds local AI prompt scanning to Copilot before enforcement date.
+3. CMMC enforcement deadline pushed again — removes urgency.
+Founder-market fit: STRONG. Deep proxy architecture knowledge + compliance regulatory depth.`,
+      ["ooda", "paul-graham", "verdict", "build", "failure-modes", "painkiller", "yc", "dfars", "enforcement"]
+    ),
+
+    node(
+      "product_evolution",
+      "market",
+      "Product evolution — Kaelus to HoundShield rebranding rationale",
+      `Original name: Kaelus.Online (Greek root, abstract). Renamed to HoundShield (April 2026).
+Strategic rationale:
+1. "Kaelus" has no meaning in the target buyer's vocabulary. "HoundShield" signals watchdog (hound = surveillance/tracking) + protection (shield). Jordan understands it without explanation.
+2. Domain houndshield.com acquired. All configs updated: Vercel project renamed, GitHub repo repointed.
+3. Messaging pivot: "AI compliance firewall" became "Local-only AI DLP for CMMC." CMMC-first positioning reduces scope and sharpens the beachhead.
+4. Code: 295 files renamed, all source code references updated from Kaelus to HoundShield.
+Pending production tasks (blockers):
+- Stripe webhook still points to kaelus.online — must update at dashboard.stripe.com/webhooks to https://houndshield.com/api/stripe/webhook. This blocks all paid subscription completions.
+- Supabase migrations 003 and 004 not pushed to production DB — run: cd compliance-firewall-agent && npx supabase db push`,
+      ["rebrand", "kaelus", "houndshield", "stripe", "webhook", "migration", "open-source", "blocker"]
+    ),
+
+    node(
+      "tool_ecosystem",
+      "architecture",
+      "Developer tooling ecosystem — tools used to build HoundShield",
+      `Key tools integrated into the HoundShield development workflow:
+- Firecrawl: web scraping for Brain AI knowledge ingestion. Wired in lib/brain-ai/firecrawl-updater.ts. Fetches competitor pages, NIST docs, regulatory updates.
+- Context7: injects up-to-date, version-specific library docs into Claude Code sessions. Prevents hallucinated APIs.
+- claude-mem / episodic-memory MCP: persistent memory across Claude Code sessions. Stores decisions, preferences, lessons learned.
+- browser-harness / browser-use: browser automation for testing AI provider proxy integrations end-to-end.
+- code-review-graph MCP: tree-sitter codebase graph + BM25 impact analysis. Run before lib/gateway/ changes to get impact radius. 6.8x token reduction vs full traversal.
+- Superpowers plugin (obra/superpowers): enforces brainstorming → TDD → code review workflow in every session.
+- GSD (Get Shit Done): spec-driven development — interviews user, builds plan, executes phase by phase with verification gates.
+- caveman mode: token-efficient response protocol for dense sessions. Drops filler, keeps technical substance.`,
+      ["firecrawl", "context7", "browser-use", "gsd", "superpowers", "tooling", "workflow", "mcp", "caveman"]
+    ),
   ];
 }

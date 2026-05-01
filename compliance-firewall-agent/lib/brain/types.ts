@@ -1,6 +1,13 @@
 export type Confidence = "high" | "medium" | "low";
 
-export type DomainTopic = "cmmc-l2" | "hipaa" | "soc2" | "competitors" | "market";
+export type DomainTopic =
+  | "cmmc-l2"
+  | "hipaa"
+  | "soc2"
+  | "competitors"
+  | "market"
+  | "product-roadmap"
+  | "architecture";
 
 export interface KnowledgeFact {
   claim: string;

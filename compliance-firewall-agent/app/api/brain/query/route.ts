@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
       {
         success: false,
         error: "Provide ?q=<question> (min 3 chars)",
-        available_domains: ["cmmc", "hipaa", "soc2", "competitors", "market"],
+        available_domains: ["cmmc-l2", "hipaa", "soc2", "competitors", "market", "product-roadmap", "architecture", "nist", "customer", "pricing"],
         example: "/api/brain/query?q=Why+is+HoundShield+CMMC+compliant",
       },
       { status: 400 }
