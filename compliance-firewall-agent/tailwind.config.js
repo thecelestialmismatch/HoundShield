@@ -17,30 +17,30 @@ module.exports = {
           200: "#F5F0E8",
           DEFAULT: "#FAF7F2",
         },
-        /* ── Neon accent (orange-500 alias) ──────────────────── */
+        /* ── Neon accent (coral alias) ───────────────────────── */
         neon: {
-          DEFAULT: "#F97316",
-          light:   "#FB923C",
-          dark:    "#EA580C",
+          DEFAULT: "#DA7756",
+          light:   "#E48B6A",
+          dark:    "#C96441",
         },
-        /* ── Brand orange scale ──────────────────────────────── */
+        /* ── Brand coral scale — Anthropic/Claude palette ───── */
         brand: {
-          50:  "#FFF7ED",
-          100: "#FFEDD5",
-          200: "#FED7AA",
-          300: "#FDBA74",
-          400: "#FB923C",   /* orange-400 — light accent */
-          500: "#F97316",   /* orange-500 */
-          600: "#EA580C",   /* orange-600 — PRIMARY CTA */
-          700: "#C2410C",   /* orange-700 — pressed/dark */
-          800: "#9A3412",   /* orange-800 */
-          900: "#7C2D12",   /* orange-900 */
+          50:  "#FDF4F0",
+          100: "#FAE5DC",
+          200: "#F5C9B5",
+          300: "#EDA98A",
+          400: "#E48B6A",   /* claude.ai light accent */
+          500: "#DA7756",   /* Anthropic primary coral */
+          600: "#C96441",   /* PRIMARY CTA — pressed state */
+          700: "#B05230",   /* dark pressed */
+          800: "#8A3F23",   /* deep */
+          900: "#6B2F18",   /* deepest */
         },
         accent: {
-          DEFAULT: "#EA580C",
-          light:   "#FB923C",
-          dark:    "#C2410C",
-          muted:   "rgba(234, 88, 12, 0.08)",
+          DEFAULT: "#DA7756",
+          light:   "#E48B6A",
+          dark:    "#C96441",
+          muted:   "rgba(218, 119, 86, 0.08)",
         },
         success: {
           DEFAULT: "#10B981",
@@ -61,9 +61,9 @@ module.exports = {
           muted:   "rgba(245, 158, 11, 0.1)",
         },
         info: {
-          DEFAULT: "#EA580C",
-          light:   "#FB923C",
-          muted:   "rgba(234, 88, 12, 0.1)",
+          DEFAULT: "#DA7756",
+          light:   "#E48B6A",
+          muted:   "rgba(218, 119, 86, 0.1)",
         },
         /* ── Neutral dark scale ──────────────────────────────── */
         surface: {
@@ -138,10 +138,10 @@ module.exports = {
         "card":       "0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
         "card-hover": "0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.08)",
         "card-lg":    "0 20px 40px -10px rgba(0, 0, 0, 0.15)",
-        "glow-sm":    "0 0 15px -3px rgba(234, 88, 12, 0.2)",
-        "glow":       "0 0 30px -5px rgba(234, 88, 12, 0.25)",
-        "glow-lg":    "0 0 60px -10px rgba(234, 88, 12, 0.30)",
-        "glow-xl":    "0 0 80px -15px rgba(234, 88, 12, 0.35)",
+        "glow-sm":    "0 0 15px -3px rgba(218, 119, 86, 0.25)",
+        "glow":       "0 0 30px -5px rgba(218, 119, 86, 0.30)",
+        "glow-lg":    "0 0 60px -10px rgba(218, 119, 86, 0.35)",
+        "glow-xl":    "0 0 80px -15px rgba(218, 119, 86, 0.40)",
         "frost":      "0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
         "inner-light":"inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
       },
