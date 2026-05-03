@@ -121,11 +121,11 @@ export default function HomePage() {
               Setup
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-              Set up in five minutes.
+              From zero visibility to C3PAO-ready in 15 minutes.
             </h2>
             <p className="text-slate-400 mt-3 max-w-lg mx-auto">
-              Point your AI tools at a proxy URL. That&apos;s the whole installation. No firewall
-              rules, no network changes, no IT ticket required.
+              No firewall rules. No network changes. No IT ticket.
+              One environment variable and every AI prompt your team sends is logged, scanned, and audit-ready.
             </p>
           </FadeIn>
           <div className="grid sm:grid-cols-3 gap-5">
@@ -163,7 +163,7 @@ export default function HomePage() {
               Compliance
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-              Real numbers, not marketing claims.
+              The three questions your C3PAO will ask about AI.
             </h2>
           </FadeIn>
           <div className="grid sm:grid-cols-3 gap-6">
@@ -230,21 +230,35 @@ export default function HomePage() {
       {/* ── CTA ────────────────────────────────────────────── */}
       <section className="py-24 px-6">
         <FadeIn>
-          <div className="max-w-3xl mx-auto text-center border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-10 md:p-14">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-              Start your free CMMC assessment today
-            </h2>
-            <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-              Defense contractors who start now have 6–8 months to close gaps before assessments.
-              The average SPRS score for an unprepared contractor is −68.
-              Hound Shield shows you exactly where you stand — for free.
+          <div className="max-w-3xl mx-auto text-center border border-brand-400/20 bg-brand-400/[0.04] backdrop-blur-sm rounded-2xl p-10 md:p-14">
+            <p className="text-xs font-mono font-semibold text-brand-400 uppercase tracking-[0.2em] mb-4">
+              CMMC enforcement: November 2026
             </p>
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 bg-[#EA580C] hover:bg-[#e8b830] text-[#0a0a0a] font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
-            >
-              Get Started Free <ArrowRight className="w-4 h-4" />
-            </Link>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+              Your engineers are using ChatGPT.<br className="hidden sm:block" />
+              Your assessor is 6 months away.
+            </h2>
+            <p className="text-slate-400 mb-3 max-w-xl mx-auto leading-relaxed">
+              Every AI prompt your team sends is a potential CUI exfiltration event your C3PAO will ask about.
+              Hound Shield intercepts every one, generates the audit trail, and produces the PDF your assessor needs.
+            </p>
+            <p className="text-sm text-brand-400/80 font-mono mb-8">
+              Average unprotected contractor SPRS score: −68 &nbsp;·&nbsp; Deploy today: 15 minutes
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
+              >
+                Deploy Free — 15 Minutes <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/command-center/shield/reports"
+                className="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-medium text-sm transition-colors cursor-pointer"
+              >
+                See sample C3PAO report <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </FadeIn>
       </section>

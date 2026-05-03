@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # Hound Shield Proxy — one-command install
 # Usage: curl -sSL https://houndshield.com/install | bash
-#   -y / --yes    Non-interactive: uses env vars, skips all prompts
-#   --version     Print image tag and exit
+#   -y / --yes        Non-interactive: uses env vars, skips all prompts
+#   --version         Print image tag and exit
+#   --port=<n>        Override default port (8080)
+#   --uninstall       Stop and remove the proxy container
+#   --verify          Verify the running proxy is healthy
 set -euo pipefail
 
 PROXY_PORT="${PROXY_PORT:-8080}"
@@ -17,6 +20,48 @@ for arg in "$@"; do
     -y|--yes)         NON_INTERACTIVE=true ;;
     --version)        echo "houndshield-proxy:${IMAGE_VERSION}"; exit 0 ;;
     --port=*)         PROXY_PORT="${arg#--port=}" ;;
+    --uninstall)
+      echo "  Removing Hound Shield proxy..."
+      if docker ps -q --filter "name=houndshield-proxy" | grep -q .; then
+        docker stop houndshield-proxy >/dev/null && echo "  ✓ Container stopped."
+      fi
+      if docker ps -aq --filter "name=houndshield-proxy" | grep -q .; then
+        docker rm houndshield-proxy >/dev/null && echo "  ✓ Container removed."
+      fi
+      if docker volume ls -q --filter "name=houndshield-data" | grep -q .; then
+        read -rp "  Remove audit log volume (WARNING: deletes all local logs)? (y/N) " confirm
+        if [[ "$confirm" =~ ^[Yy]$ ]]; then
+          docker volume rm houndshield-data >/dev/null && echo "  ✓ Audit data volume removed."
+        else
+          echo "  Audit data volume retained (houndshield-data). Your logs are safe."
+        fi
+      fi
+      echo ""
+      echo "  Hound Shield proxy uninstalled successfully."
+      exit 0
+      ;;
+    --verify)
+      echo "  Verifying Hound Shield proxy on port ${PROXY_PORT}..."
+      if ! docker ps -q --filter "name=houndshield-proxy" | grep -q .; then
+        echo "  ERROR: houndshield-proxy container is not running."
+        echo "  Start it: docker start houndshield-proxy"
+        exit 1
+      fi
+      STATUS=$(curl -sf --max-time 5 "http://localhost:${PROXY_PORT}/health" 2>/dev/null || echo "failed")
+      if [[ "$STATUS" == *"ok"* ]]; then
+        echo "  ✓ Proxy healthy on port ${PROXY_PORT}"
+        echo ""
+        echo "  Test a CUI block (should get error response):"
+        echo "    curl -X POST http://localhost:${PROXY_PORT}/v1/chat/completions \\"
+        echo "      -H 'Content-Type: application/json' \\"
+        echo "      -d '{\"messages\":[{\"role\":\"user\",\"content\":\"CAGE 1ABC2 W911NF-23-C-0001\"}]}'"
+      else
+        echo "  ERROR: Proxy not responding on port ${PROXY_PORT}."
+        echo "  Check logs: docker logs houndshield-proxy"
+        exit 1
+      fi
+      exit 0
+      ;;
   esac
 done
 
