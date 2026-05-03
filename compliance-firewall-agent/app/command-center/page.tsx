@@ -63,6 +63,7 @@ import {
   getRemediationPriorities,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses } from "@/lib/shieldready/storage";
+import type { AssessmentResponse } from "@/lib/shieldready/types";
 // BarLineChartPlayer (Remotion) moved to legacy — using Recharts ComposedChart instead
 
 /* ── Chart Colors ──────────────────────────────────────────────── */
@@ -199,12 +200,16 @@ const recentEvents = [
 ];
 
 /* ── Tooltip ────────────────────────────────────────────────────── */
-function ChartTooltip({ active, payload, label }: any) {
+function ChartTooltip({ active, payload, label }: {
+  active?: boolean;
+  payload?: Array<{ name: string; value: number; color: string }>;
+  label?: string;
+}) {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-white border border-white/10 rounded-xl px-3 py-2 text-xs shadow-lg">
       <div className="text-slate-400 mb-1 font-mono">{label}</div>
-      {payload.map((item: any, i: number) => (
+      {payload.map((item, i: number) => (
         <div key={i} className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
           <span className="text-slate-500">{item.name}:</span>
@@ -261,7 +266,7 @@ function RevenueChart() {
    COMMAND CENTER OVERVIEW
    ══════════════════════════════════════════════════════════════════ */
 export default function CommandCenterOverview() {
-  const [responses, setResponses] = useState<any[]>([]);
+  const [responses, setResponses] = useState<AssessmentResponse[]>([]);
   const [mounted, setMounted] = useState(false);
   const [tokenData] = useState(generateTokenData);
   const [activeFilter, setActiveFilter] = useState<
@@ -287,7 +292,7 @@ export default function CommandCenterOverview() {
   );
 
   const responseMap = useMemo(
-    () => new Map(responses.map((r: any) => [r.controlId, r])),
+    () => new Map(responses.map((r) => [r.controlId, r])),
     [responses]
   );
   const statusCounts = useMemo(() => {

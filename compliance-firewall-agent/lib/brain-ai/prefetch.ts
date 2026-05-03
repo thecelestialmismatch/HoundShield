@@ -4,6 +4,8 @@
  * Pre-loads compliance data, scans project structure, and warms caches
  * before the first user interaction. Brain AI original implementation for Hound Shield.
  */
+import fs from "fs";
+import path from "path";
 
 export interface PrefetchEntry {
   key: string;
@@ -110,36 +112,31 @@ export function projectScan(rootPath = "."): ProjectScanResult {
   let fileCount = 0;
 
   try {
-    if (typeof require !== "undefined") {
-      const fs = require("fs") as typeof import("fs");
-      const path = require("path") as typeof import("path");
+    const check = (rel: string) => {
+      try { return fs.existsSync(path.join(rootPath, rel)); } catch { return false; }
+    };
 
-      const check = (rel: string) => {
-        try { return fs.existsSync(path.join(rootPath, rel)); } catch { return false; }
+    hasNextConfig    = check("next.config.js") || check("next.config.ts");
+    hasEnvFile       = check(".env") || check(".env.local");
+    hasSupabaseSchema = check("supabase/schema.sql") || check("supabase/migrations");
+    hasComplianceData = check("reference-data") || check("compliance-data");
+    hasTestSuite     = check("__tests__") || check("tests") || check("spec");
+
+    try {
+      const walk = (dir: string, depth = 0): number => {
+        if (depth > 3) return 0;
+        let count = 0;
+        for (const f of fs.readdirSync(dir)) {
+          if (f.startsWith(".") || f === "node_modules") continue;
+          const full = path.join(dir, f);
+          const stat = fs.statSync(full);
+          if (stat.isDirectory()) count += walk(full, depth + 1);
+          else count++;
+        }
+        return count;
       };
-
-      hasNextConfig    = check("next.config.js") || check("next.config.ts");
-      hasEnvFile       = check(".env") || check(".env.local");
-      hasSupabaseSchema = check("supabase/schema.sql") || check("supabase/migrations");
-      hasComplianceData = check("reference-data") || check("compliance-data");
-      hasTestSuite     = check("__tests__") || check("tests") || check("spec");
-
-      try {
-        const walk = (dir: string, depth = 0): number => {
-          if (depth > 3) return 0;
-          let count = 0;
-          for (const f of fs.readdirSync(dir)) {
-            if (f.startsWith(".") || f === "node_modules") continue;
-            const full = path.join(dir, f);
-            const stat = fs.statSync(full);
-            if (stat.isDirectory()) count += walk(full, depth + 1);
-            else count++;
-          }
-          return count;
-        };
-        fileCount = walk(rootPath);
-      } catch { /* ignore */ }
-    }
+      fileCount = walk(rootPath);
+    } catch { /* ignore */ }
   } catch { /* non-Node environment */ }
 
   return {
