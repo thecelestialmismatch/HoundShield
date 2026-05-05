@@ -2,7 +2,7 @@
 name: deploy
 ---
 
-Pre-deploy checklist for Kaelus.Online:
+Pre-deploy checklist for Hound Shield:
 
 ## 1. BUILD
 ```bash
@@ -30,7 +30,7 @@ If yes: `vercel --prod`
 Watch build logs.
 
 ## 6. POST-DEPLOY SMOKE TEST
-- https://kaelus.online loads
+- https://houndshield.com loads
 - Auth flow: signup → onboarding
 - Stripe webhook receiving events
 - Monitor Sentry first 10 minutes

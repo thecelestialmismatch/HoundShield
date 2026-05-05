@@ -39,6 +39,25 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-04-26
+
+### `??` does not narrow `string | string[]`
+**What:** `req.params.orgId ?? ""` still typed as `string | string[]` — 5 TypeScript build errors in server.ts after Express params destructuring.
+**Root cause:** `??` removes `null | undefined` only. `string | string[]` is never nullish, so the union is unchanged. Express `@types/express@^5` types `ParamsDictionary` values as `string | string[]` in some paths.
+**Rule:** For Express route params, cast at destructuring: `const orgId = req.params.orgId as string`. Named URL segments are always strings at runtime; the cast is safe and correct.
+
+### better-sqlite3 named params must be exhaustive
+**What:** `addQuarantineRow` threw `Missing named parameter "nist_control"` at runtime even though the column has a default.
+**Root cause:** better-sqlite3 requires every `@named` parameter in the SQL to be present in the bound object. SQLite column defaults don't substitute for missing JS-side params.
+**Rule:** Always spread explicit `null` defaults for optional columns before spreading the caller-supplied object: `{ pattern_name: null, nist_control: null, ...row }`.
+
+### Vitest module caching bleeds state across tests
+**What:** `sample_count toBe(10)` got 20 — a second test saw the previous test's DB writes.
+**Root cause:** Vitest caches ESM modules. `beforeEach` recreated the DB path env var but the singleton inside the module kept the old handle.
+**Rule:** Always call module-level `resetBaselineCache()` / `resetRateTracker()` / `closeOodaDb()` in `afterEach`. For count-based assertions, read the baseline value *before* the operation and assert the delta, not an absolute value.
+
+---
+
 ## 2026-04-20
 
 ### SSR crash with Recharts

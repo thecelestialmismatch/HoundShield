@@ -65,12 +65,17 @@
 - [ ] ruflo — workflow automation for onboarding email sequences
 
 ## Done
-- [x] `.claude/settings.json` — model, autoMemoryEnabled
-- [x] `.claude/agents/` — all 8 agents with memory: project and maxTurns: 20
-- [x] `.claude/skills/` — all 8 skills including browser-harness, firecrawl-ingest, swarm-orchestrate, anywhere-guard
-- [x] `.claude/hooks/pre-commit.sh` — tsc + eslint + npm test gates
+- [x] **OODA loop — full behavioral DLP engine** (`proxy/ooda/`) — commit `984c3b36`
+  - 10 source files: types, db, rate-tracker, baseline, observe, orient, decide, act, loop, server migration
+  - 49 vitest tests, real SQLite temp dirs, zero mocks — all green
+  - `npm run build` clean, `npm test` 49/49
+  - New endpoints: `/v1/quarantine`, `/v1/baselines/:entityId`, `/v1/policy/:orgId`
 - [x] OODA Phase 1-5 strategic analysis — verdict: BUILD, PG would fund this
 - [x] PRD v2 — `docs/HOUNDSHIELD-PRD-v2.md` with manager mode + sprint plan
 - [x] Brain AI knowledge graph — `lib/brain-ai/knowledge-graph.ts` (BM25, seed knowledge, TTL-aware)
 - [x] Brain AI query interface — `lib/brain-ai/brain-query.ts` (ask, addKnowledge, marketCheck)
 - [x] CLAUDE.md — manager mode added
+- [x] `.claude/settings.json` — model, autoMemoryEnabled, code-review-graph hooks
+- [x] `.claude/agents/` — all 8 agents with memory: project and maxTurns: 20
+- [x] `.claude/skills/` — all 8 skills including browser-harness, firecrawl-ingest, swarm-orchestrate, anywhere-guard
+- [x] `.claude/hooks/pre-commit.sh` — tsc + eslint + npm test gates
