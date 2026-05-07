@@ -3,15 +3,16 @@
 ## Active
 <!-- Move items here when starting work -->
 
-## Sprint 1 (Week of 2026-04-28) — Jordan deploys in 10 minutes, exports a PDF
+## Sprint 1 (Week of 2026-04-28) — Jordan deploys in 10 minutes, exports a PDF ✅ MERGED PR #62
 
 **Sprint goal:** One customer deploys HoundShield and exports a PDF audit report for her C3PAO.
 
-- [ ] Complete `proxy/install.sh` — curl pipe bash, starts Docker, configures proxy URL, <5min on fresh machine
-- [ ] Wire PDF generation in `app/api/reports/generate/` (use @react-pdf/renderer — lighter than Puppeteer)
-- [ ] E2E test: proxy intercepts ChatGPT traffic -> CUI flagged -> PDF exported
-- [ ] Landing page: remove all decorative gradients, rewrite hero copy to Jordan's pain (see HOUNDSHIELD-PRD-v2.md Section 1)
-- [ ] Push Supabase migrations 003+004 to production
+- [x] Complete `proxy/install.sh` — curl pipe bash, starts Docker, configures proxy URL + `--uninstall` + `--verify` flags
+- [x] Wire PDF generation in `app/api/reports/generate/` — jsPDF, 5-page C3PAO report, tier gating, demo mode
+- [x] E2E test: proxy intercepts ChatGPT traffic -> CUI flagged -> PDF exported (105/105 passing)
+- [x] Landing page: Jordan pain copy ("Your engineers are using ChatGPT. Your assessor is 6 months away."), Anthropic/Claude coral palette, `/docs/quickstart` page
+- [ ] Push Supabase migrations 003+004 to production — requires `NEXT_PUBLIC_SUPABASE_*` env vars (manual step)
+- [ ] Set `OPENROUTER_API_KEY` in Vercel — Brain AI shows "trouble connecting" on live site (manual step)
 
 ## Sprint 2 (Week of 2026-05-05) — First C3PAO partner, first paying customer
 
@@ -79,3 +80,4 @@
 - [x] `.claude/agents/` — all 8 agents with memory: project and maxTurns: 20
 - [x] `.claude/skills/` — all 8 skills including browser-harness, firecrawl-ingest, swarm-orchestrate, anywhere-guard
 - [x] `.claude/hooks/pre-commit.sh` — tsc + eslint + npm test gates
+- [x] Sprint 1 complete — PR #62 merged 2026-05-03: install.sh, PDF generation + tests, E2E proxy→CUI→PDF, Jordan landing page, /docs/quickstart, Anthropic coral palette, 105/105 tests passing

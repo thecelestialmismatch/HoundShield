@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yantr/Desktop/Kaelus.Online-main/.claude/hooks/lint-on-save.sh",
+            "command": "/Users/yantr/Desktop/HoundShield.Online-main/.claude/hooks/lint-on-save.sh",
             "timeout": 10000
           }
         ]
@@ -69,7 +69,7 @@
           },
           {
             "type": "command",
-            "command": "/Users/yantr/Desktop/Kaelus.Online-main/.claude/hooks/pre-commit.sh",
+            "command": "/Users/yantr/Desktop/HoundShield.Online-main/.claude/hooks/pre-commit.sh",
             "timeout": 60000
           }
         ]

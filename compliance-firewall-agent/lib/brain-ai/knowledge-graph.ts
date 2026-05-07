@@ -835,17 +835,17 @@ Founder-market fit: STRONG. Deep proxy architecture knowledge + compliance regul
     node(
       "product_evolution",
       "market",
-      "Product evolution — Kaelus to HoundShield rebranding rationale",
-      `Original name: Kaelus.Online (Greek root, abstract). Renamed to HoundShield (April 2026).
+      "Product evolution — HoundShield to HoundShield rebranding rationale",
+      `Original name: houndshield.com (Greek root, abstract). Renamed to HoundShield (April 2026).
 Strategic rationale:
-1. "Kaelus" has no meaning in the target buyer's vocabulary. "HoundShield" signals watchdog (hound = surveillance/tracking) + protection (shield). Jordan understands it without explanation.
+1. "HoundShield" has no meaning in the target buyer's vocabulary. "HoundShield" signals watchdog (hound = surveillance/tracking) + protection (shield). Jordan understands it without explanation.
 2. Domain houndshield.com acquired. All configs updated: Vercel project renamed, GitHub repo repointed.
 3. Messaging pivot: "AI compliance firewall" became "Local-only AI DLP for CMMC." CMMC-first positioning reduces scope and sharpens the beachhead.
-4. Code: 295 files renamed, all source code references updated from Kaelus to HoundShield.
+4. Code: 295 files renamed, all source code references updated from HoundShield to HoundShield.
 Pending production tasks (blockers):
-- Stripe webhook still points to kaelus.online — must update at dashboard.stripe.com/webhooks to https://houndshield.com/api/stripe/webhook. This blocks all paid subscription completions.
+- Stripe webhook still points to houndshield.com — must update at dashboard.stripe.com/webhooks to https://houndshield.com/api/stripe/webhook. This blocks all paid subscription completions.
 - Supabase migrations 003 and 004 not pushed to production DB — run: cd compliance-firewall-agent && npx supabase db push`,
-      ["rebrand", "kaelus", "houndshield", "stripe", "webhook", "migration", "open-source", "blocker"]
+      ["rebrand", "houndshield", "houndshield", "stripe", "webhook", "migration", "open-source", "blocker"]
     ),
 
     node(
