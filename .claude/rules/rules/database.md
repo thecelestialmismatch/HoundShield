@@ -4,7 +4,7 @@ paths:
   - "compliance-firewall-agent/lib/supabase*"
 ---
 
-# Database Rules — Kaelus.Online
+# Database Rules — HoundShield.Online
 
 ## Supabase
 - RLS enabled on EVERY new table — no exceptions

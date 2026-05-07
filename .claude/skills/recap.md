@@ -90,4 +90,4 @@ Active branch: `claude/modest-chaplygin-8bfe99`
 
 Immediate next: `proxy/install.sh` — curl pipe bash, starts Docker, sets proxy URL in <5 min.
 
-Blockers: Stripe webhook (houndshield.com → houndshield.com) · Supabase migrations 003+004 not in prod.
+Blockers: Stripe webhook (kaelus.online → houndshield.com) · Supabase migrations 003+004 not in prod.
