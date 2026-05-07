@@ -1,4 +1,4 @@
-# KAELUS.AI BEAST SYSTEM MANIFEST
+# houndshield.com BEAST SYSTEM MANIFEST
 
 ## What You've Got
 

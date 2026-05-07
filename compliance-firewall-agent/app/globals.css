@@ -62,8 +62,8 @@
   }
 
   body {
-    background-color: #0a0a0a;
-    color: #FAF7F2;
+    background-color: #ffffff;
+    color: #0f172a;
     line-height: 1.6;
   }
 
@@ -787,6 +787,8 @@ html:not(.dark) body {
 /* Override hardcoded dark section/div backgrounds */
 html:not(.dark) [class*="[#0a0a0a]"],
 html:not(.dark) [class*="[#0a0a10]"],
+html:not(.dark) [class*="[#0a0a12]"],
+html:not(.dark) [class*="[#07070b]"],
 html:not(.dark) [class*="[#0e0e18]"],
 html:not(.dark) [class*="[#0a0a0a]/"] {
   background-color: #f0f4f8 !important;

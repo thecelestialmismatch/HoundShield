@@ -44,7 +44,7 @@ there (position calculation, not text measurement).
 **What it is:** MCP plugin providing FTS5-indexed session continuity across Claude Code
 sessions. Compresses context from 315KB to 5.4KB.  
 **Audit finding:** Clean architecture, 46 tests, no hype copy, IBM Plex font.  
-**Applied:** context-mode is available as an MCP. Run in Kaelus Claude Code sessions
+**Applied:** context-mode is available as an MCP. Run in HoundShield Claude Code sessions
 to reduce context compaction issues during multi-file gateway refactors.
 
 ### code-review-graph (tirth8205)
@@ -69,13 +69,13 @@ definitions into a swarmvault corpus for semantic classification lookup.
 ### superpowers (obra)
 **URL:** https://github.com/obra/superpowers  
 **What it is:** The skill framework powering Claude Code's `Skill` tool.  
-**Applied:** Kaelus already uses this via `superpowers:` skill prefix in CLAUDE.md.
+**Applied:** HoundShield already uses this via `superpowers:` skill prefix in CLAUDE.md.
 
 ### TurboQuant (Google Research)
 **URL:** https://research.google/blog/turboquant-redefining-ai-efficiency-with-extreme-compression/  
 **What it is:** 3-bit KV cache compression, 8x faster attention, zero accuracy loss.  
-**Applied:** Not applicable — Kaelus uses Anthropic's API, not self-hosted inference.
-Relevant if Kaelus ever self-hosts models for on-premise enterprise deployments.
+**Applied:** Not applicable — HoundShield uses Anthropic's API, not self-hosted inference.
+Relevant if HoundShield ever self-hosts models for on-premise enterprise deployments.
 
 ---
 
@@ -93,11 +93,11 @@ scan counts, organizations, and threats blocked.
 
 ### claw-code (ultraworkers)
 185K GitHub stars. Rust-based Claude Code alternative. If customers use claw-code,
-Kaelus's proxy URL approach (no client changes needed) is the right bet — it's
+HoundShield's proxy URL approach (no client changes needed) is the right bet — it's
 framework-agnostic.
 
 ### badclaude / OpenWhip (GitFrog1111)
-Adversarial Claude behavior research. Useful for red-teaming Kaelus's prompt
+Adversarial Claude behavior research. Useful for red-teaming HoundShield's prompt
 interception — what prompt injections does the compliance scanner need to catch?
 
 ---
@@ -133,7 +133,7 @@ Nodes cover gaps not previously in either KB store.
 
 ### Product Evolution (`product_evolution`)
 **Source:** Rebranding project (April 2026, ~295 files renamed)  
-**Added:** Kaelus → HoundShield rationale. Pending blockers: Stripe webhook still on kaelus.online (update at dashboard.stripe.com/webhooks), Supabase migrations 003+004 not pushed to prod.
+**Added:** HoundShield → HoundShield rationale. Pending blockers: Stripe webhook still on houndshield.com (update at dashboard.stripe.com/webhooks), Supabase migrations 003+004 not pushed to prod.
 
 ### Tool Ecosystem (`tool_ecosystem`)
 **Source:** Development workflow audit  

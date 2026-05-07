@@ -2,7 +2,7 @@
 ## Paul Graham-Style Pressure Test and Full Validation Pipeline
 
 *Grounded in a complete read of the codebase: proxy/scanner.ts, proxy/patterns/index.ts,
-proxy/server.ts, docs/KAELUS-PRD.md, ROADMAP.md, advisory/architecture.md,
+proxy/server.ts, docs/HOUNDSHIELD-PRD.md, ROADMAP.md, advisory/architecture.md,
 brain/research.md, and the full Next.js application structure.*
 
 *Written: 2026-04-26*
