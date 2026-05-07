@@ -401,7 +401,7 @@ It is token-efficient. The knowledge graph is compressed. Agents load the releva
   "current_phase": "Month 1 — Foundation",
   "critical_blockers": [
     "Supabase replacement (CUI incompatibility) — MUST COMPLETE BEFORE FIRST CUSTOMER",
-    "houndshield rebrand (Kaelus → houndshield) — complete in Week 1"
+    "houndshield rebrand (HoundShield → houndshield) — complete in Week 1"
   ]
 }
 ```

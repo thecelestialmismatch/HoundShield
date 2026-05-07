@@ -136,11 +136,11 @@ try {
   // Build Docker
   console.log('✓ Building Docker image...');
   const timestamp = Math.floor(Date.now() / 1000);
-  execSync(`docker build -t kaelus:staging-${timestamp} .`, { stdio: 'inherit' });
+  execSync(`docker build -t houndshield:staging-${timestamp} .`, { stdio: 'inherit' });
   
   console.log('✅ Staging deployment ready (Docker image built)');
-  console.log(`   Image: kaelus:staging-${timestamp}`);
-  console.log('   Run: docker run -p 3000:3000 kaelus:staging-[timestamp]');
+  console.log(`   Image: houndshield:staging-${timestamp}`);
+  console.log('   Run: docker run -p 3000:3000 houndshield:staging-[timestamp]');
   
 } catch (error) {
   console.error('❌ Deployment failed:', error.message);
@@ -170,7 +170,7 @@ try {
   
   // Docker
   console.log('✓ Building Docker image...');
-  execSync('docker build -t kaelus:prod-latest .', { stdio: 'inherit' });
+  execSync('docker build -t houndshield:prod-latest .', { stdio: 'inherit' });
   
   // Update session state
   console.log('✓ Updating session state...');
@@ -183,7 +183,7 @@ try {
   fs.writeFileSync('SESSION_STATE.json', JSON.stringify(state, null, 2));
   
   console.log('✅ Production deployment ready');
-  console.log('   Image: kaelus:prod-latest');
+  console.log('   Image: houndshield:prod-latest');
   console.log('   Next: Deploy to production environment');
   
 } catch (error) {
