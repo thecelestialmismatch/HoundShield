@@ -1,5 +1,5 @@
 /**
- * Kaelus AI Firewall — Popup Script
+ * HoundShield AI Firewall — Popup Script
  * Reads chrome.storage.session for recent findings, renders them safely.
  * No innerHTML used.
  */
