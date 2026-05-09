@@ -9,11 +9,13 @@ export const metadata: Metadata = {
   title: "HoundShield Blog — CMMC, AI Security, and DFARS Compliance",
   description:
     "Technical deep-dives on CMMC Level 2 compliance, AI data exfiltration risk, and how the Defense Industrial Base can use AI safely without violating DFARS 252.204-7012.",
+  alternates: { canonical: "https://houndshield.com/blog" },
   openGraph: {
     title: "HoundShield Blog — CMMC, AI Security, and DFARS Compliance",
     description:
       "Technical deep-dives on CMMC Level 2 compliance, AI data exfiltration risk, and how the Defense Industrial Base can use AI safely.",
     type: "website",
+    url: "https://houndshield.com/blog",
   },
 };
 

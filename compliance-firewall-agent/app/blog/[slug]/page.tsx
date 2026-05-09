@@ -18,14 +18,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return { title: "Not Found" };
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
   return {
     title: `${post.title} — HoundShield Blog`,
     description: post.excerpt,
+    alternates: { canonical: `${baseUrl}/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
       publishedTime: post.publishedAt,
+      url: `${baseUrl}/blog/${post.slug}`,
     },
   };
 }
@@ -152,8 +155,28 @@ export default async function BlogPostPage({ params }: Props) {
   const post = getPost(slug);
   if (!post) notFound();
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const articleJsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    url: `${baseUrl}/blog/${post.slug}`,
+    author: { "@type": "Organization", name: "HoundShield", url: baseUrl },
+    publisher: {
+      "@type": "Organization",
+      name: "HoundShield",
+      url: baseUrl,
+      logo: { "@type": "ImageObject", url: `${baseUrl}/logo.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${baseUrl}/blog/${post.slug}` },
+  });
+
   return (
     <div className="bg-[#07070b] min-h-screen">
+      <script type="application/ld+json">{articleJsonLd}</script>
       <Navbar variant="dark" />
 
       <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
