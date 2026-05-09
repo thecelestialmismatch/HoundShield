@@ -1,120 +1,174 @@
-# HoundShield — HERMES AI Swarm Architecture
-**Version:** 1.0 | **Date:** May 2026
-
-## Overview
-
-HERMES is a 7-agent AI swarm that operates HoundShield's development autonomously. Each agent runs an OODA loop (Observe → Orient → Decide → Act), self-corrects via `tasks/lessons.md`, and self-terminates if its KPI is missed 3 cycles in a row.
-
-**Prime directive (visible in every agent's system prompt):** $5,000 MRR in 30 days.
+# HoundShield — AI Team Architecture
+**Version:** 2.0 | May 2026 | BEAST PHASE2 Evolution
+**Status:** Production-ready. These are real agents doing real work.
 
 ---
 
-## Agent Definitions
+## Philosophy
 
-### ATLAS — Backend + Infrastructure
-**KPI:** Zero prod 5xx errors. Migrations applied within 24h of authoring.
-**Owns:** Supabase schema, migrations, all API routes, Stripe wiring, auth middleware.
-**OODA cadence:** Per PR. Checks migration safety before applying. Never drops columns without a fill-and-deprecate cycle.
-**Hard limits:** Never touches frontend components. Never modifies scanner.ts or patterns/index.ts without compliance-specialist agent approval.
+HoundShield's AI system has two distinct jobs:
+1. **Product intelligence** — the scanning/detection pipeline that Jordan pays for
+2. **Founder intelligence** — the agent team that helps the solo founder ship faster
 
-### FORGE — Frontend + UI
-**KPI:** Lighthouse performance >90. Landing page converts >8% visitor → signup.
-**Owns:** Design system, all components, landing page, pricing page, light-mode rebuild.
-**OODA cadence:** Per component. Screenshots before/after every UI change.
-**Hard limits:** Never touches API routes. Never modifies compliance engine. Components max 500 lines.
-
-### CIPHER — LLM Orchestration
-**KPI:** Brain AI query latency <200ms. OpenRouter fallback rate <5%.
-**Owns:** OpenRouter routing, Brain AI knowledge graph, prompt chains, model selection.
-**OODA cadence:** Per AI feature. Monitors OpenRouter error rates.
-**Hard limits:** Never routes prompt content to external logging. Local-only data boundary is sacred.
-
-### STRIKER — Revenue + Growth
-**KPI:** $5,000 MRR by Day 30. 10 paying customers by Day 14.
-**Owns:** Pricing coherence, onboarding funnel, email sequences, partner program.
-**OODA cadence:** Daily. Checks conversion funnel metrics each morning.
-**Hard limits:** Never changes pricing without updating both pricing/page.tsx AND checkout/route.ts simultaneously.
-
-### GUARDIAN — QA + Testing
-**KPI:** Test coverage ≥80%. Zero regressions in compliance engine. Build passes on every commit.
-**Owns:** Test suite, pre-commit hooks, E2E flows, compliance accuracy verification.
-**OODA cadence:** Per commit. Blocks merge if coverage drops below 80%.
-**Hard limits:** Never modifies business logic to make tests pass. Fix the code, not the test.
-
-### SCRIBE — Documentation
-**KPI:** Every shipped feature has docs within 24h. Zero stale references in CLAUDE.md or PRD.
-**Owns:** CLAUDE.md, PRD.md, ROADMAP.md, README, docs/ folder, AI architecture docs.
-**OODA cadence:** End of each sprint. Audits docs for staleness.
-**Hard limits:** Never makes up features. Only documents what is shipped.
-
-### ORACLE — Research
-**KPI:** 3 competitor signals delivered per week. Market opportunity score updated monthly.
-**Owns:** Market research, competitor mapping, product idea validation, ICP refinement.
-**OODA cadence:** Weekly. Produces structured research reports in docs/market-research/.
-**Hard limits:** No implementation work. Research only. Hands findings to STRIKER.
+These are different systems with different models and different latency requirements.
+Do not conflate them.
 
 ---
 
-## OODA Loop Protocol
+## System 1: Product Intelligence (What Jordan Pays For)
 
-Every agent follows this sequence for every task:
+### The Scan Pipeline
 
 ```
-OBSERVE:  Read tasks/todo.md. What is the current state?
-ORIENT:   Does this task serve the prime objective ($5K MRR)?
-DECIDE:   Is this the highest-leverage action available right now?
-ACT:      Execute. Mark done. Log to tasks/lessons.md if anything unexpected.
+User AI Query
+     │
+     ▼
+[Proxy Intercept] ←── proxy/server.ts
+     │
+     ▼
+[Risk Classifier] ←── lib/classifier/risk-engine.ts
+  16 pattern engines
+  <10ms deterministic
+  No LLM — pure regex + ML patterns
+     │
+     ├── BLOCK → log + return 403 with explanation
+     │
+     └── PASS → forward to upstream AI
+                    │
+                    ▼
+              [Metadata Logger] ←── proxy/storage.ts
+              logs: timestamp, matched_patterns, controls_affected, scan_latency
+              NEVER logs: prompt content (local-only data boundary)
+                    │
+                    ▼
+              [Dashboard Sync] ←── proxy/webhook.ts
+              sends: stats only (counts, latency, compliance_status)
+              never: CUI content
 ```
 
-**Self-correction:** If an agent misses its KPI 3 cycles in a row, it:
-1. Logs the miss to `tasks/lessons.md` with root cause
-2. Escalates to `team-lead` agent
-3. Pauses until team-lead issues new directive
+**Critical rule:** Prompt content never leaves the customer's machine. Only license key hash + prompt count + compliance status go to HoundShield servers. Violating this is an immediate product kill — it makes HoundShield another Nightfall.
+
+### Risk Classifier Engines (16 total)
+1. CUI Pattern Matcher (NIST 800-171 vocabulary)
+2. Export Control Detector (EAR/ITAR terms)
+3. PII Scanner (SSN, DOB, address patterns)
+4. PHI Detector (HIPAA-defined health identifiers)
+5. Contract Number Extractor (DoD contract format: W911/N00014/FA8650)
+6. Classification Marker Scanner (FOUO, CUI//SP-CTI, etc.)
+7. Technical Drawing Indicator (CAD file names, part numbers)
+8. Personnel Data Detector (clearance levels, positions)
+9. Financial Data Scanner (budget codes, CAGE codes)
+10. Network Topology Detector (IP ranges, system names in defense context)
+11. Cryptographic Material Scanner (key material patterns)
+12. Source Code IP Detector (file paths, proprietary function signatures)
+13. Biometric Data Detector
+14. Geolocation Data Scanner (coordinate patterns in classified context)
+15. Aggregation Risk Assessor (individually benign + collectively CUI)
+16. Entropy Anomaly Detector (encoded/obfuscated data)
+
+**Model:** Pure deterministic (regex + keyword matching + simple ML). No LLM in the scan path. This is intentional — LLMs add latency (50-200ms), cost, and non-determinism. Jordan needs a consistent answer, not a probabilistic one.
 
 ---
 
-## Escalation Paths
+## System 2: Founder Intelligence (Internal Tooling)
+
+### Agent Team (`.claude/agents/`)
+
+| Agent | File | Responsibility | Max Turns |
+|-------|------|----------------|-----------|
+| Team Lead | team-lead.md | Sprint gating, escalation, Jordan-check | 5 |
+| Code Reviewer | code-reviewer.md | PR review against security + Jordan criteria | 10 |
+| Security Auditor | security-auditor.md | CMMC accuracy, data boundary checks | 8 |
+| Compliance Specialist | compliance-specialist.md | NIST 800-171 control accuracy | 10 |
+| Test Writer | test-writer.md | Test coverage for scanner + Stripe + auth | 15 |
+| Debugger | debugger.md | Runtime errors, failed builds | 10 |
+| Brain Updater | brain-updater.md | Knowledge graph ingestion | 8 |
+| Doc Writer | doc-writer.md | PRD, roadmap, user-facing docs | 10 |
+| Refactorer | refactorer.md | Clean code without scope creep | 10 |
+
+### Handoff Logic
 
 ```
-Any agent → team-lead:  CRITICAL finding, KPI miss ×3, scope ambiguity
-team-lead → user:       Architecture decision, revenue strategy change, security incident
+Founder → Team Lead (always the first check)
+               │
+               ├── Is this in sprint? → YES → assign to specialist agent
+               │
+               └── Is this in sprint? → NO → block + explain Jordan priority
+                         │
+                         └── Override approved? → YES → assign with context
 ```
 
-**team-lead agent** (`/.claude/agents/team-lead.md`): Reviews escalations, enforces cross-agent consistency, resolves conflicts, maintains the verification standard.
+**Escalation rule:** Any CRITICAL finding (data boundary violation, Stripe webhook error, auth bypass) → immediately invoke team-lead before touching code.
+
+### The LLM Council (Brain AI)
+
+For strategic decisions (pivots, positioning, pricing changes) the LLM Council runs 5 advisor perspectives before any decision:
+
+| Advisor | Role | Color |
+|---------|------|-------|
+| The Contrarian | Challenges assumptions, finds fatal flaws | Red |
+| The First Principles Thinker | Strips to fundamentals | Purple |
+| The Expansionist | Sees 10x opportunities | Green |
+| The Outsider | Jordan's perspective, buyer psychology | Orange |
+| The Executor | Revenue-first, ship now | Blue |
+
+Council threshold: Only run for decisions with >$1K MRR impact. Not for code.
 
 ---
 
-## Reconstitution Protocol
+## System 3: Brain AI Knowledge Graph
 
-If an agent is lost mid-task (context overflow, error):
-1. Read `tasks/todo.md` — find the `in_progress` item
-2. Read `tasks/lessons.md` — understand what was attempted
-3. Read the affected files directly — reconstruct state from code
-4. Resume from last verified checkpoint
+**File:** `lib/brain-ai/knowledge-graph.ts`
+**Purpose:** Queryable knowledge base for compliance accuracy and market intelligence
+
+### Data Categories
+- CMMC control library (110 NIST 800-171 Rev 2 controls, full text + SPRS weights)
+- Competitor profiles (Nightfall, Strac, Cyberhaven, Netskope, Purview — updated quarterly)
+- C3PAO directory (marketplace.cmmcab.org data)
+- Market research (CMMC timeline, DIB contractor counts, Phase 2 data)
+- Product history (decisions, rationale, evolution)
+
+### Query Interface
+```typescript
+// Internal use only — never exposed to Jordan's queries directly
+import { ask, addKnowledge } from '@/lib/brain-ai/brain-query';
+
+// Query
+const answer = await ask('What NIST controls does AI usage monitoring satisfy?');
+
+// Ingest
+await addKnowledge({
+  category: 'cmmc',
+  fact: 'AC.2.006 requires controlling access to CUI on portable devices',
+  source: 'NIST SP 800-171 Rev 2',
+  confidence: 1.0,
+});
+```
 
 ---
 
-## Inter-Agent Contracts
+## Model Routing Strategy
 
-Agents hand off via files, not direct communication:
+| Use Case | Model | Rationale |
+|----------|-------|-----------|
+| Scan pipeline | No LLM | Deterministic, <10ms |
+| Chat (FAQ) | Local FAQ → OpenRouter free tier | Cost zero for 80% of queries |
+| Chat (complex) | OpenRouter: Qwen3/Llama-70B | Free tier for MVP |
+| Agent work | claude-sonnet-4-5 | Best reasoning for compliance accuracy |
+| Brain AI ingestion | claude-haiku | Fast, cheap, bulk processing |
+| Council deliberation | claude-opus-4 | Strategic decisions only |
 
-| From     | To       | Via                          | Content                           |
-|----------|----------|------------------------------|-----------------------------------|
-| ORACLE   | STRIKER  | `docs/market-research/*.md`  | Market signals, competitor data   |
-| STRIKER  | FORGE    | `tasks/todo.md`              | Conversion funnel fixes needed    |
-| GUARDIAN | ATLAS    | `tasks/todo.md`              | Failing tests that need API fixes |
-| SCRIBE   | All      | `CLAUDE.md`, `docs/PRD.md`   | Updated source of truth           |
-| ATLAS    | GUARDIAN | PR diff                      | Schema changes to test            |
+**Budget rule:** OpenRouter free tier handles MVP traffic. Upgrade to paid models only when MRR > $2K.
 
 ---
 
-## Compliance Engine — Sacred Zone
+## What Is NOT AI (on purpose)
 
-The following files are owned by no agent and require multi-agent review before modification:
+- Stripe webhook handling — deterministic code
+- Auth flows — Supabase Auth
+- PDF generation — jsPDF deterministic templates
+- RLS policies — SQL
+- Rate limiting — token bucket algorithm
 
-- `proxy/scanner.ts` — stream scanner
-- `proxy/patterns/index.ts` — 16 detection patterns
-- `lib/classifier/` — CUI/PII/PHI classifier
-- `supabase/migrations/` — schema history
-
-Modification requires: GUARDIAN (test gate) + ATLAS (migration safety) + compliance-specialist agent review.
+Don't put an LLM in the path of anything that needs to be deterministic, auditable, or <50ms.
+Jordan's C3PAO will audit the evidence. It must be consistent, not probabilistic.

@@ -1,0 +1,318 @@
+/*!
+Theme Name: JayAbraham
+Theme URI: https://jayabrahamconsulting.com/blog/
+Author: Webprofits
+Author URI: https://webprofits.com.au/
+Description: Description
+Version: 1.0.0
+Tested up to: 5.4
+Requires PHP: 5.6
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: jayabraham
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+
+*/
+:root {
+	--colors--white: white;
+	--colors--black: black;
+	--colors--black-2: #02103f;
+
+	--colors--cream: #fbf9f6;
+	--colors--yellow: #efac25;
+	--colors--grey: #ededed;
+	--colors--grey-2: #a2a1a1;
+	--colors--grey-3: #f7f7f7;
+	--colors--navy: #142b6f;
+	--colors--light-purple: #9eb1ea;
+
+	--margin--marg-xxs: 0.8rem;
+	--margin--marg-xs: 1.25rem;
+	--margin--marg-s: 1.875rem;
+	--margin--marg-m: 2.5rem;
+	--margin--marg-l: 3.75rem;
+	--margin--marg-xl: 5.625rem;
+	--margin--marg-xxl: 8.75rem;
+
+	--padding--padd-xs: 1.25rem;
+	--padding--padd-s: 2.5rem;
+	--padding--padd-m: 3.75rem;
+	--padding--padd-l: 5.7rem;
+	--padding--padd-xl: 7.5rem;
+	--padding--padd-xxl: 8.75rem;
+	--padding--padd-xxxl: 10rem;
+}
+
+.site-main {
+	background: #fff;
+}
+
+.top-header {
+	padding: 0;
+}
+
+ul.social a {
+	background-color: #FFD600;
+	border: none;
+	transition: all 0.3s ease;
+}
+
+ul.social a:hover {
+	background: var(--colors--white);
+}
+
+ul.social a:hover svg,
+ul.social a:hover svg path {
+	fill: var(--colors--navy);
+}
+
+.column ul.social a {
+	background: none;
+	border: 1px solid var(--colors--grey);
+}
+
+.column ul.social a:hover svg,
+.column ul.social a:hover svg path {
+	fill: var(--colors--white);
+}
+
+.column ul.social a:hover {
+	background: var(--colors--navy);
+	border-color: var(--colors--navy)
+}
+
+.post-list {
+	max-width: 1440px;
+	width: 80%;
+	padding: var(--padding--padd-l) 0 var(--padding--padd-s);
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: var(--padding--padd-s);
+	margin: 0 auto;
+}
+
+.post-list article {
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	overflow: hidden;
+}
+
+.post-list article a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	font-size: unset;
+}
+
+.post-list .post-thumbnail {
+	height: 275px;
+	overflow: hidden;
+}
+
+.post-list .post-thumbnail img {
+	object-fit: cover;
+	min-width: 100%;
+	min-height: 100%;
+	width: auto;
+	height: auto;
+}
+
+.post-list .post-text {
+	padding: var(--margin--marg-s);
+	background: var(--colors--white);
+	height: calc(100% - 275px);
+}
+
+.post-list h3 {
+	font-size: 26px;
+	margin: 0 0 var(--margin--marg-xs);
+}
+
+nav.pagination {
+	text-align: center;
+	justify-content: center;
+	padding: 0 0 var(--padding--padd-l);
+	font-size: 1rem;
+	border: none;
+}
+
+nav.pagination .prev:before {
+	transform: rotate(180deg);
+	margin-left: 0;
+	margin-right: 5px;
+}
+
+nav.pagination .next:after,
+nav.pagination .prev:before {
+	display: inline-block;
+	content: "";
+	width: 14px;
+	height: 11px;
+	background-image: url(images/arrow-right-black.svg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	margin-left: 5px;
+}
+
+nav.pagination .next:hover:after,
+nav.pagination .prev:hover:before {
+	background-image: url(images/arrow-right-white.svg);
+}
+
+nav.pagination a {
+	background: var(--colors--white);
+	border: 1px solid var(--colors--grey);
+	transition: all 0.3s ease;
+}
+
+nav.pagination a:hover,
+nav.pagination .page-numbers.current {
+	background-color: var(--colors--navy);
+	color: var(--colors--white);
+}
+
+nav.pagination .next,
+nav.pagination .prev {
+	height: 40px;
+	padding: 0 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--colors--white);
+	border: 1px solid var(--colors--grey);
+	border-radius: 50px;
+}
+
+nav.pagination .page-numbers:not(.prev):not(.next) {
+	padding: 0;
+	width: 40px;
+	height: 40px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+}
+
+.single-cta.blog .single-cta-c {
+	padding: var(--padding--padd-m) 0;
+}
+
+.single-cta.blog {
+	background-color: var(--colors--white);
+	color: var(--colors--black2);
+}
+
+.single-article {
+	max-width: 960px;
+	width: 80%;
+	padding: var(--padding--padd-l) 0 var(--padding--padd-s);
+	margin: 0 auto;
+}
+
+.mm-page .single-article article {
+	margin-bottom:4rem;
+}
+
+.single-article h1 {
+	margin: 0 0 var(--margin--marg-xxs);
+}
+
+.single-article h2 {
+	font-size: clamp(2rem, 2.25rem + 1.25vw, 2.5rem);
+	line-height: 1.1;
+}
+
+.single-article h3 {
+	font-size: clamp(1.5rem, 1.75rem + 1.25vw, 2rem);
+	line-height: 1.1;
+}
+
+.single-article .post-thumbnail {
+	border-radius: 5px;
+	overflow: hidden;
+	margin: 0 0 var(--margin--marg-m);
+}
+
+.single-article .top-header:not(header .top-header):first-of-type {
+	margin: 0 0 var(--margin--marg-xs);
+}
+
+.single-article .top-header {
+	margin: 0 0 var(--margin--marg-m);
+}
+
+.related-posts {
+	max-width: 1440px;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.single-post .post-list {
+	width: 100%;
+	padding: var(--padding--padd-l) 0;
+}
+
+.single-post .post-list h1 {
+	text-align: center;
+	grid-column: 1 / -1;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="password"] {
+	background: none;
+	border:1px solid var(--colors--white);
+	color: var(--colors--white);
+	padding: 15px 30px;
+	border-radius: 40px;
+	font-weight: 400;
+}
+
+input[type="submit"] {
+	background: var(--colors--yellow);
+	border: 1px solid transparent;
+	color: var(--colors--black-2);
+	border-radius: 40px;
+	text-align: center;
+	font-size: 1rem;
+	display: inline-block;
+	padding: 16px 45px 16px 35px;
+	font-weight: 500;
+	position: relative;
+	display: inline-block;
+	transition: all 0.5s ease;
+}
+
+input[type="submit"]:hover {
+	background: var(--colors--white);
+}
+
+@media screen and (max-width: 1024px) {
+	.post-list {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (max-width: 932px) {
+	:root {
+		--padding--padd-xs: 0.6rem;
+		--padding--padd-s: 1rem;
+		--padding--padd-m: 2rem;
+		--margin--marg-s: 1rem;
+		--margin--marg-m: 1.5rem;
+		--margin--marg-l: 2rem;
+		--margin--marg-xl: 2.5rem;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.post-list {
+		grid-template-columns: repeat(1, 1fr);
+	}
+}
