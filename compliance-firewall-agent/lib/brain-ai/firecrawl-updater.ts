@@ -1,94 +1,57 @@
 /**
- * Brain AI v3 — FirecrawlUpdater
+ * houndshield Brain AI — Firecrawl Knowledge Updater
  *
- * Scrapes external sources to keep the KnowledgeGraph current.
- * Only updates a KG node if scraped content changed >10% (diff detection).
- * Logs failures to Supabase brain_update_failures table.
+ * Uses Firecrawl to automatically update the knowledge graph with:
+ * - NIST 800-171 / CMMC regulatory changes
+ * - Competitor pricing and feature updates
+ * - Market intelligence (enforcement timelines, assessor capacity)
  *
- * 8 update targets: Nightfall, Strac, Forcepoint, Cloudflare AI GW,
- * CMMC AB, CUI registry, GitHub CMMC patterns, NIST news.
+ * Architecture: runs as a background job (cron or manual trigger).
+ * No prompt content is ever sent to Firecrawl — only public URLs.
  */
 
-import { addKnowledgeNode, queryKnowledgeGraph } from "./knowledge-graph";
+import { KnowledgeGraph, upsertNode, KGNode } from "./knowledge-graph";
 
-export interface UpdateTarget {
-  id: string;
-  name: string;
-  url: string;
-  domain: import("./knowledge-graph").KnowledgeDomain;
-  selector?: string;
+interface FirecrawlScrapeResult {
+  success: boolean;
+  data?: {
+    markdown?: string;
+    html?: string;
+    metadata?: { title?: string; description?: string };
+  };
+  error?: string;
 }
 
-export interface UpdateResult {
-  target: string;
-  success: boolean;
-  changed: boolean;
-  error?: string;
+interface UpdateTarget {
+  id: string;
+  url: string;
+  category: KGNode["category"];
+  title: string;
+  extractionPrompt: string;
 }
 
 const UPDATE_TARGETS: UpdateTarget[] = [
   {
-    id: "nightfall-pricing",
-    name: "Nightfall DLP Pricing",
-    url: "https://nightfall.ai/pricing",
-    domain: "competitor",
+    id: "competitor-nightfall",
+    url: "https://www.nightfall.ai/pricing",
+    category: "competitor",
+    title: "Nightfall AI — Competitor Analysis",
+    extractionPrompt: "Extract current pricing tiers and any AI DLP specific features",
   },
   {
-    id: "strac-pricing",
-    name: "Strac DLP Pricing",
-    url: "https://strac.io/pricing",
-    domain: "competitor",
-  },
-  {
-    id: "forcepoint-dlp",
-    name: "Forcepoint DLP",
-    url: "https://www.forcepoint.com/product/dlp-data-loss-prevention",
-    domain: "competitor",
-  },
-  {
-    id: "cloudflare-ai-gateway",
-    name: "Cloudflare AI Gateway",
-    url: "https://developers.cloudflare.com/ai-gateway/",
-    domain: "competitor",
-  },
-  {
-    id: "cmmc-ab-news",
-    name: "CMMC Accreditation Body News",
-    url: "https://cyberab.org/news/",
-    domain: "cmmc",
-  },
-  {
-    id: "cui-registry",
-    name: "CUI Registry (NARA)",
-    url: "https://www.archives.gov/cui/registry/category-list",
-    domain: "nist",
-  },
-  {
-    id: "github-cmmc-patterns",
-    name: "GitHub CMMC Pattern Repos",
-    url: "https://github.com/search?q=cmmc+cui+detection&type=repositories",
-    domain: "cmmc",
-  },
-  {
-    id: "nist-csrc-news",
-    name: "NIST CSRC News (800-171 updates)",
-    url: "https://csrc.nist.gov/publications/detail/sp/800-171/rev-2/final",
-    domain: "nist",
+    id: "market-cmmc-enforcement",
+    url: "https://www.acq.osd.mil/cmmc/",
+    category: "market",
+    title: "CMMC Enforcement Timeline",
+    extractionPrompt: "Extract current enforcement phase dates and contractor requirements",
   },
 ];
 
-function contentDiffRatio(oldContent: string, newContent: string): number {
-  if (!oldContent) return 1;
-  const oldWords = new Set(oldContent.toLowerCase().split(/\s+/));
-  const newWords = newContent.toLowerCase().split(/\s+/);
-  const changed = newWords.filter((w) => !oldWords.has(w)).length;
-  return changed / Math.max(newWords.length, 1);
-}
-
-async function scrapeWithFirecrawl(url: string): Promise<string | null> {
-  const apiKey = process.env.FIRECRAWL_API_KEY;
-  if (!apiKey) return null;
-
+/**
+ * Scrape a single URL via Firecrawl API.
+ * Only sends the URL — no customer data, no prompt content.
+ */
+async function scrapeUrl(url: string, apiKey: string): Promise<string | null> {
   try {
     const response = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
@@ -96,90 +59,76 @@ async function scrapeWithFirecrawl(url: string): Promise<string | null> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({ url, formats: ["markdown"] }),
+      body: JSON.stringify({
+        url,
+        formats: ["markdown"],
+        onlyMainContent: true,
+        timeout: 10000,
+      }),
     });
 
     if (!response.ok) return null;
-    const data = await response.json() as { data?: { markdown?: string } };
-    return data?.data?.markdown ?? null;
+
+    const result: FirecrawlScrapeResult = await response.json() as FirecrawlScrapeResult;
+    return result.data?.markdown ?? null;
   } catch {
     return null;
   }
 }
 
-async function logFailure(targetId: string, error: string): Promise<void> {
-  try {
-    const { createClient } = await import("@supabase/supabase-js");
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-      process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
-    );
-    await supabase.from("brain_update_failures").insert({
-      target_id: targetId,
-      error,
-      created_at: new Date().toISOString(),
-    });
-  } catch {
-    // Best-effort logging — don't throw
-  }
-}
+/**
+ * Run a knowledge graph update cycle.
+ * Safe to call in a cron job — idempotent.
+ */
+export async function runKnowledgeUpdate(
+  graph: KnowledgeGraph,
+  options: {
+    firecrawlApiKey?: string;
+    targets?: string[]; // specific node IDs to update, or all if omitted
+    dryRun?: boolean;
+  } = {}
+): Promise<{ graph: KnowledgeGraph; updatedNodes: string[]; errors: string[] }> {
+  const { firecrawlApiKey, targets, dryRun = false } = options;
 
-export async function runKnowledgeGraphUpdate(
-  targetIds?: string[],
-): Promise<UpdateResult[]> {
-  const targets = targetIds
-    ? UPDATE_TARGETS.filter((t) => targetIds.includes(t.id))
+  if (!firecrawlApiKey) {
+    return {
+      graph,
+      updatedNodes: [],
+      errors: ["FIRECRAWL_API_KEY not configured — skipping knowledge update"],
+    };
+  }
+
+  const updatedNodes: string[] = [];
+  const errors: string[] = [];
+  let currentGraph = graph;
+
+  const targetsToUpdate = targets
+    ? UPDATE_TARGETS.filter((t) => targets.includes(t.id))
     : UPDATE_TARGETS;
 
-  const results: UpdateResult[] = [];
-
-  for (const target of targets) {
-    try {
-      const scraped = await scrapeWithFirecrawl(target.url);
-
-      if (!scraped) {
-        await logFailure(target.id, "Firecrawl returned null — check FIRECRAWL_API_KEY");
-        results.push({ target: target.id, success: false, changed: false, error: "scrape failed" });
-        continue;
-      }
-
-      // Check existing node for diff
-      const existing = await queryKnowledgeGraph({
-        query: target.name,
-        domains: [target.domain],
-        limit: 1,
-      });
-
-      const existingContent = existing[0]?.node.content ?? "";
-      const diffRatio = contentDiffRatio(existingContent, scraped);
-
-      if (diffRatio < 0.1) {
-        results.push({ target: target.id, success: true, changed: false });
-        continue;
-      }
-
-      const summary = scraped.slice(0, 800);
-      addKnowledgeNode({
-        id: target.id,
-        domain: target.domain,
-        title: target.name,
-        content: summary,
-        keywords: target.name.toLowerCase().split(/\s+/),
-        source: target.url,
-        sourceType: "firecrawl",
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        ttl: 7 * 24 * 60 * 60 * 1000,
-        weight: 0.7,
-      });
-
-      results.push({ target: target.id, success: true, changed: true });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      await logFailure(target.id, message);
-      results.push({ target: target.id, success: false, changed: false, error: message });
+  for (const target of targetsToUpdate) {
+    const content = await scrapeUrl(target.url, firecrawlApiKey);
+    if (!content) {
+      errors.push(`Failed to scrape ${target.url}`);
+      continue;
     }
+
+    // Truncate to reasonable size for storage
+    const truncated = content.slice(0, 2000);
+
+    if (!dryRun) {
+      currentGraph = upsertNode(currentGraph, {
+        id: target.id,
+        category: target.category,
+        title: target.title,
+        content: `[Auto-updated via Firecrawl on ${new Date().toISOString().split("T")[0]}]\n\n${truncated}`,
+        confidence: 0.75, // lower confidence for auto-scraped content
+        sources: [target.url],
+      });
+    }
+
+    updatedNodes.push(target.id);
   }
 
-  return results;
+  return { graph: currentGraph, updatedNodes, errors };
 }

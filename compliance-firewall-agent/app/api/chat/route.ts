@@ -15,6 +15,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { findFaqAnswer } from "@/lib/brain-ai/faq";
+import {
+  captureRequest,
+  openSpan,
+  closeSpan,
+  finalizeTrace,
+  type Trace,
+} from "@/lib/observability";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -189,6 +196,10 @@ function proxyOpenRouterStream(
 // ---------------------------------------------------------------------------
 
 export async function POST(request: NextRequest) {
+  // Observability: every request gets a trace regardless of outcome
+  let trace: Trace | null = null;
+  let userQuestion = "";
+
   try {
     const ip =
       request.headers.get("x-forwarded-for") ||
@@ -214,20 +225,39 @@ export async function POST(request: NextRequest) {
       system,
       temperature = 0.7,
       scanInput = true,
+      sessionId,
+      userId,
+      promptVersion = "v1.0",
     } = body;
+
+    // ── STEP 1: Capture request, open trace ───────────────────────────────
+    const lastUserMsg = [...(messages as Array<{ role: string; content: string }>)]
+      .reverse()
+      .find((m) => m.role === "user");
+    userQuestion = lastUserMsg?.content ?? "";
+
+    if (userId) {
+      trace = captureRequest({
+        sessionId:     sessionId ?? ip,
+        userId:        userId as string,
+        userQuestion,
+        modelName:     MODEL_MAP[model as string] ?? (model as string),
+        promptVersion: promptVersion as string,
+        temperature:   temperature as number,
+      });
+    }
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "Messages array is required" }, { status: 400 });
     }
 
     // ── 1. Compliance scan on latest user message ──────────────────────────
-    const lastUserMsg = [...messages]
-      .reverse()
-      .find((m: { role: string }) => m.role === "user");
     let complianceMeta: Record<string, unknown> | null = null;
 
     if (scanInput && lastUserMsg) {
+      const scanSpan = trace ? openSpan(trace, "intent_router", "compliance_scan") : null;
       const scanResult = await classifyRisk(lastUserMsg.content);
+      if (scanSpan) closeSpan(scanSpan, { risk_level: scanResult.risk_level, blocked: scanResult.should_block });
       if (scanResult.should_block) {
         return NextResponse.json(
           {
@@ -266,8 +296,16 @@ export async function POST(request: NextRequest) {
 
     // ── 2. Local FAQ match (always works, no API key needed) ───────────────
     if (lastUserMsg?.content) {
+      const faqSpan = trace ? openSpan(trace, "retriever", "faq_lookup") : null;
       const faqAnswer = findFaqAnswer(lastUserMsg.content);
+      if (faqSpan) closeSpan(faqSpan, { hit: !!faqAnswer });
       if (faqAnswer) {
+        // Fire-and-forget trace finalization (FAQ path — no LLM involved)
+        if (trace) {
+          const responseSpan = openSpan(trace, "final_response", "faq_response");
+          closeSpan(responseSpan, faqAnswer);
+          finalizeTrace(trace, { userQuestion, finalAnswer: faqAnswer, ragContext: null }).catch(() => undefined);
+        }
         return new Response(streamTextAsSSE(faqAnswer), { headers: sseHeaders });
       }
     }
@@ -279,7 +317,7 @@ export async function POST(request: NextRequest) {
       "";
 
     if (apiKey) {
-      const resolvedModel = MODEL_MAP[model] ?? model;
+      const resolvedModel = MODEL_MAP[model as string] ?? (model as string);
       const systemPrompt =
         system ||
         "You are Brain AI, the intelligent compliance assistant embedded in Hound Shield. " +
@@ -291,8 +329,20 @@ export async function POST(request: NextRequest) {
         ...messages,
       ];
 
-      const orBody = await callOpenRouter(apiKey, resolvedModel, fullMessages, temperature);
+      const llmSpan = trace ? openSpan(trace, "llm_call", "openrouter_call", { model: resolvedModel }) : null;
+      const orBody = await callOpenRouter(apiKey, resolvedModel, fullMessages, temperature as number);
+      if (llmSpan) closeSpan(llmSpan, { success: !!orBody });
+
       if (orBody) {
+        // Fire-and-forget: finalize trace after streaming begins
+        // We can't hook into stream completion in Next.js streaming routes,
+        // so we record the LLM path synchronously and skip answer scoring here.
+        // Answer scoring happens via the /api/observability/feedback endpoint.
+        if (trace) {
+          const respSpan = openSpan(trace, "final_response", "llm_stream");
+          closeSpan(respSpan, { streamed: true });
+          finalizeTrace(trace, { userQuestion, finalAnswer: "[streamed]", ragContext: null }).catch(() => undefined);
+        }
         return new Response(
           proxyOpenRouterStream(orBody, complianceMeta),
           { headers: sseHeaders }
@@ -305,8 +355,18 @@ export async function POST(request: NextRequest) {
       ? FALLBACK_MESSAGE
       : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install Hound Shield — I can answer those instantly! For free-form AI questions, an OpenRouter API key is required (set OPENROUTER_API_KEY in Vercel).";
 
+    if (trace) {
+      const fbSpan = openSpan(trace, "final_response", "fallback");
+      closeSpan(fbSpan, fallbackText);
+      finalizeTrace(trace, { userQuestion, finalAnswer: fallbackText, ragContext: null }).catch(() => undefined);
+    }
+
     return new Response(streamTextAsSSE(fallbackText), { headers: sseHeaders });
   } catch (err) {
+    // Log error span if trace is open
+    if (trace) {
+      finalizeTrace(trace, { userQuestion, finalAnswer: "[error]", ragContext: null }).catch(() => undefined);
+    }
     console.error("[chat] Unhandled error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

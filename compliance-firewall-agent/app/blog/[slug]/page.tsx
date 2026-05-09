@@ -1,243 +1,245 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import type { Metadata } from "next";
-import { ArrowLeft, Clock, Calendar, Tag, ArrowRight, AlertTriangle, Info, CheckCircle, XCircle } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { LandingFooter } from "@/components/landing/LandingFooter";
-import { BLOG_POSTS, getPost, type BlogSection } from "../posts/data";
+import { getAllPosts, getPostBySlug } from "@/lib/blog/posts";
 
-interface Props {
+// ── Static params (build all posts at compile time) ───────────────────────────
+export function generateStaticParams() {
+  return getAllPosts().map((post) => ({ slug: post.slug }));
+}
+
+// ── Dynamic SEO metadata per post ─────────────────────────────────────────────
+export async function generateMetadata({
+  params,
+}: {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+}): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
-  if (!post) return { title: "Not Found" };
+  const post = getPostBySlug(slug);
+  if (!post) return { title: "Post Not Found" };
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const url = `${baseUrl}/blog/${post.slug}`;
+
   return {
-    title: `${post.title} — HoundShield Blog`,
-    description: post.excerpt,
+    title: `${post.title} | HoundShield Blog`,
+    description: post.description,
+    keywords: post.tags,
+    authors: [{ name: post.author }],
+    alternates: { canonical: url },
     openGraph: {
       title: post.title,
-      description: post.excerpt,
+      description: post.description,
       type: "article",
-      publishedTime: post.publishedAt,
+      url,
+      publishedTime: post.date,
+      modifiedTime: post.updatedDate ?? post.date,
+      authors: [post.author],
+      tags: post.tags,
+      siteName: "HoundShield",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
     },
   };
 }
 
-function CalloutBox({ section }: { section: BlogSection }) {
-  const variants = {
-    warning: {
-      bg: "bg-amber-500/[0.08]",
-      border: "border-amber-500/30",
-      icon: AlertTriangle,
-      iconColor: "text-amber-400",
-      textColor: "text-amber-100",
+// ── JSON-LD Article schema ─────────────────────────────────────────────────────
+function ArticleJsonLd({ post }: { post: ReturnType<typeof getPostBySlug> }) {
+  if (!post) return null;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    author: {
+      "@type": "Organization",
+      name: post.author,
+      url: baseUrl,
     },
-    danger: {
-      bg: "bg-red-500/[0.08]",
-      border: "border-red-500/30",
-      icon: XCircle,
-      iconColor: "text-red-400",
-      textColor: "text-red-100",
+    publisher: {
+      "@type": "Organization",
+      name: "HoundShield",
+      url: baseUrl,
+      logo: { "@type": "ImageObject", url: `${baseUrl}/logo.png` },
     },
-    info: {
-      bg: "bg-brand-400/[0.06]",
-      border: "border-brand-400/30",
-      icon: Info,
-      iconColor: "text-brand-400",
-      textColor: "text-slate-200",
-    },
-    success: {
-      bg: "bg-emerald-500/[0.08]",
-      border: "border-emerald-500/30",
-      icon: CheckCircle,
-      iconColor: "text-emerald-400",
-      textColor: "text-emerald-100",
-    },
+    datePublished: post.date,
+    dateModified: post.updatedDate ?? post.date,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${baseUrl}/blog/${post.slug}` },
+    keywords: post.tags.join(", "),
+    articleSection: post.category,
+    timeRequired: `PT${post.readingTime}M`,
   };
-  const v = variants[section.variant ?? "info"];
-  const Icon = v.icon;
   return (
-    <div className={`my-6 flex gap-4 rounded-xl border p-5 ${v.bg} ${v.border}`}>
-      <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${v.iconColor}`} />
-      <p className={`text-sm leading-relaxed ${v.textColor}`}>{section.text}</p>
-    </div>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
   );
 }
 
-function CodeBlock({ section }: { section: BlogSection }) {
+// ── BreadcrumbList JSON-LD ────────────────────────────────────────────────────
+function BreadcrumbJsonLd({ post }: { post: ReturnType<typeof getPostBySlug> }) {
+  if (!post) return null;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${baseUrl}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${baseUrl}/blog/${post.slug}` },
+    ],
+  };
   return (
-    <div className="my-6 rounded-xl border border-white/[0.1] bg-[#0d0d14] overflow-hidden">
-      {section.language && (
-        <div className="px-4 py-2 border-b border-white/[0.06] flex items-center justify-between">
-          <span className="text-xs font-mono text-slate-500">{section.language}</span>
-        </div>
-      )}
-      <pre className="p-5 text-sm font-mono text-slate-300 overflow-x-auto leading-relaxed whitespace-pre">
-        {section.text}
-      </pre>
-    </div>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
   );
 }
 
-function DataTable({ section }: { section: BlogSection }) {
-  return (
-    <div className="my-6 overflow-x-auto rounded-xl border border-white/[0.1]">
-      <table className="w-full text-sm">
-        {section.headers && (
-          <thead>
-            <tr className="border-b border-white/[0.08] bg-white/[0.03]">
-              {section.headers.map((h) => (
-                <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-400 font-mono uppercase tracking-wider">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-        )}
-        <tbody>
-          {section.rows?.map((row, ri) => (
-            <tr key={ri} className="border-b border-white/[0.05] hover:bg-white/[0.02]">
-              {row.map((cell, ci) => (
-                <td key={ci} className={`px-4 py-3 ${ci === 0 ? "font-semibold text-white" : "text-slate-400"} ${cell === "No" ? "text-red-400 font-semibold" : ""} ${cell === "Yes" ? "text-emerald-400 font-semibold" : ""}`}>
-                  {cell}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function RenderSection({ section }: { section: BlogSection }) {
-  switch (section.type) {
-    case "h2":
-      return <h2 className="text-2xl sm:text-3xl font-bold text-white mt-12 mb-4 leading-tight">{section.text}</h2>;
-    case "h3":
-      return <h3 className="text-xl font-semibold text-white mt-8 mb-3">{section.text}</h3>;
-    case "p":
-      return <p className="text-slate-300 leading-relaxed my-4">{section.text}</p>;
-    case "callout":
-      return <CalloutBox section={section} />;
-    case "code":
-      return <CodeBlock section={section} />;
-    case "list":
-      return (
-        <ul className="my-4 flex flex-col gap-2.5">
-          {section.items?.map((item, i) => (
-            <li key={i} className="flex items-start gap-3 text-slate-300 text-sm leading-relaxed">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-400 flex-shrink-0 mt-2" />
-              {item}
-            </li>
-          ))}
-        </ul>
-      );
-    case "table":
-      return <DataTable section={section} />;
-    default:
-      return null;
-  }
-}
-
-export default async function BlogPostPage({ params }: Props) {
+// ── Page ─────────────────────────────────────────────────────────────────────
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  const allPosts = getAllPosts();
+  const related = allPosts
+    .filter((p) => p.slug !== post.slug && p.category === post.category)
+    .slice(0, 3);
+
   return (
-    <div className="bg-[#07070b] min-h-screen">
-      <Navbar variant="dark" />
+    <>
+      <ArticleJsonLd post={post} />
+      <BreadcrumbJsonLd post={post} />
+      <main className="min-h-screen bg-[#07070b] text-white">
+        {/* Nav */}
+        <header className="border-b border-white/10 bg-[#07070b]/80 backdrop-blur-sm sticky top-0 z-10">
+          <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <Link href="/blog" className="text-sm text-white/60 hover:text-white transition-colors">
+              ← Blog
+            </Link>
+            <Link href="/" className="text-sm text-white/40 hover:text-white transition-colors">
+              houndshield.com
+            </Link>
+          </div>
+        </header>
 
-      <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
-        {/* Back */}
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 mb-10 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to blog
-        </Link>
+        <div className="max-w-4xl mx-auto px-6 py-16">
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/30 mb-8">
+            <Link href="/" className="hover:text-white/60 transition-colors">Home</Link>
+            <span>/</span>
+            <Link href="/blog" className="hover:text-white/60 transition-colors">Blog</Link>
+            <span>/</span>
+            <span className="text-white/50 truncate max-w-xs">{post.title}</span>
+          </nav>
 
-        {/* Meta */}
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-400/10 text-brand-400 text-xs font-semibold">
-            <Tag className="w-3 h-3" />
-            {post.category}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-xs text-slate-500 font-mono">
-            <Calendar className="w-3 h-3" />
-            {post.publishedAt}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-xs text-slate-500 font-mono">
-            <Clock className="w-3 h-3" />
-            {post.readingTimeMin} min read
-          </span>
-        </div>
+          {/* Article header */}
+          <header className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full border bg-blue-900/40 text-blue-300 border-blue-800">
+                {post.category}
+              </span>
+              <span className="text-xs text-white/40">{post.readingTime} min read</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6">{post.title}</h1>
+            <p className="text-lg text-white/60 leading-relaxed mb-8">{post.excerpt}</p>
+            <div className="flex items-center gap-4 text-sm text-white/40 pb-8 border-b border-white/10">
+              <span>
+                By <span className="text-white/70">{post.author}</span>
+              </span>
+              <span>·</span>
+              <time dateTime={post.date}>
+                {new Date(post.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
+            </div>
+          </header>
 
-        {/* Title */}
-        <h1 className="font-editorial text-3xl sm:text-4xl font-bold text-white leading-[1.1] mb-4">
-          {post.title}
-        </h1>
-        <p className="text-lg text-slate-400 leading-relaxed mb-3">{post.subtitle}</p>
+          {/* Article body */}
+          <article
+            className="prose prose-invert prose-blue max-w-none
+              prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-4
+              prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8
+              prose-p:text-white/70 prose-p:leading-relaxed
+              prose-li:text-white/70 prose-li:leading-relaxed
+              prose-strong:text-white prose-strong:font-semibold
+              prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+              prose-table:text-sm prose-th:text-white prose-td:text-white/70
+              prose-blockquote:border-blue-500 prose-blockquote:text-white/60"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.08] text-xs text-slate-400 font-mono"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+          {/* Tags */}
+          <div className="mt-12 pt-8 border-t border-white/10">
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs px-3 py-1 bg-white/[0.05] border border-white/10 rounded-full text-white/50"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
 
-        <div className="border-t border-white/[0.08] mb-10" />
-
-        {/* Content */}
-        <article>
-          {post.content.map((section, i) => (
-            <RenderSection key={i} section={section} />
-          ))}
-        </article>
-
-        <div className="border-t border-white/[0.08] mt-14 pt-10">
-          <div className="rounded-2xl border border-brand-400/20 bg-brand-400/[0.04] p-8">
-            <p className="text-xs font-mono font-semibold text-brand-400 uppercase tracking-[0.2em] mb-3">
-              Ready to fix your data boundary?
-            </p>
-            <h3 className="text-2xl font-bold text-white mb-3">
-              Deploy HoundShield in 15 minutes.
-            </h3>
-            <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-              Local-only AI proxy. No cloud DLP. No DFARS incidents. Free for up to 5 users — C3PAO-ready PDF on day one.
+          {/* CTA */}
+          <aside className="mt-16 p-8 bg-gradient-to-br from-blue-950/40 to-slate-900/40 border border-blue-500/20 rounded-2xl">
+            <h2 className="text-xl font-bold mb-3">Close the AI Compliance Gap</h2>
+            <p className="text-white/60 mb-6 text-sm leading-relaxed">
+              HoundShield intercepts AI prompts before they leave your network. One URL change,
+              sub-10ms scanning, PDF evidence for your C3PAO assessor. Setup takes under 10 minutes.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/signup"
-                className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
+                href="/demo"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-colors text-center"
               >
-                Deploy Free <ArrowRight className="w-4 h-4" />
+                See the Demo →
               </Link>
               <Link
-                href="/docs/quickstart"
-                className="inline-flex items-center justify-center gap-2 text-brand-400 hover:text-brand-300 font-medium text-sm transition-colors"
+                href="/pricing"
+                className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-xl transition-colors text-center"
               >
-                View quickstart guide <ArrowRight className="w-3.5 h-3.5" />
+                View Pricing
               </Link>
             </div>
-          </div>
+          </aside>
+
+          {/* Related posts */}
+          {related.length > 0 && (
+            <section className="mt-16">
+              <h2 className="text-lg font-bold mb-6 text-white/80">Related Articles</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {related.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/blog/${p.slug}`}
+                    className="block p-5 bg-white/[0.03] border border-white/10 rounded-xl hover:border-blue-500/30 hover:bg-white/[0.05] transition-all"
+                  >
+                    <p className="text-xs text-white/40 mb-2">{p.readingTime} min read</p>
+                    <h3 className="text-sm font-semibold text-white/90 leading-snug">{p.title}</h3>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </main>
-
-      <LandingFooter />
-    </div>
+    </>
   );
 }

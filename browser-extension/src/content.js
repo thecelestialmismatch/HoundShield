@@ -1,8 +1,8 @@
 /**
- * Kaelus AI Firewall — Content Script
+ * Hound Shield — Content Script
  *
  * Intercepts prompts typed into AI chat UIs before they are submitted.
- * Scans locally for high-confidence patterns, optionally calls Kaelus API.
+ * Scans locally for high-confidence patterns, optionally calls HoundShield API.
  *
  * Supported sites:
  *   ChatGPT (chat.openai.com, chatgpt.com)
@@ -71,7 +71,7 @@ const SITE_ADAPTERS = [
 ];
 
 // ---------------------------------------------------------------------------
-// Kaelus settings (loaded from chrome.storage)
+// HoundShield settings (loaded from chrome.storage)
 // ---------------------------------------------------------------------------
 
 /** @type {{ enabled: boolean, blockOnRisk: string[], apiKey: string|null, endpoint: string }} */
@@ -111,7 +111,7 @@ function localScan(text) {
 }
 
 /**
- * Optionally forward to Kaelus API for deep scan.
+ * Optionally forward to HoundShield API for deep scan.
  * Returns null if no API key configured.
  * @param {string} text
  * @returns {Promise<{ id: string, label: string, risk: string }[]|null>}
@@ -140,8 +140,8 @@ async function remoteScan(text) {
 // Banner UI — built entirely with safe DOM methods (no innerHTML)
 // ---------------------------------------------------------------------------
 
-const BANNER_ID = "kaelus-warning-banner";
-const OVERLAY_ID = "kaelus-overlay";
+const BANNER_ID = "houndshield-warning-banner";
+const OVERLAY_ID = "houndshield-overlay";
 
 /**
  * Remove any existing banner / overlay from the page.
@@ -158,7 +158,7 @@ function removeBanner() {
  */
 function buildRiskBadge(risk) {
   const badge = document.createElement("span");
-  badge.className = "kaelus-badge";
+  badge.className = "houndshield-badge";
   badge.setAttribute("data-risk", risk.toLowerCase());
   badge.textContent = risk;
   return badge;
@@ -171,15 +171,15 @@ function buildRiskBadge(risk) {
  */
 function buildFindingRow(finding) {
   const row = document.createElement("div");
-  row.className = "kaelus-finding-row";
+  row.className = "houndshield-finding-row";
 
   const icon = document.createElement("span");
-  icon.className = "kaelus-finding-icon";
+  icon.className = "houndshield-finding-icon";
   icon.setAttribute("aria-hidden", "true");
   icon.textContent = "\u26A0\uFE0F"; // ⚠️
 
   const label = document.createElement("span");
-  label.className = "kaelus-finding-label";
+  label.className = "houndshield-finding-label";
   label.textContent = finding.label;
 
   row.appendChild(icon);
@@ -201,37 +201,37 @@ function showBanner(findings, blocked, onSendAnyway) {
   // Overlay (semi-transparent backdrop)
   const overlay = document.createElement("div");
   overlay.id = OVERLAY_ID;
-  overlay.className = "kaelus-overlay";
+  overlay.className = "houndshield-overlay";
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
-  overlay.setAttribute("aria-label", "Kaelus compliance warning");
+  overlay.setAttribute("aria-label", "HoundShield compliance warning");
 
   // Banner card
   const banner = document.createElement("div");
   banner.id = BANNER_ID;
-  banner.className = "kaelus-banner";
+  banner.className = "houndshield-banner";
 
   // Header row
   const header = document.createElement("div");
-  header.className = "kaelus-header";
+  header.className = "houndshield-header";
 
   const logoWrap = document.createElement("div");
-  logoWrap.className = "kaelus-logo-wrap";
+  logoWrap.className = "houndshield-logo-wrap";
 
   const shieldIcon = document.createElement("span");
-  shieldIcon.className = "kaelus-shield";
+  shieldIcon.className = "houndshield-shield";
   shieldIcon.setAttribute("aria-hidden", "true");
   shieldIcon.textContent = "\uD83D\uDEE1\uFE0F"; // 🛡️
 
   const productName = document.createElement("span");
-  productName.className = "kaelus-product-name";
-  productName.textContent = "Kaelus AI Firewall";
+  productName.className = "houndshield-product-name";
+  productName.textContent = "Hound Shield";
 
   logoWrap.appendChild(shieldIcon);
   logoWrap.appendChild(productName);
 
   const closeBtn = document.createElement("button");
-  closeBtn.className = "kaelus-close-btn";
+  closeBtn.className = "houndshield-close-btn";
   closeBtn.setAttribute("aria-label", "Dismiss warning");
   closeBtn.textContent = "\u2715"; // ×
   closeBtn.addEventListener("click", removeBanner);
@@ -241,29 +241,29 @@ function showBanner(findings, blocked, onSendAnyway) {
 
   // Title
   const title = document.createElement("p");
-  title.className = "kaelus-title";
+  title.className = "houndshield-title";
   title.textContent = blocked
     ? "Prompt blocked — sensitive data detected"
     : "Warning — potential compliance issue";
 
   // Findings list
   const findingsList = document.createElement("div");
-  findingsList.className = "kaelus-findings-list";
+  findingsList.className = "houndshield-findings-list";
   findings.forEach((f) => findingsList.appendChild(buildFindingRow(f)));
 
   // Subtitle
   const subtitle = document.createElement("p");
-  subtitle.className = "kaelus-subtitle";
+  subtitle.className = "houndshield-subtitle";
   subtitle.textContent = blocked
-    ? "Remove the flagged content before sending, or send through your Kaelus gateway for audit logging."
+    ? "Remove the flagged content before sending, or send through your HoundShield gateway for audit logging."
     : "This prompt may contain regulated information. Consider reviewing before sending.";
 
   // Action buttons
   const actions = document.createElement("div");
-  actions.className = "kaelus-actions";
+  actions.className = "houndshield-actions";
 
   const editBtn = document.createElement("button");
-  editBtn.className = "kaelus-btn kaelus-btn-primary";
+  editBtn.className = "houndshield-btn houndshield-btn-primary";
   editBtn.textContent = "Edit prompt";
   editBtn.addEventListener("click", removeBanner);
 
@@ -271,7 +271,7 @@ function showBanner(findings, blocked, onSendAnyway) {
 
   if (!blocked) {
     const sendBtn = document.createElement("button");
-    sendBtn.className = "kaelus-btn kaelus-btn-secondary";
+    sendBtn.className = "houndshield-btn houndshield-btn-secondary";
     sendBtn.textContent = "Send anyway";
     sendBtn.addEventListener("click", () => {
       removeBanner();
@@ -282,13 +282,13 @@ function showBanner(findings, blocked, onSendAnyway) {
 
   // Footer link
   const footer = document.createElement("div");
-  footer.className = "kaelus-footer";
+  footer.className = "houndshield-footer";
 
   const footerLink = document.createElement("a");
   footerLink.href = "https://houndshield.com/dashboard";
   footerLink.target = "_blank";
   footerLink.rel = "noopener noreferrer";
-  footerLink.className = "kaelus-footer-link";
+  footerLink.className = "houndshield-footer-link";
   footerLink.textContent = "View audit log \u2192"; // →
 
   footer.appendChild(footerLink);
@@ -361,7 +361,7 @@ async function interceptPrompt(text, submitCallback) {
   // Notify background for badge/logging
   if (typeof chrome !== "undefined" && chrome.runtime) {
     chrome.runtime.sendMessage({
-      type: "KAELUS_FINDING",
+      type: "HOUNDSHIELD_FINDING",
       findings,
       blocked,
       host: location.hostname,
