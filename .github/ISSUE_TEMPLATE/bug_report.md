@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a report to help us improve Kaelus.ai
+about: Create a report to help us improve Hound Shield.ai
 title: 'bug: '
 labels: 'bug, needs triage'
 assignees: ''

@@ -1,8 +1,8 @@
 {
-  "name": "@kaelus/sdk",
+  "name": "@houndshield/sdk",
   "version": "0.1.0",
-  "description": "Kaelus AI Compliance Gateway SDK — Real-time streaming compliance for LLM traffic",
-  "author": "Kaelus <info@kaelus.online>",
+  "description": "Hound Shield AI Compliance Gateway SDK — Real-time streaming compliance for LLM traffic",
+  "author": "Hound Shield <info@houndshield.com>",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -43,12 +43,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kaelus/sdk"
+    "url": "https://github.com/houndshield/sdk"
   },
   "bugs": {
-    "url": "https://github.com/kaelus/sdk/issues"
+    "url": "https://github.com/houndshield/sdk/issues"
   },
-  "homepage": "https://kaelus.online/docs/sdk",
+  "homepage": "https://houndshield.com/docs/sdk",
   "engines": {
     "node": ">=18.0.0"
   },

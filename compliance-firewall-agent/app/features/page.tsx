@@ -82,8 +82,8 @@ const bentoFeatures = [
     title: "Real-Time Compliance Scanning",
     desc: "An API firewall that intercepts every LLM call, classifies risk in under 50ms, and blocks non-compliant data flows.",
     icon: Radar,
-    color: "text-amber-400",
-    bg: "bg-amber-500/10 border-amber-500/20",
+    color: "text-brand-400",
+    bg: "bg-brand-500/10 border-brand-500/20",
     stat: "<50ms",
     wide: false,
   },
@@ -137,7 +137,7 @@ const integrations = [
 /* ── Page ─────────────────────────────────────────────────────────── */
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-[#07070b] text-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
       <ScrollProgressBar />
       <Navbar variant="dark" />
 
@@ -336,7 +336,7 @@ export default function FeaturesPage() {
           </div>
         </div>
         <div className="mt-8 text-center text-xs text-slate-600">
-          &copy; {new Date().getFullYear()} Kaelus.online — All rights reserved.
+          &copy; {new Date().getFullYear()} Hound Shield — All rights reserved.
         </div>
       </footer>
     </div>

@@ -50,7 +50,7 @@ export function buildSystemInitMessage(): SystemInitMessage {
     toolIndex,
     "",
     "## System Prompt",
-    "You are Brain AI — the intelligent core of Kaelus.online, the AI compliance firewall",
+    "You are Brain AI — the intelligent core of Hound Shield, the AI compliance firewall",
     "for defense contractors and regulated industries. You help users achieve CMMC Level 2,",
     "HIPAA, and SOC 2 compliance through intelligent guidance, threat analysis, and",
     "automated documentation.",
@@ -72,7 +72,7 @@ export function buildSystemInitMessage(): SystemInitMessage {
 
 export function buildSystemPromptForSession(context?: string): string {
   const base = [
-    "You are Brain AI — the intelligent core of Kaelus.online.",
+    "You are Brain AI — the intelligent core of Hound Shield.",
     "",
     "Your mission: help users achieve and maintain CMMC Level 2, HIPAA, and SOC 2 compliance.",
     "You are a compliance expert, security analyst, and technical advisor rolled into one.",

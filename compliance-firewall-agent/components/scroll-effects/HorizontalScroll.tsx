@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, ReactNode } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 
 interface HorizontalScrollProps {
   /** Each child becomes one full-screen panel */
@@ -60,13 +60,33 @@ export function HorizontalScroll({ panels, className = "", label }: HorizontalSc
   );
 }
 
+function PanelDot({ progress, count, index }: {
+  progress: MotionValue<number>;
+  count: number;
+  index: number;
+}) {
+  const dotProgress = useTransform(
+    progress,
+    [(index - 0.5) / count, index / count, (index + 0.5) / count],
+    [0, 1, 0]
+  );
+  const scale = useTransform(dotProgress, [0, 1], [1, 1.6]);
+  const opacity = useTransform(dotProgress, [0, 1], [0.3, 1]);
+  return (
+    <motion.div
+      style={{ scale, opacity }}
+      className="w-1.5 h-1.5 rounded-full bg-brand-400 will-change-transform"
+    />
+  );
+}
+
 function PanelDots({
   count,
   progress,
   label,
 }: {
   count: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  progress: MotionValue<number>;
   label?: string;
 }) {
   return (
@@ -77,22 +97,9 @@ function PanelDots({
         </span>
       )}
       <div className="flex items-center gap-2">
-        {Array.from({ length: count }).map((_, i) => {
-          const dotProgress = useTransform(
-            progress,
-            [(i - 0.5) / count, i / count, (i + 0.5) / count],
-            [0, 1, 0]
-          );
-          const scale = useTransform(dotProgress, [0, 1], [1, 1.6]);
-          const opacity = useTransform(dotProgress, [0, 1], [0.3, 1]);
-          return (
-            <motion.div
-              key={i}
-              style={{ scale, opacity }}
-              className="w-1.5 h-1.5 rounded-full bg-brand-400 will-change-transform"
-            />
-          );
-        })}
+        {Array.from({ length: count }).map((_, i) => (
+          <PanelDot key={i} progress={progress} count={count} index={i} />
+        ))}
       </div>
     </div>
   );

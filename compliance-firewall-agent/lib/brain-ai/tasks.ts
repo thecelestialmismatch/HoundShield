@@ -2,7 +2,7 @@
  * Brain AI — Task Management
  *
  * Manages porting tasks, remediation tasks, and compliance work items.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export type TaskStatus = "pending" | "in_progress" | "complete" | "skipped" | "failed";

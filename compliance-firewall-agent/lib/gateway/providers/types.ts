@@ -1,5 +1,5 @@
 /**
- * Kaelus Streaming Gateway — Shared Provider Types
+ * Hound Shield Streaming Gateway — Shared Provider Types
  *
  * These types form the contract between the gateway engine, provider adapters,
  * and the compliance scanning pipeline. Every LLM provider adapter must
@@ -7,7 +7,7 @@
  *
  * Design rationale:
  * - `ProviderName` is a union type (not an enum) for tree-shaking and simpler serialization.
- * - `StreamRequest` carries the user-supplied API key so Kaelus never stores provider credentials.
+ * - `StreamRequest` carries the user-supplied API key so Hound Shield never stores provider credentials.
  * - `StreamEvent` is the universal event envelope emitted by the proxy — the API route
  *   converts these 1:1 into SSE frames for the client.
  * - "custom" provider allows self-hosted or fine-tuned model endpoints that speak
@@ -63,9 +63,9 @@ export interface ChatMessage {
 }
 
 /**
- * Inbound streaming request from a Kaelus client.
+ * Inbound streaming request from a Hound Shield client.
  *
- * The `api_key` is the end-user's own provider key — Kaelus acts as a
+ * The `api_key` is the end-user's own provider key — Hound Shield acts as a
  * pass-through proxy and never persists this value.
  */
 export interface StreamRequest {
@@ -79,11 +79,11 @@ export interface StreamRequest {
   temperature?: number;
   /** Maximum tokens to generate. */
   max_tokens?: number;
-  /** Must be true — Kaelus only supports streaming mode. */
+  /** Must be true — Hound Shield only supports streaming mode. */
   stream: true;
   /** User's API key for the target provider (never stored). */
   api_key: string;
-  /** Kaelus user identifier for audit logging. */
+  /** Hound Shield user identifier for audit logging. */
   user_id: string;
   /** Arbitrary metadata attached to the compliance event. */
   metadata?: Record<string, unknown>;

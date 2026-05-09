@@ -61,7 +61,7 @@ const STATUS_CONFIG: Record<AgentStatus, { color: string; label: string; icon: R
 const AGENTS: Agent[] = [
   {
     id: 'a1',
-    name: 'Kaelus Prime',
+    name: 'Hound Shield Prime',
     role: 'Chief Orchestrator — Coordinates all agents, manages workflows, and delegates complex tasks across the system.',
     type: 'orchestrator',
     status: 'active',

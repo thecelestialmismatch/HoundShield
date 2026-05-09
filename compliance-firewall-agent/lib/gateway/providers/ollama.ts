@@ -1,5 +1,5 @@
 /**
- * Ollama Local Model Provider — Kaelus.Online Air-Gap Mode
+ * Ollama Local Model Provider — Hound Shield Air-Gap Mode
  *
  * Routes AI requests to a local Ollama instance instead of cloud providers.
  * Enables full air-gap compliance: no data ever leaves the network.
@@ -15,7 +15,7 @@
  *   1. Install Ollama: https://ollama.com
  *   2. Pull a model: ollama pull llama3.2
  *   3. Set OLLAMA_BASE_URL=http://your-server:11434
- *   4. All AI requests route through Kaelus compliance scanning first
+ *   4. All AI requests route through Hound Shield compliance scanning first
  *
  * Recommended models for CMMC/defense use cases:
  *   - llama3.2      — best general purpose (3B, fast)
@@ -101,7 +101,7 @@ export async function listOllamaModels(): Promise<string[]> {
 /**
  * Send a chat request to Ollama and return the streaming response.
  * The returned body is in Ollama's NDJSON streaming format.
- * Use `proxyOllamaStream` to convert it to Kaelus SSE format.
+ * Use `proxyOllamaStream` to convert it to Hound Shield SSE format.
  */
 export async function streamOllamaChat(
   opts: OllamaRequestOptions
@@ -144,7 +144,7 @@ export async function streamOllamaChat(
 }
 
 /**
- * Convert an Ollama NDJSON stream to Kaelus SSE format.
+ * Convert an Ollama NDJSON stream to Hound Shield SSE format.
  * Output: `data: {"content": "..."}\n\n` chunks, then `data: [DONE]\n\n`
  */
 export function proxyOllamaStream(body: ReadableStream): ReadableStream {

@@ -3,7 +3,7 @@
  *
  * Organizes Brain AI commands into builtins, plugin-like, and skill-like categories.
  * Provides dependency resolution and execution ordering.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 import { CommandSnapshot, loadCommandSnapshot } from "./commands";

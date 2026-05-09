@@ -3,7 +3,7 @@
 /**
  * SimulationGraph
  *
- * A force-directed multi-agent visualization for the Kaelus command center.
+ * A force-directed multi-agent visualization for the Hound Shield command center.
  * Renders agents as circular nodes on an SVG canvas with:
  *   - Tooltip on hover: name, role, status, recent interaction, sentiment
  *   - Status colors: idle (slate), interacting (brand/indigo), thinking (amber)

@@ -11,13 +11,13 @@ interface KnowledgeStore {
   documents: Map<string, KnowledgeDocument>;
 }
 
-const globalStore = globalThis as unknown as { __kaelus_knowledge_store?: KnowledgeStore };
-if (!globalStore.__kaelus_knowledge_store) {
-  globalStore.__kaelus_knowledge_store = {
+const globalStore = globalThis as unknown as { __houndshield_knowledge_store?: KnowledgeStore };
+if (!globalStore.__houndshield_knowledge_store) {
+  globalStore.__houndshield_knowledge_store = {
     documents: new Map(),
   };
 }
-const store = globalStore.__kaelus_knowledge_store;
+const store = globalStore.__houndshield_knowledge_store;
 
 // Simple text similarity search (TF-IDF-like)
 function searchDocuments(query: string, docs: KnowledgeDocument[]): Array<{ doc: KnowledgeDocument; score: number }> {

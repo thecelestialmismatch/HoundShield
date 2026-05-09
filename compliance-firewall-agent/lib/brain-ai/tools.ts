@@ -1,7 +1,7 @@
 /**
  * Brain AI — Tool Adapter
  *
- * wraps Kaelus's existing ToolRegistry
+ * wraps Hound Shield's existing ToolRegistry
  * with snapshot export, scoring, and permission filtering.
  */
 

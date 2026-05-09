@@ -11,7 +11,7 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="min-h-screen bg-[#07070b] flex items-center justify-center p-8">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-8">
       <div className="text-center max-w-md">
         <Logo className="w-16 h-16 rounded-2xl mx-auto mb-6" />
         <h1 className="text-2xl font-bold text-white mb-2">Something went wrong</h1>

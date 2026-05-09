@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Navbar > matches snapshot 1`] = `
+<div
+  animate="[object Object]"
+  class="fixed top-0 left-0 right-0 h-[1px] z-[60] bg-gradient-to-r from-transparent via-brand-400/60 to-transparent"
+  initial="[object Object]"
+  transition="[object Object]"
+/>
+`;

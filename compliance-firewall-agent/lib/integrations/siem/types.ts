@@ -10,7 +10,7 @@ export interface SiemEvent {
   id: string;
   /** ISO-8601 timestamp */
   timestamp: string;
-  /** Kaelus-assigned severity */
+  /** Hound Shield-assigned severity */
   severity: SiemSeverity;
   /** Numeric severity for correlation (LOW=2, MEDIUM=5, HIGH=7, CRITICAL=10) */
   severity_score: number;
@@ -75,7 +75,7 @@ export function toCef(event: SiemEvent): string {
     .filter(Boolean)
     .join(" ");
 
-  return `CEF:0|Kaelus|AIFirewall|2.0|${event.action}|Kaelus AI Compliance Event|${sev}|${ext}`;
+  return `CEF:0|Hound Shield|AIFirewall|2.0|${event.action}|Hound Shield AI Compliance Event|${sev}|${ext}`;
 }
 
 /** Exponential backoff retry helper used by all connectors. */

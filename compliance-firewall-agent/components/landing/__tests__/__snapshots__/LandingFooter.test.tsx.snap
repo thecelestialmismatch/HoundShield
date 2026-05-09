@@ -1,0 +1,233 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LandingFooter > matches snapshot 1`] = `
+<footer
+  class="border-t border-white/[0.06]"
+>
+  <div
+    class="max-w-6xl mx-auto px-6 py-16"
+  >
+    <div
+      class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12"
+    >
+      <div
+        class="col-span-2 md:col-span-1"
+      >
+        <a
+          href="/"
+        >
+          <div
+            data-testid="logo-mock"
+          />
+          <span
+            data-testid="text-logo-mock"
+          >
+            Hound Shield
+          </span>
+        </a>
+        <p
+          class="text-sm text-slate-500 leading-relaxed mb-4"
+        >
+          AI compliance firewall for regulated industries.
+        </p>
+        <div
+          class="flex items-center gap-3 text-[10px] font-mono text-slate-600 uppercase tracking-wider"
+        >
+          <span
+            class="flex items-center gap-1.5"
+          >
+            <span
+              class="w-1.5 h-1.5 rounded-full bg-emerald-500"
+            />
+            All systems operational
+          </span>
+        </div>
+      </div>
+      <div>
+        <h4
+          class="text-xs font-semibold text-white/50 uppercase tracking-wider mb-4"
+        >
+          Product
+        </h4>
+        <ul
+          class="space-y-2.5"
+        >
+          <li>
+            <a
+              href="/features"
+            >
+              Features
+            </a>
+          </li>
+          <li>
+            <a
+              href="/pricing"
+            >
+              Pricing
+            </a>
+          </li>
+          <li>
+            <a
+              href="/demo"
+            >
+              Demo
+            </a>
+          </li>
+          <li>
+            <a
+              href="/partners"
+            >
+              Partners
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h4
+          class="text-xs font-semibold text-white/50 uppercase tracking-wider mb-4"
+        >
+          Industries
+        </h4>
+        <ul
+          class="space-y-2.5"
+        >
+          <li>
+            <a
+              href="/features"
+            >
+              Defense (CMMC)
+            </a>
+          </li>
+          <li>
+            <a
+              href="/hipaa"
+            >
+              Healthcare (HIPAA)
+            </a>
+          </li>
+          <li>
+            <a
+              href="/features"
+            >
+              Technology (SOC 2)
+            </a>
+          </li>
+          <li>
+            <a
+              href="/features"
+            >
+              Five Eyes / DISP
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h4
+          class="text-xs font-semibold text-white/50 uppercase tracking-wider mb-4"
+        >
+          Resources
+        </h4>
+        <ul
+          class="space-y-2.5"
+        >
+          <li>
+            <a
+              href="/docs"
+            >
+              Documentation
+            </a>
+          </li>
+          <li>
+            <a
+              href="/docs"
+            >
+              NIST Controls
+            </a>
+          </li>
+          <li>
+            <a
+              href="#faq"
+            >
+              FAQ
+            </a>
+          </li>
+          <li>
+            <a
+              href="/contact"
+            >
+              Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h4
+          class="text-xs font-semibold text-white/50 uppercase tracking-wider mb-4"
+        >
+          Legal
+        </h4>
+        <ul
+          class="space-y-2.5"
+        >
+          <li>
+            <a
+              href="/privacy"
+            >
+              Privacy
+            </a>
+          </li>
+          <li>
+            <a
+              href="/terms"
+            >
+              Terms
+            </a>
+          </li>
+          <li>
+            <a
+              href="/terms"
+            >
+              Security
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
+    >
+      <p
+        class="text-xs text-slate-600"
+      >
+        © 
+        2026
+         Hound Shield. Built for regulated industries.
+      </p>
+      <div
+        class="flex gap-6"
+      >
+        <a
+          href="/privacy"
+        >
+          Privacy
+        </a>
+        <a
+          href="/terms"
+        >
+          Terms
+        </a>
+        <a
+          href="/docs"
+        >
+          Docs
+        </a>
+        <a
+          href="/contact"
+        >
+          Contact
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+`;
