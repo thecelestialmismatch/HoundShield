@@ -2,7 +2,7 @@
  * Brain AI — Conversation History
  *
  * Manages conversation history with compaction to prevent unbounded growth.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 import { StoredMessage } from "./models";

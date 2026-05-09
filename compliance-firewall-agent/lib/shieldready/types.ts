@@ -1,4 +1,4 @@
-// Kaelus CMMC Core Types
+// Hound Shield CMMC Core Types
 
 export type ControlFamily =
   | 'AC' | 'AT' | 'AU' | 'CM' | 'IA'

@@ -5,6 +5,10 @@ import {
 } from "./patterns";
 import { detectHIPAA, hasMedicalContext } from "./hipaa-patterns";
 import { scanWithGeminiFlash, isGeminiConfigured } from "./gemini-scanner";
+import {
+  classifyWithAdvisor,
+  isAdvisorConfigured,
+} from "@/lib/advisor/compliance-advisor";
 import type {
   ClassificationResult,
   DetectedEntity,
@@ -206,6 +210,33 @@ export async function classifyRisk(
     for (const cat of geminiCategoryNames) {
       const mapped = mapGeminiCategory(cat);
       if (mapped) categoriesFound.add(mapped);
+    }
+  }
+
+  // ── Stage 6.5: Advisor escalation for borderline MEDIUM cases ───────────────
+  //
+  // When regex + Gemini land on MEDIUM risk, the classification is genuinely
+  // uncertain — regex fires too broadly and Gemini has a 12ms cap. For these
+  // grey-zone cases we invoke the advisor_20260301 strategy: Haiku as fast
+  // executor, Opus as advisor consulted only when Haiku is itself uncertain.
+  //
+  // Budget: 5s timeout. Falls back to regex result on any failure.
+  // Gate: only fires when ANTHROPIC_API_KEY is set and risk is exactly MEDIUM.
+  if (highestRisk === "MEDIUM" && isAdvisorConfigured()) {
+    const advisorResult = await Promise.race([
+      classifyWithAdvisor(textToScan, { preliminary_risk: "MEDIUM" }),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 5_000)),
+    ]);
+
+    if (advisorResult) {
+      const advisorRisk = advisorResult.risk_level as RiskLevel;
+      // Only accept the advisor ruling if it diverges — otherwise keep MEDIUM
+      if (RISK_PRIORITY[advisorRisk] !== RISK_PRIORITY[highestRisk]) {
+        highestRisk = advisorRisk;
+        shouldBlock = advisorRisk === "HIGH" || advisorRisk === "CRITICAL";
+        shouldQuarantine = advisorRisk === "MEDIUM" && !shouldBlock;
+        if (shouldBlock) shouldQuarantine = false;
+      }
     }
   }
 

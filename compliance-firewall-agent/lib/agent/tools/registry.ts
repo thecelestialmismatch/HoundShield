@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Agent Tool Registry
+// Hound Shield Agent Tool Registry
 // Central registry for all agent tools — register, discover, execute
 // ============================================================================
 
@@ -90,10 +90,10 @@ class ToolRegistry {
 }
 
 // Singleton registry
-const globalRegistry = globalThis as unknown as { __kaelus_tool_registry?: ToolRegistry };
-if (!globalRegistry.__kaelus_tool_registry) {
-  globalRegistry.__kaelus_tool_registry = new ToolRegistry();
+const globalRegistry = globalThis as unknown as { __houndshield_tool_registry?: ToolRegistry };
+if (!globalRegistry.__houndshield_tool_registry) {
+  globalRegistry.__houndshield_tool_registry = new ToolRegistry();
 }
 
-export const toolRegistry: ToolRegistry = globalRegistry.__kaelus_tool_registry;
+export const toolRegistry: ToolRegistry = globalRegistry.__houndshield_tool_registry;
 export default toolRegistry;

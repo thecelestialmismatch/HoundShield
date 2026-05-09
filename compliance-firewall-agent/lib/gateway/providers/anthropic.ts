@@ -1,5 +1,5 @@
 /**
- * Kaelus Streaming Gateway — Anthropic Provider Adapter
+ * Hound Shield Streaming Gateway — Anthropic Provider Adapter
  *
  * Handles communication with the Anthropic Messages API in streaming mode.
  *
@@ -21,7 +21,7 @@
  *   event: message_stop
  *   data: {"type":"message_stop"}
  *
- * This adapter normalizes all of the above into Kaelus `StreamToken` objects.
+ * This adapter normalizes all of the above into Hound Shield `StreamToken` objects.
  *
  * Supported models:
  *   claude-sonnet-4-20250514, claude-3-5-haiku-20241022, claude-3-opus-20240229
@@ -110,7 +110,7 @@ type AnthropicEvent =
  * Anthropic provider adapter.
  *
  * Stateless and thread-safe. Handles the Anthropic Messages API streaming
- * protocol, converting typed SSE events into normalized Kaelus tokens.
+ * protocol, converting typed SSE events into normalized Hound Shield tokens.
  */
 export const anthropicAdapter: ProviderAdapter = {
   name: "anthropic" as ProviderName,
@@ -184,7 +184,7 @@ export const anthropicAdapter: ProviderAdapter = {
     try {
       parsed = JSON.parse(trimmed) as AnthropicEvent;
     } catch {
-      console.warn("[kaelus:anthropic] Failed to parse SSE chunk:", trimmed.slice(0, 200));
+      console.warn("[houndshield:anthropic] Failed to parse SSE chunk:", trimmed.slice(0, 200));
       return null;
     }
 
@@ -277,7 +277,7 @@ export const anthropicAdapter: ProviderAdapter = {
 /**
  * Separates the system message from conversation messages.
  *
- * OpenAI/Kaelus format puts system as a message with role "system".
+ * OpenAI/Hound Shield format puts system as a message with role "system".
  * Anthropic requires it as a separate top-level `system` parameter.
  * This function performs that conversion.
  */

@@ -1,4 +1,4 @@
-# Kaelus.Online — SaaS Launch Checklist
+# Hound Shield — SaaS Launch Checklist
 
 **68 items · 10 categories · Updated: 2026-03-28**
 Status key:  Done ·  Needed · ️ Partial ·  Needs key/config
@@ -66,7 +66,7 @@ Status key:  Done ·  Needed · ️ Partial ·  Needs key/config
 
 ## ️ Email & Communications
 
--  Support email — no support@kaelus.online routing visible
+-  Support email — no support@houndshield.com routing visible
 -  Transactional email — Resend (RESEND_API_KEY set in production)
 -  SPF, DKIM, DMARC records — check DNS configuration
 - ️ Welcome email — /api/email/welcome route exists; verify it fires on signup
@@ -124,7 +124,7 @@ Status key:  Done ·  Needed · ️ Partial ·  Needs key/config
 
 ##  IMMEDIATE BLOCKERS (Fix Before Any Launch)
 
-1. **Signup "Failed to fetch"** — Go to Supabase → Auth → URL Configuration → add `https://kaelus.online` and `https://kaelus.online/**` to Redirect URLs
+1. **Signup "Failed to fetch"** — Go to Supabase → Auth → URL Configuration → add `https://houndshield.com` and `https://houndshield.com/**` to Redirect URLs
 2. **Supabase migrations 003+004** — Run `npx supabase db push` to apply to production DB
 3. **Cookie consent banner** — Required for GDPR compliance (EU users)
 4. **SPF/DKIM/DMARC** — Email deliverability for confirmation/welcome emails
@@ -137,5 +137,5 @@ Status key:  Done ·  Needed · ️ Partial ·  Needs key/config
 3. Uptime monitoring (BetterStack free tier)
 4. Lighthouse audit + fix images.unoptimized
 5. PostHog funnel events for activation tracking
-6. Support email routing (support@kaelus.online)
+6. Support email routing (support@houndshield.com)
 7. Cancellation in-app flow

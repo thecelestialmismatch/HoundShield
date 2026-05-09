@@ -1,5 +1,5 @@
 /**
- * Kaelus Streaming Gateway — Provider Registry
+ * Hound Shield Streaming Gateway — Provider Registry
  *
  * Central registry that maps provider names to their adapters and configurations.
  * This module is the single entry point for the streaming proxy to resolve
@@ -150,7 +150,7 @@ export function getProvider(name: ProviderName): ProviderAdapter {
   const adapter = ADAPTER_REGISTRY[name];
   if (!adapter) {
     throw new Error(
-      `[kaelus:registry] Unknown provider: "${name}". ` +
+      `[houndshield:registry] Unknown provider: "${name}". ` +
       `Supported providers: ${Object.keys(ADAPTER_REGISTRY).join(", ")}`
     );
   }
@@ -166,7 +166,7 @@ export function getProviderConfig(name: ProviderName): ProviderConfig {
   const config = PROVIDER_CONFIGS[name];
   if (!config) {
     throw new Error(
-      `[kaelus:registry] Unknown provider config: "${name}". ` +
+      `[houndshield:registry] Unknown provider config: "${name}". ` +
       `Supported providers: ${Object.keys(PROVIDER_CONFIGS).join(", ")}`
     );
   }

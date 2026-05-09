@@ -63,7 +63,7 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -89,12 +89,12 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#07070b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
       <ScrollProgressBar />
       {/* Subtle background blurs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-[30%] -left-[15%] h-[60%] w-[50%] rounded-full bg-brand-200/20 blur-[150px]" />
-        <div className="absolute top-[50%] -right-[15%] h-[60%] w-[40%] rounded-full bg-violet-200/15 blur-[150px]" />
+        <div className="absolute top-[50%] -right-[15%] h-[60%] w-[40%] rounded-full bg-brand-200/15 blur-[150px]" />
       </div>
 
       <motion.div

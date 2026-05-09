@@ -1,5 +1,5 @@
 /**
- * Elastic/ELK SIEM Connector — Kaelus.Online
+ * Elastic/ELK SIEM Connector — Hound Shield
  *
  * Sends compliance events to Elasticsearch via the REST Bulk API.
  * Compatible with self-hosted Elasticsearch 8.x and Elastic Cloud.
@@ -7,18 +7,18 @@
  * Required env vars:
  *   ELASTIC_URL          — e.g. https://my-cluster.es.io:9243
  *   ELASTIC_API_KEY      — base64 "id:api_key" (preferred over username/password)
- *   ELASTIC_INDEX        — target index name, defaults to "kaelus-compliance"
+ *   ELASTIC_INDEX        — target index name, defaults to "houndshield-compliance"
  *
  * Optional env vars:
  *   ELASTIC_USERNAME     — fallback basic auth
  *   ELASTIC_PASSWORD     — fallback basic auth
- *   ELASTIC_PIPELINE     — ingest pipeline name (e.g. "kaelus-enrich")
+ *   ELASTIC_PIPELINE     — ingest pipeline name (e.g. "houndshield-enrich")
  *   ELASTIC_SOURCETYPE   — "cef" to send raw CEF strings instead of JSON docs
  *
  * Index mapping tip — create this index template in Kibana or via API:
- * PUT _index_template/kaelus-compliance
+ * PUT _index_template/houndshield-compliance
  * {
- *   "index_patterns": ["kaelus-compliance*"],
+ *   "index_patterns": ["houndshield-compliance*"],
  *   "template": {
  *     "mappings": {
  *       "properties": {
@@ -60,7 +60,7 @@ export interface ElasticConfig extends SiemConnectorConfig {
 }
 
 const BULK_URL_SUFFIX = "/_bulk";
-const DEFAULT_INDEX = "kaelus-compliance";
+const DEFAULT_INDEX = "houndshield-compliance";
 const NON_RETRYABLE = new Set([400, 401, 403]);
 
 /** Build Authorization header from config. */
@@ -84,7 +84,7 @@ function toElasticDoc(event: SiemEvent, useCef: boolean): Record<string, unknown
       "event.severity": event.severity,
       "event.action": event.action,
       "log.level": event.severity.toLowerCase(),
-      "labels.source": "kaelus",
+      "labels.source": "houndshield",
     };
   }
 
@@ -104,7 +104,7 @@ function toElasticDoc(event: SiemEvent, useCef: boolean): Record<string, unknown
     latency_ms: event.latency_ms,
     stream_truncated: event.stream_truncated,
     framework: event.framework,
-    "labels.source": "kaelus",
+    "labels.source": "houndshield",
     "ecs.version": "8.11.0",
   };
 }

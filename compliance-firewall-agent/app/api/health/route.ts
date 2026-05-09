@@ -13,7 +13,7 @@ export async function GET() {
   const status = {
     status: "healthy",
     version: "1.0.0",
-    product: "Kaelus AI Compliance Firewall",
+    product: "Hound Shield AI Compliance Firewall",
     timestamp: new Date().toISOString(),
     uptime_seconds: Math.round(uptime),
     services: {

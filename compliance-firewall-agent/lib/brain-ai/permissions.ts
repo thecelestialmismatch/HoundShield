@@ -2,7 +2,7 @@
  * Brain AI — Permissions
  *
  * Permission management for tools, commands, and data access.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export type PermissionLevel = "deny" | "ask" | "allow";
@@ -100,7 +100,7 @@ export class PermissionManager {
         allowed: demoAllowed.has(toolName),
         reason: demoAllowed.has(toolName)
           ? undefined
-          : `Tool '${toolName}' requires a paid subscription. Sign up at kaelus.online.`,
+          : `Tool '${toolName}' requires a paid subscription. Sign up at houndshield.com.`,
       };
     }
 

@@ -1,6 +1,6 @@
-# Kaelus.Online — Design System
+# Hound Shield — Design System
 
-> Drop this file in any AI agent context to instantly convey the Kaelus visual identity.
+> Drop this file in any AI agent context to instantly convey the Hound Shield visual identity.
 > Based on the awesome-design-md pattern: plain-text design docs for AI coding agents.
 
 ---
@@ -157,7 +157,7 @@ const PlatformDashboard = dynamic(() => import("@/components/landing/PlatformDas
 
 ## Brand Voice (for AI-generated copy)
 
-- **Active voice:** "Kaelus detects" not "Detection is performed"
+- **Active voice:** "Hound Shield detects" not "Detection is performed"
 - **Numbers first:** "<10ms" not "under ten milliseconds"
 - **Defense angle:** November 2026 enforcement, C3PAO $30K-$150K, 80K+ contractors
 - **No em-dashes** in code, comments, or docs — use periods or commas

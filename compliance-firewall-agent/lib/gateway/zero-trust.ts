@@ -1,7 +1,7 @@
 /**
  * Zero-Trust Mode — Deny by Default, Allowlist per Team
  *
- * When KAELUS_ZERO_TRUST=true, ALL AI requests are blocked by default.
+ * When HOUNDSHIELD_ZERO_TRUST=true, ALL AI requests are blocked by default.
  * Access is granted only to explicitly allowlisted:
  *   - AI providers (e.g. "openai", "anthropic")
  *   - AI models (e.g. "gpt-4o-mini", "claude-3-haiku")
@@ -48,7 +48,7 @@ export interface ZeroTrustDecision {
 // ---------------------------------------------------------------------------
 
 export function isZeroTrustEnabled(): boolean {
-  return process.env.KAELUS_ZERO_TRUST === "true";
+  return process.env.HOUNDSHIELD_ZERO_TRUST === "true";
 }
 
 // ---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /**
- * Kaelus — Slack Integration
+ * Hound Shield — Slack Integration
  *
  * Full Slack integration using Incoming Webhooks and Block Kit.
  *
@@ -72,7 +72,7 @@ export async function postSlackAlert(payload: SlackCompliancePayload): Promise<v
 
   if (!webhookUrl) return; // Slack not configured
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://kaelus.online";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
   const reviewUrl =
     payload.reviewUrl ??
     `${appUrl}/command-center/events?id=${payload.eventId}`;
@@ -267,7 +267,7 @@ async function postWithRetry(
         // 400 from Slack means bad payload, not transient — don't retry
         if (!res.ok) {
           const text = await res.text().catch(() => "");
-          console.error(`[kaelus:slack] Payload rejected (${res.status}): ${text}`);
+          console.error(`[houndshield:slack] Payload rejected (${res.status}): ${text}`);
         }
         return;
       }
@@ -287,7 +287,7 @@ async function postWithRetry(
     }
   }
 
-  console.error("[kaelus:slack] Notification failed after retries:", lastError);
+  console.error("[houndshield:slack] Notification failed after retries:", lastError);
 }
 
 function sleep(ms: number): Promise<void> {

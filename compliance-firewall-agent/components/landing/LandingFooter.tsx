@@ -86,7 +86,7 @@ export function LandingFooter() {
 
         <div className="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-600">
-            &copy; {new Date().getFullYear()} Kaelus.online. Built for regulated industries.
+            &copy; {new Date().getFullYear()} Hound Shield. Built for regulated industries.
           </p>
           <div className="flex gap-6">
             <Link href="/privacy" className="text-xs text-slate-600 hover:text-white/60 transition-colors">Privacy</Link>

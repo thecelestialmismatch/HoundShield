@@ -467,9 +467,9 @@ export function AgentBuilder({
   const [agents, setAgents] = useState<Agent[]>([
     {
       id: "agent-1",
-      name: "Kaelus Code Pro",
+      name: "Hound Shield Code Pro",
       description: "Production-ready code generator with compliance awareness",
-      systemPrompt: "You are Kaelus Code Pro, an expert coding assistant. Write clean, production-ready code with best practices and compliance awareness. Always check for sensitive data patterns before outputting code.",
+      systemPrompt: "You are Hound Shield Code Pro, an expert coding assistant. Write clean, production-ready code with best practices and compliance awareness. Always check for sensitive data patterns before outputting code.",
       model: "deepseek-v3",
       temperature: 0.7,
       isActive: true,

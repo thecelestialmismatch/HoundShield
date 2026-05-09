@@ -1,11 +1,11 @@
 /**
- * Kaelus — Model Compliance Leaderboard
+ * Hound Shield — Model Compliance Leaderboard
  *
  * Tracks compliance metrics per AI model in real time. Answers the question:
  * "Which of the 800+ models produces the cleanest output for regulated workloads?"
  *
  * Metrics tracked per model:
- *   - Total requests routed through Kaelus
+ *   - Total requests routed through Hound Shield
  *   - Violation rate (% of requests that triggered a risk finding)
  *   - Blocked / quarantined counts
  *   - Average confidence score on detections

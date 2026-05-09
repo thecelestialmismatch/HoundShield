@@ -145,7 +145,7 @@ function scanText(text: string): ScanResult[] {
 
 const severityColor = {
     critical: { bg: "bg-rose-500/10", border: "border-rose-500/30", text: "text-rose-400", dot: "bg-rose-500", badge: "bg-rose-500/20 text-rose-300 border-rose-500/30" },
-    high: { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", dot: "bg-amber-500", badge: "bg-amber-500/20 text-amber-300 border-amber-500/30" },
+    high: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-400", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-300 border-brand-500/30" },
     medium: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-400", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-300 border-brand-500/30" },
 };
 
@@ -247,7 +247,7 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     </div>
                     {/* Quick Fix */}
                     <div className="flex gap-3">
-                        <Lightbulb className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
+                        <Lightbulb className="w-4 h-4 text-brand-400 mt-0.5 shrink-0" />
                         <div>
                             <p className="text-xs font-bold text-slate-300 mb-1">Quick Fix</p>
                             <p className="text-xs text-slate-500 leading-relaxed">{result.tip}</p>
@@ -261,10 +261,10 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                             <p className="text-xs text-slate-500 leading-relaxed">{result.fix}</p>
                         </div>
                     </div>
-                    {/* Kaelus Pro upgrade prompt */}
+                    {/* Hound Shield Pro upgrade prompt */}
                     <div className="bg-brand-500/10 border border-brand-500/20 rounded-lg p-3 mt-2">
                         <p className="text-[11px] text-brand-300 leading-relaxed">
-                            <strong>With Kaelus Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
+                            <strong>With Hound Shield Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
                         </p>
                     </div>
                 </div>
@@ -318,7 +318,7 @@ export default function FreeDemoPage() {
     const totalThreats = results.reduce((acc, r) => acc + r.matches.length, 0);
 
     return (
-        <div className="min-h-screen bg-[#07070b] text-white font-sans overflow-x-hidden">
+        <div className="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden">
             <ScrollProgressBar />
             <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
             <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
@@ -344,7 +344,7 @@ export default function FreeDemoPage() {
                         {[
                             { step: "1", title: "Connect (optional)", desc: "Tag scans with your company name", icon: Building2, color: "text-brand-400" },
                             { step: "2", title: "Paste Your Prompt", desc: "Or pick from our sample scenarios", icon: FileText, color: "text-purple-400" },
-                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-amber-400" },
+                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-brand-400" },
                             { step: "4", title: "Get Fix Reports", desc: "Detailed impact + remediation tips", icon: Lightbulb, color: "text-emerald-400" },
                         ].map((s) => {
                             const Icon = s.icon;
@@ -469,9 +469,9 @@ export default function FreeDemoPage() {
                                                 </div>
                                             )}
                                             {highCount > 0 && (
-                                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                                                    <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                                    <span className="text-[11px] font-bold text-amber-400">{highCount} High</span>
+                                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20">
+                                                    <div className="w-2 h-2 rounded-full bg-brand-500" />
+                                                    <span className="text-[11px] font-bold text-brand-400">{highCount} High</span>
                                                 </div>
                                             )}
                                             {mediumCount > 0 && (
@@ -482,7 +482,7 @@ export default function FreeDemoPage() {
                                             )}
                                         </div>
 
-                                        <p className="text-xs text-slate-400 mb-2">Click each threat to see impact, fix tips, and why you need Kaelus Pro ↓</p>
+                                        <p className="text-xs text-slate-400 mb-2">Click each threat to see impact, fix tips, and why you need Hound Shield Pro ↓</p>
 
                                         {results.map((r, i) => (
                                             <ThreatCard key={i} result={r} companyName={companyName} />
@@ -492,10 +492,10 @@ export default function FreeDemoPage() {
                                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-purple-500/15 border border-brand-500/25">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Package className="w-4 h-4 text-brand-400" />
-                                                <p className="text-sm font-bold text-white">Kaelus Pro Package</p>
+                                                <p className="text-sm font-bold text-white">Hound Shield Pro Package</p>
                                             </div>
                                             <p className="text-xs text-slate-500 mb-3 leading-relaxed">
-                                                This free scanner shows you the problem. <strong className="text-slate-300">Kaelus Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
+                                                This free scanner shows you the problem. <strong className="text-slate-300">Hound Shield Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
                                             </p>
                                             <Link href="/auth" className="btn-primary w-full text-center text-sm !py-3 mb-2">
                                                 Get Full Protection <ArrowRight className="w-4 h-4" />
@@ -514,7 +514,7 @@ export default function FreeDemoPage() {
                     <div className="mt-20">
                         <div className="text-center mb-10">
                             <h2 className="text-3xl font-bold tracking-tight mb-3">What Our AI Scans For</h2>
-                            <p className="text-sm text-slate-400 max-w-2xl mx-auto">Kaelus uses 13 AI models to detect 9 categories of sensitive data. Here&apos;s every threat pattern we check — and what makes our detection smarter than regex-only tools.</p>
+                            <p className="text-sm text-slate-400 max-w-2xl mx-auto">Hound Shield uses 13 AI models to detect 9 categories of sensitive data. Here&apos;s every threat pattern we check — and what makes our detection smarter than regex-only tools.</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
@@ -564,11 +564,11 @@ export default function FreeDemoPage() {
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">5. Understand What You Need</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-300">Kaelus Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
+                                    <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-300">Hound Shield Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-emerald-300 mb-2">6. Get the Full Package</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">Ready to protect your company? Sign up for Kaelus Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
+                                    <p className="text-xs text-slate-500 leading-relaxed">Ready to protect your company? Sign up for Hound Shield Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
                                 </div>
                             </div>
                         </div>
@@ -577,7 +577,7 @@ export default function FreeDemoPage() {
                     {/* ═══ WHY FREE SCANNER ≠ FULL PROTECTION ═══ */}
                     <div className="mt-10 grid md:grid-cols-2 gap-6">
                         <div className="glass-card p-6">
-                            <h3 className="text-sm font-bold text-slate-500 mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-amber-400" /> This Free Demo</h3>
+                            <h3 className="text-sm font-bold text-slate-500 mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-brand-400" /> This Free Demo</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "9 regex-based threat patterns",
@@ -595,7 +595,7 @@ export default function FreeDemoPage() {
                             </ul>
                         </div>
                         <div className="glass-card-glow p-6 border-brand-500/20">
-                            <h3 className="text-sm font-bold text-brand-300 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-400" /> Kaelus Pro Package</h3>
+                            <h3 className="text-sm font-bold text-brand-300 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-400" /> Hound Shield Pro Package</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "13 AI models with context awareness",
@@ -639,7 +639,7 @@ export default function FreeDemoPage() {
 
             <footer className="border-t border-white/10 bg-transparent py-8">
                 <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-                    &copy; {new Date().getFullYear()} Kaelus.online — All rights reserved.
+                    &copy; {new Date().getFullYear()} Hound Shield — All rights reserved.
                 </div>
             </footer>
         </div>

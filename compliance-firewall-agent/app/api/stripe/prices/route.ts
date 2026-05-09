@@ -27,7 +27,7 @@ export async function GET() {
     priceIds.map(async (id) => {
       try {
         const s = getStripeClient();
-        const p: any = await s.prices.retrieve(id);
+        const p: Stripe.Price = await s.prices.retrieve(id);
         const amount = p?.unit_amount ?? null; // in cents
         const currency = p?.currency ?? 'usd';
         return { id, amount, currency };

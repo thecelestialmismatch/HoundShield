@@ -36,7 +36,7 @@ const plans = [
     annualTotal: 0,
     description: "7-day free trial — no credit card required. Explore CMMC tools and see your SPRS score.",
     features: [
-      "Kaelus CMMC assessment (read-only)",
+      "Hound Shield CMMC assessment (read-only)",
       "110-control gap analysis",
       "Live SPRS score calculator",
       "Basic compliance dashboard",
@@ -54,13 +54,13 @@ const plans = [
     icon: Crown,
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 69,
-    annualPrice: 890,
-    annualTotal: 890,
+    monthlyPrice: 199,
+    annualPrice: 1910,
+    annualTotal: 1910,
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
-      "Kaelus assessment (editable)",
+      "Hound Shield assessment (editable)",
       "10 user seats",
       "Gap analysis + remediation roadmap",
       "JSON compliance reports",
@@ -76,17 +76,42 @@ const plans = [
     badge: "Most Popular",
   },
   {
+    id: "growth",
+    name: "Growth",
+    icon: ShieldCheck,
+    iconColor: "text-purple-400",
+    iconBg: "bg-purple-500/10 border-purple-500/20",
+    monthlyPrice: 499,
+    annualPrice: 4790,
+    annualTotal: 4790,
+    description: "Unlimited scans, PDF reports, and C3PAO coordination for growing primes.",
+    features: [
+      "AI gateway — unlimited scans",
+      "Everything in Pro",
+      "25 user seats",
+      "PDF compliance reports",
+      "C3PAO assessment coordination",
+      "Audit trail export",
+      "SSO & RBAC",
+      "Dedicated onboarding",
+      "Custom SLA (99.9%)",
+    ],
+    cta: "Start 7-Day Trial",
+    ctaStyle: "btn-ghost",
+    highlighted: false,
+    badge: null,
+  },
+  {
     id: "enterprise",
     name: "Enterprise",
     icon: Building2,
-    iconColor: "text-purple-400",
-    iconBg: "bg-purple-500/10 border-purple-500/20",
-    monthlyPrice: 199,
-    annualPrice: 1990,
-    annualTotal: 1990,
-    description: "Unlimited scans, unlimited seats, and on-prem deployment for large primes.",
+    iconColor: "text-amber-400",
+    iconBg: "bg-amber-500/10 border-amber-500/20",
+    monthlyPrice: 999,
+    annualPrice: 9590,
+    annualTotal: 9590,
+    description: "On-prem deployment, unlimited seats, and air-gapped support for large primes.",
     features: [
-      "AI gateway — unlimited scans",
       "Everything in Growth",
       "Unlimited user seats",
       "PDF reports (white-labeled)",
@@ -94,9 +119,9 @@ const plans = [
       "Custom SLA (99.99%)",
       "Dedicated account manager",
       "HITL quarantine review",
-      "C3PAO assessment coordination",
+      "Custom detection rules",
     ],
-    cta: "Start 7-Day Trial",
+    cta: "Contact Sales",
     ctaStyle: "btn-ghost",
     highlighted: false,
     badge: null,
@@ -105,11 +130,11 @@ const plans = [
     id: "agency",
     name: "Agency / MSP",
     icon: Users,
-    iconColor: "text-amber-400",
-    iconBg: "bg-amber-500/10 border-amber-500/20",
-    monthlyPrice: 499,
-    annualPrice: 4990,
-    annualTotal: 4990,
+    iconColor: "text-brand-400",
+    iconBg: "bg-brand-500/10 border-brand-500/20",
+    monthlyPrice: 2499,
+    annualPrice: 23990,
+    annualTotal: 23990,
     description: "Multi-tenant platform for consultants managing multiple defense contractors.",
     features: [
       "Everything in Enterprise",
@@ -135,6 +160,7 @@ interface ComparisonRow {
   feature: string;
   free: FeatureValue;
   pro: FeatureValue;
+  growth: FeatureValue;
   enterprise: FeatureValue;
   agency: FeatureValue;
   category: string;
@@ -142,36 +168,36 @@ interface ComparisonRow {
 
 const comparisonFeatures: ComparisonRow[] = [
   // AI Gateway
-  { feature: "Monthly API scans", free: "None", pro: "50K", enterprise: "Unlimited", agency: "Unlimited", category: "AI Gateway" },
-  { feature: "Detection patterns", free: false, pro: "16", enterprise: "16+ Custom", agency: "16+ Custom", category: "AI Gateway" },
-  { feature: "Real-time threat feed", free: false, pro: true, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "Custom detection rules", free: false, pro: false, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "HITL quarantine review", free: false, pro: false, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "Monthly API scans", free: "None", pro: "50K", growth: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "AI Gateway" },
+  { feature: "Detection patterns", free: false, pro: "16", growth: "16", enterprise: "16+ Custom", agency: "16+ Custom", category: "AI Gateway" },
+  { feature: "Real-time threat feed", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "Custom detection rules", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "HITL quarantine review", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "AI Gateway" },
   // CMMC & Compliance
-  { feature: "CMMC self-assessment", free: "Read-only", pro: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SPRS score calculator", free: true, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Gap analysis & remediation", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "JSON compliance reports", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "PDF compliance reports", free: false, pro: false, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SSP document generation", free: false, pro: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Audit trail export", free: false, pro: false, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "C3PAO coordination", free: false, pro: false, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "CMMC self-assessment", free: "Read-only", pro: true, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
+  { feature: "SPRS score calculator", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "Gap analysis & remediation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "JSON compliance reports", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "PDF compliance reports", free: false, pro: false, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
+  { feature: "SSP document generation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "Audit trail export", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "C3PAO coordination", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
   // Platform & Integrations
-  { feature: "Dashboard access", free: "Basic", pro: "Full", enterprise: "Full", agency: "Multi-tenant", category: "Platform & Integrations" },
-  { feature: "Log retention", free: "7 days", pro: "90 days", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Team seats", free: "1", pro: "10", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Client accounts", free: false, pro: false, enterprise: false, agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Slack & webhook alerts", free: false, pro: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "API access", free: false, pro: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "SSO & RBAC", free: false, pro: false, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "White-label reports", free: false, pro: false, enterprise: false, agency: true, category: "Platform & Integrations" },
-  { feature: "On-prem / air-gapped", free: false, pro: false, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "Dashboard access", free: "Basic", pro: "Full", growth: "Full", enterprise: "Full", agency: "Multi-tenant", category: "Platform & Integrations" },
+  { feature: "Log retention", free: "7 days", pro: "90 days", growth: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Team seats", free: "1", pro: "10", growth: "25", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Client accounts", free: false, pro: false, growth: false, enterprise: false, agency: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Slack & webhook alerts", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "API access", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "SSO & RBAC", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "White-label reports", free: false, pro: false, growth: false, enterprise: false, agency: true, category: "Platform & Integrations" },
+  { feature: "On-prem / air-gapped", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Platform & Integrations" },
   // Support
-  { feature: "Community support", free: true, pro: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Priority support (< 4hr)", free: false, pro: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated onboarding", free: false, pro: false, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated account manager", free: false, pro: false, enterprise: true, agency: true, category: "Support" },
-  { feature: "SLA guarantee", free: false, pro: false, enterprise: "99.99%", agency: "99.99%", category: "Support" },
+  { feature: "Community support", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
+  { feature: "Priority support (< 4hr)", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
+  { feature: "Dedicated onboarding", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Support" },
+  { feature: "Dedicated account manager", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Support" },
+  { feature: "SLA guarantee", free: false, pro: false, growth: "99.9%", enterprise: "99.99%", agency: "99.99%", category: "Support" },
 ];
 
 /* ===== FAQ DATA ===== */
@@ -291,7 +317,7 @@ export default function PricingPage() {
       router.push("/signup");
       return;
     }
-    if (tier === "agency") {
+    if (tier === "agency" || tier === "enterprise") {
       window.location.href = "#contact";
       return;
     }
@@ -326,7 +352,7 @@ export default function PricingPage() {
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
 
   return (
-    <div className="dark min-h-screen bg-[#07070b] relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
       <ScrollProgressBar />
       {/* ===== FLOATING ORBS ===== */}
       <div className="orb orb-1" />
@@ -397,7 +423,7 @@ export default function PricingPage() {
       {/* ===== PRICING CARDS ===== */}
       <section className="relative px-6 pb-24">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5 lg:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6 pt-6">
             {plans.map((plan, i) => {
               const price =
                 plan.monthlyPrice === -1
@@ -432,7 +458,7 @@ export default function PricingPage() {
 
                     <div
                       className={`relative h-full flex flex-col p-8 rounded-2xl ${plan.highlighted
-                          ? "bg-[#0d0d14]"
+                          ? "bg-[#111111]"
                           : "glass-card-glow"
                         }`}
                     >
@@ -468,7 +494,11 @@ export default function PricingPage() {
                           </div>
                         )}
                         <p className="text-xs text-slate-500 mt-1">
-                          {plan.id === 'free' ? 'No credit card required' : isAnnual ? 'Billed annually · save 20%' : 'Billed monthly'}
+                          {plan.id === 'free'
+                            ? 'No credit card required'
+                            : isAnnual && plan.annualPrice
+                              ? `~$${Math.round(plan.annualPrice / 12)}/mo · billed annually`
+                              : 'Billed monthly'}
                         </p>
                       </div>
 
@@ -549,7 +579,7 @@ export default function PricingPage() {
                   Try any paid plan risk-free. If you&apos;re not completely satisfied
                   within the first 30 days, we&apos;ll refund every penny. No
                   questions asked, no hoops to jump through. We&apos;re that
-                  confident you&apos;ll love Kaelus.
+                  confident you&apos;ll love Hound Shield.
                 </p>
               </div>
             </div>
@@ -576,13 +606,14 @@ export default function PricingPage() {
           <AnimatedSection delay={150}>
             <div className="glass-card overflow-x-auto">
               {/* Table header */}
-              <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.06]">
+              <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.06]">
                 <div className="p-5 text-sm font-medium text-slate-500">
                   Feature
                 </div>
                 {([
                   { name: "Starter", key: "free" },
                   { name: "Pro", key: "pro" },
+                  { name: "Growth", key: "growth" },
                   { name: "Enterprise", key: "enterprise" },
                   { name: "Agency", key: "agency" },
                 ] as const).map((tier) => (
@@ -607,7 +638,7 @@ export default function PricingPage() {
               {categories.map((category) => (
                 <div key={category}>
                   {/* Category header */}
-                  <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.04] bg-white/[0.015]">
+                  <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.04] bg-white/[0.015]">
                     <div className="col-span-6 p-4 px-5">
                       <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
                         {category}
@@ -621,13 +652,13 @@ export default function PricingPage() {
                     .map((row, ri) => (
                       <div
                         key={ri}
-                        className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
+                        className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
                       >
                         <div className="p-4 px-5 text-sm text-slate-400">
                           {row.feature}
                         </div>
                         {(
-                          ["free", "pro", "enterprise", "agency"] as const
+                          ["free", "pro", "growth", "enterprise", "agency"] as const
                         ).map((planKey) => {
                           const val = row[planKey];
                           return (
@@ -686,7 +717,7 @@ export default function PricingPage() {
                 icon: Lock,
                 stat: "99.99%",
                 label: "Uptime SLA",
-                color: "text-amber-400",
+                color: "text-brand-400",
               },
               {
                 icon: Users,
@@ -722,7 +753,7 @@ export default function PricingPage() {
                 <span className="text-gradient-brand">Questions</span>
               </h2>
               <p className="text-slate-400">
-                Everything you need to know about Kaelus pricing and plans.
+                Everything you need to know about Hound Shield pricing and plans.
               </p>
             </div>
           </AnimatedSection>
@@ -759,7 +790,7 @@ export default function PricingPage() {
                   </span>
                 </h2>
                 <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ teams that trust Kaelus to protect their most
+                  Join 500+ teams that trust Hound Shield to protect their most
                   sensitive data from unauthorized AI exposure. Deploy in
                   under 15 minutes.
                 </p>
@@ -868,7 +899,7 @@ export default function PricingPage() {
           </div>
           <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-700">
-              &copy; 2026 Kaelus.online — All rights reserved.
+              &copy; 2026 Hound Shield — All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-600">
               <span>Privacy Policy</span>

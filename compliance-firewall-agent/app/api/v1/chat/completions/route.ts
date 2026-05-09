@@ -5,10 +5,10 @@
  *
  * Drop-in replacement for the OpenAI Chat Completions API. Configure your
  * OpenAI client to point to this URL and all traffic is automatically
- * scanned by the Kaelus compliance engine before reaching the upstream LLM.
+ * scanned by the Hound Shield compliance engine before reaching the upstream LLM.
  *
  * Authentication:
- *   Authorization: Bearer <kaelus-api-key>   (Kaelus gateway key)
+ *   Authorization: Bearer <houndshield-api-key>   (Hound Shield gateway key)
  *   x-provider-api-key: <upstream-key>       (OpenAI/Anthropic/Gemini key)
  *   x-provider: openai | anthropic | google | openrouter  (default: openai)
  *   x-user-id: <user-identifier>             (optional, for audit trail)
@@ -20,10 +20,10 @@
  *   { error: { message, type, code } }
  *
  * Compliance scan results are appended as response headers:
- *   X-Kaelus-Risk-Level   e.g. NONE | LOW | MEDIUM | HIGH | CRITICAL
- *   X-Kaelus-Action       ALLOWED | BLOCKED | QUARANTINED
- *   X-Kaelus-Scan-Ms      scan latency in milliseconds
- *   X-Kaelus-Request-Id   opaque request identifier for audit lookup
+ *   X-Hound Shield-Risk-Level   e.g. NONE | LOW | MEDIUM | HIGH | CRITICAL
+ *   X-Hound Shield-Action       ALLOWED | BLOCKED | QUARANTINED
+ *   X-Hound Shield-Scan-Ms      scan latency in milliseconds
+ *   X-Hound Shield-Request-Id   opaque request identifier for audit lookup
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -101,7 +101,7 @@ function openAIError(
 }
 
 /**
- * Validates a Kaelus gateway API key.
+ * Validates a Hound Shield gateway API key.
  * Accepts any non-empty key in demo mode (Supabase not configured).
  */
 async function validateGatewayKey(key: string): Promise<boolean> {
@@ -565,7 +565,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   const tier = await getUserSubscription(userId);
   if (!canAccessGateway(tier)) {
     return openAIError(
-      "Gateway access requires a Pro plan or higher. Upgrade at https://kaelus.online/pricing",
+      "Gateway access requires a Pro plan or higher. Upgrade at https://houndshield.com/pricing",
       "insufficient_quota",
       "plan_required",
       402
@@ -582,10 +582,10 @@ export async function POST(req: NextRequest): Promise<Response> {
     classification.should_quarantine ? "QUARANTINED" : "ALLOWED";
 
   const complianceHeaders: Record<string, string> = {
-    "X-Kaelus-Risk-Level": classification.risk_level,
-    "X-Kaelus-Action": action,
-    "X-Kaelus-Scan-Ms": String(scanMs),
-    "X-Kaelus-Request-Id": requestId,
+    "X-Hound Shield-Risk-Level": classification.risk_level,
+    "X-Hound Shield-Action": action,
+    "X-Hound Shield-Scan-Ms": String(scanMs),
+    "X-Hound Shield-Request-Id": requestId,
   };
 
   // --- Block/quarantine response ----------------------------------------
@@ -594,12 +594,12 @@ export async function POST(req: NextRequest): Promise<Response> {
       {
         error: {
           message:
-            "Request blocked by Kaelus compliance firewall. " +
+            "Request blocked by Hound Shield compliance firewall. " +
             `Risk level: ${classification.risk_level}. ` +
             `Detected: ${classification.entities.map((e) => e.type).join(", ") || "policy violation"}.`,
           type: "content_policy_violation",
           code: "compliance_blocked",
-          kaelus_meta: {
+          houndshield_meta: {
             risk_level: classification.risk_level,
             entities: classification.entities.slice(0, 5),
             scan_ms: scanMs,
@@ -616,11 +616,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       {
         error: {
           message:
-            "Request quarantined by Kaelus compliance firewall pending review. " +
+            "Request quarantined by Hound Shield compliance firewall pending review. " +
             `Risk level: ${classification.risk_level}.`,
           type: "content_policy_violation",
           code: "compliance_quarantined",
-          kaelus_meta: {
+          houndshield_meta: {
             risk_level: classification.risk_level,
             entities: classification.entities.slice(0, 5),
             scan_ms: scanMs,
@@ -683,7 +683,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         total_tokens: result.promptTokens + result.completionTokens,
       },
       system_fingerprint: null,
-      kaelus_meta: {
+      houndshield_meta: {
         risk_level: classification.risk_level,
         scan_ms: scanMs,
         action: "ALLOWED",

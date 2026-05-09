@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kaelus AI Firewall — Settings</title>
+    <title>Hound Shield AI Firewall — Settings</title>
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
       body {
@@ -82,7 +82,7 @@
     <div class="page">
       <header>
         <span style="font-size:22px">🛡️</span>
-        <span class="brand">Kaelus AI Firewall</span>
+        <span class="brand">Hound Shield AI Firewall</span>
       </header>
 
       <h2>General</h2>
@@ -114,17 +114,17 @@
         </div>
       </div>
 
-      <h2>Kaelus API (optional)</h2>
+      <h2>Hound Shield API (optional)</h2>
       <div class="card">
         <div class="field">
           <label for="api-key">API Key</label>
           <input type="text" id="api-key" placeholder="kae_live_..." autocomplete="off" />
-          <p class="hint">Connect to your Kaelus workspace for deep scanning and audit logging. Leave blank for local-only scanning.</p>
+          <p class="hint">Connect to your Hound Shield workspace for deep scanning and audit logging. Leave blank for local-only scanning.</p>
         </div>
         <div class="field">
           <label for="endpoint">Gateway Endpoint</label>
-          <input type="url" id="endpoint" placeholder="https://kaelus.online/api/v1/scan" />
-          <p class="hint">Override if you self-host the Kaelus gateway.</p>
+          <input type="url" id="endpoint" placeholder="https://houndshield.com/api/v1/scan" />
+          <p class="hint">Override if you self-host the Hound Shield gateway.</p>
         </div>
       </div>
 
@@ -135,7 +135,7 @@
     <script>
       // Load saved settings
       chrome.storage.sync.get(
-        { enabled: true, blockOnRisk: ["CRITICAL", "HIGH"], apiKey: "", endpoint: "https://kaelus.online/api/v1/scan" },
+        { enabled: true, blockOnRisk: ["CRITICAL", "HIGH"], apiKey: "", endpoint: "https://houndshield.com/api/v1/scan" },
         (s) => {
           document.getElementById("enabled").checked = s.enabled;
           document.getElementById("block-critical").checked = s.blockOnRisk.includes("CRITICAL");
@@ -156,7 +156,7 @@
           enabled: document.getElementById("enabled").checked,
           blockOnRisk,
           apiKey: document.getElementById("api-key").value.trim() || null,
-          endpoint: document.getElementById("endpoint").value.trim() || "https://kaelus.online/api/v1/scan",
+          endpoint: document.getElementById("endpoint").value.trim() || "https://houndshield.com/api/v1/scan",
         }, () => {
           const msg = document.getElementById("saved-msg");
           msg.style.display = "block";

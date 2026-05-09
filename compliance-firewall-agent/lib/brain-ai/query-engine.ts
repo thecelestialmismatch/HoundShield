@@ -175,7 +175,7 @@ export class QueryEnginePort {
     const queue = new AsyncQueue<QueryEngineEvent>();
 
     const { executeAgentLoop } = await import("../agent/orchestrator");
-    const { AgentStreamEvent } = await import("../agent/types");
+    type AgentStreamEvent = import("../agent/types").AgentStreamEvent;
 
     const openRouterMessages = messages
       .filter((m) => m.role !== "system")
@@ -192,7 +192,7 @@ export class QueryEnginePort {
       temperature: cfg.temperature,
       apiKey: apiKey ?? process.env.OPENROUTER_API_KEY ?? "",
       sessionId,
-      onEvent: (agentEvent: typeof AgentStreamEvent) => {
+      onEvent: (agentEvent: AgentStreamEvent) => {
         const evt = agentEvent as {
           type: string;
           content?: string;
@@ -226,8 +226,8 @@ export class QueryEnginePort {
           Object.assign(usage, addTurn(usage, inp, out));
           // usage events are internal bookkeeping — not forwarded to consumer
           return;
-        } else if (evt.type === "error" && (evt as { message?: string }).message) {
-          qEvent = { type: "error", message: (evt as { message: string }).message };
+        } else if (evt.type === "error" && (evt as unknown as { message?: string }).message) {
+          qEvent = { type: "error", message: (evt as unknown as { message: string }).message };
         }
 
         if (qEvent) {

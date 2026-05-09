@@ -3,7 +3,7 @@
  *
  * Provides runtime context for each Brain AI invocation:
  * user identity, session state, permissions, cost budget, and environment.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 import { PermissionContext, PermissionManager, createPermissionManager } from "./permissions";

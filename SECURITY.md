@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Currently, the following versions of the Kaelus.online compliance firewall are supported with security updates.
+Currently, the following versions of the Hound Shield compliance firewall are supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -11,12 +11,12 @@ Currently, the following versions of the Kaelus.online compliance firewall are s
 
 ## Reporting a Vulnerability
 
-Kaelus maintains a **zero-tolerance policy** for vulnerabilities concerning data sovereignty or AI traffic interception boundaries.
+Hound Shield maintains a **zero-tolerance policy** for vulnerabilities concerning data sovereignty or AI traffic interception boundaries.
 
 If you identify a security flaw in this software, **do not submit a public issue or pull request**.
 
 Please contact our security operations center immediately by emailing:
-**info@kaelus.online**
+**info@houndshield.com**
 
 Please include:
 1. A descriptive subject line.

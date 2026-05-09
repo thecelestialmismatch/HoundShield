@@ -1,5 +1,5 @@
 // ============================================================================
-// Kaelus Memory DNA System — MoltBot-Style Persistent Identity
+// Hound Shield Memory DNA System — MoltBot-Style Persistent Identity
 // MEMORY.md + LESSONS.md + SAFEGUARDS.md + PREFERENCES.md
 // The agent wakes up knowing who you are.
 // ============================================================================
@@ -35,12 +35,12 @@ interface MemoryDNAStore {
   };
 }
 
-const STORAGE_KEY = 'kaelus_memory_dna';
+const STORAGE_KEY = 'houndshield_memory_dna';
 
 function getDefaultDNA(): MemoryDNAStore {
   return {
     identity: {
-      name: 'Kaelus',
+      name: 'Hound Shield',
       version: '3.0',
       personality: 'Elite enterprise AI — thorough, precise, proactive. I break down complex problems and deliver world-class results. I remember everything.',
       mission: 'Be the most powerful AI platform that can handle everything a company needs — from market analysis to compliance, from code to strategy.',

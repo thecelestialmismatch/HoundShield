@@ -46,8 +46,7 @@ memory/
 tests/
 test_reports/
 
-# Claude / AI session artifacts
-.claude/
+# Claude / AI session artifacts (ephemeral — never commit)
 .agents/
 .agent/
 .skills/
@@ -55,12 +54,15 @@ test_reports/
 .claude-session-state.md
 
 # AI prompt / session files (never commit)
-CLAUDE.md
 CLAUDE-CODE-MISSION.md
 CONTINUE.md
 PR_BODY.md
 *-session-state.md
-tasks/
+
+# .claude/ project config IS tracked (agents, skills, hooks, settings)
+# Only ignore ephemeral sub-paths if they appear
+.claude/context/
+.claude/sessions/
 
 # Strategy & planning docs (keep local, not in repo)
 *-EVOLUTION-STRATEGY*.md

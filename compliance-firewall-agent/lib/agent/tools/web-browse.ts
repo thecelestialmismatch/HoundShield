@@ -40,7 +40,7 @@ const webBrowseTool: ToolHandler = {
 
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'Kaelus-Agent/1.0 (Enterprise AI Platform)',
+          'User-Agent': 'Hound Shield-Agent/1.0 (Enterprise AI Platform)',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.5',
         },

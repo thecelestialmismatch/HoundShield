@@ -1,5 +1,5 @@
 /**
- * Kaelus Secrets Manager
+ * Hound Shield Secrets Manager
  *
  * Single source of truth for all runtime secrets.
  * Reads from environment variables today; interface is async so it can be

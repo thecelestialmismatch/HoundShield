@@ -2,7 +2,7 @@
  * Custom Pattern Library — Per-Tenant Compliance Rules
  *
  * Allows organizations to define their own sensitive data patterns
- * on top of Kaelus's built-in 16+ detection rules.
+ * on top of Hound Shield's built-in 16+ detection rules.
  *
  * Use cases:
  *   - Defense contractors: custom contract number formats, program codes

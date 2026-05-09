@@ -1,12 +1,12 @@
 /**
- * Kaelus Custom Server — WebSocket + Next.js
+ * Hound Shield Custom Server — WebSocket + Next.js
  *
  * This server extends the standard Next.js standalone server with WebSocket
  * support for persistent, low-latency compliance gateway connections.
  *
  * Architecture:
  *   - HTTP requests → Next.js request handler (all existing API routes work as-is)
- *   - WebSocket upgrades on /ws/gateway → Kaelus WebSocket handler
+ *   - WebSocket upgrades on /ws/gateway → Hound Shield WebSocket handler
  *   - WebSocket ping/pong heartbeat for connection health
  *
  * Usage:
@@ -102,7 +102,7 @@ app.prepare().then(() => {
     console.log(`
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
-║    KAELUS AI Compliance Gateway                           ║
+║    HOUNDSHIELD AI Compliance Gateway                           ║
 ║                                                              ║
 ║   HTTP  → http://${hostname}:${port}                              ║
 ║   WS    → ws://${hostname}:${port}/ws/gateway                     ║

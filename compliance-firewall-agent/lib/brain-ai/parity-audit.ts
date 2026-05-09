@@ -2,7 +2,7 @@
  * Brain AI — Parity Audit
  *
  * assesses Brain AI feature coverage
- * against the full Brain AI architecture and Kaelus feature checklist.
+ * against the full Brain AI architecture and Hound Shield feature checklist.
  * Generates a detailed markdown report of what's present vs missing.
  */
 
@@ -22,7 +22,7 @@ const EXPECTED_FEATURES = [
   "index — unified BrainAI singleton",
 ];
 
-// Expected Kaelus compliance features
+// Expected Hound Shield compliance features
 const EXPECTED_COMPLIANCE = [
   "CMMC Level 2 classifier",
   "CUI detection patterns",

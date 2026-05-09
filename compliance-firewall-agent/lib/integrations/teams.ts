@@ -1,5 +1,5 @@
 /**
- * Kaelus — Microsoft Teams Integration
+ * Hound Shield — Microsoft Teams Integration
  *
  * Posts compliance alerts to Microsoft Teams via Incoming Webhooks
  * using Adaptive Cards v1.5 format.
@@ -65,7 +65,7 @@ export async function postTeamsAlert(payload: TeamsCompliancePayload): Promise<v
 
   if (!webhookUrl) return; // Teams not configured
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://kaelus.online";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
   const reviewUrl =
     payload.reviewUrl ??
     `${appUrl}/command-center/events?id=${payload.eventId}`;
@@ -259,7 +259,7 @@ async function postWithRetry(
 
       if (res.status === 400) {
         const text = await res.text().catch(() => "");
-        console.error(`[kaelus:teams] Payload rejected (${res.status}): ${text}`);
+        console.error(`[houndshield:teams] Payload rejected (${res.status}): ${text}`);
         return;
       }
 
@@ -276,7 +276,7 @@ async function postWithRetry(
     }
   }
 
-  console.error("[kaelus:teams] Notification failed after retries:", lastError);
+  console.error("[houndshield:teams] Notification failed after retries:", lastError);
 }
 
 function sleep(ms: number): Promise<void> {

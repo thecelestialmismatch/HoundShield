@@ -1,7 +1,7 @@
 /**
  * SAML/SSO Support — Okta, Azure AD, JumpCloud
  *
- * Kaelus uses Supabase Auth as the identity backbone.
+ * Hound Shield uses Supabase Auth as the identity backbone.
  * Supabase Enterprise exposes SAML 2.0 via supabase.auth.signInWithSSO().
  *
  * This module provides:
@@ -156,7 +156,7 @@ const PROVIDER_SETUP_URLS: Record<SamlProvider, string> = {
   okta:      "https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_saml.htm",
   azure_ad:  "https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/add-application-portal-setup-sso",
   jumpcloud: "https://jumpcloud.com/support/configure-sso-with-saml",
-  generic:   "https://kaelus.online/docs/sso",
+  generic:   "https://houndshield.com/docs/sso",
 };
 
 export function getProviderLabel(provider: SamlProvider): string {
@@ -164,18 +164,18 @@ export function getProviderLabel(provider: SamlProvider): string {
 }
 
 export function getProviderSetupUrl(provider: SamlProvider): string {
-  return PROVIDER_SETUP_URLS[provider] ?? "https://kaelus.online/docs/sso";
+  return PROVIDER_SETUP_URLS[provider] ?? "https://houndshield.com/docs/sso";
 }
 
 // ---------------------------------------------------------------------------
-// SP Metadata XML builder (used by IdP admin to configure Kaelus as SP)
+// SP Metadata XML builder (used by IdP admin to configure Hound Shield as SP)
 // ---------------------------------------------------------------------------
 
 /**
  * Generate a minimal SAML 2.0 Service Provider metadata XML.
- * The IdP admin uploads this XML when configuring the Kaelus application.
+ * The IdP admin uploads this XML when configuring the Hound Shield application.
  *
- * @param baseUrl  — e.g. "https://kaelus.online"
+ * @param baseUrl  — e.g. "https://houndshield.com"
  * @param entityId — SP Entity ID (defaults to baseUrl)
  */
 export function buildSpMetadataXml(baseUrl: string, entityId?: string): string {

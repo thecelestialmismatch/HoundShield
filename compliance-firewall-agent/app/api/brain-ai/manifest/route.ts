@@ -2,7 +2,7 @@
  * Brain AI — Manifest Endpoint
  *
  * GET /api/brain-ai/manifest
- * Returns the Kaelus codebase structure manifest.
+ * Returns the Hound Shield codebase structure manifest.
  * Query param: ?format=markdown to get markdown output.
  */
 

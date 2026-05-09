@@ -61,7 +61,7 @@ const TYPE_BADGE: Record<TaskType, { icon: React.ElementType; bg: string; text: 
   automated: { icon: Zap, bg: 'bg-purple-500/10', text: 'text-purple-400' },
 };
 
-const AGENTS = ['Kaelus', 'Analyst', 'Creator', 'Monitor', 'Specialist', 'Orchestrator'];
+const AGENTS = ['Hound Shield', 'Analyst', 'Creator', 'Monitor', 'Specialist', 'Orchestrator'];
 
 const SAMPLE_TASKS: Task[] = [
   { id: 't1', title: 'Scan vendor contracts for GDPR compliance', status: 'backlog', assignee: 'Analyst', priority: 'medium', dueDate: '2026-03-05', type: 'one-time', tags: ['compliance'] },
@@ -70,7 +70,7 @@ const SAMPLE_TASKS: Task[] = [
   { id: 't4', title: 'Draft privacy policy update for EU markets', status: 'in_progress', assignee: 'Creator', priority: 'high', dueDate: '2026-03-03', type: 'one-time', tags: ['policy'] },
   { id: 't5', title: 'Monitor API rate-limit violations', status: 'done', assignee: 'Monitor', priority: 'medium', dueDate: '2026-02-25', type: 'automated', tags: ['api'] },
   { id: 't6', title: 'Build compliance training quiz module', status: 'review', assignee: 'Creator', priority: 'low', dueDate: '2026-03-10', type: 'one-time', tags: ['training'] },
-  { id: 't7', title: 'Daily security log aggregation', status: 'done', assignee: 'Kaelus', priority: 'medium', dueDate: '2026-02-27', type: 'recurring', tags: ['logging'] },
+  { id: 't7', title: 'Daily security log aggregation', status: 'done', assignee: 'Hound Shield', priority: 'medium', dueDate: '2026-02-27', type: 'recurring', tags: ['logging'] },
   { id: 't8', title: 'Evaluate new encryption library', status: 'todo', assignee: 'Specialist', priority: 'high', dueDate: '2026-03-08', type: 'one-time', tags: ['security'] },
   { id: 't9', title: 'Orchestrate quarterly risk assessment', status: 'backlog', assignee: 'Orchestrator', priority: 'urgent', dueDate: '2026-03-15', type: 'recurring', tags: ['risk'] },
   { id: 't10', title: 'Auto-tag sensitive documents in knowledge base', status: 'review', assignee: 'Analyst', priority: 'medium', dueDate: '2026-03-02', type: 'automated', tags: ['knowledge'] },

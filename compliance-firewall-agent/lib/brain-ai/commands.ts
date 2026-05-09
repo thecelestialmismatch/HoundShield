@@ -1,7 +1,7 @@
 /**
  * Brain AI — Command Registry
  *
- * adapted for Kaelus slash-commands.
+ * adapted for Hound Shield slash-commands.
  * Manages discovery, routing, and execution of Brain AI commands.
  */
 
@@ -15,7 +15,7 @@ export interface CommandSnapshot {
   requiresAuth: boolean;
 }
 
-// ─── Built-in Kaelus Brain AI commands ───────────────────────────────────
+// ─── Built-in Hound Shield Brain AI commands ───────────────────────────────────
 
 const BUILTIN_COMMANDS: CommandSnapshot[] = [
   {
@@ -76,7 +76,7 @@ const BUILTIN_COMMANDS: CommandSnapshot[] = [
   },
   {
     name: "pricing",
-    description: "View Kaelus subscription plans and upgrade options",
+    description: "View Hound Shield subscription plans and upgrade options",
     sourceHint: "/pricing",
     category: "utility",
     requiresAuth: false,
@@ -90,7 +90,7 @@ const BUILTIN_COMMANDS: CommandSnapshot[] = [
   },
   {
     name: "demo",
-    description: "Run the Kaelus compliance firewall demo",
+    description: "Run the Hound Shield compliance firewall demo",
     sourceHint: "/demo",
     category: "utility",
     requiresAuth: false,

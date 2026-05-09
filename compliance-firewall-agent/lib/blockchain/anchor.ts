@@ -1,5 +1,5 @@
 /**
- * Blockchain Anchor Service — Kaelus.online
+ * Blockchain Anchor Service — Hound Shield
  *
  * Anchors compliance event hashes to Base L2 (Coinbase's Ethereum L2)
  * for tamper-proof audit evidence. Cost: ~$0.001 per transaction.
@@ -86,8 +86,8 @@ export async function anchorToBlockchain(
   const wallet = getWalletClient();
   const account = getAnchorAccount();
 
-  // Prefix the hash with "KAELUS:" for easy on-chain identification
-  const data = toHex(`KAELUS:${eventHash}`);
+  // Prefix the hash with "HOUNDSHIELD:" for easy on-chain identification
+  const data = toHex(`HOUNDSHIELD:${eventHash}`);
 
   // Send zero-value transaction to self with hash as data
   const txHash = await wallet.sendTransaction({
@@ -130,7 +130,7 @@ export async function verifyOnChain(
       ? Buffer.from(tx.input.slice(2), "hex").toString("utf-8")
       : null;
 
-    const expectedOnChain = `KAELUS:${expectedHash}`;
+    const expectedOnChain = `HOUNDSHIELD:${expectedHash}`;
     const verified = onChainData === expectedOnChain;
 
     // Get block timestamp

@@ -1,5 +1,5 @@
 /**
- * WebSocket Connection Handler for the Kaelus Gateway.
+ * WebSocket Connection Handler for the Hound Shield Gateway.
  *
  * Manages the full lifecycle of a WebSocket connection:
  *   1. Authentication (first message must be `auth`)
@@ -9,7 +9,7 @@
  *   5. Graceful disconnect and resource cleanup
  *
  * Protocol:
- *   Client -> { type: "auth", api_key: "kaelus-key-..." }
+ *   Client -> { type: "auth", api_key: "houndshield-key-..." }
  *   Server -> { type: "auth.success", session_id: "uuid" }
  *
  *   Client -> { type: "request.create", provider, model, messages, api_key, ... }

@@ -3,7 +3,7 @@
  *
  * Reusable agent skills — high-level capabilities that combine tools
  * and knowledge to accomplish specific compliance tasks.
- * Brain AI original implementation for Kaelus.online.
+ * Brain AI original implementation for Hound Shield.
  */
 
 export interface Skill {
