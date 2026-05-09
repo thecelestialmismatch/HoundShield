@@ -281,3 +281,60 @@ export function managerModeCheck(
 
   return null;
 }
+
+// ─── Backward-compat shims ───────────────────────────────────────────────────
+// brain-query.ts and specialist-agents.ts expect a class-based API.
+
+export type KnowledgeDomain = KGCategory;
+
+interface QueryResult {
+  node: KGNode & { domain: KGCategory };
+  score: number;
+  stale: boolean;
+}
+
+export function getKnowledgeGraph() {
+  return {
+    query({ query, domains, limit = 5 }: { query: string; domains?: KGCategory[]; limit?: number }): QueryResult[] {
+      const results = queryKnowledge(SEED_KNOWLEDGE_GRAPH, {
+        keyword: query,
+        category: domains?.[0],
+        limit,
+      });
+      return results.map((node) => ({
+        node: { ...node, domain: node.category },
+        score: node.confidence * 10,
+        stale: false,
+      }));
+    },
+    addNode(params: { domain: KGCategory; title: string; content: string; keywords?: string[]; source?: string; [k: string]: unknown }): KGNode {
+      const newNode: KGNode = {
+        id: `${params.domain}-${Date.now()}`,
+        category: params.domain,
+        title: params.title,
+        content: params.content,
+        confidence: 0.8,
+        lastUpdated: new Date().toISOString().split("T")[0],
+      };
+      SEED_KNOWLEDGE_GRAPH.nodes.push(newNode);
+      return newNode;
+    },
+  };
+}
+
+export async function queryKnowledgeGraph({ query, domains, limit = 5 }: {
+  query: string;
+  domains?: KGCategory[];
+  limit?: number;
+}): Promise<QueryResult[]> {
+  const results = queryKnowledge(SEED_KNOWLEDGE_GRAPH, {
+    keyword: query,
+    category: domains?.[0],
+    limit,
+  });
+  return results.map((node) => ({
+    node: { ...node, domain: node.category },
+    score: node.confidence * 10,
+    stale: false,
+  }));
+}
