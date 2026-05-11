@@ -1,3 +1,9 @@
 {
-  "rootDirectory": "compliance-firewall-agent"
+  "version": 2,
+  "builds": [
+    { "src": "compliance-firewall-agent/package.json", "use": "@vercel/next" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/compliance-firewall-agent/$1" }
+  ]
 }
