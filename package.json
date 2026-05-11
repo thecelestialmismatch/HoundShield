@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@vercel/analytics": "^2.0.1"
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/config": "^0.3.0"
   }
 }
