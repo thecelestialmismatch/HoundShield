@@ -7,7 +7,7 @@
 
 import { ReasoningLoop } from "./reasoning-loop";
 import { TruthVerifier } from "./truth-verifier";
-import { queryKnowledgeGraph } from "./knowledge-graph";
+import { queryKnowledgeGraph, type KnowledgeResult } from "./knowledge-graph";
 
 export interface AgentQuery {
   query: string;
@@ -27,7 +27,7 @@ export interface AgentResult {
 async function buildContext(query: string, domains: import("./knowledge-graph").KnowledgeDomain[]): Promise<string> {
   const nodes = await queryKnowledgeGraph({ query, domains, limit: 5 });
   if (nodes.length === 0) return "";
-  return nodes.map((r) => `[${r.node.id}] ${r.node.title}: ${r.node.content}`).join("\n\n");
+  return nodes.map((r: KnowledgeResult) => `[${r.node.id}] ${r.node.title}: ${r.node.content}`).join("\n\n");
 }
 
 // ─── CMCCAgent — fully implemented ────────────────────────────────────────
@@ -63,7 +63,7 @@ export class CMCCAgent {
 
     const sources = (
       await queryKnowledgeGraph({ query: query.query, domains: ["cmmc", "nist"], limit: 3 })
-    ).map((r) => r.node.source);
+    ).map((r: KnowledgeResult) => r.node.source);
 
     return {
       agent: "CMCCAgent",
