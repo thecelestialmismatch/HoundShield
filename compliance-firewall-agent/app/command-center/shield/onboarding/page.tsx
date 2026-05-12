@@ -326,7 +326,7 @@ const response = await client.chat.completions.create({
 });`}</pre>
                   </div>
 
-                  <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 text-sm text-indigo-300">
+                  <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-brand-300">
                     <span className="font-semibold">Skip for now —</span> you can grab your API key and gateway docs from the dashboard anytime. The assessment doesn&apos;t require connection.
                   </div>
                 </div>

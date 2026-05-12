@@ -2,7 +2,7 @@
 name: deploy
 ---
 
-Pre-deploy checklist for Kaelus.Online:
+Pre-deploy checklist for HoundShield:
 
 ## 1. BUILD
 ```bash

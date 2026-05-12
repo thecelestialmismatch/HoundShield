@@ -1,13 +1,16 @@
 {
   "name": "houndshield-proxy",
-  "version": "1.0.0",
-  "description": "Hound Shield local AI DLP proxy — scans AI prompts for CUI/PII/PHI before they leave your network",
+  "version": "2.0.0",
+  "description": "Hound Shield local AI DLP proxy — OODA loop with behavioral baselines, graduated response, and CUI/PII/PHI scanning",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx watch server.ts",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test": "vitest run --reporter=verbose",
+    "test:watch": "vitest --reporter=verbose",
+    "test:coverage": "vitest run --coverage --reporter=verbose"
   },
   "dependencies": {
     "better-sqlite3": "^11.9.1",
@@ -21,8 +24,10 @@
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.3",
     "@types/uuid": "^10.0.0",
+    "@vitest/coverage-v8": "^2.1.0",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^2.1.0"
   },
   "engines": {
     "node": ">=20.0.0"

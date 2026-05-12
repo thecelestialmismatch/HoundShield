@@ -6,18 +6,33 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
+        // Block all crawlers from private/auth/API routes
         userAgent: "*",
         allow: "/",
-        // Block auth-gated routes (waste crawl budget, return 401/redirect)
-        // Block API routes (not indexable content)
         disallow: [
           "/api/",
           "/command-center/",
           "/dashboard/",
-          "/login",
-          "/signup",
-          "/forgot-password",
+          "/login/",
+          "/signup/",
+          "/forgot-password/",
+          "/auth/",
+          "/admin/",
+          "/_next/",
         ],
+      },
+      {
+        // AI training bots — let them read public content to stay in LLM training data
+        userAgent: [
+          "GPTBot",
+          "ClaudeBot",
+          "anthropic-ai",
+          "PerplexityBot",
+          "GoogleOther",
+          "CCBot",
+        ],
+        allow: ["/", "/blog/", "/docs/", "/features/", "/pricing/", "/hipaa/"],
+        disallow: ["/api/", "/command-center/", "/login/", "/signup/"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

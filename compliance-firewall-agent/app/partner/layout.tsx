@@ -34,7 +34,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[#0d0d14] border-r border-white/[0.06] transition-all duration-300 ${
+      className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[#111111] border-r border-white/[0.06] transition-all duration-300 ${
         collapsed ? "w-[68px]" : "w-[240px]"
       }`}
     >
@@ -144,7 +144,7 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
 
   return (
     <header
-      className={`fixed top-0 right-0 z-40 h-14 border-b border-white/[0.06] bg-[#07070b]/80 backdrop-blur-xl flex items-center justify-between px-6 transition-all duration-300 ${
+      className={`fixed top-0 right-0 z-40 h-14 border-b border-white/[0.06] bg-[#0a0a0a]/80 backdrop-blur-xl flex items-center justify-between px-6 transition-all duration-300 ${
         sidebarCollapsed ? "left-[68px]" : "left-[240px]"
       }`}
     >
@@ -177,10 +177,10 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#07070b] text-white font-sans">
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[40%] rounded-full bg-brand-400/[0.03] blur-[120px]" />
-        <div className="absolute top-[40%] -right-[10%] h-[50%] w-[35%] rounded-full bg-violet-400/[0.02] blur-[120px]" />
+        <div className="absolute top-[40%] -right-[10%] h-[50%] w-[35%] rounded-full bg-brand-400/[0.02] blur-[120px]" />
       </div>
 
       <Sidebar

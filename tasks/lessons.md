@@ -39,6 +39,25 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-04-26
+
+### `??` does not narrow `string | string[]`
+**What:** `req.params.orgId ?? ""` still typed as `string | string[]` — 5 TypeScript build errors in server.ts after Express params destructuring.
+**Root cause:** `??` removes `null | undefined` only. `string | string[]` is never nullish, so the union is unchanged. Express `@types/express@^5` types `ParamsDictionary` values as `string | string[]` in some paths.
+**Rule:** For Express route params, cast at destructuring: `const orgId = req.params.orgId as string`. Named URL segments are always strings at runtime; the cast is safe and correct.
+
+### better-sqlite3 named params must be exhaustive
+**What:** `addQuarantineRow` threw `Missing named parameter "nist_control"` at runtime even though the column has a default.
+**Root cause:** better-sqlite3 requires every `@named` parameter in the SQL to be present in the bound object. SQLite column defaults don't substitute for missing JS-side params.
+**Rule:** Always spread explicit `null` defaults for optional columns before spreading the caller-supplied object: `{ pattern_name: null, nist_control: null, ...row }`.
+
+### Vitest module caching bleeds state across tests
+**What:** `sample_count toBe(10)` got 20 — a second test saw the previous test's DB writes.
+**Root cause:** Vitest caches ESM modules. `beforeEach` recreated the DB path env var but the singleton inside the module kept the old handle.
+**Rule:** Always call module-level `resetBaselineCache()` / `resetRateTracker()` / `closeOodaDb()` in `afterEach`. For count-based assertions, read the baseline value *before* the operation and assert the delta, not an absolute value.
+
+---
+
 ## 2026-04-20
 
 ### SSR crash with Recharts
@@ -65,3 +84,22 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 **What:** Fetching LeadGenMan resource URLs returned only page title — no content.
 **Root cause:** Pages are React SPAs. WebFetch fetches raw HTML; JavaScript has not executed, so the content is absent from the response body.
 **Rule:** For JS-rendered pages, use Playwright MCP (`browser_navigate` + `browser_snapshot`) instead of WebFetch. WebFetch is only reliable for static HTML and JSON APIs.
+
+---
+
+## 2026-04-29
+
+### TypeScript strict mode is not optional
+**What:** Using `any` types to "move faster" caused runtime errors in scanning paths that TypeScript would have caught.
+**Root cause:** Time pressure → unsafe casts → undefined behaviour in production.
+**Rule:** Zero tolerance for `any` in compliance-critical code. Use `unknown` + Zod `.parse()` at every external boundary. Run `tsc --strict --noEmit` before every commit.
+
+### Sub-10ms latency is an architectural constraint, not a target
+**What:** Features added without measuring latency impact pushed scanning above 10ms threshold.
+**Root cause:** Treating latency as a post-implementation concern rather than a design input.
+**Rule:** Every new feature must answer "what is the latency cost?" before implementation. Benchmark critical paths before and after. Regex fallback is mandatory for deterministic high-frequency paths.
+
+### Test coverage is compliance evidence, not a metric
+**What:** Skipping tests on CUI detection paths left audit trail gaps that would fail a C3PAO review.
+**Root cause:** Treating test coverage as a quality metric rather than a compliance artifact.
+**Rule:** 100% coverage of all CUI/PII/PHI detection functions. Test both detection (true positive) and non-detection (false positive) cases. Audit log paths must have integration tests.

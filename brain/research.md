@@ -44,7 +44,7 @@ there (position calculation, not text measurement).
 **What it is:** MCP plugin providing FTS5-indexed session continuity across Claude Code
 sessions. Compresses context from 315KB to 5.4KB.  
 **Audit finding:** Clean architecture, 46 tests, no hype copy, IBM Plex font.  
-**Applied:** context-mode is available as an MCP. Run in Kaelus Claude Code sessions
+**Applied:** context-mode is available as an MCP. Run in HoundShield Claude Code sessions
 to reduce context compaction issues during multi-file gateway refactors.
 
 ### code-review-graph (tirth8205)
@@ -69,13 +69,13 @@ definitions into a swarmvault corpus for semantic classification lookup.
 ### superpowers (obra)
 **URL:** https://github.com/obra/superpowers  
 **What it is:** The skill framework powering Claude Code's `Skill` tool.  
-**Applied:** Kaelus already uses this via `superpowers:` skill prefix in CLAUDE.md.
+**Applied:** HoundShield already uses this via `superpowers:` skill prefix in CLAUDE.md.
 
 ### TurboQuant (Google Research)
 **URL:** https://research.google/blog/turboquant-redefining-ai-efficiency-with-extreme-compression/  
 **What it is:** 3-bit KV cache compression, 8x faster attention, zero accuracy loss.  
-**Applied:** Not applicable — Kaelus uses Anthropic's API, not self-hosted inference.
-Relevant if Kaelus ever self-hosts models for on-premise enterprise deployments.
+**Applied:** Not applicable — HoundShield uses Anthropic's API, not self-hosted inference.
+Relevant if HoundShield ever self-hosts models for on-premise enterprise deployments.
 
 ---
 
@@ -93,12 +93,51 @@ scan counts, organizations, and threats blocked.
 
 ### claw-code (ultraworkers)
 185K GitHub stars. Rust-based Claude Code alternative. If customers use claw-code,
-Kaelus's proxy URL approach (no client changes needed) is the right bet — it's
+HoundShield's proxy URL approach (no client changes needed) is the right bet — it's
 framework-agnostic.
 
 ### badclaude / OpenWhip (GitFrog1111)
-Adversarial Claude behavior research. Useful for red-teaming Kaelus's prompt
+Adversarial Claude behavior research. Useful for red-teaming HoundShield's prompt
 interception — what prompt injections does the compliance scanner need to catch?
+
+---
+
+## OODA Ingestion — 2026-04-30
+
+8 new knowledge nodes added to Brain AI from full product data review (ALL MY DATA ingestion).
+Nodes cover gaps not previously in either KB store.
+
+### Product Roadmap (`product_roadmap`)
+**Source:** OODA product roadmap analysis, April 2026  
+**Added:** Planned capabilities in priority order: Shannon entropy engine, browser extension paste interception, extended AI provider support (Perplexity/Grok/Mistral/Meta AI), demo mode guard, subscription gating.
+
+### Browser Extension (`product_extension`)
+**Source:** Product roadmap + architecture decision  
+**Added:** Paste interception at UI layer via WASM scanner. Complementary to proxy (network layer). BYOD deployment path. Target: Chrome/Edge. Safe redact mode replaces CUI tokens inline.
+
+### Shannon Entropy Engine (`product_entropy`)
+**Source:** Information-theoretic secret detection research  
+**Added:** H > 3.5 threshold for strings >16 chars = probable secret. Catches zero-day API key formats regex can't. Addresses NIST 3.13.10 (cryptographic protection of key material).
+
+### Sprint 1 MVP Flow (`product_sprint1_mvp`)
+**Source:** CLAUDE.md Sprint 1 definition  
+**Added:** End-to-end Jordan flow: signup → Docker pull → one env var → proxy running → 3 test prompts → PDF export. Target: <10 minutes for non-technical IT manager.
+
+### Customer Discovery Questions (`market_customer_discovery`)
+**Source:** OODA Phase 2 validated framework  
+**Added:** 5 open-ended discovery questions + 4 urgency signals (no C3PAO answer, DNS bypass via hotspot, <90 days to assessment, prime contractor mandate).
+
+### OODA BUILD Verdict (`market_ooda_verdict`)
+**Source:** OODA Phase 1-5 Paul Graham pressure test, April 2026  
+**Added:** STRONG verdict. DFARS 7012 = law not preference. Local-only moat uncopiable. Painkiller. Top 3 failure modes: Microsoft GCC High ships local AI DLP, enterprise DLP adds CMMC-local, enforcement deadline extends.
+
+### Product Evolution (`product_evolution`)
+**Source:** Rebranding project (April 2026, ~295 files renamed)  
+**Added:** HoundShield → HoundShield rationale. Pending blockers: Stripe webhook still on houndshield.com (update at dashboard.stripe.com/webhooks), Supabase migrations 003+004 not pushed to prod.
+
+### Tool Ecosystem (`tool_ecosystem`)
+**Source:** Development workflow audit  
+**Added:** Firecrawl (Brain AI ingestion), Context7 (live docs), claude-mem (persistent memory), browser-harness (AI provider testing), code-review-graph MCP (6.8x token reduction), Superpowers, GSD, caveman mode.
 
 ---
 
