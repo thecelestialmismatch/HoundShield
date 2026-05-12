@@ -464,3 +464,36 @@ This is the forcing function that converts inertia into purchase intent.`,
     ),
   ];
 }
+
+// KGNode — shape used by firecrawl-updater (different field names from KnowledgeNode)
+export interface KGNode {
+  id: string;
+  category: KnowledgeDomain;
+  title: string;
+  content: string;
+  confidence: number;
+  sources: string[];
+}
+
+export function upsertNode(graph: KnowledgeGraph, node: KGNode): KnowledgeGraph {
+  const existing = graph.nodes.find((n) => n.id === node.id);
+  if (existing) {
+    graph.updateNode(node.id, node.content);
+  } else {
+    graph.addNode({
+      domain: node.category,
+      title: node.title,
+      content: node.content,
+      keywords: [],
+      source: node.sources[0] ?? "firecrawl",
+      sourceType: "firecrawl",
+      ttl: 7 * 24 * 60 * 60 * 1000,
+      weight: node.confidence,
+    });
+  }
+  return graph;
+}
+
+export async function queryKnowledgeGraph(params: KnowledgeQuery): Promise<KnowledgeResult[]> {
+  return getKnowledgeGraph().query(params);
+}
