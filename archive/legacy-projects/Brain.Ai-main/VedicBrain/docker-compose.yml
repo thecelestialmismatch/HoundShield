@@ -1,0 +1,72 @@
+version: "3.9"
+
+# VedicBrain.AI — Local Development Stack (CPU/Ollama)
+# For GPU production, use docker-compose.prod.yml
+
+services:
+  # ── Ollama (local model server) ─────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: vedic-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # ── VedicBrain API ──────────────────────────────────────────────────────────
+  vedic-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: vedic-api
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      - MODEL_BACKEND=ollama
+      - MODEL_BASE_URL=http://ollama:11434/v1
+      - MODEL_NAME=qwen2.5:72b-instruct
+      - MODEL_CONTEXT_WINDOW=131072
+      - API_HOST=0.0.0.0
+      - API_PORT=8080
+      - ENVIRONMENT=development
+      - API_DOCS_ENABLED=true
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+    volumes:
+      - vedic_sessions:/app/.vedic_sessions
+      - ./vedic_brain:/app/vedic_brain   # hot reload in dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+
+  # ── Redis (rate limiting / caching) ────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: vedic-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+  vedic_sessions:
+  redis_data:

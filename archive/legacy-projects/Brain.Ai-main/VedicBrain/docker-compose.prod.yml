@@ -1,0 +1,95 @@
+version: "3.9"
+
+# VedicBrain.AI — Production Stack (GPU / vLLM)
+# Requirements: NVIDIA GPU(s), Docker with nvidia-container-toolkit
+
+services:
+  # ── vLLM Inference (GPU) ────────────────────────────────────────────────────
+  vllm:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.inference
+    container_name: vedic-vllm
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - MODEL=${VLLM_MODEL:-Qwen/Qwen2.5-72B-Instruct}
+      - TENSOR_PARALLEL_SIZE=${TENSOR_PARALLEL_SIZE:-4}
+      - GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.90}
+      - MAX_MODEL_LEN=${MAX_MODEL_LEN:-131072}
+      - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - hf_cache:/root/.cache/huggingface
+    shm_size: "32gb"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 300s   # model loading takes time
+    restart: unless-stopped
+
+  # ── VedicBrain API (production) ─────────────────────────────────────────────
+  vedic-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: vedic-api
+    depends_on:
+      vllm:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      - MODEL_BACKEND=vllm
+      - VLLM_BASE_URL=http://vllm:8000/v1
+      - VLLM_MODEL=${VLLM_MODEL:-Qwen/Qwen2.5-72B-Instruct}
+      - API_HOST=0.0.0.0
+      - API_PORT=8080
+      - API_WORKERS=4
+      - ENVIRONMENT=production
+      - API_DOCS_ENABLED=false
+      - SECRET_KEY=${SECRET_KEY}
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=true
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+    volumes:
+      - vedic_sessions:/app/.vedic_sessions
+    restart: unless-stopped
+
+  # ── Redis ────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: vedic-redis
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    restart: unless-stopped
+
+  # ── Nginx (TLS termination + reverse proxy) ──────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: vedic-nginx
+    depends_on:
+      - vedic-api
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_certs:/etc/nginx/certs
+    restart: unless-stopped
+
+volumes:
+  hf_cache:
+  vedic_sessions:
+  redis_data:
+  nginx_certs:

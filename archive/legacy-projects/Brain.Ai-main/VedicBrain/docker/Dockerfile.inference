@@ -1,0 +1,29 @@
+# VedicBrain.AI — vLLM Inference Server
+# Requires NVIDIA GPU with CUDA 12.1+
+# Serves any HuggingFace model via OpenAI-compatible API
+
+FROM vllm/vllm-openai:latest
+
+# Default: Qwen2.5-72B-Instruct (best open-weight general-purpose model)
+# Override MODEL at runtime: docker run -e MODEL=Qwen/Qwen2.5-7B-Instruct ...
+ENV MODEL="Qwen/Qwen2.5-72B-Instruct"
+ENV TENSOR_PARALLEL_SIZE="4"
+ENV GPU_MEMORY_UTILIZATION="0.90"
+ENV MAX_MODEL_LEN="131072"
+ENV PORT="8000"
+ENV HOST="0.0.0.0"
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=60s --timeout=30s --start-period=300s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+CMD python -m vllm.entrypoints.openai.api_server \
+    --model ${MODEL} \
+    --host ${HOST} \
+    --port ${PORT} \
+    --tensor-parallel-size ${TENSOR_PARALLEL_SIZE} \
+    --gpu-memory-utilization ${GPU_MEMORY_UTILIZATION} \
+    --max-model-len ${MAX_MODEL_LEN} \
+    --enable-prefix-caching \
+    --disable-log-requests

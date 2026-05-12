@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential curl git ripgrep \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python deps
+COPY pyproject.toml .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -e ".[dev]"
+
+# Playwright for WebFetch
+RUN playwright install chromium --with-deps 2>/dev/null || true
+
+# Copy source
+COPY vedic_brain/ vedic_brain/
+
+# Non-root user
+RUN useradd -m -u 1000 vedic
+RUN chown -R vedic:vedic /app
+USER vedic
+
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+CMD ["vedic", "serve", "--host", "0.0.0.0", "--port", "8080"]
