@@ -38,25 +38,15 @@ function ThemeToggle() {
 
 /* ── Live Shield Badge ───────────────────────────────────── */
 function LiveShieldBadge() {
-  const [count, setCount] = useState(14_312);
-  useEffect(() => {
-    const t = setInterval(() => setCount((n) => n + Math.floor(Math.random() * 3) + 1), 6000);
-    return () => clearInterval(t);
-  }, []);
   return (
     <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
       <span className="relative flex h-1.5 w-1.5">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
         <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
       </span>
-      <motion.span
-        key={count}
-        initial={{ opacity: 0.5 }}
-        animate={{ opacity: 1 }}
-        className="text-[10px] font-mono font-bold text-emerald-400 tabular-nums"
-      >
-        {count.toLocaleString()} blocked
-      </motion.span>
+      <span className="text-[10px] font-mono font-bold text-emerald-400">
+        16 engines · &lt;10ms
+      </span>
     </div>
   );
 }

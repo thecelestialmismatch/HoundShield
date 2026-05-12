@@ -129,6 +129,27 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // ── CORS for Brain API (same-origin only) ────────────────────────────────
+  // Brain endpoints accept x-ingest-key — restrict cross-origin access
+  // so that key can't be stolen by a third-party page sending requests.
+  if (pathname.startsWith('/api/brain')) {
+    const requestOrigin = request.headers.get('origin') ?? '';
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
+    const allowed = [appUrl, 'http://localhost:3000', 'http://127.0.0.1:3000'];
+    if (requestOrigin && !allowed.includes(requestOrigin)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+    if (requestOrigin) {
+      response.headers.set('Access-Control-Allow-Origin', requestOrigin);
+      response.headers.set('Vary', 'Origin');
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, x-ingest-key');
+    }
+    if (request.method === 'OPTIONS') {
+      return new NextResponse(null, { status: 204, headers: response.headers });
+    }
+  }
+
   // ── CORS for Gateway API ──────────────────────────────────────────────────
   if (pathname.startsWith('/api/gateway')) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? '';
