@@ -16,14 +16,14 @@ Screenshots captured from Yupp.ai (yupp.ai) for mobile app UX reference.
 ### Leaderboard UI
 - Tab bar: Text · Image · Coding · Live · Security
 - Ranking rows with model name, score bar, compliance badge
-- Kaelus twist: compliance score per model (not just performance)
+- HoundShield twist: compliance score per model (not just performance)
 
 ### Sign-up Flow
 - Google OAuth primary CTA (orange button)
 - Minimal friction — no credit card on free tier
 - Dashboard preview in hero
 
-## Kaelus Differentiators vs Yupp
+## HoundShield Differentiators vs Yupp
 - Every model is SCANNED before it sees your data
 - Compliance badge on every model card (SOC2 ✓ HIPAA ✓ CMMC ✓)
 - Audit trail for every prompt, every model

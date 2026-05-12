@@ -26,6 +26,7 @@ import {
   getRemediationPriorities,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses, getOrganization } from "@/lib/shieldready/storage";
+import type { AssessmentResponse } from "@/lib/shieldready/types";
 
 const NAV_CARDS = [
   {
@@ -59,7 +60,7 @@ const NAV_CARDS = [
 ];
 
 export default function ShieldReadyDashboard() {
-  const [responses, setResponses] = useState<any[]>([]);
+  const [responses, setResponses] = useState<AssessmentResponse[]>([]);
 
   useEffect(() => {
     setResponses(getAssessmentResponses());
@@ -74,7 +75,7 @@ export default function ShieldReadyDashboard() {
   const completion = useMemo(() => getCompletionPercent(ALL_CONTROLS.length, responses), [responses]);
   const priorities = useMemo(() => getRemediationPriorities(ALL_CONTROLS, responses), [responses]);
 
-  const responseMap = useMemo(() => new Map(responses.map((r: any) => [r.controlId, r])), [responses]);
+  const responseMap = useMemo(() => new Map(responses.map((r) => [r.controlId, r])), [responses]);
 
   const statusCounts = useMemo(() => {
     let met = 0, partial = 0, unmet = 0, open = 0;

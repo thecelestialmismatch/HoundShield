@@ -220,7 +220,7 @@ const ACTION_COLORS: Record<RuleAction, string> = {
   ALLOW: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
   WARN: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
   BLOCK: "text-red-400 bg-red-400/10 border-red-400/20",
-  QUARANTINE: "text-violet-400 bg-violet-400/10 border-violet-400/20",
+  QUARANTINE: "text-brand-400 bg-brand-400/10 border-brand-400/20",
 };
 
 // ---------------------------------------------------------------------------
@@ -320,7 +320,7 @@ function RuleModal({
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0d0d14] border border-white/10 rounded-2xl shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#111111] border border-white/10 rounded-2xl shadow-2xl"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-white/[0.06]">
@@ -682,7 +682,7 @@ export default function FirewallRulesPage() {
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-[#07070b] p-6">
+    <div className="min-h-screen bg-[#0a0a0a] p-6">
       {/* Toast */}
       <AnimatePresence>
         {toast && (
@@ -727,7 +727,7 @@ export default function FirewallRulesPage() {
         <div className="flex gap-3 flex-wrap">
           {[
             { name: "HIPAA", rules: HIPAA_TEMPLATE_RULES, color: "text-sky-400 border-sky-400/30 hover:bg-sky-400/10", desc: `${HIPAA_TEMPLATE_RULES.length} rules — PHI de-identification` },
-            { name: "SOC 2", rules: SOC2_TEMPLATE_RULES, color: "text-violet-400 border-violet-400/30 hover:bg-violet-400/10", desc: `${SOC2_TEMPLATE_RULES.length} rules — CC6.1 secrets/credentials` },
+            { name: "SOC 2", rules: SOC2_TEMPLATE_RULES, color: "text-brand-400 border-brand-400/30 hover:bg-brand-400/10", desc: `${SOC2_TEMPLATE_RULES.length} rules — CC6.1 secrets/credentials` },
           ].map(({ name, rules: templateRules, color, desc }) => (
             <button
               key={name}
@@ -881,7 +881,7 @@ export default function FirewallRulesPage() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              className="w-full max-w-sm bg-[#0d0d14] border border-white/10 rounded-2xl p-6"
+              className="w-full max-w-sm bg-[#111111] border border-white/10 rounded-2xl p-6"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">

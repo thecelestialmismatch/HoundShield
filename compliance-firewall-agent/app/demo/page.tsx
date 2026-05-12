@@ -145,7 +145,7 @@ function scanText(text: string): ScanResult[] {
 
 const severityColor = {
     critical: { bg: "bg-rose-500/10", border: "border-rose-500/30", text: "text-rose-400", dot: "bg-rose-500", badge: "bg-rose-500/20 text-rose-300 border-rose-500/30" },
-    high: { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", dot: "bg-amber-500", badge: "bg-amber-500/20 text-amber-300 border-amber-500/30" },
+    high: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-400", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-300 border-brand-500/30" },
     medium: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-400", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-300 border-brand-500/30" },
 };
 
@@ -247,7 +247,7 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     </div>
                     {/* Quick Fix */}
                     <div className="flex gap-3">
-                        <Lightbulb className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
+                        <Lightbulb className="w-4 h-4 text-brand-400 mt-0.5 shrink-0" />
                         <div>
                             <p className="text-xs font-bold text-slate-300 mb-1">Quick Fix</p>
                             <p className="text-xs text-slate-500 leading-relaxed">{result.tip}</p>
@@ -318,7 +318,7 @@ export default function FreeDemoPage() {
     const totalThreats = results.reduce((acc, r) => acc + r.matches.length, 0);
 
     return (
-        <div className="min-h-screen bg-[#07070b] text-white font-sans overflow-x-hidden">
+        <div className="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden">
             <ScrollProgressBar />
             <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
             <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
@@ -344,7 +344,7 @@ export default function FreeDemoPage() {
                         {[
                             { step: "1", title: "Connect (optional)", desc: "Tag scans with your company name", icon: Building2, color: "text-brand-400" },
                             { step: "2", title: "Paste Your Prompt", desc: "Or pick from our sample scenarios", icon: FileText, color: "text-purple-400" },
-                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-amber-400" },
+                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-brand-400" },
                             { step: "4", title: "Get Fix Reports", desc: "Detailed impact + remediation tips", icon: Lightbulb, color: "text-emerald-400" },
                         ].map((s) => {
                             const Icon = s.icon;
@@ -469,9 +469,9 @@ export default function FreeDemoPage() {
                                                 </div>
                                             )}
                                             {highCount > 0 && (
-                                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                                                    <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                                    <span className="text-[11px] font-bold text-amber-400">{highCount} High</span>
+                                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20">
+                                                    <div className="w-2 h-2 rounded-full bg-brand-500" />
+                                                    <span className="text-[11px] font-bold text-brand-400">{highCount} High</span>
                                                 </div>
                                             )}
                                             {mediumCount > 0 && (
@@ -577,7 +577,7 @@ export default function FreeDemoPage() {
                     {/* ═══ WHY FREE SCANNER ≠ FULL PROTECTION ═══ */}
                     <div className="mt-10 grid md:grid-cols-2 gap-6">
                         <div className="glass-card p-6">
-                            <h3 className="text-sm font-bold text-slate-500 mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-amber-400" /> This Free Demo</h3>
+                            <h3 className="text-sm font-bold text-slate-500 mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-brand-400" /> This Free Demo</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "9 regex-based threat patterns",

@@ -46,6 +46,12 @@ export { generateTranscript, formatTranscript } from "./transcript";
 export { runParityAudit } from "./parity-audit";
 export { QueryEngineRuntime } from "./query";
 
+// ─── Brain AI v3 exports ───────────────────────────────────────────────────
+export { ReasoningLoop } from "./reasoning-loop";
+export { TruthVerifier } from "./truth-verifier";
+export { MultiAgentOrchestrator } from "./multi-agent-orchestrator";
+export { CMCCAgent, SecurityAgent } from "./specialist-agents";
+
 import { QueryEnginePort } from "./query-engine";
 import { PortRuntime } from "./runtime";
 import { buildSystemInitMessage } from "./system-init";
@@ -62,9 +68,9 @@ let _runtime: PortRuntime | null = null;
 export function getQueryEngine(): QueryEnginePort {
   if (!_queryEngine) {
     _queryEngine = new QueryEnginePort({
-      model: process.env.BRAIN_AI_MODEL ?? "google/gemini-flash-1.5",
+      model: process.env.BRAIN_AI_MODEL ?? "claude-sonnet-4-6",
       maxTurns: 15,
-      maxBudgetTokens: 8192,
+      maxBudgetTokens: 4096,
     });
   }
   return _queryEngine;
@@ -77,10 +83,10 @@ export function getQueryEngine(): QueryEnginePort {
 export function getRuntime(): PortRuntime {
   if (!_runtime) {
     _runtime = new PortRuntime({
-      model: process.env.BRAIN_AI_MODEL ?? "google/gemini-flash-1.5",
+      model: process.env.BRAIN_AI_MODEL ?? "claude-sonnet-4-6",
       apiKey: process.env.OPENROUTER_API_KEY ?? "",
       maxTurns: 15,
-      maxBudgetTokens: 8192,
+      maxBudgetTokens: 4096,
       allowCodeExecution: false,
     });
   }

@@ -176,7 +176,7 @@ export default function PartnerDashboard() {
                     client.status === "active"
                       ? "bg-emerald-500"
                       : client.status === "trial"
-                      ? "bg-amber-500"
+                      ? "bg-brand-500"
                       : "bg-slate-600"
                   }`}
                 />
@@ -203,7 +203,7 @@ export default function PartnerDashboard() {
                     <p className="text-sm font-semibold text-white">
                       {(client.quarantined_count ?? 0).toLocaleString()}
                     </p>
-                    <p className="text-[10px] text-amber-400 flex items-center gap-1 justify-end">
+                    <p className="text-[10px] text-brand-400 flex items-center gap-1 justify-end">
                       <AlertTriangle className="w-2.5 h-2.5" /> Quarantined
                     </p>
                   </div>

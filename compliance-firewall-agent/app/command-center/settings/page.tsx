@@ -44,7 +44,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#0d0d14] border border-white/10 rounded-2xl overflow-hidden">
+    <div className="bg-[#111111] border border-white/10 rounded-2xl overflow-hidden">
       <div className="px-6 py-5 border-b border-white/10 flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-200 flex items-center justify-center">
           <Icon className="w-4 h-4 text-brand-500" />

@@ -2,24 +2,35 @@
  * Hound Shield Proxy — Express server.
  *
  * OpenAI-compatible API surface:
- *   POST /v1/chat/completions
- *   GET  /health
- *   GET  /v1/events          (local audit log)
- *   GET  /v1/stats           (local stats)
+ *   POST /v1/chat/completions  — main proxy endpoint (OODA loop)
+ *   GET  /health               — liveness check
+ *   GET  /v1/events            — local audit log
+ *   GET  /v1/stats             — local stats
+ *   GET  /v1/quarantine        — quarantine queue (pending review)
+ *   PUT  /v1/quarantine/:id    — release or block quarantined request
+ *   GET  /v1/baselines/:orgId  — behavioral baseline for an org
+ *   GET  /v1/policy/:orgId     — org policy
+ *   PUT  /v1/policy/:orgId     — update org policy
  *
- * Intercepts prompts, scans for CUI/PII/PHI, blocks or forwards to upstream AI.
- * Metadata (never content) is forwarded async to houndshield.com dashboard.
+ * All prompt content stays local. Only metadata reaches houndshield.com dashboard.
  */
 
 import express, { type Request, type Response, type NextFunction } from "express";
-import fetch, { type Response as FetchResponse } from "node-fetch";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-import { scanMessages } from "./scanner.js";
-import { logEvent } from "./storage.js";
-import { enqueueEvent, setWebhookLicenseKey, flushWebhook } from "./webhook.js";
+import { queryEvents, getStats } from "./storage.js";
+import { setWebhookLicenseKey, flushWebhook } from "./webhook.js";
 import { validateLicense } from "./license.js";
+import { runOODALoop } from "./ooda/loop.js";
+import {
+  getQuarantineRows,
+  updateQuarantineStatus,
+  getOrgPolicyRow,
+  upsertOrgPolicyRow,
+  getBaselineRow,
+} from "./ooda/db.js";
+import { DEFAULT_POLICY } from "./ooda/types.js";
 
 // ── Environment ─────────────────────────────────────────────────────────────
 
@@ -64,6 +75,14 @@ const ChatRequestSchema = z.object({
   max_tokens: z.number().optional(),
 });
 
+const OrgPolicyUpdateSchema = z.object({
+  warn_before_block: z.boolean().optional(),
+  redact_low_risk: z.boolean().optional(),
+  max_requests_per_minute: z.number().int().min(1).max(10000).optional(),
+  lockout_after_n_blocks: z.number().int().min(1).max(100).optional(),
+  lockout_duration_minutes: z.number().int().min(1).max(10080).optional(),
+});
+
 // ── App ─────────────────────────────────────────────────────────────────────
 
 const app = express();
@@ -72,24 +91,33 @@ app.use(express.json({ limit: "4mb" }));
 // ── Health ──────────────────────────────────────────────────────────────────
 
 app.get("/health", (_req: Request, res: Response) => {
-  res.json({ status: "ok", version: "1.0.0", source: "houndshield-proxy" });
+  res.json({
+    status: "ok",
+    version: "2.0.0",
+    source: "houndshield-proxy",
+    ooda: true,
+  });
 });
 
-// ── Main proxy endpoint ─────────────────────────────────────────────────────
+// ── Main proxy endpoint (OODA loop) ─────────────────────────────────────────
 
 app.post("/v1/chat/completions", async (req: Request, res: Response) => {
   const requestId = uuidv4();
-  const startMs = Date.now();
 
   // Validate license
   const license = await validateLicense(LICENSE_KEY);
   const orgId = license.org_id;
 
-  // Determine upstream provider
+  // Determine upstream provider and credentials
   const providerHeader = req.headers["x-provider"] as Provider | undefined;
   const provider: Provider = providerHeader ?? DEFAULT_PROVIDER;
   const upstreamKey =
     (req.headers["x-provider-api-key"] as string | undefined) ?? UPSTREAM_API_KEY;
+  const upstreamUrl = providerEndpoint(provider);
+
+  // Extract user/session identifiers from headers (optional, fallback to org-level)
+  const userId = (req.headers["x-user-id"] as string | undefined) ?? orgId;
+  const sessionId = (req.headers["x-session-id"] as string | undefined) ?? requestId;
 
   // Parse and validate request body
   const parsed = ChatRequestSchema.safeParse(req.body);
@@ -102,107 +130,27 @@ app.post("/v1/chat/completions", async (req: Request, res: Response) => {
 
   const { messages, stream, ...rest } = parsed.data;
 
-  // ── SCAN ──────────────────────────────────────────────────────────────────
-  const scanResult = scanMessages(messages as Array<{ role: string; content: unknown }>);
-  const scanMs = scanResult.scan_ms;
-
-  const topEntity = scanResult.entities[0];
-  const patternName = topEntity?.pattern_name;
-  const nistControl = topEntity?.nist_controls?.[0];
-
-  // Log locally (metadata only, no content)
-  const actionMapped =
-    scanResult.action === "BLOCK"
-      ? "BLOCKED"
-      : scanResult.action === "QUARANTINE"
-      ? "QUARANTINED"
-      : "ALLOWED";
-
-  logEvent({
-    request_id: requestId,
-    org_id: orgId,
-    action: actionMapped,
-    risk_level: scanResult.risk_level,
-    pattern_name: patternName,
-    nist_control: nistControl,
-    scan_ms: Math.round(scanMs),
-  });
-
-  // Forward metadata async to cloud dashboard
-  enqueueEvent({
-    request_id: requestId,
-    org_id: orgId,
-    action: actionMapped,
-    risk_level: scanResult.risk_level,
-    pattern_name: patternName,
-    nist_control: nistControl,
-    scan_ms: Math.round(scanMs),
-  });
-
-  // Set response headers before any branching
-  res.setHeader("X-HoundShield-Request-Id", requestId);
-  res.setHeader("X-HoundShield-Risk-Level", scanResult.risk_level);
-  res.setHeader("X-HoundShield-Action", actionMapped);
-  res.setHeader("X-HoundShield-Scan-Ms", String(Math.round(scanMs)));
-
-  // ── BLOCK ─────────────────────────────────────────────────────────────────
-  if (scanResult.action === "BLOCK") {
-    res.status(403).json({
-      error: {
-        message: "Request blocked by Hound Shield compliance firewall",
-        code: "HOUNDSHIELD_BLOCKED",
-        risk_level: scanResult.risk_level,
-        pattern: patternName ?? "unknown",
-        nist_control: nistControl,
-        request_id: requestId,
-      },
-    });
-    return;
-  }
-
-  // ── QUARANTINE — allow but flag ────────────────────────────────────────────
-  // (falls through to forward — dashboard will show QUARANTINED status)
-
-  // ── FORWARD to upstream AI ────────────────────────────────────────────────
-  const upstreamUrl = providerEndpoint(provider);
-
-  let upstreamRes: FetchResponse;
-  try {
-    upstreamRes = await fetch(upstreamUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${upstreamKey}`,
-        ...(provider === "anthropic"
-          ? { "anthropic-version": "2023-06-01" }
-          : {}),
-      },
-      body: JSON.stringify({ messages, stream, ...rest }),
-    });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : "Upstream unreachable";
-    res.status(502).json({ error: { message: msg, code: "UPSTREAM_ERROR" } });
-    return;
-  }
-
-  // ── Streaming passthrough ─────────────────────────────────────────────────
-  if (stream && upstreamRes.body) {
-    res.setHeader("Content-Type", "text/event-stream");
-    res.setHeader("Cache-Control", "no-cache");
-    upstreamRes.body.pipe(res);
-    return;
-  }
-
-  // ── Non-streaming response ────────────────────────────────────────────────
-  const data = await upstreamRes.json();
-  res.status(upstreamRes.status).json(data);
-  void startMs; // suppress unused warning
+  // Run full OODA loop
+  await runOODALoop(
+    {
+      request_id: requestId,
+      org_id: orgId,
+      user_id: userId,
+      session_id: sessionId,
+      messages: messages as Array<{ role: string; content: unknown }>,
+      provider,
+      upstream_key: upstreamKey,
+      upstream_url: upstreamUrl,
+      stream,
+      rest,
+    },
+    res
+  );
 });
 
 // ── Local audit endpoints ───────────────────────────────────────────────────
 
 app.get("/v1/events", (req: Request, res: Response) => {
-  const { queryEvents } = require("./storage.js") as typeof import("./storage.js");
   const limit = Math.min(parseInt((req.query.limit as string) ?? "100", 10), 500);
   const offset = parseInt((req.query.offset as string) ?? "0", 10);
   const action = req.query.action as string | undefined;
@@ -211,8 +159,67 @@ app.get("/v1/events", (req: Request, res: Response) => {
 });
 
 app.get("/v1/stats", (_req: Request, res: Response) => {
-  const { getStats } = require("./storage.js") as typeof import("./storage.js");
   res.json({ success: true, data: getStats() });
+});
+
+// ── Quarantine management ───────────────────────────────────────────────────
+
+app.get("/v1/quarantine", (req: Request, res: Response) => {
+  const orgId = req.query.org_id as string | undefined;
+  if (!orgId) {
+    res.status(400).json({ error: { message: "org_id query param required" } });
+    return;
+  }
+  const status = (req.query.status as "pending" | "released" | "blocked") ?? "pending";
+  const limit = Math.min(parseInt((req.query.limit as string) ?? "100", 10), 500);
+  res.json({ success: true, data: getQuarantineRows(orgId, status, limit) });
+});
+
+app.put("/v1/quarantine/:requestId", (req: Request, res: Response) => {
+  const requestId = req.params.requestId as string;
+  const { status, reviewed_by } = req.body as {
+    status?: "released" | "blocked";
+    reviewed_by?: string;
+  };
+  if (!status || !["released", "blocked"].includes(status)) {
+    res.status(400).json({ error: { message: "status must be 'released' or 'blocked'" } });
+    return;
+  }
+  updateQuarantineStatus(requestId, status, reviewed_by ?? "api");
+  res.json({ success: true });
+});
+
+// ── Behavioral baseline ─────────────────────────────────────────────────────
+
+app.get("/v1/baselines/:entityId", (req: Request, res: Response) => {
+  const entityId = req.params.entityId as string;
+  const baseline = getBaselineRow(entityId);
+  if (!baseline) {
+    res.status(404).json({ error: { message: "No baseline found for this entity" } });
+    return;
+  }
+  res.json({ success: true, data: baseline });
+});
+
+// ── Org policy management ───────────────────────────────────────────────────
+
+app.get("/v1/policy/:orgId", (req: Request, res: Response) => {
+  const orgId = req.params.orgId as string;
+  const policy = getOrgPolicyRow(orgId) ?? { ...DEFAULT_POLICY, org_id: orgId };
+  res.json({ success: true, data: policy });
+});
+
+app.put("/v1/policy/:orgId", (req: Request, res: Response) => {
+  const orgId = req.params.orgId as string;
+  const parsed = OrgPolicyUpdateSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: { message: "Invalid policy", details: parsed.error.errors } });
+    return;
+  }
+  const existing = getOrgPolicyRow(orgId) ?? { ...DEFAULT_POLICY, org_id: orgId };
+  const updated = { ...existing, ...parsed.data, org_id: orgId };
+  upsertOrgPolicyRow(updated);
+  res.json({ success: true, data: updated });
 });
 
 // ── Error handler ───────────────────────────────────────────────────────────
@@ -225,7 +232,7 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 // ── Start ────────────────────────────────────────────────────────────────────
 
 const server = app.listen(PORT, () => {
-  console.log(`[houndshield] Proxy listening on http://localhost:${PORT}`);
+  console.log(`[houndshield] Proxy v2.0 (OODA) listening on http://localhost:${PORT}`);
   console.log(`[houndshield] Set baseURL = "http://localhost:${PORT}/v1" in your AI client`);
   console.log(`[houndshield] Provider: ${DEFAULT_PROVIDER}`);
 });

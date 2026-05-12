@@ -25,8 +25,8 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 
 const badgeStyles = {
   Feature: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
-  Improvement: "bg-indigo-500/15 text-indigo-400 border-indigo-500/25",
-  Fix: "bg-amber-500/15 text-amber-400 border-amber-500/25",
+  Improvement: "bg-brand-500/15 text-brand-400 border-brand-500/25",
+  Fix: "bg-brand-500/15 text-brand-400 border-brand-500/25",
 };
 
 type Item = { tag: keyof typeof badgeStyles; text: string };
@@ -97,18 +97,18 @@ const roadmap = [
 
 export default function ChangelogPage() {
   return (
-    <div className="min-h-screen bg-[#07070b] text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       <ScrollProgressBar />
       <Navbar variant="dark" />
 
       {/* Hero */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.07] via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-500/[0.07] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
-            <p className="text-xs uppercase tracking-[0.25em] text-indigo-400 font-semibold mb-4">Changelog</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold mb-4">Changelog</p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
-              What&apos;s new in <span className="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">Hound Shield</span>
+              What&apos;s new in <span className="bg-gradient-to-r from-brand-400 to-emerald-400 bg-clip-text text-transparent">Hound Shield</span>
             </h1>
             <p className="text-lg text-slate-400 max-w-xl mx-auto">Every improvement, shipped fast.</p>
           </FadeIn>
@@ -168,9 +168,9 @@ export default function ChangelogPage() {
       <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto">
           <FadeIn className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 mb-4">
-              <Rocket className="w-4 h-4 text-indigo-400" />
-              <span className="text-xs font-semibold text-indigo-300 uppercase tracking-wider">Roadmap</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-500/20 bg-brand-500/10 mb-4">
+              <Rocket className="w-4 h-4 text-brand-400" />
+              <span className="text-xs font-semibold text-brand-300 uppercase tracking-wider">Roadmap</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Coming next</h2>
           </FadeIn>
@@ -179,10 +179,10 @@ export default function ChangelogPage() {
               const Icon = item.icon;
               return (
                 <FadeIn key={item.title} delay={i * 0.08}>
-                  <div className="group border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-6 h-full cursor-pointer hover:border-indigo-500/20 hover:bg-indigo-500/[0.03] transition-colors duration-300">
+                  <div className="group border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-6 h-full cursor-pointer hover:border-brand-500/20 hover:bg-brand-500/[0.03] transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-3">
-                      <Icon className="w-5 h-5 text-indigo-400" />
-                      <span className="text-[10px] uppercase tracking-wider text-indigo-400 font-bold">{item.q}</span>
+                      <Icon className="w-5 h-5 text-brand-400" />
+                      <span className="text-[10px] uppercase tracking-wider text-brand-400 font-bold">{item.q}</span>
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
                     <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
@@ -201,7 +201,7 @@ export default function ChangelogPage() {
             <Sparkles className="w-6 h-6 text-emerald-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-3">Ship with confidence</h3>
             <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">Start protecting your AI pipeline today. Free tier available with no credit card required.</p>
-            <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-indigo-600 hover:bg-indigo-500 text-sm font-semibold transition-colors cursor-pointer">
+            <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-600 hover:bg-brand-500 text-sm font-semibold transition-colors cursor-pointer">
               Get started <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

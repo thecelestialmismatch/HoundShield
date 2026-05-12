@@ -23,8 +23,29 @@
 [![Frameworks](https://img.shields.io/badge/Frameworks-SOC2_%7C_HIPAA_%7C_CMMC_L2-black?style=flat-square)](https://houndshield.com)
 [![Stack](https://img.shields.io/badge/Stack-Next.js_15_%7C_Supabase_%7C_Stripe-black?style=flat-square)](https://houndshield.com)
 [![Status](https://img.shields.io/badge/Status-Production-brightgreen?style=flat-square)](https://houndshield.com)
+[![Open Source](https://img.shields.io/badge/Proxy-Open_Source_MIT-00c896?style=flat-square)](./proxy)
 
 </div>
+
+---
+
+## Open Source
+
+**Proxy engine + scanner + 16 CMMC patterns: MIT licensed, free forever.**
+
+```bash
+# Self-host the proxy in 5 minutes
+docker run -p 8080:8080 -e LICENSE_KEY=free ghcr.io/houndshield/proxy:latest
+```
+
+Like Supabase and Cal.com: the core runs anywhere. The hosted dashboard, Brain AI compliance advisor, and PDF reports live at [houndshield.com](https://houndshield.com).
+
+| Component | License |
+|-----------|---------|
+| `proxy/` — scanner, patterns, audit log | MIT |
+| Dashboard, Brain AI, PDF reports | Hosted at houndshield.com |
+
+See [`proxy/README.md`](./proxy/README.md) for self-host instructions and [`proxy/PATTERNS.md`](./proxy/PATTERNS.md) for all 16 detection patterns with NIST control mappings.
 
 ---
 

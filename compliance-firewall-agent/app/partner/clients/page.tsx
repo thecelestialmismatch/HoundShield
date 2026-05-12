@@ -139,7 +139,7 @@ export default function ClientsPage() {
                         client.status === "active"
                           ? "bg-emerald-500/10 text-emerald-400"
                           : client.status === "trial"
-                          ? "bg-amber-500/10 text-amber-400"
+                          ? "bg-brand-500/10 text-brand-400"
                           : "bg-slate-700/50 text-slate-400"
                       }`}
                     >
@@ -162,7 +162,7 @@ export default function ClientsPage() {
                     <span className="text-sm font-semibold text-white">
                       {(client.quarantined_count ?? 0).toLocaleString()}
                     </span>
-                    <div className="text-[10px] text-amber-400 flex items-center gap-0.5 justify-end">
+                    <div className="text-[10px] text-brand-400 flex items-center gap-0.5 justify-end">
                       <AlertTriangle className="w-2.5 h-2.5" /> flagged
                     </div>
                   </div>

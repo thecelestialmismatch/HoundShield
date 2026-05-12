@@ -109,7 +109,7 @@ function LiveScanner() {
             { status: "PASS", msg: "GPT-4o request — PII check cleared", color: "text-emerald-400/70" },
             { status: "BLOCK", msg: "Claude req — SSN pattern detected", color: "text-red-400/70" },
             { status: "PASS", msg: "Gemini request — compliant payload", color: "text-emerald-400/70" },
-            { status: "FLAG", msg: "DeepSeek req — PHI proximity alert", color: "text-amber-400/70" },
+            { status: "FLAG", msg: "DeepSeek req — PHI proximity alert", color: "text-brand-400/70" },
           ].map((line, i) => (
             <div
               key={i}
@@ -123,7 +123,7 @@ function LiveScanner() {
                   ? "bg-emerald-500/10 text-emerald-400"
                   : line.status === "BLOCK"
                     ? "bg-red-500/10 text-red-400"
-                    : "bg-amber-500/10 text-amber-400"
+                    : "bg-brand-500/10 text-brand-400"
                   }`}
               >
                 {line.status}
@@ -266,10 +266,10 @@ export default function AuthPage() {
   );
 
   return (
-    <div className="flex min-h-screen bg-[#07070b]">
+    <div className="flex min-h-screen bg-[#0a0a0a]">
       <ScrollProgressBar />
       {/* ─── LEFT BRANDING PANEL ─── */}
-      <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-[#07070b] items-center justify-center p-12 xl:p-16">
+      <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-[#0a0a0a] items-center justify-center p-12 xl:p-16">
         {/* Background textures */}
         <div className="bg-dot-grid absolute inset-0 opacity-20" />
         <div className="absolute inset-0 bg-aurora opacity-30" />

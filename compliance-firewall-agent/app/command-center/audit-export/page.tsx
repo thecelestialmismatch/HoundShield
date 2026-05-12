@@ -218,7 +218,7 @@ export default function AuditExportPage() {
               className="w-full rounded-lg bg-white/[0.04] border border-white/[0.08] px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500/50 transition-colors appearance-none cursor-pointer"
             >
               {(["ALL", "LOW", "MEDIUM", "HIGH", "CRITICAL"] as const).map((r) => (
-                <option key={r} value={r} className="bg-[#0d0d14]">
+                <option key={r} value={r} className="bg-[#111111]">
                   {r === "ALL" ? "All Levels" : r}
                 </option>
               ))}
@@ -235,7 +235,7 @@ export default function AuditExportPage() {
               className="w-full rounded-lg bg-white/[0.04] border border-white/[0.08] px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500/50 transition-colors appearance-none cursor-pointer"
             >
               {(["ALL", "ALLOW", "BLOCK", "QUARANTINE"] as const).map((a) => (
-                <option key={a} value={a} className="bg-[#0d0d14]">
+                <option key={a} value={a} className="bg-[#111111]">
                   {a === "ALL" ? "All Actions" : a}
                 </option>
               ))}

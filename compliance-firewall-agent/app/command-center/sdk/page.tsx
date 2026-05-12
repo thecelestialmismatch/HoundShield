@@ -111,7 +111,7 @@ function CodeBlock({ code, language, label }: { code: string; language: string; 
   };
 
   return (
-    <div className="rounded-xl bg-[#07070b] border border-white/[0.08] overflow-hidden">
+    <div className="rounded-xl bg-[#0a0a0a] border border-white/[0.08] overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06] bg-white/[0.02]">
         <div className="flex items-center gap-2">
           <Terminal className="w-3.5 h-3.5 text-white/30" />
@@ -143,7 +143,7 @@ export default function SDKPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#07070b] p-6 max-w-5xl mx-auto">
+    <div className="min-h-screen bg-[#0a0a0a] p-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
@@ -228,7 +228,7 @@ export default function SDKPage() {
               <XAxis dataKey="time" tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} interval={3} />
               <YAxis tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} />
               <Tooltip
-                contentStyle={{ background: "#0d0d14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
+                contentStyle={{ background: "#111111", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
                 labelStyle={{ color: "rgba(255,255,255,0.6)" }}
               />
               <Area type="monotone" dataKey="allowed" stroke="#10b981" strokeWidth={1.5} fill="url(#allowedGrad)" name="Allowed" />

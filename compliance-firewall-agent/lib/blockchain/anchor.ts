@@ -86,8 +86,8 @@ export async function anchorToBlockchain(
   const wallet = getWalletClient();
   const account = getAnchorAccount();
 
-  // Prefix the hash with "KAELUS:" for easy on-chain identification
-  const data = toHex(`KAELUS:${eventHash}`);
+  // Prefix the hash with "HOUNDSHIELD:" for easy on-chain identification
+  const data = toHex(`HOUNDSHIELD:${eventHash}`);
 
   // Send zero-value transaction to self with hash as data
   const txHash = await wallet.sendTransaction({
@@ -130,7 +130,7 @@ export async function verifyOnChain(
       ? Buffer.from(tx.input.slice(2), "hex").toString("utf-8")
       : null;
 
-    const expectedOnChain = `KAELUS:${expectedHash}`;
+    const expectedOnChain = `HOUNDSHIELD:${expectedHash}`;
     const verified = onChainData === expectedOnChain;
 
     // Get block timestamp

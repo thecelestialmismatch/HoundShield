@@ -57,8 +57,8 @@ const DETECTED_PATTERNS = [
 
 const RISK_COLORS: Record<string, string> = {
   CRITICAL: "text-red-400",
-  HIGH: "text-amber-400",
-  MEDIUM: "text-yellow-400",
+  HIGH: "text-brand-400",
+  MEDIUM: "text-brand-400",
 };
 
 const API_SECTIONS = [
@@ -370,8 +370,8 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
 const METHOD_COLORS: Record<string, string> = {
   GET: "bg-emerald-500/10 text-emerald-400",
   POST: "bg-brand-500/10 text-brand-400",
-  "GET / POST": "bg-amber-500/10 text-amber-400",
-  GUIDE: "bg-indigo-500/10 text-indigo-400",
+  "GET / POST": "bg-brand-500/10 text-brand-400",
+  GUIDE: "bg-brand-500/10 text-brand-400",
   REF: "bg-slate-500/10 text-slate-400",
 };
 
@@ -382,10 +382,10 @@ export default function DocsPage() {
   const section = API_SECTIONS.find((s) => s.id === activeSection);
 
   return (
-    <div className="min-h-screen bg-[#07070b]">
+    <div className="min-h-screen bg-[#0a0a0a]">
       <ScrollProgressBar />
       {/* Nav */}
-      <nav className="sticky top-0 z-50 h-16 bg-[#07070b]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-6">
+      <nav className="sticky top-0 z-50 h-16 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
@@ -516,7 +516,7 @@ export default function DocsPage() {
                 <CodeBlock code={SDK_EXAMPLES[sdkLang]} language={sdkLang} />
               </div>
 
-              <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 text-sm text-indigo-300">
+              <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-brand-300">
                 <span className="font-semibold">No infrastructure change required.</span> Your employees keep using ChatGPT, Copilot, or Claude — Hound Shield sits in the middle transparently.
               </div>
             </div>
@@ -556,7 +556,7 @@ export default function DocsPage() {
                 </table>
               </div>
 
-              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-sm text-amber-300">
+              <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-brand-300">
                 <span className="font-semibold">Conservative by design.</span> False negatives are worse than false positives for a compliance tool. Quarantined items go to human review — false positives are released, never silently passed.
               </div>
             </div>

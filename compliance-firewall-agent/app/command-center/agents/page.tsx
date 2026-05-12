@@ -53,7 +53,7 @@ export default function AgentsPage() {
   const thinkingCount = AGENTS.filter((a) => a.status === "thinking").length;
 
   return (
-    <div className="min-h-screen bg-[#07070b] p-6">
+    <div className="min-h-screen bg-[#0a0a0a] p-6">
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
           <div className="w-9 h-9 rounded-xl bg-brand-500/20 flex items-center justify-center">
@@ -68,7 +68,7 @@ export default function AgentsPage() {
       <div className="grid grid-cols-3 gap-3 mb-6 max-w-md">
         {[
           { label: "Active", value: activeCount, icon: Activity, color: "text-brand-400" },
-          { label: "Interacting", value: interactingCount, icon: Zap, color: "text-indigo-400" },
+          { label: "Interacting", value: interactingCount, icon: Zap, color: "text-brand-400" },
           { label: "Thinking", value: thinkingCount, icon: Brain, color: "text-amber-400" },
         ].map(({ label, value, icon: Icon, color }) => (
           <div key={label} className="flex items-center gap-2.5 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
@@ -85,7 +85,7 @@ export default function AgentsPage() {
           <SimulationGraph agents={AGENTS} edges={EDGES} width={720} height={480} />
         </div>
         <div className="w-full xl:w-72 flex-shrink-0">
-          <div className="bg-[#0d0d14] border border-white/[0.06] rounded-xl overflow-hidden">
+          <div className="bg-[#111111] border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-white/[0.06]">
               <div className="flex items-center gap-2">
                 <Bot className="w-4 h-4 text-brand-400" />

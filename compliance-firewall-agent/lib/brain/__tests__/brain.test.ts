@@ -72,9 +72,9 @@ describe("updateBrain", () => {
 });
 
 describe("getBrainSummary", () => {
-  it("returns 5 domains", () => {
+  it("returns 7 domains", () => {
     const summary = getBrainSummary();
-    expect(summary.domains.length).toBe(5);
+    expect(summary.domains.length).toBe(7);
   });
 
   it("totalFacts is sum of all domain factCounts", () => {

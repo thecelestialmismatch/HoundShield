@@ -28,9 +28,12 @@ export interface RuntimeConfig {
   maxTurns?: number;
   maxBudgetTokens?: number;
   model?: string;
+  deepModel?: string;
   apiKey?: string;
   allowCodeExecution?: boolean;
   onEvent?: (event: QueryEngineEvent) => void;
+  n_iterations?: number;
+  dailyTokenBudget?: number;
 }
 
 export class PortRuntime {
@@ -40,11 +43,14 @@ export class PortRuntime {
   constructor(config: RuntimeConfig = {}) {
     this.config = {
       maxTurns: config.maxTurns ?? 15,
-      maxBudgetTokens: config.maxBudgetTokens ?? 8192,
-      model: config.model ?? "google/gemini-flash-1.5",
+      maxBudgetTokens: config.maxBudgetTokens ?? 4096,
+      model: config.model ?? "claude-sonnet-4-6",
+      deepModel: config.deepModel ?? "claude-opus-4-7",
       apiKey: config.apiKey ?? process.env.OPENROUTER_API_KEY ?? "",
       allowCodeExecution: config.allowCodeExecution ?? false,
       onEvent: config.onEvent ?? (() => {}),
+      n_iterations: config.n_iterations ?? 2,
+      dailyTokenBudget: config.dailyTokenBudget ?? 500000,
     };
     this.queryEngine = new QueryEnginePort({
       maxTurns: this.config.maxTurns,

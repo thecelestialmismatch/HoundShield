@@ -18,7 +18,7 @@ The `claw-code` reference implementation — a full Claude Code internals port i
 - Components (`brain/components/`) — Ink/terminal UI components
 - Services (`brain/services/`) — analytics, compact, extractMemories, oauth, plugins
 
-**Why isolated:** Zero imports from the Kaelus app layer. This is reference material for
+**Why isolated:** Zero imports from the HoundShield app layer. This is reference material for
 the AI agent architecture, not production Next.js code. The actual Brain AI compliance
 assistant lives in `lib/brain-ai/` (specifically `faq.ts` and `query-engine.ts`).
 

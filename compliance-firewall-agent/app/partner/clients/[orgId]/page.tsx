@@ -103,14 +103,14 @@ export default function ClientDetailPage() {
 
   const actionIcon = {
     BLOCKED: <Shield className="w-3.5 h-3.5 text-rose-400" />,
-    QUARANTINED: <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />,
+    QUARANTINED: <AlertTriangle className="w-3.5 h-3.5 text-brand-400" />,
     ALLOWED: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />,
   };
 
   const riskColor: Record<string, string> = {
     CRITICAL: "text-rose-400",
     HIGH: "text-orange-400",
-    MEDIUM: "text-amber-400",
+    MEDIUM: "text-brand-400",
     LOW: "text-blue-400",
     NONE: "text-slate-400",
   };
@@ -134,7 +134,7 @@ export default function ClientDetailPage() {
             Status:{" "}
             <span
               className={
-                client.status === "active" ? "text-emerald-400" : "text-amber-400"
+                client.status === "active" ? "text-emerald-400" : "text-brand-400"
               }
             >
               {client.status}
@@ -234,7 +234,7 @@ export default function ClientDetailPage() {
                       evt.action === "BLOCKED"
                         ? "text-rose-400"
                         : evt.action === "QUARANTINED"
-                        ? "text-amber-400"
+                        ? "text-brand-400"
                         : "text-emerald-400"
                     }
                   >

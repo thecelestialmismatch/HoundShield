@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#07070b]">
+    <div className="min-h-screen bg-[#0a0a0a]">
       <ScrollProgressBar />
       <Navbar variant="dark" />
       <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
@@ -20,7 +20,7 @@ export default function TermsPage() {
         <div className="prose-dark space-y-8 text-sm text-slate-400 leading-relaxed">
           <section>
             <h2 className="text-lg font-semibold text-slate-200 mb-3">1. Acceptance of Terms</h2>
-            <p>By accessing or using Hound Shield ("the Service"), you agree to be bound by these Terms of Service. If you are using the Service on behalf of an organization, you represent that you have authority to bind that organization to these terms.</p>
+            <p>By accessing or using Hound Shield (&quot;the Service&quot;), you agree to be bound by these Terms of Service. If you are using the Service on behalf of an organization, you represent that you have authority to bind that organization to these terms.</p>
           </section>
 
           <section>
@@ -50,7 +50,7 @@ export default function TermsPage() {
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>Use the Service for any unlawful purpose</li>
               <li>Attempt to reverse engineer, decompile, or disassemble the Service</li>
-              <li>Exceed your plan's usage limits through automated means</li>
+              <li>Exceed your plan&apos;s usage limits through automated means</li>
               <li>Share your account credentials with unauthorized users</li>
               <li>Interfere with or disrupt the Service or its infrastructure</li>
             </ul>

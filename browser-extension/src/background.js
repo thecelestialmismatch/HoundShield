@@ -1,5 +1,5 @@
 /**
- * Kaelus AI Firewall — Background Service Worker (Manifest V3)
+ * HoundShield AI Firewall — Background Service Worker (Manifest V3)
  *
  * Responsibilities:
  *   - Maintain a findings counter per tab (badge)
@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
 // ---------------------------------------------------------------------------
 
 chrome.runtime.onMessage.addListener((message, sender) => {
-  if (message.type !== "KAELUS_FINDING") return;
+  if (message.type !== "HoundShield_FINDING") return;
 
   const tabId = sender.tab?.id;
   if (!tabId) return;

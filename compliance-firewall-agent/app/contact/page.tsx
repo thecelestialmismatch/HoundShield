@@ -52,26 +52,26 @@ export default function ContactPage() {
     setTimeout(() => { setLoading(false); setSubmitted(true); }, 1500);
   };
 
-  const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all duration-200";
+  const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 transition-all duration-200";
 
   const cards = [
-    { icon: Mail, color: "text-indigo-400", label: "General Inquiries", value: "contact@houndshield.com", sub: "Sales, partnerships, and general questions" },
+    { icon: Mail, color: "text-brand-400", label: "General Inquiries", value: "contact@houndshield.com", sub: "Sales, partnerships, and general questions" },
     { icon: CalendarCheck, color: "text-emerald-400", label: "Technical Support", value: "support@houndshield.com", sub: "Integration help and troubleshooting" },
-    { icon: Clock, color: "text-amber-400", label: "Response Time", value: "< 4 hours", sub: "During business hours (ET)" },
+    { icon: Clock, color: "text-brand-400", label: "Response Time", value: "< 4 hours", sub: "During business hours (ET)" },
   ];
 
   return (
-    <div className="min-h-screen bg-[#07070b] text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       <ScrollProgressBar />
       <Navbar variant="dark" />
 
       {/* Hero */}
       <section className="relative pt-36 pb-16 md:pt-44 md:pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/[0.06] via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-600/[0.06] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
-              Talk to our <span className="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">CMMC experts</span>
+              Talk to our <span className="bg-gradient-to-r from-brand-400 to-emerald-400 bg-clip-text text-transparent">CMMC experts</span>
             </h1>
             <p className="text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
               Whether you need help with NIST 800-171, SPRS scoring, or C3PAO preparation -- our team is ready to guide you.
@@ -109,7 +109,7 @@ export default function ContactPage() {
                     <CheckCircle2 className="w-14 h-14 text-emerald-400 mx-auto mb-4" />
                     <h3 className="text-2xl font-bold mb-2">Message sent</h3>
                     <p className="text-slate-400 mb-8">We will respond within 4 business hours.</p>
-                    <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-sm font-semibold transition-colors cursor-pointer">
+                    <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-sm font-semibold transition-colors cursor-pointer">
                       Back to Home <ArrowRight className="w-4 h-4" />
                     </Link>
                   </motion.div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
                         <textarea name="message" value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} rows={4} className={`${inputCls} resize-none`} placeholder="Tell us about your compliance needs..." />
                         {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message}</p>}
                       </div>
-                      <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-sm font-semibold transition-colors cursor-pointer">
+                      <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-60 text-sm font-semibold transition-colors cursor-pointer">
                         {loading ? <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
                         {loading ? "Sending..." : "Send Message"}
                       </button>

@@ -1,0 +1,78 @@
+name: Publish Pattern Updates
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "proxy/patterns/**"
+      - "proxy/PATTERNS.md"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Get changed patterns
+        id: diff
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD -- proxy/patterns/ proxy/PATTERNS.md | tr '\n' ' ')
+          echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
+          echo "Changed: $CHANGED"
+
+      - name: Build pattern summary
+        run: |
+          cd proxy
+          npm ci --ignore-scripts
+          npx tsx -e "
+            import { PATTERNS } from './patterns/index.ts';
+            const summary = {
+              total: PATTERNS.length,
+              by_category: {},
+              updated_at: new Date().toISOString(),
+            };
+            for (const p of PATTERNS) {
+              summary.by_category[p.category] = (summary.by_category[p.category] ?? 0) + 1;
+            }
+            console.log(JSON.stringify(summary, null, 2));
+          " > pattern-summary.json
+          cat pattern-summary.json
+
+      - name: Create release note
+        if: steps.diff.outputs.changed_files != ''
+        env:
+          CHANGED_FILES: ${{ steps.diff.outputs.changed_files }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = JSON.parse(fs.readFileSync('proxy/pattern-summary.json', 'utf8'));
+            const changedFiles = process.env.CHANGED_FILES ?? '';
+            const body = [
+              '## Pattern Update',
+              '',
+              `**Total patterns:** ${summary.total}`,
+              '**By category:**',
+              ...Object.entries(summary.by_category).map(([k, v]) => `- ${k}: ${v}`),
+              '',
+              `Changed files: \`${changedFiles}\``,
+              '',
+              'See [PATTERNS.md](./proxy/PATTERNS.md) for full documentation.',
+            ].join('\n');
+
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body,
+            });
