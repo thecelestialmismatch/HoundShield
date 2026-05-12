@@ -8,8 +8,8 @@
  * Pattern: ruflo Truth Verification System applied to compliance claims.
  */
 
-import { queryKnowledgeGraph } from "./knowledge-graph";
-import type { KnowledgeDomain } from "./knowledge-graph";
+import { queryKnowledge, SEED_KNOWLEDGE_GRAPH } from "./knowledge-graph";
+import type { KGCategory } from "./knowledge-graph";
 
 export interface ComplianceClaim {
   text: string;
@@ -72,15 +72,15 @@ export class TruthVerifier {
       }
     }
 
-    const domains: KnowledgeDomain[] = claim.domain
-      ? [claim.domain as KnowledgeDomain]
-      : ["cmmc", "nist"];
+    const category: KGCategory = claim.domain === "nist" || claim.domain === "cmmc"
+      ? "compliance"
+      : (claim.domain as KGCategory | undefined) ?? "compliance";
 
-    const results = await queryKnowledgeGraph({
-      query: claim.controlNumber ? `${claim.controlNumber} ${claim.text}` : claim.text,
-      domains,
-      limit: 3,
-    });
+    const keyword = claim.controlNumber
+      ? `${claim.controlNumber} ${claim.text}`
+      : claim.text;
+
+    const results = queryKnowledge(SEED_KNOWLEDGE_GRAPH, { keyword, category, limit: 3 });
 
     if (results.length === 0) {
       return {
@@ -93,13 +93,13 @@ export class TruthVerifier {
     }
 
     const topResult = results[0];
-    const confidence = Math.min(topResult.score, 1.0);
+    const confidence = topResult.confidence;
 
     return {
       claim,
       verified: confidence >= 0.85,
       confidence,
-      supportingNode: topResult.node.id,
+      supportingNode: topResult.id,
       flag: confidence >= 0.85 ? "verified" : "needs_verify",
     };
   }
