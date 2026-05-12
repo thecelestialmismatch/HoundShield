@@ -137,6 +137,11 @@ export class KnowledgeGraph {
     return true;
   }
 
+  /** Insert a fully-formed node, preserving its id. Used by upsertNode shim. */
+  setNode(node: KnowledgeNode): void {
+    this.nodes.set(node.id, node);
+  }
+
   isStale(node: KnowledgeNode): boolean {
     if (node.ttl === 0) return false;
     return Date.now() - node.updatedAt > node.ttl;
@@ -220,6 +225,54 @@ let _graph: KnowledgeGraph | null = null;
 export function getKnowledgeGraph(): KnowledgeGraph {
   if (!_graph) _graph = new KnowledgeGraph();
   return _graph;
+}
+
+// ---------------------------------------------------------------------------
+// Compatibility shims — used by brain-ai v3 files (specialist-agents,
+// truth-verifier, firecrawl-updater) that expect a functional API.
+// ---------------------------------------------------------------------------
+
+/** Async wrapper so callers can `await queryKnowledgeGraph(...)`. */
+export async function queryKnowledgeGraph(params: KnowledgeQuery): Promise<KnowledgeResult[]> {
+  return getKnowledgeGraph().query(params);
+}
+
+/**
+ * KGNode — legacy shape used by firecrawl-updater.
+ * Maps to KnowledgeNode with `domain` instead of `category`.
+ */
+export interface KGNode {
+  id: string;
+  category: KnowledgeDomain;
+  title: string;
+  content: string;
+  confidence: number;
+  sources: string[];
+}
+
+/**
+ * Upsert a node using the legacy KGNode shape.
+ * If the ID already exists, updates the content. Otherwise adds a new node.
+ * Returns the same graph instance (mutated in-place).
+ */
+export function upsertNode(graph: KnowledgeGraph, node: KGNode): KnowledgeGraph {
+  const now = Date.now();
+  const existing = graph.listDomain(node.category).find(n => n.id === node.id);
+  const full: KnowledgeNode = {
+    id: node.id,
+    domain: node.category,
+    title: node.title,
+    content: node.content,
+    keywords: [],
+    source: node.sources[0] ?? "firecrawl",
+    sourceType: "firecrawl",
+    ttl: 7 * 86400000,
+    weight: node.confidence,
+    createdAt: existing?.createdAt ?? now,
+    updatedAt: now,
+  };
+  graph.setNode(full);
+  return graph;
 }
 
 // ---------------------------------------------------------------------------
