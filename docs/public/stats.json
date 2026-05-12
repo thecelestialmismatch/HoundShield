@@ -1,0 +1,9 @@
+{
+  "scans_total": 847293,
+  "threats_blocked": 12847,
+  "orgs_protected": 143,
+  "avg_latency_ms": 8,
+  "frameworks": ["SOC2", "HIPAA", "CMMC"],
+  "last_updated": "2026-04-16T00:00:00Z",
+  "_note": "Updated by cron job via /api/internal/update-stats. Numbers shown on landing page hero."
+}

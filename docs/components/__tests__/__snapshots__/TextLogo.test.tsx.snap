@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TextLogo > applies dark variant correctly 1`] = `
+<span
+  class="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-400 transition-all duration-300 "
+>
+  Hound
+  <span
+    class="text-white/90 font-bold"
+  >
+     Shield
+  </span>
+</span>
+`;
+
+exports[`TextLogo > applies light variant correctly 1`] = `
+<span
+  class="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-400 transition-all duration-300 "
+>
+  Hound
+  <span
+    class="text-[#0a0a0a]/90 font-bold"
+  >
+     Shield
+  </span>
+</span>
+`;
