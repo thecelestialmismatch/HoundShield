@@ -177,7 +177,7 @@ const globalJsonLd = [
         name: "Can my employees still use ChatGPT with HoundShield?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. HoundShield works as a transparent proxy. Employees point their AI tools at your Kaelus endpoint instead of directly at the AI API. Prompts that don't contain CUI/PHI/PII pass through normally. Flagged content is blocked and logged with a tamper-evident record.",
+          text: "Yes. HoundShield works as a transparent proxy. Employees point their AI tools at your HoundShield endpoint instead of directly at the AI API. Prompts that don't contain CUI/PHI/PII pass through normally. Flagged content is blocked and logged with a tamper-evident record.",
         },
       },
       {
@@ -185,7 +185,7 @@ const globalJsonLd = [
         name: "How long does HoundShield take to set up?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Under 10 minutes for most organizations. It's a single URL change — point your AI tools at your Kaelus endpoint instead of the cloud AI API. Docker deployment takes 3 commands. No agent installation on individual machines required.",
+          text: "Under 10 minutes for most organizations. It's a single URL change — point your AI tools at your HoundShield endpoint instead of the cloud AI API. Docker deployment takes 3 commands. No agent installation on individual machines required.",
         },
       },
       {
