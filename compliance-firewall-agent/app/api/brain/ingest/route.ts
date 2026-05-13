@@ -15,7 +15,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const bodySchema = z.object({
-  domain: z.enum(["cmmc", "hipaa", "soc2", "nist", "competitor", "market", "architecture", "pricing", "customer"]),
+  domain: z.enum(["compliance", "competitor", "market", "architecture", "product", "customer", "legal"]),
   title: z.string().min(3).max(200),
   content: z.string().min(10).max(5000),
   keywords: z.array(z.string()).min(1).max(20),
