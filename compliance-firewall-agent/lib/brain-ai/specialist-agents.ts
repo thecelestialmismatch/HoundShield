@@ -7,7 +7,7 @@
 
 import { ReasoningLoop } from "./reasoning-loop";
 import { TruthVerifier } from "./truth-verifier";
-import { queryKnowledgeGraph } from "./knowledge-graph";
+import { queryKnowledge, SEED_KNOWLEDGE_GRAPH, KGCategory } from "./knowledge-graph";
 
 export interface AgentQuery {
   query: string;
@@ -24,10 +24,10 @@ export interface AgentResult {
   verified: boolean;
 }
 
-async function buildContext(query: string, domains: import("./knowledge-graph").KnowledgeDomain[]): Promise<string> {
-  const nodes = await queryKnowledgeGraph({ query, domains, limit: 5 });
+function buildContext(query: string, category: KGCategory): string {
+  const nodes = queryKnowledge(SEED_KNOWLEDGE_GRAPH, { keyword: query, category, limit: 5 });
   if (nodes.length === 0) return "";
-  return nodes.map((r) => `[${r.node.id}] ${r.node.title}: ${r.node.content}`).join("\n\n");
+  return nodes.map((r) => `[${r.id}] ${r.title}: ${r.content}`).join("\n\n");
 }
 
 // ─── CMCCAgent — fully implemented ────────────────────────────────────────
@@ -47,7 +47,7 @@ export class CMCCAgent {
   }
 
   async run(query: AgentQuery): Promise<AgentResult> {
-    const context = await buildContext(query.query, ["cmmc", "nist"]);
+    const context = buildContext(query.query, "compliance");
 
     const n_iterations = query.mode === "deep" ? 4 : 2;
     const model = query.mode === "deep" ? "claude-opus-4-7" : "claude-sonnet-4-6";
@@ -61,9 +61,8 @@ export class CMCCAgent {
     const claims = this.verifier.extractClaims(result.answer);
     const report = await this.verifier.verifyAll(claims);
 
-    const sources = (
-      await queryKnowledgeGraph({ query: query.query, domains: ["cmmc", "nist"], limit: 3 })
-    ).map((r) => r.node.source);
+    const sources = queryKnowledge(SEED_KNOWLEDGE_GRAPH, { keyword: query.query, category: "compliance", limit: 3 })
+      .map((r) => r.sources?.[0] ?? "");
 
     return {
       agent: "CMCCAgent",
@@ -91,7 +90,7 @@ export class SecurityAgent {
   }
 
   async run(query: AgentQuery): Promise<AgentResult> {
-    const context = await buildContext(query.query, ["cmmc", "nist"]);
+    const context = buildContext(query.query, "compliance");
     const result = await this.loop.run(
       `Security analysis: ${query.query}`,
       context,
