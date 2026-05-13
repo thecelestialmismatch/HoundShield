@@ -12,23 +12,18 @@ function getStripe() {
 /**
  * HoundShield Pricing — Canonical Structure (May 2026)
  *
- * Starter:    $0        — trial only, no checkout
- * Pro:        $199/mo   — 10 seats, 50K scans/mo, full CMMC + PDF export
- * Growth:     $499/mo   — 25 seats, unlimited scans, C3PAO coordination
- * Enterprise: $999/mo   — unlimited seats, on-prem, white-label
- * Agency/MSP: $2,499/mo — multi-tenant, unlimited clients, partner commission
+ * Starter: $0     — 5 users, 7-day log retention, basic scan
+ * Pro:     $199/mo — 25 users, 30-day retention, full CMMC + PDF export
+ * Enterprise: $499/mo — 100 users, 90-day retention, SSO + API access + C3PAO report
+ * Agency:  $1,499/mo — unlimited clients, white-label, partner commission
  *
  * All prices match /pricing page exactly. No orphaned tiers.
- * Env vars: STRIPE_{TIER}_{MONTHLY|ANNUAL}_PRICE_ID
+ * Env vars: STRIPE_PRO_MONTHLY_PRICE_ID, STRIPE_PRO_ANNUAL_PRICE_ID, etc.
  */
 const PRICE_MAP: Record<string, { monthly: string; annual: string }> = {
   pro: {
     monthly: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || '',
     annual: process.env.STRIPE_PRO_ANNUAL_PRICE_ID || '',
-  },
-  growth: {
-    monthly: process.env.STRIPE_GROWTH_MONTHLY_PRICE_ID || '',
-    annual: process.env.STRIPE_GROWTH_ANNUAL_PRICE_ID || '',
   },
   enterprise: {
     monthly: process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID || '',
@@ -71,7 +66,7 @@ export async function POST(request: NextRequest) {
 
     if (!PRICE_MAP[tier]) {
       return NextResponse.json(
-        { error: `Invalid tier: ${tier}. Valid tiers: pro, growth, enterprise, agency` },
+        { error: `Invalid tier: ${tier}. Valid tiers: pro, enterprise, agency` },
         { status: 400 }
       );
     }
