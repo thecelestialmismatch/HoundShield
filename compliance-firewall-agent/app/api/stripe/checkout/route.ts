@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 
     if (!PRICE_MAP[tier]) {
       return NextResponse.json(
-        { error: `Invalid tier: ${tier}. Valid tiers: pro, enterprise, agency` },
+        { error: `Invalid tier: ${tier}. Valid tiers: pro, growth, enterprise, agency` },
         { status: 400 }
       );
     }
