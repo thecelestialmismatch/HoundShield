@@ -55,7 +55,7 @@ import {
   PolarRadiusAxis,
   Legend,
 } from "recharts";
-import SPRSGauge from "@/components/dashboard/SPRSGauge";
+import SPRSDashboardWidget from "@/components/dashboard/SPRSDashboardWidget";
 import { ALL_CONTROLS } from "@/lib/shieldready/controls";
 import {
   calculateSPRS,
@@ -529,50 +529,7 @@ export default function CommandCenterOverview() {
       {/* ── SPRS + Hourly Activity ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* SPRS Gauge */}
-        <div className="glass-card p-5 text-center">
-          <h3 className="font-display font-bold text-base text-white mb-4">
-            SPRS Score
-          </h3>
-          <SPRSGauge score={sprs.total} />
-          <div className="grid grid-cols-3 gap-3 mt-5">
-            <div className="text-center">
-              <p className="font-display font-bold text-lg text-emerald-600">
-                {statusCounts.met}
-              </p>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Met</p>
-            </div>
-            <div className="text-center">
-              <p className="font-display font-bold text-lg text-amber-500">
-                {statusCounts.partial}
-              </p>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Partial</p>
-            </div>
-            <div className="text-center">
-              <p className="font-display font-bold text-lg text-rose-500">
-                {statusCounts.unmet}
-              </p>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Unmet</p>
-            </div>
-          </div>
-          {/* SPRS improvement from HoundShield */}
-          <div className="mt-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-3 py-2">
-            <p className="text-[11px] font-mono text-emerald-400 font-semibold uppercase tracking-wider mb-0.5">
-              HoundShield Impact
-            </p>
-            <p className="text-xs text-emerald-300">
-              <span className="font-bold">+18 pts</span> protected — AC.L2-3.1.3, AU.L2-3.3.1, SI.L2-3.14.1
-            </p>
-            <p className="text-[10px] text-emerald-500/70 mt-0.5">
-              CUI flow control · audit logging · flaw remediation
-            </p>
-          </div>
-          <Link
-            href="/command-center/shield"
-            className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-500 hover:text-brand-600 transition-colors"
-          >
-            View Full Assessment <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+        <SPRSDashboardWidget variant="compact" />
 
         {/* Hourly Activity */}
         <div className="lg:col-span-2 glass-card p-5">
