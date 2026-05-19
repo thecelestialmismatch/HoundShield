@@ -33,7 +33,7 @@
 ## Sprint 4 (Week of 2026-05-19) — 5 paying customers, $1K MRR
 
 - [ ] Onboarding email sequence (3 emails: day 1/3/7)
-- [ ] In-app CMMC control coverage map — shows Jordan which controls HoundShield covers
+- [x] In-app CMMC control coverage map — shows Jordan which controls HoundShield covers (shipped PR #77)
 - [ ] SPRS improvement estimate shown in dashboard (+15 to +30 points)
 - [ ] C3PAO white-label dashboard MVP (rebrandable)
 
