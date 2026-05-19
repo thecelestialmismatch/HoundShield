@@ -461,7 +461,7 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <Logo />
+            <Logo variant={variant} />
             <TextLogo className="text-lg" variant={variant} />
           </Link>
 
