@@ -5,7 +5,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 export const metadata: Metadata = {
   title: "Pricing | AI Compliance Firewall for CMMC & HIPAA",
   description:
-    "HoundShield pricing for defense contractors and regulated industries. Free starter, Pro at $69/mo, Growth at $199/mo, Enterprise at $499/mo. C3PAO-ready PDF evidence included.",
+    "HoundShield pricing for defense contractors and regulated industries. Free starter, Pro at $199/mo, Growth at $499/mo, Enterprise at $999/mo, Agency at $2,499/mo. C3PAO-ready PDF evidence included.",
   keywords: [
     "CMMC compliance pricing",
     "AI compliance firewall cost",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "HoundShield Pricing | CMMC & HIPAA AI Compliance",
     description:
-      "Plans starting free. Pro $69/mo. Enterprise $499/mo with C3PAO-ready PDF reports, full CMMC Level 2 coverage, and local-only deployment.",
+      "Plans starting free. Pro $199/mo. Enterprise $999/mo with C3PAO-ready PDF reports, full CMMC Level 2 coverage, and local-only deployment.",
     url: `${BASE_URL}/pricing`,
     type: "website",
   },
