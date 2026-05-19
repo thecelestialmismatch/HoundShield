@@ -1,10 +1,26 @@
-import { Shield, Zap } from "lucide-react";
+import Image from "next/image";
 
-export function Logo({ className = "" }: { className?: string }) {
+interface LogoProps {
+    className?: string;
+    size?: number;
+    /** "dark" = white logo on dark bg; "light" = black logo on light bg; "auto" = CSS invert via dark class */
+    variant?: "dark" | "light" | "auto";
+}
+
+export function Logo({ className = "", size = 32, variant = "auto" }: LogoProps) {
+    const filterClass =
+        variant === "dark" ? "invert" :
+        variant === "light" ? "" :
+        "dark:invert";
+
     return (
-        <div className={`relative flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-[#EA580C] to-[#C2410C] flex items-center justify-center ${className}`}>
-            <Shield className="w-4.5 h-4.5 text-white" fill="rgba(255,255,255,0.2)" strokeWidth={2} />
-            <Zap className="w-2 h-2 text-cream-100 absolute" style={{ fill: "currentColor" }} />
-        </div>
+        <Image
+            src="/houndshield-logo.png"
+            alt="Hound Shield"
+            width={size}
+            height={size}
+            className={`flex-shrink-0 ${filterClass} ${className}`}
+            priority
+        />
     );
 }
