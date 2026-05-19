@@ -3,7 +3,8 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Shield } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 const PlatformDashboard = dynamic(
   () => import("@/components/landing/PlatformDashboard").then((m) => m.PlatformDashboard),
@@ -35,7 +36,7 @@ export function HeroSection() {
               transition={{ duration: 0.45, ease }}
               className="inline-flex items-center gap-2 mb-7 px-3 py-1.5 rounded-md border border-brand-400/30 bg-brand-400/5"
             >
-              <Shield className="w-3.5 h-3.5 text-brand-400" />
+              <Logo variant="dark" className="w-3.5" />
               <span className="text-xs font-mono font-semibold text-brand-400 uppercase tracking-wider">
                 CMMC Level 2 — HIPAA — SOC 2
               </span>
