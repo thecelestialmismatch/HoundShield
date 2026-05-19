@@ -11,7 +11,7 @@
 - [x] Wire PDF generation in `app/api/reports/generate/` — jsPDF, 5-page C3PAO report, tier gating, demo mode
 - [x] E2E test: proxy intercepts ChatGPT traffic -> CUI flagged -> PDF exported (105/105 passing)
 - [x] Landing page: Jordan pain copy ("Your engineers are using ChatGPT. Your assessor is 6 months away."), Anthropic/Claude coral palette, `/docs/quickstart` page
-- [ ] Push Supabase migrations 003+004 to production — requires `NEXT_PUBLIC_SUPABASE_*` env vars (manual step)
+- [x] Push Supabase migrations to production — 010 (RLS fix + AI observability) + 011 (partner portal) applied 2026-05-13
 - [ ] Set `OPENROUTER_API_KEY` in Vercel — Brain AI shows "trouble connecting" on live site (manual step)
 
 ## Sprint 2 (Week of 2026-05-05) — First C3PAO partner, first paying customer

@@ -90,9 +90,9 @@ const PRICING_TIERS = [
 ];
 
 const PARTNER_ITEMS = [
-  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
+  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msps" },
   { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
-  { icon: DollarSign,color:"text-amber-400",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
+  { icon: DollarSign,color:"text-amber-400",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#resellers" },
 ];
 
 const DOC_ITEMS = [
