@@ -78,7 +78,7 @@ export function WhyHoundshield() {
     <section className="py-24 px-6 bg-slate-50 border-y border-slate-100">
       <div className="max-w-5xl mx-auto">
         <FadeIn className="mb-14">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0369A1] mb-3">Why houndshield</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-600 mb-3">Why houndshield</p>
           <h2 className="text-[clamp(26px,3.5vw,42px)] font-display font-bold tracking-tight leading-[1.1] text-slate-900">
             One tool does what three tools used to.
           </h2>

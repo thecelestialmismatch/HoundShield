@@ -9,62 +9,63 @@
  * Upgrade to LLM synthesis is optional and model-agnostic.
  */
 
-import { SEED_KNOWLEDGE_GRAPH, KGCategory, KGNode, queryKnowledge, upsertNode } from "./knowledge-graph";
+import { getKnowledgeGraph, KnowledgeDomain } from "./knowledge-graph";
 
 export interface BrainResponse {
   answer: string;
-  sources: Array<{ domain: KGCategory; title: string; stale: boolean }>;
+  sources: Array<{ domain: KnowledgeDomain; title: string; stale: boolean }>;
   confidence: "high" | "medium" | "low";
   suggestion?: string;
 }
 
-const STALE_MS = 30 * 24 * 60 * 60 * 1000;
-function isStale(node: KGNode): boolean {
-  return Date.now() - new Date(node.lastUpdated).getTime() > STALE_MS;
-}
-
-// Routing map: question keywords -> preferred category for narrowing
-const DOMAIN_ROUTING: Array<{ keywords: string[]; categories: KGCategory[] }> = [
+// Routing map: question keywords -> relevant domains
+const DOMAIN_ROUTING: Array<{ keywords: string[]; domains: KnowledgeDomain[] }> = [
   {
-    keywords: ["cmmc", "dfars", "cui", "controlled unclassified", "level 2", "c3pao", "sprs", "nist", "hipaa", "phi", "health", "soc 2", "soc2"],
-    categories: ["compliance"],
+    keywords: ["cmmc", "dfars", "cui", "controlled unclassified", "level 2", "c3pao", "sprs"],
+    domains: ["cmmc", "nist"],
+  },
+  {
+    keywords: ["hipaa", "phi", "health", "patient", "medical"],
+    domains: ["hipaa"],
+  },
+  {
+    keywords: ["soc 2", "soc2", "soc ii", "type ii"],
+    domains: ["soc2"],
   },
   {
     keywords: ["nightfall", "strac", "purview", "symantec", "cyberhaven", "netskope", "competitor"],
-    categories: ["competitor"],
+    domains: ["competitor"],
   },
   {
-    keywords: ["market", "revenue", "mrr", "buyer", "jordan", "yc"],
-    categories: ["market"],
-  },
-  {
-    keywords: ["customer", "pricing", "price", "tier"],
-    categories: ["customer", "product"],
+    keywords: ["market", "customer", "revenue", "mrr", "buyer", "jordan", "pricing", "yc"],
+    domains: ["market", "customer", "pricing"],
   },
   {
     keywords: ["proxy", "architecture", "scanner", "pattern", "local", "data boundary"],
-    categories: ["architecture"],
+    domains: ["architecture"],
   },
 ];
 
-let runtimeGraph = SEED_KNOWLEDGE_GRAPH;
-
-function routeCategories(question: string): KGCategory | undefined {
+function routeDomains(question: string): KnowledgeDomain[] | undefined {
   const q = question.toLowerCase();
+  const matched = new Set<KnowledgeDomain>();
   for (const route of DOMAIN_ROUTING) {
     if (route.keywords.some(k => q.includes(k))) {
-      return route.categories[0];
+      route.domains.forEach(d => matched.add(d));
     }
   }
-  return undefined;
+  return matched.size > 0 ? Array.from(matched) : undefined;
 }
 
 /** Ask the Brain AI a question. Returns structured answer with sources. */
 export function ask(question: string): BrainResponse {
-  const category = routeCategories(question);
-  const results = queryKnowledge(runtimeGraph, { keyword: question, category, limit: 5, minConfidence: 0.7 });
+  const graph = getKnowledgeGraph();
+  const domains = routeDomains(question);
+  const results = graph.query({ query: question, domains, limit: 5 });
 
-  if (results.length === 0) {
+  // Discard low-signal results — BM25 incidental common-word matches stay below 2
+  const relevant = results.filter(r => r.score >= 2);
+  if (relevant.length === 0) {
     return {
       answer: "No matching knowledge found. Run /firecrawl-ingest to add sources, or add a node manually via addKnowledge().",
       sources: [],
@@ -73,21 +74,20 @@ export function ask(question: string): BrainResponse {
     };
   }
 
-  const answer = results
-    .map(r => `[${r.category.toUpperCase()}] **${r.title}**\n${r.content}`)
+  const answer = relevant
+    .map(r => `[${r.node.domain.toUpperCase()}] **${r.node.title}**\n${r.node.content}`)
     .join("\n\n---\n\n");
 
-  const staleCount = results.filter(r => isStale(r)).length;
-  const topConfidence = results[0].confidence;
+  const staleCount = relevant.filter(r => r.stale).length;
   const confidence: "high" | "medium" | "low" =
-    topConfidence > 0.9 ? "high" : topConfidence > 0.8 ? "medium" : "low";
+    relevant[0].score > 5 ? "high" : relevant[0].score > 2 ? "medium" : "low";
 
   return {
     answer,
-    sources: results.map(r => ({
-      domain: r.category,
-      title: r.title,
-      stale: isStale(r),
+    sources: relevant.map(r => ({
+      domain: r.node.domain,
+      title: r.node.title,
+      stale: r.stale,
     })),
     confidence,
     suggestion:
@@ -99,25 +99,25 @@ export function ask(question: string): BrainResponse {
 
 /** Add new knowledge to the graph (for agent-driven updates) */
 export function addKnowledge(params: {
-  domain: KGCategory;
+  domain: KnowledgeDomain;
   title: string;
   content: string;
   keywords: string[];
   source: string;
   ttlDays?: number;
 }): string {
-  const id = `${params.domain}-${Date.now()}`;
-  runtimeGraph = upsertNode(runtimeGraph, {
-    id,
-    category: params.domain,
+  const graph = getKnowledgeGraph();
+  const node = graph.addNode({
+    domain: params.domain,
     title: params.title,
-    content: params.keywords.length > 0
-      ? `${params.content}\n\nKeywords: ${params.keywords.join(", ")}`
-      : params.content,
-    confidence: 1.0,
-    sources: [params.source],
+    content: params.content,
+    keywords: params.keywords,
+    source: params.source,
+    sourceType: "manual",
+    ttl: (params.ttlDays ?? 0) * 24 * 60 * 60 * 1000,
+    weight: 1.0,
   });
-  return id;
+  return node.id;
 }
 
 /** Quick competitive intelligence lookup */
