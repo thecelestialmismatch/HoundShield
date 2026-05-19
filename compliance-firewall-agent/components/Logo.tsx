@@ -1,31 +1,26 @@
+import Image from "next/image";
+
 interface LogoProps {
-  className?: string;
-  variant?: "light" | "dark";
-  size?: "sm" | "md" | "lg";
+    className?: string;
+    size?: number;
+    /** "dark" = white logo on dark bg; "light" = black logo on light bg; "auto" = CSS invert via dark class */
+    variant?: "dark" | "light" | "auto";
 }
 
-export function Logo({ className = "", variant = "light", size = "md" }: LogoProps) {
-  const sizeClass = { sm: "w-6", md: "w-8", lg: "w-12" }[size];
-  const colorClass = variant === "dark" ? "text-brand-400" : "text-brand-600";
+export function Logo({ className = "", size = 32, variant = "auto" }: LogoProps) {
+    const filterClass =
+        variant === "dark" ? "invert" :
+        variant === "light" ? "" :
+        "dark:invert";
 
-  return (
-    <svg
-      viewBox="0 0 100 120"
-      className={`${sizeClass} flex-shrink-0 ${colorClass} ${className}`}
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        d="M50 118 Q10 90 8 72 L8 32 Q8 26 14 26 L26 26 L30 5 L38 26
-           Q44 20 50 20 Q56 20 62 26 L70 5 L74 26 L86 26
-           Q92 26 92 32 L92 72 Q90 90 50 118Z
-           M28 52 L43 47 L42 50 L27 55Z
-           M72 52 L57 47 L58 50 L73 55Z
-           M33 62 Q38 56 46 60 Q44 68 37 68 Q30 67 33 62Z
-           M67 62 Q62 56 54 60 Q56 68 63 68 Q70 67 67 62Z"
-      />
-    </svg>
-  );
+    return (
+        <Image
+            src="/houndshield-logo.png"
+            alt="Hound Shield"
+            width={size}
+            height={size}
+            className={`flex-shrink-0 ${filterClass} ${className}`}
+            priority
+        />
+    );
 }
