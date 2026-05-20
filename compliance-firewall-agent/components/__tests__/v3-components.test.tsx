@@ -260,4 +260,71 @@ describe('NavV3', () => {
     const links = screen.getAllByText('Start free')
     expect(links.length).toBeGreaterThanOrEqual(1)
   })
+
+  it('logo image has logo-img class (no bg-white wrapper)', () => {
+    render(<NavV3 />)
+    const logoImg = document.querySelector('img[alt="HoundShield"]')
+    expect(logoImg).toBeTruthy()
+    expect(logoImg!.className).toContain('logo-img')
+  })
+
+  it('logo image is NOT wrapped in a bg-white div', () => {
+    render(<NavV3 />)
+    const logoImg = document.querySelector('img[alt="HoundShield"]')
+    const parent = logoImg?.parentElement
+    // Parent should be the Link anchor, not a bg-white box
+    expect(parent?.className ?? '').not.toContain('bg-white')
+  })
+
+  it('logo image renders at 40x40', () => {
+    render(<NavV3 />)
+    const logoImg = document.querySelector('img[alt="HoundShield"]') as HTMLImageElement
+    expect(logoImg?.width).toBe(40)
+    expect(logoImg?.height).toBe(40)
+  })
+})
+
+// ── FooterV3 ──────────────────────────────────────────────────────
+import { FooterV3 } from '../layout/FooterV3'
+
+describe('FooterV3', () => {
+  it('renders footer element', () => {
+    render(<FooterV3 />)
+    expect(document.querySelector('footer')).toBeTruthy()
+  })
+
+  it('logo image has logo-img class (no bg-white wrapper)', () => {
+    render(<FooterV3 />)
+    const logoImg = document.querySelector('img[alt="HoundShield"]')
+    expect(logoImg).toBeTruthy()
+    expect(logoImg!.className).toContain('logo-img')
+  })
+
+  it('logo image is NOT wrapped in a bg-white div', () => {
+    render(<FooterV3 />)
+    const logoImg = document.querySelector('img[alt="HoundShield"]')
+    const parent = logoImg?.parentElement
+    expect(parent?.className ?? '').not.toContain('bg-white')
+  })
+
+  it('logo image renders at 48x48', () => {
+    render(<FooterV3 />)
+    const logoImg = document.querySelector('img[alt="HoundShield"]') as HTMLImageElement
+    expect(logoImg?.width).toBe(48)
+    expect(logoImg?.height).toBe(48)
+  })
+
+  it('renders compliance badges', () => {
+    render(<FooterV3 />)
+    expect(screen.getByText('CMMC LVL 2')).toBeTruthy()
+    // HIPAA appears in both badge strip and footer link column
+    const hipaaEls = screen.getAllByText('HIPAA')
+    expect(hipaaEls.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('renders Product section links', () => {
+    render(<FooterV3 />)
+    expect(screen.getByText('Product')).toBeTruthy()
+    expect(screen.getByText('Pricing')).toBeTruthy()
+  })
 })
