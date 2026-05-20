@@ -35,19 +35,14 @@ export function NavV3() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <div
-              className="w-8 h-8 rounded-lg overflow-hidden bg-white"
-              style={{ boxShadow: 'var(--shadow-logo)' }}
-            >
-              <Image
-                src="/houndshield-logo.png"
-                alt="HoundShield"
-                width={32}
-                height={32}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
+            <Image
+              src="/houndshield-logo.png"
+              alt="HoundShield"
+              width={40}
+              height={40}
+              className="logo-img"
+              priority
+            />
             <span className="font-semibold text-[var(--hs-ink)] text-sm tracking-tight font-[var(--font-body)]">
               HoundShield
             </span>

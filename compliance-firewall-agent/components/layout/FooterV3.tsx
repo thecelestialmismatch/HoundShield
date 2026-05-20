@@ -41,18 +41,13 @@ export function FooterV3() {
           {/* Brand column */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-4">
-              <div
-                className="w-8 h-8 rounded-lg overflow-hidden bg-white"
-                style={{ boxShadow: 'var(--shadow-logo)' }}
-              >
-                <Image
-                  src="/houndshield-logo.png"
-                  alt="HoundShield"
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <Image
+                src="/houndshield-logo.png"
+                alt="HoundShield"
+                width={48}
+                height={48}
+                className="logo-img"
+              />
               <span className="font-semibold text-[var(--hs-ink)] text-sm font-[var(--font-body)]">
                 HoundShield
               </span>
