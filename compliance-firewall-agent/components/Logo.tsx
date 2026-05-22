@@ -3,24 +3,24 @@ import Image from "next/image";
 interface LogoProps {
     className?: string;
     size?: number;
-    /** "dark" = white logo on dark bg; "light" = black logo on light bg; "auto" = CSS invert via dark class */
+    /** Kept for backward compat — visual is now handled by circular container, not CSS filter */
     variant?: "dark" | "light" | "auto";
 }
 
-export function Logo({ className = "", size = 32, variant = "auto" }: LogoProps) {
-    const filterClass =
-        variant === "dark" ? "invert" :
-        variant === "light" ? "" :
-        "dark:invert";
-
+export function Logo({ className = "", size = 36 }: LogoProps) {
     return (
-        <Image
-            src="/houndshield-logo.png"
-            alt="Hound Shield"
-            width={size}
-            height={size}
-            className={`flex-shrink-0 ${filterClass} ${className}`}
-            priority
-        />
+        <div
+            className={`rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 bg-[#0F1E2E] ${className}`}
+            style={{ width: size, height: size }}
+        >
+            <Image
+                src="/houndshield-logo.png"
+                alt="HoundShield"
+                width={size}
+                height={size}
+                className="object-cover"
+                priority
+            />
+        </div>
     );
 }
