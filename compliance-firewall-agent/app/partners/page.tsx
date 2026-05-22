@@ -266,7 +266,7 @@ export default function PartnersPage() {
         <div
           className="absolute inset-0 pointer-events-none opacity-30"
           style={{
-            background: "radial-gradient(ellipse 80% 40% at 50% 60%, rgba(218,119,86,0.12) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 80% 40% at 50% 60%, rgba(129,166,198,0.12) 0%, transparent 70%)",
           }}
         />
         <div className="relative z-10 max-w-5xl mx-auto px-6">
