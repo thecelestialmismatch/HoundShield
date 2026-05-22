@@ -63,13 +63,13 @@ const PILLARS = [
   },
   {
     icon: FileCheck,
-    iconBg: "bg-amber-50 border-amber-200",
-    iconColor: "text-amber-700",
+    iconBg: "bg-brand-50 border-brand-200",
+    iconColor: "text-brand-600",
     eyebrow: "vs. manual audit prep",
     title: "Audit-ready from day one.",
     body: "Every blocked query is logged in an immutable SHA-256 hash chain. Export your complete audit trail in seconds — SOC 2, HIPAA, or C3PAO.",
     stat: { label: "Audit findings prevented (avg)", value: 94, suffix: "%" },
-    accentColor: "text-amber-700",
+    accentColor: "text-brand-600",
   },
 ];
 

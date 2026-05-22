@@ -315,7 +315,7 @@ export default function FeaturesPage() {
             </p>
             <Link
               href="/signup"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-brand-500 to-emerald-500 hover:from-brand-400 hover:to-emerald-400 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
+              className="btn-primary"
             >
               Get Started Free <ArrowRight className="w-4 h-4" />
             </Link>
