@@ -816,7 +816,7 @@ export default function PricingPage() {
         </AnimatedSection>
       </section>
 
-      <FooterV3 />
+      <FooterV3 dark />
     </div>
   );
 }
