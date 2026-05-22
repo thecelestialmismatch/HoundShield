@@ -6,25 +6,16 @@ import { motion } from "framer-motion";
 import {
   Shield,
   ArrowRight,
-  BarChart3,
   AlertTriangle,
-  CheckCircle2,
-  XCircle,
   Clock,
-  TrendingUp,
   FileText,
   Crosshair,
   BookOpen,
   Zap,
 } from "lucide-react";
-import SPRSGauge from "@/components/dashboard/SPRSGauge";
+import SPRSDashboardWidget from "@/components/dashboard/SPRSDashboardWidget";
 import { ALL_CONTROLS } from "@/lib/shieldready/controls";
-import { CONTROL_FAMILIES } from "@/lib/shieldready/controls/families";
-import {
-  calculateSPRS,
-  getCompletionPercent,
-  getRemediationPriorities,
-} from "@/lib/shieldready/scoring";
+import { getRemediationPriorities } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses, getOrganization } from "@/lib/shieldready/storage";
 import type { AssessmentResponse } from "@/lib/shieldready/types";
 
@@ -71,23 +62,7 @@ export default function ShieldReadyDashboard() {
     return getOrganization();
   }, []);
 
-  const sprs = useMemo(() => calculateSPRS(ALL_CONTROLS, responses), [responses]);
-  const completion = useMemo(() => getCompletionPercent(ALL_CONTROLS.length, responses), [responses]);
   const priorities = useMemo(() => getRemediationPriorities(ALL_CONTROLS, responses), [responses]);
-
-  const responseMap = useMemo(() => new Map(responses.map((r) => [r.controlId, r])), [responses]);
-
-  const statusCounts = useMemo(() => {
-    let met = 0, partial = 0, unmet = 0, open = 0;
-    for (const c of ALL_CONTROLS) {
-      const s = responseMap.get(c.id)?.status ?? "NOT_ASSESSED";
-      if (s === "MET") met++;
-      else if (s === "PARTIAL") partial++;
-      else if (s === "UNMET") unmet++;
-      else open++;
-    }
-    return { met, partial, unmet, open };
-  }, [responseMap]);
 
   const hasStarted = responses.length > 0;
 
@@ -139,65 +114,7 @@ export default function ShieldReadyDashboard() {
       </div>
 
       {/* Score + Stats */}
-      {hasStarted && (
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-8">
-          <div className="lg:col-span-2 bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-8 flex items-center justify-center">
-            <SPRSGauge score={sprs.total} size="md" />
-          </div>
-
-          <div className="lg:col-span-4 grid grid-cols-2 gap-3">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              className="bg-white/[0.03]/70 border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
-                <BarChart3 size={14} />
-                Completion
-              </div>
-              <div className="text-3xl font-bold text-white">{completion}%</div>
-              <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3 overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-brand-500 to-emerald-500 rounded-full"
-                  animate={{ width: `${completion}%` }}
-                />
-              </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-              className="bg-white/[0.03]/70 border border-emerald-500/20 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-emerald-400 text-xs mb-2">
-                <CheckCircle2 size={14} />
-                Controls Met
-              </div>
-              <div className="text-3xl font-bold text-emerald-400">{statusCounts.met}</div>
-              <div className="text-xs text-slate-500 mt-1">of {ALL_CONTROLS.length}</div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="bg-white/[0.03]/70 border border-amber-500/20 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-amber-400 text-xs mb-2">
-                <AlertTriangle size={14} />
-                Partial
-              </div>
-              <div className="text-3xl font-bold text-amber-400">{statusCounts.partial}</div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-              className="bg-white/[0.03]/70 border border-red-500/20 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-red-400 text-xs mb-2">
-                <XCircle size={14} />
-                Gaps
-              </div>
-              <div className="text-3xl font-bold text-red-400">{statusCounts.unmet + statusCounts.open}</div>
-              <div className="text-xs text-slate-500 mt-1">
-                {statusCounts.unmet} unmet, {statusCounts.open} not assessed
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      )}
+      <SPRSDashboardWidget variant="full" />
 
       {/* Nav Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

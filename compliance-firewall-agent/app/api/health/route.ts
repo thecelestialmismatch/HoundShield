@@ -18,6 +18,8 @@ export async function GET() {
     uptime_seconds: Math.round(uptime),
     services: {
       database: isSupabaseConfigured() ? "connected" : "demo_mode",
+      ai_router: process.env.OPENROUTER_API_KEY ? "connected" : "missing_key",
+      payments: process.env.STRIPE_SECRET_KEY ? "connected" : "missing_key",
       classifier: "operational",
       quarantine: "operational",
       audit_chain: "operational",

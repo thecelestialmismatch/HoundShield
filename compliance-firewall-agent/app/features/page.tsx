@@ -21,8 +21,8 @@ import {
   ShieldHalf,
   Server,
 } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { TextLogo } from "@/components/TextLogo";
+import { NavV3 } from "@/components/layout/NavV3";
+import { FooterV3 } from "@/components/layout/FooterV3";
 
 /* ── Fade-in wrapper ─────────────────────────────────────────────── */
 function FadeIn({
@@ -139,7 +139,7 @@ export default function FeaturesPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
       <ScrollProgressBar />
-      <Navbar variant="dark" />
+      <NavV3 />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28">
@@ -323,22 +323,7 @@ export default function FeaturesPage() {
         </FadeIn>
       </section>
 
-      {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="border-t border-white/10 py-12 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 cursor-pointer">
-            <TextLogo variant="dark" />
-          </Link>
-          <div className="flex gap-6 text-sm text-slate-500">
-            <Link href="/" className="hover:text-white transition-colors cursor-pointer">Home</Link>
-            <Link href="/pricing" className="hover:text-white transition-colors cursor-pointer">Pricing</Link>
-            <Link href="/command-center" className="hover:text-white transition-colors cursor-pointer">Dashboard</Link>
-          </div>
-        </div>
-        <div className="mt-8 text-center text-xs text-slate-600">
-          &copy; {new Date().getFullYear()} Hound Shield — All rights reserved.
-        </div>
-      </footer>
+      <FooterV3 />
     </div>
   );
 }
