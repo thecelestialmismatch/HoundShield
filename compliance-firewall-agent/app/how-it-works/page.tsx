@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { NavV3 } from '@/components/layout/NavV3'
+import { Navbar } from '@/components/Navbar'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ShieldCheck, Plug, FileText } from 'lucide-react'
 
@@ -26,8 +26,8 @@ const STEPS = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <NavV3 />
+    <div className="min-h-screen bg-[var(--hs-surface-0)]">
+      <Navbar variant="light" />
 
       {/* Hero */}
       <section className="pt-32 pb-16 px-6 text-center">
@@ -35,10 +35,10 @@ export default function HowItWorksPage() {
           <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3">
             HOW IT WORKS
           </p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight mb-5">
+          <h1 className="text-4xl sm:text-5xl font-bold text-[var(--hs-ink)] tracking-tight mb-5">
             Local-first compliance.<br />Zero data exposure.
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-[var(--hs-ink-secondary)] max-w-2xl mx-auto leading-relaxed">
             HoundShield sits between your team and every AI provider. Everything is
             scanned on your hardware — not ours. That&apos;s the only way to guarantee
             your CUI never becomes a DFARS 7012 spill.
@@ -54,10 +54,10 @@ export default function HowItWorksPage() {
             return (
               <div
                 key={step.number}
-                className="flex gap-8 items-start border border-slate-100 rounded-2xl p-8 bg-slate-50"
+                className="flex gap-8 items-start border border-[var(--hs-border-subtle)] rounded-2xl p-8 bg-[var(--hs-surface-1)]"
               >
                 <div className="flex-shrink-0 flex flex-col items-center gap-3">
-                  <span className="text-4xl font-black text-slate-200 font-mono leading-none">
+                  <span className="text-4xl font-black text-[var(--hs-sand)] font-mono leading-none">
                     {step.number}
                   </span>
                   <div className="w-12 h-12 rounded-xl bg-[var(--hs-mist)] border border-[var(--hs-border)] flex items-center justify-center text-[var(--hs-steel-dark)]">
@@ -65,10 +65,10 @@ export default function HowItWorksPage() {
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-2">
+                  <h2 className="text-xl font-bold text-[var(--hs-ink)] mb-2">
                     {step.title}
                   </h2>
-                  <p className="text-slate-600 leading-relaxed">
+                  <p className="text-[var(--hs-ink-secondary)] leading-relaxed">
                     {step.body}
                   </p>
                 </div>
@@ -80,16 +80,16 @@ export default function HowItWorksPage() {
 
       {/* CTA */}
       <section className="py-20 px-6 text-center">
-        <div className="max-w-xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+        <div className="max-w-xl mx-auto border border-[var(--hs-border)] bg-[var(--hs-surface-1)] rounded-2xl p-10">
+          <h2 className="text-2xl font-bold text-[var(--hs-ink)] mb-4">
             Ready to protect your CUI?
           </h2>
-          <p className="text-slate-600 mb-8">
+          <p className="text-[var(--hs-ink-secondary)] mb-8">
             No credit card required. Assess all 110 controls and see your SPRS score in under 30 minutes.
           </p>
           <Link
-            href="/pricing"
-            className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors"
+            href="/signup"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-brand-500 to-emerald-500 hover:from-brand-600 hover:to-emerald-600 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors"
           >
             Get started free
           </Link>
