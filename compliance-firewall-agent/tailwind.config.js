@@ -12,10 +12,15 @@ module.exports = {
       colors: {
         /* ── Cream / off-white scale ─────────────────────────── */
         cream: {
-          50:  "#FAFAF9",
-          100: "#FAF7F2",
-          200: "#F5F0E8",
-          DEFAULT: "#FAF7F2",
+          50:  "#FAF7F2",
+          100: "#F3E3D0",
+          200: "#E8D0B8",
+          DEFAULT: "#F3E3D0",
+        },
+        sand: {
+          DEFAULT: "#D2C4B4",
+          light:   "#E0D5C8",
+          dark:    "#B8A898",
         },
         /* ── Neon accent (kept for backward compat, points to steel) */
         neon: {

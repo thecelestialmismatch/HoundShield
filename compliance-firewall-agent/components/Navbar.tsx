@@ -67,7 +67,7 @@ const PRODUCTS = [
   { icon: HeartPulse,color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]", border: "border-[rgba(129,166,198,0.12)]", label: "Healthcare",    framework: "HIPAA · 45 CFR Part 164",      useCase: "Clinicians pasting patient records into AI tools for documentation and billing.", saves: "Avg. $1.9M HIPAA penalty", href: "/hipaa", live: true },
   { icon: Shield,    color: "text-brand-600",  bg: "bg-[rgba(129,166,198,0.12)]",   border: "border-[rgba(129,166,198,0.18)]",   label: "Defense",       framework: "CMMC Level 2 · NIST 800-171",  useCase: "DoD contractors leaking CUI and contract data into AI proposal tools.", saves: "Avg. $150K C3PAO cost", href: "/command-center/shield/onboarding", live: true },
   { icon: Briefcase, color: "text-brand-700", bg: "bg-[rgba(129,166,198,0.14)]",  border: "border-[rgba(129,166,198,0.20)]",  label: "Legal & Finance",framework: "SOC 2 · PCI DSS",             useCase: "Lawyers and analysts sharing privileged client data with AI assistants.", saves: "Avg. $200K per breach", href: "/features", live: true },
-  { icon: Globe,     color: "text-orange-300",    bg: "bg-[rgba(129,166,198,0.06)]",     border: "border-[rgba(129,166,198,0.10)]",     label: "Five Eyes / Global",framework: "DISP · ASD Essential Eight", useCase: "International defence suppliers navigating AUKUS and allied compliance.", saves: "DISP audit costs", href: "/partners", live: true },
+  { icon: Globe,     color: "text-brand-400",    bg: "bg-[rgba(129,166,198,0.06)]",     border: "border-[rgba(129,166,198,0.10)]",     label: "Five Eyes / Global",framework: "DISP · ASD Essential Eight", useCase: "International defence suppliers navigating AUKUS and allied compliance.", saves: "DISP audit costs", href: "/partners", live: true },
   { icon: Landmark,  color: "text-brand-800",   bg: "bg-[rgba(129,166,198,0.16)]",    border: "border-[rgba(129,166,198,0.22)]",    label: "Government",    framework: "FedRAMP · FISMA",              useCase: "Federal agencies adopting AI without a compliant data handling framework.", saves: "Authorization costs", href: "/signup", live: false },
 ];
 
@@ -77,7 +77,7 @@ const FEATURES_ITEMS = [
   { icon: Zap,       color: "text-brand-600",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#interception" },
   { icon: Clock,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#interception" },
   { icon: FileCheck, color: "text-brand-700", bg: "bg-[rgba(129,166,198,0.14)]", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit",               href: "/features#audit" },
-  { icon: Layers,    color: "text-orange-300",    bg: "bg-[rgba(129,166,198,0.06)]",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/docs#quickstart" },
+  { icon: Layers,    color: "text-brand-400",    bg: "bg-[rgba(129,166,198,0.06)]",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/docs#quickstart" },
   { icon: Activity,  color: "text-brand-800",   bg: "bg-[rgba(129,166,198,0.16)]",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },
 ];
 
@@ -92,7 +92,7 @@ const PRICING_TIERS = [
 const PARTNER_ITEMS = [
   { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
   { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
-  { icon: DollarSign,color:"text-amber-400",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
+  { icon: DollarSign,color:"text-brand-400",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
 ];
 
 const DOC_ITEMS = [
@@ -461,8 +461,8 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <Logo />
-            <TextLogo className="text-lg" variant={variant} />
+            <Logo size={40} />
+            <TextLogo className="text-xl" variant={variant} />
           </Link>
 
           {/* Desktop Nav */}
