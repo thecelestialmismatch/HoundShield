@@ -90,9 +90,15 @@ const PRICING_TIERS = [
 ];
 
 const PARTNER_ITEMS = [
+<<<<<<< HEAD
   { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
   { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
   { icon: DollarSign,color:"text-brand-400",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
+=======
+  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msps" },
+  { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
+  { icon: DollarSign,color:"text-brand-400",   bg: "bg-[rgba(129,166,198,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#resellers" },
+>>>>>>> f616133 (feat(ui): apply steel/sky/cream palette everywhere, PlatformDashboard in hero)
 ];
 
 const DOC_ITEMS = [
@@ -460,9 +466,15 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           {/* Logo */}
+<<<<<<< HEAD
           <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
             <Logo size={40} />
             <TextLogo className="text-xl" variant={variant} />
+=======
+          <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
+            <Logo size={40} variant={variant} />
+            <TextLogo className="text-2xl" variant={variant} />
+>>>>>>> f616133 (feat(ui): apply steel/sky/cream palette everywhere, PlatformDashboard in hero)
           </Link>
 
           {/* Desktop Nav */}

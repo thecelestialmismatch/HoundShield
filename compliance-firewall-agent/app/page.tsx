@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { ArrowRight, CheckCircle } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
-import { ThreatFeed } from '@/components/ui/ThreatFeed'
 import { CountdownTimer } from '@/components/ui/CountdownTimer'
+import { PlatformDashboardClient } from '@/components/landing/PlatformDashboardClient'
 import { ComparisonFlow } from '@/components/ui/ComparisonFlow'
 import { FaqAccordion, type FaqItem } from '@/components/ui/FaqAccordion'
 import { CodeBlock } from '@/components/ui/CodeBlock'
@@ -164,8 +164,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative">
-              <ThreatFeed />
+            <div className="relative rounded-xl overflow-hidden shadow-[var(--shadow-xl)] border border-[var(--hs-border)]">
+              <PlatformDashboardClient />
             </div>
           </div>
         </div>
