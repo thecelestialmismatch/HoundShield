@@ -323,7 +323,7 @@ export default function FeaturesPage() {
         </FadeIn>
       </section>
 
-      <FooterV3 />
+      <FooterV3 dark />
     </div>
   );
 }

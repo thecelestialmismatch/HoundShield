@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
 const NAV_LINKS = [
   { label: 'Product',  href: '/features' },
@@ -40,7 +40,6 @@ export function NavV3() {
               alt="HoundShield"
               width={40}
               height={40}
-              className="logo-img"
               priority
             />
             <span className="font-semibold text-[var(--hs-ink)] text-sm tracking-tight font-[var(--font-body)]">
@@ -64,13 +63,13 @@ export function NavV3() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-2">
             <Link
-              href="/sign-in"
+              href="/login"
               className="px-4 py-1.5 text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] rounded-[var(--radius-md)] hover:bg-[var(--hs-mist)] transition-colors font-[var(--font-body)]"
             >
               Sign in
             </Link>
             <Link
-              href="/sign-up"
+              href="/signup"
               className="px-4 py-2 text-sm font-semibold text-white rounded-[var(--radius-md)] transition-all duration-200 hover:-translate-y-px font-[var(--font-body)]"
               style={{
                 background: 'linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))',
@@ -109,14 +108,14 @@ export function NavV3() {
           ))}
           <div className="pt-2 flex flex-col gap-2">
             <Link
-              href="/sign-in"
+              href="/login"
               onClick={() => setMobileOpen(false)}
               className="block w-full text-center px-4 py-2.5 text-sm text-[var(--hs-ink)] border border-[var(--hs-border)] rounded-[var(--radius-md)] hover:bg-[var(--hs-mist)] transition-colors font-[var(--font-body)]"
             >
               Sign in
             </Link>
             <Link
-              href="/sign-up"
+              href="/signup"
               onClick={() => setMobileOpen(false)}
               className="block w-full text-center px-4 py-2.5 text-sm font-semibold text-white rounded-[var(--radius-md)] font-[var(--font-body)]"
               style={{
