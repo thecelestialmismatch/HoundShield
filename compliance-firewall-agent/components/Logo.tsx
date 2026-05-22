@@ -1,10 +1,19 @@
-import { Shield, Zap } from "lucide-react";
-
-export function Logo({ className = "" }: { className?: string }) {
-    return (
-        <div className={`relative flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-[#EA580C] to-[#C2410C] flex items-center justify-center ${className}`}>
-            <Shield className="w-4.5 h-4.5 text-white" fill="rgba(255,255,255,0.2)" strokeWidth={2} />
-            <Zap className="w-2 h-2 text-cream-100 absolute" style={{ fill: "currentColor" }} />
-        </div>
-    );
+export function Logo({ className = "", size = 32 }: { className?: string; size?: number }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`text-brand-500 flex-shrink-0 ${className}`}
+      aria-hidden="true"
+    >
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  );
 }
