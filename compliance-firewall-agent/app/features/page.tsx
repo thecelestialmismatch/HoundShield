@@ -21,7 +21,7 @@ import {
   ShieldHalf,
   Server,
 } from "lucide-react";
-import { NavV3 } from "@/components/layout/NavV3";
+import { Navbar } from "@/components/Navbar";
 import { FooterV3 } from "@/components/layout/FooterV3";
 
 /* ── Fade-in wrapper ─────────────────────────────────────────────── */
@@ -55,8 +55,8 @@ const bentoFeatures = [
     title: "CMMC Self-Assessment",
     desc: "Walk through all 110 NIST SP 800-171 controls with guided questionnaires. Your SPRS score updates in real time as you complete each practice.",
     icon: ShieldCheck,
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/10 border-emerald-500/20",
+    color: "text-emerald-600",
+    bg: "bg-emerald-50 border-emerald-200",
     stat: "110 Controls",
     wide: true,
   },
@@ -73,8 +73,8 @@ const bentoFeatures = [
     title: "SSP & POA&M Generation",
     desc: "Auto-generate your System Security Plan and Plan of Action & Milestones documents ready for C3PAO review.",
     icon: FileText,
-    color: "text-purple-400",
-    bg: "bg-purple-500/10 border-purple-500/20",
+    color: "text-purple-600",
+    bg: "bg-purple-50 border-purple-200",
     stat: "1-Click",
     wide: false,
   },
@@ -82,8 +82,8 @@ const bentoFeatures = [
     title: "Real-Time Compliance Scanning",
     desc: "An API firewall that intercepts every LLM call, classifies risk in under 50ms, and blocks non-compliant data flows.",
     icon: Radar,
-    color: "text-brand-400",
-    bg: "bg-brand-500/10 border-brand-500/20",
+    color: "text-brand-600",
+    bg: "bg-brand-50 border-brand-200",
     stat: "<50ms",
     wide: false,
   },
@@ -91,8 +91,8 @@ const bentoFeatures = [
     title: "Encrypted Audit Trail",
     desc: "Every action is logged in a tamper-proof SHA-256 hash chain. One-click integrity verification for auditors.",
     icon: Lock,
-    color: "text-brand-400",
-    bg: "bg-brand-500/10 border-brand-500/20",
+    color: "text-brand-600",
+    bg: "bg-brand-50 border-brand-200",
     stat: "SHA-256",
     wide: false,
   },
@@ -100,8 +100,8 @@ const bentoFeatures = [
     title: "AI Agent Workspace",
     desc: "A ReAct-loop agent with 12 integrated tools: policy lookup, control mapping, evidence collection, remediation planning, and more.",
     icon: Bot,
-    color: "text-rose-400",
-    bg: "bg-rose-500/10 border-rose-500/20",
+    color: "text-rose-600",
+    bg: "bg-rose-50 border-rose-200",
     stat: "12 Tools",
     wide: true,
   },
@@ -137,25 +137,25 @@ const integrations = [
 /* ── Page ─────────────────────────────────────────────────────────── */
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)] relative overflow-hidden">
       <ScrollProgressBar />
-      <NavV3 />
+      <Navbar variant="light" />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28">
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-400/[0.06] to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--hs-steel)]/[0.06] to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
-            <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-[var(--hs-steel-dark)] font-semibold mb-4">
               Platform Features
             </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-[1.1] text-[var(--hs-ink)]">
               Everything you need for{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-emerald-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-emerald-500">
                 CMMC Level 2
               </span>
             </h1>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-[var(--hs-ink-secondary)] max-w-2xl mx-auto leading-relaxed">
               Map, assess, and close gaps across all 110 NIST SP 800-171 controls.
               AI-driven remediation, auto-generated documentation, and a real-time
               SPRS score — in one platform built for defense contractors.
@@ -175,21 +175,21 @@ export default function FeaturesPage() {
                 delay={i * 0.08}
                 className={f.wide ? "sm:col-span-2" : ""}
               >
-                <div className="border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-6 h-full transition-all duration-200 hover:border-brand-400/20 hover:bg-white/[0.08] group">
+                <div className="border border-[var(--hs-border)] bg-[var(--hs-surface-1)] rounded-2xl p-6 h-full transition-all duration-200 hover:border-[var(--hs-steel)]/40 hover:bg-[var(--hs-mist-md)] group">
                   <div className="flex items-start justify-between mb-4">
                     <div
                       className={`w-11 h-11 rounded-xl ${f.bg} border flex items-center justify-center`}
                     >
                       <Icon className={`w-5 h-5 ${f.color}`} />
                     </div>
-                    <span className="text-xs font-mono font-bold text-slate-400 bg-white/10 px-2.5 py-1 rounded-md">
+                    <span className="text-xs font-mono font-bold text-[var(--hs-ink-secondary)] bg-[var(--hs-mist)] px-2.5 py-1 rounded-md border border-[var(--hs-border-subtle)]">
                       {f.stat}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-brand-400 transition-colors duration-200">
+                  <h3 className="text-lg font-semibold text-[var(--hs-ink)] mb-2 group-hover:text-brand-600 transition-colors duration-200">
                     {f.title}
                   </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+                  <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{f.desc}</p>
                 </div>
               </FadeIn>
             );
@@ -201,10 +201,10 @@ export default function FeaturesPage() {
       <section id="audit" className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <FadeIn className="text-center mb-12">
-            <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-3">
+            <p className="text-xs uppercase tracking-[0.2em] text-[var(--hs-steel-dark)] font-semibold mb-3">
               Compare Plans
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--hs-ink)]">
               Pick the plan that fits your mission
             </h2>
           </FadeIn>
@@ -213,14 +213,14 @@ export default function FeaturesPage() {
             <div className="overflow-x-auto -mx-6 px-6">
               <table className="w-full min-w-[640px] border-collapse">
                 <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left text-sm text-slate-400 font-medium py-4 pr-4 w-[40%]">
+                  <tr className="border-b border-[var(--hs-border)]">
+                    <th className="text-left text-sm text-[var(--hs-ink-secondary)] font-medium py-4 pr-4 w-[40%]">
                       Feature
                     </th>
                     {plans.map((p) => (
                       <th
                         key={p.name}
-                        className="text-center text-sm font-semibold py-4 px-3"
+                        className="text-center text-sm font-semibold py-4 px-3 text-[var(--hs-ink)]"
                       >
                         {p.name}
                       </th>
@@ -231,19 +231,19 @@ export default function FeaturesPage() {
                   {comparisonRows.map((row, ri) => (
                     <tr
                       key={row}
-                      className="border-b border-white/10 last:border-0"
+                      className="border-b border-[var(--hs-border-subtle)] last:border-0"
                     >
-                      <td className="text-sm text-slate-400 py-3.5 pr-4">{row}</td>
+                      <td className="text-sm text-[var(--hs-ink-secondary)] py-3.5 pr-4">{row}</td>
                       {plans.map((p) => {
                         const v = p.features[ri];
                         return (
                           <td key={p.name} className="text-center py-3.5 px-3">
                             {v === true ? (
-                              <Check className="w-4 h-4 text-emerald-400 mx-auto" />
+                              <Check className="w-4 h-4 text-emerald-500 mx-auto" />
                             ) : v === false ? (
-                              <Minus className="w-4 h-4 text-slate-400 mx-auto" />
+                              <Minus className="w-4 h-4 text-[var(--hs-ink-tertiary)] mx-auto" />
                             ) : (
-                              <span className="text-sm text-slate-400 font-mono">
+                              <span className="text-sm text-[var(--hs-ink-secondary)] font-mono">
                                 {v}
                               </span>
                             )}
@@ -260,7 +260,7 @@ export default function FeaturesPage() {
           <FadeIn delay={0.15} className="text-center mt-8">
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-2 text-sm text-brand-500 hover:text-brand-400 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 text-sm text-brand-500 hover:text-brand-600 transition-colors cursor-pointer"
             >
               View full pricing details <ArrowRight className="w-4 h-4" />
             </Link>
@@ -272,13 +272,13 @@ export default function FeaturesPage() {
       <section id="integrations" className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <FadeIn className="text-center mb-12">
-            <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-3">
+            <p className="text-xs uppercase tracking-[0.2em] text-[var(--hs-steel-dark)] font-semibold mb-3">
               Integrations
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--hs-ink)]">
               Works with your stack
             </h2>
-            <p className="text-slate-400 mt-3 max-w-lg mx-auto">
+            <p className="text-[var(--hs-ink-secondary)] mt-3 max-w-lg mx-auto">
               Connect to the platforms your team already uses. FedRAMP and GCC-compatible
               out of the box.
             </p>
@@ -289,9 +289,9 @@ export default function FeaturesPage() {
               const Icon = int.icon;
               return (
                 <FadeIn key={int.name} delay={i * 0.06}>
-                  <div className="border border-white/10 bg-white/5 rounded-2xl p-5 flex flex-col items-center gap-3 transition-all duration-200 hover:border-brand-400/20 hover:bg-white/[0.08] cursor-pointer">
-                    <Icon className="w-7 h-7 text-slate-400" />
-                    <span className="text-xs font-medium text-slate-400 text-center leading-tight">
+                  <div className="border border-[var(--hs-border)] bg-[var(--hs-surface-1)] rounded-2xl p-5 flex flex-col items-center gap-3 transition-all duration-200 hover:border-[var(--hs-steel)]/40 hover:bg-[var(--hs-mist-md)] cursor-pointer">
+                    <Icon className="w-7 h-7 text-[var(--hs-ink-tertiary)]" />
+                    <span className="text-xs font-medium text-[var(--hs-ink-secondary)] text-center leading-tight">
                       {int.name}
                     </span>
                   </div>
@@ -305,17 +305,17 @@ export default function FeaturesPage() {
       {/* ── CTA ───────────────────────────────────────────────── */}
       <section className="py-24 px-6">
         <FadeIn>
-          <div className="max-w-3xl mx-auto text-center border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-10 md:p-14">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          <div className="max-w-3xl mx-auto text-center border border-[var(--hs-border)] bg-[var(--hs-surface-1)] rounded-2xl p-10 md:p-14">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4 text-[var(--hs-ink)]">
               Start your free CMMC assessment today
             </h2>
-            <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+            <p className="text-[var(--hs-ink-secondary)] mb-8 max-w-lg mx-auto">
               No credit card required. Assess all 110 controls, get your SPRS score,
               and see exactly where you stand in under 30 minutes.
             </p>
             <Link
               href="/signup"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-brand-500 to-emerald-500 hover:from-brand-400 hover:to-emerald-400 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-brand-500 to-emerald-500 hover:from-brand-600 hover:to-emerald-600 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer"
             >
               Get Started Free <ArrowRight className="w-4 h-4" />
             </Link>

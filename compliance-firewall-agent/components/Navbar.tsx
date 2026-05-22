@@ -462,9 +462,9 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <Logo variant={variant} />
-            <TextLogo className="text-lg" variant={variant} />
+          <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
+            <Logo size={40} />
+            <TextLogo className="text-2xl" variant={variant} />
           </Link>
 
           {/* Desktop Nav */}
