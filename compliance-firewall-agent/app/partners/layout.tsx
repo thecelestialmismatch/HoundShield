@@ -5,7 +5,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 export const metadata: Metadata = {
   title: "Partner Program | C3PAO & MSP AI Compliance Partnership",
   description:
-    "Join the HoundShield partner program. C3PAOs and MSPs use Kaelus to deliver CMMC Level 2 AI compliance for their clients. Revenue share, co-marketing, and dedicated support.",
+    "Join the HoundShield partner program. C3PAOs and MSPs use HoundShield to deliver CMMC Level 2 AI compliance for their clients. Revenue share, co-marketing, and dedicated support.",
   keywords: [
     "C3PAO partner",
     "CMMC compliance partner",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Partner Program | HoundShield",
     description:
-      "C3PAOs and MSPs partner with Kaelus to deliver CMMC AI compliance to defense contractors. Revenue share, co-marketing, dedicated support.",
+      "C3PAOs and MSPs partner with HoundShield to deliver CMMC AI compliance to defense contractors. Revenue share, co-marketing, dedicated support.",
     url: `${BASE_URL}/partners`,
     type: "website",
   },
