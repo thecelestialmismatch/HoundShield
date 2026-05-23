@@ -41,6 +41,7 @@ export function NavV3() {
               width={40}
               height={40}
               priority
+              className="logo-img"
             />
             <span className="font-semibold text-[var(--hs-ink)] text-sm tracking-tight font-[var(--font-body)]">
               HoundShield

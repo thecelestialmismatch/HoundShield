@@ -63,22 +63,22 @@ function LiveShieldBadge() {
 
 /* ── Products Mega-Menu Data ─────────────────────────────── */
 const PRODUCTS = [
-  { icon: Lock,      color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]",  border: "border-[rgba(234,88,12,0.15)]",  label: "Technology",    framework: "SOC 2 · AI Governance",        useCase: "LLM governance · prompt controls · audit trail", saves: "$50K+", live: true, href: "/industries/technology" },
-  { icon: HeartPulse,color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]", border: "border-[rgba(234,88,12,0.12)]", label: "Healthcare",    framework: "HIPAA · 45 CFR Part 164",      useCase: "PHI detection · fines $100–$50K per violation · audit ready", saves: "$75K+", live: true, href: "/industries/healthcare" },
-  { icon: Shield,    color: "text-brand-600",  bg: "bg-[rgba(234,88,12,0.12)]",   border: "border-[rgba(234,88,12,0.18)]",   label: "Defense",       framework: "CMMC Level 2 · NIST 800-171",  useCase: "CUI detection · contractor audits · containment", saves: "$125K+", live: true, href: "/industries/defense" },
-  { icon: Briefcase, color: "text-brand-700", bg: "bg-[rgba(234,88,12,0.14)]",  border: "border-[rgba(234,88,12,0.20)]",  label: "Legal & Finance",framework: "SOC 2 · PCI DSS",             useCase: "PII masking · compliance evidence · liability shield", saves: "$90K+", live: true, href: "/industries/finance" },
-  { icon: Globe,     color: "text-orange-300",    bg: "bg-[rgba(234,88,12,0.06)]",     border: "border-[rgba(234,88,12,0.10)]",     label: "Five Eyes / Global",framework: "DISP · ASD Essential Eight",     useCase: "Multi-jurisdictional · UK/AU/CA/NZ compliance", saves: "$110K+", live: false, href: "#" },
-  { icon: Landmark,  color: "text-brand-800",   bg: "bg-[rgba(234,88,12,0.16)]",    border: "border-[rgba(234,88,12,0.22)]",    label: "Government",    framework: "FedRAMP · FISMA",              useCase: "OMB-required controls · federal contractor baseline", saves: "$200K+", live: false, href: "#" },
+  { icon: Lock,      color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]",  border: "border-[rgba(129,166,198,0.15)]",  label: "Technology",    framework: "SOC 2 · AI Governance",        useCase: "Engineers pasting API keys and source code into Copilot and ChatGPT daily.", saves: "Avg. $400K breach cost", href: "/features", live: true },
+  { icon: HeartPulse,color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]", border: "border-[rgba(129,166,198,0.12)]", label: "Healthcare",    framework: "HIPAA · 45 CFR Part 164",      useCase: "Clinicians pasting patient records into AI tools for documentation and billing.", saves: "Avg. $1.9M HIPAA penalty", href: "/hipaa", live: true },
+  { icon: Shield,    color: "text-brand-600",  bg: "bg-[rgba(129,166,198,0.12)]",   border: "border-[rgba(129,166,198,0.18)]",   label: "Defense",       framework: "CMMC Level 2 · NIST 800-171",  useCase: "DoD contractors leaking CUI and contract data into AI proposal tools.", saves: "Avg. $150K C3PAO cost", href: "/command-center/shield/onboarding", live: true },
+  { icon: Briefcase, color: "text-brand-700", bg: "bg-[rgba(129,166,198,0.14)]",  border: "border-[rgba(129,166,198,0.20)]",  label: "Legal & Finance",framework: "SOC 2 · PCI DSS",             useCase: "Lawyers and analysts sharing privileged client data with AI assistants.", saves: "Avg. $200K per breach", href: "/features", live: true },
+  { icon: Globe,     color: "text-brand-400",    bg: "bg-[rgba(129,166,198,0.06)]",     border: "border-[rgba(129,166,198,0.10)]",     label: "Five Eyes / Global",framework: "DISP · ASD Essential Eight", useCase: "International defence suppliers navigating AUKUS and allied compliance.", saves: "DISP audit costs", href: "/partners", live: true },
+  { icon: Landmark,  color: "text-brand-800",   bg: "bg-[rgba(129,166,198,0.16)]",    border: "border-[rgba(129,166,198,0.22)]",    label: "Government",    framework: "FedRAMP · FISMA",              useCase: "Federal agencies adopting AI without a compliant data handling framework.", saves: "Authorization costs", href: "/signup", live: false },
 ];
 
 /* ── Nav Flyout Panel Data ───────────────────────────────── */
 const FEATURES_ITEMS = [
-  { icon: Eye,       color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "AI Prompt Interception",  desc: "Every LLM request inspected before it leaves the network",       href: "/features#interception" },
-  { icon: Zap,       color: "text-brand-600",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#engines" },
-  { icon: Clock,     color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#latency" },
-  { icon: FileCheck, color: "text-brand-700", bg: "bg-[rgba(234,88,12,0.14)]", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit",               href: "/features#audit" },
-  { icon: Layers,    color: "text-orange-300",    bg: "bg-[rgba(234,88,12,0.06)]",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/features#deploy" },
-  { icon: Activity,  color: "text-brand-800",   bg: "bg-[rgba(234,88,12,0.16)]",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/features#dashboard" },
+  { icon: Eye,       color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "AI Prompt Interception",  desc: "Every LLM request inspected before it leaves the network",       href: "/features#interception" },
+  { icon: Zap,       color: "text-brand-600",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "16 Detection Engines",    desc: "CUI, PII, IP, PHI, secrets, CAGE codes, clearances",             href: "/features#interception" },
+  { icon: Clock,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "<10ms Latency",           desc: "Zero user impact — transparent to every employee",               href: "/features#interception" },
+  { icon: FileCheck, color: "text-brand-700", bg: "bg-[rgba(129,166,198,0.14)]", label: "Immutable Audit Trail",   desc: "SHA-256 tamper-evident logs. Ready for any audit",               href: "/features#audit" },
+  { icon: Layers,    color: "text-brand-400",    bg: "bg-[rgba(129,166,198,0.06)]",    label: "One Proxy URL Deploy",    desc: "Works with ChatGPT, Copilot, Claude, Gemini — all at once",      href: "/docs#quickstart" },
+  { icon: Activity,  color: "text-brand-800",   bg: "bg-[rgba(129,166,198,0.16)]",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },
 ];
 
 const PRICING_TIERS = [
@@ -90,22 +90,22 @@ const PRICING_TIERS = [
 ];
 
 const PARTNER_ITEMS = [
-  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msps" },
-  { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
-  { icon: DollarSign,color:"text-amber-400",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#resellers" },
+  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
+  { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
+  { icon: DollarSign,color:"text-brand-400",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
 ];
 
 const DOC_ITEMS = [
-  { icon: Zap,      color: "text-brand-500", bg: "bg-[rgba(234,88,12,0.08)]", label: "5-min Quickstart",         desc: "One URL change → full compliance", href: "/docs#quickstart" },
-  { icon: Terminal, color: "text-brand-400",  bg: "bg-[rgba(234,88,12,0.10)]",  label: "API Reference",            desc: "Gateway, classifier, and audit endpoints", href: "/docs#api" },
-  { icon: Shield,   color: "text-brand-600",   bg: "bg-[rgba(234,88,12,0.12)]",   label: "CMMC Configuration Guide", desc: "NIST 800-171 pattern reference", href: "/docs#cmmc" },
-  { icon: BookOpen, color: "text-brand-700",  bg: "bg-[rgba(234,88,12,0.14)]",  label: "Detection Engine Docs",    desc: "16 engine patterns, thresholds, overrides", href: "/docs#detection" },
+  { icon: Zap,      color: "text-brand-500", bg: "bg-[rgba(129,166,198,0.08)]", label: "5-min Quickstart",         desc: "One URL change → full compliance", href: "/docs#quickstart" },
+  { icon: Terminal, color: "text-brand-400",  bg: "bg-[rgba(129,166,198,0.10)]",  label: "API Reference",            desc: "Gateway, classifier, and audit endpoints", href: "/docs#api" },
+  { icon: Shield,   color: "text-brand-600",   bg: "bg-[rgba(129,166,198,0.12)]",   label: "CMMC Configuration Guide", desc: "NIST 800-171 pattern reference", href: "/docs#cmmc" },
+  { icon: BookOpen, color: "text-brand-700",  bg: "bg-[rgba(129,166,198,0.14)]",  label: "Detection Engine Docs",    desc: "16 engine patterns, thresholds, overrides", href: "/docs#detection" },
 ];
 
 const CONTACT_ITEMS = [
-  { icon: Calendar, color: "text-brand-400", bg: "bg-[rgba(234,88,12,0.10)]", label: "Book a Demo",     desc: "30-min live walkthrough · No commitment", href: "/contact" },
-  { icon: Mail,     color: "text-brand-500",bg: "bg-[rgba(234,88,12,0.08)]",label: "Enterprise Sales", desc: "Custom pricing · SLA · Dedicated CSM",    href: "/contact" },
-  { icon: Users,    color: "text-brand-600",  bg: "bg-[rgba(234,88,12,0.12)]",  label: "Partner Inquiry", desc: "MSP, reseller, and integration partnerships", href: "/partners" },
+  { icon: Calendar, color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "Book a Demo",     desc: "30-min live walkthrough · No commitment", href: "/contact" },
+  { icon: Mail,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "Enterprise Sales", desc: "Custom pricing · SLA · Dedicated CSM",    href: "/contact" },
+  { icon: Users,    color: "text-brand-600",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "Partner Inquiry", desc: "MSP, reseller, and integration partnerships", href: "/partners" },
 ];
 
 /* ── Generic Flyout Panel ────────────────────────────────── */
@@ -131,7 +131,7 @@ function FlyoutPanel<T extends { icon: React.ElementType; color: string; bg: str
           exit={{ opacity: 0, y: 6, scale: 0.98 }}
           transition={{ duration: 0.18, ease: [0.25, 0.4, 0.25, 1] }}
           style={{ width }}
-          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[100]"
+          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
         >
           <div className="px-5 pt-4 pb-3 border-b border-white/[0.06]">
             <p className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-brand-400">{header.eyebrow}</p>
@@ -251,7 +251,7 @@ function ProductsMenu({ isDark }: { isDark: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
-            className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[740px] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[100]"
+            className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[740px] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
           >
             <div className="px-5 pt-4 pb-3 border-b border-white/[0.06]">
               <p className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-brand-400">Products by Industry</p>
@@ -269,9 +269,7 @@ function ProductsMenu({ isDark }: { isDark: boolean }) {
                     className={`group relative flex flex-col gap-2 p-4 bg-[#0a0a0a] transition-colors hover:bg-white/[0.04] ${!p.live ? "opacity-60 pointer-events-none" : ""}`}
                   >
                     {!p.live && (
-                      <span className="absolute top-3 right-3 text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-700/60 text-slate-500 border border-slate-600/40">
-                        Coming
-                      </span>
+                      <span className="absolute top-3 right-3 text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-700/60 text-slate-500 border border-slate-600/40">Soon</span>
                     )}
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${p.bg} border ${p.border}`}>
                       <Icon className={`w-4 h-4 ${p.color}`} />
@@ -317,7 +315,7 @@ function PricingFlyout({ open }: { open: boolean }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 6, scale: 0.98 }}
           transition={{ duration: 0.18 }}
-          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[320px] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[100]"
+          className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+8px)] w-[320px] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-2xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] overflow-hidden z-50"
         >
           <div className="px-4 pt-4 pb-3 border-b border-white/[0.06]">
             <p className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-brand-400">Pricing</p>
@@ -462,9 +460,9 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
             <Logo size={40} />
-            <TextLogo className="text-2xl" variant={variant} />
+            <TextLogo className="text-xl" variant={variant} />
           </Link>
 
           {/* Desktop Nav */}
