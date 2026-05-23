@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { displayFont, bodyFont } from "./fonts";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 export const viewport: Viewport = {
-  themeColor: "#07070b",
+  themeColor: "#FAFCFF",
   width: "device-width",
   initialScale: 1,
 };
@@ -102,7 +103,7 @@ const globalJsonLd = [
     offers: [
       {
         "@type": "Offer",
-        name: "Starter",
+        name: "Free",
         price: "0",
         priceCurrency: "USD",
         description: "Free tier — AI prompt scanning, basic compliance reports",
@@ -110,23 +111,30 @@ const globalJsonLd = [
       {
         "@type": "Offer",
         name: "Pro",
-        price: "69",
+        price: "199",
         priceCurrency: "USD",
         description: "Pro — advanced scanning, PDF evidence export, CMMC controls",
       },
       {
         "@type": "Offer",
         name: "Growth",
-        price: "199",
+        price: "499",
         priceCurrency: "USD",
         description: "Growth — multi-user, gateway mode, SPRS score tracking",
       },
       {
         "@type": "Offer",
         name: "Enterprise",
-        price: "499",
+        price: "999",
         priceCurrency: "USD",
         description: "Enterprise — C3PAO-ready reports, dedicated support",
+      },
+      {
+        "@type": "Offer",
+        name: "Federal",
+        price: "2499",
+        priceCurrency: "USD",
+        description: "Federal — multi-tenant agency deployments, SLA, custom integrations",
       },
     ],
     featureList: [
@@ -177,7 +185,7 @@ const globalJsonLd = [
         name: "Can my employees still use ChatGPT with HoundShield?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. HoundShield works as a transparent proxy. Employees point their AI tools at your Kaelus endpoint instead of directly at the AI API. Prompts that don't contain CUI/PHI/PII pass through normally. Flagged content is blocked and logged with a tamper-evident record.",
+          text: "Yes. HoundShield works as a transparent proxy. Employees point their AI tools at your HoundShield endpoint instead of directly at the AI API. Prompts that don't contain CUI/PHI/PII pass through normally. Flagged content is blocked and logged with a tamper-evident record.",
         },
       },
       {
@@ -185,7 +193,7 @@ const globalJsonLd = [
         name: "How long does HoundShield take to set up?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Under 10 minutes for most organizations. It's a single URL change — point your AI tools at your Kaelus endpoint instead of the cloud AI API. Docker deployment takes 3 commands. No agent installation on individual machines required.",
+          text: "Under 10 minutes for most organizations. It's a single URL change — point your AI tools at your HoundShield endpoint instead of the cloud AI API. Docker deployment takes 3 commands. No agent installation on individual machines required.",
         },
       },
       {
@@ -208,7 +216,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="dark scroll-smooth"
+      className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -217,9 +225,9 @@ export default function RootLayout({
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
         />
         <link rel="canonical" href={BASE_URL} />
-        {/* Preconnect to key external resources */}
+        {/* JetBrains Mono preconnect — loaded via CSS @import */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Global JSON-LD: SoftwareApplication + Organization + FAQPage */}
         {globalJsonLd.map((schema, i) => (
           <script

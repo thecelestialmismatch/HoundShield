@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/Navbar";
-import { TextLogo } from "@/components/TextLogo";
+import { NavV3 } from "@/components/layout/NavV3";
+import { FooterV3 } from "@/components/layout/FooterV3";
 import {
   Shield,
   ArrowRight,
@@ -360,7 +360,7 @@ export default function PricingPage() {
       <div className="orb orb-3" />
 
       {/* ===== NAV ===== */}
-      <Navbar variant="dark" />
+      <NavV3 />
 
       {/* ===== CHECKOUT ERROR BANNER ===== */}
       {checkoutError && (
@@ -816,99 +816,7 @@ export default function PricingPage() {
         </AnimatedSection>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/[0.06] py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <TextLogo variant="dark" />
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                AI-powered compliance firewall protecting enterprise data from
-                LLM leaks.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
-                Product
-              </p>
-              <div className="space-y-2.5">
-                <Link
-                  href="/#features"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Features
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Pricing
-                </Link>
-                <Link
-                  href="/command-center"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/#agents"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  AI Agents
-                </Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
-                Compliance
-              </p>
-              <div className="space-y-2.5">
-                <span className="block text-sm text-slate-500">SOC 2</span>
-                <span className="block text-sm text-slate-500">GDPR</span>
-                <span className="block text-sm text-slate-500">EU AI Act</span>
-                <span className="block text-sm text-slate-500">HIPAA</span>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
-                Company
-              </p>
-              <div className="space-y-2.5">
-                <Link
-                  href="/docs"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Documentation
-                </Link>
-                <Link
-                  href="/signup"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Get Started
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-700">
-              &copy; 2026 Hound Shield — All rights reserved.
-            </p>
-            <div className="flex items-center gap-4 text-xs text-slate-600">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
-              <span>Security</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <FooterV3 dark />
     </div>
   );
 }
