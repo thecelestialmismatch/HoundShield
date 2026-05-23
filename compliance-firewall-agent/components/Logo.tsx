@@ -1,4 +1,5 @@
-export function Logo({ className = "", size = 38 }: { className?: string; size?: number }) {
+export function Logo({ className = "", size = 38, variant }: { className?: string; size?: number; variant?: "light" | "dark" }) {
+  const colorClass = variant === "dark" ? "text-white" : "text-slate-900 dark:text-white";
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +7,7 @@ export function Logo({ className = "", size = 38 }: { className?: string; size?:
       width={size}
       height={size}
       fill="currentColor"
-      className={`text-slate-900 dark:text-white flex-shrink-0 ${className}`}
+      className={`${colorClass} flex-shrink-0 ${className}`}
       aria-hidden="true"
     >
       <path
