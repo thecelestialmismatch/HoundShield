@@ -50,6 +50,7 @@ vi.mock("@/lib/shieldready/storage", () => ({
 
 import SPRSDashboardWidget from "../SPRSDashboardWidget";
 import type { AssessmentResponse } from "@/lib/shieldready/types";
+import { ALL_CONTROLS } from "@/lib/shieldready/controls";
 
 function makeResponse(controlId: string, status: AssessmentResponse["status"]): AssessmentResponse {
   return { controlId, status, notes: "", evidenceUploaded: false, answeredAt: "2024-01-01T00:00:00Z" };
@@ -106,10 +107,8 @@ describe("SPRSDashboardWidget — compact variant", () => {
   });
 
   it('shows "Met ✓" when score is at or above DoD threshold', () => {
-    // Mock many MET responses to push score above 70
-    const responses = Array.from({ length: 110 }, (_, i) =>
-      makeResponse(`ctrl-${i}`, "MET"),
-    );
+    // Use real control IDs so calculateSPRS can match them and produce a passing score
+    const responses = ALL_CONTROLS.map(c => makeResponse(c.id, "MET"));
     mockGetAssessmentResponses.mockReturnValue(responses);
     render(<SPRSDashboardWidget variant="compact" />);
     expect(screen.getByText(/Met ✓/)).toBeInTheDocument();

@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { ShieldCheck, FileText, Zap, Brain, Grid2x2, Activity } from 'lucide-react'
 
 interface Feature {
@@ -47,6 +50,8 @@ const FEATURES: Feature[] = [
 ]
 
 export function FeaturesGrid() {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+
   return (
     <section
       id="features"
@@ -73,6 +78,9 @@ export function FeaturesGrid() {
               key={feature.control}
               className="feature-card"
               data-testid={`feature-card-${idx}`}
+              data-hovered={hoveredIdx === idx ? 'true' : 'false'}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className="flex-shrink-0 w-9 h-9 rounded-[var(--radius-md)] bg-[var(--hs-mist)] flex items-center justify-center text-[var(--hs-steel-dark)]">
@@ -82,10 +90,12 @@ export function FeaturesGrid() {
                   {feature.title}
                 </h3>
               </div>
-              <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed font-[var(--font-body)]">
-                {feature.body}
-              </p>
-              <span className="inline-block mt-3 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider font-[var(--font-mono)] text-[var(--hs-steel-dark)] bg-[var(--hs-mist)] border border-[var(--hs-border)]">
+              <div className="feature-expand-wrap">
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed font-[var(--font-body)]">
+                  {feature.body}
+                </p>
+              </div>
+              <span className="feature-control-tag inline-block mt-3 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider font-[var(--font-mono)] text-[var(--hs-steel-dark)] bg-[var(--hs-mist)] border border-[var(--hs-border)]">
                 {feature.control}
               </span>
             </div>

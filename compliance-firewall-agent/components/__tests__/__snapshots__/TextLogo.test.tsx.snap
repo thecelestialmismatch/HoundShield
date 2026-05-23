@@ -2,11 +2,15 @@
 
 exports[`TextLogo > applies dark variant correctly 1`] = `
 <span
-  class="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-400 transition-all duration-300 "
+  class="font-black tracking-tight leading-none "
 >
-  Hound
   <span
-    class="text-white/90 font-bold"
+    class="text-white"
+  >
+    Hound
+  </span>
+  <span
+    class="font-bold text-white/80"
   >
      Shield
   </span>
@@ -15,11 +19,15 @@ exports[`TextLogo > applies dark variant correctly 1`] = `
 
 exports[`TextLogo > applies light variant correctly 1`] = `
 <span
-  class="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-400 transition-all duration-300 "
+  class="font-black tracking-tight leading-none "
 >
-  Hound
   <span
-    class="text-[#0a0a0a]/90 font-bold"
+    class="text-[#1A3347]"
+  >
+    Hound
+  </span>
+  <span
+    class="font-bold text-slate-600"
   >
      Shield
   </span>

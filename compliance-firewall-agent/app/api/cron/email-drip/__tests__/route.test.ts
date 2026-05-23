@@ -1,24 +1,27 @@
 import { NextRequest } from 'next/server';
+import { vi, beforeEach, describe, it, expect } from 'vitest';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
-const mockSend = jest.fn();
-jest.mock('resend', () => ({
-  Resend: jest.fn().mockImplementation(() => ({ emails: { send: mockSend } })),
+const mockSend = vi.fn();
+vi.mock('resend', () => ({
+  Resend: vi.fn().mockImplementation(function () {
+    return { emails: { send: mockSend } };
+  }),
 }));
 
-const mockFrom = jest.fn();
+const mockFrom = vi.fn();
 const mockSupabaseChain = {
-  select: jest.fn().mockReturnThis(),
-  is: jest.fn().mockReturnThis(),
-  lt: jest.fn().mockReturnThis(),
-  in: jest.fn().mockReturnThis(),
-  update: jest.fn().mockReturnThis(),
-  eq: jest.fn().mockReturnThis(),
-  upsert: jest.fn().mockReturnThis(),
+  select: vi.fn().mockReturnThis(),
+  is: vi.fn().mockReturnThis(),
+  lt: vi.fn().mockReturnThis(),
+  in: vi.fn().mockReturnThis(),
+  update: vi.fn().mockReturnThis(),
+  eq: vi.fn().mockReturnThis(),
+  upsert: vi.fn().mockReturnThis(),
 };
-jest.mock('@/lib/supabase/client', () => ({
-  createServiceClient: jest.fn(() => ({
+vi.mock('@/lib/supabase/client', () => ({
+  createServiceClient: vi.fn(() => ({
     from: mockFrom.mockReturnValue(mockSupabaseChain),
   })),
 }));
@@ -38,7 +41,7 @@ function setEnv(overrides: Record<string, string | undefined>) {
 // ── Tests ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   setEnv({ CRON_SECRET: 'test-secret', RESEND_API_KEY: 'test-key' });
   // Default: no pending rows
   mockSupabaseChain.lt.mockResolvedValue({ data: [], error: null });
@@ -49,7 +52,7 @@ describe('GET /api/cron/email-drip', () => {
   let GET: (req: NextRequest) => Promise<Response>;
 
   beforeEach(async () => {
-    jest.resetModules();
+    vi.resetModules();
     ({ GET } = await import('../route'));
   });
 
@@ -65,7 +68,7 @@ describe('GET /api/cron/email-drip', () => {
 
   it('returns 503 when CRON_SECRET not set', async () => {
     delete process.env.CRON_SECRET;
-    jest.resetModules();
+    vi.resetModules();
     const { GET: freshGET } = await import('../route');
     const res = await freshGET(makeRequest('Bearer test-secret'));
     expect(res.status).toBe(503);
@@ -73,7 +76,7 @@ describe('GET /api/cron/email-drip', () => {
 
   it('skips gracefully when RESEND_API_KEY not set', async () => {
     delete process.env.RESEND_API_KEY;
-    jest.resetModules();
+    vi.resetModules();
     const { GET: freshGET } = await import('../route');
     const res = await freshGET(makeRequest('Bearer test-secret'));
     const body = await res.json();
