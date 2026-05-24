@@ -24,7 +24,8 @@ import { HeroSection } from "../HeroSection";
 describe("HeroSection", () => {
   it("renders the main headline", () => {
     render(<HeroSection />);
-    expect(screen.getByText(/Proof/i)).toBeTruthy();
+    // Headline text is split across spans; match a substring that's all in one node
+    expect(screen.getByText(/in 10 minutes/i)).toBeTruthy();
   });
 
   it("renders primary CTA button", () => {
