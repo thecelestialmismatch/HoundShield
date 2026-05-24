@@ -38,8 +38,8 @@ export function NavV3() {
             <Image
               src="/houndshield-logo.png"
               alt="HoundShield"
-              width={36}
-              height={36}
+              width={40}
+              height={40}
               className="logo-img object-contain"
               priority
             />
