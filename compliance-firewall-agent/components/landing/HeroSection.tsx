@@ -3,7 +3,7 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, Timer } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const PlatformDashboard = dynamic(
@@ -11,12 +11,16 @@ const PlatformDashboard = dynamic(
   { ssr: false, loading: () => <div className="h-full w-full bg-[#0d0d14] rounded-b-2xl min-h-[360px]" /> }
 );
 
-const PROOF = [
-  "16 CUI detection patterns",
-  "CMMC Level 2 enforced",
-  "HIPAA + SOC 2 simultaneous",
-  "<10ms scan latency",
-  "Nothing leaves your network",
+const CMMC_ENFORCEMENT = new Date("2026-11-10");
+const daysUntilCMMC = Math.ceil(
+  (CMMC_ENFORCEMENT.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+);
+
+const TRUST_SIGNALS = [
+  "NIST 800-171 Rev 2",
+  "DFARS 7012",
+  "CMMC Level 2",
+  "SHA-256 Audit Chain",
 ];
 
 const ease = [0.25, 0.4, 0.25, 1] as const;
@@ -47,10 +51,10 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.08, ease }}
-              className="font-editorial text-[clamp(38px,5.5vw,70px)] font-bold leading-[1.02] tracking-[-2px] text-white mb-5"
+              className="font-editorial text-[clamp(36px,5vw,66px)] font-bold leading-[1.04] tracking-[-2px] text-white mb-5"
             >
-              Proof,{" "}
-              <span className="text-brand-400">not policy.</span>
+              CMMC Level 2 AI Compliance —{" "}
+              <span className="text-brand-400">in 10 minutes.</span>
             </motion.h1>
 
             {/* Sub */}
@@ -58,22 +62,25 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.16, ease }}
-              className="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-4 leading-[1.6]"
+              className="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-6 leading-[1.6]"
             >
-              The only AI firewall that generates the audit PDF your C3PAO assessor
-              actually accepts. Local-only. One URL change. Deploy in 15 minutes.
+              Your employees are pasting CUI into ChatGPT. Hound Shield intercepts
+              every prompt locally, blocks violations, and produces the C3PAO-ready
+              PDF your assessor needs. One URL change. No code.
             </motion.p>
 
-            {/* SVA callout */}
-            <motion.p
+            {/* Countdown badge */}
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.22 }}
-              className="text-[13px] text-brand-400/70 font-mono mb-8"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-amber-500/25 bg-amber-500/5 mb-8"
             >
-              Built for ISSO/ISSM at CMMC Level 2 defense contractors.
-              November 2026 enforcement is 6 months away.
-            </motion.p>
+              <Timer className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+              <span className="text-xs font-mono text-amber-400">
+                {daysUntilCMMC > 0 ? daysUntilCMMC : 0} days until CMMC Phase 2 enforcement (Nov 10, 2026)
+              </span>
+            </motion.div>
 
             {/* CTAs */}
             <motion.div
@@ -98,14 +105,14 @@ export function HeroSection() {
               </Link>
             </motion.div>
 
-            {/* Proof list */}
+            {/* Trust signals */}
             <motion.ul
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.36 }}
               className="flex flex-wrap items-center gap-x-5 gap-y-2.5"
             >
-              {PROOF.map((t) => (
+              {TRUST_SIGNALS.map((t) => (
                 <li key={t} className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 uppercase tracking-wider">
                   <span className="w-1 h-1 rounded-full bg-brand-400/70 flex-shrink-0" />
                   {t}

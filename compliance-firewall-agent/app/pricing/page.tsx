@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+
+const RoiCalculator = dynamic(
+  () => import("@/components/landing/RoiCalculator").then((m) => m.RoiCalculator),
+  { ssr: false, loading: () => <div className="py-20" /> }
+);
 import Link from "next/link";
 import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import { useRouter } from "next/navigation";
@@ -17,10 +23,10 @@ import {
   ShieldCheck,
   BadgeCheck,
   Clock,
-  Users,
   Lock,
   Star,
   Minus,
+  FileCheck,
 } from "lucide-react";
 
 /* ===== PRICING DATA ===== */
@@ -126,32 +132,6 @@ const plans = [
     highlighted: false,
     badge: null,
   },
-  {
-    id: "agency",
-    name: "Agency / MSP",
-    icon: Users,
-    iconColor: "text-brand-400",
-    iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 2499,
-    annualPrice: 23990,
-    annualTotal: 23990,
-    description: "Multi-tenant platform for consultants managing multiple defense contractors.",
-    features: [
-      "Everything in Enterprise",
-      "Multi-tenant dashboard",
-      "White-label compliance reports",
-      "Unlimited client accounts",
-      "Bulk compliance reporting",
-      "Partner API access",
-      "Revenue-share program",
-      "Dedicated success manager",
-      "SLA guarantee (99.99%)",
-    ],
-    cta: "Contact Sales",
-    ctaStyle: "btn-ghost",
-    highlighted: false,
-    badge: "For Consultants",
-  },
 ];
 
 /* ===== COMPARISON TABLE DATA ===== */
@@ -162,42 +142,39 @@ interface ComparisonRow {
   pro: FeatureValue;
   growth: FeatureValue;
   enterprise: FeatureValue;
-  agency: FeatureValue;
   category: string;
 }
 
 const comparisonFeatures: ComparisonRow[] = [
   // AI Gateway
-  { feature: "Monthly API scans", free: "None", pro: "50K", growth: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "AI Gateway" },
-  { feature: "Detection patterns", free: false, pro: "16", growth: "16", enterprise: "16+ Custom", agency: "16+ Custom", category: "AI Gateway" },
-  { feature: "Real-time threat feed", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "Custom detection rules", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "HITL quarantine review", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "AI Gateway" },
+  { feature: "Monthly API scans", free: "None", pro: "50K", growth: "Unlimited", enterprise: "Unlimited", category: "AI Gateway" },
+  { feature: "Detection patterns", free: false, pro: "16", growth: "16", enterprise: "16+ Custom", category: "AI Gateway" },
+  { feature: "Real-time threat feed", free: false, pro: true, growth: true, enterprise: true, category: "AI Gateway" },
+  { feature: "Custom detection rules", free: false, pro: false, growth: false, enterprise: true, category: "AI Gateway" },
+  { feature: "HITL quarantine review", free: false, pro: false, growth: false, enterprise: true, category: "AI Gateway" },
   // CMMC & Compliance
-  { feature: "CMMC self-assessment", free: "Read-only", pro: true, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SPRS score calculator", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Gap analysis & remediation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "JSON compliance reports", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "PDF compliance reports", free: false, pro: false, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SSP document generation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Audit trail export", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "C3PAO coordination", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
+  { feature: "CMMC self-assessment", free: "Read-only", pro: true, growth: true, enterprise: true, category: "CMMC & Compliance" },
+  { feature: "SPRS score calculator", free: true, pro: true, growth: true, enterprise: true, category: "CMMC & Compliance" },
+  { feature: "Gap analysis & remediation", free: false, pro: true, growth: true, enterprise: true, category: "CMMC & Compliance" },
+  { feature: "JSON compliance reports", free: false, pro: true, growth: true, enterprise: true, category: "CMMC & Compliance" },
+  { feature: "PDF compliance reports", free: false, pro: false, growth: true, enterprise: true, category: "CMMC & Compliance" },
+  { feature: "SSP document generation", free: false, pro: true, growth: true, enterprise: true, category: "CMMC & Compliance" },
+  { feature: "Audit trail export", free: false, pro: false, growth: true, enterprise: true, category: "CMMC & Compliance" },
+  { feature: "C3PAO coordination", free: false, pro: false, growth: true, enterprise: true, category: "CMMC & Compliance" },
   // Platform & Integrations
-  { feature: "Dashboard access", free: "Basic", pro: "Full", growth: "Full", enterprise: "Full", agency: "Multi-tenant", category: "Platform & Integrations" },
-  { feature: "Log retention", free: "7 days", pro: "90 days", growth: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Team seats", free: "1", pro: "10", growth: "25", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Client accounts", free: false, pro: false, growth: false, enterprise: false, agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Slack & webhook alerts", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "API access", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "SSO & RBAC", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "White-label reports", free: false, pro: false, growth: false, enterprise: false, agency: true, category: "Platform & Integrations" },
-  { feature: "On-prem / air-gapped", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Platform & Integrations" },
+  { feature: "Dashboard access", free: "Basic", pro: "Full", growth: "Full", enterprise: "Full", category: "Platform & Integrations" },
+  { feature: "Log retention", free: "7 days", pro: "90 days", growth: "Unlimited", enterprise: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Team seats", free: "1", pro: "10", growth: "25", enterprise: "Unlimited", category: "Platform & Integrations" },
+  { feature: "Slack & webhook alerts", free: false, pro: true, growth: true, enterprise: true, category: "Platform & Integrations" },
+  { feature: "API access", free: false, pro: true, growth: true, enterprise: true, category: "Platform & Integrations" },
+  { feature: "SSO & RBAC", free: false, pro: false, growth: true, enterprise: true, category: "Platform & Integrations" },
+  { feature: "On-prem / air-gapped", free: false, pro: false, growth: false, enterprise: true, category: "Platform & Integrations" },
   // Support
-  { feature: "Community support", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Priority support (< 4hr)", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated onboarding", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated account manager", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Support" },
-  { feature: "SLA guarantee", free: false, pro: false, growth: "99.9%", enterprise: "99.99%", agency: "99.99%", category: "Support" },
+  { feature: "Community support", free: true, pro: true, growth: true, enterprise: true, category: "Support" },
+  { feature: "Priority support (< 4hr)", free: false, pro: true, growth: true, enterprise: true, category: "Support" },
+  { feature: "Dedicated onboarding", free: false, pro: false, growth: true, enterprise: true, category: "Support" },
+  { feature: "Dedicated account manager", free: false, pro: false, growth: false, enterprise: true, category: "Support" },
+  { feature: "SLA guarantee", free: false, pro: false, growth: "99.9%", enterprise: "99.99%", category: "Support" },
 ];
 
 /* ===== FAQ DATA ===== */
@@ -317,7 +294,7 @@ export default function PricingPage() {
       router.push("/signup");
       return;
     }
-    if (tier === "agency" || tier === "enterprise") {
+    if (tier === "enterprise") {
       window.location.href = "#contact";
       return;
     }
@@ -515,14 +492,6 @@ export default function PricingPage() {
                           {plan.cta}
                           <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
-                      ) : plan.id === "agency" ? (
-                        <Link
-                          href="#contact"
-                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""}`}
-                        >
-                          {plan.cta}
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
                       ) : (
                         <button
                           onClick={() => handleCheckout(plan.id, isAnnual ? "annual" : "monthly")}
@@ -560,6 +529,33 @@ export default function PricingPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ===== AUDIT PACK ADD-ON ===== */}
+      <section className="relative px-6 pb-12">
+        <div className="max-w-6xl mx-auto">
+          <AnimatedSection>
+            <div className="glass-card p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6 border-brand-400/20">
+              <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center flex-shrink-0">
+                <FileCheck className="w-6 h-6 text-brand-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-3 mb-1">
+                  <h3 className="text-base font-semibold text-white">Audit Pack</h3>
+                  <span className="px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold">One-time · $999</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">Add to any plan</span>
+                </div>
+                <p className="text-sm text-slate-400 leading-relaxed">SHA-256 signed evidence bundle · C3PAO delivery checklist · SSP template · 90-day audit-ready log archive. Everything your assessor needs in a single deliverable.</p>
+              </div>
+              <Link
+                href="/contact?subject=audit-pack"
+                className="btn-ghost text-sm flex-shrink-0 whitespace-nowrap"
+              >
+                Get Audit Pack <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -606,7 +602,7 @@ export default function PricingPage() {
           <AnimatedSection delay={150}>
             <div className="glass-card overflow-x-auto">
               {/* Table header */}
-              <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.06]">
+              <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.06]">
                 <div className="p-5 text-sm font-medium text-slate-500">
                   Feature
                 </div>
@@ -615,7 +611,6 @@ export default function PricingPage() {
                   { name: "Pro", key: "pro" },
                   { name: "Growth", key: "growth" },
                   { name: "Enterprise", key: "enterprise" },
-                  { name: "Agency", key: "agency" },
                 ] as const).map((tier) => (
                   <div
                     key={tier.key}
@@ -638,8 +633,8 @@ export default function PricingPage() {
               {categories.map((category) => (
                 <div key={category}>
                   {/* Category header */}
-                  <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.04] bg-white/[0.015]">
-                    <div className="col-span-6 p-4 px-5">
+                  <div className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.04] bg-white/[0.015]">
+                    <div className="col-span-5 p-4 px-5">
                       <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
                         {category}
                       </span>
@@ -652,13 +647,13 @@ export default function PricingPage() {
                     .map((row, ri) => (
                       <div
                         key={ri}
-                        className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
+                        className="grid grid-cols-5 min-w-[640px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
                       >
                         <div className="p-4 px-5 text-sm text-slate-400">
                           {row.feature}
                         </div>
                         {(
-                          ["free", "pro", "growth", "enterprise", "agency"] as const
+                          ["free", "pro", "growth", "enterprise"] as const
                         ).map((planKey) => {
                           const val = row[planKey];
                           return (
@@ -720,7 +715,7 @@ export default function PricingPage() {
                 color: "text-brand-400",
               },
               {
-                icon: Users,
+                icon: Building2,
                 stat: "500+",
                 label: "Teams protected",
                 color: "text-purple-400",
@@ -742,6 +737,9 @@ export default function PricingPage() {
           </div>
         </AnimatedSection>
       </section>
+
+      {/* ===== ROI CALCULATOR ===== */}
+      <RoiCalculator />
 
       {/* ===== FAQ ===== */}
       <section className="relative px-6 pb-24">
