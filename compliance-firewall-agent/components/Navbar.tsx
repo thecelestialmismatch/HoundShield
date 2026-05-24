@@ -82,11 +82,10 @@ const FEATURES_ITEMS = [
 ];
 
 const PRICING_TIERS = [
-  { label: "Free",       price: "$0",    note: "Up to 1,000 prompts/mo", color: "text-slate-400",   href: "/signup" },
-  { label: "Pro",        price: "$199",  note: "SOC 2 + HIPAA coverage",  color: "text-brand-400",  href: "/signup?plan=pro" },
+  { label: "Free",       price: "$0",    note: "Up to 1,000 prompts/mo", color: "text-slate-400",  href: "/signup" },
+  { label: "Pro",        price: "$199",  note: "SOC 2 + HIPAA coverage",  color: "text-brand-400", href: "/signup?plan=pro" },
   { label: "Growth",     price: "$499",  note: "PDF compliance reports",  color: "text-brand-500", href: "/signup?plan=growth" },
-  { label: "Enterprise", price: "$999",  note: "Unlimited orgs + CMMC",   color: "text-brand-600",   href: "/contact" },
-  { label: "Agency",     price: "$2,499",note: "White-label for MSPs",    color: "text-brand-700",  href: "/contact" },
+  { label: "Enterprise", price: "$999",  note: "Unlimited orgs + CMMC",   color: "text-brand-600", href: "/contact" },
 ];
 
 const PARTNER_ITEMS = [
@@ -356,6 +355,7 @@ const NAV_LINKS = [
   { href: "/pricing",  label: "Pricing"  },
   { href: "/partners", label: "Partners" },
   { href: "/docs",     label: "Docs"     },
+  { href: "/security", label: "Security" },
   { href: "/contact",  label: "Contact"  },
 ];
 
