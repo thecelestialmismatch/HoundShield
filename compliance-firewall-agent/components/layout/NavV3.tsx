@@ -38,13 +38,18 @@ export function NavV3() {
             <Image
               src="/houndshield-logo.png"
               alt="HoundShield"
-              width={40}
-              height={40}
+              width={36}
+              height={36}
+              className="logo-img object-contain"
               priority
-              className="logo-img"
             />
-            <span className="font-semibold text-[var(--hs-ink)] text-sm tracking-tight font-[var(--font-body)]">
-              HoundShield
+            <span className="font-bold text-[var(--hs-ink)] text-base tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
+              <span style={{
+                background: 'linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}>Hound</span>Shield
             </span>
           </Link>
 
