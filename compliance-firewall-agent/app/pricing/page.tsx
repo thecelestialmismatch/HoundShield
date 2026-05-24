@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+
+const RoiCalculator = dynamic(
+  () => import("@/components/landing/RoiCalculator").then((m) => m.RoiCalculator),
+  { ssr: false, loading: () => <div className="py-20" /> }
+);
 import Link from "next/link";
 import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import { useRouter } from "next/navigation";
@@ -731,6 +737,9 @@ export default function PricingPage() {
           </div>
         </AnimatedSection>
       </section>
+
+      {/* ===== ROI CALCULATOR ===== */}
+      <RoiCalculator />
 
       {/* ===== FAQ ===== */}
       <section className="relative px-6 pb-24">
