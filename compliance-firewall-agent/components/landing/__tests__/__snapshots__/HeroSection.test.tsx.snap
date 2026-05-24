@@ -39,34 +39,69 @@ exports[`HeroSection > matches snapshot 1`] = `
         </div>
         <h1
           animate="[object Object]"
-          class="font-editorial text-[clamp(38px,5.5vw,70px)] font-bold leading-[1.02] tracking-[-2px] text-white mb-5"
+          class="font-editorial text-[clamp(36px,5vw,66px)] font-bold leading-[1.04] tracking-[-2px] text-white mb-5"
           initial="[object Object]"
           transition="[object Object]"
         >
-          Proof,
+          CMMC Level 2 AI Compliance —
            
           <span
             class="text-brand-400"
           >
-            not policy.
+            in 10 minutes.
           </span>
         </h1>
         <p
           animate="[object Object]"
-          class="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-4 leading-[1.6]"
+          class="text-[clamp(15px,1.6vw,18px)] text-slate-400 max-w-lg mb-6 leading-[1.6]"
           initial="[object Object]"
           transition="[object Object]"
         >
-          The only AI firewall that generates the audit PDF your C3PAO assessor actually accepts. Local-only. One URL change. Deploy in 15 minutes.
+          Your employees are pasting CUI into ChatGPT. Hound Shield intercepts every prompt locally, blocks violations, and produces the C3PAO-ready PDF your assessor needs. One URL change. No code.
         </p>
-        <p
+        <div
           animate="[object Object]"
-          class="text-[13px] text-brand-400/70 font-mono mb-8"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-amber-500/25 bg-amber-500/5 mb-8"
           initial="[object Object]"
           transition="[object Object]"
         >
-          Built for ISSO/ISSM at CMMC Level 2 defense contractors. November 2026 enforcement is 6 months away.
-        </p>
+          <svg
+            class="lucide lucide-timer w-3.5 h-3.5 text-amber-400 flex-shrink-0"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line
+              x1="10"
+              x2="14"
+              y1="2"
+              y2="2"
+            />
+            <line
+              x1="12"
+              x2="15"
+              y1="14"
+              y2="11"
+            />
+            <circle
+              cx="12"
+              cy="14"
+              r="8"
+            />
+          </svg>
+          <span
+            class="text-xs font-mono text-amber-400"
+          >
+            170
+             days until CMMC Phase 2 enforcement (Nov 10, 2026)
+          </span>
+        </div>
         <div
           animate="[object Object]"
           class="flex flex-col sm:flex-row gap-3 mb-10"
@@ -131,7 +166,7 @@ exports[`HeroSection > matches snapshot 1`] = `
             <span
               class="w-1 h-1 rounded-full bg-brand-400/70 flex-shrink-0"
             />
-            16 CUI detection patterns
+            NIST 800-171 Rev 2
           </li>
           <li
             class="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 uppercase tracking-wider"
@@ -139,7 +174,7 @@ exports[`HeroSection > matches snapshot 1`] = `
             <span
               class="w-1 h-1 rounded-full bg-brand-400/70 flex-shrink-0"
             />
-            CMMC Level 2 enforced
+            DFARS 7012
           </li>
           <li
             class="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 uppercase tracking-wider"
@@ -147,7 +182,7 @@ exports[`HeroSection > matches snapshot 1`] = `
             <span
               class="w-1 h-1 rounded-full bg-brand-400/70 flex-shrink-0"
             />
-            HIPAA + SOC 2 simultaneous
+            CMMC Level 2
           </li>
           <li
             class="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 uppercase tracking-wider"
@@ -155,15 +190,7 @@ exports[`HeroSection > matches snapshot 1`] = `
             <span
               class="w-1 h-1 rounded-full bg-brand-400/70 flex-shrink-0"
             />
-            &lt;10ms scan latency
-          </li>
-          <li
-            class="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 uppercase tracking-wider"
-          >
-            <span
-              class="w-1 h-1 rounded-full bg-brand-400/70 flex-shrink-0"
-            />
-            Nothing leaves your network
+            SHA-256 Audit Chain
           </li>
         </ul>
       </div>

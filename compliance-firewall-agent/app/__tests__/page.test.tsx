@@ -31,6 +31,15 @@ vi.mock('@/components/ui/CodeBlock',     () => ({ CodeBlock: ({ code }: { code: 
 vi.mock('@/components/landing/FeaturesGrid', () => ({
   FeaturesGrid: () => <section data-testid="features-grid-mock">Features Grid</section>,
 }))
+vi.mock('@/components/landing/PlatformDashboardClient', () => ({
+  PlatformDashboardClient: () => <div data-testid="platform-dashboard-mock" />,
+}))
+vi.mock('@/components/landing/DeploymentModes', () => ({
+  DeploymentModes: () => <section data-testid="deployment-modes-mock">Deployment Modes</section>,
+}))
+vi.mock('@/components/landing/ScannerDemo', () => ({
+  ScannerDemo: () => <section data-testid="scanner-demo-mock">Scanner Demo</section>,
+}))
 vi.mock('@/components/layout/NavV3',    () => ({ NavV3:    () => <nav>Nav</nav> }))
 vi.mock('@/components/layout/FooterV3', () => ({ FooterV3: () => <footer>Footer</footer> }))
 
@@ -62,9 +71,10 @@ describe('HomePage', () => {
     expect(h1.textContent).toMatch(/Stop your team from leaking/i)
   })
 
-  it('renders ThreatFeed in hero', () => {
+  it('renders PlatformDashboard in hero', () => {
     render(<HomePage />)
-    expect(screen.getByTestId('threat-feed-mock')).toBeTruthy()
+    // BEAST UI v3 replaced ThreatFeed with PlatformDashboardClient in the hero
+    expect(screen.getByTestId('platform-dashboard-mock')).toBeTruthy()
   })
 
   it('renders FeaturesGrid section', () => {
@@ -145,7 +155,9 @@ describe('HomePage', () => {
 
   it('env var code block present in step 01', () => {
     render(<HomePage />)
-    expect(screen.getByText('OPENAI_BASE_URL=https://proxy.houndshield.com')).toBeTruthy()
+    // env var appears in How It Works step + DeploymentModes; both correct
+    const matches = screen.getAllByText('OPENAI_BASE_URL=https://proxy.houndshield.com')
+    expect(matches.length).toBeGreaterThanOrEqual(1)
   })
 
   it('pricing section is present', () => {
