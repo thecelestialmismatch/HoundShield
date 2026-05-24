@@ -19,7 +19,9 @@ vi.mock('next/navigation', () => ({
 }))
 
 // Stub all complex client components
-vi.mock('@/components/ui/ThreatFeed',    () => ({ ThreatFeed:    () => <div data-testid="threat-feed-mock" /> }))
+vi.mock('@/components/landing/PlatformDashboardClient', () => ({
+  PlatformDashboardClient: () => <div data-testid="platform-dashboard-mock" />,
+}))
 vi.mock('@/components/ui/CountdownTimer',() => ({ CountdownTimer:() => <div data-testid="countdown-mock">days</div> }))
 vi.mock('@/components/ui/ComparisonFlow',() => ({ ComparisonFlow:() => <div data-testid="comparison-flow-mock" /> }))
 vi.mock('@/components/ui/FaqAccordion',  () => ({
@@ -62,9 +64,9 @@ describe('HomePage', () => {
     expect(h1.textContent).toMatch(/Stop your team from leaking/i)
   })
 
-  it('renders ThreatFeed in hero', () => {
+  it('renders PlatformDashboard in hero', () => {
     render(<HomePage />)
-    expect(screen.getByTestId('threat-feed-mock')).toBeTruthy()
+    expect(screen.getByTestId('platform-dashboard-mock')).toBeTruthy()
   })
 
   it('renders FeaturesGrid section', () => {
