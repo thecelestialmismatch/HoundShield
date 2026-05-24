@@ -8,6 +8,8 @@ import { ComparisonFlow } from '@/components/ui/ComparisonFlow'
 import { FaqAccordion, type FaqItem } from '@/components/ui/FaqAccordion'
 import { CodeBlock } from '@/components/ui/CodeBlock'
 import { FeaturesGrid } from '@/components/landing/FeaturesGrid'
+import { DeploymentModes } from '@/components/landing/DeploymentModes'
+import { ScannerDemo } from '@/components/landing/ScannerDemo'
 
 /* ─── Static data ──────────────────────────────────────────────── */
 
@@ -170,6 +172,12 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Deployment modes ─────────────────────────────────────── */}
+      <DeploymentModes />
+
+      {/* ── Live scanner demo ─────────────────────────────────────── */}
+      <ScannerDemo />
 
       {/* ── 2. STATS STRIP ──────────────────────────────────────── */}
       <section className="py-14 border-y border-[var(--hs-border-subtle)] bg-[var(--hs-surface-2)]">
