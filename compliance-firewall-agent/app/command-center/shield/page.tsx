@@ -12,6 +12,7 @@ import {
   Crosshair,
   BookOpen,
   Zap,
+  TrendingUp,
 } from "lucide-react";
 import SPRSDashboardWidget from "@/components/dashboard/SPRSDashboardWidget";
 import { ALL_CONTROLS } from "@/lib/shieldready/controls";
@@ -142,6 +143,54 @@ export default function ShieldReadyDashboard() {
           );
         })}
       </div>
+
+      {/* HoundShield SPRS protection card */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="bg-gradient-to-r from-brand-500/10 to-emerald-500/10 border border-brand-500/20 rounded-2xl p-6 mb-6"
+      >
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <TrendingUp size={16} className="text-brand-400" />
+              <span className="text-sm font-semibold text-brand-400">HoundShield Gateway Active</span>
+            </div>
+            <h3 className="text-lg font-bold text-white mb-1">
+              Protects up to <span className="text-brand-400">+22 SPRS points</span>
+            </h3>
+            <p className="text-slate-400 text-sm max-w-xl">
+              HoundShield&apos;s AI prompt scanner directly enforces 6 NIST 800-171 Rev 2 controls — blocking CUI/PHI/credential exfiltration before it reaches any AI model.
+            </p>
+          </div>
+          <Link
+            href="/command-center/shield/coverage"
+            className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500/20 hover:bg-brand-500/30 border border-brand-500/30 text-brand-300 text-sm font-medium transition-colors"
+          >
+            View coverage map <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {[
+            { id: "3.1.3", label: "CUI flow control", pts: 5 },
+            { id: "3.1.22", label: "CUI on public systems", pts: 3 },
+            { id: "3.3.1", label: "Audit logging", pts: 3 },
+            { id: "3.3.2", label: "User traceability", pts: 3 },
+            { id: "3.13.1", label: "Boundary protection", pts: 1 },
+            { id: "3.12.3", label: "Control monitoring", pts: 3 },
+          ].map((c) => (
+            <span
+              key={c.id}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-xs font-mono"
+            >
+              <span className="text-brand-400">{c.id}</span>
+              <span className="text-white/50">{c.label}</span>
+              <span className="text-emerald-400 font-bold">+{c.pts}pts</span>
+            </span>
+          ))}
+        </div>
+      </motion.div>
 
       {/* Top priorities (if assessment started) */}
       {hasStarted && priorities.length > 0 && (
