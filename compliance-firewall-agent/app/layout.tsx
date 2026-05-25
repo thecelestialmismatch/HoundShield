@@ -105,28 +105,42 @@ const globalJsonLd = [
         name: "Starter",
         price: "0",
         priceCurrency: "USD",
-        description: "Free tier — AI prompt scanning, basic compliance reports",
+        description: "7-day free trial — CMMC self-assessment, SPRS calculator, 110-control gap analysis",
       },
       {
         "@type": "Offer",
         name: "Pro",
-        price: "69",
+        price: "199",
         priceCurrency: "USD",
-        description: "Pro — advanced scanning, PDF evidence export, CMMC controls",
+        description: "Pro — AI gateway (50K scans/mo), 10 seats, SSP generation, priority support",
       },
       {
         "@type": "Offer",
         name: "Growth",
-        price: "199",
+        price: "499",
         priceCurrency: "USD",
-        description: "Growth — multi-user, gateway mode, SPRS score tracking",
+        description: "Growth — unlimited scans, 25 seats, PDF compliance reports, C3PAO coordination, SSO",
       },
       {
         "@type": "Offer",
         name: "Enterprise",
-        price: "499",
+        price: "999",
         priceCurrency: "USD",
-        description: "Enterprise — C3PAO-ready reports, dedicated support",
+        description: "Enterprise — unlimited seats, on-prem / air-gapped deployment, dedicated CSM, HITL quarantine",
+      },
+      {
+        "@type": "Offer",
+        name: "Agency / MSP",
+        price: "2499",
+        priceCurrency: "USD",
+        description: "Multi-tenant platform for consultants — white-label reports, unlimited client accounts, revenue-share program",
+      },
+      {
+        "@type": "Offer",
+        name: "Audit Pack",
+        price: "999",
+        priceCurrency: "USD",
+        description: "One-time — SSP + POA&M + 14 NIST 800-171 policy templates + 1-hour Registered Practitioner review",
       },
     ],
     featureList: [
@@ -177,7 +191,7 @@ const globalJsonLd = [
         name: "Can my employees still use ChatGPT with HoundShield?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. HoundShield works as a transparent proxy. Employees point their AI tools at your Kaelus endpoint instead of directly at the AI API. Prompts that don't contain CUI/PHI/PII pass through normally. Flagged content is blocked and logged with a tamper-evident record.",
+          text: "Yes. HoundShield works as a transparent proxy. Employees point their AI tools at your HoundShield endpoint instead of directly at the AI API. Prompts that don't contain CUI/PHI/PII pass through normally. Flagged content is blocked and logged with a tamper-evident record.",
         },
       },
       {
@@ -185,7 +199,7 @@ const globalJsonLd = [
         name: "How long does HoundShield take to set up?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Under 10 minutes for most organizations. It's a single URL change — point your AI tools at your Kaelus endpoint instead of the cloud AI API. Docker deployment takes 3 commands. No agent installation on individual machines required.",
+          text: "Under 10 minutes for most organizations. It's a single URL change — point your AI tools at your HoundShield endpoint instead of the cloud AI API. Docker deployment takes 3 commands. No agent installation on individual machines required.",
         },
       },
       {

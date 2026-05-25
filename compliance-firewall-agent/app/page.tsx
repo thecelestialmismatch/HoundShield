@@ -269,12 +269,14 @@ export default function HomePage() {
           <Link href="/" className="flex items-center gap-2 cursor-pointer">
             <TextLogo variant="dark" />
           </Link>
-          <div className="flex gap-6 text-sm text-slate-500">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 justify-center">
             <Link href="/about" className="hover:text-white transition-colors cursor-pointer">About</Link>
             <Link href="/features" className="hover:text-white transition-colors cursor-pointer">Features</Link>
             <Link href="/pricing" className="hover:text-white transition-colors cursor-pointer">Pricing</Link>
-            <Link href="/contact" className="hover:text-white transition-colors cursor-pointer">Contact</Link>
+            <Link href="/security" className="hover:text-white transition-colors cursor-pointer">Security</Link>
+            <Link href="/deployment-modes" className="hover:text-white transition-colors cursor-pointer">Deployment</Link>
             <Link href="/docs" className="hover:text-white transition-colors cursor-pointer">Docs</Link>
+            <Link href="/contact" className="hover:text-white transition-colors cursor-pointer">Contact</Link>
           </div>
         </div>
         <div className="mt-8 text-center text-xs text-slate-600">
