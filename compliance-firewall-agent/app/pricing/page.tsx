@@ -703,26 +703,26 @@ export default function PricingPage() {
             {[
               {
                 icon: Shield,
-                stat: "2M+",
-                label: "Scans processed",
+                stat: "110",
+                label: "NIST 800-171 controls mapped",
                 color: "text-brand-400",
               },
               {
                 icon: Clock,
-                stat: "<50ms",
-                label: "Average latency",
+                stat: "<10ms",
+                label: "Detection latency (p95)",
                 color: "text-emerald-400",
               },
               {
                 icon: Lock,
-                stat: "99.99%",
-                label: "Uptime SLA",
+                stat: "16",
+                label: "CUI/PHI/PII engines",
                 color: "text-brand-400",
               },
               {
                 icon: Users,
-                stat: "500+",
-                label: "Teams protected",
+                stat: "76,598",
+                label: "US DIB orgs needing CMMC L2",
                 color: "text-purple-400",
               },
             ].map((item, i) => (
@@ -790,9 +790,8 @@ export default function PricingPage() {
                   </span>
                 </h2>
                 <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ teams that trust Hound Shield to protect their most
-                  sensitive data from unauthorized AI exposure. Deploy in
-                  under 15 minutes.
+                  CMMC Level 2 enforcement begins November 10, 2026. Deploy Hound Shield
+                  in under 15 minutes and generate C3PAO-ready evidence on day one.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -902,9 +901,10 @@ export default function PricingPage() {
               &copy; 2026 Hound Shield — All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-600">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
-              <span>Security</span>
+              <Link href="/privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
+              <Link href="/security" className="hover:text-slate-400 transition-colors">Security</Link>
+              <Link href="/deployment-modes" className="hover:text-slate-400 transition-colors">Deployment</Link>
             </div>
           </div>
         </div>
