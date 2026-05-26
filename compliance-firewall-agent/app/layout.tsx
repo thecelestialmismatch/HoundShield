@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { displayFont, bodyFont } from "./fonts";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 export const viewport: Viewport = {
-  themeColor: "#07070b",
+  themeColor: "#FAFCFF",
   width: "device-width",
   initialScale: 1,
 };
@@ -102,38 +103,31 @@ const globalJsonLd = [
     offers: [
       {
         "@type": "Offer",
-        name: "Starter",
+        name: "Free",
         price: "0",
         priceCurrency: "USD",
-        description: "7-day free trial — CMMC self-assessment, SPRS calculator, 110-control gap analysis",
+        description: "Free tier — up to 1,000 prompts/month, CMMC self-assessment, SPRS calculator, 110-control gap analysis",
       },
       {
         "@type": "Offer",
         name: "Pro",
         price: "199",
         priceCurrency: "USD",
-        description: "Pro — AI gateway (50K scans/mo), 10 seats, SSP generation, priority support",
+        description: "Pro — AI gateway (50K scans/mo), 10 seats, SSP generation, SOC 2 + HIPAA coverage, priority support",
       },
       {
         "@type": "Offer",
         name: "Growth",
         price: "499",
         priceCurrency: "USD",
-        description: "Growth — unlimited scans, 25 seats, PDF compliance reports, C3PAO coordination, SSO",
+        description: "Growth — unlimited scans, 25 seats, PDF compliance reports, C3PAO coordination, SSO & RBAC",
       },
       {
         "@type": "Offer",
         name: "Enterprise",
         price: "999",
         priceCurrency: "USD",
-        description: "Enterprise — unlimited seats, on-prem / air-gapped deployment, dedicated CSM, HITL quarantine",
-      },
-      {
-        "@type": "Offer",
-        name: "Agency / MSP",
-        price: "2499",
-        priceCurrency: "USD",
-        description: "Multi-tenant platform for consultants — white-label reports, unlimited client accounts, revenue-share program",
+        description: "Enterprise — unlimited seats, on-prem / air-gapped deployment, dedicated CSM, custom detection rules, SLA 99.99%",
       },
       {
         "@type": "Offer",
@@ -222,7 +216,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="dark scroll-smooth"
+      className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -231,9 +225,9 @@ export default function RootLayout({
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
         />
         <link rel="canonical" href={BASE_URL} />
-        {/* Preconnect to key external resources */}
+        {/* JetBrains Mono preconnect — loaded via CSS @import */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Global JSON-LD: SoftwareApplication + Organization + FAQPage */}
         {globalJsonLd.map((schema, i) => (
           <script

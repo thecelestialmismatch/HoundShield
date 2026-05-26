@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 function getResend(): Resend | null {
   const key = process.env.RESEND_API_KEY;
@@ -50,9 +50,9 @@ export async function POST(req: NextRequest) {
   <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
 
     <!-- Header -->
-    <div style="background: #1e40af; padding: 32px 40px;">
+    <div style="background: #0f172a; padding: 32px 40px;">
       <h1 style="color: #fff; margin: 0; font-size: 22px; font-weight: 700;">Hound Shield</h1>
-      <p style="color: #bfdbfe; margin: 6px 0 0; font-size: 13px;">AI Compliance Firewall for Defense Contractors</p>
+      <p style="color: #ea580c; margin: 6px 0 0; font-size: 13px;">AI Compliance Firewall for Defense Contractors</p>
     </div>
 
     <!-- Body -->
@@ -66,26 +66,26 @@ export async function POST(req: NextRequest) {
       <!-- CTA -->
       <div style="text-align: center; margin: 32px 0;">
         <a href="${APP_URL}/command-center/shield/assessment"
-          style="background: #2563eb; color: #fff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
+          style="background: #ea580c; color: #fff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
           Complete your CMMC assessment →
         </a>
       </div>
 
       <!-- What's next -->
-      <div style="background: #f0f9ff; border-radius: 10px; padding: 20px; margin: 24px 0;">
-        <p style="color: #0369a1; font-weight: 600; margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">
+      <div style="background: #fff7ed; border-radius: 10px; padding: 20px; margin: 24px 0;">
+        <p style="color: #c2410c; font-weight: 600; margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">
           Your 3-step quickstart
         </p>
         <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
-          <span style="background: #2563eb; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">1</span>
+          <span style="background: #ea580c; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">1</span>
           <span style="color: #334155; font-size: 14px;">Complete the 110-control CMMC gap assessment</span>
         </div>
         <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
-          <span style="background: #2563eb; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">2</span>
+          <span style="background: #ea580c; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">2</span>
           <span style="color: #334155; font-size: 14px;">Route your first AI query through the Hound Shield gateway</span>
         </div>
         <div style="display: flex; align-items: flex-start; gap: 12px;">
-          <span style="background: #2563eb; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">3</span>
+          <span style="background: #ea580c; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">3</span>
           <span style="color: #334155; font-size: 14px;">See your first compliance event in the dashboard</span>
         </div>
       </div>
@@ -117,6 +117,17 @@ export async function POST(req: NextRequest) {
   if (error) {
     console.error("[email/welcome] Resend error:", error);
     return NextResponse.json({ sent: false, error: error.message });
+  }
+
+  // Enroll in drip sequence — upsert so repeated calls are safe.
+  const serviceClient = createServiceClient();
+  const { error: enrollErr } = await serviceClient
+    .from("onboarding_email_sequence")
+    .upsert({ user_id: user.id }, { onConflict: "user_id", ignoreDuplicates: true });
+
+  if (enrollErr) {
+    // Non-fatal — Day 1 email was sent; log and continue.
+    console.error("[email/welcome] Enrollment upsert failed:", enrollErr);
   }
 
   return NextResponse.json({ sent: true, id: data?.id });

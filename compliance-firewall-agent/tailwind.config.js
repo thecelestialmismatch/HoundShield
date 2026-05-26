@@ -1,46 +1,49 @@
-const path = require("path");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
   content: [
-    path.join(__dirname, "./app/**/*.{js,ts,jsx,tsx,mdx}"),
-    path.join(__dirname, "./components/**/*.{js,ts,jsx,tsx,mdx}"),
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        /* ── Cream / off-white scale ─────────────────────────── */
+        /* ── Cream / sand palette ───────────────────────────── */
         cream: {
           50:  "#FAFAF9",
           100: "#FAF7F2",
-          200: "#F5F0E8",
-          DEFAULT: "#FAF7F2",
+          200: "#F3E3D0",
+          DEFAULT: "#F3E3D0",
         },
-        /* ── Neon accent (coral alias) ───────────────────────── */
+        sand: {
+          DEFAULT: "#D2C4B4",
+          light:   "#E8DCCC",
+          dark:    "#B8A898",
+        },
+        /* ── Neon accent (kept for backward compat, points to steel) */
         neon: {
-          DEFAULT: "#DA7756",
-          light:   "#E48B6A",
-          dark:    "#C96441",
+          DEFAULT: "#81A6C6",
+          light:   "#AACDDC",
+          dark:    "#5A86A8",
         },
-        /* ── Brand coral scale — Anthropic/Claude palette ───── */
+        /* ── Brand steel scale — HoundShield BEAST UI v3 palette ── */
         brand: {
-          50:  "#FDF4F0",
-          100: "#FAE5DC",
-          200: "#F5C9B5",
-          300: "#EDA98A",
-          400: "#E48B6A",   /* claude.ai light accent */
-          500: "#DA7756",   /* Anthropic primary coral */
-          600: "#C96441",   /* PRIMARY CTA — pressed state */
-          700: "#B05230",   /* dark pressed */
-          800: "#8A3F23",   /* deep */
-          900: "#6B2F18",   /* deepest */
+          50:  "#F0F5FA",   /* lightest tint */
+          100: "#DCE9F3",   /* light steel */
+          200: "#C5DAE9",   /* hs-steel-light */
+          300: "#AACDDC",   /* hs-sky */
+          400: "#AACDDC",   /* accent / links / icon highlights */
+          500: "#81A6C6",   /* hs-steel — primary CTA */
+          600: "#5A86A8",   /* hs-steel-dark — pressed state */
+          700: "#3D6A8A",   /* darker steel */
+          800: "#2B4F6B",   /* deep steel */
+          900: "#1A3347",   /* deepest */
         },
         accent: {
-          DEFAULT: "#DA7756",
-          light:   "#E48B6A",
-          dark:    "#C96441",
-          muted:   "rgba(218, 119, 86, 0.08)",
+          DEFAULT: "#81A6C6",
+          light:   "#AACDDC",
+          dark:    "#5A86A8",
+          muted:   "rgba(129, 166, 198, 0.08)",
         },
         success: {
           DEFAULT: "#10B981",
@@ -61,9 +64,9 @@ module.exports = {
           muted:   "rgba(245, 158, 11, 0.1)",
         },
         info: {
-          DEFAULT: "#DA7756",
-          light:   "#E48B6A",
-          muted:   "rgba(218, 119, 86, 0.1)",
+          DEFAULT: "#81A6C6",
+          light:   "#AACDDC",
+          muted:   "rgba(129, 166, 198, 0.1)",
         },
         /* ── Neutral dark scale ──────────────────────────────── */
         surface: {
@@ -138,10 +141,10 @@ module.exports = {
         "card":       "0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
         "card-hover": "0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.08)",
         "card-lg":    "0 20px 40px -10px rgba(0, 0, 0, 0.15)",
-        "glow-sm":    "0 0 15px -3px rgba(218, 119, 86, 0.25)",
-        "glow":       "0 0 30px -5px rgba(218, 119, 86, 0.30)",
-        "glow-lg":    "0 0 60px -10px rgba(218, 119, 86, 0.35)",
-        "glow-xl":    "0 0 80px -15px rgba(218, 119, 86, 0.40)",
+        "glow-sm":    "0 0 15px -3px rgba(129, 166, 198, 0.25)",
+        "glow":       "0 0 30px -5px rgba(129, 166, 198, 0.30)",
+        "glow-lg":    "0 0 60px -10px rgba(129, 166, 198, 0.35)",
+        "glow-xl":    "0 0 80px -15px rgba(129, 166, 198, 0.40)",
         "frost":      "0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
         "inner-light":"inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
       },

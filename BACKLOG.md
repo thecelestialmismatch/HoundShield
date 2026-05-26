@@ -1,4 +1,4 @@
-# Kaelus Backlog
+# HoundShield Backlog
 Append-only. [P0] ships this week. [P1] this month. [P2] someday. Operator works P0 first, always.
 
 - [P0] 2026-04-19 — Build 50-prospect list of DoD subs (50–500 emp) with CMMC L2 exposure; tag by assessment urgency (3h)
