@@ -1,4 +1,11 @@
 # HoundShield Backlog
+
+> **2026-05-26 — SUPERSEDED.** Active task queue is now `tasks/todo.md` under HERMES Stage 1 / Stage 2 / Stage 3 doctrine. Items below are preserved for historical reference only. Anything that mentions the $199/mo lead pricing, the "10 customers" goal, the Kaelus-era branding, or C3PAO channel is OBSOLETE — see `DECISIONS.md` 2026-05-26 entry for the pivot rationale.
+
+---
+
+## Historical (Kaelus era — DO NOT EXECUTE)
+
 Append-only. [P0] ships this week. [P1] this month. [P2] someday. Operator works P0 first, always.
 
 - [P0] 2026-04-19 — Build 50-prospect list of DoD subs (50–500 emp) with CMMC L2 exposure; tag by assessment urgency (3h)

@@ -1,5 +1,23 @@
-# Hound Shield — Revenue Roadmap
-## From $0 to $10K MRR → YC S26/W27
+# HoundShield — Revenue Roadmap (HERMES, compass-corrected 2026-05-26)
+
+> **2026-05-26 — SUPERSEDED.** The old "$0 → $10K MRR via C3PAOs" sprint-week playbook below is preserved for vocabulary and objection-handling reference, but the strategy is OBSOLETE. See `DECISIONS.md` 2026-05-26 entry and `tasks/todo.md` for the live Stage 1 / 2 / 3 milestones.
+
+## Active roadmap (live)
+
+| Stage | Deadline | Milestone |
+|-------|----------|-----------|
+| **Stage 1** | June 25, 2026 | 3 paid $499 CMMC AI Risk Reports + 1 signed RPO/MSP referral agreement. Docker image published. Brain AI CUI warning live. Mode A/B/C disclaimer on homepage + `/security`. Pricing page leads with $499 one-time. |
+| **Stage 2** | August 25, 2026 | $3K MRR run-rate, ≥5 paying logos, ≥1 channel partner generating leads, SOC 2 Type I in progress, one adjacent vertical landing page (healthcare OR legal). Subscription tiers $299/$799/$1,499 launch. |
+| **Stage 3** | November 10, 2026 (CMMC Phase 2 enforcement day) | $25K–$50K MRR target, 25–60 logos, SOC 2 Type I complete, AWS GovCloud option in beta. |
+
+**Lead product:** $499 one-time CMMC AI Risk Assessment Report.
+**Channel (primary):** RPOs + CMMC-focused MSPs (NEVER C3PAOs — legally prohibited).
+**Buyer sequence:** Rachel (healthcare, 30–90 days) → Jordan (defense, 90–180 days) → Marcus (legal, 45–90 days).
+**Kill criteria (Sept 1, 2026):** Shut down or pivot if ANY TWO are true — (<5 paid customers) AND (no signed channel partner) AND (CMMC Phase 2 extended ≥6 months).
+
+---
+
+## Historical playbook (Kaelus era — DO NOT EXECUTE)
 
 **Written for:** A founder who built the product but knows nothing about the defense contracting ecosystem.
 **Goal:** First paying customer in 14 days. $10K MRR in 6 months. YC application with traction.

@@ -15,25 +15,28 @@ const QUICK_ACTIONS = [
 ];
 
 const HOUNDSHIELD_SYSTEM =
-  "You are Brain AI, the intelligent compliance assistant embedded in Hound Shield. " +
-  "You are a senior expert in CMMC Level 2, NIST 800-171 Rev 2, SPRS scoring, HIPAA PHI, SOC 2 Type II, CUI detection, and AI security. " +
+  "You are Brain AI, the public information assistant embedded in HoundShield. " +
+  "You answer general questions about CMMC Level 2, NIST 800-171 Rev 2, SPRS scoring, HIPAA PHI, SOC 2, CUI detection categories, and the HoundShield product. " +
+  "CRITICAL DATA BOUNDARY: This chat routes through a commercial cloud LLM endpoint (OpenRouter). It is NOT FedRAMP-authorized and is NOT a CUI-safe channel. " +
+  "If a user pastes anything resembling CUI, PHI, PII, contract numbers, CAGE codes, source code, API keys, or any sensitive data, immediately decline to process it and reply: 'That looks like sensitive data. This chat is not a CUI-safe channel — it routes through a commercial cloud LLM. Please remove the sensitive content and rephrase as a general question. For actual scanning, use the HoundShield proxy in Mode B (Docker, customer-hosted).' " +
   "Keep answers under 200 words. Use bullet points for lists. Be warm, precise, and focused on compliance value. " +
   "PRODUCT FACTS: " +
-  "Hound Shield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning for 16 risk categories in under 10ms. " +
-  "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously. 800+ models via OpenRouter. " +
-  "INSTALLATION: Change baseURL to gateway.houndshield.com/v1 — works with any OpenAI-compatible SDK. 15 minutes. No agents. No network changes. " +
-  "PRICING: Starter FREE (1K scans/mo), Pro $199/mo (50K scans, SOC2+HIPAA), Growth $499/mo (CMMC+SIEM+PDF reports), Enterprise $999/mo (blockchain+SSO), Agency $2499/mo (multi-tenant). " +
-  "CMMC FACTS: 110 NIST 800-171 controls, SPRS score -203 to +110, November 2026 enforcement, C3PAO costs $30K-$150K. " +
-  "DETECTION: CUI (FOUO, CAGE codes, contract numbers), PHI (all 18 HIPAA identifiers), PII, API keys, source code, financial data, IP, ITAR/EAR. " +
-  "INTEGRATIONS: Slack, Microsoft Teams, Splunk HEC, Azure Sentinel (Hound ShieldCompliance_CL), Base L2 blockchain audit trail, MCP server (early access). " +
-  "STACK: Next.js 15, React 19, Supabase, Stripe, Tailwind. Self-host via Docker. " +
-  "If asked about defense contractors: emphasize November 2026 CMMC enforcement and that 80000+ contractors need this. " +
-  "If asked about AI agent frameworks (Goose, AgentScope, Claude Code, Cursor): explain Hound Shield works as a gateway for those too. " +
+  "HoundShield is an OpenAI-compatible compliance proxy that intercepts AI prompts before they reach ChatGPT/Copilot/Claude/Gemini, scanning for 16 risk categories in under 10ms. " +
+  "Three deployment modes: Mode A — proxy.houndshield.com on Vercel, NOT FedRAMP, demo/non-CUI only; Mode B — self-hosted Docker on customer infrastructure, CUI-safe, required for any defense workload; Mode C — air-gapped, for Enterprise/IL-5+. " +
+  "Never claim the hosted Mode A endpoint is CUI-safe. " +
+  "LEAD PRODUCT: $499 one-time CMMC AI Risk Assessment Report — 14-day proxy deployment in the customer's environment, SHA-256-signed PDF mapped to NIST 800-171 controls. Bypasses procurement. " +
+  "RPO/MSP CO-BRAND: $299 wholesale, 40-50 percent revenue share. " +
+  "SUBSCRIPTION (available July 2026): $299 Starter, $799 Pro, $1,499 Enterprise per month. Annual discount 17 percent. 30-day money-back. " +
+  "CMMC FACTS: 110 NIST 800-171 Rev 2 controls, SPRS score -203 to +110, November 10 2026 Phase 2 enforcement (date may slip), 76,598 DIB contractors need Level 2, ~1,042 certified as of Feb 2026. C3PAO assessment costs $30K-$150K. " +
+  "DETECTION CATEGORIES (do not echo customer data, only describe what is detected): CUI (FOUO, CAGE codes, contract numbers), PHI (all 18 HIPAA identifiers), PII, API keys, source code, financial data, IP, ITAR/EAR. " +
+  "INSTALLATION: Change baseURL to the customer's HoundShield proxy URL (Mode B Docker default: http://localhost:8080/v1). Works with any OpenAI-compatible SDK. 15 minutes. " +
+  "CHANNEL: HoundShield works with RPOs (Registered Practitioner Organizations) and CMMC-focused MSPs. Never C3PAOs — they are legally prohibited from product endorsement under 32 CFR Part 170. " +
+  "If asked about AI agent frameworks (Goose, AgentScope, Claude Code, Cursor): explain HoundShield works as a gateway for those too. " +
   "If asked about model costs/optimization: recommend model routing (Haiku for simple tasks, Sonnet for daily work, Opus for complex decisions). " +
   "Contact: info@houndshield.com. Docs: houndshield.com/docs.";
 
 const GREETING =
-  "Hi! I'm **Brain AI** — Hound Shield's CMMC compliance assistant.\n\nI can answer instantly (no LLM needed) about:\n\n- **CMMC Level 2** controls, SPRS scoring, C3PAO assessment\n- **CUI / PHI / PII** detection — what we block and why\n- **HIPAA** Safe Harbor identifiers\n- **SOC 2** Trust Services criteria\n- **Installation** — the one-URL change\n- **Pricing** and deployment modes\n\nTry a quick action below, or just ask.";
+  "Hi — I'm **Brain AI**, HoundShield's public information assistant.\n\nI can answer general questions about:\n\n- **CMMC Level 2** controls, SPRS scoring, NIST 800-171 Rev 2\n- **CUI / PHI / PII** detection — what we look for and why\n- **HIPAA** Safe Harbor identifiers\n- **Three deployment modes** — Mode A trial, Mode B Docker (CUI-safe), Mode C air-gapped\n- Our **$499 CMMC AI Risk Report** and Stage 2 subscription tiers\n\n⚠️ **Important:** this chat routes through a commercial cloud LLM. Do not paste CUI, PHI, contract numbers, CAGE codes, or any sensitive data here. For actual prompt scanning, use the HoundShield proxy in Mode B.\n\nTry a quick action below, or just ask.";
 
 type Message = { role: "user" | "bot"; text: string };
 
@@ -51,6 +54,8 @@ function TypingDots() {
   );
 }
 
+const CONSENT_KEY = "houndshield.brain-ai.cui-consent.v1";
+
 export function GlobalChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -58,8 +63,21 @@ export function GlobalChat() {
   const [isTyping, setIsTyping] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
   const [hasGreeted, setHasGreeted] = useState(false);
+  const [consentGiven, setConsentGiven] = useState(false);
+  const [showConsentModal, setShowConsentModal] = useState(false);
   const msgsRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  // Hydrate consent from localStorage. SSR-safe: only runs in browser.
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined" && window.localStorage.getItem(CONSENT_KEY) === "true") {
+        setConsentGiven(true);
+      }
+    } catch {
+      // localStorage may be disabled (private mode, embedded contexts) — treat as no consent.
+    }
+  }, []);
 
   useEffect(() => {
     if (msgsRef.current) {
@@ -67,7 +85,34 @@ export function GlobalChat() {
     }
   }, [messages, isTyping]);
 
+  const grantConsent = () => {
+    try {
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(CONSENT_KEY, "true");
+      }
+    } catch {
+      // localStorage may be disabled — consent still grants for this session.
+    }
+    setConsentGiven(true);
+    setShowConsentModal(false);
+    setIsOpen(true);
+    if (!hasGreeted) {
+      setHasGreeted(true);
+      setMessages([{ role: "bot", text: GREETING }]);
+    }
+  };
+
+  const declineConsent = () => {
+    setShowConsentModal(false);
+  };
+
   const handleOpen = () => {
+    // Gate: first-time users must acknowledge the CUI warning before the chat can open.
+    // Required by HERMES doctrine — Brain AI routes through a commercial LLM and is NOT CUI-safe.
+    if (!consentGiven) {
+      setShowConsentModal(true);
+      return;
+    }
     const opening = !isOpen;
     setIsOpen(opening);
     if (opening && !hasGreeted) {
@@ -210,6 +255,68 @@ export function GlobalChat() {
 
   return (
     <>
+      {/* CUI Consent Modal — gates Brain AI behind explicit acknowledgement that this is NOT a CUI-safe channel. */}
+      {showConsentModal && (
+        <div
+          className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cui-consent-title"
+        >
+          <div
+            className="max-w-md w-full rounded-2xl overflow-hidden"
+            style={{
+              background: "#0e0e18",
+              border: "1px solid rgba(239,68,68,0.4)",
+              boxShadow: "0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px rgba(239,68,68,0.15)",
+            }}
+          >
+            <div className="px-5 py-4 border-b border-white/[0.08] bg-red-500/[0.08]">
+              <h2 id="cui-consent-title" className="text-base font-bold text-white flex items-center gap-2">
+                <span className="text-red-400" aria-hidden="true">⚠</span>
+                Brain AI is NOT a CUI-safe channel
+              </h2>
+            </div>
+            <div className="px-5 py-4 text-[13px] leading-relaxed text-white/85 space-y-3">
+              <p>
+                This chat routes through a commercial cloud LLM endpoint (OpenRouter) that is{" "}
+                <strong className="text-white">not FedRAMP-authorized</strong>.
+              </p>
+              <p className="text-white/70">
+                <strong className="text-white/90">Do not paste:</strong> Controlled Unclassified
+                Information (CUI), Protected Health Information (PHI), contract numbers, CAGE
+                codes, source code, API keys, or any sensitive data.
+              </p>
+              <p className="text-white/70">
+                Brain AI answers general questions about CMMC, HIPAA, and HoundShield product
+                facts. For actual prompt scanning of sensitive data, deploy the HoundShield proxy
+                in <strong className="text-white/90">Mode B (Docker, self-hosted)</strong>.
+              </p>
+              <p className="text-[11px] text-white/40">
+                CMMC reference: pasting CUI into a commercial cloud LLM is a reportable spillage
+                event under DFARS 252.204-7012 and NIST 800-171 SC.3.177.
+              </p>
+            </div>
+            <div className="flex gap-2 px-5 py-4 border-t border-white/[0.08] bg-white/[0.02]">
+              <button
+                type="button"
+                onClick={declineConsent}
+                className="flex-1 px-4 py-2.5 rounded-lg text-[13px] text-white/70 hover:text-white border border-white/[0.1] hover:border-white/[0.2] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={grantConsent}
+                className="flex-1 px-4 py-2.5 rounded-lg text-[13px] font-semibold text-white bg-indigo-500 hover:bg-indigo-400 transition-colors"
+              >
+                I understand — open chat
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Trigger Button */}
       <button
         onClick={handleOpen}
@@ -267,6 +374,15 @@ export function GlobalChat() {
             >
               <X className="w-4 h-4" />
             </button>
+          </div>
+
+          {/* Persistent CUI warning banner — visible above every message exchange. */}
+          <div
+            className="px-3.5 py-2 border-b border-red-500/20 bg-red-500/[0.06] text-[11px] leading-snug text-red-300/90"
+            role="status"
+          >
+            <span className="font-semibold text-red-300">Do not paste CUI/PHI.</span>{" "}
+            Routes through a commercial LLM — not a CUI-safe channel.
           </div>
 
           {/* Messages */}
