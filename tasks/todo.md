@@ -34,10 +34,14 @@
 - [ ] Add report cover branding: "CMMC AI Risk Assessment Report — Mode B (Customer-Hosted Docker)"
 
 ### Blockers (manual — user owns)
-- [ ] Set `OPENROUTER_API_KEY` in Vercel
-- [ ] Set `STRIPE_WEBHOOK_SECRET` in Vercel
+- [x] Set `OPENROUTER_API_KEY` in Vercel — verified 2026-05-26 (updated 2 days ago, Production+Preview)
+- [x] Set `STRIPE_WEBHOOK_SECRET` in Vercel — verified 2026-05-26 (updated 2026-05-13, Production+Preview)
 - [x] Push Supabase migrations to production — 010 (RLS fix + AI observability) + 011 (partner portal) applied 2026-05-13
 - [ ] Fix CI: export `KGCategory` / `SEED_KNOWLEDGE_GRAPH` from `lib/brain-ai/knowledge-graph.ts`
+- [ ] **CRITICAL — production gap** Add `NEXT_PUBLIC_SUPABASE_ANON_KEY` to Vercel (same value as `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`). 9 code locations still reference the old name: `middleware.ts`, `app/auth/callback/route.ts`, `app/forgot-password/page.tsx`, `app/api/models/leaderboard/route.ts`, `app/api/observability/{bad-answers,feedback}/route.ts`, `lib/env.ts`, `lib/brain-ai/setup.ts` (2). Without the alias, auth + observability routes silently use empty string → server-side rejected requests in prod.
+- [ ] Audit Vercel: delete orphan env var `Webhook_Signing_Secret` (0 code refs; superseded by `STRIPE_WEBHOOK_SECRET`)
+- [ ] Follow-up PR: rename all 9 `NEXT_PUBLIC_SUPABASE_ANON_KEY` references to `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Supabase deprecated the `anon` naming in 2024)
+- [ ] **Tag `proxy-v0.1.0`** to fire GHCR publish workflow (the last Stage 0 deferred item — without it, Mode B is documented but the image is unsigned and unpushed)
 
 ---
 
