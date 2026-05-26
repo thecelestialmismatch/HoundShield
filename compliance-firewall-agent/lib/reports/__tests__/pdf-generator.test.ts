@@ -1,29 +1,29 @@
 import { generateCompliancePDF, type ReportData, type BlockEventEvidence } from "../pdf-generator";
 
 // jsPDF uses browser APIs. Provide minimal stubs for Node.js test environment.
-jest.mock("jspdf", () => {
+vi.mock("jspdf", () => {
   const mockDoc = {
-    setFillColor: jest.fn().mockReturnThis(),
-    setTextColor: jest.fn().mockReturnThis(),
-    setFontSize: jest.fn().mockReturnThis(),
-    setFont: jest.fn().mockReturnThis(),
-    setDrawColor: jest.fn().mockReturnThis(),
-    rect: jest.fn().mockReturnThis(),
-    roundedRect: jest.fn().mockReturnThis(),
-    line: jest.fn().mockReturnThis(),
-    text: jest.fn().mockReturnThis(),
-    addPage: jest.fn().mockReturnThis(),
-    setPage: jest.fn().mockReturnThis(),
-    splitTextToSize: jest.fn().mockReturnValue(["line1", "line2"]),
-    getNumberOfPages: jest.fn().mockReturnValue(5),
-    output: jest.fn().mockReturnValue(new ArrayBuffer(1024)),
-    internal: { getNumberOfPages: jest.fn().mockReturnValue(5) },
+    setFillColor: vi.fn().mockReturnThis(),
+    setTextColor: vi.fn().mockReturnThis(),
+    setFontSize: vi.fn().mockReturnThis(),
+    setFont: vi.fn().mockReturnThis(),
+    setDrawColor: vi.fn().mockReturnThis(),
+    rect: vi.fn().mockReturnThis(),
+    roundedRect: vi.fn().mockReturnThis(),
+    line: vi.fn().mockReturnThis(),
+    text: vi.fn().mockReturnThis(),
+    addPage: vi.fn().mockReturnThis(),
+    setPage: vi.fn().mockReturnThis(),
+    splitTextToSize: vi.fn().mockReturnValue(["line1", "line2"]),
+    getNumberOfPages: vi.fn().mockReturnValue(5),
+    output: vi.fn().mockReturnValue(new ArrayBuffer(1024)),
+    internal: { getNumberOfPages: vi.fn().mockReturnValue(5) },
     lastAutoTable: { finalY: 100 },
   };
-  return { jsPDF: jest.fn(() => mockDoc) };
+  return { jsPDF: vi.fn(function () { return mockDoc; }) };
 });
 
-jest.mock("jspdf-autotable", () => jest.fn());
+vi.mock("jspdf-autotable", () => ({ default: vi.fn() }));
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 

@@ -18,6 +18,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY tsconfig.json ./
 COPY *.ts ./
 COPY patterns/ ./patterns/
+COPY ooda/ ./ooda/
 
 RUN npm install -D typescript@^5.8.3 tsx@^4.19.3 \
     && npx tsc \

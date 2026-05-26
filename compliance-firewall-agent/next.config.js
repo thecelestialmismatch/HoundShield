@@ -5,6 +5,9 @@ const nextConfig = {
   // Required for Docker standalone build
   output: "standalone",
 
+  // Silence "inferred workspace root" warning — explicit root anchors file tracing
+  outputFileTracingRoot: require("path").join(__dirname, "../"),
+
   // Dev server origins (allow all local access)
   allowedDevOrigins: [
     "http://127.0.0.1:3000",
