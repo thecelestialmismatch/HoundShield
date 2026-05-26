@@ -1,912 +1,422 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
-import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/Navbar";
-import { TextLogo } from "@/components/TextLogo";
 import {
-  Shield,
+  FileCheck,
   ArrowRight,
   Check,
-  ChevronDown,
-  Zap,
-  Crown,
-  Building2,
-  ShieldCheck,
-  BadgeCheck,
-  Clock,
+  Server,
+  HandshakeIcon,
+  Calendar,
   Users,
-  Lock,
-  Star,
-  Minus,
+  Shield,
+  AlertTriangle,
 } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { TextLogo } from "@/components/TextLogo";
 
-/* ===== PRICING DATA ===== */
-const plans = [
+export const metadata: Metadata = {
+  title: "Pricing — HoundShield",
+  description:
+    "Lead product: $499 one-time CMMC AI Risk Assessment Report. Stage 2 subscription tiers ($299/$799/$1,499) available July 2026. RPO/MSP co-brand at $299 wholesale.",
+  alternates: { canonical: "https://houndshield.com/pricing" },
+};
+
+type Stage2Tier = {
+  name: string;
+  monthly: number;
+  description: string;
+  features: string[];
+  highlighted: boolean;
+};
+
+const stage2: Stage2Tier[] = [
   {
-    id: "free",
     name: "Starter",
-    icon: Zap,
-    iconColor: "text-emerald-400",
-    iconBg: "bg-emerald-500/10 border-emerald-500/20",
-    monthlyPrice: 0,
-    annualPrice: 0,
-    annualTotal: 0,
-    description: "7-day free trial — no credit card required. Explore CMMC tools and see your SPRS score.",
+    monthly: 299,
+    description: "Quarterly gap report + basic monitoring for a single tenant.",
     features: [
-      "Hound Shield CMMC assessment (read-only)",
-      "110-control gap analysis",
-      "Live SPRS score calculator",
-      "Basic compliance dashboard",
-      "Community support",
-      "No AI gateway access",
-    ],
-    cta: "Start 7-Day Trial",
-    ctaStyle: "btn-ghost",
-    highlighted: false,
-    badge: null,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    icon: Crown,
-    iconColor: "text-brand-400",
-    iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 199,
-    annualPrice: 1910,
-    annualTotal: 1910,
-    description: "AI gateway + full CMMC compliance suite for defense contractors.",
-    features: [
-      "AI gateway — 50,000 scans/mo",
-      "Hound Shield assessment (editable)",
+      "Quarterly $499 gap report credit",
+      "Mode B (Docker) deployment, single org",
       "10 user seats",
-      "Gap analysis + remediation roadmap",
-      "JSON compliance reports",
-      "SSP & policy document generation",
-      "Email & Slack alerts",
-      "Priority support (< 4hr SLA)",
+      "Basic dashboard + 30-day log retention",
+      "Email alerts on violations",
+      "Email support (next business day)",
+    ],
+    highlighted: false,
+  },
+  {
+    name: "Pro",
+    monthly: 799,
+    description: "Continuous detection, Slack alerts, C3PAO-ready PDF on demand.",
+    features: [
+      "Everything in Starter",
+      "Continuous prompt scanning (Mode B)",
+      "50 user seats",
+      "Slack + email alert routing",
+      "C3PAO-ready PDF report — generate any time",
       "90-day log retention",
-      "API access",
+      "Priority support (4-hour SLA)",
+      "SIEM connector (Splunk HEC or Azure Sentinel)",
     ],
-    cta: "Start 7-Day Trial",
-    ctaStyle: "btn-primary",
     highlighted: true,
-    badge: "Most Popular",
   },
   {
-    id: "growth",
-    name: "Growth",
-    icon: ShieldCheck,
-    iconColor: "text-purple-400",
-    iconBg: "bg-purple-500/10 border-purple-500/20",
-    monthlyPrice: 499,
-    annualPrice: 4790,
-    annualTotal: 4790,
-    description: "Unlimited scans, PDF reports, and C3PAO coordination for growing primes.",
-    features: [
-      "AI gateway — unlimited scans",
-      "Everything in Pro",
-      "25 user seats",
-      "PDF compliance reports",
-      "C3PAO assessment coordination",
-      "Audit trail export",
-      "SSO & RBAC",
-      "Dedicated onboarding",
-      "Custom SLA (99.9%)",
-    ],
-    cta: "Start 7-Day Trial",
-    ctaStyle: "btn-ghost",
-    highlighted: false,
-    badge: null,
-  },
-  {
-    id: "enterprise",
     name: "Enterprise",
-    icon: Building2,
-    iconColor: "text-amber-400",
-    iconBg: "bg-amber-500/10 border-amber-500/20",
-    monthlyPrice: 999,
-    annualPrice: 9590,
-    annualTotal: 9590,
-    description: "On-prem deployment, unlimited seats, and air-gapped support for large primes.",
+    monthly: 1499,
+    description: "Mode B/C deployment support, dedicated CSM, air-gapped option.",
     features: [
-      "Everything in Growth",
+      "Everything in Pro",
+      "Mode C (air-gapped) deployment support",
       "Unlimited user seats",
-      "PDF reports (white-labeled)",
-      "On-prem / air-gapped deployment",
-      "Custom SLA (99.99%)",
-      "Dedicated account manager",
-      "HITL quarantine review",
-      "Custom detection rules",
+      "Dedicated Customer Success Manager",
+      "1-year log retention",
+      "Custom NIST 800-171 control mapping review",
+      "Quarterly compliance posture review",
+      "SOC 2 Type I report (when complete)",
     ],
-    cta: "Contact Sales",
-    ctaStyle: "btn-ghost",
     highlighted: false,
-    badge: null,
-  },
-  {
-    id: "agency",
-    name: "Agency / MSP",
-    icon: Users,
-    iconColor: "text-brand-400",
-    iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 2499,
-    annualPrice: 23990,
-    annualTotal: 23990,
-    description: "Multi-tenant platform for consultants managing multiple defense contractors.",
-    features: [
-      "Everything in Enterprise",
-      "Multi-tenant dashboard",
-      "White-label compliance reports",
-      "Unlimited client accounts",
-      "Bulk compliance reporting",
-      "Partner API access",
-      "Revenue-share program",
-      "Dedicated success manager",
-      "SLA guarantee (99.99%)",
-    ],
-    cta: "Contact Sales",
-    ctaStyle: "btn-ghost",
-    highlighted: false,
-    badge: "For Consultants",
   },
 ];
 
-/* ===== COMPARISON TABLE DATA ===== */
-type FeatureValue = boolean | string;
-interface ComparisonRow {
-  feature: string;
-  free: FeatureValue;
-  pro: FeatureValue;
-  growth: FeatureValue;
-  enterprise: FeatureValue;
-  agency: FeatureValue;
-  category: string;
-}
-
-const comparisonFeatures: ComparisonRow[] = [
-  // AI Gateway
-  { feature: "Monthly API scans", free: "None", pro: "50K", growth: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "AI Gateway" },
-  { feature: "Detection patterns", free: false, pro: "16", growth: "16", enterprise: "16+ Custom", agency: "16+ Custom", category: "AI Gateway" },
-  { feature: "Real-time threat feed", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "Custom detection rules", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "AI Gateway" },
-  { feature: "HITL quarantine review", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "AI Gateway" },
-  // CMMC & Compliance
-  { feature: "CMMC self-assessment", free: "Read-only", pro: true, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SPRS score calculator", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Gap analysis & remediation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "JSON compliance reports", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "PDF compliance reports", free: false, pro: false, growth: true, enterprise: true, agency: "White-label", category: "CMMC & Compliance" },
-  { feature: "SSP document generation", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "Audit trail export", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  { feature: "C3PAO coordination", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "CMMC & Compliance" },
-  // Platform & Integrations
-  { feature: "Dashboard access", free: "Basic", pro: "Full", growth: "Full", enterprise: "Full", agency: "Multi-tenant", category: "Platform & Integrations" },
-  { feature: "Log retention", free: "7 days", pro: "90 days", growth: "Unlimited", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Team seats", free: "1", pro: "10", growth: "25", enterprise: "Unlimited", agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Client accounts", free: false, pro: false, growth: false, enterprise: false, agency: "Unlimited", category: "Platform & Integrations" },
-  { feature: "Slack & webhook alerts", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "API access", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "SSO & RBAC", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Platform & Integrations" },
-  { feature: "White-label reports", free: false, pro: false, growth: false, enterprise: false, agency: true, category: "Platform & Integrations" },
-  { feature: "On-prem / air-gapped", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Platform & Integrations" },
-  // Support
-  { feature: "Community support", free: true, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Priority support (< 4hr)", free: false, pro: true, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated onboarding", free: false, pro: false, growth: true, enterprise: true, agency: true, category: "Support" },
-  { feature: "Dedicated account manager", free: false, pro: false, growth: false, enterprise: true, agency: true, category: "Support" },
-  { feature: "SLA guarantee", free: false, pro: false, growth: "99.9%", enterprise: "99.99%", agency: "99.99%", category: "Support" },
-];
-
-/* ===== FAQ DATA ===== */
-const faqData = [
-  {
-    q: "What's included in the 7-day free trial?",
-    a: "Full access to the Starter tier — CMMC self-assessment, 110-control gap analysis, live SPRS calculator, and basic compliance dashboard. No credit card required. After 7 days, choose a paid plan to keep your data and continue scanning.",
-  },
-  {
-    q: "What happens when the free trial ends?",
-    a: "After 7 days, your account is paused until you select a paid plan. Your assessment data and scores are saved. Upgrade to Pro for unlimited scans, AI gateway access, and PDF compliance reports. We'll remind you by email before the trial expires.",
-  },
-  {
-    q: "Can I switch between monthly and annual billing?",
-    a: "Yes. You can switch from monthly to annual billing at any time and the savings (20% off) apply immediately. If you switch from annual to monthly, the change takes effect at the end of your current annual period. No penalties or hidden fees.",
-  },
-  {
-    q: "What's included in the 7-day Pro trial?",
-    a: "Full access to every Pro feature: unlimited scans, 16 detection patterns, encrypted quarantine, CFO-ready reports, Slack/webhook integrations, and priority support. No credit card required. If you don't upgrade after 7 days, you automatically move to the Starter plan.",
-  },
-  {
-    q: "How does self-hosted deployment work on Enterprise?",
-    a: "We provide Docker images and Kubernetes manifests (Helm charts) for on-premise deployment. Your data never leaves your infrastructure. Our team assists with setup, configuration, and ongoing maintenance. We also support air-gapped environments.",
-  },
-  {
-    q: "Do you offer discounts for startups or nonprofits?",
-    a: "Yes. We offer 50% off Pro plans for verified startups (under $5M funding, under 50 employees) and nonprofits. Contact our sales team with proof of eligibility. Educational institutions also qualify for special pricing.",
-  },
-  {
-    q: "What payment methods do you accept?",
-    a: "We accept all major credit cards (Visa, Mastercard, American Express), ACH bank transfers, and wire transfers for annual Enterprise contracts. All payments are processed securely through Stripe. We also support purchase orders for Enterprise customers.",
-  },
-  {
-    q: "Is there a money-back guarantee?",
-    a: "Yes. All paid plans include a 30-day money-back guarantee. If you're not completely satisfied within the first 30 days, contact us for a full refund, no questions asked. We're confident you'll see the value within the first week.",
-  },
-];
-
-/* ===== INTERSECTION OBSERVER HOOK ===== */
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setInView(true);
-      },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, inView };
-}
-
-/* ===== ANIMATED SECTION ===== */
-function AnimatedSection({
-  children,
-  className = "",
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) {
-  const { ref, inView } = useInView(0.1);
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ease-out ${className} ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
-}
-
-/* ===== FAQ ITEM ===== */
-function FAQItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="border border-white/[0.06] rounded-xl overflow-hidden hover:border-white/[0.1] transition-colors">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-5 text-left"
-      >
-        <span className="text-sm font-medium text-slate-200 pr-4">{q}</span>
-        <ChevronDown
-          className={`w-4 h-4 text-slate-500 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
-            }`}
-        />
-      </button>
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${open ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-          }`}
-      >
-        <div className="px-5 pb-5 -mt-1">
-          <p className="text-sm text-slate-400 leading-relaxed">{a}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ===== MAIN PAGE ===== */
 export default function PricingPage() {
-  const [isAnnual, setIsAnnual] = useState(true);
-  const [loading, setLoading] = useState<string | null>(null);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const router = useRouter();
-
-  async function handleCheckout(tier: string, billing: "monthly" | "annual") {
-    if (tier === "free") {
-      router.push("/signup");
-      return;
-    }
-    if (tier === "agency" || tier === "enterprise") {
-      window.location.href = "#contact";
-      return;
-    }
-
-    setCheckoutError(null);
-    try {
-      setLoading(tier);
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier, billing }),
-      });
-
-      if (res.status === 401) {
-        router.push("/login?redirect=/pricing");
-        return;
-      }
-
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setCheckoutError(data.error || "Checkout failed. Please try again.");
-      }
-    } catch {
-      setCheckoutError("Network error. Please check your connection and try again.");
-    } finally {
-      setLoading(null);
-    }
-  }
-
-  const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
-
   return (
-    <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
-      <ScrollProgressBar />
-      {/* ===== FLOATING ORBS ===== */}
-      <div className="orb orb-1" />
-      <div className="orb orb-2" />
-      <div className="orb orb-3" />
-
-      {/* ===== NAV ===== */}
+    <div className="min-h-screen bg-[#07070b] text-white">
       <Navbar variant="dark" />
 
-      {/* ===== CHECKOUT ERROR BANNER ===== */}
-      {checkoutError && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-5 py-3 rounded-xl backdrop-blur-sm shadow-lg">
-          <span>{checkoutError}</span>
-          <button onClick={() => setCheckoutError(null)} className="text-red-400/60 hover:text-red-400 ml-2">&#10005;</button>
-        </div>
-      )}
-
-      {/* ===== HERO ===== */}
-      <section className="relative pt-32 pb-16 px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-dot-grid animate-grid-fade" />
-        <div className="absolute inset-0 bg-hero-glow" />
-
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <AnimatedSection>
-            <h1 className="text-display-sm md:text-display lg:text-display-lg mb-6">
-              Simple,{" "}
-              <span className="text-gradient-brand">Transparent</span>{" "}
-              Pricing
-            </h1>
-          </AnimatedSection>
-
-          <AnimatedSection delay={200}>
-            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Protect your enterprise from AI data leaks without the enterprise
-              pricing headache. Start free, scale when you&apos;re ready.
-            </p>
-          </AnimatedSection>
-
-          {/* ===== BILLING TOGGLE ===== */}
-          <AnimatedSection delay={300}>
-            <div className="inline-flex items-center gap-4 p-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
-              <button
-                onClick={() => setIsAnnual(false)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!isAnnual
-                    ? "bg-brand-500 text-white "
-                    : "text-slate-400 hover:text-slate-300"
-                  }`}
-              >
-                Monthly
-              </button>
-              <button
-                onClick={() => setIsAnnual(true)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${isAnnual
-                    ? "bg-brand-500 text-white "
-                    : "text-slate-400 hover:text-slate-300"
-                  }`}
-              >
-                Annual
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
-                  Save 20%
-                </span>
-              </button>
-            </div>
-          </AnimatedSection>
+      {/* Hero — $499 one-time, the actual lead product */}
+      <section className="px-6 pt-24 pb-12 text-center">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-3">
+            Stage 1 — Lead Product
+          </p>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-5 leading-[1.05]">
+            $499. One-time. C3PAO-ready PDF in two weeks.
+          </h1>
+          <p className="text-lg text-slate-300 leading-relaxed mb-8 max-w-2xl mx-auto">
+            Deploy the HoundShield proxy in Mode B (Docker) inside your environment for 14 days.
+            Receive a SHA-256-signed PDF showing every AI prompt event risk-scored against the
+            110 NIST 800-171 Rev 2 controls. No subscription. No MSA. Bypasses procurement.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4">
+            <Link
+              href="/contact?intent=gap-report"
+              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors cursor-pointer"
+            >
+              Order the $499 Gap Report <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/security"
+              className="inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors"
+            >
+              Review the data-path first <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <p className="text-xs text-slate-500 font-mono">
+            14-day deployment &nbsp;·&nbsp; Mode B (Docker, your infrastructure) &nbsp;·&nbsp; 30-day money-back
+          </p>
         </div>
       </section>
 
-      {/* ===== PRICING CARDS ===== */}
-      <section className="relative px-6 pb-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6 pt-6">
-            {plans.map((plan, i) => {
-              const price =
-                plan.monthlyPrice === -1
-                  ? null
-                  : isAnnual
-                    ? plan.annualPrice
-                    : plan.monthlyPrice;
-              const Icon = plan.icon;
-
+      {/* What's in the report */}
+      <section className="px-6 py-12 border-t border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight text-center">
+            What you get for $499
+          </h2>
+          <p className="text-slate-400 mb-10 max-w-2xl mx-auto text-center">
+            RPOs charge $5K–$15K for the equivalent gap assessment. Same evidence, same control
+            mapping, fixed price, no proposals.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                icon: Server,
+                title: "Mode B deployment",
+                desc: "HoundShield Docker image runs inside your network. Prompt content never leaves your boundary.",
+              },
+              {
+                icon: Calendar,
+                title: "14-day observation",
+                desc: "Live scanning of every prompt your team sends to ChatGPT, Copilot, Claude, and Gemini.",
+              },
+              {
+                icon: FileCheck,
+                title: "Signed PDF",
+                desc: "Every event mapped to NIST 800-171 Rev 2 controls. SHA-256 hash chain you can verify offline.",
+              },
+              {
+                icon: Shield,
+                title: "Hand-off ready",
+                desc: "Send the PDF directly to your assessor or compliance officer. No editing required.",
+              },
+            ].map((item) => {
+              const Icon = item.icon;
               return (
-                <AnimatedSection key={plan.id} delay={i * 150}>
-                  <div
-                    className={`relative h-full flex flex-col rounded-2xl transition-all duration-300 ${plan.highlighted
-                        ? "scale-[1.02] md:scale-105"
-                        : "hover:scale-[1.02]"
-                      }`}
-                  >
-                    {/* Gradient border for highlighted card */}
-                    {plan.highlighted && (
-                      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-brand-400 via-brand-500/50 to-purple-500/30 opacity-100" />
-                    )}
-
-                    {/* Badge */}
-                    {plan.badge && (
-                      <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-white text-xs font-semibold">
-                          <Star className="w-3 h-3" />
-                          {plan.badge}
-                        </div>
-                      </div>
-                    )}
-
-                    <div
-                      className={`relative h-full flex flex-col p-8 rounded-2xl ${plan.highlighted
-                          ? "bg-[#111111]"
-                          : "glass-card-glow"
-                        }`}
-                    >
-                      {/* Plan header */}
-                      <div className="flex items-center gap-3 mb-4">
-                        <div
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center border ${plan.iconBg}`}
-                        >
-                          <Icon className={`w-5 h-5 ${plan.iconColor}`} />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-white">
-                            {plan.name}
-                          </h3>
-                        </div>
-                      </div>
-
-                      {/* Price */}
-                      <div className="mb-4">
-                        {plan.id === 'free' ? (
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-white tracking-tight">Free</span>
-                            <span className="text-base font-normal text-slate-500 ml-1">7 days</span>
-                          </div>
-                        ) : (
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-white tracking-tight">
-                              ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
-                            </span>
-                            <span className="text-base font-normal text-slate-500 ml-1">
-                              {isAnnual ? "/yr" : "/mo"}
-                            </span>
-                          </div>
-                        )}
-                        <p className="text-xs text-slate-500 mt-1">
-                          {plan.id === 'free'
-                            ? 'No credit card required'
-                            : isAnnual && plan.annualPrice
-                              ? `~$${Math.round(plan.annualPrice / 12)}/mo · billed annually`
-                              : 'Billed monthly'}
-                        </p>
-                      </div>
-
-                      <p className="text-sm text-slate-500 leading-relaxed mb-6">
-                        {plan.description}
-                      </p>
-
-                      {/* CTA */}
-                      {plan.id === "free" ? (
-                        <Link
-                          href="/signup"
-                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""}`}
-                        >
-                          {plan.cta}
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      ) : plan.id === "agency" ? (
-                        <Link
-                          href="#contact"
-                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""}`}
-                        >
-                          {plan.cta}
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      ) : (
-                        <button
-                          onClick={() => handleCheckout(plan.id, isAnnual ? "annual" : "monthly")}
-                          disabled={loading === plan.id}
-                          className={`${plan.ctaStyle} w-full justify-center text-sm mb-8 ${plan.highlighted ? "py-3" : ""} ${loading === plan.id ? "opacity-60 pointer-events-none" : ""}`}
-                        >
-                          {loading === plan.id ? "Redirecting..." : plan.cta}
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-
-                      {/* Feature divider */}
-                      <div className="section-divider mb-6" />
-
-                      {/* Features */}
-                      <ul className="space-y-3 flex-1">
-                        {plan.features.map((feature, fi) => (
-                          <li
-                            key={fi}
-                            className="flex items-start gap-3 text-sm"
-                          >
-                            <Check
-                              className={`w-4 h-4 flex-shrink-0 mt-0.5 ${plan.highlighted
-                                  ? "text-brand-400"
-                                  : "text-emerald-400/70"
-                                }`}
-                            />
-                            <span className="text-slate-400">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                <div
+                  key={item.title}
+                  className="border border-white/[0.08] bg-white/[0.02] rounded-2xl p-5"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-400/30 flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5 text-brand-400" />
                   </div>
-                </AnimatedSection>
+                  <h3 className="text-sm font-semibold text-white mb-2">{item.title}</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+                </div>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* ===== MONEY-BACK GUARANTEE ===== */}
-      <section className="relative px-6 pb-24">
-        <AnimatedSection>
-          <div className="max-w-3xl mx-auto">
-            <div className="glass-card p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-8 h-8 text-emerald-400" />
+      {/* RPO/MSP co-brand */}
+      <section className="px-6 py-12 border-t border-white/[0.06] bg-[#0d0d14]">
+        <div className="max-w-4xl mx-auto">
+          <div className="border border-emerald-400/20 bg-emerald-500/[0.04] rounded-2xl p-8 sm:p-10">
+            <div className="flex items-start gap-4 mb-5">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-center flex-shrink-0">
+                <HandshakeIcon className="w-5 h-5 text-emerald-300" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  30-Day Money-Back Guarantee
-                </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">
-                  Try any paid plan risk-free. If you&apos;re not completely satisfied
-                  within the first 30 days, we&apos;ll refund every penny. No
-                  questions asked, no hoops to jump through. We&apos;re that
-                  confident you&apos;ll love Hound Shield.
+                <p className="text-xs uppercase tracking-[0.2em] text-emerald-300 font-semibold mb-1.5">
+                  RPO + MSP Channel
                 </p>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                  Co-brand the gap report. Keep 40–50% margin.
+                </h2>
               </div>
             </div>
+            <p className="text-slate-300 leading-relaxed mb-4">
+              Registered Practitioner Organizations and CMMC-focused MSPs can resell the $499 gap
+              report at <strong className="text-white">$299 wholesale</strong>. Your client receives
+              a PDF co-branded with your firm. We provision the proxy, you own the relationship.
+            </p>
+            <p className="text-sm text-slate-400 mb-6">
+              Not for C3PAOs — they are legally prohibited from product endorsement to clients they
+              assess (32 CFR Part 170, ISO 17020 cooling-off). This channel is RPOs + MSPs only.
+            </p>
+            <Link
+              href="/partners"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-300 hover:text-emerald-200 transition-colors"
+            >
+              Become a partner <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-        </AnimatedSection>
-      </section>
-
-      {/* ===== FEATURE COMPARISON TABLE ===== */}
-      <section className="relative px-6 pb-24">
-        <div className="max-w-6xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-16">
-              <h2 className="text-display-sm md:text-display mb-4">
-                Compare{" "}
-                <span className="text-gradient-brand">Every Feature</span>
-              </h2>
-              <p className="text-slate-400 max-w-xl mx-auto">
-                A detailed breakdown of what&apos;s included in each plan so you
-                can make the right choice for your team.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={150}>
-            <div className="glass-card overflow-x-auto">
-              {/* Table header */}
-              <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.06]">
-                <div className="p-5 text-sm font-medium text-slate-500">
-                  Feature
-                </div>
-                {([
-                  { name: "Starter", key: "free" },
-                  { name: "Pro", key: "pro" },
-                  { name: "Growth", key: "growth" },
-                  { name: "Enterprise", key: "enterprise" },
-                  { name: "Agency", key: "agency" },
-                ] as const).map((tier) => (
-                  <div
-                    key={tier.key}
-                    className={`p-5 text-center text-sm font-semibold ${tier.key === "pro"
-                        ? "text-brand-400 bg-brand-500/[0.04]"
-                        : "text-slate-400"
-                      }`}
-                  >
-                    {tier.name}
-                    {tier.key === "pro" && (
-                      <span className="ml-2 px-2 py-0.5 rounded-full bg-brand-500/15 text-brand-300 text-[10px] font-semibold">
-                        Popular
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Table body by category */}
-              {categories.map((category) => (
-                <div key={category}>
-                  {/* Category header */}
-                  <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.04] bg-white/[0.015]">
-                    <div className="col-span-6 p-4 px-5">
-                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
-                        {category}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Feature rows */}
-                  {comparisonFeatures
-                    .filter((f) => f.category === category)
-                    .map((row, ri) => (
-                      <div
-                        key={ri}
-                        className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
-                      >
-                        <div className="p-4 px-5 text-sm text-slate-400">
-                          {row.feature}
-                        </div>
-                        {(
-                          ["free", "pro", "growth", "enterprise", "agency"] as const
-                        ).map((planKey) => {
-                          const val = row[planKey];
-                          return (
-                            <div
-                              key={planKey}
-                              className={`p-4 text-center text-sm ${planKey === "pro" ? "bg-brand-500/[0.02]" : ""
-                                }`}
-                            >
-                              {typeof val === "boolean" ? (
-                                val ? (
-                                  <Check className="w-4 h-4 text-emerald-400 mx-auto" />
-                                ) : (
-                                  <Minus className="w-4 h-4 text-slate-700 mx-auto" />
-                                )
-                              ) : (
-                                <span
-                                  className={
-                                    planKey === "pro"
-                                      ? "text-brand-300 font-medium"
-                                      : "text-slate-400"
-                                  }
-                                >
-                                  {val}
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ))}
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
         </div>
       </section>
 
-      {/* ===== TRUSTED LOGOS / STATS BAR ===== */}
-      <section className="relative px-6 pb-24">
-        <AnimatedSection>
-          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Shield,
-                stat: "2M+",
-                label: "Scans processed",
-                color: "text-brand-400",
-              },
-              {
-                icon: Clock,
-                stat: "<50ms",
-                label: "Average latency",
-                color: "text-emerald-400",
-              },
-              {
-                icon: Lock,
-                stat: "99.99%",
-                label: "Uptime SLA",
-                color: "text-brand-400",
-              },
-              {
-                icon: Users,
-                stat: "500+",
-                label: "Teams protected",
-                color: "text-purple-400",
-              },
-            ].map((item, i) => (
+      {/* Stage 2 subscription tiers — clearly marked future */}
+      <section className="px-6 py-16 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="inline-block px-3 py-1 rounded-full border border-slate-500/40 bg-slate-500/10 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-300 mb-4">
+              Stage 2 — Available July 2026
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight">
+              Subscription tiers (after the gap report)
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              Continuous monitoring tiers launch in Stage 2 — after the lead $499 gap report has
+              proven value with the first cohort of paying customers. Reserve a slot below.
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-3 gap-5">
+            {stage2.map((tier) => (
               <div
-                key={i}
-                className="glass-card p-6 text-center"
+                key={tier.name}
+                className={`relative border rounded-2xl p-6 flex flex-col ${
+                  tier.highlighted
+                    ? "border-brand-400/40 bg-brand-500/[0.04]"
+                    : "border-white/[0.08] bg-white/[0.02]"
+                }`}
               >
-                <item.icon
-                  className={`w-5 h-5 ${item.color} mx-auto mb-3`}
-                />
-                <p className="text-2xl font-bold text-white mb-1">
-                  {item.stat}
+                {tier.highlighted && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-block px-3 py-1 rounded-full border border-brand-400/50 bg-brand-500/20 text-[10px] font-mono font-bold uppercase tracking-wider text-brand-300">
+                    Recommended
+                  </span>
+                )}
+                <h3 className="text-lg font-bold text-white mb-1">{tier.name}</h3>
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className="text-3xl font-bold font-mono text-white">
+                    ${tier.monthly}
+                  </span>
+                  <span className="text-sm text-slate-400">/ month</span>
+                </div>
+                <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                  {tier.description}
                 </p>
-                <p className="text-xs text-slate-500">{item.label}</p>
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {tier.features.map((feature) => (
+                    <li key={feature} className="flex gap-2 text-sm text-slate-300 leading-relaxed">
+                      <Check className="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={`/contact?intent=stage2-${tier.name.toLowerCase()}`}
+                  className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                    tier.highlighted
+                      ? "bg-brand-600 hover:bg-brand-700 text-white"
+                      : "border border-white/[0.12] hover:border-white/[0.24] text-white"
+                  }`}
+                >
+                  Reserve a slot <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             ))}
           </div>
-        </AnimatedSection>
-      </section>
-
-      {/* ===== FAQ ===== */}
-      <section className="relative px-6 pb-24">
-        <div className="max-w-3xl mx-auto">
-          <AnimatedSection>
-            <div className="text-center mb-12">
-              <h2 className="text-display-sm md:text-display mb-4">
-                Frequently Asked{" "}
-                <span className="text-gradient-brand">Questions</span>
-              </h2>
-              <p className="text-slate-400">
-                Everything you need to know about Hound Shield pricing and plans.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={100}>
-            <div className="space-y-3">
-              {faqData.map((item, i) => (
-                <FAQItem key={i} q={item.q} a={item.a} />
-              ))}
-            </div>
-          </AnimatedSection>
+          <p className="text-center text-xs text-slate-500 mt-6 font-mono">
+            Annual discount 17% &nbsp;·&nbsp; 30-day money-back &nbsp;·&nbsp; Cancel any time
+          </p>
         </div>
       </section>
 
-      {/* ===== BOTTOM CTA ===== */}
-      <section className="relative px-6 pb-24">
-        <AnimatedSection>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="glass-card-glow p-12 md:p-16 relative overflow-hidden">
-              {/* Background glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-500/8 via-transparent to-purple-500/5" />
-              <div className="absolute inset-0 bg-dot-grid opacity-30" />
-
-              <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-medium mb-6">
-                  <BadgeCheck className="w-3.5 h-3.5" />
-                  SOC 2 &middot; GDPR &middot; HIPAA &middot; EU AI Act
-                </div>
-
-                <h2 className="text-display-sm md:text-display mb-4">
-                  Ready to{" "}
-                  <span className="text-gradient-brand">
-                    Secure Your AI?
-                  </span>
-                </h2>
-                <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ teams that trust Hound Shield to protect their most
-                  sensitive data from unauthorized AI exposure. Deploy in
-                  under 15 minutes.
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Link href="/signup" className="btn-primary px-8 py-3">
-                    Start Free Trial
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <Link href="#contact" className="btn-ghost px-8 py-3">
-                    Talk to Sales
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-
-                <p className="text-xs text-slate-600 mt-6">
-                  No credit card required &middot; 14-day Pro trial &middot;
-                  Cancel anytime
-                </p>
-              </div>
+      {/* Audit Pack add-on */}
+      <section className="px-6 py-12 border-t border-white/[0.06] bg-[#0d0d14]">
+        <div className="max-w-3xl mx-auto">
+          <div className="border border-white/[0.08] bg-white/[0.03] rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-start">
+            <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-400/30 flex items-center justify-center flex-shrink-0">
+              <FileCheck className="w-5 h-5 text-brand-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-1.5">
+                Add-On
+              </p>
+              <h2 className="text-xl font-bold mb-2">Audit Pack — $999 one-time</h2>
+              <p className="text-sm text-slate-400 leading-relaxed mb-4">
+                SSP + POA&amp;M + 14 policy templates aligned to NIST 800-171 Rev 2, plus a
+                1-hour expert review with a CMMC-experienced compliance engineer. Pairs with
+                the $499 gap report to give your assessor the full documentation set.
+              </p>
+              <Link
+                href="/contact?intent=audit-pack"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-400 hover:text-brand-300 transition-colors"
+              >
+                Add to your gap report <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
-        </AnimatedSection>
+        </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/[0.06] py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <TextLogo variant="dark" />
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                AI-powered compliance firewall protecting enterprise data from
-                LLM leaks.
+      {/* Mode-A warning — at the bottom, hard to miss */}
+      <section className="px-6 py-12 border-t border-white/[0.06]">
+        <div className="max-w-3xl mx-auto">
+          <div className="border border-amber-400/30 bg-amber-500/[0.06] rounded-2xl p-6 flex gap-4 items-start">
+            <AlertTriangle className="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-amber-200/90 leading-relaxed">
+              <p className="font-semibold text-amber-200 mb-1">
+                Mode A trial is NOT for CUI, PHI, or contract data.
               </p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
-                Product
+              <p className="text-amber-200/80">
+                If you sign up for a free trial via the homepage, you receive a Mode A hosted
+                endpoint (<code className="font-mono text-xs">proxy.houndshield.com</code>) which
+                runs on Vercel and is NOT FedRAMP-authorized. The $499 gap report deploys the
+                proxy in Mode B (Docker) inside your environment — that&rsquo;s the CUI-safe path.
+                See{" "}
+                <Link href="/security" className="text-amber-200 underline hover:text-amber-100">
+                  the security page
+                </Link>{" "}
+                for the full data-flow statement.
               </p>
-              <div className="space-y-2.5">
-                <Link
-                  href="/#features"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Features
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Pricing
-                </Link>
-                <Link
-                  href="/command-center"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/#agents"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  AI Agents
-                </Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
-                Compliance
-              </p>
-              <div className="space-y-2.5">
-                <span className="block text-sm text-slate-500">SOC 2</span>
-                <span className="block text-sm text-slate-500">GDPR</span>
-                <span className="block text-sm text-slate-500">EU AI Act</span>
-                <span className="block text-sm text-slate-500">HIPAA</span>
-              </div>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">
-                Company
-              </p>
-              <div className="space-y-2.5">
-                <Link
-                  href="/docs"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Documentation
-                </Link>
-                <Link
-                  href="/signup"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="block text-sm text-slate-500 hover:text-slate-300 transition-colors"
-                >
-                  Get Started
-                </Link>
-              </div>
             </div>
           </div>
-          <div className="border-t border-white/[0.04] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-700">
-              &copy; 2026 Hound Shield — All rights reserved.
-            </p>
-            <div className="flex items-center gap-4 text-xs text-slate-600">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
-              <span>Security</span>
-            </div>
+        </div>
+      </section>
+
+      {/* FAQ — using native details/summary, zero client JS */}
+      <section className="px-6 py-16 border-t border-white/[0.06] bg-[#0d0d14]">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8 tracking-tight text-center">
+            Honest answers
+          </h2>
+          <div className="space-y-3">
+            {[
+              {
+                q: "Why $499 and not a subscription?",
+                a: "A $499 PO bypasses procurement in most organizations. A subscription requires MSA review. We want the path to first-paid customer to be as short as possible, and the gap report is genuinely useful evidence even if you never buy the subscription.",
+              },
+              {
+                q: "What happens after the 14 days?",
+                a: "You keep the PDF. You can uninstall the proxy or leave it running. There is no auto-conversion to a subscription — Stage 2 subscription tiers don't launch until July 2026, and even then you have to explicitly opt in.",
+              },
+              {
+                q: "Is the hosted endpoint CUI-safe?",
+                a: "No. The hosted endpoint at proxy.houndshield.com is Mode A — Vercel-hosted, NOT FedRAMP-authorized, NOT for CUI. Mode B (Docker, your infrastructure) is the CUI-safe deployment. Mode C (air-gapped) is required for IL-5 and SAP environments.",
+              },
+              {
+                q: "Do you have a SOC 2 report?",
+                a: "Not yet. SOC 2 Type I is in progress (target July 2026 start). If your procurement requires SOC 2 from the vendor before signing, Mode A and the subscription tiers aren't a fit for you yet. Mode B + the $499 gap report is, because HoundShield doesn't process your data — it runs inside your boundary.",
+              },
+              {
+                q: "Why not work through C3PAOs?",
+                a: "C3PAOs are legally prohibited from recommending products to clients they assess (32 CFR Part 170, CMMC Code of Professional Conduct, ISO 17020 cooling-off rules). Working through them as a sales channel would put their accreditation at risk. We work through RPOs and CMMC-focused MSPs instead.",
+              },
+              {
+                q: "What if I find a bug or vulnerability?",
+                a: "Email security@houndshield.com with reproduction steps. We acknowledge within 24 hours and triage within 72.",
+              },
+            ].map((item) => (
+              <details
+                key={item.q}
+                className="group border border-white/[0.08] bg-white/[0.02] rounded-xl overflow-hidden"
+              >
+                <summary className="cursor-pointer list-none px-5 py-4 flex items-center justify-between gap-3 text-sm font-semibold text-white hover:bg-white/[0.04] transition-colors">
+                  <span>{item.q}</span>
+                  <ArrowRight className="w-4 h-4 text-slate-500 group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="px-5 pb-5 text-sm text-slate-300 leading-relaxed">{item.a}</div>
+              </details>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="px-6 py-20 border-t border-white/[0.06]">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-400/30 flex items-center justify-center mx-auto mb-5">
+            <Users className="w-6 h-6 text-brand-400" />
+          </div>
+          <h2 className="text-3xl font-bold mb-3 tracking-tight">
+            Two weeks. One PDF. $499.
+          </h2>
+          <p className="text-slate-400 mb-8 max-w-xl mx-auto leading-relaxed">
+            Email{" "}
+            <a
+              href="mailto:info@houndshield.com?subject=$499%20CMMC%20AI%20Risk%20Report"
+              className="text-brand-400 hover:text-brand-300"
+            >
+              info@houndshield.com
+            </a>{" "}
+            or open the contact form — we&rsquo;ll schedule the kickoff call within one business day.
+          </p>
+          <Link
+            href="/contact?intent=gap-report"
+            className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors cursor-pointer"
+          >
+            Order the $499 Gap Report <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10 py-10 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <Link href="/" className="flex items-center gap-2 cursor-pointer">
+            <TextLogo variant="dark" />
+          </Link>
+          <div className="flex gap-6 text-sm text-slate-500">
+            <Link href="/about" className="hover:text-white transition-colors cursor-pointer">About</Link>
+            <Link href="/features" className="hover:text-white transition-colors cursor-pointer">Features</Link>
+            <Link href="/pricing" className="hover:text-white transition-colors cursor-pointer">Pricing</Link>
+            <Link href="/contact" className="hover:text-white transition-colors cursor-pointer">Contact</Link>
+            <Link href="/docs" className="hover:text-white transition-colors cursor-pointer">Docs</Link>
+            <Link href="/security" className="hover:text-white transition-colors cursor-pointer">Security</Link>
+          </div>
+        </div>
+        <div className="mt-6 text-center text-xs text-slate-600">
+          &copy; {new Date().getFullYear()} HoundShield — All rights reserved.
         </div>
       </footer>
     </div>
