@@ -36,7 +36,7 @@
 ### Blockers (manual — user owns)
 - [ ] Set `OPENROUTER_API_KEY` in Vercel
 - [ ] Set `STRIPE_WEBHOOK_SECRET` in Vercel
-- [ ] Push Supabase migrations 003+004 to production
+- [x] Push Supabase migrations to production — 010 (RLS fix + AI observability) + 011 (partner portal) applied 2026-05-13
 - [ ] Fix CI: export `KGCategory` / `SEED_KNOWLEDGE_GRAPH` from `lib/brain-ai/knowledge-graph.ts`
 
 ---
@@ -49,8 +49,10 @@
 - [ ] Begin SOC 2 Type I (Vanta or Drata, ~$5K–$15K, 60–90 days)
 - [ ] One adjacent vertical landing page live (healthcare OR legal)
 - [ ] Onboarding email sequence (3 emails: day 1/3/7)
-- [ ] In-app CMMC control coverage map shown to all paying customers
+- [x] In-app CMMC control coverage map — shipped PR #77 (Stage 2 work = gate behind subscription + hydrate from real scan data, see `~/.claude/plans/stage-2-subscription-surface.md`)
 - [ ] SPRS improvement estimate in dashboard (+15 to +30 points)
+<!-- Killed: "C3PAO white-label dashboard MVP" — doctrine rules C3PAOs out of channel; replaced with read-only assessor view in Stage 3 -->
+
 
 ---
 

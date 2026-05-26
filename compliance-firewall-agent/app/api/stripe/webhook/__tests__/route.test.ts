@@ -10,30 +10,32 @@
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
 // Supabase
-const mockUpsert = jest.fn().mockResolvedValue({ error: null });
-const mockUpdate = jest.fn();
-const mockEq = jest.fn().mockResolvedValue({ error: null });
-const mockEq2 = jest.fn().mockResolvedValue({ error: null });
-const mockFrom = jest.fn();
+const mockUpsert = vi.fn().mockResolvedValue({ error: null });
+const mockUpdate = vi.fn();
+const mockEq = vi.fn().mockResolvedValue({ error: null });
+const mockEq2 = vi.fn().mockResolvedValue({ error: null });
+const mockFrom = vi.fn();
 
-jest.mock("@/lib/supabase/client", () => ({
-  createServiceClient: jest.fn(() => ({ from: mockFrom })),
+vi.mock("@/lib/supabase/client", () => ({
+  createServiceClient: vi.fn(() => ({ from: mockFrom })),
 }));
 
 // Stripe
-const mockConstructEvent = jest.fn();
-const mockSubscriptionsRetrieve = jest.fn();
+const mockConstructEvent = vi.fn();
+const mockSubscriptionsRetrieve = vi.fn();
 
-jest.mock("stripe", () => {
-  return jest.fn().mockImplementation(() => ({
-    webhooks: {
-      constructEvent: mockConstructEvent,
-    },
-    subscriptions: {
-      retrieve: mockSubscriptionsRetrieve,
-    },
-  }));
-});
+vi.mock("stripe", () => ({
+  default: vi.fn().mockImplementation(function () {
+    return {
+      webhooks: {
+        constructEvent: mockConstructEvent,
+      },
+      subscriptions: {
+        retrieve: mockSubscriptionsRetrieve,
+      },
+    };
+  }),
+}));
 
 // ── Import route handler after mocks ──────────────────────────────────────
 
@@ -59,9 +61,9 @@ function setupSupabase() {
   mockFrom.mockReturnValue({
     upsert: mockUpsert,
     update: mockUpdate,
-    select: jest.fn().mockReturnValue({
-      eq: jest.fn().mockReturnValue({
-        single: jest.fn().mockResolvedValue({ data: null }),
+    select: vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        single: vi.fn().mockResolvedValue({ data: null }),
       }),
     }),
   });
@@ -166,7 +168,7 @@ describe("POST /api/stripe/webhook — checkout.session.completed", () => {
   afterEach(() => {
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("upserts subscription and updates profile tier", async () => {
@@ -231,7 +233,7 @@ describe("POST /api/stripe/webhook — customer.subscription.updated", () => {
   afterEach(() => {
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("upserts subscription and updates profile to active tier", async () => {
@@ -285,7 +287,7 @@ describe("POST /api/stripe/webhook — customer.subscription.deleted", () => {
   afterEach(() => {
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("marks subscription canceled and downgrades user to free", async () => {
@@ -315,7 +317,7 @@ describe("POST /api/stripe/webhook — invoice.payment_failed", () => {
   afterEach(() => {
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("sets subscription status to past_due", async () => {
@@ -353,7 +355,7 @@ describe("POST /api/stripe/webhook — invoice.paid", () => {
   afterEach(() => {
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("restores subscription to active (only past_due rows)", async () => {
@@ -406,7 +408,7 @@ describe("POST /api/stripe/webhook — handler errors", () => {
   afterEach(() => {
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("returns 500 when handler throws unexpectedly", async () => {
@@ -418,11 +420,11 @@ describe("POST /api/stripe/webhook — handler errors", () => {
 
     // Make supabase blow up inside the handler
     mockFrom.mockReturnValue({
-      upsert: jest.fn().mockRejectedValue(new Error("DB connection lost")),
-      update: jest.fn().mockReturnValue({ eq: jest.fn().mockResolvedValue({ error: null }) }),
-      select: jest.fn().mockReturnValue({
-        eq: jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({ data: null }),
+      upsert: vi.fn().mockRejectedValue(new Error("DB connection lost")),
+      update: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ error: null }) }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({ data: null }),
         }),
       }),
     });

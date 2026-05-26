@@ -188,8 +188,8 @@ For defense contractors who need everything on-premises:
 
 ```bash
 # Clone the repo on their server
-git clone https://github.com/thecelestialmismatch/HoundShield.git
-cd HoundShield/compliance-firewall-agent
+git clone https://github.com/thecelestialmismatch/Kaelus.Online
+cd Kaelus.Online/compliance-firewall-agent
 
 # Copy and fill in their env vars
 cp .env.local .env.docker

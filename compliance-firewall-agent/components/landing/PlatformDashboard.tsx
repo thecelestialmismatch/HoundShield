@@ -12,18 +12,18 @@ import {
 
 /* ── Event pool ────────────────────────────────────────── */
 const EVENT_POOL = [
-  { framework: "SOC 2",  color: "#FB923C", detail: "GitHub token in Copilot prompt body",       status: "BLOCKED"     as const, engine: "secrets" },
+  { framework: "SOC 2",  color: "#AACDDC", detail: "GitHub token in Copilot prompt body",       status: "BLOCKED"     as const, engine: "secrets" },
   { framework: "HIPAA",  color: "#10B981", detail: "Patient DOB + MRN in ChatGPT session",      status: "BLOCKED"     as const, engine: "PHI" },
-  { framework: "CMMC",   color: "#EA580C", detail: "CUI contract FA8802-24-C-0031 detected",    status: "QUARANTINED" as const, engine: "CUI" },
-  { framework: "SOC 2",  color: "#FB923C", detail: "Stripe secret key in code review prompt",   status: "BLOCKED"     as const, engine: "secrets" },
+  { framework: "CMMC",   color: "#81A6C6", detail: "CUI contract FA8802-24-C-0031 detected",    status: "QUARANTINED" as const, engine: "CUI" },
+  { framework: "SOC 2",  color: "#AACDDC", detail: "Stripe secret key in code review prompt",   status: "BLOCKED"     as const, engine: "secrets" },
   { framework: "HIPAA",  color: "#10B981", detail: "Discharge summary pasted to AI tool",       status: "QUARANTINED" as const, engine: "PHI" },
-  { framework: "CMMC",   color: "#EA580C", detail: "Export-controlled ITAR tech data flagged",  status: "BLOCKED"     as const, engine: "CUI" },
-  { framework: "SOC 2",  color: "#FB923C", detail: "AWS access key in Claude.ai message",       status: "BLOCKED"     as const, engine: "secrets" },
+  { framework: "CMMC",   color: "#81A6C6", detail: "Export-controlled ITAR tech data flagged",  status: "BLOCKED"     as const, engine: "CUI" },
+  { framework: "SOC 2",  color: "#AACDDC", detail: "AWS access key in Claude.ai message",       status: "BLOCKED"     as const, engine: "secrets" },
   { framework: "HIPAA",  color: "#10B981", detail: "SSN + insurance ID in AI billing prompt",   status: "BLOCKED"     as const, engine: "PII" },
-  { framework: "CMMC",   color: "#EA580C", detail: "CAGE code 3GTK7 in AI proposal draft",      status: "QUARANTINED" as const, engine: "CUI" },
+  { framework: "CMMC",   color: "#81A6C6", detail: "CAGE code 3GTK7 in AI proposal draft",      status: "QUARANTINED" as const, engine: "CUI" },
 ];
 
-const ENGINE_COLORS = ["#EA580C", "#10B981", "#FB923C", "#F87171"];
+const ENGINE_COLORS = ["#81A6C6", "#10B981", "#AACDDC", "#F87171"];
 
 function rand(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -42,17 +42,17 @@ function initPie() {
   const soc = rand(35, 50);
   const hipaa = rand(22, 36);
   return [
-    { name: "SOC 2", value: soc,               color: "#FB923C" },
+    { name: "SOC 2", value: soc,               color: "#AACDDC" },
     { name: "HIPAA", value: hipaa,             color: "#10B981" },
-    { name: "CMMC",  value: 100 - soc - hipaa, color: "#EA580C" },
+    { name: "CMMC",  value: 100 - soc - hipaa, color: "#81A6C6" },
   ];
 }
 
 function initCoverage() {
   return [
-    { label: "API Key Protection", pct: rand(95, 100), color: "#EA580C" },
+    { label: "API Key Protection", pct: rand(95, 100), color: "#81A6C6" },
     { label: "PHI / PII Coverage", pct: rand(89, 97),  color: "#10B981" },
-    { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#FB923C" },
+    { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#AACDDC" },
     { label: "SPRS Score",         pct: rand(78, 91),  color: "#F87171" },
   ];
 }
@@ -167,9 +167,9 @@ export function PlatformDashboard() {
       const soc   = rand(35, 50);
       const hipaa = rand(22, 36);
       setPieData([
-        { name: "SOC 2", value: soc,               color: "#FB923C" },
+        { name: "SOC 2", value: soc,               color: "#AACDDC" },
         { name: "HIPAA", value: hipaa,             color: "#10B981" },
-        { name: "CMMC",  value: 100 - soc - hipaa, color: "#EA580C" },
+        { name: "CMMC",  value: 100 - soc - hipaa, color: "#81A6C6" },
       ]);
     }, 2800);
     return () => clearInterval(t);
@@ -178,9 +178,9 @@ export function PlatformDashboard() {
   useEffect(() => {
     const t = setInterval(() => {
       setCoverageData([
-        { label: "API Key Protection", pct: rand(95, 100), color: "#EA580C" },
+        { label: "API Key Protection", pct: rand(95, 100), color: "#81A6C6" },
         { label: "PHI / PII Coverage", pct: rand(89, 97),  color: "#10B981" },
-        { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#FB923C" },
+        { label: "CUI Accuracy",       pct: rand(90, 98),  color: "#AACDDC" },
         { label: "SPRS Score",         pct: rand(78, 91),  color: "#F87171" },
       ]);
     }, 4000);
@@ -280,23 +280,23 @@ export function PlatformDashboard() {
                   <AreaChart data={chartData} margin={{ top: 2, right: 2, left: -30, bottom: 0 }}>
                     <defs>
                       <linearGradient id="soc2g" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#FB923C" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#FB923C" stopOpacity={0}   />
+                        <stop offset="5%"  stopColor="#AACDDC" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#AACDDC" stopOpacity={0}   />
                       </linearGradient>
                       <linearGradient id="hipaag" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%"  stopColor="#10B981" stopOpacity={0.3} />
                         <stop offset="95%" stopColor="#10B981" stopOpacity={0}   />
                       </linearGradient>
                       <linearGradient id="cmmcg" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#EA580C" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#EA580C" stopOpacity={0}   />
+                        <stop offset="5%"  stopColor="#81A6C6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#81A6C6" stopOpacity={0}   />
                       </linearGradient>
                     </defs>
                     <XAxis dataKey="t" hide />
                     <Tooltip content={<ChartTip />} cursor={{ stroke: "rgba(255,255,255,0.06)" }} />
-                    <Area type="monotone" dataKey="soc2"  stroke="#FB923C" fill="url(#soc2g)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                    <Area type="monotone" dataKey="soc2"  stroke="#AACDDC" fill="url(#soc2g)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
                     <Area type="monotone" dataKey="hipaa" stroke="#10B981" fill="url(#hipaag)" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-                    <Area type="monotone" dataKey="cmmc"  stroke="#EA580C" fill="url(#cmmcg)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                    <Area type="monotone" dataKey="cmmc"  stroke="#81A6C6" fill="url(#cmmcg)"  strokeWidth={1.5} dot={false} isAnimationActive={false} />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
