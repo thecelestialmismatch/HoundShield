@@ -11,18 +11,18 @@ const FOOTER_LINKS = {
     { label: 'Roadmap',       href: '/roadmap' },
   ],
   Compliance: [
-    { label: 'CMMC Level 2',  href: '/features' },
-    { label: 'HIPAA',         href: '/hipaa' },
-    { label: 'SOC 2',         href: '/features' },
-    { label: 'NIST 800-171',  href: '/features' },
-    { label: 'DFARS 7012',    href: '/features' },
+    { label: 'CMMC Level 2',     href: '/features' },
+    { label: 'HIPAA',            href: '/hipaa' },
+    { label: 'SOC 2',            href: '/features' },
+    { label: 'NIST 800-171',     href: '/features' },
+    { label: 'Deployment modes', href: '/deployment-modes' },
   ],
   Resources: [
     { label: 'Documentation', href: '/docs' },
+    { label: 'Security',      href: '/security' },
     { label: 'Blog',          href: '/blog' },
     { label: 'Partners',      href: '/partners' },
     { label: 'Contact',       href: '/contact' },
-    { label: 'About',         href: '/about' },
   ],
 }
 
@@ -110,6 +110,9 @@ export function FooterV3({ dark = false }: FooterV3Props) {
               <Link href="/terms" className="text-xs text-slate-600 hover:text-slate-400 transition-colors font-[var(--font-body)]">
                 Terms
               </Link>
+              <Link href="/security" className="text-xs text-slate-600 hover:text-slate-400 transition-colors font-[var(--font-body)]">
+                Security
+              </Link>
             </div>
           </div>
         </div>
@@ -187,6 +190,9 @@ export function FooterV3({ dark = false }: FooterV3Props) {
             </Link>
             <Link href="/terms" className="text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] transition-colors font-[var(--font-body)]">
               Terms
+            </Link>
+            <Link href="/security" className="text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] transition-colors font-[var(--font-body)]">
+              Security
             </Link>
           </div>
         </div>
