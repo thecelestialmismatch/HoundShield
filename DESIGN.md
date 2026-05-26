@@ -159,7 +159,9 @@ const PlatformDashboard = dynamic(() => import("@/components/landing/PlatformDas
 
 - **Active voice:** "Hound Shield detects" not "Detection is performed"
 - **Numbers first:** "<10ms" not "under ten milliseconds"
-- **Defense angle:** November 2026 enforcement, C3PAO $30K-$150K, 80K+ contractors
+- **Defense angle:** November 10, 2026 Phase 2 enforcement (may slip — never bet copy on this date), C3PAO assessment $30K-$150K, 76,598 DIB contractors need Level 2
+- **Healthcare angle:** 81% of healthcare data policy violations involve regulated data (Netskope, May 2025); ChatGPT is NOT HIPAA-compliant without a BAA
+- **Legal angle:** State bar AI ethics opinions (NY/CA/FL, 2024–2025) create monitoring requirement under attorney-client privilege + Kovel doctrine
 - **No em-dashes** in code, comments, or docs — use periods or commas
 - **Superlatives sparingly** — let the numbers speak ("110 controls" not "comprehensive controls")
 - **One proxy URL change** — repeat this message. It is the core value proposition.

@@ -24,3 +24,15 @@ Decision: All future Kaelus work sessions run under KAELUS-BEAST-PROMPT.md v1.0 
 Why: Solve the cross-session memory problem by structure (state files), enforce token economy, keep every response tied to ARR or ARR-enabling work.
 Reversible? Yes — prompt can be bypassed at any time; state files survive independently.
 Evidence: KAELUS-BEAST-PROMPT.md
+
+## 2026-05-26 — HERMES compass correction (5-in-1 pivot)
+Decision: Pivoted from "$199/mo SaaS-first / Jordan-only / C3PAO channel / 10 customers by June 10" to "$499 one-time gap report / Rachel-first sequence / RPO+MSP channel / 3 paid reports + 1 RPO agreement by June 25."
+Why:
+  1. 84-day median B2B SaaS cycle made "10 customers in 4 weeks" arithmetically impossible.
+  2. $499 PO bypasses procurement; subscription needs MSA review. Faster-to-cash.
+  3. C3PAOs are legally prohibited from product endorsement (32 CFR Part 170, CMMC CoPC, ISO 17020 cooling-off). The old channel was always going to refuse.
+  4. Vercel hosted endpoint is NOT FedRAMP-authorized — any C3PAO assessor would disqualify the "CUI-safe" claim. Introduced explicit Mode A (Vercel, trial) / Mode B (Docker, CUI-safe) / Mode C (air-gapped) distinction.
+  5. Healthcare buyers (Rachel) move faster than defense (Jordan) and don't require vendor FedRAMP. Reordered buyer sequence.
+Reversible? Pricing and channel can flip back. Architecture mode distinctions are physical facts and cannot be undone without losing FedRAMP-track customers.
+Kill criteria added: Sept 1, 2026 — shut down or pivot if ANY TWO of (<5 paid customers / no signed channel partner / CMMC Phase 2 extended ≥6 months).
+Evidence: `/Users/yantr/.claude/plans/update-identity-you-are-breezy-orbit.md` + `memory/decisions.md` 2026-05-26 entry.

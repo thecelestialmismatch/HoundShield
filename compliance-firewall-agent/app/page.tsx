@@ -39,49 +39,24 @@ const STEPS = [
   },
 ]
 
-const PRICING = [
-  {
-    name: 'Free',
-    monthly: 0,
-    desc: 'Try HoundShield risk-free',
-    features: ['1 user', '1,000 scans/mo', 'Basic compliance reports', 'CMMC pattern detection'],
-    cta: 'Start free',
-    href: '/signup',
-  },
-  {
-    name: 'Pro',
-    monthly: 199,
-    desc: 'For compliance-conscious teams',
-    features: ['5 users', 'Unlimited scans', 'PDF evidence export', 'SPRS score tracking', 'Webhook alerts'],
-    cta: 'Start Pro',
-    href: '/signup?plan=pro',
-    highlight: true,
-  },
-  {
-    name: 'Growth',
-    monthly: 499,
-    desc: 'For multi-team organizations',
-    features: ['25 users', 'Gateway mode', 'HIPAA + SOC 2 coverage', 'Audit trail export', 'Priority support'],
-    cta: 'Start Growth',
-    href: '/signup?plan=growth',
-  },
-  {
-    name: 'Enterprise',
-    monthly: 999,
-    desc: 'C3PAO assessment ready',
-    features: ['Unlimited users', 'C3PAO-ready reports', 'On-prem deployment', 'SLA guarantee', 'Dedicated CSM'],
-    cta: 'Contact sales',
-    href: '/contact',
-  },
-  {
-    name: 'Federal',
-    monthly: 2499,
-    desc: 'Multi-agency deployments',
-    features: ['Multi-tenant', 'FedRAMP alignment', 'Custom integrations', 'CMMC advisory', 'SLA + NDA'],
-    cta: 'Contact sales',
-    href: '/contact',
-  },
-]
+/* Lead product per HERMES doctrine: $499 one-time CMMC AI Risk Report.
+ * Subscription tiers ($299/$799/$1,499) deferred to Stage 2 (July 2026) — see /pricing. */
+const LEAD_PRODUCT = {
+  name: 'CMMC AI Risk Assessment Report',
+  price: 499,
+  priceSuffix: 'one-time',
+  desc: '14-day proxy deployment in your environment (Mode B Docker). SHA-256-signed PDF mapped to all 110 NIST 800-171 Rev 2 controls. Bypasses procurement.',
+  features: [
+    'Mode B (Docker) deployment in customer infrastructure',
+    'Prompt content never leaves your network boundary',
+    '14-day live observation of all AI prompt traffic',
+    'NIST 800-171 Rev 2 control mapping + SPRS delta estimate',
+    'SHA-256 hash-chained audit log, verifiable offline',
+    'C3PAO hand-off ready — no editing required',
+  ],
+  cta: 'Order the $499 Gap Report',
+  href: '/contact?intent=gap-report',
+}
 
 const FAQ_ITEMS: FaqItem[] = [
   {
@@ -321,75 +296,81 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 7. PRICING ──────────────────────────────────────────── */}
+      {/* ── 7. PRICING — HERMES Stage 1 lead product ──────────── */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]" id="pricing">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[10px] font-semibold text-[var(--hs-steel-dark)] uppercase tracking-widest mb-3 font-[var(--font-body)]">
+              Stage 1 — Lead Product
+            </p>
             <h2
               className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Pricing that scales with your team
+              $499. One-time. C3PAO-ready PDF in two weeks.
             </h2>
             <p className="text-base text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
-              Start free. Upgrade when you need PDF evidence, gateway mode, or dedicated support.
+              A $499 PO bypasses procurement. Subscriptions don&apos;t. Lead with the report,
+              graduate to monitoring in Stage 2 (July 2026).
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {PRICING.map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-[var(--radius-xl)] p-5 flex flex-col bg-white ${
-                  plan.highlight ? 'border-2 shadow-[var(--shadow-xl)]' : 'border shadow-[var(--shadow-card)]'
-                }`}
-                style={{ borderColor: plan.highlight ? 'var(--hs-steel)' : 'var(--hs-border)' }}
+          <div
+            className="rounded-[var(--radius-xl)] p-8 bg-white border-2 shadow-[var(--shadow-xl)]"
+            style={{ borderColor: 'var(--hs-steel)' }}
+          >
+            <div className="flex items-baseline gap-2 mb-2">
+              <span
+                className="text-4xl font-semibold text-[var(--hs-ink)]"
+                style={{ fontFamily: 'var(--font-mono)' }}
               >
-                {plan.highlight && (
-                  <div className="text-[10px] font-semibold text-[var(--hs-steel-dark)] uppercase tracking-widest mb-3 font-[var(--font-body)]">
-                    Most popular
-                  </div>
-                )}
-                <div className="text-sm font-semibold text-[var(--hs-ink)] mb-1 font-[var(--font-body)]">{plan.name}</div>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span
-                    className="text-2xl font-semibold text-[var(--hs-ink)]"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                  >
-                    ${plan.monthly}
-                  </span>
-                  {plan.monthly > 0 && (
-                    <span className="text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">/mo</span>
-                  )}
-                </div>
-                <p className="text-xs text-[var(--hs-ink-tertiary)] mb-4 font-[var(--font-body)]">{plan.desc}</p>
-                <ul className="space-y-1.5 mb-6 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-1.5 text-xs text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
-                      <CheckCircle className="w-3 h-3 text-[var(--hs-steel)] shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={plan.href}
-                  className={`block text-center py-2 text-xs font-semibold rounded-[var(--radius-md)] transition-all font-[var(--font-body)] ${
-                    plan.highlight
-                      ? 'text-white hover:opacity-90'
-                      : 'text-[var(--hs-ink)] border border-[var(--hs-border)] hover:bg-[var(--hs-mist)]'
-                  }`}
-                  style={plan.highlight ? {
-                    background: 'linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))',
-                  } : undefined}
+                ${LEAD_PRODUCT.price}
+              </span>
+              <span className="text-sm text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">
+                {LEAD_PRODUCT.priceSuffix}
+              </span>
+            </div>
+            <h3 className="text-lg font-semibold text-[var(--hs-ink)] mb-2 font-[var(--font-body)]">
+              {LEAD_PRODUCT.name}
+            </h3>
+            <p className="text-sm text-[var(--hs-ink-secondary)] mb-5 font-[var(--font-body)] leading-relaxed">
+              {LEAD_PRODUCT.desc}
+            </p>
+            <ul className="space-y-2 mb-6">
+              {LEAD_PRODUCT.features.map((f) => (
+                <li
+                  key={f}
+                  className="flex items-start gap-2 text-sm text-[var(--hs-ink-secondary)] font-[var(--font-body)]"
                 >
-                  {plan.cta}
-                </Link>
-              </div>
-            ))}
+                  <CheckCircle className="w-4 h-4 text-[var(--hs-steel)] shrink-0 mt-0.5" />
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-col sm:flex-row gap-3 items-center">
+              <Link
+                href={LEAD_PRODUCT.href}
+                className="block text-center px-6 py-3 text-sm font-semibold rounded-[var(--radius-md)] text-white hover:opacity-90 transition-all font-[var(--font-body)]"
+                style={{
+                  background: 'linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))',
+                }}
+              >
+                {LEAD_PRODUCT.cta}
+              </Link>
+              <Link
+                href="/pricing"
+                className="text-sm text-[var(--hs-steel-dark)] hover:opacity-80 font-medium font-[var(--font-body)] inline-flex items-center gap-1"
+              >
+                See Stage 2 subscription tiers <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
           <p className="mt-6 text-center text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">
-            Annual plans save 20% · All plans include 30-day money-back guarantee
+            14-day deployment · Mode B (Docker, customer infrastructure) · 30-day money-back ·{' '}
+            <Link href="/security" className="underline hover:opacity-80">
+              full data-path statement
+            </Link>
           </p>
         </div>
       </section>
