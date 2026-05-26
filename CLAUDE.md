@@ -77,24 +77,35 @@ Rules:
 
 ## Design System
 
-Landing page is light mode. Dashboard is dark mode. Both coexist via `html.dark` class toggle.
+**Theme: LIGHT default everywhere.** Dark mode = optional inverse via toggle (`.dark` class on `<html>`).
 
-**Landing (light, no `.dark` on `<html>`):**
-- Body bg: `#ffffff` / `#f0f4f8` (slate-50)
+Palette (soft blue + cream pastels):
+- `#81A6C6` Blue — `brand-500` PRIMARY
+- `#AACDDC` Sea — `brand-300`
+- `#F3E3D0` Cream — `cream-100`
+- `#D2C4B4` Beige — `cream-300`
+
+**Landing + Dashboard (light, no `.dark` on `<html>`):**
+- Body bg: `#FBF8F2` (cream-50)
+- Section alt bg: `#F3E3D0` (cream-100, palette Cream)
+- Surface accent: `#D2C4B4` (cream-300, palette Beige)
 - Primary text: `#0f172a` (slate-900)
 - Secondary text: `#475569` (slate-600)
-- Brand accent: `brand-400` CSS variable — never `amber-*`, `yellow-*`, `indigo-*`
-- Cards: light glass with `border-slate-200`, white bg
+- Brand text on light bg: `text-brand-700`+ (brand-500 fails WCAG AA on cream)
+- CTA: `bg-brand-500 text-white hover:bg-brand-600`
+- Cards: `bg-white/80` + `border-slate-200`
 - Fonts: `font-editorial` (headers), `font-mono` (metrics)
+- NEVER `amber-*`, `yellow-*`, `orange-*`, `indigo-*` — use `brand-*` (blue)
 
-**Dashboard (dark, `.dark` class on wrapper):**
-- Background: `#07070b` (home), `#0d0d14` (alt sections)
-- Brand gold: `brand-400` — never raw color names
+**Logo:**
+- File: `compliance-firewall-agent/public/houndshield-logo.png` (black doberman + shield)
+- Component: `<Logo />` renders via `next/image`
+- Favicon: same file referenced in `app/layout.tsx`
 
-**Both:**
+**Both modes:**
 - No inline styles (radial-gradient `style` prop OK)
 - Components max 500 lines — split if larger
-- Custom cursor `CursorGlow` on `pointer:fine` — never break it
+- Custom cursor `CursorGlow` on `pointer:fine` — never break it; tint = blue rgba
 
 ---
 

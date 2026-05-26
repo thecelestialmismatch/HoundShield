@@ -40,14 +40,14 @@ export function DemoBanner({ show }: DemoBannerProps) {
     <div
       role="alert"
       aria-live="polite"
-      className="relative z-50 flex items-center gap-3 px-4 py-2.5 bg-amber-500/10 border-b border-amber-500/30 text-amber-300 text-sm"
+      className="relative z-50 flex items-center gap-3 px-4 py-2.5 bg-brand-500/10 border-b border-brand-500/30 text-brand-300 text-sm"
     >
       {/* Icon */}
-      <AlertTriangle className="w-4 h-4 flex-shrink-0 text-amber-400" aria-hidden="true" />
+      <AlertTriangle className="w-4 h-4 flex-shrink-0 text-brand-400" aria-hidden="true" />
 
       {/* Message */}
       <p className="flex-1 min-w-0">
-        <span className="font-semibold text-amber-200">Demo Mode</span>
+        <span className="font-semibold text-brand-200">Demo Mode</span>
         {" — "}
         Your data is not being saved. All dashboards show simulated data only.
       </p>
@@ -55,7 +55,7 @@ export function DemoBanner({ show }: DemoBannerProps) {
       {/* CTA */}
       <Link
         href="/command-center/settings"
-        className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-xs font-medium border border-amber-500/30 transition-colors whitespace-nowrap"
+        className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-brand-500/20 hover:bg-brand-500/30 text-brand-200 text-xs font-medium border border-brand-500/30 transition-colors whitespace-nowrap"
       >
         Connect account
         <ArrowRight className="w-3 h-3" />
@@ -65,7 +65,7 @@ export function DemoBanner({ show }: DemoBannerProps) {
       <button
         onClick={dismiss}
         aria-label="Dismiss demo mode banner"
-        className="flex-shrink-0 p-1 rounded-md text-amber-400 hover:text-amber-200 hover:bg-amber-500/20 transition-colors"
+        className="flex-shrink-0 p-1 rounded-md text-brand-400 hover:text-brand-200 hover:bg-brand-500/20 transition-colors"
       >
         <X className="w-3.5 h-3.5" />
       </button>

@@ -174,13 +174,13 @@ export default function ShieldReadyDashboard() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="bg-white/[0.03]/70 border border-amber-500/20 rounded-2xl p-5"
+              className="bg-white/[0.03]/70 border border-brand-500/20 rounded-2xl p-5"
             >
-              <div className="flex items-center gap-2 text-amber-400 text-xs mb-2">
+              <div className="flex items-center gap-2 text-brand-400 text-xs mb-2">
                 <AlertTriangle size={14} />
                 Partial
               </div>
-              <div className="text-3xl font-bold text-amber-400">{statusCounts.partial}</div>
+              <div className="text-3xl font-bold text-brand-400">{statusCounts.partial}</div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
@@ -231,7 +231,7 @@ export default function ShieldReadyDashboard() {
         <div className="bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between p-5 border-b border-white/10 dark:border-white/10 dark:border-slate-700/50">
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <AlertTriangle size={18} className="text-amber-400" />
+              <AlertTriangle size={18} className="text-brand-400" />
               Top Remediation Priorities
             </h3>
             <Link

@@ -67,7 +67,7 @@ export default function ExecutionTrace({
           ? <XCircle className="w-4 h-4 text-red-500" />
           : <CheckCircle2 className="w-4 h-4 text-emerald-400" />;
       case 'answer':
-        return <Zap className="w-4 h-4 text-amber-500" />;
+        return <Zap className="w-4 h-4 text-brand-500" />;
       case 'error':
         return <XCircle className="w-4 h-4 text-red-500" />;
       default:
@@ -102,7 +102,7 @@ export default function ExecutionTrace({
             Execution Trace
           </h3>
           {isRunning && (
-            <span className="flex items-center gap-1.5 text-xs text-amber-400">
+            <span className="flex items-center gap-1.5 text-xs text-brand-400">
               <Loader2 className="w-3 h-3 animate-spin" />
               Step {currentStep}/{maxSteps}
             </span>
@@ -178,7 +178,7 @@ export default function ExecutionTrace({
                         </span>
                       )}
                       {step.status === 'running' && (
-                        <span className="text-[10px] text-amber-500 animate-pulse">
+                        <span className="text-[10px] text-brand-500 animate-pulse">
                           running...
                         </span>
                       )}

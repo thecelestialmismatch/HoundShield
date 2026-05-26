@@ -6,7 +6,7 @@ import { ClientShell } from "@/components/ClientShell";
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 export const viewport: Viewport = {
-  themeColor: "#07070b",
+  themeColor: "#FBF8F2",
   width: "device-width",
   initialScale: 1,
 };
@@ -208,14 +208,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="dark scroll-smooth"
+      className="scroll-smooth"
       suppressHydrationWarning
     >
       <head>
-        <link
-          rel="icon"
-          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
-        />
+        <link rel="icon" type="image/png" href="/houndshield-logo.png" />
+        <link rel="apple-touch-icon" href="/houndshield-logo.png" />
         <link rel="canonical" href={BASE_URL} />
         {/* Preconnect to key external resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

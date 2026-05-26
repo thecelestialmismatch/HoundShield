@@ -18,7 +18,7 @@ export interface CharacterPalette {
 export const PALETTES: CharacterPalette[] = [
     { skin: '#f5d6b8', hair: '#4a3728', shirt: '#3b82f6', pants: '#1e3a5f', shoes: '#2d2d2d', outline: '#1a1a2e' },
     { skin: '#d4a373', hair: '#1a1a1a', shirt: '#ef4444', pants: '#374151', shoes: '#1f1f1f', outline: '#1a1a2e' },
-    { skin: '#fce4c0', hair: '#c2410c', shirt: '#22c55e', pants: '#1e40af', shoes: '#3d2b1f', outline: '#1a1a2e' },
+    { skin: '#fce4c0', hair: '#527A9F', shirt: '#22c55e', pants: '#1e40af', shoes: '#3d2b1f', outline: '#1a1a2e' },
     { skin: '#8b6914', hair: '#0f0f0f', shirt: '#a855f7', pants: '#1e293b', shoes: '#1a1a1a', outline: '#1a1a2e' },
     { skin: '#f0c8a0', hair: '#fbbf24', shirt: '#06b6d4', pants: '#334155', shoes: '#292524', outline: '#1a1a2e' },
     { skin: '#c68642', hair: '#3b1f0b', shirt: '#f97316', pants: '#1e3a5f', shoes: '#1c1917', outline: '#1a1a2e' },

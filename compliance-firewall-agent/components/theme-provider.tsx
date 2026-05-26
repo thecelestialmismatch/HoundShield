@@ -27,7 +27,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem("houndshield-theme") as Theme | null;
-    const initial = stored || "dark";
+    const initial = stored || "light";
     document.documentElement.setAttribute("data-theme", initial);
     document.documentElement.classList.toggle("dark", initial === "dark");
     setThemeState(initial);

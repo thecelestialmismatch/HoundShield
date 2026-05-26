@@ -274,7 +274,7 @@ export function GlobalChat() {
                 key={i}
                 className={`max-w-[88%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed whitespace-pre-wrap ${
                   msg.role === "user"
-                    ? "self-end bg-indigo-500 text-white rounded-br-sm"
+                    ? "self-end bg-brand-500 text-white rounded-br-sm"
                     : "self-start bg-white/[0.05] text-white/85 border border-white/[0.07] rounded-bl-sm"
                 }`}
               >
@@ -291,7 +291,7 @@ export function GlobalChat() {
                 <button
                   key={action}
                   onClick={() => sendMessage(action)}
-                  className="text-[11px] px-2.5 py-1.5 rounded-full cursor-pointer transition-all text-indigo-300 hover:bg-indigo-500/25"
+                  className="text-[11px] px-2.5 py-1.5 rounded-full cursor-pointer transition-all text-brand-300 hover:bg-brand-500/25"
                   style={{
                     background: "rgba(99,102,241,0.1)",
                     border: "1px solid rgba(99,102,241,0.25)",
@@ -316,12 +316,12 @@ export function GlobalChat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Brain AI anything..."
-              className="flex-1 bg-black/40 border border-white/[0.08] rounded-[10px] px-3 py-2.5 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 transition-colors"
+              className="flex-1 bg-black/40 border border-white/[0.08] rounded-[10px] px-3 py-2.5 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-brand-500/40 transition-colors"
             />
             <button
               type="submit"
               disabled={!input.trim() || isTyping}
-              className="px-3.5 py-2.5 rounded-[10px] bg-indigo-500 hover:bg-indigo-400 text-white transition-colors disabled:opacity-40 disabled:hover:bg-indigo-500 cursor-pointer"
+              className="px-3.5 py-2.5 rounded-[10px] bg-brand-500 hover:bg-brand-400 text-white transition-colors disabled:opacity-40 disabled:hover:bg-brand-500 cursor-pointer"
             >
               <Send className="w-3.5 h-3.5" />
             </button>

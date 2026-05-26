@@ -211,14 +211,14 @@ const PREDEFINED_PATTERNS: { label: string; category: RuleCategory; pattern: str
 
 const RISK_COLORS: Record<RiskLevel, string> = {
   LOW: "text-sky-400 bg-sky-400/10 border-sky-400/20",
-  MEDIUM: "text-amber-400 bg-amber-400/10 border-amber-400/20",
-  HIGH: "text-orange-400 bg-orange-400/10 border-orange-400/20",
+  MEDIUM: "text-brand-400 bg-brand-400/10 border-brand-400/20",
+  HIGH: "text-brand-400 bg-brand-400/10 border-brand-400/20",
   CRITICAL: "text-red-400 bg-red-400/10 border-red-400/20",
 };
 
 const ACTION_COLORS: Record<RuleAction, string> = {
   ALLOW: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-  WARN: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
+  WARN: "text-brand-400 bg-brand-400/10 border-brand-400/20",
   BLOCK: "text-red-400 bg-red-400/10 border-red-400/20",
   QUARANTINE: "text-brand-400 bg-brand-400/10 border-brand-400/20",
 };
