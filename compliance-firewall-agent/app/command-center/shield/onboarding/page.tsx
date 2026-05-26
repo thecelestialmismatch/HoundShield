@@ -221,7 +221,7 @@ export default function OnboardingPage() {
                       onClick={() => setHandlesCUI(!handlesCUI)}
                       className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
                         handlesCUI
-                          ? "bg-amber-500/100/10 border-amber-500/50 text-amber-400"
+                          ? "bg-brand-500/100/10 border-brand-500/50 text-brand-400"
                           : "bg-white/[0.05]/50 border-slate-600 text-slate-400 hover:border-slate-500"
                       }`}
                     >
@@ -410,11 +410,11 @@ const response = await client.chat.completions.create({
                   </div>
 
                   {handlesCUI && cmmcLevel === 1 && (
-                    <div className="bg-amber-500/100/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
-                      <AlertTriangle size={18} className="text-amber-400 mt-0.5 shrink-0" />
+                    <div className="bg-brand-500/100/10 border border-brand-500/30 rounded-xl p-4 flex items-start gap-3">
+                      <AlertTriangle size={18} className="text-brand-400 mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-amber-300 text-sm font-medium">CUI requires Level 2</p>
-                        <p className="text-amber-400/70 text-sm">
+                        <p className="text-brand-300 text-sm font-medium">CUI requires Level 2</p>
+                        <p className="text-brand-400/70 text-sm">
                           You indicated your organization handles CUI. CMMC Level 2 is required for CUI protection.
                         </p>
                       </div>

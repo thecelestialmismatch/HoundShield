@@ -204,14 +204,14 @@ const STATUS_CONFIG: Record<
     glow: "rgba(245,158,11,0.25)",
     label: "Thinking",
     icon: Brain,
-    textClass: "text-amber-500",
+    textClass: "text-brand-500",
   },
   interacting: {
     color: "#818cf8",
     glow: "rgba(129,140,248,0.3)",
     label: "Interacting",
     icon: Zap,
-    textClass: "text-indigo-400",
+    textClass: "text-brand-400",
   },
 };
 

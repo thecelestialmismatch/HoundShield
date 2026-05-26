@@ -225,14 +225,14 @@ function ChartTooltip({ active, payload, label }: {
 /* ── Status badge colors ── */
 const statusColor: Record<string, string> = {
   blocked: "bg-rose-500/10 text-rose-600 ring-rose-500/20",
-  warning: "bg-amber-500/10 text-amber-600 ring-amber-200",
+  warning: "bg-brand-500/10 text-brand-600 ring-brand-200",
   passed: "bg-emerald-500/10 text-emerald-600 ring-emerald-200",
 };
 
 const riskColor: Record<string, string> = {
   CRITICAL: "text-rose-600",
   HIGH: "text-rose-500",
-  MEDIUM: "text-amber-500",
+  MEDIUM: "text-brand-500",
   LOW: "text-emerald-500",
 };
 
@@ -386,8 +386,8 @@ export default function CommandCenterOverview() {
             change: "+23%",
             trend: "up",
             icon: Zap,
-            color: "text-amber-600",
-            bg: "bg-amber-500/10",
+            color: "text-brand-600",
+            bg: "bg-brand-500/10",
           },
           {
             label: "SPRS Score",
@@ -542,7 +542,7 @@ export default function CommandCenterOverview() {
               <p className="text-[10px] text-slate-400 uppercase tracking-wider">Met</p>
             </div>
             <div className="text-center">
-              <p className="font-display font-bold text-lg text-amber-500">
+              <p className="font-display font-bold text-lg text-brand-500">
                 {statusCounts.partial}
               </p>
               <p className="text-[10px] text-slate-400 uppercase tracking-wider">Partial</p>
@@ -753,7 +753,7 @@ export default function CommandCenterOverview() {
                 {evt.status === "blocked" ? (
                   <XCircle className="w-5 h-5 text-rose-500" />
                 ) : evt.status === "warning" ? (
-                  <AlertTriangle className="w-5 h-5 text-amber-500" />
+                  <AlertTriangle className="w-5 h-5 text-brand-500" />
                 ) : (
                   <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                 )}
@@ -837,7 +837,7 @@ export default function CommandCenterOverview() {
             label: "Generate Report",
             icon: BarChart3,
             href: "/command-center/shield/reports",
-            color: "bg-amber-500/10 text-amber-600",
+            color: "bg-brand-500/10 text-brand-600",
           },
         ].map((action) => (
           <Link

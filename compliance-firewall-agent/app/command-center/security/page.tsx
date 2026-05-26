@@ -99,8 +99,8 @@ const CATEGORY_BAR = [
 
 const RISK_COLORS: Record<string, string> = {
   CRITICAL: "text-red-400 bg-red-400/10 border-red-400/20",
-  HIGH: "text-orange-400 bg-orange-400/10 border-orange-400/20",
-  MEDIUM: "text-amber-400 bg-amber-400/10 border-amber-400/20",
+  HIGH: "text-brand-400 bg-brand-400/10 border-brand-400/20",
+  MEDIUM: "text-brand-400 bg-brand-400/10 border-brand-400/20",
   LOW: "text-sky-400 bg-sky-400/10 border-sky-400/20",
   NONE: "text-white/30 bg-white/5 border-white/10",
 };
@@ -195,7 +195,7 @@ export default function SecurityDashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Total Blocked" value={totalBlocked.toLocaleString()} icon={XCircle} color="bg-red-500/20 text-red-400" trend="+8%" trendUp={false} />
         <StatCard label="Quarantined" value={totalQuarantined.toLocaleString()} icon={AlertTriangle} color="bg-brand-500/20 text-brand-400" trend="-2%" trendUp={true} />
-        <StatCard label="Avg Scan Latency" value={`${avgLatency}ms`} icon={Clock} color="bg-amber-500/20 text-amber-400" trend="-3ms" trendUp={true} />
+        <StatCard label="Avg Scan Latency" value={`${avgLatency}ms`} icon={Clock} color="bg-brand-500/20 text-brand-400" trend="-3ms" trendUp={true} />
         <StatCard label="Critical Violations" value={criticalCount} icon={Shield} color="bg-red-500/20 text-red-400" />
       </div>
 

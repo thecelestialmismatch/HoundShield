@@ -31,7 +31,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string; dot: string 
     typing: { label: "Writing Code", color: "text-green-400", dot: "bg-green-400" },
     running: { label: "Executing", color: "text-brand-400", dot: "bg-brand-400" },
     reading: { label: "Analyzing", color: "text-purple-400", dot: "bg-purple-400" },
-    waiting: { label: "Awaiting Input", color: "text-yellow-400", dot: "bg-yellow-400" },
+    waiting: { label: "Awaiting Input", color: "text-brand-400", dot: "bg-brand-400" },
     idle: { label: "Idle", color: "text-slate-400", dot: "bg-slate-400" },
 };
 

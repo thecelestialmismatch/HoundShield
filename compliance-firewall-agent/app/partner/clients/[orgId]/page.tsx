@@ -109,7 +109,7 @@ export default function ClientDetailPage() {
 
   const riskColor: Record<string, string> = {
     CRITICAL: "text-rose-400",
-    HIGH: "text-orange-400",
+    HIGH: "text-brand-400",
     MEDIUM: "text-brand-400",
     LOW: "text-blue-400",
     NONE: "text-slate-400",

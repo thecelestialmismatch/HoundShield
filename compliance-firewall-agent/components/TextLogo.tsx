@@ -1,10 +1,23 @@
 import React from "react";
 
-export function TextLogo({ className = "", variant = "light" }: { className?: string; variant?: "light" | "dark" }) {
-  const dotDomainColor = variant === "dark" ? "text-white/80" : "text-slate-900/90";
+interface TextLogoProps {
+  className?: string;
+  variant?: "light" | "dark";
+}
+
+export function TextLogo({ className = "", variant = "light" }: TextLogoProps) {
+  const houndGradient =
+    variant === "dark"
+      ? "from-brand-300 to-brand-500"
+      : "from-brand-700 to-brand-500";
+  const shieldColor = variant === "dark" ? "text-white/90" : "text-slate-900";
+
   return (
-    <span className={`text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-400 transition-all duration-300 ${className}`}>
-      Hound<span className={`${variant === "dark" ? "text-white/90" : "text-[#0a0a0a]/90"} font-bold`}> Shield</span>
+    <span
+      className={`text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r ${houndGradient} transition-all duration-300 ${className}`}
+    >
+      Hound
+      <span className={`${shieldColor} font-bold`}> Shield</span>
     </span>
   );
 }

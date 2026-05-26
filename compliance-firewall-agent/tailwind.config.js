@@ -10,37 +10,39 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        /* ── Cream / off-white scale ─────────────────────────── */
+        /* Cream / off-white scale (palette: F3E3D0, D2C4B4) */
         cream: {
-          50:  "#FAFAF9",
-          100: "#FAF7F2",
-          200: "#F5F0E8",
-          DEFAULT: "#FAF7F2",
+          50:  "#FBF8F2",
+          100: "#F3E3D0",
+          200: "#E5D2BD",
+          300: "#D2C4B4",
+          400: "#B8A89A",
+          DEFAULT: "#F3E3D0",
         },
-        /* ── Neon accent (coral alias) ───────────────────────── */
+        /* Soft-blue accent alias */
         neon: {
-          DEFAULT: "#DA7756",
-          light:   "#E48B6A",
-          dark:    "#C96441",
+          DEFAULT: "#81A6C6",
+          light:   "#AACDDC",
+          dark:    "#6790B5",
         },
-        /* ── Brand coral scale — Anthropic/Claude palette ───── */
+        /* Brand blue scale anchored to palette #81A6C6 */
         brand: {
-          50:  "#FDF4F0",
-          100: "#FAE5DC",
-          200: "#F5C9B5",
-          300: "#EDA98A",
-          400: "#E48B6A",   /* claude.ai light accent */
-          500: "#DA7756",   /* Anthropic primary coral */
-          600: "#C96441",   /* PRIMARY CTA — pressed state */
-          700: "#B05230",   /* dark pressed */
-          800: "#8A3F23",   /* deep */
-          900: "#6B2F18",   /* deepest */
+          50:  "#F3F7FA",
+          100: "#E1ECF4",
+          200: "#C4D9E8",
+          300: "#AACDDC",   /* palette Sea */
+          400: "#95B9D0",
+          500: "#81A6C6",   /* palette Blue - PRIMARY CTA */
+          600: "#6790B5",   /* pressed state */
+          700: "#527A9F",
+          800: "#3D6485",
+          900: "#2C4E6B",
         },
         accent: {
-          DEFAULT: "#DA7756",
-          light:   "#E48B6A",
-          dark:    "#C96441",
-          muted:   "rgba(218, 119, 86, 0.08)",
+          DEFAULT: "#81A6C6",
+          light:   "#AACDDC",
+          dark:    "#6790B5",
+          muted:   "rgba(129, 166, 198, 0.08)",
         },
         success: {
           DEFAULT: "#10B981",
@@ -61,17 +63,17 @@ module.exports = {
           muted:   "rgba(245, 158, 11, 0.1)",
         },
         info: {
-          DEFAULT: "#DA7756",
-          light:   "#E48B6A",
-          muted:   "rgba(218, 119, 86, 0.1)",
+          DEFAULT: "#81A6C6",
+          light:   "#AACDDC",
+          muted:   "rgba(129, 166, 198, 0.1)",
         },
-        /* ── Neutral dark scale ──────────────────────────────── */
+        /* Neutral surface scale repainted to cream tones */
         surface: {
-          DEFAULT: "#FAF7F2",
-          50:  "#FAF7F2",
-          100: "#F5F0E8",
-          200: "#E8E0D8",
-          300: "#D0C8C0",
+          DEFAULT: "#FBF8F2",
+          50:  "#FBF8F2",
+          100: "#F3E3D0",
+          200: "#E5D2BD",
+          300: "#D2C4B4",
         },
       },
       fontFamily: {
@@ -136,18 +138,18 @@ module.exports = {
       },
       boxShadow: {
         "card":       "0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
-        "card-hover": "0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.08)",
-        "card-lg":    "0 20px 40px -10px rgba(0, 0, 0, 0.15)",
-        "glow-sm":    "0 0 15px -3px rgba(218, 119, 86, 0.25)",
-        "glow":       "0 0 30px -5px rgba(218, 119, 86, 0.30)",
-        "glow-lg":    "0 0 60px -10px rgba(218, 119, 86, 0.35)",
-        "glow-xl":    "0 0 80px -15px rgba(218, 119, 86, 0.40)",
-        "frost":      "0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
-        "inner-light":"inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
+        "card-hover": "0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 4px 10px -4px rgba(0, 0, 0, 0.06)",
+        "card-lg":    "0 20px 40px -10px rgba(0, 0, 0, 0.12)",
+        "glow-sm":    "0 0 15px -3px rgba(129, 166, 198, 0.20)",
+        "glow":       "0 0 30px -5px rgba(129, 166, 198, 0.22)",
+        "glow-lg":    "0 0 60px -10px rgba(129, 166, 198, 0.25)",
+        "glow-xl":    "0 0 80px -15px rgba(129, 166, 198, 0.28)",
+        "frost":      "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
+        "inner-light":"inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
       },
       backgroundImage: {
         "gradient-radial":  "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-arctic":  "linear-gradient(135deg, #FAF7F2 0%, #FAFAF9 50%, #F5F0E8 100%)",
+        "gradient-arctic":  "linear-gradient(135deg, #FBF8F2 0%, #F3E3D0 50%, #E5D2BD 100%)",
       },
     },
   },
