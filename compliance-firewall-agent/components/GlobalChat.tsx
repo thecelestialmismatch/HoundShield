@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send } from "lucide-react";
+import { X, Send, Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { Logo } from "@/components/Logo";
 
 const QUICK_ACTIONS = [
   "How does CMMC Level 2 work?",
-  "What can you detect?",
-  "How do I install Hound Shield?",
+  "What is SPRS scoring?",
+  "What can Hound Shield detect?",
+  "How do I install it?",
+  "What is CUI?",
+  "Pricing?",
 ];
 
 const HOUNDSHIELD_SYSTEM =
@@ -32,8 +36,7 @@ const HOUNDSHIELD_SYSTEM =
   "Contact: info@houndshield.com. Docs: houndshield.com/docs.";
 
 const GREETING =
-  "Hi — I'm Brain AI, HoundShield's public information assistant. I can answer general questions about CMMC, NIST 800-171, SPRS scoring, our $499 CMMC AI Risk Report, and our three deployment modes (Mode A trial, Mode B Docker CUI-safe, Mode C air-gapped). " +
-  "Important: this chat routes through a commercial cloud LLM. Do not paste CUI, PHI, contract numbers, or any sensitive data here. For actual scanning, use the HoundShield proxy in Mode B.";
+  "Hi — I'm **Brain AI**, HoundShield's public information assistant.\n\nI can answer general questions about:\n\n- **CMMC Level 2** controls, SPRS scoring, NIST 800-171 Rev 2\n- **CUI / PHI / PII** detection — what we look for and why\n- **HIPAA** Safe Harbor identifiers\n- **Three deployment modes** — Mode A trial, Mode B Docker (CUI-safe), Mode C air-gapped\n- Our **$499 CMMC AI Risk Report** and Stage 2 subscription tiers\n\n⚠️ **Important:** this chat routes through a commercial cloud LLM. Do not paste CUI, PHI, contract numbers, CAGE codes, or any sensitive data here. For actual prompt scanning, use the HoundShield proxy in Mode B.\n\nTry a quick action below, or just ask.";
 
 type Message = { role: "user" | "bot"; text: string };
 
@@ -243,7 +246,8 @@ export function GlobalChat() {
         ...prev,
         {
           role: "bot",
-          text: "Something went wrong connecting to Brain AI. Try asking about CMMC, SPRS, CUI, or installation — those work offline!",
+          text:
+            "Brain AI hit a network error. CMMC, SPRS, CUI, HIPAA, SOC 2, installation, and pricing all answer **offline** from local knowledge — try one of those, or retry your question.",
         },
       ]);
     }
@@ -328,7 +332,7 @@ export function GlobalChat() {
         {isOpen ? (
           <X className="w-5 h-5 text-white" />
         ) : (
-          <Logo className="w-7 h-7" />
+          <Logo variant="dark" className="w-7" />
         )}
       </button>
 
@@ -353,7 +357,7 @@ export function GlobalChat() {
                   border: "1px solid rgba(99,102,241,0.3)",
                 }}
               >
-                <Logo className="w-5 h-5" />
+                <Logo variant="dark" className="w-5" />
               </div>
               <div>
                 <div className="text-sm font-bold text-white">Brain AI</div>
@@ -384,31 +388,71 @@ export function GlobalChat() {
           {/* Messages */}
           <div
             ref={msgsRef}
-            className="flex flex-col gap-2.5 px-3.5 py-3.5 max-h-[300px] overflow-y-auto"
+            className="flex flex-col gap-2.5 px-3.5 py-3.5 max-h-[360px] overflow-y-auto"
           >
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`max-w-[88%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed whitespace-pre-wrap ${
+                className={`max-w-[92%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
                   msg.role === "user"
-                    ? "self-end bg-indigo-500 text-white rounded-br-sm"
-                    : "self-start bg-white/[0.05] text-white/85 border border-white/[0.07] rounded-bl-sm"
+                    ? "self-end bg-indigo-500 text-white rounded-br-sm whitespace-pre-wrap"
+                    : "self-start bg-white/[0.05] text-white/85 border border-white/[0.07] rounded-bl-sm prose-chat"
                 }`}
               >
-                {msg.text}
+                {msg.role === "user" ? (
+                  msg.text
+                ) : (
+                  <ReactMarkdown
+                    components={{
+                      a: ({ href, children }) => (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-indigo-300 underline decoration-indigo-400/40 hover:decoration-indigo-300"
+                        >
+                          {children}
+                        </a>
+                      ),
+                      code: ({ children }) => (
+                        <code className="px-1.5 py-0.5 rounded bg-black/40 text-indigo-200 text-[12px] font-mono break-all">
+                          {children}
+                        </code>
+                      ),
+                      pre: ({ children }) => (
+                        <pre className="my-2 p-2.5 rounded-lg bg-black/40 border border-white/[0.06] text-[12px] font-mono overflow-x-auto whitespace-pre-wrap break-all">
+                          {children}
+                        </pre>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="list-disc pl-4 my-1.5 space-y-1">{children}</ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="list-decimal pl-4 my-1.5 space-y-1">{children}</ol>
+                      ),
+                      strong: ({ children }) => (
+                        <strong className="font-semibold text-white">{children}</strong>
+                      ),
+                      p: ({ children }) => <p className="my-1.5 first:mt-0 last:mb-0">{children}</p>,
+                    }}
+                  >
+                    {msg.text}
+                  </ReactMarkdown>
+                )}
               </div>
             ))}
             {isTyping && <TypingDots />}
           </div>
 
-          {/* Quick Actions */}
-          {showQuickActions && messages.length > 0 && (
+          {/* Quick Actions — always visible while open */}
+          {showQuickActions && (
             <div className="flex flex-wrap gap-1.5 px-3 py-2 border-t border-white/[0.04]">
               {QUICK_ACTIONS.map((action) => (
                 <button
                   key={action}
                   onClick={() => sendMessage(action)}
-                  className="text-[11px] px-2.5 py-1.5 rounded-full cursor-pointer transition-all text-indigo-300 hover:bg-indigo-500/25"
+                  disabled={isTyping}
+                  className="text-[11px] px-2.5 py-1.5 rounded-full cursor-pointer transition-all text-indigo-300 hover:bg-indigo-500/25 disabled:opacity-40 disabled:pointer-events-none"
                   style={{
                     background: "rgba(99,102,241,0.1)",
                     border: "1px solid rgba(99,102,241,0.25)",
@@ -419,6 +463,14 @@ export function GlobalChat() {
               ))}
             </div>
           )}
+
+          {/* Capability badge — explains it works without LLM key */}
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 border-t border-white/[0.04] bg-white/[0.015]">
+            <Sparkles className="w-3 h-3 text-indigo-300/70" />
+            <span className="text-[10px] text-white/40">
+              Local CMMC knowledge · works offline
+            </span>
+          </div>
 
           {/* Input */}
           <form

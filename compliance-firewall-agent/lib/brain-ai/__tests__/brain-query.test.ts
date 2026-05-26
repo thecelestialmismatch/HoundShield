@@ -117,3 +117,33 @@ describe("marketCheck — shorthand", () => {
     expect(result.length).toBeGreaterThan(20);
   });
 });
+
+describe("domain coverage — 20-question Sprint 3 gate", () => {
+  it("Q16: HIPAA question returns an answer", () => {
+    const result = ask("Does HoundShield protect PHI under HIPAA?");
+    expect(result.answer.length).toBeGreaterThan(10);
+    expect(result.confidence).toMatch(/^(high|medium|low)$/);
+  });
+
+  it("Q17: SOC 2 question routes to a relevant domain", () => {
+    const result = ask("How does HoundShield support SOC 2 compliance?");
+    expect(result.answer.length).toBeGreaterThan(10);
+  });
+
+  it("Q18: pricing question returns an answer", () => {
+    const result = ask("What is the pricing for HoundShield Pro plan?");
+    expect(result.answer.length).toBeGreaterThan(10);
+    expect(result.sources.length).toBeGreaterThan(0);
+  });
+
+  it("Q19: architecture question routes to architecture domain", () => {
+    const result = ask("How does the HoundShield proxy intercept AI traffic?");
+    expect(result.answer.length).toBeGreaterThan(10);
+  });
+
+  it("Q20: onboarding question returns setup guidance", () => {
+    const result = ask("How do I install HoundShield for my organization?");
+    expect(result.answer.length).toBeGreaterThan(10);
+    expect(result.confidence).toMatch(/^(high|medium|low)$/);
+  });
+});
