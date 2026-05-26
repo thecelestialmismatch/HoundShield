@@ -10,14 +10,30 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        /* Cream / off-white scale (palette: F3E3D0, D2C4B4) */
+        /* Cream / sand scale (palette: F3E3D0, D2C4B4) — v3 sand-light + cream-deep */
         cream: {
-          50:  "#FBF8F2",
-          100: "#F3E3D0",
-          200: "#E5D2BD",
-          300: "#D2C4B4",
+          50:  "#FAFCFF",   /* v3 surface-0: cool white */
+          75:  "#F5F8FB",   /* v3 surface-1: subtle blue tint */
+          100: "#F3E3D0",   /* palette Cream (v3 surface-2) */
+          150: "#EDD5BC",   /* v3 cream-deep (surface-3) */
+          200: "#E8DDD1",   /* v3 sand-light */
+          300: "#D2C4B4",   /* palette Beige */
           400: "#B8A89A",
           DEFAULT: "#F3E3D0",
+        },
+        /* v3 ink (navy) text ramp */
+        ink: {
+          DEFAULT:   "#0F1E2E",
+          primary:   "#0F1E2E",
+          secondary: "#3D5166",
+          tertiary:  "#6B8299",
+          deep:      "#0D1B2A",
+        },
+        /* v3 steel — between brand-500 and brand-200 */
+        steel: {
+          light: "#C5DAE9",
+          DEFAULT: "#5A86A8",
+          dark: "#4A7FA5",
         },
         /* Soft-blue accent alias */
         neon: {
@@ -67,20 +83,27 @@ module.exports = {
           light:   "#AACDDC",
           muted:   "rgba(129, 166, 198, 0.1)",
         },
-        /* Neutral surface scale repainted to cream tones */
+        /* v3 surface scale (cool white → cream → sand) */
         surface: {
-          DEFAULT: "#FBF8F2",
-          50:  "#FBF8F2",
+          DEFAULT: "#FAFCFF",
+          0:   "#FAFCFF",
+          1:   "#F5F8FB",
+          2:   "#F3E3D0",
+          3:   "#EDD5BC",
+          50:  "#FAFCFF",
+          75:  "#F5F8FB",
           100: "#F3E3D0",
-          200: "#E5D2BD",
+          150: "#EDD5BC",
+          200: "#E8DDD1",
           300: "#D2C4B4",
         },
       },
       fontFamily: {
-        sans:      ["var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
-        display:   ["var(--font-outfit)", "var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
-        editorial: ["var(--font-playfair)", "Georgia", "ui-serif", "serif"],
-        mono:      ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
+        /* v3: DM Sans body, Fraunces display, JetBrains Mono code */
+        sans:      ["'DM Sans'", "var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
+        display:   ["'Fraunces'", "Georgia", "var(--font-playfair)", "ui-serif", "serif"],
+        editorial: ["'Fraunces'", "Georgia", "var(--font-playfair)", "ui-serif", "serif"],
+        mono:      ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
         grotesk:   ["Anton", "Impact", "ui-sans-serif", "system-ui", "sans-serif"],
         condiment: ["Condiment", "cursive"],
       },
