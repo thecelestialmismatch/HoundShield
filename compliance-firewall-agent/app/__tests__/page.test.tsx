@@ -160,23 +160,32 @@ describe('HomePage', () => {
     expect(matches.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('pricing section is present', () => {
+  // Pricing section was rewritten for HERMES Stage 1 doctrine pivot (2026-05-26).
+  // Old assertions targeted a 5-tier table (Free / Pro / Growth / Enterprise / Federal)
+  // with "Most popular" Pro tier. The new section leads with the single $499 one-time
+  // CMMC AI Risk Assessment Report; subscription tiers were deferred to /pricing under
+  // the "Stage 2 — Available July 2026" pill. See DECISIONS.md 2026-05-26.
+
+  it('pricing section leads with the $499 one-time gap report', () => {
     render(<HomePage />)
-    expect(screen.getByText('Pricing that scales with your team')).toBeTruthy()
+    expect(
+      screen.getByText('$499. One-time. C3PAO-ready PDF in two weeks.')
+    ).toBeTruthy()
   })
 
-  it('renders 5 pricing tiers', () => {
+  it('pricing section names the lead product', () => {
     render(<HomePage />)
-    expect(screen.getByText('Free')).toBeTruthy()
-    expect(screen.getByText('Pro')).toBeTruthy()
-    expect(screen.getByText('Growth')).toBeTruthy()
-    expect(screen.getByText('Enterprise')).toBeTruthy()
-    expect(screen.getByText('Federal')).toBeTruthy()
+    expect(screen.getByText('CMMC AI Risk Assessment Report')).toBeTruthy()
   })
 
-  it('Pro plan marked as most popular', () => {
+  it('pricing section flags Stage 1 lead-product framing', () => {
     render(<HomePage />)
-    expect(screen.getByText('Most popular')).toBeTruthy()
+    expect(screen.getByText('Stage 1 — Lead Product')).toBeTruthy()
+  })
+
+  it('pricing section links to /pricing for Stage 2 subscription tiers', () => {
+    render(<HomePage />)
+    expect(screen.getByText(/See Stage 2 subscription tiers/i)).toBeTruthy()
   })
 
   it('CTA final section contains audit copy', () => {
