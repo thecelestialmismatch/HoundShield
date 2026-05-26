@@ -3,12 +3,9 @@
   "configurations": [
     {
       "name": "dev",
-      "runtimeExecutable": "/Users/yantr/.nvm/versions/node/v24.13.1/bin/node",
-      "runtimeArgs": [
-        "/Users/yantr/Desktop/HoundShield.Online-main/compliance-firewall-agent/node_modules/next/dist/bin/next",
-        "dev",
-        "/Users/yantr/Desktop/HoundShield.Online-main/compliance-firewall-agent"
-      ],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/yantr/Desktop/HoundShield-main/.claude/worktrees/beautiful-wiles-b5b879/compliance-firewall-agent",
       "port": 3000
     }
   ]

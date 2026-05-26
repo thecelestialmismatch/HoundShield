@@ -2,15 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Google Fonts — loaded via CSS to avoid build-time network failures */
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Condiment&family=Inter:wght@100..900&family=Outfit:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+/* Google Fonts — v3 stack: Fraunces (display), DM Sans (body), JetBrains Mono (code) */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Condiment&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
 
 :root {
   --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-outfit: 'Outfit', ui-sans-serif, system-ui, sans-serif;
   --font-playfair: 'Playfair Display', ui-serif, Georgia, serif;
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-outfit);
+  --font-fraunces: 'Fraunces', Georgia, ui-serif, serif;
+  --font-dm-sans: 'DM Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-jetbrains: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-fraunces);
+
+  /* v3 design tokens (HoundShield Landing Page v3) */
+  --hs-blue:         #81A6C6;
+  --hs-sky:          #AACDDC;
+  --hs-cream:        #F3E3D0;
+  --hs-sand:         #D2C4B4;
+  --hs-white:        #FAFCFF;
+  --hs-ink:          #0F1E2E;
+  --hs-ink-secondary:#3D5166;
+  --hs-ink-tertiary: #6B8299;
+  --hs-navy:         #0D1B2A;
+  --hs-steel-dark:   #5A86A8;
+  --hs-steel-light:  #C5DAE9;
+  --hs-cream-deep:   #EDD5BC;
+  --hs-sand-light:   #E8DDD1;
+  --hs-surface-0:    #FAFCFF;
+  --hs-surface-1:    #F5F8FB;
+  --hs-surface-2:    #F3E3D0;
+  --hs-surface-3:    #EDD5BC;
+  --hs-border-subtle:rgba(129,166,198,0.12);
+  --hs-border:       rgba(129,166,198,0.22);
+  --hs-border-strong:rgba(129,166,198,0.45);
+  --hs-border-ink:   rgba(15,30,46,0.10);
+  --hs-mist:         rgba(129,166,198,0.06);
+  --hs-mist-md:      rgba(129,166,198,0.10);
+  --hs-glow:         rgba(129,166,198,0.18);
+  --hs-glow-strong:  rgba(129,166,198,0.28);
+  --hs-shadow-sm:    0 1px 2px rgba(15,30,46,0.04), 0 1px 3px rgba(129,166,198,0.06);
+  --hs-shadow-md:    0 4px 16px rgba(15,30,46,0.06), 0 1px 4px rgba(129,166,198,0.08);
+  --hs-shadow-lg:    0 8px 32px rgba(15,30,46,0.08), 0 2px 8px rgba(129,166,198,0.10);
+
   /* Cursor position for section spotlights */
   --mx: -500px;
   --my: -500px;
@@ -51,7 +85,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    HOUND SHIELD — Light Pastel Design System
    Dual theme · Soft blue + cream accents · Calm authority
-   Palette: #FBF8F2 · #F3E3D0 · #81A6C6 · #AACDDC · #D2C4B4
+   Palette: #FAFCFF · #F3E3D0 · #81A6C6 · #AACDDC · #0F1E2E (v3)
    Light = default. Dark = optional via .dark class.
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -63,8 +97,9 @@
   }
 
   body {
-    background-color: #ffffff;
-    color: #0f172a;
+    background-color: #FAFCFF;
+    color: #0F1E2E;
+    font-family: var(--font-dm-sans);
     line-height: 1.6;
   }
 
@@ -780,7 +815,7 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 html:not(.dark) body {
-  background-color: #FBF8F2 !important;
+  background-color: #FAFCFF !important;
   color: #0f172a !important;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -792,12 +827,12 @@ html:not(.dark) [class*="[#0a0a12]"],
 html:not(.dark) [class*="[#07070b]"],
 html:not(.dark) [class*="[#0e0e18]"],
 html:not(.dark) [class*="[#0a0a0a]/"] {
-  background-color: #FBF8F2 !important;
+  background-color: #FAFCFF !important;
 }
 
 /* Section wrappers */
 html:not(.dark) section {
-  background-color: #FBF8F2 !important;
+  background-color: #FAFCFF !important;
 }
 
 /* Alternating cream surfaces for visual rhythm */
