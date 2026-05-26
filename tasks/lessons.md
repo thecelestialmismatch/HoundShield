@@ -19,11 +19,14 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 **Root cause:** Engineering effort went toward impressive features, not evidence-grade compliance artifacts.
 **Rule:** Sprint 1 does not ship any new dashboard features until PDF report generation works end-to-end. PDF first. Dashboard polish never.
 
-### OODA Analysis: C3PAO channel beats cold outreach 10-to-1
+### OODA Analysis: C3PAO channel beats cold outreach 10-to-1 — **REVERSED 2026-05-26**
 
-**What:** C3PAOs each have 20-100 defense contractor clients who are actively seeking compliance tools. One C3PAO conversation = 10-50 potential customers. Cold contractor outreach is slow and unscalable.
-**Root cause:** No explicit channel strategy before this analysis.
-**Rule:** Sprint 2 goal is one signed C3PAO referral partner. Measure pipeline by C3PAO partners, not individual contractors contacted.
+**What (original):** C3PAOs each have 20-100 defense contractor clients who are actively seeking compliance tools. One C3PAO conversation = 10-50 potential customers. Cold contractor outreach is slow and unscalable.
+**Root cause (original):** No explicit channel strategy before this analysis.
+**Rule (original, NOW INVALID):** Sprint 2 goal is one signed C3PAO referral partner. Measure pipeline by C3PAO partners, not individual contractors contacted.
+
+**2026-05-26 reversal:** C3PAOs are LEGALLY PROHIBITED from product endorsement to clients they assess (32 CFR Part 170, CMMC CoPC, ISO 17020 cooling-off). The original rule was based on the false assumption that C3PAOs could function as a sales channel. They cannot — every C3PAO ask was always going to be refused.
+**New rule:** Channel is RPOs (Registered Practitioner Organizations) and CMMC-focused MSPs, NOT C3PAOs. Target Cyber AB Marketplace RPO list (Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics, +43 more). Offer 40–50% rev share on $499 gap-report co-brand. See `DECISIONS.md` 2026-05-26 entry.
 
 ### Brain AI: static research.md was not queryable
 
