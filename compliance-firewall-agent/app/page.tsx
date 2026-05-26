@@ -13,6 +13,9 @@ import {
   FileCheck,
   Eye,
   Zap,
+  Server,
+  Cloud,
+  ShieldOff,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { TextLogo } from "@/components/TextLogo";
@@ -48,8 +51,8 @@ const steps = [
   {
     number: "01",
     title: "Change one URL",
-    desc: "Replace api.openai.com with proxy.houndshield.com in your environment config. Works with ChatGPT, Copilot, Claude, Gemini — any OpenAI-compatible tool. No code changes, no agents to install.",
-    code: "OPENAI_BASE_URL=https://proxy.houndshield.com",
+    desc: "Replace api.openai.com with your HoundShield proxy. For CUI workloads run Mode B — self-hosted Docker, default URL http://localhost:8080/v1. Mode A (proxy.houndshield.com) is a non-CUI trial endpoint. Works with ChatGPT, Copilot, Claude, Gemini — any OpenAI-compatible SDK. No agents to install.",
+    code: "OPENAI_BASE_URL=http://localhost:8080/v1",
     icon: Terminal,
   },
   {
@@ -93,6 +96,46 @@ const proofCards = [
     bg: "bg-brand-500/10 border-brand-500/20",
     title: "An audit trail that holds up in court.",
     body: "Every AI prompt stored in an append-only log with a SHA-256 integrity hash. Your auditors get read-only access. No manual exports, no spreadsheets, no guessing what your team sent.",
+  },
+];
+
+/* ── Deployment modes — architecture honesty (HERMES doctrine) ── */
+const deploymentModes = [
+  {
+    label: "Mode A — Hosted Trial",
+    endpoint: "proxy.houndshield.com",
+    icon: Cloud,
+    cuiSafe: false,
+    cuiSafeLabel: "NOT CUI-safe",
+    audience: "Demo, non-CUI evaluation, internal pilots",
+    note: "Runs on Vercel. NOT FedRAMP-authorized. Do not route CUI, PHI, contract numbers, or any DFARS 252.204-7012 data through this endpoint.",
+    color: "text-amber-300",
+    border: "border-amber-400/30",
+    bg: "bg-amber-500/[0.05]",
+  },
+  {
+    label: "Mode B — Self-Hosted Docker",
+    endpoint: "houndshield/proxy:latest",
+    icon: Server,
+    cuiSafe: true,
+    cuiSafeLabel: "CUI-safe",
+    audience: "CUI-handling contractors, HIPAA covered entities, AmLaw 200 firms",
+    note: "Runs entirely inside your network. Prompt content never leaves your boundary. Only license-key hash + scan count traverse the network. Required for any CMMC Level 2 or HIPAA-regulated workload.",
+    color: "text-emerald-300",
+    border: "border-emerald-400/30",
+    bg: "bg-emerald-500/[0.05]",
+  },
+  {
+    label: "Mode C — Air-Gapped",
+    endpoint: "Customer isolated network",
+    icon: ShieldOff,
+    cuiSafe: true,
+    cuiSafeLabel: "CUI-safe",
+    audience: "Enterprise DIB, IL-5+ workloads, federal civilian high-side",
+    note: "Fully offline operation. No outbound traffic — license validated against a customer-hosted licensing server. Update bundles delivered via signed media.",
+    color: "text-indigo-300",
+    border: "border-indigo-400/30",
+    bg: "bg-indigo-500/[0.05]",
   },
 ];
 
@@ -152,6 +195,76 @@ export default function HomePage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ── Deployment modes — architecture honesty ────────── */}
+      <section className="py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <FadeIn className="text-center mb-12">
+            <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-3">
+              Architecture
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Three deployment modes. Pick the one your data requires.
+            </h2>
+            <p className="text-slate-400 mt-3 max-w-2xl mx-auto">
+              The HoundShield marketing site runs on Vercel. The CUI scanning path does not.
+              For any workload covered by DFARS 252.204-7012, NIST 800-171, or HIPAA, run Mode B (Docker) inside your boundary.
+            </p>
+          </FadeIn>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {deploymentModes.map((mode, i) => {
+              const Icon = mode.icon;
+              return (
+                <FadeIn key={mode.label} delay={i * 0.08}>
+                  <div
+                    className={`border ${mode.border} ${mode.bg} backdrop-blur-sm rounded-2xl p-6 h-full flex flex-col`}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div
+                        className={`w-10 h-10 rounded-xl ${mode.bg} border ${mode.border} flex items-center justify-center`}
+                      >
+                        <Icon className={`w-5 h-5 ${mode.color}`} />
+                      </div>
+                      <span
+                        className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-1 rounded-md border ${
+                          mode.cuiSafe
+                            ? "text-emerald-300 border-emerald-400/40 bg-emerald-500/10"
+                            : "text-amber-300 border-amber-400/40 bg-amber-500/10"
+                        }`}
+                      >
+                        {mode.cuiSafeLabel}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-semibold text-white mb-1 leading-tight">
+                      {mode.label}
+                    </h3>
+                    <code className={`block text-xs font-mono ${mode.color} mb-3 break-all`}>
+                      {mode.endpoint}
+                    </code>
+                    <p className="text-xs text-slate-400 uppercase tracking-wider mb-2 font-semibold">
+                      Audience
+                    </p>
+                    <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                      {mode.audience}
+                    </p>
+                    <p className="text-xs text-slate-400 leading-relaxed mt-auto pt-3 border-t border-white/[0.06]">
+                      {mode.note}
+                    </p>
+                  </div>
+                </FadeIn>
+              );
+            })}
+          </div>
+          <FadeIn delay={0.2} className="text-center mt-8">
+            <Link
+              href="/security"
+              className="inline-flex items-center gap-2 text-sm text-brand-500 hover:text-brand-400 transition-colors cursor-pointer"
+            >
+              Full security &amp; architecture statement <ArrowRight className="w-4 h-4" />
+            </Link>
+          </FadeIn>
         </div>
       </section>
 
@@ -275,6 +388,7 @@ export default function HomePage() {
             <Link href="/pricing" className="hover:text-white transition-colors cursor-pointer">Pricing</Link>
             <Link href="/contact" className="hover:text-white transition-colors cursor-pointer">Contact</Link>
             <Link href="/docs" className="hover:text-white transition-colors cursor-pointer">Docs</Link>
+            <Link href="/security" className="hover:text-white transition-colors cursor-pointer">Security</Link>
           </div>
         </div>
         <div className="mt-8 text-center text-xs text-slate-600">
