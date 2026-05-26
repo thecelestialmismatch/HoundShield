@@ -98,7 +98,7 @@ exports[`HeroSection > matches snapshot 1`] = `
           <span
             class="text-xs font-mono text-amber-400"
           >
-            170
+            168
              days until CMMC Phase 2 enforcement (Nov 10, 2026)
           </span>
         </div>

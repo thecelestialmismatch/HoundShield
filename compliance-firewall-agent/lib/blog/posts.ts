@@ -190,7 +190,7 @@ const posts: BlogPost[] = [
 
 <h2>The Technical Solution: Local AI Proxy</h2>
 <p>HoundShield intercepts every AI API call before it leaves your network. It runs pattern matching against 200+ CUI indicators (CAGE codes, contract numbers, classification markings, clearance levels, PHI markers) in under 10ms. Blocked requests never reach the external AI service. Every decision creates an immutable log entry.</p>
-<p>Setup is one line: point your AI tool's API base URL to your Kaelus endpoint instead of api.openai.com. No code changes. No agent installation on every machine. One network-level change covers your entire organization.</p>
+<p>Setup is one line: point your AI tool's API base URL to your HoundShield endpoint instead of api.openai.com. No code changes. No agent installation on every machine. One network-level change covers your entire organization.</p>
     `,
   },
   {
