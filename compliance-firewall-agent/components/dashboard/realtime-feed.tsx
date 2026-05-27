@@ -48,16 +48,16 @@ interface DashboardMetrics {
 const RISK_COLORS: Record<string, string> = {
   NONE: "text-zinc-400",
   LOW: "text-emerald-400",
-  MEDIUM: "text-amber-400",
-  HIGH: "text-orange-500",
+  MEDIUM: "text-brand-400",
+  HIGH: "text-brand-500",
   CRITICAL: "text-red-500",
 };
 
 const RISK_BG: Record<string, string> = {
   NONE: "bg-zinc-500/10",
   LOW: "bg-emerald-500/100/10",
-  MEDIUM: "bg-amber-500/100/10",
-  HIGH: "bg-orange-500/10",
+  MEDIUM: "bg-brand-500/100/10",
+  HIGH: "bg-brand-500/10",
   CRITICAL: "bg-red-500/10",
 };
 
@@ -70,7 +70,7 @@ const ACTION_ICONS: Record<string, typeof Shield> = {
 const ACTION_COLORS: Record<string, string> = {
   ALLOWED: "text-emerald-400",
   BLOCKED: "text-red-400",
-  QUARANTINED: "text-amber-400",
+  QUARANTINED: "text-brand-400",
 };
 
 const MAX_EVENTS = 200;
@@ -180,7 +180,7 @@ export function RealtimeFeed() {
             onClick={() => setPaused(!paused)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               paused
-                ? "bg-amber-500/100/10 text-amber-400 hover:bg-amber-500/100/20"
+                ? "bg-brand-500/100/10 text-brand-400 hover:bg-brand-500/100/20"
                 : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
             }`}
           >
@@ -222,7 +222,7 @@ export function RealtimeFeed() {
             value={metrics.blocked_count.toLocaleString()}
           />
           <MetricCell
-            icon={<ShieldAlert className="h-3.5 w-3.5 text-amber-400" />}
+            icon={<ShieldAlert className="h-3.5 w-3.5 text-brand-400" />}
             label="Quarantined"
             value={metrics.quarantined_count.toLocaleString()}
           />
@@ -366,7 +366,7 @@ function EventRow({
         <span className="text-xs text-zinc-500 truncate">
           {event.user_id}
           {event.entities_found > 0 && (
-            <span className="text-amber-400 ml-1">
+            <span className="text-brand-400 ml-1">
               · {event.entities_found} entit{event.entities_found === 1 ? "y" : "ies"}
             </span>
           )}

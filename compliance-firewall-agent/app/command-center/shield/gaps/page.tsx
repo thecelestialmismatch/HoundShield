@@ -24,7 +24,7 @@ import type { AssessmentResponse, NISTControl, RiskPriority } from "@/lib/shield
 
 const PRIORITY_COLORS: Record<RiskPriority, { bg: string; text: string; border: string }> = {
   CRITICAL: { bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" },
-  HIGH: { bg: "bg-amber-500/100/10", text: "text-amber-400", border: "border-amber-500/30" },
+  HIGH: { bg: "bg-brand-500/100/10", text: "text-brand-400", border: "border-brand-500/30" },
   MEDIUM: { bg: "bg-brand-500/100/10", text: "text-brand-400", border: "border-brand-500/30" },
   LOW: { bg: "bg-white/[0.03]0/10", text: "text-slate-400", border: "border-slate-500/30" },
 };
@@ -199,7 +199,7 @@ export default function GapsPage() {
                 <span className="text-slate-500 text-xs shrink-0">{control.estimatedHours}h</span>
 
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-lg ${
-                  currentStatus === "PARTIAL" ? "bg-amber-500/100/10 text-amber-400" :
+                  currentStatus === "PARTIAL" ? "bg-brand-500/100/10 text-brand-400" :
                   currentStatus === "UNMET" ? "bg-red-500/10 text-red-400" :
                   "bg-white/[0.03]0/10 text-slate-400"
                 }`}>

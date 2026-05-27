@@ -343,7 +343,7 @@ export default function AgentsPage() {
     amber: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
     rose: { bg: "bg-rose-500/5", border: "border-rose-500/30", text: "text-rose-400", iconBg: "bg-rose-500/10 border-rose-500/20" },
     cyan: { bg: "bg-cyan-500/5", border: "border-cyan-500/30", text: "text-cyan-400", iconBg: "bg-cyan-500/10 border-cyan-500/20" },
-    orange: { bg: "bg-orange-500/5", border: "border-orange-500/30", text: "text-orange-400", iconBg: "bg-orange-500/10 border-orange-500/20" },
+    orange: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
     teal: { bg: "bg-teal-500/5", border: "border-teal-500/30", text: "text-teal-400", iconBg: "bg-teal-500/10 border-teal-500/20" },
     indigo: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
   };

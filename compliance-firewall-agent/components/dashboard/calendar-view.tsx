@@ -215,13 +215,13 @@ export default function CalendarView() {
                   key={`day-${day}`}
                   onClick={() => setSelectedDay(isSelected ? null : ds)}
                   className={`h-24 border-b border-r border-white/10 p-1.5 cursor-pointer transition-colors ${
-                    isSelected ? 'bg-indigo-500/10' : 'hover:bg-white/[0.03]'
+                    isSelected ? 'bg-brand-500/10' : 'hover:bg-white/[0.03]'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span
                       className={`text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full ${
-                        isToday ? 'bg-indigo-500 text-white' : 'text-slate-200'
+                        isToday ? 'bg-brand-500 text-white' : 'text-slate-200'
                       }`}
                     >
                       {day}

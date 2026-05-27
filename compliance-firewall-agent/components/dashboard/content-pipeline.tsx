@@ -47,8 +47,8 @@ const STAGES: { key: Stage; label: string; icon: React.ElementType; accent: stri
 
 const PRIORITY_COLORS: Record<Priority, { bg: string; text: string; dot: string }> = {
   low: { bg: 'bg-white/[0.05]', text: 'text-slate-500', dot: 'bg-white/40' },
-  medium: { bg: 'bg-amber-500/100/10', text: 'text-amber-400', dot: 'bg-amber-400' },
-  high: { bg: 'bg-orange-500/10', text: 'text-orange-400', dot: 'bg-orange-500' },
+  medium: { bg: 'bg-brand-500/100/10', text: 'text-brand-400', dot: 'bg-brand-400' },
+  high: { bg: 'bg-brand-500/10', text: 'text-brand-400', dot: 'bg-brand-500' },
   urgent: { bg: 'bg-red-500/10', text: 'text-red-400', dot: 'bg-red-500' },
 };
 
@@ -242,7 +242,7 @@ export default function ContentPipeline() {
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => handleAdd(stage.key)}
-                          className="text-xs font-medium px-3 py-1 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                          className="text-xs font-medium px-3 py-1 rounded-md bg-brand-500 hover:bg-brand-600 text-white transition-colors"
                         >
                           Add
                         </button>
@@ -326,7 +326,7 @@ export default function ContentPipeline() {
                             {stageIdx < STAGES.length - 1 && (
                               <button
                                 onClick={(e) => { e.stopPropagation(); moveCard(card.id, 'next'); }}
-                                className="flex items-center gap-1 text-xs font-medium px-2 py-1 rounded transition-colors bg-indigo-500 hover:bg-indigo-600 text-white"
+                                className="flex items-center gap-1 text-xs font-medium px-2 py-1 rounded transition-colors bg-brand-500 hover:bg-brand-600 text-white"
                               >
                                 Next <ArrowRight className="w-3 h-3" />
                               </button>

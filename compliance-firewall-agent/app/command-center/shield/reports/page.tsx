@@ -140,7 +140,7 @@ export default function ReportsPage() {
 
       {/* PDF error / upgrade nudge */}
       {pdfError && (
-        <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-sm text-amber-300">
+        <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 bg-brand-500/10 border border-brand-500/20 rounded-xl text-sm text-brand-300">
           <span>{pdfError}</span>
           <a href="/pricing" className="text-brand-400 hover:text-brand-300 font-medium underline underline-offset-2 whitespace-nowrap">
             Upgrade →
@@ -221,7 +221,7 @@ export default function ReportsPage() {
                   <th className="text-left text-xs font-semibold text-slate-500 uppercase px-5 py-3">Family</th>
                   <th className="text-center text-xs font-semibold text-slate-500 uppercase px-3 py-3">Controls</th>
                   <th className="text-center text-xs font-semibold text-emerald-500 uppercase px-3 py-3">Met</th>
-                  <th className="text-center text-xs font-semibold text-amber-500 uppercase px-3 py-3">Partial</th>
+                  <th className="text-center text-xs font-semibold text-brand-500 uppercase px-3 py-3">Partial</th>
                   <th className="text-center text-xs font-semibold text-red-500 uppercase px-3 py-3">Unmet</th>
                   <th className="text-center text-xs font-semibold text-slate-500 uppercase px-3 py-3">Score</th>
                   <th className="text-right text-xs font-semibold text-slate-500 uppercase px-5 py-3">Max</th>
@@ -242,7 +242,7 @@ export default function ReportsPage() {
                       </td>
                       <td className="text-center text-slate-300 dark:text-slate-300 print:text-black px-3 py-3">{family.controlCount}</td>
                       <td className="text-center text-emerald-400 print:text-emerald-600 font-medium px-3 py-3">{stats?.met ?? 0}</td>
-                      <td className="text-center text-amber-400 print:text-amber-600 font-medium px-3 py-3">{stats?.partial ?? 0}</td>
+                      <td className="text-center text-brand-400 print:text-brand-600 font-medium px-3 py-3">{stats?.partial ?? 0}</td>
                       <td className="text-center text-red-400 print:text-red-600 font-medium px-3 py-3">{stats?.unmet ?? 0}</td>
                       <td className="text-center text-white print:text-black font-bold px-3 py-3">{stats?.score ?? 0}</td>
                       <td className="text-right text-slate-500 px-5 py-3">{-maxForFamily}</td>
@@ -255,7 +255,7 @@ export default function ReportsPage() {
                   <td className="px-5 py-3 font-bold text-white print:text-black">TOTAL</td>
                   <td className="text-center font-bold text-white print:text-black px-3 py-3">{ALL_CONTROLS.length}</td>
                   <td className="text-center font-bold text-emerald-400 px-3 py-3">{statusCounts.met}</td>
-                  <td className="text-center font-bold text-amber-400 px-3 py-3">{statusCounts.partial}</td>
+                  <td className="text-center font-bold text-brand-400 px-3 py-3">{statusCounts.partial}</td>
                   <td className="text-center font-bold text-red-400 px-3 py-3">{statusCounts.unmet}</td>
                   <td className="text-center font-bold text-white print:text-black text-lg px-3 py-3">{sprs.total}</td>
                   <td className="text-right font-bold text-slate-400 px-5 py-3">-203</td>

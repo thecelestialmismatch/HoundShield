@@ -1,35 +1,19 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`TextLogo > applies dark variant correctly 1`] = `
+exports[`TextLogo > applies dark variant (white text on dark surfaces) 1`] = `
 <span
-  class="font-black tracking-tight leading-none "
+  class="font-display font-normal tracking-tight leading-none text-white "
+  style="letter-spacing: -0.015em;"
 >
-  <span
-    class="text-white"
-  >
-    Hound
-  </span>
-  <span
-    class="font-bold text-white/80"
-  >
-     Shield
-  </span>
+  HoundShield
 </span>
 `;
 
-exports[`TextLogo > applies light variant correctly 1`] = `
+exports[`TextLogo > applies light variant (ink text on light surfaces) 1`] = `
 <span
-  class="font-black tracking-tight leading-none "
+  class="font-display font-normal tracking-tight leading-none text-ink-primary "
+  style="letter-spacing: -0.015em;"
 >
-  <span
-    class="text-[#1A3347]"
-  >
-    Hound
-  </span>
-  <span
-    class="font-bold text-slate-600"
-  >
-     Shield
-  </span>
+  HoundShield
 </span>
 `;

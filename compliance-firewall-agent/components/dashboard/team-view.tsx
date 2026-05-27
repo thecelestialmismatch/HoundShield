@@ -283,7 +283,7 @@ export default function TeamView() {
                   <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2">
                     <button
                       onClick={() => setAssignModalOpen(agent.id)}
-                      className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                      className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-md bg-brand-500 hover:bg-brand-600 text-white transition-colors"
                     >
                       <ListTodo className="w-3 h-3" /> Assign Task
                     </button>
@@ -338,7 +338,7 @@ export default function TeamView() {
                 onChange={(e) => setAssignText(e.target.value)}
                 placeholder="Describe the task..."
                 rows={3}
-                className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 resize-none"
+                className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-brand-500/50 resize-none"
               />
             </div>
             <div className="px-6 py-4 border-t border-white/10 flex justify-end gap-2">
@@ -350,7 +350,7 @@ export default function TeamView() {
               </button>
               <button
                 onClick={() => handleAssign(assignModalOpen)}
-                className="text-sm font-medium px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                className="text-sm font-medium px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white transition-colors"
               >
                 Assign
               </button>

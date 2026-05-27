@@ -32,7 +32,7 @@ import type {
 // ─── Tailwind safelist for dynamic colors (rendered at build time) ───────────
 const _TW_SAFELIST = [
   "bg-emerald-500/100/20", "text-emerald-400", "border-emerald-500", "border-emerald-500/30",
-  "bg-amber-500/100/20", "text-amber-400", "border-amber-500", "border-amber-500/30",
+  "bg-brand-500/100/20", "text-brand-400", "border-brand-500", "border-brand-500/30",
   "bg-red-500/20", "text-red-400", "border-red-500", "border-red-500/30",
   "bg-white/[0.03]0/20", "text-slate-400", "border-slate-500", "border-slate-500/30",
   "shadow-[0_0_12px_rgba(0,0,0,0.3)]",
@@ -190,12 +190,12 @@ export default function AssessmentPage() {
       <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
         {/* Demo mode save warning */}
         {isDemo && (
-          <div className="mb-5 flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-300">
-            <span className="mt-0.5 text-amber-400">️</span>
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-brand-500/20 bg-brand-500/5 px-4 py-3 text-sm text-brand-300">
+            <span className="mt-0.5 text-brand-400">️</span>
             <span>
-              <span className="font-semibold text-amber-200">Results are not being saved.</span>{" "}
+              <span className="font-semibold text-brand-200">Results are not being saved.</span>{" "}
               Complete your account setup to persist assessment data across sessions.{" "}
-              <a href="/command-center/settings" className="underline underline-offset-2 hover:text-amber-100 transition-colors">
+              <a href="/command-center/settings" className="underline underline-offset-2 hover:text-brand-100 transition-colors">
                 Go to Settings →
               </a>
             </span>

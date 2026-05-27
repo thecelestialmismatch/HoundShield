@@ -210,7 +210,7 @@ export default function ControlCard({
                   <span>•</span>
                   <span className={`font-medium ${
                     control.riskPriority === "CRITICAL" ? "text-red-400" :
-                    control.riskPriority === "HIGH" ? "text-amber-400" :
+                    control.riskPriority === "HIGH" ? "text-brand-400" :
                     control.riskPriority === "MEDIUM" ? "text-brand-400" : "text-slate-400"
                   }`}>
                     {control.riskPriority} priority

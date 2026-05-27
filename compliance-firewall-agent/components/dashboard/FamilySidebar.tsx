@@ -86,7 +86,7 @@ export default function FamilySidebar({
             {/* Status dots */}
             <div className="flex gap-0.5 shrink-0">
               {stats.met > 0 && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/100" title={`${stats.met} met`} />}
-              {stats.partial > 0 && <span className="w-1.5 h-1.5 rounded-full bg-amber-500/100" title={`${stats.partial} partial`} />}
+              {stats.partial > 0 && <span className="w-1.5 h-1.5 rounded-full bg-brand-500/100" title={`${stats.partial} partial`} />}
               {stats.unmet > 0 && <span className="w-1.5 h-1.5 rounded-full bg-red-500" title={`${stats.unmet} unmet`} />}
             </div>
           </button>
