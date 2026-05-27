@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
 
 // Mock Next.js dynamic (PlatformDashboard is SSR:false)
 vi.mock("next/dynamic", () => ({
@@ -20,6 +20,19 @@ vi.mock("framer-motion", () => ({
 }));
 
 import { HeroSection } from "../HeroSection";
+
+// Freeze "today" so the CMMC Phase 2 day counter is deterministic in snapshots.
+// Without this, the snapshot ticks every time the suite runs on a new UTC day.
+const FROZEN_NOW = new Date("2026-05-26T00:00:00.000Z");
+
+beforeAll(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(FROZEN_NOW);
+});
+
+afterAll(() => {
+  vi.useRealTimers();
+});
 
 describe("HeroSection", () => {
   it("renders the main headline", () => {
