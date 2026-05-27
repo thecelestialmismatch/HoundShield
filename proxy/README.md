@@ -30,16 +30,42 @@ Blocked prompts get a `403` with the detection category. Everything is logged lo
 
 ```bash
 docker run -p 8080:8080 \
-  -e LICENSE_KEY=your-key \
-  -e PROXY_TARGET=https://api.openai.com \
-  ghcr.io/houndshield/proxy:latest
+  -e HOUNDSHIELD_LICENSE_KEY=your-key \
+  -e UPSTREAM_API_KEY=your-openai-or-anthropic-key \
+  -e UPSTREAM_PROVIDER=openai \
+  -v houndshield-data:/data \
+  ghcr.io/thecelestialmismatch/houndshield-proxy:latest
 ```
 
 **Docker Compose**
 
 ```bash
-curl -O https://raw.githubusercontent.com/houndshield/proxy/main/docker-compose.yml
-docker compose up -d
+curl -O https://raw.githubusercontent.com/thecelestialmismatch/HoundShield/main/proxy/docker-compose.yml
+HOUNDSHIELD_LICENSE_KEY=your-key UPSTREAM_API_KEY=your-key docker compose up -d
+```
+
+### Verify the image (recommended before any CUI deployment)
+
+Every published image is signed with [cosign](https://docs.sigstore.dev/) using
+keyless OIDC — no shared secret, no key rotation, the signature is bound to the
+GitHub Actions workflow that built it.
+
+```bash
+cosign verify ghcr.io/thecelestialmismatch/houndshield-proxy:latest \
+  --certificate-identity-regexp "https://github.com/thecelestialmismatch/HoundShield/.+" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+```
+
+A successful verification prints the certificate subject (the workflow path) and
+the digest the signature covers. If verification fails, do not run the image —
+contact security@houndshield.com.
+
+The SBOM is also attached as a build attestation:
+
+```bash
+cosign download attestation \
+  --predicate-type https://spdx.dev/Document \
+  ghcr.io/thecelestialmismatch/houndshield-proxy:latest
 ```
 
 **Configure your AI tools**
@@ -84,14 +110,19 @@ LICENSE_KEY=your-key PROXY_TARGET=https://api.openai.com npm start
 
 ## What requires a license
 
-| Feature | Plan |
+| Feature | Tier |
 |---------|------|
-| Dashboard + analytics | Pro ($199/mo) |
-| Brain AI compliance advisor | Pro+ |
-| PDF report (C3PAO-ready evidence) | Growth ($499/mo) |
-| Multi-tenant / MSP portal | Enterprise ($999+/mo) |
+| **CMMC AI Risk Assessment Report** (one-time PDF, NIST 800-171 mapping) | $499 one-time — lead product |
+| Dashboard + analytics + Slack/email alerts | $299/mo Starter *(available July 2026)* |
+| C3PAO-ready PDF reports, continuous detection, SIEM exports | $799/mo Pro *(available July 2026)* |
+| Mode B/C deployment support, dedicated CSM, air-gapped option | $1,499/mo Enterprise *(available July 2026)* |
 
-Get a free license key at [houndshield.com](https://houndshield.com) — free tier includes the proxy with up to 10,000 scans/day.
+Get a license key at [houndshield.com/pricing](https://houndshield.com/pricing). Subscription tiers launch
+in Stage 2 — until then, lead with the $499 one-time gap report.
+
+Architecture honesty: the hosted endpoint `proxy.houndshield.com` is **Mode A** (Vercel-hosted, NOT FedRAMP-authorized, demo only).
+For any CUI/PHI workload, run **Mode B** (this image, on your own infrastructure) or **Mode C** (air-gapped).
+See [houndshield.com/security](https://houndshield.com/security) for the full deployment-mode table.
 
 ---
 

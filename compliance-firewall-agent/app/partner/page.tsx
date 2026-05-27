@@ -97,7 +97,7 @@ export default function PartnerDashboard() {
         <div>
           <h1 className="text-2xl font-display font-bold text-white">Partner Dashboard</h1>
           <p className="text-sm text-slate-400 mt-1">
-            C3PAO multi-tenant management — all client organizations in one view
+            RPO &amp; MSP multi-tenant management — all client organizations in one view
           </p>
         </div>
         <Link
@@ -239,13 +239,13 @@ export default function PartnerDashboard() {
             href: "/partner/clients",
             icon: Building2,
             title: "Add Client Org",
-            desc: "Onboard a new defense contractor to Hound Shield in under 2 minutes",
+            desc: "Onboard a new client (DIB, healthcare, or law firm) in under 2 minutes",
           },
           {
             href: "/partner/billing",
             icon: TrendingUp,
             title: "Partner Billing",
-            desc: "$75/client/month — view invoices and usage",
+            desc: "$299 wholesale per $499 gap report — view invoices and rev share",
           },
         ].map(({ href, icon: Icon, title, desc }) => (
           <Link

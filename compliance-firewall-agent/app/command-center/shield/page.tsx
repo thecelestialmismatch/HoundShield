@@ -6,25 +6,17 @@ import { motion } from "framer-motion";
 import {
   Shield,
   ArrowRight,
-  BarChart3,
   AlertTriangle,
-  CheckCircle2,
-  XCircle,
   Clock,
-  TrendingUp,
   FileText,
   Crosshair,
   BookOpen,
   Zap,
+  TrendingUp,
 } from "lucide-react";
-import SPRSGauge from "@/components/dashboard/SPRSGauge";
+import SPRSDashboardWidget from "@/components/dashboard/SPRSDashboardWidget";
 import { ALL_CONTROLS } from "@/lib/shieldready/controls";
-import { CONTROL_FAMILIES } from "@/lib/shieldready/controls/families";
-import {
-  calculateSPRS,
-  getCompletionPercent,
-  getRemediationPriorities,
-} from "@/lib/shieldready/scoring";
+import { getRemediationPriorities } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses, getOrganization } from "@/lib/shieldready/storage";
 import type { AssessmentResponse } from "@/lib/shieldready/types";
 
@@ -71,23 +63,7 @@ export default function ShieldReadyDashboard() {
     return getOrganization();
   }, []);
 
-  const sprs = useMemo(() => calculateSPRS(ALL_CONTROLS, responses), [responses]);
-  const completion = useMemo(() => getCompletionPercent(ALL_CONTROLS.length, responses), [responses]);
   const priorities = useMemo(() => getRemediationPriorities(ALL_CONTROLS, responses), [responses]);
-
-  const responseMap = useMemo(() => new Map(responses.map((r) => [r.controlId, r])), [responses]);
-
-  const statusCounts = useMemo(() => {
-    let met = 0, partial = 0, unmet = 0, open = 0;
-    for (const c of ALL_CONTROLS) {
-      const s = responseMap.get(c.id)?.status ?? "NOT_ASSESSED";
-      if (s === "MET") met++;
-      else if (s === "PARTIAL") partial++;
-      else if (s === "UNMET") unmet++;
-      else open++;
-    }
-    return { met, partial, unmet, open };
-  }, [responseMap]);
 
   const hasStarted = responses.length > 0;
 
@@ -139,65 +115,7 @@ export default function ShieldReadyDashboard() {
       </div>
 
       {/* Score + Stats */}
-      {hasStarted && (
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-8">
-          <div className="lg:col-span-2 bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-8 flex items-center justify-center">
-            <SPRSGauge score={sprs.total} size="md" />
-          </div>
-
-          <div className="lg:col-span-4 grid grid-cols-2 gap-3">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              className="bg-white/[0.03]/70 border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-slate-400 text-xs mb-2">
-                <BarChart3 size={14} />
-                Completion
-              </div>
-              <div className="text-3xl font-bold text-white">{completion}%</div>
-              <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3 overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-brand-500 to-emerald-500 rounded-full"
-                  animate={{ width: `${completion}%` }}
-                />
-              </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-              className="bg-white/[0.03]/70 border border-emerald-500/20 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-emerald-400 text-xs mb-2">
-                <CheckCircle2 size={14} />
-                Controls Met
-              </div>
-              <div className="text-3xl font-bold text-emerald-400">{statusCounts.met}</div>
-              <div className="text-xs text-slate-500 mt-1">of {ALL_CONTROLS.length}</div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="bg-white/[0.03]/70 border border-brand-500/20 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-brand-400 text-xs mb-2">
-                <AlertTriangle size={14} />
-                Partial
-              </div>
-              <div className="text-3xl font-bold text-brand-400">{statusCounts.partial}</div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-              className="bg-white/[0.03]/70 border border-red-500/20 rounded-2xl p-5"
-            >
-              <div className="flex items-center gap-2 text-red-400 text-xs mb-2">
-                <XCircle size={14} />
-                Gaps
-              </div>
-              <div className="text-3xl font-bold text-red-400">{statusCounts.unmet + statusCounts.open}</div>
-              <div className="text-xs text-slate-500 mt-1">
-                {statusCounts.unmet} unmet, {statusCounts.open} not assessed
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      )}
+      <SPRSDashboardWidget variant="full" />
 
       {/* Nav Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -226,12 +144,60 @@ export default function ShieldReadyDashboard() {
         })}
       </div>
 
+      {/* HoundShield SPRS protection card */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="bg-gradient-to-r from-brand-500/10 to-emerald-500/10 border border-brand-500/20 rounded-2xl p-6 mb-6"
+      >
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <TrendingUp size={16} className="text-brand-400" />
+              <span className="text-sm font-semibold text-brand-400">HoundShield Gateway Active</span>
+            </div>
+            <h3 className="text-lg font-bold text-white mb-1">
+              Protects up to <span className="text-brand-400">+22 SPRS points</span>
+            </h3>
+            <p className="text-slate-400 text-sm max-w-xl">
+              HoundShield&apos;s AI prompt scanner directly enforces 6 NIST 800-171 Rev 2 controls — blocking CUI/PHI/credential exfiltration before it reaches any AI model.
+            </p>
+          </div>
+          <Link
+            href="/command-center/shield/coverage"
+            className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500/20 hover:bg-brand-500/30 border border-brand-500/30 text-brand-300 text-sm font-medium transition-colors"
+          >
+            View coverage map <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {[
+            { id: "3.1.3", label: "CUI flow control", pts: 5 },
+            { id: "3.1.22", label: "CUI on public systems", pts: 3 },
+            { id: "3.3.1", label: "Audit logging", pts: 3 },
+            { id: "3.3.2", label: "User traceability", pts: 3 },
+            { id: "3.13.1", label: "Boundary protection", pts: 1 },
+            { id: "3.12.3", label: "Control monitoring", pts: 3 },
+          ].map((c) => (
+            <span
+              key={c.id}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-xs font-mono"
+            >
+              <span className="text-brand-400">{c.id}</span>
+              <span className="text-white/50">{c.label}</span>
+              <span className="text-emerald-400 font-bold">+{c.pts}pts</span>
+            </span>
+          ))}
+        </div>
+      </motion.div>
+
       {/* Top priorities (if assessment started) */}
       {hasStarted && priorities.length > 0 && (
         <div className="bg-white/[0.03]/70 backdrop-blur-xl border border-white/10 dark:border-white/10 dark:border-slate-700/50 rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between p-5 border-b border-white/10 dark:border-white/10 dark:border-slate-700/50">
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <AlertTriangle size={18} className="text-brand-400" />
+              <AlertTriangle size={18} className="text-amber-400" />
               Top Remediation Priorities
             </h3>
             <Link
