@@ -8,39 +8,39 @@
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
 // Supabase — start unconfigured (demo mode)
-const mockIsSupabaseConfigured = jest.fn().mockReturnValue(false);
-const mockCreateServiceClient = jest.fn();
-const mockCreateClient = jest.fn();
-jest.mock("@/lib/supabase/client", () => ({
+const mockIsSupabaseConfigured = vi.fn().mockReturnValue(false);
+const mockCreateServiceClient = vi.fn();
+const mockCreateClient = vi.fn();
+vi.mock("@/lib/supabase/client", () => ({
   isSupabaseConfigured: () => mockIsSupabaseConfigured(),
   createServiceClient: () => mockCreateServiceClient(),
 }));
-jest.mock("@/lib/supabase/server", () => ({
+vi.mock("@/lib/supabase/server", () => ({
   createClient: () => mockCreateClient(),
 }));
 
 // Subscription check
-const mockGetUserSubscription = jest.fn().mockResolvedValue("free");
-const mockCanAccessGateway = jest.fn().mockResolvedValue(true);
-jest.mock("@/lib/subscription/check", () => ({
+const mockGetUserSubscription = vi.fn().mockResolvedValue("free");
+const mockCanAccessGateway = vi.fn().mockResolvedValue(true);
+vi.mock("@/lib/subscription/check", () => ({
   getUserSubscription: (...args: unknown[]) => mockGetUserSubscription(...args),
   canAccessGateway: (...args: unknown[]) => mockCanAccessGateway(...args),
 }));
 
 // Seed anchors
-jest.mock("@/lib/audit/seed-anchor", () => ({
-  createSeedAnchor: jest.fn().mockResolvedValue("mock-seed-hash"),
-  computeMerkleRoot: jest.fn().mockReturnValue("mock-merkle-root"),
+vi.mock("@/lib/audit/seed-anchor", () => ({
+  createSeedAnchor: vi.fn().mockResolvedValue("mock-seed-hash"),
+  computeMerkleRoot: vi.fn().mockReturnValue("mock-merkle-root"),
 }));
 
 // PDF generator
-const mockGeneratePDF = jest.fn().mockReturnValue(Buffer.from("fake-pdf-content"));
-jest.mock("@/lib/reports/pdf-generator", () => ({
+const mockGeneratePDF = vi.fn().mockReturnValue(Buffer.from("fake-pdf-content"));
+vi.mock("@/lib/reports/pdf-generator", () => ({
   generateCompliancePDF: (...args: unknown[]) => mockGeneratePDF(...args),
 }));
 
 // Demo data
-jest.mock("@/lib/demo-data", () => ({
+vi.mock("@/lib/demo-data", () => ({
   DEMO_EVENTS: [
     {
       id: "1",
@@ -238,7 +238,7 @@ describe("GET /api/reports/generate?format=pdf — production tier gating", () =
 
   it("returns 401 when user is not authenticated", async () => {
     mockCreateClient.mockReturnValue({
-      auth: { getUser: jest.fn().mockResolvedValue({ data: { user: null } }) },
+      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null } }) },
     });
     const res = await GET(makeRequest({ from: FROM, to: TO, format: "pdf" }));
     expect(res.status).toBe(401);
@@ -247,7 +247,7 @@ describe("GET /api/reports/generate?format=pdf — production tier gating", () =
   it("returns 402 when user is on free tier (PDF requires Growth+)", async () => {
     mockCreateClient.mockReturnValue({
       auth: {
-        getUser: jest.fn().mockResolvedValue({ data: { user: { id: "user-123" } } }),
+        getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-123" } } }),
       },
     });
     mockGetUserSubscription.mockResolvedValue("free");
@@ -261,7 +261,7 @@ describe("GET /api/reports/generate?format=pdf — production tier gating", () =
   it("returns 402 for 'pro' tier (Growth+ required for PDF)", async () => {
     mockCreateClient.mockReturnValue({
       auth: {
-        getUser: jest.fn().mockResolvedValue({ data: { user: { id: "user-123" } } }),
+        getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-123" } } }),
       },
     });
     mockGetUserSubscription.mockResolvedValue("pro");
@@ -272,23 +272,23 @@ describe("GET /api/reports/generate?format=pdf — production tier gating", () =
   it("allows PDF for 'growth' tier user", async () => {
     mockCreateClient.mockReturnValue({
       auth: {
-        getUser: jest.fn().mockResolvedValue({ data: { user: { id: "user-456" } } }),
+        getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-456" } } }),
       },
     });
     mockGetUserSubscription.mockResolvedValue("growth");
 
-    const mockSelect = jest.fn().mockReturnThis();
-    const mockGte = jest.fn().mockReturnThis();
-    const mockLte = jest.fn().mockReturnThis();
-    const mockOrder = jest.fn().mockResolvedValue({ data: [], error: null });
-    const mockInsert = jest.fn().mockReturnThis();
-    const mockSelectReport = jest.fn().mockReturnThis();
-    const mockSingle = jest.fn().mockResolvedValue({ data: { id: "report-1" }, error: null });
-    const mockUpdate = jest.fn().mockReturnThis();
-    const mockEq = jest.fn().mockResolvedValue({ data: null, error: null });
+    const mockSelect = vi.fn().mockReturnThis();
+    const mockGte = vi.fn().mockReturnThis();
+    const mockLte = vi.fn().mockReturnThis();
+    const mockOrder = vi.fn().mockResolvedValue({ data: [], error: null });
+    const mockInsert = vi.fn().mockReturnThis();
+    const mockSelectReport = vi.fn().mockReturnThis();
+    const mockSingle = vi.fn().mockResolvedValue({ data: { id: "report-1" }, error: null });
+    const mockUpdate = vi.fn().mockReturnThis();
+    const mockEq = vi.fn().mockResolvedValue({ data: null, error: null });
 
     mockCreateServiceClient.mockReturnValue({
-      from: jest.fn((table: string) => {
+      from: vi.fn((table: string) => {
         if (table === "compliance_events") {
           return { select: mockSelect, gte: mockGte, lte: mockLte, order: mockOrder };
         }

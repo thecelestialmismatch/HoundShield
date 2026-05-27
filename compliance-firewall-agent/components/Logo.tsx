@@ -8,6 +8,13 @@ interface LogoProps {
    * matches the v3 reference embed style.
    */
   card?: boolean;
+  /**
+   * Surface variant. `"light"` (default) renders the cream card unchanged.
+   * `"dark"` swaps the card to a translucent slate surface so the mark
+   * still reads on dark navbars/footers. Accepted for back-compat with
+   * callers that pass `variant` down from the parent Navbar.
+   */
+  variant?: "light" | "dark";
 }
 
 /**
@@ -18,7 +25,12 @@ interface LogoProps {
  * We translate the JSX-style inline embed into a Next.js `<Image>` so the
  * file stays statically optimized.
  */
-export function Logo({ className = "", size = 32, card = true }: LogoProps) {
+export function Logo({
+  className = "",
+  size = 32,
+  card = true,
+  variant = "light",
+}: LogoProps) {
   const radius = Math.round(size * 0.18);
   const inner = Math.round(size * 0.78);
   const pad = Math.round((size - inner) / 2);
@@ -37,9 +49,14 @@ export function Logo({ className = "", size = 32, card = true }: LogoProps) {
     );
   }
 
+  const cardSurface =
+    variant === "dark"
+      ? "bg-white/10 ring-1 ring-white/15 shadow-card"
+      : "bg-cream-100 ring-1 ring-cream-300/60 shadow-card";
+
   return (
     <span
-      className={`inline-flex items-center justify-center flex-shrink-0 bg-cream-100 ring-1 ring-cream-300/60 shadow-card ${className}`}
+      className={`inline-flex items-center justify-center flex-shrink-0 ${cardSurface} ${className}`}
       style={{
         width: size,
         height: size,

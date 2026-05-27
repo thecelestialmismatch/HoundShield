@@ -31,6 +31,7 @@ import {
   SlidersHorizontal,
   BarChart3,
   Download,
+  Map,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
@@ -72,6 +73,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { id: "shield-dashboard", label: "SPRS Dashboard", icon: Target, href: "/command-center/shield" },
       { id: "assessment", label: "Assessment", icon: ClipboardCheck, href: "/command-center/shield/assessment" },
+      { id: "coverage", label: "Coverage Map", icon: Map, href: "/command-center/shield/coverage" },
       { id: "gaps", label: "Gap Analysis", icon: SearchX, href: "/command-center/shield/gaps" },
       { id: "reports", label: "Reports", icon: FileBarChart, href: "/command-center/shield/reports" },
       { id: "resources", label: "Resources", icon: BookOpen, href: "/command-center/shield/resources" },

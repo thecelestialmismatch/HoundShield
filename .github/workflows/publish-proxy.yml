@@ -1,0 +1,136 @@
+name: Publish Proxy Image
+
+# Builds and publishes the HoundShield proxy image to GitHub Container Registry.
+# Multi-arch (linux/amd64, linux/arm64). Cosign keyless OIDC signing. SBOM via attestation.
+#
+# Triggers:
+#   1. Push of a tag matching `proxy-v*.*.*` (e.g. `proxy-v1.0.0`) — releases the version
+#   2. Manual workflow_dispatch — for ad-hoc rebuilds of `:latest` against current main
+#
+# Outputs:
+#   - ghcr.io/${owner}/houndshield-proxy:latest
+#   - ghcr.io/${owner}/houndshield-proxy:${tag}
+#   - ghcr.io/${owner}/houndshield-proxy:sha-${short_sha}
+#   - Signature attached via cosign keyless (verifiable with `cosign verify`)
+#   - SBOM attached as a build attestation
+#
+# Verification (for end users) — see proxy/README.md "Verify the image" section.
+
+on:
+  push:
+    tags:
+      - "proxy-v*.*.*"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why are you triggering a manual publish?"
+        required: true
+        default: "Refresh :latest from main"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/houndshield-proxy
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # id-token: write is required for cosign keyless OIDC signing
+      id-token: write
+      # attestations: write is required for SBOM + provenance attestations
+      attestations: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU (for arm64 cross-build)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract image metadata (tags + labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # Tag-triggered release: turn `proxy-v1.2.3` into `1.2.3` + `latest`
+            type=match,pattern=proxy-v(.*),group=1,enable=${{ startsWith(github.ref, 'refs/tags/proxy-v') }}
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/proxy-v') || github.event_name == 'workflow_dispatch' }}
+            # Always include the short SHA for traceability
+            type=sha,prefix=sha-,format=short
+          labels: |
+            org.opencontainers.image.title=HoundShield Proxy
+            org.opencontainers.image.description=Local AI compliance proxy for CMMC Level 2, HIPAA, and SOC 2. Scans every prompt before it reaches ChatGPT/Copilot/Claude.
+            org.opencontainers.image.vendor=HoundShield
+            org.opencontainers.image.licenses=BUSL-1.1
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.documentation=https://houndshield.com/security
+
+      - name: Build and push (multi-arch)
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ./proxy
+          file: ./proxy/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image by digest (keyless OIDC)
+        env:
+          # All tags above point to the same content; signing by digest covers every tag.
+          DIGEST: ${{ steps.build.outputs.digest }}
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r tag; do
+            [ -z "$tag" ] && continue
+            printf 'Signing %s@%s\n' "$tag" "$DIGEST"
+            cosign sign --yes "${tag}@${DIGEST}"
+          done <<< "$TAGS"
+
+      - name: Attest SBOM
+        uses: actions/attest-sbom@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          sbom-path: ${{ steps.build.outputs.metadata }}
+          push-to-registry: true
+
+      - name: Write job summary
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+          TAGS: ${{ steps.meta.outputs.tags }}
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          REPO: ${{ github.repository }}
+        run: |
+          {
+            printf '## HoundShield Proxy — Image Published\n\n'
+            printf '**Digest:** `%s`\n\n' "$DIGEST"
+            printf '**Tags:**\n```\n%s\n```\n\n' "$TAGS"
+            printf '**Verification:**\n```bash\n'
+            printf 'cosign verify %s:latest \\\n' "$IMAGE"
+            printf '  --certificate-identity-regexp "https://github.com/%s/.+" \\\n' "$REPO"
+            printf '  --certificate-oidc-issuer https://token.actions.githubusercontent.com\n'
+            printf '```\n'
+          } >> "$GITHUB_STEP_SUMMARY"
