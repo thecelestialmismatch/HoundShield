@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { PublicShell } from "@/components/layout/PublicShell";
+import { SectionEyebrow } from "@/components/marketing/SectionEyebrow";
 import { getAllPosts, getPostBySlug } from "@/lib/blog/posts";
 
 // ── Static params (build all posts at compile time) ───────────────────────────
@@ -118,128 +121,170 @@ export default async function BlogPostPage({
     .slice(0, 3);
 
   return (
-    <>
+    <PublicShell>
       <ArticleJsonLd post={post} />
       <BreadcrumbJsonLd post={post} />
-      <main className="min-h-screen bg-[#07070b] text-white">
-        {/* Nav */}
-        <header className="border-b border-white/10 bg-[#07070b]/80 backdrop-blur-sm sticky top-0 z-10">
-          <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-            <Link href="/blog" className="text-sm text-white/60 hover:text-white transition-colors">
-              ← Blog
+      <article style={{ padding: "128px 24px 96px", maxWidth: 760, margin: "0 auto" }}>
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5"
+          style={{ color: "var(--hs-ink-tertiary)", fontSize: 13, marginBottom: 24 }}
+        >
+          <ArrowLeft className="w-3.5 h-3.5" /> All posts
+        </Link>
+        <SectionEyebrow>
+          {post.category} · {post.readingTime} min read
+        </SectionEyebrow>
+        <h1
+          className="font-display"
+          style={{
+            fontSize: "clamp(32px,4.5vw,52px)",
+            fontWeight: 600,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            color: "var(--hs-ink)",
+            margin: "16px 0 16px",
+          }}
+        >
+          {post.title}
+        </h1>
+        <p style={{ fontSize: 18, color: "var(--hs-ink-secondary)", lineHeight: 1.65, marginBottom: 28 }}>
+          {post.excerpt}
+        </p>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            flexWrap: "wrap",
+            fontSize: 13.5,
+            color: "var(--hs-ink-tertiary)",
+            paddingBottom: 28,
+            marginBottom: 40,
+            borderBottom: "1px solid var(--hs-border-subtle)",
+          }}
+        >
+          <span>
+            By <span style={{ color: "var(--hs-ink)" }}>{post.author}</span>
+          </span>
+          <span aria-hidden>·</span>
+          <time dateTime={post.date}>
+            {new Date(post.date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
+        </div>
+        <div
+          className="hs-prose"
+          style={{ fontSize: 16.5, lineHeight: 1.75, color: "var(--hs-ink-secondary)" }}
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+        <div style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid var(--hs-border-subtle)", display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {post.tags.map((tag) => (
+            <span
+              key={tag}
+              style={{
+                fontSize: 12,
+                padding: "5px 10px",
+                borderRadius: 9999,
+                background: "var(--hs-mist)",
+                color: "var(--hs-ink-secondary)",
+                fontFamily: "var(--font-mono)",
+              }}
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+        <aside
+          className="glass-card"
+          style={{
+            marginTop: 56,
+            padding: 32,
+          }}
+        >
+          <h2
+            className="font-display"
+            style={{
+              fontSize: 24,
+              fontWeight: 600,
+              color: "var(--hs-ink)",
+              letterSpacing: "-0.015em",
+              marginBottom: 10,
+            }}
+          >
+            Close the AI Compliance Gap
+          </h2>
+          <p style={{ color: "var(--hs-ink-secondary)", marginBottom: 20, fontSize: 14.5, lineHeight: 1.65 }}>
+            HoundShield intercepts AI prompts before they leave your network. One URL change, sub-10ms scanning, PDF evidence for your C3PAO assessor. Setup takes under 10 minutes.
+          </p>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <Link
+              href="/demo"
+              className="text-white inline-flex items-center gap-1.5"
+              style={{
+                padding: "10px 16px",
+                borderRadius: 10,
+                fontWeight: 600,
+                fontSize: 14,
+                background: "linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))",
+                boxShadow: "0 4px 12px rgba(90,134,168,0.25)",
+              }}
+            >
+              See the Demo →
             </Link>
-            <Link href="/" className="text-sm text-white/40 hover:text-white transition-colors">
-              houndshield.com
+            <Link
+              href="/pricing"
+              style={{
+                padding: "10px 16px",
+                borderRadius: 10,
+                fontWeight: 600,
+                fontSize: 14,
+                color: "var(--hs-ink)",
+                background: "var(--hs-mist)",
+                border: "1px solid var(--hs-border)",
+              }}
+            >
+              View Pricing
             </Link>
           </div>
-        </header>
-
-        <div className="max-w-4xl mx-auto px-6 py-16">
-          {/* Breadcrumb */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/30 mb-8">
-            <Link href="/" className="hover:text-white/60 transition-colors">Home</Link>
-            <span>/</span>
-            <Link href="/blog" className="hover:text-white/60 transition-colors">Blog</Link>
-            <span>/</span>
-            <span className="text-white/50 truncate max-w-xs">{post.title}</span>
-          </nav>
-
-          {/* Article header */}
-          <header className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full border bg-blue-900/40 text-blue-300 border-blue-800">
-                {post.category}
-              </span>
-              <span className="text-xs text-white/40">{post.readingTime} min read</span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6">{post.title}</h1>
-            <p className="text-lg text-white/60 leading-relaxed mb-8">{post.excerpt}</p>
-            <div className="flex items-center gap-4 text-sm text-white/40 pb-8 border-b border-white/10">
-              <span>
-                By <span className="text-white/70">{post.author}</span>
-              </span>
-              <span>·</span>
-              <time dateTime={post.date}>
-                {new Date(post.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-            </div>
-          </header>
-
-          {/* Article body */}
-          <article
-            className="prose prose-invert prose-blue max-w-none
-              prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-4
-              prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8
-              prose-p:text-white/70 prose-p:leading-relaxed
-              prose-li:text-white/70 prose-li:leading-relaxed
-              prose-strong:text-white prose-strong:font-semibold
-              prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-              prose-table:text-sm prose-th:text-white prose-td:text-white/70
-              prose-blockquote:border-blue-500 prose-blockquote:text-white/60"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-
-          {/* Tags */}
-          <div className="mt-12 pt-8 border-t border-white/10">
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs px-3 py-1 bg-white/[0.05] border border-white/10 rounded-full text-white/50"
-                >
-                  {tag}
-                </span>
+        </aside>
+        {related.length > 0 && (
+          <section style={{ marginTop: 56 }}>
+            <SectionEyebrow>Related articles</SectionEyebrow>
+            <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14 }}>
+              {related.map((p) => (
+                <Link key={p.slug} href={`/blog/${p.slug}`} className="glass-card" style={{ padding: 18, display: "block" }}>
+                  <div className="font-mono uppercase" style={{ fontSize: 10, letterSpacing: "0.14em", color: "var(--hs-ink-tertiary)", marginBottom: 6 }}>
+                    {p.readingTime} min read
+                  </div>
+                  <h3 className="font-display" style={{ fontSize: 15.5, fontWeight: 600, color: "var(--hs-ink)", lineHeight: 1.3, letterSpacing: "-0.01em" }}>
+                    {p.title}
+                  </h3>
+                </Link>
               ))}
             </div>
-          </div>
-
-          {/* CTA */}
-          <aside className="mt-16 p-8 bg-gradient-to-br from-blue-950/40 to-slate-900/40 border border-blue-500/20 rounded-2xl">
-            <h2 className="text-xl font-bold mb-3">Close the AI Compliance Gap</h2>
-            <p className="text-white/60 mb-6 text-sm leading-relaxed">
-              HoundShield intercepts AI prompts before they leave your network. One URL change,
-              sub-10ms scanning, PDF evidence for your C3PAO assessor. Setup takes under 10 minutes.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/demo"
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-colors text-center"
-              >
-                See the Demo →
-              </Link>
-              <Link
-                href="/pricing"
-                className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-xl transition-colors text-center"
-              >
-                View Pricing
-              </Link>
-            </div>
-          </aside>
-
-          {/* Related posts */}
-          {related.length > 0 && (
-            <section className="mt-16">
-              <h2 className="text-lg font-bold mb-6 text-white/80">Related Articles</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {related.map((p) => (
-                  <Link
-                    key={p.slug}
-                    href={`/blog/${p.slug}`}
-                    className="block p-5 bg-white/[0.03] border border-white/10 rounded-xl hover:border-blue-500/30 hover:bg-white/[0.05] transition-all"
-                  >
-                    <p className="text-xs text-white/40 mb-2">{p.readingTime} min read</p>
-                    <h3 className="text-sm font-semibold text-white/90 leading-snug">{p.title}</h3>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-      </main>
-    </>
+          </section>
+        )}
+      </article>
+      <style>{`
+        .hs-prose h2 { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--hs-ink); margin: 40px 0 16px; letter-spacing: -0.015em; line-height: 1.2; }
+        .hs-prose h3 { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--hs-ink); margin: 32px 0 12px; letter-spacing: -0.01em; line-height: 1.25; }
+        .hs-prose p { margin: 0 0 16px; }
+        .hs-prose ul, .hs-prose ol { margin: 0 0 16px 22px; padding: 0; }
+        .hs-prose li { margin-bottom: 8px; }
+        .hs-prose a { color: var(--hs-steel-dark); text-decoration: underline; text-decoration-color: var(--hs-border); text-underline-offset: 3px; }
+        .hs-prose a:hover { text-decoration-color: var(--hs-steel-dark); }
+        .hs-prose code { background: var(--hs-mist-md); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.92em; color: var(--hs-ink); }
+        .hs-prose pre { background: #0F1E2E; color: #C5DAE9; padding: 18px; border-radius: 12px; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.65; margin: 16px 0; }
+        .hs-prose blockquote { border-left: 3px solid var(--hs-steel); padding: 4px 18px; margin: 18px 0; color: var(--hs-ink-secondary); font-style: italic; }
+        .hs-prose strong { color: var(--hs-ink); font-weight: 600; }
+        .hs-prose table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+        .hs-prose th, .hs-prose td { padding: 8px 10px; border: 1px solid var(--hs-border-subtle); }
+        .hs-prose th { background: var(--hs-mist); color: var(--hs-ink); font-weight: 600; text-align: left; }
+      `}</style>
+    </PublicShell>
   );
 }

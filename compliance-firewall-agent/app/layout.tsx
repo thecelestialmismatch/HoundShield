@@ -2,11 +2,12 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
+import { fraunces, inter, jetbrains } from "./fonts";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 export const viewport: Viewport = {
-  themeColor: "#07070b",
+  themeColor: "#FAFCFF",
   width: "device-width",
   initialScale: 1,
 };
@@ -208,14 +209,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="dark scroll-smooth"
+      className={`scroll-smooth ${inter.variable} ${fraunces.variable} ${jetbrains.variable}`}
       suppressHydrationWarning
     >
       <head>
-        <link
-          rel="icon"
-          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
-        />
         <link rel="canonical" href={BASE_URL} />
         {/* Preconnect to key external resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -229,7 +226,7 @@ export default function RootLayout({
           />
         ))}
       </head>
-      <body className="min-h-screen font-sans antialiased relative">
+      <body className="min-h-screen font-body antialiased relative" style={{ background: "var(--hs-surface-0)", color: "var(--hs-ink)" }}>
         <ClientShell>
           {children}
           <GlobalChat />
