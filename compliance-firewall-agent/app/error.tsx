@@ -1,37 +1,89 @@
 "use client";
 
-import { Logo } from "@/components/Logo";
-import { RefreshCw } from "lucide-react";
+import { useEffect } from "react";
+import Link from "next/link";
+import { PublicShell } from "@/components/layout/PublicShell";
+import { SectionEyebrow } from "@/components/marketing/SectionEyebrow";
 
-export default function Error({
-  error,
-  reset,
-}: {
+interface ErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}
+
+export default function ErrorPage({ error, reset }: ErrorProps) {
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.error("Unhandled error in route:", error);
+  }, [error]);
+
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-8">
-      <div className="text-center max-w-md">
-        <Logo className="w-16 h-16 rounded-2xl mx-auto mb-6" />
-        <h1 className="text-2xl font-bold text-white mb-2">Something went wrong</h1>
-        <p className="text-slate-400 mb-2 text-sm">
-          An unexpected error occurred. Your data is safe — the compliance
-          firewall continues to protect your pipeline.
+    <PublicShell>
+      <section
+        style={{
+          padding: "160px 24px 120px",
+          maxWidth: 720,
+          margin: "0 auto",
+          textAlign: "center",
+        }}
+      >
+        <SectionEyebrow>500 — Something went wrong</SectionEyebrow>
+        <h1
+          className="font-display"
+          style={{
+            fontSize: "clamp(36px,5vw,56px)",
+            fontWeight: 600,
+            lineHeight: 1.05,
+            letterSpacing: "-0.02em",
+            color: "var(--hs-ink)",
+            margin: "16px 0 16px",
+          }}
+        >
+          Something broke on our end.
+        </h1>
+        <p style={{ fontSize: 17, color: "var(--hs-ink-secondary)", marginBottom: 32 }}>
+          The error was logged. You can retry, or head back home.
         </p>
         {error.digest && (
-          <p className="text-xs text-slate-500 font-mono mb-6">
-            Error ID: {error.digest}
+          <p
+            className="font-mono"
+            style={{ fontSize: 12, color: "var(--hs-ink-tertiary)", marginBottom: 24 }}
+          >
+            Reference: {error.digest}
           </p>
         )}
-        <button
-          onClick={reset}
-          className="btn-primary inline-flex items-center gap-2"
-        >
-          <RefreshCw className="w-4 h-4" />
-          Try Again
-        </button>
-      </div>
-    </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+          <button
+            onClick={reset}
+            type="button"
+            className="text-white inline-flex items-center gap-2"
+            style={{
+              padding: "11px 18px",
+              borderRadius: 10,
+              fontWeight: 600,
+              background: "linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))",
+              boxShadow: "0 4px 12px rgba(90,134,168,0.25)",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Try again
+          </button>
+          <Link
+            href="/"
+            style={{
+              padding: "11px 18px",
+              borderRadius: 10,
+              fontWeight: 600,
+              color: "var(--hs-ink)",
+              border: "1px solid var(--hs-border)",
+              background: "#fff",
+            }}
+          >
+            Home
+          </Link>
+        </div>
+      </section>
+    </PublicShell>
   );
 }

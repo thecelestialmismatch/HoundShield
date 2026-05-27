@@ -4,23 +4,22 @@ import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
-import { Logo } from "@/components/Logo";
-import { TextLogo } from "@/components/TextLogo";
+import { HoundShieldLogo } from "@/components/brand/HoundShieldLogo";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState("");
+  const [errMsg, setErrMsg] = useState("");
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setErrMsg("");
 
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     );
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
@@ -28,7 +27,7 @@ export default function ForgotPasswordPage() {
     });
 
     if (resetError) {
-      setError(resetError.message);
+      setErrMsg(resetError.message);
     } else {
       setSent(true);
     }
@@ -36,68 +35,133 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        {/* Logo */}
-        <div className="flex items-center justify-center gap-2.5 mb-8">
-          <Logo className="w-9 h-9" />
-          <TextLogo variant="dark" />
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px",
+        background: "var(--hs-surface-0)",
+      }}
+    >
+      <div className="glass-card" style={{ width: "100%", maxWidth: 420, padding: 32 }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
+          <HoundShieldLogo size={40} asLink />
         </div>
 
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-1.5"
+          style={{ fontSize: 12, color: "var(--hs-ink-tertiary)", marginBottom: 24 }}
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Back to login
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to login
         </Link>
 
         {sent ? (
-          <div className="text-center space-y-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto">
-              <CheckCircle className="w-6 h-6 text-emerald-400" />
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                background: "rgba(112,200,140,0.12)",
+                border: "1px solid rgba(112,200,140,0.30)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 16,
+              }}
+            >
+              <CheckCircle className="w-6 h-6" style={{ color: "#3FA070" }} />
             </div>
-            <h1 className="text-xl font-bold text-white">Check your email</h1>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <h1
+              className="font-display"
+              style={{ fontSize: 22, fontWeight: 600, color: "var(--hs-ink)", marginBottom: 8 }}
+            >
+              Check your email
+            </h1>
+            <p style={{ fontSize: 14, color: "var(--hs-ink-secondary)", lineHeight: 1.6 }}>
               We sent a password reset link to{" "}
-              <span className="text-slate-300 font-medium">{email}</span>.
-              <br />
-              Click the link in the email to reset your password.
+              <span style={{ color: "var(--hs-ink)", fontWeight: 500 }}>{email}</span>.
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 text-sm text-brand-400 hover:text-brand-400 transition-colors mt-4"
+              className="inline-flex items-center gap-1.5"
+              style={{ marginTop: 16, fontSize: 13, color: "var(--hs-steel-dark)", fontWeight: 600 }}
             >
               Return to login
             </Link>
           </div>
         ) : (
           <>
-            <h1 className="text-xl font-bold text-white mb-1">Reset your password</h1>
-            <p className="text-sm text-slate-400 mb-6">
+            <h1
+              className="font-display"
+              style={{ fontSize: 24, fontWeight: 600, color: "var(--hs-ink)", marginBottom: 6 }}
+            >
+              Reset your password
+            </h1>
+            <p style={{ fontSize: 14, color: "var(--hs-ink-secondary)", marginBottom: 20 }}>
               Enter your email and we&apos;ll send you a reset link.
             </p>
 
-            {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
-                {error}
+            {errMsg && (
+              <div
+                style={{
+                  marginBottom: 14,
+                  padding: 12,
+                  borderRadius: 10,
+                  background: "rgba(225,75,75,0.06)",
+                  border: "1px solid rgba(225,75,75,0.22)",
+                  color: "#9A2D2D",
+                  fontSize: 12,
+                }}
+              >
+                {errMsg}
               </div>
             )}
 
-            <form onSubmit={handleReset} className="space-y-4">
+            <form onSubmit={handleReset} style={{ display: "grid", gap: 14 }}>
               <div>
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">
+                <label
+                  className="font-mono uppercase"
+                  style={{
+                    display: "block",
+                    fontSize: 11,
+                    letterSpacing: "0.14em",
+                    color: "var(--hs-ink-tertiary)",
+                    marginBottom: 6,
+                  }}
+                >
                   Email
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <div style={{ position: "relative" }}>
+                  <Mail
+                    className="w-4 h-4"
+                    style={{
+                      position: "absolute",
+                      left: 12,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "var(--hs-ink-tertiary)",
+                    }}
+                  />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
+                    style={{
+                      width: "100%",
+                      padding: "12px 14px 12px 38px",
+                      borderRadius: 10,
+                      border: "1px solid var(--hs-border-subtle)",
+                      background: "#fff",
+                      color: "var(--hs-ink)",
+                      fontSize: 14,
+                      fontFamily: "inherit",
+                    }}
                   />
                 </div>
               </div>
@@ -105,7 +169,20 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-500 text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="text-white"
+                style={{
+                  width: "100%",
+                  padding: "12px 16px",
+                  borderRadius: 10,
+                  fontWeight: 600,
+                  fontSize: 14,
+                  background: "linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))",
+                  boxShadow: "0 4px 12px rgba(90,134,168,0.25)",
+                  border: "none",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  opacity: loading ? 0.6 : 1,
+                  fontFamily: "inherit",
+                }}
               >
                 {loading ? "Sending..." : "Send reset link"}
               </button>

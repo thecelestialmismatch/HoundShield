@@ -10,7 +10,34 @@
   --font-outfit: 'Outfit', ui-sans-serif, system-ui, sans-serif;
   --font-playfair: 'Playfair Display', ui-serif, Georgia, serif;
   --font-sans: var(--font-inter);
-  --font-display: var(--font-outfit);
+  --font-display: var(--font-fraunces, 'Fraunces', 'Newsreader', Georgia, serif);
+  --font-body: var(--font-inter-next, 'Inter', system-ui, sans-serif);
+  --font-mono: var(--font-jetbrains, 'JetBrains Mono', ui-monospace, monospace);
+
+  /* ── HoundShield brand tokens (steel-blue + cream, single light theme) ── */
+  --hs-steel: #81A6C6;
+  --hs-steel-dark: #5A86A8;
+  --hs-steel-light: #C5DAE9;
+  --hs-sky: #AACDDC;
+
+  --hs-surface-0: #FAFCFF;
+  --hs-surface-1: #F5F8FB;
+  --hs-surface-2: #F3E3D0;
+  --hs-surface-3: #EDD5BC;
+  --hs-sand: #D2C4B4;
+
+  --hs-ink: #0F1E2E;
+  --hs-ink-secondary: #3D5166;
+  --hs-ink-tertiary: #6B8299;
+
+  --hs-border-subtle: rgba(129, 166, 198, 0.12);
+  --hs-border: rgba(129, 166, 198, 0.22);
+  --hs-border-strong: rgba(129, 166, 198, 0.45);
+
+  --hs-mist: rgba(129, 166, 198, 0.06);
+  --hs-mist-md: rgba(129, 166, 198, 0.10);
+  --hs-glow: rgba(129, 166, 198, 0.18);
+
   /* Cursor position for section spotlights */
   --mx: -500px;
   --my: -500px;
@@ -26,7 +53,7 @@
   inset: 0;
   background: radial-gradient(
     500px circle at var(--mx) var(--my),
-    rgba(234, 88, 12, 0.06),
+    rgba(129, 166, 198, 0.10),
     transparent 40%
   );
   opacity: 0;
@@ -44,9 +71,86 @@
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .card-glow:hover {
-  border-color: rgba(234, 88, 12, 0.25) !important;
-  box-shadow: 0 0 0 1px rgba(234, 88, 12, 0.15), 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-color: rgba(129, 166, 198, 0.45) !important;
+  box-shadow: 0 0 0 1px rgba(129, 166, 198, 0.18), 0 8px 32px rgba(15, 30, 46, 0.08);
 }
+
+/* ── HoundShield public-site utilities ── */
+.nav-frosted {
+  background: rgba(250, 252, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--hs-border-subtle);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--hs-border-subtle);
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(15, 30, 46, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.glass-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--hs-border);
+  box-shadow: 0 8px 24px rgba(15, 30, 46, 0.08);
+}
+
+.glass-card-glow:hover {
+  box-shadow: 0 8px 28px var(--hs-glow);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: 0.55rem;
+  color: #fff;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel));
+  box-shadow: 0 4px 12px rgba(90, 134, 168, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(90, 134, 168, 0.32);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.5rem;
+  color: var(--hs-ink-secondary);
+  font-weight: 500;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.btn-ghost:hover {
+  color: var(--hs-ink);
+  background: var(--hs-mist);
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel), var(--hs-sky));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+.font-mono { font-family: var(--font-mono); }
+
+/* Dark sections inside public site (architectural problem, live-in-ten-minutes) */
+.hs-dark {
+  background: var(--hs-ink);
+  color: #C5DAE9;
+}
+.hs-dark .eyebrow-steel { color: var(--hs-sky); }
+.hs-dark a { color: #C5DAE9; }
 
 /* ═══════════════════════════════════════════════════════════════════
    HOUND SHIELD — Dark Design System
