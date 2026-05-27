@@ -446,10 +446,10 @@ import { OPENCLAW_TEMPLATES } from "./openclaw-templates";
 const ALL_TEMPLATES = [...MCKINSEY_TEMPLATES, ...TECHNICAL_TEMPLATES, ...OPENCLAW_TEMPLATES];
 
 const COLOR_MAP: Record<string, { icon: string; bg: string; border: string }> = {
-  brand: { icon: "text-indigo-400", bg: "bg-indigo-500/10", border: "border-indigo-500/20" },
+  brand: { icon: "text-brand-400", bg: "bg-brand-500/10", border: "border-brand-500/20" },
   info: { icon: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500/20" },
   success: { icon: "text-emerald-400", bg: "bg-emerald-500/100/10", border: "border-emerald-500/20" },
-  warning: { icon: "text-amber-400", bg: "bg-amber-500/100/10", border: "border-amber-500/20" },
+  warning: { icon: "text-brand-400", bg: "bg-brand-500/100/10", border: "border-brand-500/20" },
   danger: { icon: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/20" },
 };
 
@@ -673,7 +673,7 @@ export function AgentBuilder({
           <button
             onClick={() => setTemplateCategory('openclaw')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${templateCategory === 'openclaw'
-              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+              ? 'bg-brand-500/20 text-brand-300 border border-brand-500/30'
               : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
               }`}
           >
@@ -682,7 +682,7 @@ export function AgentBuilder({
           <button
             onClick={() => setTemplateCategory('enterprise')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${templateCategory === 'enterprise'
-              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+              ? 'bg-brand-500/20 text-brand-300 border border-brand-500/30'
               : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
               }`}
           >
@@ -691,7 +691,7 @@ export function AgentBuilder({
           <button
             onClick={() => setTemplateCategory('technical')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${templateCategory === 'technical'
-              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+              ? 'bg-brand-500/20 text-brand-300 border border-brand-500/30'
               : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
               }`}
           >
@@ -717,7 +717,7 @@ export function AgentBuilder({
                 <div className="flex gap-1 mt-2">
                   <button
                     onClick={() => quickLaunchTemplate(t)}
-                    className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-brand-500/20 text-brand-300 hover:bg-brand-500/30 transition-colors"
                   >
                     <Play className="w-2.5 h-2.5" /> Launch
                   </button>
@@ -785,7 +785,7 @@ export function AgentBuilder({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => launchAgent(agent)}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium hover:bg-indigo-500/20 transition-all"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-medium hover:bg-brand-500/20 transition-all"
                   >
                     <Play className="w-3.5 h-3.5" /> Launch
                   </button>
@@ -825,7 +825,7 @@ export function AgentBuilder({
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="e.g. Market Analyzer"
-                className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+                className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-brand-500/50 focus:outline-none transition-all"
               />
             </div>
 
@@ -835,7 +835,7 @@ export function AgentBuilder({
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="What does this agent do?"
-                className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all"
+                className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-brand-500/50 focus:outline-none transition-all"
               />
             </div>
 
@@ -846,7 +846,7 @@ export function AgentBuilder({
                 onChange={(e) => setForm({ ...form, systemPrompt: e.target.value })}
                 placeholder="Define the agent's behavior..."
                 rows={6}
-                className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-indigo-500/50 focus:outline-none transition-all resize-none font-mono"
+                className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:border-brand-500/50 focus:outline-none transition-all resize-none font-mono"
               />
               <p className="text-[10px] text-slate-300 dark:text-slate-300 mt-1">{form.systemPrompt.length} characters</p>
             </div>
@@ -860,7 +860,7 @@ export function AgentBuilder({
                     key={tool.name}
                     onClick={() => toggleFormTool(tool.name)}
                     className={`px-2.5 py-1 rounded-lg text-[11px] transition-colors ${form.tools.includes(tool.name)
-                      ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                      ? 'bg-brand-500/20 text-brand-300 border border-brand-500/30'
                       : 'bg-white/5 text-zinc-500 border border-white/10 hover:bg-white/10'
                       }`}
                   >
@@ -876,7 +876,7 @@ export function AgentBuilder({
                 <select
                   value={form.model}
                   onChange={(e) => setForm({ ...form, model: e.target.value })}
-                  className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-indigo-500/50 focus:outline-none transition-all"
+                  className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-brand-500/50 focus:outline-none transition-all"
                 >
                   {AVAILABLE_MODELS.map((m) => (
                     <option key={m.id} value={m.id}>{m.name} ({m.tag})</option>
@@ -892,7 +892,7 @@ export function AgentBuilder({
                   step="0.1"
                   value={form.temperature}
                   onChange={(e) => setForm({ ...form, temperature: parseFloat(e.target.value) || 0.7 })}
-                  className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-indigo-500/50 focus:outline-none transition-all"
+                  className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-brand-500/50 focus:outline-none transition-all"
                 />
               </div>
             </div>

@@ -50,8 +50,8 @@ const COLUMNS: { key: TaskStatus; label: string; icon: React.ElementType; color:
 
 const PRIORITY_DOTS: Record<TaskPriority, string> = {
   low: 'bg-white/40',
-  medium: 'bg-amber-400',
-  high: 'bg-orange-500',
+  medium: 'bg-brand-400',
+  high: 'bg-brand-500',
   urgent: 'bg-red-500',
 };
 
@@ -143,7 +143,7 @@ export default function TasksBoard() {
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+            className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white transition-colors"
           >
             <Plus className="w-4 h-4" /> Add Task
           </button>
@@ -153,7 +153,7 @@ export default function TasksBoard() {
         <div className="mt-4 flex items-center gap-3">
           <div className="flex-1 h-2 rounded-full bg-white/[0.05] overflow-hidden">
             <div
-              className="h-full rounded-full transition-all duration-500 bg-indigo-500"
+              className="h-full rounded-full transition-all duration-500 bg-brand-500"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -172,7 +172,7 @@ export default function TasksBoard() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as TaskStatus | 'all')}
-              className="appearance-none text-xs bg-[#0c0c10] border border-white/10 rounded-md pl-2.5 pr-7 py-1.5 text-white focus:outline-none focus:border-indigo-500/50 cursor-pointer"
+              className="appearance-none text-xs bg-[#0c0c10] border border-white/10 rounded-md pl-2.5 pr-7 py-1.5 text-white focus:outline-none focus:border-brand-500/50 cursor-pointer"
             >
               <option value="all">All Statuses</option>
               {COLUMNS.map((c) => (
@@ -187,7 +187,7 @@ export default function TasksBoard() {
             <select
               value={filterAssignee}
               onChange={(e) => setFilterAssignee(e.target.value)}
-              className="appearance-none text-xs bg-[#0c0c10] border border-white/10 rounded-md pl-2.5 pr-7 py-1.5 text-white focus:outline-none focus:border-indigo-500/50 cursor-pointer"
+              className="appearance-none text-xs bg-[#0c0c10] border border-white/10 rounded-md pl-2.5 pr-7 py-1.5 text-white focus:outline-none focus:border-brand-500/50 cursor-pointer"
             >
               <option value="all">All Agents</option>
               {AGENTS.map((a) => (
@@ -202,7 +202,7 @@ export default function TasksBoard() {
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value as TaskPriority | 'all')}
-              className="appearance-none text-xs bg-[#0c0c10] border border-white/10 rounded-md pl-2.5 pr-7 py-1.5 text-white focus:outline-none focus:border-indigo-500/50 cursor-pointer"
+              className="appearance-none text-xs bg-[#0c0c10] border border-white/10 rounded-md pl-2.5 pr-7 py-1.5 text-white focus:outline-none focus:border-brand-500/50 cursor-pointer"
             >
               <option value="all">All Priorities</option>
               <option value="low">Low</option>
@@ -278,7 +278,7 @@ export default function TasksBoard() {
                             {colIdx < COLUMNS.length - 1 && (
                               <button
                                 onClick={() => advanceTask(task.id)}
-                                className="text-[10px] font-medium px-2 py-0.5 rounded bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                                className="text-[10px] font-medium px-2 py-0.5 rounded bg-brand-500 hover:bg-brand-600 text-white transition-colors"
                               >
                                 Advance
                               </button>
@@ -325,7 +325,7 @@ export default function TasksBoard() {
                   onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                   onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
                   placeholder="What needs to be done?"
-                  className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50"
+                  className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-white/20 focus:outline-none focus:border-brand-500/50"
                 />
               </div>
 
@@ -335,7 +335,7 @@ export default function TasksBoard() {
                   <select
                     value={newTask.assignee}
                     onChange={(e) => setNewTask({ ...newTask, assignee: e.target.value })}
-                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50"
+                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-500/50"
                   >
                     {AGENTS.map((a) => <option key={a} value={a}>{a}</option>)}
                   </select>
@@ -345,7 +345,7 @@ export default function TasksBoard() {
                   <select
                     value={newTask.priority}
                     onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as TaskPriority })}
-                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50"
+                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-500/50"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -361,7 +361,7 @@ export default function TasksBoard() {
                   <select
                     value={newTask.type}
                     onChange={(e) => setNewTask({ ...newTask, type: e.target.value as TaskType })}
-                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50"
+                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-500/50"
                   >
                     <option value="one-time">One-Time</option>
                     <option value="recurring">Recurring</option>
@@ -374,7 +374,7 @@ export default function TasksBoard() {
                     type="date"
                     value={newTask.dueDate}
                     onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
-                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50"
+                    className="w-full text-sm bg-[#0c0c10] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-brand-500/50"
                   />
                 </div>
               </div>
@@ -388,7 +388,7 @@ export default function TasksBoard() {
               </button>
               <button
                 onClick={handleAddTask}
-                className="text-sm font-medium px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white transition-colors"
+                className="text-sm font-medium px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white transition-colors"
               >
                 Create Task
               </button>

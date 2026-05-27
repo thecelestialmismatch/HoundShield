@@ -117,7 +117,7 @@ export function PlatformDashboard() {
   const [scanPct, setScanPct]           = useState(0);
   const [severityData, setSeverityData] = useState([
     { level: "HIGH", count: rand(3, 12),  color: "text-red-400",   bg: "bg-red-500/10",    border: "border-red-500/20"   },
-    { level: "MED",  count: rand(8, 24),  color: "text-amber-400", bg: "bg-amber-500/10",  border: "border-amber-500/20" },
+    { level: "MED",  count: rand(8, 24),  color: "text-brand-400", bg: "bg-brand-500/10",  border: "border-brand-500/20" },
     { level: "LOW",  count: rand(15, 40), color: "text-slate-400", bg: "bg-white/[0.04]",  border: "border-white/[0.06]" },
   ]);
   const [latencyMs, setLatencyMs]       = useState(rand(6, 11));
@@ -198,7 +198,7 @@ export function PlatformDashboard() {
     const t = setInterval(() => {
       setSeverityData([
         { level: "HIGH", count: rand(3, 12),  color: "text-red-400",   bg: "bg-red-500/10",    border: "border-red-500/20"   },
-        { level: "MED",  count: rand(8, 24),  color: "text-amber-400", bg: "bg-amber-500/10",  border: "border-amber-500/20" },
+        { level: "MED",  count: rand(8, 24),  color: "text-brand-400", bg: "bg-brand-500/10",  border: "border-brand-500/20" },
         { level: "LOW",  count: rand(15, 40), color: "text-slate-400", bg: "bg-white/[0.04]",  border: "border-white/[0.06]" },
       ]);
     }, 2500);

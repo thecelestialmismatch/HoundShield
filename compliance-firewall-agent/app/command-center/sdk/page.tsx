@@ -192,7 +192,7 @@ export default function SDKPage() {
               label: "Block Rate",
               value: `${blockRate}%`,
               icon: BarChart3,
-              color: "text-amber-400",
+              color: "text-brand-400",
               trend: "stable",
               up: null,
             },

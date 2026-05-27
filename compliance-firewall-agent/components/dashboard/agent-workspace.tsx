@@ -842,7 +842,7 @@ export default function AgentWorkspace({
                                 <span className="text-xs font-medium text-slate-300">{tc.name}</span>
                                 <div className="flex-1" />
                                 {tc.status === 'running' ? (
-                                  <Loader2 className="w-3 h-3 text-amber-400 animate-spin" />
+                                  <Loader2 className="w-3 h-3 text-brand-400 animate-spin" />
                                 ) : tc.status === 'error' ? (
                                   <XCircle className="w-3 h-3 text-red-400" />
                                 ) : (

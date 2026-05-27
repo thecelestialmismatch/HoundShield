@@ -155,7 +155,7 @@ export default function KnowledgeBase() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'csv': return <FileSpreadsheet className="w-4 h-4 text-emerald-400" />;
-      case 'json': return <Code className="w-4 h-4 text-amber-400" />;
+      case 'json': return <Code className="w-4 h-4 text-brand-400" />;
       case 'markdown': return <FileText className="w-4 h-4 text-brand-400" />;
       default: return <FileText className="w-4 h-4 text-zinc-400" />;
     }
@@ -167,13 +167,13 @@ export default function KnowledgeBase() {
       <div className="px-4 py-3 border-b border-white/10">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-indigo-400" />
+            <BookOpen className="w-4 h-4 text-brand-400" />
             Knowledge Base
             <span className="text-[10px] text-zinc-500 ml-1">({documents.length} docs)</span>
           </h3>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 text-xs hover:bg-indigo-500/30 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-brand-500/20 text-brand-400 text-xs hover:bg-brand-500/30 transition-colors"
           >
             <Plus className="w-3 h-3" />
             Add
@@ -190,15 +190,15 @@ export default function KnowledgeBase() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="Search knowledge base..."
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50"
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-brand-500/50"
             />
           </div>
         </div>
 
         {searchResults && (
-          <div className="mt-2 p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-300">
+          <div className="mt-2 p-2 rounded-lg bg-brand-500/10 border border-brand-500/20 text-xs text-brand-300">
             {searchResults}
-            <button onClick={() => setSearchResults(null)} className="ml-2 text-indigo-400 hover:text-indigo-300">
+            <button onClick={() => setSearchResults(null)} className="ml-2 text-brand-400 hover:text-brand-300">
               <X className="w-3 h-3 inline" />
             </button>
           </div>
@@ -214,7 +214,7 @@ export default function KnowledgeBase() {
             <p className="text-xs mt-1">Add documents for your agents to reference</p>
             <button
               onClick={() => setShowAddModal(true)}
-              className="mt-3 px-3 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 text-xs hover:bg-indigo-500/30 transition-colors"
+              className="mt-3 px-3 py-1.5 rounded-lg bg-brand-500/20 text-brand-400 text-xs hover:bg-brand-500/30 transition-colors"
             >
               <Plus className="w-3 h-3 inline mr-1" />
               Add First Document
@@ -280,7 +280,7 @@ export default function KnowledgeBase() {
                   value={newDoc.title}
                   onChange={(e) => setNewDoc(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Document title..."
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50"
+                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-brand-500/50"
                 />
               </div>
 
@@ -293,7 +293,7 @@ export default function KnowledgeBase() {
                       onClick={() => setNewDoc(prev => ({ ...prev, type }))}
                       className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
                         newDoc.type === type
-                          ? 'bg-indigo-500/30 text-indigo-300 border border-indigo-500/50'
+                          ? 'bg-brand-500/30 text-brand-300 border border-brand-500/50'
                           : 'bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10'
                       }`}
                     >
@@ -306,7 +306,7 @@ export default function KnowledgeBase() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-xs text-zinc-400">Content</label>
-                  <label className="flex items-center gap-1 px-2 py-1 rounded text-[10px] text-indigo-400 hover:bg-indigo-500/10 cursor-pointer transition-colors">
+                  <label className="flex items-center gap-1 px-2 py-1 rounded text-[10px] text-brand-400 hover:bg-brand-500/10 cursor-pointer transition-colors">
                     <Upload className="w-3 h-3" />
                     Upload File
                     <input type="file" className="hidden" onChange={handleFileUpload} accept=".txt,.csv,.json,.md,.markdown" />
@@ -317,7 +317,7 @@ export default function KnowledgeBase() {
                   onChange={(e) => setNewDoc(prev => ({ ...prev, content: e.target.value }))}
                   placeholder="Paste your document content here..."
                   rows={10}
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50 resize-none font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-brand-500/50 resize-none font-mono"
                 />
                 <div className="text-[10px] text-zinc-500 mt-1">
                   {newDoc.content.length.toLocaleString()} characters
@@ -335,7 +335,7 @@ export default function KnowledgeBase() {
               <button
                 onClick={handleAddDocument}
                 disabled={!newDoc.title.trim() || !newDoc.content.trim() || isLoading}
-                className="px-4 py-1.5 rounded-lg text-xs font-medium bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-1.5 rounded-lg text-xs font-medium bg-brand-500 text-white hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? 'Adding...' : 'Add Document'}
               </button>

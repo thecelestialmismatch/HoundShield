@@ -43,7 +43,7 @@ const EDGES: SimEdge[] = [
 ];
 
 const STATUS_ICON: Record<string, React.ComponentType<{ className?: string }>> = { idle: Clock, thinking: Brain, interacting: Zap };
-const STATUS_COLOR: Record<string, string> = { idle: "text-slate-400", thinking: "text-amber-400", interacting: "text-brand-400" };
+const STATUS_COLOR: Record<string, string> = { idle: "text-slate-400", thinking: "text-brand-400", interacting: "text-brand-400" };
 
 export default function AgentsPage() {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
@@ -69,7 +69,7 @@ export default function AgentsPage() {
         {[
           { label: "Active", value: activeCount, icon: Activity, color: "text-brand-400" },
           { label: "Interacting", value: interactingCount, icon: Zap, color: "text-brand-400" },
-          { label: "Thinking", value: thinkingCount, icon: Brain, color: "text-amber-400" },
+          { label: "Thinking", value: thinkingCount, icon: Brain, color: "text-brand-400" },
         ].map(({ label, value, icon: Icon, color }) => (
           <div key={label} className="flex items-center gap-2.5 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
             <Icon className={`w-4 h-4 ${color} flex-shrink-0`} />

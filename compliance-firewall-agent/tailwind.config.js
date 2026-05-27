@@ -1,48 +1,63 @@
+const path = require("path");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    path.join(__dirname, "./app/**/*.{js,ts,jsx,tsx,mdx}"),
+    path.join(__dirname, "./components/**/*.{js,ts,jsx,tsx,mdx}"),
   ],
   theme: {
     extend: {
       colors: {
-        /* ── Cream / sand palette ───────────────────────────── */
+        /* Cream / sand scale (palette: F3E3D0, D2C4B4) — v3 sand-light + cream-deep */
         cream: {
-          50:  "#FAFAF9",
-          100: "#FAF7F2",
-          200: "#F3E3D0",
+          50:  "#FAFCFF",   /* v3 surface-0: cool white */
+          75:  "#F5F8FB",   /* v3 surface-1: subtle blue tint */
+          100: "#F3E3D0",   /* palette Cream (v3 surface-2) */
+          150: "#EDD5BC",   /* v3 cream-deep (surface-3) */
+          200: "#E8DDD1",   /* v3 sand-light */
+          300: "#D2C4B4",   /* palette Beige */
+          400: "#B8A89A",
           DEFAULT: "#F3E3D0",
         },
-        sand: {
-          DEFAULT: "#D2C4B4",
-          light:   "#E8DCCC",
-          dark:    "#B8A898",
+        /* v3 ink (navy) text ramp */
+        ink: {
+          DEFAULT:   "#0F1E2E",
+          primary:   "#0F1E2E",
+          secondary: "#3D5166",
+          tertiary:  "#6B8299",
+          deep:      "#0D1B2A",
         },
-        /* ── Neon accent (kept for backward compat, points to steel) */
+        /* v3 steel — between brand-500 and brand-200 */
+        steel: {
+          light: "#C5DAE9",
+          DEFAULT: "#5A86A8",
+          dark: "#4A7FA5",
+        },
+        /* Soft-blue accent alias */
         neon: {
           DEFAULT: "#81A6C6",
           light:   "#AACDDC",
-          dark:    "#5A86A8",
+          dark:    "#6790B5",
         },
-        /* ── Brand steel scale — HoundShield BEAST UI v3 palette ── */
+        /* Brand blue scale anchored to palette #81A6C6 */
         brand: {
-          50:  "#F0F5FA",   /* lightest tint */
-          100: "#DCE9F3",   /* light steel */
-          200: "#C5DAE9",   /* hs-steel-light */
-          300: "#AACDDC",   /* hs-sky */
-          400: "#AACDDC",   /* accent / links / icon highlights */
-          500: "#81A6C6",   /* hs-steel — primary CTA */
-          600: "#5A86A8",   /* hs-steel-dark — pressed state */
-          700: "#3D6A8A",   /* darker steel */
-          800: "#2B4F6B",   /* deep steel */
-          900: "#1A3347",   /* deepest */
+          50:  "#F3F7FA",
+          100: "#E1ECF4",
+          200: "#C4D9E8",
+          300: "#AACDDC",   /* palette Sea */
+          400: "#95B9D0",
+          500: "#81A6C6",   /* palette Blue - PRIMARY CTA */
+          600: "#6790B5",   /* pressed state */
+          700: "#527A9F",
+          800: "#3D6485",
+          900: "#2C4E6B",
         },
         accent: {
           DEFAULT: "#81A6C6",
           light:   "#AACDDC",
-          dark:    "#5A86A8",
+          dark:    "#6790B5",
           muted:   "rgba(129, 166, 198, 0.08)",
         },
         success: {
@@ -68,20 +83,27 @@ module.exports = {
           light:   "#AACDDC",
           muted:   "rgba(129, 166, 198, 0.1)",
         },
-        /* ── Neutral dark scale ──────────────────────────────── */
+        /* v3 surface scale (cool white → cream → sand) */
         surface: {
-          DEFAULT: "#FAF7F2",
-          50:  "#FAF7F2",
-          100: "#F5F0E8",
-          200: "#E8E0D8",
-          300: "#D0C8C0",
+          DEFAULT: "#FAFCFF",
+          0:   "#FAFCFF",
+          1:   "#F5F8FB",
+          2:   "#F3E3D0",
+          3:   "#EDD5BC",
+          50:  "#FAFCFF",
+          75:  "#F5F8FB",
+          100: "#F3E3D0",
+          150: "#EDD5BC",
+          200: "#E8DDD1",
+          300: "#D2C4B4",
         },
       },
       fontFamily: {
-        sans:      ["var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
-        display:   ["var(--font-outfit)", "var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
-        editorial: ["var(--font-playfair)", "Georgia", "ui-serif", "serif"],
-        mono:      ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
+        /* v3: DM Sans body, Fraunces display, JetBrains Mono code */
+        sans:      ["'DM Sans'", "var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
+        display:   ["'Fraunces'", "Georgia", "var(--font-playfair)", "ui-serif", "serif"],
+        editorial: ["'Fraunces'", "Georgia", "var(--font-playfair)", "ui-serif", "serif"],
+        mono:      ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
         grotesk:   ["Anton", "Impact", "ui-sans-serif", "system-ui", "sans-serif"],
         condiment: ["Condiment", "cursive"],
       },
@@ -139,18 +161,18 @@ module.exports = {
       },
       boxShadow: {
         "card":       "0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
-        "card-hover": "0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.08)",
-        "card-lg":    "0 20px 40px -10px rgba(0, 0, 0, 0.15)",
-        "glow-sm":    "0 0 15px -3px rgba(129, 166, 198, 0.25)",
-        "glow":       "0 0 30px -5px rgba(129, 166, 198, 0.30)",
-        "glow-lg":    "0 0 60px -10px rgba(129, 166, 198, 0.35)",
-        "glow-xl":    "0 0 80px -15px rgba(129, 166, 198, 0.40)",
-        "frost":      "0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
-        "inner-light":"inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
+        "card-hover": "0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 4px 10px -4px rgba(0, 0, 0, 0.06)",
+        "card-lg":    "0 20px 40px -10px rgba(0, 0, 0, 0.12)",
+        "glow-sm":    "0 0 15px -3px rgba(129, 166, 198, 0.20)",
+        "glow":       "0 0 30px -5px rgba(129, 166, 198, 0.22)",
+        "glow-lg":    "0 0 60px -10px rgba(129, 166, 198, 0.25)",
+        "glow-xl":    "0 0 80px -15px rgba(129, 166, 198, 0.28)",
+        "frost":      "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
+        "inner-light":"inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
       },
       backgroundImage: {
         "gradient-radial":  "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-arctic":  "linear-gradient(135deg, #FAF7F2 0%, #FAFAF9 50%, #F5F0E8 100%)",
+        "gradient-arctic":  "linear-gradient(135deg, #FBF8F2 0%, #F3E3D0 50%, #E5D2BD 100%)",
       },
     },
   },
