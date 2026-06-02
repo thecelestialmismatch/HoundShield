@@ -65,7 +65,7 @@ let _supabaseReady: boolean | null = null;
 function isSupabaseReady(): boolean {
   if (_supabaseReady !== null) return _supabaseReady;
   const url = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim();
-  const key = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').trim();
+  const key = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '').trim();
   _supabaseReady =
     url.startsWith('https://') &&
     !url.includes('YOUR-PROJECT-ID') &&
@@ -168,7 +168,7 @@ export async function middleware(request: NextRequest) {
   if (isSupabaseReady() && needsAuth(pathname)) {
     const supabase = createServerClient(
       (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim(),
-      (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').trim(),
+      (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '').trim(),
       {
         cookies: {
           getAll() {
