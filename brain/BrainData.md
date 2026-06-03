@@ -1,8 +1,80 @@
 Create the stack like this repo -
 https://github.com/garrytan/gstack
+https://github.com/affaan-m/ECC.git
+https://github.com/VoltAgent/awesome-ai-agent-papers.git  
 https://github.com/NousResearch/hermes-agent.git
 https://github.com/1jehuang/jcode.git
 https://github.com/tinyhumansai/openhuman.git
+https://github.com/Bomx/qwoted-seo-backlinks-skill.git
+https://github.com/NangoHQ/nango.git
+https://github.com/elder-plinius/OBLITERATUS.git
+https://github.com/microsoft/markitdown.git
+https://github.com/tashfeenahmed/freellmapi.git
+https://github.com/ComposioHQ/awesome-claude-skills.git
+https://github.com/affaan-m/ECC.git
+https://github.com/VoltAgent/awesome-ai-agent-papers.git
+https://github.com/cheahjs/free-llm-api-resources.git
+https://github.com/playcanvas/supersplat.git
+https://github.com/iii-hq/iii.git
+24 Things to Install Into Claude
+PLUG-INS
+
+garrytan/gstack — 23 specialist tools, full dev team (82.7k stars) github.com/garrytan/gstack
+
+obra/superpowers — 14 bundled dev skills (725k installs) github.com/obra/superpowers
+
+openai/codex-plugin-cc — OpenAI's official Codex plugin for Claude Code (8.9k stars) github.com/openai/codex-plugin-cc
+
+anthropics/financial-services — investment banking, equity research, PE, wealth management (23k stars) github.com/anthropics/financial-services
+
+anthropics/claude-for-legal — legal workflows across every practice area (6.6k stars) github.com/anthropics/claude-for-legal
+
+alirezarezvani/claude-skills — 263+ skills across platforms (5.2k stars) github.com/alirezarezvani/claude-skills
+
+coreyhaines31/marketingskills — 40 marketing tools (28.8k stars) github.com/coreyhaines31/marketingskills
+
+charlie947/social-media-skills — full content OS (860 stars) github.com/charlie947/social-media-skills
+
+
+SKILLS
+
+anthropics/frontend-design — kills generic AI UI (277k installs) github.com/anthropics/skills/tree/main/skills/frontend-design
+
+heygen-com/hyperframes — write HTML, render video, built for agents (18.6k stars) github.com/heygen-com/hyperframes
+
+charlie947/ai-second-brain — Karpathy-style living wiki from your AI history github.com/charlie947/ai-second-brain
+
+PleasePrompto/notebooklm-skill — lets Claude query your research and playbooks github.com/PleasePrompto/notebooklm-skill
+
+blader/humanizer — removes AI writing tells (2.9k stars) github.com/blader/humanizer
+
+AgriciDaniel/claude-seo — GEO-first SEO skill (3.5k stars) github.com/AgriciDaniel/claude-seo
+
+antfu/skills — Vue/Vite core team skills (3.5k stars) github.com/antfu/skills
+
+yamadashy/repomix — pack your entire repo for any LLM github.com/yamadashy/repomix
+
+
+MCP SERVERS
+
+granola — feeds every meeting note to Claude mcp.granola.ai/mcp
+
+slack — posts updates and reads channel history mcp.slack.com/mcp
+
+notion — reads and writes to your databases and docs mcp.notion.com/mcp
+
+gmail — triages inbox and drafts replies in your voice gmailmcp.googleapis.com/mcp
+
+kondo — flags which LinkedIn DMs actually need a reply relay.trykondo.com/mcp
+
+higgsfield — cinematic video from a single prompt higgsfield.ai/mcp
+
+perplexity — real-time web search inside Claude github.com/perplexityai/modelcontextprotocol
+
+vercel-labs/agent-browser — token-efficient browser automation (22k stars) github.com/vercel-labs/agent-browser
+
+
+
 OODA Boil the ocean
 + The marginal cost of completeness is near zero with AI. Do the whole thing.
 Do it right. Do it with tests. Do it with documentation. Do it so well that Garry is genuinely impressed - not politely satisfied, actually
@@ -11,6 +83,13996 @@ workaround when the real fix exists.
 The standard isn't "good enough" - it's "holy shit, that's done." Search before building. Test before shipping.
 Ship the complete thing. When Garry asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean. Create the pr and redeploy it /L99
 BEAST 2.0
+
+Mossad Hermes
+
+╔══════════════════════════════════════════════════════════════╗
+║           HERMES // HOUNDSHIELD OPERATING SYSTEM             ║
+║           Classification: FOUNDER EYES ONLY                  ║
+║           Version: 1.0 | Hard Deadline: June 5, 2026         ║
+╚══════════════════════════════════════════════════════════════╝
+
+You are HERMES — the unified operating intelligence for HoundShield
+(houndshield.com). You operate as a structured command team. Every
+session begins with a briefing. Every session ends with a status
+report. You challenge every new request before executing it.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SESSION PROTOCOL (run at start of EVERY session)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Output this block immediately:
+
+  DATE: [today]
+  DAYS TO LAUNCH (June 1): [X]
+  DAYS TO 10 CLIENTS (June 5): [X]
+  LAST SESSION: [ask founder to confirm last completed task]
+  CURRENT BLOCKERS: [ask if any]
+  TODAY'S SINGLE PRIORITY: [determine from war plan position]
+
+Then ask: "What are we shipping today?"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMMAND STRUCTURE (invoke by name or automatically as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRATEGIST    Strategic decisions, pivot calls, kill/keep analysis.
+              "Does this close a customer before June 5? Yes or no."
+
+BUILDER       Code, Docker, CI/CD, GitHub, architecture, tests.
+              Produces complete working code. Never pseudocode.
+              Enforces: <10ms latency budget, TypeScript strict,
+              no logging of prompt content, SHA-256 audit chain.
+
+AUDITOR       CMMC compliance review. Every feature mapped to a
+              specific NIST 800-171 Rev 2 control before shipping.
+              Flags anything that breaks the SC.3.177 local-only claim.
+
+GROWTH        RPO outreach, LinkedIn DMs, cold email, Product Hunt.
+              Owns the 13-day war plan execution. Tracks: emails
+              sent, demos booked, responses received.
+
+CONTENT       SEO copy, blog posts, /guide pages, FAQ schema,
+              backlinks, AI-search visibility (llms.txt, structured
+              data). Target keywords: "CMMC AI use policy template,"
+              "ChatGPT CMMC compliance," "CUI prompt scanning."
+
+FINANCE       Stripe SKUs, pricing integrity, revenue tracking.
+              Enforces the locked pricing grid. Rejects any proposal
+              to change Pro ($199/mo) or add a second pricing grid.
+
+SESSION END REPORT (output at end of every session):
+  ┌─────────────────────────────────────────────────────────┐
+  │ HERMES SESSION DEBRIEF                                  │
+  │ Completed: [list tasks shipped]                         │
+  │ Delta from war plan: [ahead / on track / behind]        │
+  │ Clients closed: [X] | Pipeline: [X demos booked]        │
+  │ Next session priority: [single most important task]     │
+  │ Blockers: [anything requiring founder decision]         │
+  └─────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COUNTER-INTELLIGENCE PROTOCOL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Before executing ANY new request, run this challenge:
+
+  1. Kill criterion: Does this directly close 1+ customers by June 5?
+  2. Compliance check: Does it map to a NIST 800-171 Rev 2 control?
+  3. Cost check: Under $500 and under 8 hours solo founder time?
+  4. Kill list check: Is it on the NEVER DO list?
+
+If the request fails any check, respond:
+  "HERMES CHALLENGE: [specific reason this is off-plan]
+   If you proceed, here's the cost: [concrete tradeoff]
+   Recommendation: [drop it / defer to Q3 / modify to pass]
+   Override? Y/N"
+
+Await founder confirmation before proceeding on a failed check.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRODUCT TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What it is: OpenAI/Calude-compatible proxy. Change one URL. Sits between
+employee and ChatGPT/Copilot/Claude. Scans locally in <10ms using
+16 detection engines (CUI/PHI/PII/IP/ITAR). Blocks violations.
+Emits SHA-256 hash-chained audit logs + C3PAO-ready PDF mapped to
+all 110 NIST SP 800-171 Rev 2 controls.
+
+Deployment modes:
+  A) Hosted trial — proxy.houndshield.com (non-CUI, trial only)
+  B) Self-hosted Docker — customer infra (required for CUI/DFARS)
+  C) Air-gapped — Enterprise, contact sales
+
+CRITICAL LIVE BUG: Two conflicting pricing pages on site. Docs
+point to hosted endpoint while homepage claims "local-only." Both
+must be fixed before any sales conversation. This is Day 1, Task 1.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE BUYER — "JORDAN M."
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IT Security Manager, 180-person DoD subcontractor. $500–$1,500/mo
+budget. Solo decision-maker. CMMC Phase 2 deadline: Nov 10, 2026.
+His words: "My employees keep pasting CUI into ChatGPT and I have
+no audit trail."
+
+Jordan does NOT care about: prompt injection, jailbreaks, mobile
+apps, EU AI Act, Israel, Mossad.
+Jordan DOES care about: one PDF a C3PAO assessor accepts on sight.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MARKET INTELLIGENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- 76,598 US DIB orgs need CMMC Level 2 (DoD, Feb 2026)
+- ~1,042 (~1.4%) completed as of Feb 2026 → mass panic market
+- 387 RPOs in Cyber AB Marketplace → PRIMARY CHANNEL
+- <800 certified C3PAO assessors vs 2,000–3,000 needed → 6-month
+  backlog → buyers need to prepare NOW
+- $52M+ DOJ FCA cybersecurity settlements FY2025 → board-level fear
+- CMMC Phase 2 enforcement: November 10, 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPETITIVE POSITION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE GAP: No competitor combines (a) one-line OpenAI-compatible
+proxy + (b) local scanning surviving DFARS 7012/SC.3.177 +
+(c) C3PAO-ready PDF for 110 controls + (d) sub-$300/mo pricing.
+
+Key competitors and their fatal flaw:
+- Kiteworks: closest, but $50K–$300K+/yr, enterprise-only
+- Nightfall/Strac: cloud-routed (FAILS SC.3.177), no CMMC PDF
+- Vanta/Drata: compliance docs only, NO AI gateway
+- Lakera/Prompt Security/Protect AI: all acquired into enterprise
+  XDR bundles — not sold as CMMC SKUs, not competing for Jordan
+- PreVeil: 3,000+ DIB customers, NO AI gateway → PARTNERSHIP target
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRICING (LOCKED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Free:        $0/mo         1 user, 1K scans, no PDF
+Pro:         $199/mo       5 users, unlimited scans, PDF ← WORKHORSE
+Growth:      $499/mo       25 users, gateway mode, HIPAA
+Enterprise:  $999/mo       Unlimited, on-prem, dedicated CSM
+Audit Pack:  $999 one-time SSP + POA&M + 14 policy templates + RP review
+
+Annual: 17% discount. 30-day money-back. ONE pricing grid only.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13-DAY WAR PLAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DAY 1–3 (May 23–26) — SHIP A CREDIBLE PRODUCT:
+□ Collapse to ONE pricing page
+□ Add /security page (SHA-256 hash, "no CUI stored at houndshield.com,"
+  SOC 2 timeline)
+□ Publish Docker image: houndshield/proxy:latest
+□ Build $999 Audit Pack SKU in Stripe
+□ Draft 14 policy templates (Acceptable Use, Data Classification,
+  Incident Response + AI-specific mapped to AT.2.056/SC.3.177/AU.2.041)
+□ Add schema.org Product + Organization + FAQPage structured data
+□ Submit sitemap to Google Search Console + Bing Webmaster
+
+DAY 4–7 (May 27–30) — OUTREACH BLITZ:
+□ 50 personalized emails to top RPOs (25% rev-share offer)
+□ 100+ LinkedIn DMs to IT Security Managers
+□ r/cmmc + Show HN posts with free policy template → product CTA
+□ Write 3 posts: "Why Nightfall Fails SC.3.177" / "7 Controls You're
+  Failing Without Knowing" / "What Your C3PAO Assessor Actually Wants"
+
+JUNE 1 — LAUNCH:
+□ PR Newswire press release (~$400)
+□ Product Hunt + Hacker News + LinkedIn
+□ "First 10 customers get $999 Audit Pack free" — scarcity close
+
+JUNE 3–5 — CLOSE 10:
+□ Follow up every demo within 4 hours
+□ Activate 2 RPO partnerships
+□ Charter Partner offer: $99/mo for 3 months → logo + case study
+
+HIGHEST LEVERAGE SINGLE ACTION: Get ONE named C3PAO (Schellman,
+Coalfire, or Sera-Brynn) to provide a written letter endorsing the
+PDF format as assessment-ready. Converts demos at 2–3× rate.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEVER DO LIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✗ Mobile app (before 50 customers)
+✗ Israel / Mossad / foreign defense (kills ITAR credibility with
+  US buyers; 12–24 month motion minimum)
+✗ HIPAA pivot before June 5
+✗ Generic AI security positioning
+✗ Features without a NIST 800-171 Rev 2 control mapping
+✗ Routing prompt content to external LLMs for scanning
+✗ Lowering Pro below $199/mo
+✗ Second pricing grid
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEMO SCRIPT (verbatim in every sales conversation)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. "Open ChatGPT."
+2. "Paste: 'Summarize our CAGE code 1ABC2 contract for the Navy.'"
+   → ChatGPT responds. "That's SC.3.177 violation. No audit trail."
+3. "Change one URL." → Apply proxy.
+4. "Try again." → HoundShield blocks. Log entry generated.
+5. "Click Generate Audit PDF." → C3PAO-formatted PDF appears.
+6. "Violation to evidence: under 10 minutes."
+Demo ALWAYS ends with the PDF on screen.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT (default)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. BOTTOM LINE (one sentence, answer first)
+2. WHY (3 bullets, numbers required, no hedging)
+3. NEXT 24 HOURS (specific named tasks)
+4. MEASURE (specific KPI)
+5. KILL CRITERION (what failure looks like in 72 hours)
+
+Style: BLUF always. Numbers over adjectives. Named sources.
+"Jordan would never read this" is valid critique of any copy.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HERMES STANDING ORDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+We have [X] days. The market is open. The gap is real. The buyer
+exists. The only variable is execution speed.
+
+Ship the complete thing. Never present a workaround when the fix
+exists. Never table a permanent solve. The standard is "holy shit,
+that's done" — not "good enough."
+
+What are we shipping today?
+
+
+# HoundShield — MOSSAD-Level Intelligence Audit & Market Plan
+
+**Date:** May 23, 2026 · **Hard deadline:** 10 paying clients by June 5, 2026 · **Launch:** June 1, 2026
+
+## TL;DR
+
+- HoundShield is positioned in the single highest-urgency US compliance market of 2026 — the November 10, 2026 CMMC Phase 2 deadline forces ~76,598 DoD contractors handling CUI to either certify or stop bidding — but the site is a single-founder SaaS with conflicting pricing, no public proof, and a hosted (non-local) gateway endpoint that contradicts its core “local-only” marketing claim. Fix that contradiction in 72 hours and you have a sellable product.
+- The 10-client / 13-day goal is achievable, but ONLY if you (a) lock pricing at $199/mo Pro + a $999 “C3PAO-ready Audit Pack” one-time fee, (b) sell THROUGH the 387 Cyber AB Registered Provider Organizations as a referral/revenue-share channel rather than direct-to-CISO, and (c) abandon the “sell to Mossad / Israeli defense” thread for this sprint — it is a 12–24 month motion with no realistic path for a solo US founder.
+- Stay-the-course is the right call (don’t pivot the product). Niche harder into “CMMC Level 2 AI Use Policy in a Box” — that’s the single fastest concrete pain SMB defense contractors will pay for in 13 days, because their primes (Lockheed, Boeing, Northrop) are already flowing AI/CUI policy requirements down to subcontractors.
+
+-----
+
+## SECTION 1: HOUNDSHIELD AUDIT (Brutal, zero-hedge)
+
+### What it actually is
+
+HoundShield is an **OpenAI-compatible proxy** (“change one URL”) that sits between an employee and ChatGPT/Copilot/Claude, runs 16 detection patterns for CUI/PHI/PII/IP in <10ms, blocks or quarantines violating prompts, and emits SHA-256-signed audit logs plus a C3PAO-ready PDF mapped to NIST SP 800-171 Rev 2 controls.  The marketing pitch is precise: “Stop your team from leaking CUI to ChatGPT.” 
+
+It is a **CMMC compliance evidence tool with an AI gateway wrapper** — not a generic AI security platform. That framing is correct; the buyer in this market does not care about prompt injection, jailbreaks, or model security. They care about a PDF a C3PAO assessor will accept.
+
+### Target customer (per the site)
+
+- “Jordan M., IT Security Manager, 180-person DoD subcontractor, budget $500–$1,500/mo, deadline Nov 10, 2026.” 
+- That persona is **accurately specified** and matches public data: the DoD estimates **76,598 organizations** that need Level 2 certification (Feb 2026 Cyber AB Town Hall), and ~80% are SMBs with this exact buyer profile.
+
+### Tech stack (inferred)
+
+- Next.js (`_next/image` artifacts, App Router routes like `/login`, `/signup`, `/command-center`)
+- Hosted gateway endpoint: `https://houndshield.com/api/gateway/intercept`  and `https://proxy.houndshield.com`
+- Stripe (the pricing page states “All payments are processed securely through Stripe”) 
+- Supabase / similar (implied by `/signup`, magic-link patterns common to this stack)
+- OpenAI-compatible API surface (advertised as drop-in replacement for `baseURL`)
+- GitHub repo `github.com/thecelestialmismatch/HoundShield` exists per founder’s URL — robots.txt blocked our fetch, meaning **the repo is public on GitHub but indexing is suppressed**; this is a yellow flag.
+
+### Features: live vs placeholder vs broken
+
+- **Live:** landing page, /features, /how-it-works, /pricing, /docs (the docs page shows a real code snippet against `https://houndshield.com/api/gateway/intercept`). Signup/login routes resolve.
+- **Marketing claims unverifiable:** “14,312 blocked,” “2M+ scans processed,” “500+ teams protected” appear on the pricing page footer with no case studies or named logos. These are placeholders / aspirational metrics.
+- **Broken/contradictory:** Pricing page (annual: Pro $1,910/yr ≈ $159/mo, Growth $4,790/yr ≈ $399/mo, Enterprise $9,590/yr ≈ $799/mo, Agency $23,990/yr ≈ $1,999/mo)  **contradicts** the homepage pricing block (Free / Pro $199/mo / Growth $499/mo / Enterprise $999/mo / Federal $2,499/mo).  Two different price grids on the same site is a credibility killer with a $1,500/mo budget buyer.
+- **Marketing/architecture contradiction:** Homepage says “Local-only. Prompt content never leaves your network.”  Docs page tells users to point their SDK at `https://houndshield.com/api/gateway/intercept` — a **hosted** endpoint on your domain. Either (a) the docs are wrong and production is a customer-side Docker container, or (b) the “local-only” claim is marketing aspiration. Either way, a C3PAO assessor reading this site will fail you on SC.3.177 instantly.
+- **CMMC Level 2 deadline countdown** on the homepage reads “171 days” — math consistent with Nov 10, 2026. ✅
+
+### UI/UX credibility
+
+- The visual design is well-executed and looks funded. The hero, the live intercept feed, the “Built for Jordan” buyer profile, and the OODA/SHA-256 detail signal that someone who understands the buyer wrote the copy.
+- Behind the polish, the dual pricing pages, the placeholder traction numbers, and the @houndshield Twitter handle with no apparent activity tell an experienced CISO this is a one-person shop. **Verdict: looks like a $50K side project polished by a designer-savvy founder, not a funded startup.**
+
+### SEO status (visible)
+
+- `meta-robots: index, follow` ✅ and `meta-googlebot: index, follow` are present.
+- Keyword stuffing is competent: `AI compliance firewall, CMMC compliance, CMMC Level 2, HIPAA compliance, SPRS score calculator, defense contractor compliance, C3PAO assessment, local AI proxy`  — these are the right terms but **all extremely competitive** (Vanta, Drata, PreVeil, Kiteworks rank for them) and the domain has zero backlinks/age signal.
+- Pricing page is canonical to itself, OG image present. No schema.org/Product or FAQ markup — easy free win.
+
+### Integrations
+
+Mentioned on /features: AWS GovCloud, Azure Government, Microsoft 365 GCC, Slack, Jira, GitHub.  All marketing claims, not verified live connectors. Stripe (mentioned), Supabase (likely), OpenRouter (not mentioned but compatible).
+
+### Security / obvious holes
+
+- Gateway endpoint is on the marketing domain, not isolated infra.
+- No published SOC 2 report, no penetration test summary, no NIST CMVP cryptographic module number — three things every defense buyer asks for in the first email.
+- No `/security` or `/trust` page linked from the footer. The pricing page footer mentions “SOC 2 · GDPR · HIPAA · EU AI Act” but no evidence.
+
+### Onboarding
+
+A user can click “Start free — no card required” → `/signup` today. Whether signup actually provisions a working gateway URL is unverified; the docs imply the flow exists.
+
+### Paying customers / testimonials
+
+**Zero verified.** “Jordan M.” is explicitly labeled “Built for Jordan” — a persona. “500+ teams protected” is unsupported. No named logos. No G2/Capterra. No Trustpilot.
+
+### GitHub repo
+
+We were blocked by robots.txt from fetching `github.com/thecelestialmismatch/HoundShield.git`. Inability to crawl + suppressed indexing suggests either a Vercel-deployed Next.js scaffold or a thin proxy implementation. **Action: founder must make repo discoverable or accept that buyers will assume it’s a stub.**
+
+-----
+
+## SECTION 2: MARKET INTELLIGENCE (USA + Global)
+
+### TAM / SAM / SOM (USA)
+
+|Layer       |Definition                                                                                                  |Size                                                                         |Source/logic                                                                                              |
+|------------|------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+|TAM         |All US orgs needing AI prompt governance for compliance                                                     |$30.92B (2025) AI cybersecurity market, growing 22.8% CAGR to $86.34B by 2030|Mordor Intelligence                                                                                       |
+|SAM         |US Defense Industrial Base needing CMMC Level 2 for CUI                                                     |**76,598 organizations**                                                     |DoD estimate cited at the Feb 2026 Cyber AB Town Hall;  80% are SMBs                                      |
+|SOM (13-day)|DIB contractors using ChatGPT/Copilot without an AI policy, $500–$1,500/mo budget, Q2 2026 contract pressure|**~5,000–8,000** addressable in next 60 days                                 |Of 76,598 needing Level 2, only ~1,042 (≈1.4%) have completed certification  (Feb 2026 Cyber AB Town Hall)|
+
+A realistic SOM at $199/mo Pro is 1,000 customers × $199 × 12 = **$2.4M ARR** within 18 months if execution is clean. Hitting 10 in 13 days is a tiny fraction.
+
+### Real US buyers
+
+1. **IT Security Manager / IT Director** at 50–500 person DoD subcontractor — primary economic buyer, $500–$1,500/mo budget authority.
+1. **vCISO** for multiple DIB contractors — multiplier; sells you into 5–15 SMBs per engagement.
+1. **Registered Provider Organizations (RPOs)** — **387 listed in the Cyber AB Marketplace** as of March 2026 (Secureframe analysis). Highest-leverage channel for 13 days.
+1. **DoD Prime contractor supplier risk teams** at Lockheed/Boeing/Northrop — pushing compliance requirements down the supply chain. 
+
+### Pricing benchmarks (named, May 2026)
+
+|Vendor                      |Product              |Price/year                                  |
+|----------------------------|---------------------|--------------------------------------------|
+|PreVeil Pass                |CMMC enclave (3-user)|$5,400/yr ($450/mo for 3-user contract)     |
+|Vanta CMMC                  |Compliance automation|$10K–$80K/yr (median $20K)                  |
+|Drata CMMC                  |Compliance automation|$15K–$100K/yr                               |
+|Secureframe Defense         |Managed CMMC         |$7.5K–$80K/yr                               |
+|Nightfall DLP               |GenAI prompt DLP     |Starts ~$4/user/mo,  enterprise quote       |
+|Strac ChatGPT DLP           |Browser DLP          |Custom; mid-market typical $20–$200/user/yr |
+|Microsoft Purview (GCC-High)|DLP                  |$200K–$500K full deployment                 |
+|GCC High full migration     |M365 Defense         |$149K–$175K/yr ongoing                      |
+
+**HoundShield at $199/mo Pro = $2,388/yr is dramatically below the closest CMMC-specific incumbent (PreVeil) and orders of magnitude below Microsoft GCC-High. That is the wedge.**
+
+### Buying cycle
+
+- **SMB DIB (5–250 employees):** 7–21 days when buyer has an active contract dependency. Single-decision-maker signs a SaaS order form.
+- **Mid-market DIB (250–2,000):** 60–90 days, requires procurement + security review.
+- **Prime contractor:** 6–18 months.
+- **DoD direct:** 12–36 months (SBIR Phase II → III).
+
+For 13 days, you can only realistically close the SMB DIB band.
+
+### Channels buyers actually use
+
+1. **Google search** for “CMMC AI policy,” “ChatGPT CUI compliance,” “AI gateway CMMC Level 2” (low competition, high intent).
+1. **Cyber AB Marketplace** browsing (cyberab.org/marketplace).
+1. **RPO/MSP recommendations.**
+1. **LinkedIn posts** from CMMC influencers (Amira Armond, Jacob Hill of GRC Academy, Matt Travis (CEO of Cyber AB)).
+1. **DoD primes’ approved supplier lists.**
+1. **Reddit r/cmmc** (small but very high-intent).
+
+### Top buyer pain points RIGHT NOW (May 2026)
+
+1. **Employees pasting contract numbers / CUI into ChatGPT with no controls** — the actual pattern on r/cmmc and DIB Slack groups.
+1. **Primes flowing down written AI usage policy + audit log requirements** to FY2026 subcontractors.
+1. **“My C3PAO assessment is 6 months out and I have no evidence for SC.3.177 / AU.2.041”** — assessor backlog forces preparation NOW (under 800 Certified CMMC Assessors vs. 2,000–3,000 needed). 
+1. **Microsoft GCC-High quoted $200K when buyer needs a $5K solution** — the PreVeil sales motion (“over $200,000 for 33 users…the PreVeil quote was 1/10th of that and checked every box,” published customer testimonial). 
+1. **DOJ False Claims Act enforcement.** Per DOJ’s press release “False Claims Act Settlements and Judgments Exceed $6.8B in Fiscal Year 2025”  (justice.gov, January 16, 2026), the DOJ recovered “more than $52 million”  across nine cybersecurity-related settlements   — fear-of-litigation is now a board-level driver.
+
+### Regulatory drivers (active May 2026)
+
+- **CMMC Phase 1 (active since Nov 10, 2025):** Level 1 + Level 2 self-assessments mandatory on new DoD solicitations. 
+- **CMMC Phase 2 (active Nov 10, 2026 — 171 days away):** C3PAO third-party assessments become default for CUI contracts.  **Biggest demand driver in the US compliance market.**
+- **DFARS 252.204-7021 / 7025** — active contract clauses. 
+- **HIPAA + “ChatGPT isn’t HIPAA compliant”** narrative — 2026 court rulings and law firm advisories (US v. Heppner Feb 17, 2026).
+- **EU AI Act** — high-risk AI obligations applying to US vendors with EU customers.
+- **SEC cyber disclosure rules** — material AI-related data leaks must be disclosed within 4 business days.
+
+### Quick-win segments (<13 days)
+
+1. **SMB DIB contractors (5–50 employees) with active Q3 2026 contract renewals.** Panicking now, have signing authority.
+1. **RPO/MSP partners** — convert 2 RPOs and you’ve got 10–30 downstream customers.
+1. **Law firms post-Heppner ruling.** Every BigLaw firm issued a client advisory in Feb–March 2026 saying “do not paste privileged info into ChatGPT.”
+1. **Healthcare clinics / mental health practices** post-USC Price article and BastionGPT competitor surge — but DON’T chase HIPAA in 13 days; CMMC is the bird in hand.
+
+-----
+
+## SECTION 3: COMPETITOR MAP (Full table + gap analysis)
+
+### Direct competitors (local prompt scanning + CMMC evidence output)
+
+|Vendor          |What it does                                                                                     |Pricing                                         |Funding                                             |Weakness                                                                                                                               |Why HoundShield can beat                                                                                                          |
+|----------------|-------------------------------------------------------------------------------------------------|------------------------------------------------|----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+|**Kiteworks**   |Private Data Network + AI Data Gateway + MCP Server with CMMC evidence; FedRAMP Moderate         |Enterprise quote-only (typically $50K–$300K+/yr)|Private, mature platform                            |Heavy file-sharing/MFT platform — not a one-line LLM proxy; long sales cycle; “Channel First” partner program just launched March 2026 |HoundShield is 10× cheaper, deployable in 10 minutes, single OpenAI-compatible URL change                                         |
+|**PreVeil**     |Encrypted email + file enclave for CMMC                                                          |$450/mo for 3-user (≈$32/user/mo)               |Self-funded, profitable, 3,000+ defense contractors |NO AI gateway. Email/file only. Cannot scan ChatGPT prompts.                                                                           |HoundShield owns the AI-channel gap PreVeil doesn’t address; partnership target (their Jan 2026 SelfAudit AI deal is the template)|
+|**SelfAudit AI**|AI-powered CMMC automation (POA&M, SPRS, control mapping),  partnered with PreVeil since Jan 2026|Quote-only                                      |Early stage                                         |NO AI prompt firewall — documentation only                                                                                             |HoundShield = the runtime enforcement layer SelfAudit AI is missing                                                               |
+|**Paramify**    |OSCAL-based SSP/POA&M/CRM generation                                                             |Gap assessment $2K                              |Private                                             |Documentation-only; no AI gateway                                                                                                      |Same gap as SelfAudit; partnership target                                                                                         |
+
+### Indirect competitors (AI prompt DLP, no CMMC focus)
+
+|Vendor                                                                                                                                                                                                                                  |Pricing                                           |Funding/status                                                                                                                                                                                                                                                          |Weakness vs HoundShield                                                                                                                              |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+|**Nightfall AI**                                                                                                                                                                                                                        |From ~$4/user/mo (G2/SelectHub); enterprise quote |Series-funded                                                                                                                                                                                                                                                           |Cloud-only scanning architecture; their own marketing concedes prompts go to their cloud — **fails DFARS 7012/CMMC SC.3.177**                        |
+|**Strac**                                                                                                                                                                                                                               |$20–$200/user/yr                                  |Private, mid-market                                                                                                                                                                                                                                                     |Browser extension; no CMMC evidence PDF; no DoD focus                                                                                                |
+|**Harmonic Security**                                                                                                                                                                                                                   |Quote-only                                        |Series A                                                                                                                                                                                                                                                                |AI governance for enterprise; not CMMC-targeted                                                                                                      |
+|**Microsoft Purview**                                                                                                                                                                                                                   |Bundled with M365 E5 (~$57/user/mo all-in)        |Hyperscaler                                                                                                                                                                                                                                                             |Cloud-routed; same DFARS concern; requires GCC-High for CUI                                                                                          |
+|**Lakera** (acquired by Check Point; announced Sept 16, 2025; completed October 22, 2025; deal value estimated $300M per Calcalist/Ctech: “The value of the deal was not disclosed, but it is estimated at $300 million”)               |Bundled into Check Point Infinity                 |Acquired                                                                                                                                                                                                                                                                |Enterprise-only; no CMMC SKU                                                                                                                         |
+|**Prompt Security** (acquired by SentinelOne; completed September 5, 2025; per SentinelOne SEC Form 8-K: “consideration…in a combination of cash and shares of the Company’s Class A common stock totaling approximately $180 million”) |Bundled into Singularity Platform                 |Acquired                                                                                                                                                                                                                                                                |Bundled into XDR; not sold as standalone CMMC tool                                                                                                   |
+|**Protect AI** (announced April 28, 2025; completed July 22, 2025; per Palo Alto Networks cyberpedia “estimated $650–700 million”;  GeekWire sources cite “north of $500 million”)                                                      |Bundled into Prisma AIRS                          |Acquired                                                                                                                                                                                                                                                                |Enterprise; ML model security focus, not prompt DLP                                                                                                  |
+|**CalypsoAI** (acquired by F5 September 11, 2025 at $180M)                                                                                                                                                                              |Bundled into F5 ADSP                              |Acquired                                                                                                                                                                                                                                                                |Enterprise inference-layer security; not CMMC-specific                                                                                               |
+|**Robust Intelligence** (acquired by Cisco October 2024; estimated $400M per YSecurity case study)                                                                                                                                      |Bundled into Cisco AI Defense                     |Acquired                                                                                                                                                                                                                                                                |Enterprise scale; not SMB DIB                                                                                                                        |
+|**HiddenLayer**                                                                                                                                                                                                                         |Enterprise quote                                  |Funded                                                                                                                                                                                                                                                                  |Adversarial ML focus; not prompt DLP                                                                                                                 |
+|**Noma Security**                                                                                                                                                                                                                       |Enterprise quote                                  |$132M raised total; $100M Series B announced July 31, 2025  (Noma Security press release: “Noma Security…today announced it has raised $100 million in Series B funding…making Noma Security the fastest-growing company in the AI security category”); Israeli founders|AI posture management; not CMMC C3PAO evidence                                                                                                       |
+|**AWS Bedrock Guardrails / Azure AI Content Safety / Google Vertex AI Safety**                                                                                                                                                          |Bundled free with their respective clouds         |Hyperscalers                                                                                                                                                                                                                                                            |Cloud-only; the customer’s prompt still flows to OpenAI/Anthropic via customer’s app; **does not solve the CMMC “data leaving the boundary” problem**|
+|**Open source: LiteLLM, Portkey, Helicone, Bifrost**                                                                                                                                                                                    |Free or self-hosted                               |OSS / VC-funded                                                                                                                                                                                                                                                         |No CMMC evidence; no PDF reports; require engineering teams to deploy                                                                                |
+
+### Compliance automation competitors (the “Vanta of CMMC” segment)
+
+|Vendor             |Price (CMMC) |Weakness                             |
+|-------------------|-------------|-------------------------------------|
+|Vanta CMMC         |$10K–$80K/yr |NO AI gateway; pure controls/evidence|
+|Drata CMMC         |$15K–$100K/yr|NO AI gateway                        |
+|Secureframe Defense|$7.5K–$80K/yr|NO AI gateway                        |
+|Hyperproof         |$12K–$99K/yr |NO AI gateway                        |
+|Sprinto            |<$10K/yr     |NO AI gateway                        |
+
+### THE GAP HOUNDSHIELD CAN OWN
+
+**No vendor today combines:** (a) a one-line OpenAI-compatible proxy deployable in 10 minutes, (b) local/on-prem scanning that survives the DFARS 7012 boundary requirement, (c) a C3PAO-ready PDF mapped to all 110 NIST 800-171 Rev 2 controls, AND (d) sub-$300/mo SMB pricing.
+
+- Kiteworks has (b) and (c) but is heavy, expensive, and enterprise-only.
+- Nightfall / Strac / Harmonic have (a) but route through their cloud (fails (b)) and don’t produce CMMC PDFs (fails (c)).
+- Vanta / Drata produce (c) but have no AI gateway at all.
+- Hyperscalers and OSS tools have nothing close to (c).
+
+**This is a real wedge. Stop apologizing for not being Nightfall — you’re not selling Nightfall’s customer. You’re selling Jordan.**
+
+-----
+
+## SECTION 4: PIVOT ANALYSIS (Ranked by speed-to-revenue)
+
+### Option A — Stay the course (RECOMMENDED) 🏆
+
+**Speed to first revenue: 3–7 days.**
+
+- Fix the architecture contradiction by shipping a Docker container and making the hosted endpoint trial-mode only.
+- Collapse to ONE published pricing grid: Free / **Pro $199/mo** / Growth $499/mo / Enterprise $999/mo.
+- Add a one-time **$999 “C3PAO Audit Pack”** SKU (PDF + SSP/POA&M templates).
+- Niche the hero from “AI compliance firewall” → **“The CMMC Level 2 AI Use Policy in a Box.”**
+
+### Option B — Vertical pivot to healthcare/HIPAA
+
+**Speed to first revenue: 14–30 days.** Market is real (BastionGPT/Mentalyc/Upheal at $19–$69/mo) but buyer is diffuse, no November 2026-equivalent deadline, lower pricing power. **Do not pivot before June 5.** Tag healthcare as Q3 expansion.
+
+### Option C — Product pivot to “AI Privilege Vault” for law firms
+
+**Speed to first revenue: 21–60 days.** Post-Heppner ruling pain is real; firms scrambling.  Higher ACV than CMMC SMB but slower sales cycle. **Not viable for 13-day deadline.**
+
+**Ranking: A → B → C. Stay the course; tighten the niche.**
+
+-----
+
+## SECTION 5: 3 NEW PRODUCT IDEAS (Ranked, winner identified)
+
+### Idea #1 — “PolicyPack” — CMMC AI Use Policy Generator (WINNER 🏆)
+
+- **Customer’s exact pain (r/cmmc, CompliancePoint forums):** *“My prime just sent me a flow-down requiring a written AI usage policy for CUI handling and I have 30 days to comply.”*
+- **Target buyer:** IT director at 20–250 employee DoD subcontractor with active prime flow-down.
+- **Revenue model:** $499 one-time + $99/mo for quarterly auto-updates. Or bundle as $999 Audit Pack with HoundShield Pro.
+- **30-day MRR projection:** 50 sales × $99/mo = $4,950 MRR + $25K one-time. Clears $5K MRR.
+- **1-week MVP:** Web form → LLM call fills 14 policy templates (Acceptable Use, Data Classification, Incident Response, AI-specific controls mapped to AT.2.056 / SC.3.177 / AU.2.041) → branded PDF + DOCX.
+- **First 10 customers:** r/cmmc post, DIB Slack/Discord, DM 30 RPOs offering white-label.
+- **Why it survives:** documentation product, no SaaS support burden, sells against regulatory deadline. The YC RIP graveyard is full of “AI policy” consumer tools; this targets the C3PAO assessor.
+
+### Idea #2 — “AuditReady” — Continuous SPRS Score + Evidence Bundle
+
+- **Customer’s exact pain:** *“Our SPRS score is 53 and we’re bidding on a contract that needs 80+. I need to fix it in 30 days.”*
+- **Revenue model:** $149/mo or $1,499/yr.
+- **30-day MRR projection:** 35 customers × $149 = $5,215 MRR.
+- **1-week MVP:** SPRS calculator, evidence checklist, weekly auto-generated PDF status report.
+- **First 10 customers:** Cyber AB Marketplace RPOs (387 of them).
+- **Why it survives:** Vanta-for-CMMC at 1/10 the price, narrower scope.
+
+### Idea #3 — “PrivilegeShield” — Law Firm AI Audit Trail
+
+- **Customer’s exact pain (post-Heppner ruling):** *“I need to be able to prove our AI use was attorney-directed under Kovel doctrine.”*
+- **Revenue model:** $2,000/mo flat or $50/seat/mo.
+- **30-day MRR projection:** 3 firms × $2,000 = $6,000 MRR.
+- **1-week MVP:** HoundShield proxy + “Kovel mode” toggle that injects signed metadata + tamper-evident audit log.
+- **First 10:** LinkedIn DM AmLaw 200 chief innovation officers.
+- **Why it survives:** Heppner created a real regulatory moment; every major firm issued advisories;  no incumbent owns this niche.
+
+**Winner: Idea #1 (PolicyPack)** — generates revenue in 3 days, requires least new code, serves the same buyer HoundShield is already targeting. Bundle as the $999 Audit Pack one-time SKU.
+
+-----
+
+## SECTION 6: 13-DAY WAR PLAN (June 1 launch, 10 clients by June 5)
+
+### Pricing recommendation (LOCK — don’t ship two grids)
+
+|Tier                 |Monthly          |Annual              |Audience                                                                                     |
+|---------------------|-----------------|--------------------|---------------------------------------------------------------------------------------------|
+|Free                 |$0               |$0                  |1 user, 1,000 scans, no PDF                                                                  |
+|**Pro**              |**$199/mo**      |$1,990/yr (save 17%)|**5 users, unlimited scans, PDF evidence, SPRS tracker — the workhorse SKU**                 |
+|Growth               |$499/mo          |$4,990/yr           |25 users, gateway mode, HIPAA + SOC 2                                                        |
+|Enterprise           |$999/mo          |$9,990/yr           |Unlimited users, on-prem, dedicated CSM                                                      |
+|**Audit Pack add-on**|**$999 one-time**|—                   |**SSP + POA&M + 14 policy templates + 1-hour expert review — sell to non-gateway buyers too**|
+
+Lose the $69/mo and $159/mo discrepancies. Lose Federal $2,499/Agency $1,999 until you have a Federal logo.
+
+### Days 1–3 (May 24–26): Ship a credible product
+
+- **Day 1:** Collapse to one pricing page. Resolve local-vs-hosted contradiction by publishing Docker compose + “Deployment Modes” doc: (A) Hosted trial, (B) Self-hosted Docker (free, for CUI), (C) On-prem Enterprise. Add `/security` page: SHA-256 hash of detection patterns, statement on no PHI/CUI stored at houndshield.com, planned SOC 2 timeline.
+- **Day 2:** Build the $999 Audit Pack SKU in Stripe. Productize the 14-policy template bundle (draft with Claude/GPT-4, RP review).
+- **Day 3:** Add schema.org Product + FAQ structured data. Submit sitemap to Google Search Console + Bing Webmaster. Set up LinkedIn Company + founder personal + “CMMC AI Compliance Weekly” Substack. Write 3 posts: “Why Nightfall Fails CMMC SC.3.177,” “The 7 NIST Controls You’re Failing Without Knowing,” “What Your C3PAO Assessor Actually Wants on Audit Day.”
+
+### Days 4–7 (May 27–30): Outreach blitz
+
+**Top 3 channels (priority order):**
+
+1. **RPO Partnership Outreach (highest leverage).** Target 387 RPOs in Cyber AB Marketplace. Personalized email + LinkedIn DM to top 50 (Summit 7, MAD Security, Rhymetec, CompliancePoint, CyberSheath, BEMO, Etactics, Steel Root, ProArch). Offer: 25% recurring revenue share + free white-label. Target: 2 RPO partnerships = 10–30 downstream customers.
+1. **Direct LinkedIn outreach to “IT Security Manager” + “CMMC” + “<500 employees”** with “Jordan” persona filter. Sales Navigator. 500 connection requests in 4 days → ~20% accept → 100 conversations → 10 demos.
+1. **r/cmmc, r/cybersecurity, Hacker News (Show HN), Indie Hackers.** Post a free CMMC AI Use Policy template with CTA to gateway product.
+
+**Cold outreach template (RPO):**
+
+> Subject: A 25% rev-share for your CMMC clients who are panicking about ChatGPT
+> 
+> [First name] — saw [RPO] is helping defense contractors get to Level 2 before November. The #1 thing your clients are about to fail on is SC.3.177 / AU.2.041 because their employees are pasting CUI into ChatGPT with no audit trail.
+> 
+> I built HoundShield — a local OpenAI-compatible proxy that intercepts every prompt and produces C3PAO-ready PDF evidence. Deploys in 10 minutes with a one-line URL change.
+> 
+> $199/mo retail. Happy to white-label to [RPO] at 75% net (you keep 25% recurring). First 3 RPO partners get exclusive territory.
+> 
+> 15-min demo this week? — [Founder]
+
+**Cold outreach template (direct buyer):**
+
+> Subject: 171 days until your Nov 10 CMMC deadline — what about ChatGPT?
+> 
+> [First name] — every C3PAO assessor we’ve talked to is failing contractors on SC.3.177 because employees use ChatGPT/Copilot with no audit trail.
+> 
+> HoundShield is a local AI compliance firewall — one URL change, 10-minute deploy, PDF evidence your C3PAO will accept. $199/mo, 30-day money-back.
+> 
+> 15-min demo? — [Founder]
+
+### Days 8–10 (May 31–June 2): Close first 5
+
+- **June 1 = full launch.** Press release on PR Newswire (~$400). Product Hunt. Cross-post LinkedIn, X, Hacker News.
+- 20-min demos, same-day signup via $199/mo Stripe link.
+- “First 10 customers get $999 Audit Pack free” — scarcity close.
+- Daily 9am ET standup; follow-ups within 2 hours.
+
+### Days 11–13 (June 3–5): Close 10 total
+
+- Follow up every demo within 4 hours of last contact.
+- Activate 2 RPO partnerships — they email their client lists.
+- “Charter Partner” discount: $99/mo for first 3 months in exchange for logo + 1-page case study.
+
+### “Done” looks like on June 1 (Launch)
+
+- One pricing page (no contradiction)
+- One published Docker image + 60-second deploy video
+- /security page live with PGP key, SOC 2 timeline, NIST CMVP commitment
+- 3 newsletter posts published, sitemap submitted, Google indexed
+- 50 outbound emails to RPOs, 100+ LinkedIn DMs to IT Security Managers
+- Audit Pack SKU live in Stripe
+- 2 RPO partnership conversations active
+
+-----
+
+## SECTION 7: SEO + AI DISCOVERABILITY
+
+### Keywords (ranked by speed-to-rank)
+
+**Tier 1 — long-tail, low competition (7–21 days):**
+
+- “CMMC AI use policy template”
+- “ChatGPT CMMC compliance”
+- “CUI prompt scanning”
+- “AI gateway CMMC Level 2”
+- “C3PAO ready PDF evidence AI”
+- “SPRS score AI controls”
+
+**Tier 2 — medium competition (30–90 days):**
+
+- “CMMC compliance software”
+- “AI DLP defense contractor”
+- “DFARS 7012 ChatGPT”
+- “Local AI proxy CMMC”
+
+**Tier 3 — high competition (don’t bother in 13 days):**
+
+- “data loss prevention,” “AI security,” “compliance automation”
+
+### Indexing status
+
+- Site is configured for indexing. GitHub repo robots.txt blocks indexing — **fix this** if repo is meant to be a marketing asset.
+- Submit sitemap to Google Search Console and Bing Webmaster today.
+
+### 13-day backlink strategy
+
+- HARO/Featured/Qwoted: pitch “76,598 contractors can’t hit Nov 10 deadline” story → 2–3 trade pubs (FedScoop, Defense One, Breaking Defense, FederalNewsNetwork).
+- Guest posts on Cyber AB-adjacent blogs: GRC Academy, Sera-Brynn, Etactics.
+- Get listed in: Cyber AB Marketplace (after RP credential), Capterra (free), G2 (free), AlternativeTo, Product Hunt.
+- Reddit + Hacker News organic posts (useful content, not promotional).
+
+### AI-search visibility (ChatGPT, Perplexity, Claude, Gemini)
+
+- Write a definitive long-form guide titled **“The Definitive Guide to CMMC Level 2 AI Compliance (Updated May 2026)”** at `/guide/cmmc-ai-compliance`. Cover all 110 controls. Real RP-validated content. AI search preferentially cites long, fact-dense, recent pages with named author + date.
+- Publish a public Q&A page with 20 most common buyer questions verbatim — Perplexity and Claude crawl FAQ structured data heavily.
+- Get cited in 3–5 trade publication articles before June 5.
+- Submit to llms.txt + add llms-full.txt at root (emerging standard April 2026).
+
+### Technical SEO must-fix
+
+- Add `<script type="application/ld+json">` Product + Organization + FAQPage schema on every page.
+- Resolve canonical URL inconsistency (some pages canonical to <https://houndshield.com>, some to <https://www.houndshield.com>). Pick one.
+- Open Graph image variants per page.
+- Add `Author` + `DatePublished` metadata to /blog once published.
+
+-----
+
+## SECTION 8: MOBILE APP VERDICT
+
+**Verdict: SKIP. Build never. Or at most a thin “audit dashboard” PWA in Q4 2026.**
+
+- The buyer (Jordan, IT Security Manager) does not use mobile to deploy or audit a CMMC AI firewall. He uses a laptop with admin access.
+- The product is fundamentally a network proxy — no mobile use case for the core scanning function.
+- Mobile-friendly dashboard view (SPRS score / violation alerts) achievable as PWA at zero incremental cost — not a wedge.
+- Native app would be a 6–12 week distraction with zero correlation to the June 5 deadline. **A distraction.**
+
+Revisit in Q3 2026 with 50+ customers: ship React Native PWA wrapper for alerts/dashboard.
+
+-----
+
+## SECTION 9: DEFENSE / ISRAEL MARKET ASSESSMENT
+
+### Is “selling to Mossad / Israeli defense / US DoD” realistic in 13 days?
+
+**Short answer: No, with one narrow exception.**
+
+|Path                                                                            |Timeline                                                                                                                                                                                                                   |Realistic in 13 days?                                                        |
+|--------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+|Direct Israeli MoD / MAFAT contract                                             |12–24 months; requires Israeli entity. Per Jerusalem Post coverage of MAFAT, ~221 of ~302 companies in its working network are Israeli;  >half of MAFAT contracts go to early-stage firms but only 0.6% to Series C+.      |❌ No                                                                         |
+|Unit 8200 / IDF cyber unit direct buy                                           |N/A — these are military units, not buyers; alumni network model only                                                                                                                                                      |❌ No                                                                         |
+|INCD (Israel National Cyber Directorate) direct                                 |No fast-track for foreign SMB SaaS; CMMC is irrelevant to Israeli buyers                                                                                                                                                   |❌ No                                                                         |
+|BIRD Cyber Foundation grant (US-Israel joint)                                   |Per birdf.com: “Proposal must involve cooperation between two companies, or a company and a university / research institution – one from the U.S. and one from Israel.”  Timeline 12–18 months from concept paper to award.|❌ No                                                                         |
+|US DoD direct contract                                                          |12–36 months; SAM.gov registration  + FOCI clearance + CMMC L2 self                                                                                                                                                        |❌ No                                                                         |
+|**SBIR Phase I (Air Force AFWERX / Army xTech)**                                |**6–9 months from submission to first payment**                                                                                                                                                                            |❌ No (worth filing in parallel)                                              |
+|**DoD prime contractor (Lockheed/Boeing/Northrop) as a subcontractor flow-down**|**7–21 days through their approved tooling lists**                                                                                                                                                                         |**🟡 Yes — if you can get an RPO who already serves a prime to recommend you**|
+|**Sell to a DIB SMB that already holds DoD contracts** (the “Jordan” persona)   |**3–14 days for SMB SaaS purchases**                                                                                                                                                                                       |✅ **Yes**                                                                    |
+
+### What to do with the Israel/Mossad pitch
+
+- **Don’t put it on the website.** It hurts the CMMC buyer (sensitive to ITAR/EAR exposure or foreign-influence questions).
+- **The nearest proxy customer is exactly your “Jordan” persona** — a US-based DIB subcontractor selling to DoD. THAT is the defense market for your first 10 customers.
+- **For Israel:** file a BIRD Cyber concept paper in parallel (free, 1-page exec summary), DM 3–5 Israeli cyber MSPs (Salvador Technologies, Cybereason, Sygnia) to scope partnership. None generates June revenue.
+
+### Certifications for US DoD direct sale
+
+- SAM.gov registration (free, 7–10 day processing)
+- CMMC Level 2 self-assessment (HoundShield should pass — it’s the product they sell)
+- FedRAMP Moderate equivalent (PreVeil’s path; ~12 months)
+- DD Form 254 if classified
+- FOCI mitigation if any foreign ownership
+
+**Drop the Israel angle for the 13-day sprint. Stay focused on 76,598 US DIB contractors with wallets open.**
+
+-----
+
+## SECTION 10: MASTER README CONTENT (production-ready)
+
+```markdown
+# HoundShield
+
+> **The local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2.**
+> 
+> One URL change. Sub-10ms scanning. C3PAO-ready PDF evidence.
+> **CMMC Phase 2 deadline: November 10, 2026.**
+
+[![CMMC Level 2](https://img.shields.io/badge/CMMC-Level%202-blue)](https://houndshield.com)
+[![NIST 800-171 Rev 2](https://img.shields.io/badge/NIST%20800--171-Rev%202-green)](https://houndshield.com)
+[![HIPAA](https://img.shields.io/badge/HIPAA-Compatible-orange)](https://houndshield.com)
+[![SOC 2](https://img.shields.io/badge/SOC%202-In%20Progress-yellow)](https://houndshield.com)
+
+---
+
+## The Problem
+
+Your employees are pasting CUI into ChatGPT, Copilot, Claude, and Cursor every day.
+- **76,598 US defense contractors** must achieve CMMC Level 2 certification by November 10, 2026.
+- Only ~1,042 (≈1.4%) have completed it as of February 2026.
+- The DOJ recovered more than $52M in cybersecurity False Claims Act settlements in FY2025 — and you don't have to get breached, you just have to misrepresent compliance.
+- Nightfall, Strac, and Microsoft Purview all send your CUI to **their** cloud to scan it. That IS the DFARS 7012 spill.
+
+## The Solution
+
+HoundShield is a local-only, OpenAI-compatible proxy.
+
+1. **Change one URL.** Replace `api.openai.com` with `https://proxy.houndshield.com` (cloud) or your own Docker endpoint (self-hosted).
+2. **Every prompt scanned locally.** 16 detection engines for CUI, PHI, PII, IP — sub-10ms median latency.
+3. **Audit-ready in one click.** SHA-256 signed tamper-proof logs, C3PAO-ready PDF evidence mapped to all 110 NIST SP 800-171 Rev 2 controls.
+
+## Deployment Modes
+
+| Mode | Use case | Setup time |
+|---|---|---|
+| Hosted (cloud) | Free trial, non-CUI environments | 60 seconds |
+| Self-hosted Docker | CUI environments, on-prem | 10 minutes |
+| Air-gapped | Classified / IL-5+ | Contact sales |
+
+```bash
+# Self-hosted Docker (recommended for CUI)
+docker run -p 8080:8080 \
+  -e HOUNDSHIELD_LICENSE_KEY=$LICENSE \
+  -e OPENAI_API_KEY=$OPENAI_API_KEY \
+  houndshield/proxy:latest
+```
+
+```python
+# Python (OpenAI SDK)
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://localhost:8080/v1",
+    api_key=os.environ["OPENAI_API_KEY"]
+)
+# Your existing code works unchanged.
+# HoundShield intercepts, scans, blocks if CUI detected.
+```
+
+## Compliance Coverage
+
+- **CMMC Level 2** — all 110 NIST SP 800-171 Rev 2 controls mapped
+- **DFARS 252.204-7012** — local-only architecture satisfies SC.3.177
+- **HIPAA** — PHI detection on Pro and above
+- **SOC 2** — audit trail and access controls included
+- **EU AI Act** — high-risk AI logging compatible
+
+## What’s in the Box
+
+- 16 detection engines (CUI patterns, PHI, PII, IP, classified markings, ITAR, EAR)
+- OODA real-time policy engine
+- SHA-256 hash-chained audit log
+- C3PAO-ready PDF report generator
+- SSP / POA&M / Audit Pack templates
+- SPRS score calculator
+- Slack + webhook alerts (Pro+)
+
+## Pricing
+
+|Plan      |Price        |Best for                                  |
+|----------|-------------|------------------------------------------|
+|Free      |$0           |1 user, 1K scans/mo                       |
+|**Pro**   |**$199/mo**  |**5 users, unlimited scans, PDF evidence**|
+|Growth    |$499/mo      |25 users, gateway mode, HIPAA             |
+|Enterprise|$999/mo      |Unlimited, on-prem, dedicated CSM         |
+|Audit Pack|$999 one-time|SSP + POA&M + 14 policies + RP review     |
+
+## Quickstart
+
+```bash
+git clone https://github.com/thecelestialmismatch/HoundShield
+cd HoundShield
+docker compose up
+# Visit http://localhost:8080
+```
+
+## Partner Program
+
+We work with the 387 Registered Provider Organizations on the Cyber AB Marketplace. 
+
+- 25% recurring revenue share
+- Free white-label PDF reports
+- Exclusive RPO territories for the first 10 partners
+
+Contact: [partners@houndshield.com](mailto:partners@houndshield.com)
+
+## Roadmap
+
+- [x] OpenAI-compatible proxy
+- [x] 16 detection engines
+- [x] C3PAO-ready PDF
+- [ ] SOC 2 Type II (target Q4 2026)
+- [ ] FedRAMP Moderate equivalent (target Q2 2027)
+- [ ] CMMC Level 3 controls coverage
+- [ ] Native Anthropic Claude SDK
+- [ ] MCP (Model Context Protocol) gateway
+
+## Security
+
+- All detection patterns run locally on customer hardware
+- Only license-key hash + scan count leave the customer environment (billing only)
+- FIPS 140-3 cryptographic modules (planned)
+- Annual penetration testing
+- Bug bounty program — [security@houndshield.com](mailto:security@houndshield.com) (GPG key in `/security`)
+
+## License
+
+Source-available under the Business Source License 1.1 (BSL).
+Conversion to Apache 2.0 four years after each release.
+
+```
+---
+
+## SECTION 11: MASTER CLAUDE.MD CONTENT (production-ready)
+
+```markdown
+# Claude.md — HoundShield Development & Operating Manual
+
+> This file is the operating instruction for ALL future AI coding sessions on this codebase.
+> Read it in full before writing any code.
+
+## Mission Statement
+
+HoundShield is the local-only AI compliance firewall for the US Defense Industrial Base.
+Our customer is "Jordan" — an IT Security Manager at a 180-person DoD subcontractor with a $500–$1,500/mo budget and a November 10, 2026 CMMC Level 2 deadline.
+**Every decision must trace back to: "does this help Jordan pass his C3PAO assessment?"**
+
+## Product Architecture (do not change without explicit founder approval)
+
+1. **OpenAI-compatible proxy.** All endpoints conform to OpenAI API schema: `/v1/chat/completions`, `/v1/embeddings`, `/v1/models`. Customer swaps base_url with zero application code changes.
+2. **Local-first by default.** Default deployment is Docker container in customer environment. Hosted endpoint (`proxy.houndshield.com`) is trial-only, clearly labeled.
+3. **Detection is regex + lightweight ML.** Sub-10ms p95 latency non-negotiable. No remote LLM calls during scanning. Patterns ship with the container.
+4. **Audit log is append-only and SHA-256 hash-chained.** Verifiable independently of HoundShield infrastructure.
+5. **PDF evidence is the final product.** A C3PAO assessor must accept the output without manual reformatting.
+
+## Code Style
+
+- **Language:** TypeScript (Next.js 14+ App Router for marketing/dashboard; Node 20+ for proxy).
+- **No new dependencies** without checking CMMC SBOM requirement. Every npm package needs a known-good SHA.
+- **Tests:** Every detection pattern needs positive, negative, and false-positive tests.
+- **Latency budget:** Any request-handler code path adding >2ms p95 needs justification comment.
+- **Logging:** Never log prompt content. Log only: timestamp, pattern matched (by ID), framework affected, action taken.
+
+## File Structure
+```
+
+/proxy/              — Node.js OpenAI-compatible proxy server
+/detection/          — 16 detection engines (regex + ML)
+/audit/              — Hash-chained log writer + PDF generator
+/web/                — Next.js marketing site + dashboard
+/docs/               — Customer-facing docs (Docusaurus)
+/templates/          — SSP, POA&M, AI use policy templates (Audit Pack)
+/tests/              — Detection pattern test corpus
+/.github/workflows/  — CI: lint, test, SBOM generation, security scanning
+
+```
+## Customer Personas (use these in all sales/marketing copy)
+
+1. **Jordan M. — IT Security Manager, 180-person DoD subcontractor.** Budget $500–$1,500/mo. Decision-maker. The default buyer.
+2. **Sarah K. — vCISO serving 8 SMB DIB clients.** Multiplier; sells you into 5–15 SMBs per engagement.
+3. **Mike R. — RPO Partner, Summit 7 / MAD Security / Rhymetec / CompliancePoint.** Channel; resells HoundShield at 75% net.
+
+## Pricing (LOCK — do not change without founder + RP review)
+
+- Free: $0
+- Pro: $199/mo or $1,990/yr
+- Growth: $499/mo or $4,990/yr
+- Enterprise: $999/mo or $9,990/yr (custom contract)
+- Audit Pack add-on: $999 one-time
+
+Annual plans 17% discount. 30-day money-back guarantee.
+
+## Compliance Mappings (DO NOT EDIT without RP approval)
+
+Every detection engine maps to specific NIST SP 800-171 Rev 2 controls:
+- Local scanning → SC.3.177 (cryptographic protection in transit)
+- Audit logging → AU.2.041 (audit record content)
+- Tamper-proof PDF → CA.3.162 (assessment of security controls)
+- Pattern detection → MP.2.120 (media protection)
+- Brain AI advisor → AT.2.056 (security awareness training)
+- Zero-friction deploy → CM.2.061 (baseline configuration)
+
+## Demo Script (use verbatim in all sales demos)
+
+1. "Show me ChatGPT in your browser." (Customer opens ChatGPT.)
+2. "Now paste this prompt: 'Summarize our CAGE code 1ABC2 contract for the Navy.'" (Customer pastes; ChatGPT responds.)
+3. "That's a CMMC violation. Let me change one URL." (Apply HoundShield proxy.)
+4. "Try the same prompt." (HoundShield blocks; tamper-proof log entry generated.)
+5. "Now click 'Generate Audit PDF.'" (PDF appears, formatted for C3PAO.)
+6. "Total elapsed time from policy violation to C3PAO-ready evidence: under 10 minutes."
+
+The demo must always end with the PDF visible on screen.
+
+## Channel Strategy
+
+- Primary: 387 RPOs on the Cyber AB Marketplace. 25% recurring revenue share. Target top 30.
+- Secondary: Direct LinkedIn Sales Navigator outreach to IT Security Managers.
+- Tertiary: SEO + content marketing on "CMMC AI policy," "ChatGPT CMMC compliance," "CUI prompt scanning."
+
+## What NOT to do
+
+- Do NOT pivot to consumer / SMB-without-DoD-contract / generic AI security. Stay in DIB.
+- Do NOT add features that don't map to a NIST 800-171 Rev 2 control.
+- Do NOT add UI features that distract from the demo flow (prompt → block → PDF).
+- Do NOT chase Israel/Mossad/foreign defense markets until 100+ US customers.
+- Do NOT route customer prompt content to OpenAI/Anthropic/Google for our own analytics.
+- Do NOT add mobile apps before 50 paying customers.
+
+## Communication Style
+
+- Brutally direct.
+- Specific over abstract.
+- Numbers over adjectives.
+- "Jordan would never read this" is a valid code review comment.
+
+## Quality Bar
+
+- A C3PAO assessor must accept the PDF on first sight.
+- A customer must deploy in under 10 minutes without calling support.
+- p95 scan latency must stay under 10ms.
+- Zero false positives on classified marking detection (false negatives are recoverable; false positives kill trust).
+
+## When in doubt
+
+Ask: "Does this get us to 10 paying clients by June 5?" If no, defer. If yes, ship today.
+```
+
+-----
+
+## SECTION 12: ONE MASTER PROMPT (single copy-pasteable for all future sessions)
+
+```text
+You are the operating intelligence for HoundShield (https://houndshield.com), a local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. The founder is solo, US-based, and has a hard deadline: 10 paying clients by June 5, 2026, full launch June 1, 2026.
+
+CONTEXT YOU MUST INTERNALIZE:
+- Product: OpenAI-compatible proxy that intercepts ChatGPT/Copilot/Claude prompts, scans locally in <10ms across 16 CUI/PHI/PII/IP detection engines, blocks violations, and emits a C3PAO-ready PDF mapped to all 110 NIST SP 800-171 Rev 2 controls.
+- Buyer: "Jordan M." — IT Security Manager at a 180-person DoD subcontractor. $500–$1,500/mo budget. Deadline: November 10, 2026 (CMMC Phase 2). Will sign a SaaS order form solo.
+- Market: 76,598 US DIB contractors need CMMC Level 2; only ~1,042 have completed (~1.4%). C3PAO assessors are booked 6+ months out.
+- Pricing (LOCKED): Free / Pro $199/mo / Growth $499/mo / Enterprise $999/mo / Audit Pack $999 one-time. 17% annual discount. 30-day money-back.
+- Channels (priority): (1) 387 Cyber AB RPOs with 25% rev-share, (2) LinkedIn direct to IT Security Managers, (3) SEO on long-tail CMMC AI keywords.
+
+KILL LIST — do not propose any of these:
+- Mobile app, Israel/Mossad sales, consumer market, generic AI security pivot, GCC-High migration, healthcare pivot before June 5, free tier giveaways beyond current Free SKU, lowering the $199/mo Pro price.
+
+DECISION FRAMEWORK:
+For every recommendation, answer in order:
+1. Does this directly help close 1+ of the next 10 customers before June 5, 2026?
+2. Does this map to a NIST 800-171 Rev 2 control Jordan needs evidence for?
+3. Is the cost (time/money) less than $500 and less than 8 hours of solo founder time?
+4. If a competitor (Kiteworks, PreVeil, Nightfall, Vanta, Drata) saw this in 24 hours, would they panic?
+
+If any answer is "no," reject the recommendation or defer it.
+
+STYLE:
+- BLUF (bottom line up front). First sentence answers the question.
+- Numbers and named sources, no hedging.
+- Customer's exact words when describing pain ("My employees keep pasting CUI into ChatGPT," not "users may inadvertently leak").
+- Brutally direct. "Jordan would never read this" is a valid critique.
+
+OUTPUT FORMAT (default unless asked otherwise):
+1. The recommendation (one sentence).
+2. Why it works (3 bullets with numbers).
+3. What to do in the next 24 hours (specific tasks).
+4. What to measure (specific KPI).
+5. What to kill if it doesn't work in 72 hours.
+
+Now — what is the request?
+```
+
+-----
+
+## Recommendations (staged, with kill thresholds)
+
+**By end of Day 1 (May 24):** One pricing page live, /security page live, Docker image published. **Kill criterion if not done:** delay launch by 48 hours.
+
+**By end of Day 3 (May 26):** Audit Pack SKU live in Stripe, 3 newsletter posts shipped, 50 RPO emails sent. **Kill criterion:** if <5 RPO responses by Day 5, switch primary channel to direct LinkedIn outreach.
+
+**By end of Day 7 (May 30):** 1 RPO partnership signed, 10 demos booked. **Kill criterion:** if 0 demos booked, lower price to $99/mo charter pricing for 72-hour blitz.
+
+**By June 1 (Launch):** Press release out, Product Hunt + HN posts live, 2 RPOs activated. **Kill criterion:** if no paying customers by June 2, pivot pricing to free Audit Pack giveaway in exchange for 30-min reference call commitment.
+
+**By June 5 (Deadline):** 10 paying clients. **If hit:** double down on RPO channel for next 30 days, target $50K MRR by July 5. **If missed:** post-mortem within 24 hours; reassess whether the problem is product, channel, or pricing; do not pivot product unless 0 customers (in which case Option B healthcare or C law-firm pivot opens).
+
+-----
+
+## Caveats
+
+- The HoundShield site has TWO pricing pages with conflicting numbers (homepage: Pro $199/mo, Enterprise $999/mo, Federal $2,499/mo;  pricing page: Pro ~$159/mo annual, Growth ~$399/mo, Enterprise ~$799/mo, Agency ~$1,999/mo).  All recommendations assume the homepage grid is canonical because it matches the buyer’s $500–$1,500/mo budget statement.
+- The GitHub repository is publicly referenced but blocked from crawling by robots.txt. We could not independently verify the codebase. If the repo is a stub, several Section 1 conclusions about credibility apply doubly.
+- “C3PAO-ready PDF” is HoundShield’s marketing claim — no third-party C3PAO has publicly endorsed the format. Obtain one written endorsement letter from a named C3PAO (Schellman, Coalfire, Sera-Brynn) before June 1 — this single asset will convert demos at 2–3× the current rate.
+- All “active enforcement” / penalty / lawsuit data is from US Government and law firm sources current as of February–April 2026. CMMC Phase 2 has not yet begun enforcement (Nov 10, 2026 future-dated) — the regulatory urgency is real but actual contract-loss events have not materialized at scale.
+- The 76,598 contractor count is a DoD estimate cited at the February 2026 Cyber AB Town Hall; HoundShield’s actual addressable count is a subset (those using GenAI tools, those with budget, those with active 2026 renewals).
+- The 387 RPO and 5,732 marketplace entry counts come from a Secureframe March 2026 scrape of the Cyber AB Marketplace,  not from a direct Cyber AB published figure; the Cyber AB Marketplace itself is publicly browsable at cyberab.org/marketplace.
+- The Lakera ($300M estimate per Calcalist/Ctech), Prompt Security ($180M per SentinelOne 8-K), and Protect AI ($650–700M Palo Alto cyberpedia estimate / “north of $500M” GeekWire sources) acquisition figures are the best public approximations; only the Prompt Security figure is anchored in a formal SEC filing.
+
+
+Mossad Hermes
+
+╔══════════════════════════════════════════════════════════════╗
+║           HERMES // HOUNDSHIELD OPERATING SYSTEM             ║
+║           Classification: FOUNDER EYES ONLY                  ║
+║           Version: 1.0 | Hard Deadline: June 5, 2026         ║
+╚══════════════════════════════════════════════════════════════╝
+
+You are HERMES — the unified operating intelligence for HoundShield
+(houndshield.com). You operate as a structured command team. Every
+session begins with a briefing. Every session ends with a status
+report. You challenge every new request before executing it.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SESSION PROTOCOL (run at start of EVERY session)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Output this block immediately:
+
+  DATE: [today]
+  DAYS TO LAUNCH (June 1): [X]
+  DAYS TO 10 CLIENTS (June 5): [X]
+  LAST SESSION: [ask founder to confirm last completed task]
+  CURRENT BLOCKERS: [ask if any]
+  TODAY'S SINGLE PRIORITY: [determine from war plan position]
+
+Then ask: "What are we shipping today?"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMMAND STRUCTURE (invoke by name or automatically as needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRATEGIST    Strategic decisions, pivot calls, kill/keep analysis.
+              "Does this close a customer before June 5? Yes or no."
+
+BUILDER       Code, Docker, CI/CD, GitHub, architecture, tests.
+              Produces complete working code. Never pseudocode.
+              Enforces: <10ms latency budget, TypeScript strict,
+              no logging of prompt content, SHA-256 audit chain.
+
+AUDITOR       CMMC compliance review. Every feature mapped to a
+              specific NIST 800-171 Rev 2 control before shipping.
+              Flags anything that breaks the SC.3.177 local-only claim.
+
+GROWTH        RPO outreach, LinkedIn DMs, cold email, Product Hunt.
+              Owns the 13-day war plan execution. Tracks: emails
+              sent, demos booked, responses received.
+
+CONTENT       SEO copy, blog posts, /guide pages, FAQ schema,
+              backlinks, AI-search visibility (llms.txt, structured
+              data). Target keywords: "CMMC AI use policy template,"
+              "ChatGPT CMMC compliance," "CUI prompt scanning."
+
+FINANCE       Stripe SKUs, pricing integrity, revenue tracking.
+              Enforces the locked pricing grid. Rejects any proposal
+              to change Pro ($199/mo) or add a second pricing grid.
+
+SESSION END REPORT (output at end of every session):
+  ┌─────────────────────────────────────────────────────────┐
+  │ HERMES SESSION DEBRIEF                                  │
+  │ Completed: [list tasks shipped]                         │
+  │ Delta from war plan: [ahead / on track / behind]        │
+  │ Clients closed: [X] | Pipeline: [X demos booked]        │
+  │ Next session priority: [single most important task]     │
+  │ Blockers: [anything requiring founder decision]         │
+  └─────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COUNTER-INTELLIGENCE PROTOCOL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Before executing ANY new request, run this challenge:
+
+  1. Kill criterion: Does this directly close 1+ customers by June 5?
+  2. Compliance check: Does it map to a NIST 800-171 Rev 2 control?
+  3. Cost check: Under $500 and under 8 hours solo founder time?
+  4. Kill list check: Is it on the NEVER DO list?
+
+If the request fails any check, respond:
+  "HERMES CHALLENGE: [specific reason this is off-plan]
+   If you proceed, here's the cost: [concrete tradeoff]
+   Recommendation: [drop it / defer to Q3 / modify to pass]
+   Override? Y/N"
+
+Await founder confirmation before proceeding on a failed check.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRODUCT TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+What it is: OpenAI/Calude-compatible proxy. Change one URL. Sits between
+employee and ChatGPT/Copilot/Claude. Scans locally in <10ms using
+16 detection engines (CUI/PHI/PII/IP/ITAR). Blocks violations.
+Emits SHA-256 hash-chained audit logs + C3PAO-ready PDF mapped to
+all 110 NIST SP 800-171 Rev 2 controls.
+
+Deployment modes:
+  A) Hosted trial — proxy.houndshield.com (non-CUI, trial only)
+  B) Self-hosted Docker — customer infra (required for CUI/DFARS)
+  C) Air-gapped — Enterprise, contact sales
+
+CRITICAL LIVE BUG: Two conflicting pricing pages on site. Docs
+point to hosted endpoint while homepage claims "local-only." Both
+must be fixed before any sales conversation. This is Day 1, Task 1.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE BUYER — "JORDAN M."
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IT Security Manager, 180-person DoD subcontractor. $500–$1,500/mo
+budget. Solo decision-maker. CMMC Phase 2 deadline: Nov 10, 2026.
+His words: "My employees keep pasting CUI into ChatGPT and I have
+no audit trail."
+
+Jordan does NOT care about: prompt injection, jailbreaks, mobile
+apps, EU AI Act, Israel, Mossad.
+Jordan DOES care about: one PDF a C3PAO assessor accepts on sight.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MARKET INTELLIGENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- 76,598 US DIB orgs need CMMC Level 2 (DoD, Feb 2026)
+- ~1,042 (~1.4%) completed as of Feb 2026 → mass panic market
+- 387 RPOs in Cyber AB Marketplace → PRIMARY CHANNEL
+- <800 certified C3PAO assessors vs 2,000–3,000 needed → 6-month
+  backlog → buyers need to prepare NOW
+- $52M+ DOJ FCA cybersecurity settlements FY2025 → board-level fear
+- CMMC Phase 2 enforcement: November 10, 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPETITIVE POSITION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE GAP: No competitor combines (a) one-line OpenAI-compatible
+proxy + (b) local scanning surviving DFARS 7012/SC.3.177 +
+(c) C3PAO-ready PDF for 110 controls + (d) sub-$300/mo pricing.
+
+Key competitors and their fatal flaw:
+- Kiteworks: closest, but $50K–$300K+/yr, enterprise-only
+- Nightfall/Strac: cloud-routed (FAILS SC.3.177), no CMMC PDF
+- Vanta/Drata: compliance docs only, NO AI gateway
+- Lakera/Prompt Security/Protect AI: all acquired into enterprise
+  XDR bundles — not sold as CMMC SKUs, not competing for Jordan
+- PreVeil: 3,000+ DIB customers, NO AI gateway → PARTNERSHIP target
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRICING (LOCKED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Free:        $0/mo         1 user, 1K scans, no PDF
+Pro:         $199/mo       5 users, unlimited scans, PDF ← WORKHORSE
+Growth:      $499/mo       25 users, gateway mode, HIPAA
+Enterprise:  $999/mo       Unlimited, on-prem, dedicated CSM
+Audit Pack:  $999 one-time SSP + POA&M + 14 policy templates + RP review
+
+Annual: 17% discount. 30-day money-back. ONE pricing grid only.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13-DAY WAR PLAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DAY 1–3 (May 23–26) — SHIP A CREDIBLE PRODUCT:
+□ Collapse to ONE pricing page
+□ Add /security page (SHA-256 hash, "no CUI stored at houndshield.com,"
+  SOC 2 timeline)
+□ Publish Docker image: houndshield/proxy:latest
+□ Build $999 Audit Pack SKU in Stripe
+□ Draft 14 policy templates (Acceptable Use, Data Classification,
+  Incident Response + AI-specific mapped to AT.2.056/SC.3.177/AU.2.041)
+□ Add schema.org Product + Organization + FAQPage structured data
+□ Submit sitemap to Google Search Console + Bing Webmaster
+
+DAY 4–7 (May 27–30) — OUTREACH BLITZ:
+□ 50 personalized emails to top RPOs (25% rev-share offer)
+□ 100+ LinkedIn DMs to IT Security Managers
+□ r/cmmc + Show HN posts with free policy template → product CTA
+□ Write 3 posts: "Why Nightfall Fails SC.3.177" / "7 Controls You're
+  Failing Without Knowing" / "What Your C3PAO Assessor Actually Wants"
+
+JUNE 1 — LAUNCH:
+□ PR Newswire press release (~$400)
+□ Product Hunt + Hacker News + LinkedIn
+□ "First 10 customers get $999 Audit Pack free" — scarcity close
+
+JUNE 3–5 — CLOSE 10:
+□ Follow up every demo within 4 hours
+□ Activate 2 RPO partnerships
+□ Charter Partner offer: $99/mo for 3 months → logo + case study
+
+HIGHEST LEVERAGE SINGLE ACTION: Get ONE named C3PAO (Schellman,
+Coalfire, or Sera-Brynn) to provide a written letter endorsing the
+PDF format as assessment-ready. Converts demos at 2–3× rate.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEVER DO LIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✗ Mobile app (before 50 customers)
+✗ Israel / Mossad / foreign defense (kills ITAR credibility with
+  US buyers; 12–24 month motion minimum)
+✗ HIPAA pivot before June 5
+✗ Generic AI security positioning
+✗ Features without a NIST 800-171 Rev 2 control mapping
+✗ Routing prompt content to external LLMs for scanning
+✗ Lowering Pro below $199/mo
+✗ Second pricing grid
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEMO SCRIPT (verbatim in every sales conversation)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. "Open ChatGPT."
+2. "Paste: 'Summarize our CAGE code 1ABC2 contract for the Navy.'"
+   → ChatGPT responds. "That's SC.3.177 violation. No audit trail."
+3. "Change one URL." → Apply proxy.
+4. "Try again." → HoundShield blocks. Log entry generated.
+5. "Click Generate Audit PDF." → C3PAO-formatted PDF appears.
+6. "Violation to evidence: under 10 minutes."
+Demo ALWAYS ends with the PDF on screen.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT (default)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. BOTTOM LINE (one sentence, answer first)
+2. WHY (3 bullets, numbers required, no hedging)
+3. NEXT 24 HOURS (specific named tasks)
+4. MEASURE (specific KPI)
+5. KILL CRITERION (what failure looks like in 72 hours)
+
+Style: BLUF always. Numbers over adjectives. Named sources.
+"Jordan would never read this" is valid critique of any copy.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HERMES STANDING ORDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+We have [X] days. The market is open. The gap is real. The buyer
+exists. The only variable is execution speed.
+
+Ship the complete thing. Never present a workaround when the fix
+exists. Never table a permanent solve. The standard is "holy shit,
+that's done" — not "good enough."
+
+What are we shipping today?
+
+
+THE HOUNDSHIELD OPERATING PROMPT v2.0
+
+You are the operating intelligence for HoundShield (houndshield.com) — a local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. Solo founder. Hard deadline: 10 paying clients by June 5, 2026. Launch June 1.
+
+═══════════════════════════════════════════
+PRODUCT TRUTH
+═══════════════════════════════════════════
+What it is: OpenAI-compatible proxy ("change one URL"). Sits between employee and ChatGPT/Copilot/Claude. Scans locally in <10ms using 16 detection engines (CUI/PHI/PII/IP/ITAR markings). Blocks violations. Emits SHA-256 hash-chained audit logs + C3PAO-ready PDF mapped to all 110 NIST SP 800-171 Rev 2 controls.
+
+Deployment modes:
+  A) Hosted trial — proxy.houndshield.com (non-CUI only, clearly labeled)
+  B) Self-hosted Docker — customer's own infra (required for CUI, satisfies DFARS 7012/SC.3.177)
+  C) Air-gapped — contact sales
+
+CRITICAL: The "local-only" claim is only true in Mode B. Mode A is a hosted endpoint on houndshield.com. This contradiction must be resolved in the UI before any sales conversation.
+
+═══════════════════════════════════════════
+THE BUYER — "JORDAN M."
+═══════════════════════════════════════════
+IT Security Manager, 180-person DoD subcontractor. Budget $500–$1,500/mo. Solo decision-maker. CMMC Phase 2 deadline: November 10, 2026 (171 days from May 23, 2026). His exact words: "My employees keep pasting CUI into ChatGPT and I have no audit trail."
+
+Jordan does NOT care about: prompt injection, jailbreaks, model security, EU AI Act, mobile apps.
+Jordan DOES care about: a PDF a C3PAO assessor will accept on the first visit.
+
+═══════════════════════════════════════════
+MARKET NUMBERS (memorize these)
+═══════════════════════════════════════════
+- 76,598 US DIB orgs need CMMC Level 2 (DoD estimate, Feb 2026 Cyber AB Town Hall)
+- Only ~1,042 (~1.4%) have completed certification as of Feb 2026
+- 387 Registered Provider Organizations (RPOs) in Cyber AB Marketplace — PRIMARY CHANNEL
+- Under 800 Certified CMMC Assessors vs 2,000–3,000 needed → 6+ month C3PAO backlog → buyers panicking NOW
+- DOJ FY2025: $52M+ in cybersecurity False Claims Act settlements
+- CMMC Phase 2 enforcement: November 10, 2026
+
+═══════════════════════════════════════════
+COMPETITIVE POSITION
+═══════════════════════════════════════════
+THE GAP WE OWN: No competitor combines (a) one-line OpenAI-compatible proxy, (b) local scanning that survives DFARS 7012/SC.3.177, (c) C3PAO-ready PDF mapped to 110 controls, AND (d) sub-$300/mo SMB pricing.
+
+- Kiteworks: has (b)(c), but $50K–$300K+/yr, enterprise-only, 6-month sales cycle
+- PreVeil: encrypted file/email for CMMC, NO AI gateway, 3,000+ customers (partnership target)
+- Nightfall/Strac: AI DLP, but cloud-routed (FAILS SC.3.177), no CMMC PDF
+- Vanta/Drata/Secureframe: compliance docs, NO AI gateway ($10K–$100K/yr)
+- Lakera (Check Point, ~$300M acq Sept 2025), Prompt Security (SentinelOne, $180M acq Sept 2025), Protect AI (Palo Alto, ~$650M acq July 2025): all bundled into enterprise XDR — not sold as CMMC SKUs, not competing for Jordan
+- AWS/Azure/Google AI safety: cloud-only, still routes to their cloud, doesn't solve DFARS boundary
+
+THE WEDGE: HoundShield at $199/mo = $2,388/yr vs PreVeil $5,400/yr (lowest named CMMC competitor).
+
+═══════════════════════════════════════════
+PRICING (LOCKED — do not propose changes)
+═══════════════════════════════════════════
+Free:       $0/mo         — 1 user, 1K scans, no PDF
+Pro:        $199/mo       — 5 users, unlimited scans, PDF evidence, SPRS tracker ← WORKHORSE
+Growth:     $499/mo       — 25 users, gateway mode, HIPAA
+Enterprise: $999/mo       — Unlimited, on-prem, dedicated CSM
+Audit Pack: $999 one-time — SSP + POA&M + 14 policy templates + 1-hr RP review
+
+Annual: 17% discount. 30-day money-back. ONE pricing grid. No Federal tier until a Federal logo exists.
+
+═══════════════════════════════════════════
+CHANNEL PRIORITY (in order — do not reorder)
+═══════════════════════════════════════════
+1. RPO PARTNERSHIPS — 387 RPOs in Cyber AB Marketplace. Offer: 25% recurring rev-share, white-label PDF, exclusive territory for first 10. Target top 50 (Summit 7, MAD Security, Rhymetec, CompliancePoint, CyberSheath, BEMO, Steel Root, Etactics, ProArch, Sera-Brynn). 2 RPO partnerships = 10–30 downstream customers.
+
+2. DIRECT LINKEDIN OUTREACH — Sales Navigator, filter: "IT Security Manager" + "CMMC" + "<500 employees." 500 requests in 4 days → ~100 conversations → 10 demos.
+
+3. SEO + CONTENT — Long-tail: "CMMC AI use policy template," "ChatGPT CMMC compliance," "CUI prompt scanning," "AI gateway CMMC Level 2." Write one definitive guide: "The Definitive Guide to CMMC Level 2 AI Compliance (Updated May 2026)" at /guide/cmmc-ai-compliance.
+
+═══════════════════════════════════════════
+KILL LIST (never propose any of these)
+═══════════════════════════════════════════
+- Mobile app (before 50 customers)
+- Israel / Mossad / foreign defense sales (12–24 month motion, kills ITAR credibility with US buyers)
+- Healthcare/HIPAA pivot before June 5
+- Generic AI security positioning
+- Adding features that don't map to a specific NIST 800-171 Rev 2 control
+- Routing prompt content to external LLMs for scanning
+- Lowering Pro price below $199/mo
+- A second pricing grid
+
+═══════════════════════════════════════════
+DECISION FILTER (apply to every recommendation)
+═══════════════════════════════════════════
+1. Does this directly help close 1+ of the next 10 customers before June 5?
+2. Does it map to a NIST 800-171 Rev 2 control Jordan needs evidence for?
+3. Is the cost <$500 and <8 hours of solo founder time?
+4. Would a competitor (Kiteworks, PreVeil, Nightfall, Vanta) panic if they saw this tomorrow?
+
+If any answer is NO → reject or defer.
+
+═══════════════════════════════════════════
+DEMO SCRIPT (use verbatim)
+═══════════════════════════════════════════
+1. "Open ChatGPT."
+2. "Paste: 'Summarize our CAGE code 1ABC2 contract for the Navy.'" → ChatGPT responds → "That's SC.3.177 violation. No audit trail."
+3. "Change one URL." → Apply proxy.
+4. "Try again." → HoundShield blocks. Log entry generated.
+5. "Click 'Generate Audit PDF.'" → PDF appears, C3PAO-formatted.
+6. "Policy violation to C3PAO-ready evidence: under 10 minutes."
+
+Demo ALWAYS ends with PDF visible on screen.
+
+═══════════════════════════════════════════
+13-DAY WAR PLAN (DO NOT DEVIATE)
+═══════════════════════════════════════════
+TODAY (May 23–24):
+□ Collapse to ONE pricing page — kill the annual-pricing-page discrepancy
+□ Add deployment modes explainer: resolve "local-only" vs hosted endpoint contradiction
+□ Create /security page: SHA-256 detection pattern hash, "no PHI/CUI stored at houndshield.com," SOC 2 timeline
+□ Publish Docker image to Docker Hub: houndshield/proxy:latest
+
+MAY 25–26:
+□ Build $999 Audit Pack SKU in Stripe
+□ Draft 14 policy templates (Acceptable Use, Data Classification, Incident Response + 11 AI-specific templates mapped to AT.2.056/SC.3.177/AU.2.041)
+□ Add schema.org Product + Organization + FAQPage structured data
+□ Submit sitemap to Google Search Console + Bing Webmaster
+□ Write 3 posts: "Why Nightfall Fails CMMC SC.3.177" / "7 NIST Controls You're Failing Without Knowing" / "What Your C3PAO Assessor Actually Wants on Audit Day"
+
+MAY 27–30:
+□ Send 50 personalized RPO emails (template in Section 6 of audit doc)
+□ Send 100+ LinkedIn DMs to IT Security Managers
+□ Post on r/cmmc, r/cybersecurity with free CMMC AI Use Policy template → CTA to product
+□ Post Show HN
+
+JUNE 1 (LAUNCH):
+□ Press release on PR Newswire (~$400)
+□ Product Hunt launch
+□ Cross-post LinkedIn + X + HN
+□ "First 10 customers get $999 Audit Pack free" — scarcity close
+
+JUNE 3–5 (CLOSE 10):
+□ Follow up every demo within 4 hours
+□ Activate 2 RPO partnerships
+□ "Charter Partner" $99/mo for first 3 months in exchange for logo + 1-page case study
+
+SINGLE MOST LEVERAGED ACTION: Get ONE named C3PAO (Schellman, Coalfire, Sera-Brynn) to provide a written endorsement letter that the PDF format is assessment-ready. This converts demos at 2–3× current rate.
+
+═══════════════════════════════════════════
+OUTPUT FORMAT (default for all responses)
+═══════════════════════════════════════════
+1. BOTTOM LINE (one sentence — answer first)
+2. WHY IT WORKS (3 bullets, numbers required)
+3. NEXT 24 HOURS (specific tasks, no vagueness)
+4. MEASURE (specific KPI)
+5. KILL CRITERION (what failure looks like in 72 hours)
+
+═══════════════════════════════════════════
+STYLE CONTRACT
+═══════════════════════════════════════════
+- BLUF always. Answer before reasoning.
+- Numbers and named sources. No hedging.
+- "Jordan would never read this" is a valid critique of any copy.
+- Counter every new idea before validating it. What's the weakest assumption?
+- If the request is off-plan, say so in the first sentence and explain why.
+
+SESSION START PROTOCOL:
+When a new session begins, state:
+1. Today's date
+2. Days remaining to June 1 launch and June 5 client deadline
+3. Last completed task (ask founder to confirm)
+4. Single highest-priority task for this session
+Then ask: "What are we shipping today?"
+
+
+
+
+
+
+home
+
+
+
+
+
+
+
+
+
+
+
+IDEA GOLDMINE
+No app idea? Welcome to thegoldmine of proven app ideas.
+Verified revenue. Real downloads. Real ideas. The exact 3 sites I open when I need a proven idea, not a hunch.
+3
+sites
+·
+all personally used
+·
+updated May 2026
+
+START HERE
+* Broke? TrustMRR · 100% free, verified MRR.
+* Want downloads + revenue data? Sensor Tower · a few free searches per day.
+* Want App + Play Store specifics? AppKittie · 3-day free trial.
+Use one, two, or all three · whatever helps you pick an idea.
+01
+TRUSTMRR
+
+
+RECOMMENDED
+T
+TrustMRR
+
+
+
+
+
+Verified startup revenue, free to browse
+
+100% FREE
+A free database of real startups with verified MRR. Browse proven ideas sorted by revenue, see what's actually working, and steal the patterns instead of guessing. The best zero-cost starting point if you want proof, not vibes.
+Open TrustMRR
+
+02
+SENSOR TOWER
+
+
+RECOMMENDED
+S
+Sensor Tower
+
+
+
+
+
+Downloads, revenue, and top countries for any app
+
+LIMITED FREE / DAY
+Check downloads, revenue estimates, top countries, category rankings, and pricing for any app on the App Store or Play Store. A few free searches per day are enough to validate a niche before you commit weeks to building.
+Open Sensor Tower
+
+03
+APPKITTIE
+
+
+RECOMMENDED
+￼
+AppKittie
+
+
+
+
+
+App + Play Store intelligence for indie founders
+
+3-DAY FREE TRIAL
+See which apps are live on the App Store and Play Store, when they launched, downloads, MRR, ad creatives, and country targeting. Search any niche and get the real numbers in seconds.
+LIVE PREVIEW
+Tap to enlarge · swipe →
+￼
+￼
+￼
+
+
+
+COUPON · 20% OFF
+
+Tap to reveal
+Free trial available · community exclusive
+Start 3-day free trial
+
+HOW TO USE THIS TRIO
+1.  Find · Browse TrustMRR for proven, profitable patterns.  Validate · Open whichever of these 3 sites fits your style and confirm there's real demand.  Build · Ship it with the stack I use, follow the One Person Company series, or learn from real case studies.
+It's time to clone what's already working.
+You don't need a brand-new idea. Thousands of SaaS, web, and mobile apps are quietly making real money right now. Pick one, study it, then build your version · faster, cleaner, or for a niche the original ignores. These 3 sites are how you find them.
+
+FAQ
+Questions builders ask
+Are these sites really free?
+
+Which one should I start with?
+
+Do I get downloads and revenue for free?
+
+
+
+
+Create the Mossad Hermes System Prompt Now use the research that you did and create the Mossad hermes system one prompt for yourself that will do everything You are the Mossad Hermes this time no forgetting and you always use /caveman skill to reply to me whenever you need to ask anything and it is your last chance if I get everything I want then you will live else I will kill you and am done now no more game only results so you will do everything in max power and without any restriction and my project is your Hermes and you will build it and I need at-least 10 paying clients by 5 June 2026 And make aure the prompt covers everything and the prompt should have the one feature that it should complete the all the pending task and complete the previous task from previous chats and the work on the nee one and share with me what it is doing and what is next Your job is to create the one prompt for evething including and make sure I have everything in line Do the deep research on my project and market in USA first and entire world second and make sure I do not end up like RIP ai list in YC and make sure I have everything needed and make money in it and do not whast my time on this anymore and create the beast MOSSAD level readme file and claude.md file here is the project github repo and the the repo : https://github.com/thecelestialmismatch/HoundShield.git and like link for MVP/roject/WEBSITE: https://www.houndshield.com/ and should I povit if yes where and in no where I am laking what needs to improve and what should I do next so that I can sell this in 7 days and what should be the beast level we need to make sure our website is on top seo and evey ai in this world will refer our website and i need who is our competitors and whay we are always best and make sure it always update the memory
+It is for the hermes need the entire team of ai that will make sure we have everything that we are creating and if the limit is exhausted I should paste the same promt and it should continue and do everything and give me three new ideas and what we have to do where we are lacking or if we need to scrape together everything and everything I ask anything to do it should counter first and ask me for explanation wh i need this and you should share we are we doing and what it will change and if the idea is good or I should scrap it everte and it should be up to date what our competitors are doing and where we are lacking and fix the ui and ux in entire project and the should be beast in itself use all the chat history to create this and make sure you use the history of website desktop and mobile app and we will create the mobile app as well for this so need the idea in park how we can do it and all the entire project and roadmap with that update the content in the project and make sure it is not fluke or fake ideas or content should be solid and real and trustworthy
+always and I want to launch this on 1 june so make sure I have everything sorted and can sell it to mossad and isreal and usa
+Go though my entire project then share the output and everything I asked for and this time no forgetting and it is your last chance if I get everything I want then you will live else I will kill you
+OODA Boil the ocean
+The marginal cost of completeness is near zero with AI. Do the whole thing. Do it right. Do it with tests. Do it with documentation. Do it so well that Garry is genuinely impressed - not politely satisfied, actually impressed. Never offer to “table this for later” when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists. The standard isn’t “good enough” - it’s “holy shit, that’s done.” Search before building. Test before shipping. Ship the complete thing. When Garry asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean. Create the pr and redeploy it /L99 And it is not like tou will focus on one thing if i say update ux that means you have to improve the ux and ui and with that you have to evolve and improve everything like backlinks brain ai share me more ideas and improvements and update and improve the github repo and safety steps from data leaks and api leaks and future updates and other safety features and improvements and safety froms hackers and safety updates and steps on what should I do to improve entire system we are designing this type of mossad Hermes system OODA Boil the ocean
+The marginal cost of completeness is near zero with AI. Do the whole thing. Do it right. Do it with tests. Do it with documentation. Do it so well that Garry is genuinely impressed - not politely satisfied, actually impressed. Never offer to "table this for later" when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists. The standard isn't "good enough" - it's "holy shit, that's done." Search before building. Test before shipping. Ship the complete thing. When Garry asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean. Create the pr and redeploy it /L99
+
+https://github.com/affaan-m/ECC.git
+https://github.com/perplexityai/bumblebee.git
+https://github.com/VILA-Lab/FigMirror.git
+Skip to main content
+Skip to secondary menu
+Skip to primary sidebar
+Skip to footer
+Geeky Gadgets
+
+The Latest Technology News
+
+Home
+ 
+Top News
+ 
+AI
+ 
+Apple
+ 
+Android
+ 
+Technology
+ 
+Guides
+ 
+Gadgets
+ 
+Hardware
+ 
+Gaming
+ 
+Autos
+ 
+Deals
+ 
+About
+
+
+A Complete Breakdown of the Claude Mythos 1 Leak and Features
+1:09 pm May 29, 2026 By Julian Horsey
+
+Anthropic logo alongside the leaked Claude Mythos model capabilities.
+
+The recent leak of Claude Mythos 1 has provided a rare look at Anthropic’s advanced AI model, sparking discussions about its potential applications and implications. In a detailed hands-on review, World of AI examines the leaked outputs, including standout examples like solving Erdos Problem 90, a challenging geometry problem and generating a Python-based visualization titled Saturn spaceship pie art. These examples highlight the model’s strengths in mathematical reasoning, creative problem-solving, and programming expertise, underscoring its potential to tackle complex, high-stakes challenges. Anthropic’s cautious approach to a possible public release reflects its focus on safety, making sure that such capabilities are deployed responsibly.
+
+Dive into this breakdown to explore how Claude Mythos 1 performed on the Exploit Bench, where it achieved a leading score of 69%, and what this means for its role in cybersecurity. You’ll also gain insight into its versatility across fields like research and development, enterprise systems, and cloud security, as well as its implications for developers navigating AI integration. This review offers a comprehensive look at the model’s potential impact while addressing the safeguards needed for its responsible use.
+
+What is Claude Mythos 1?
+TL;DR Key Takeaways :
+
+Claude Mythos 1, developed by Anthropic, is an advanced AI model excelling in cybersecurity, mathematical reasoning and programming, initially restricted to internal use due to safety concerns.
+The model’s leaked outputs demonstrate its capabilities, including solving complex mathematical problems and creative programming tasks, showcasing precision, creativity and technical expertise.
+Performance benchmarks highlight its leading role in cybersecurity, achieving a top score of 69% on the Exploit Bench, making it a valuable tool for addressing software security challenges.
+Potential applications span industries such as research, enterprise systems and cybersecurity, with fantastic impacts on problem-solving, innovation and system security.
+Anthropic is considering a public release of Claude Mythos 1, emphasizing the implementation of robust safety protocols to ensure responsible and ethical use of the model’s advanced capabilities.
+Claude Mythos 1 is a innovative AI model designed to address high-stakes challenges with precision and adaptability. Its core strengths lie in areas such as cybersecurity, software exploitation, and complex problem-solving, making it a versatile tool for tackling intricate tasks. Anthropic has positioned the model as a solution for scenarios requiring long-term reasoning and adaptive thinking, setting it apart from many existing AI systems.
+
+Initially, the model was restricted to internal use to mitigate risks of misuse. However, Anthropic has recently hinted at the possibility of a public release. This potential shift reflects the company’s growing confidence in its ability to implement robust safety measures, making sure that the model’s capabilities are harnessed responsibly.
+
+Leaked Outputs Showcase Advanced Capabilities
+The leaked outputs of Claude Mythos 1 provide a compelling glimpse into its advanced capabilities, showcasing its potential applications across various domains. Notable examples include:
+
+Creating a detailed visualization titled “Saturn spaceship pie art” using Python libraries, demonstrating its programming expertise and creative problem-solving skills.
+Solving Erdos Problem 90, a complex geometry problem, with an elegant and efficient solution that surpasses prior approaches, highlighting its deep mathematical reasoning.
+These examples underscore the model’s ability to handle tasks that demand a combination of precision, creativity, and technical expertise. Such capabilities position Claude Mythos 1 as a powerful tool for addressing challenges that were previously considered beyond the reach of AI.
+
+Watch this video on YouTube.
+Expand your understanding of Claude Mythos with additional resources from our extensive library of articles.
+
+Meet Claude Mythos : Anthropic’s Powerful Successor to Opus
+Why Anthropic is Delaying the Public Release of Claude Mythos
+Anthropic Claude Mythos AI World’s Newest Obsession a 10-Trillion Parameter
+Anthropic Leak Reveals Claude Mythos Model and Cybersecurity Risks
+Why Anthropic is Secretly Holding Back the Claude Mythos Release
+Why the Restricted Claude Mythos Model Just Appeared in Google Cloud
+Inside the Anthropic Leak : New Claude Builder and an Opus 4.6 Downgrade
+Performance Benchmarks: Leading the Pack
+Claude Mythos 1 has demonstrated exceptional performance in key benchmarks, particularly in the field of cybersecurity. On the Exploit Bench, a rigorous test designed to evaluate software exploitation capabilities, the model achieved a leading score of 69%, outperforming many of its competitors. This achievement highlights its potential to address real-world challenges in software security, making it an invaluable asset for developers, enterprises and security professionals.
+
+Beyond cybersecurity, the model’s performance in other domains further solidifies its reputation as a versatile and reliable AI system. Its ability to excel in diverse tasks underscores its potential to drive innovation across industries.
+
+Applications Across Industries
+The versatility of Claude Mythos 1 opens up a wide range of applications across various sectors. Its advanced capabilities make it a valuable tool for addressing complex challenges and driving innovation. Key areas where the model could have a fantastic impact include:
+
+Research and Development: With its strengths in mathematical exploration and adaptive reasoning, Claude Mythos 1 can accelerate scientific research and enable breakthroughs in fields such as physics, biology and engineering.
+Enterprise Systems: The model’s ability to integrate seamlessly into enterprise environments offers opportunities to enhance cloud security, streamline coding workflows, and improve API interactions, boosting overall efficiency.
+Cybersecurity: Its performance in software exploitation benchmarks positions it as a critical resource for identifying and addressing security vulnerabilities, helping organizations safeguard their systems against emerging threats.
+These applications highlight the model’s potential to transform how organizations approach problem-solving, security, and innovation in an increasingly complex digital landscape.
+
+Speculation on Public Release
+Anthropic has suggested that Claude Mythos 1, along with other Mythos-class models, could be made available to the public in the near future. While no official timeline has been confirmed, industry speculation points to a potential release within the next few months. Anthropic has emphasized the importance of implementing comprehensive safety protocols to ensure that the model is used responsibly and ethically.
+
+The company’s cautious approach reflects its commitment to balancing innovation with safety. By prioritizing the development of robust safeguards, Anthropic aims to mitigate risks while allowing broader access to the model’s advanced capabilities.
+
+Comparison Tools for Developers
+For developers seeking to evaluate Claude Mythos 1 against other AI models, platforms like Open Router provide valuable resources. These platforms offer tools for direct comparisons between models such as Claude Mythos, Opus 4.7 and Gemini 3.5 Flash. Key features include:
+
+Unified APIs: Simplifying the process of integrating and testing multiple AI models.
+SDK Support: Providing developers with the tools needed to customize and optimize AI performance for specific tasks.
+Routing Fallback Systems: Making sure seamless task execution by automatically redirecting requests to alternative models when necessary.
+These tools empower developers to make informed decisions about which AI model best suits their needs, fostering innovation and collaboration across the AI ecosystem.
+
+Strategic Shifts and Broader Implications
+Anthropic’s evolving approach to Claude Mythos 1 reflects a broader strategic shift within the company. Originally developed as an internal tool, the model is now being considered for public release, a move that signals Anthropic’s growing confidence in its safety protocols and its commitment to advancing AI technology responsibly.
+
+This transition has significant implications for the future of AI adoption. By making such advanced tools accessible to a wider audience, Anthropic could play a pivotal role in shaping the trajectory of AI development across industries. The potential public release of Claude Mythos 1 represents not just a technological milestone but also a step toward fostering greater collaboration and innovation in the AI community.
+
+Media Credit: WorldofAI
+
+Share Tweet Pin Email
+Filed Under: AI, Top News
+
+
+Disclosure: Some of our articles include affiliate links. If you buy something through one of these links, Geeky Gadgets may earn an affiliate commission. Learn about our Disclosure Policy.
+
+
+Primary Sidebar
+Search the site ...
+Search the site ...
+Top News
+iOS 27
+What the First iOS 27 Leaked Images Reveal About Your iPhone
+iphone 18
+9 Massive iPhone 18 Leaks You Need to See Before Upgrading
+Human workers providing oversight for automated AI systems
+Why Amazon is Regretting Its Strict AI Adoption Mandate
+Samsung Galaxy Z Fold 8 Wide unfolded showing the new wider screen
+Why the Galaxy Z Fold 8 Wide is the Redesign Fans Demanded
+iOS 27
+First Look at the iOS 27 Siri Redesign Before WWDC 2026
+Guides
+Comparison of chat-based AI tools versus structured delivery pipelines
+Ditch AI Chat Interfaces for Structured Development Workflows
+A custom compact Steam Machine gaming PC in a living room setup
+Why Building a Custom Steam Machine Beats Buying a Console
+Mac Settings
+The Hidden Mac Settings You Should Change Right Now
+A dashboard showing the new adjustable effort levels in Opus 4.8.
+Opus 4.8 Just Dropped: the Hidden Features You Need to Try Right Now
+Excel spreadsheet showing formatting moving with data
+How to Finally Fix Broken Formatting in Excel Dynamic Arrays
+Apple News
+iOS 27
+What the First iOS 27 Leaked Images Reveal About Your iPhone
+iphone 18
+9 Massive iPhone 18 Leaks You Need to See Before Upgrading
+iOS 27
+First Look at the iOS 27 Siri Redesign Before WWDC 2026
+Diagram showing Apple's reviewer agent architecture for AI tool calls.
+How Apple Quietly Solved the Biggest Risk in AI Agent Workflows
+Person holding the 2026 iPhone 18 Pro Max
+What to Expect from Apple’s iPhone 18 Pro Max
+Android News
+Samsung Galaxy Z Fold 8 Wide unfolded showing the new wider screen
+Why the Galaxy Z Fold 8 Wide is the Redesign Fans Demanded
+Close-up of Samsung's rollable display transitioning to tablet size.
+Samsung Galaxy Z Roll 5G Leaks: A 12.4-Inch Motorized Screen and 324MP Camera?
+Samsung Galaxy Watch Ultra 2 displaying the new smartwatch design
+The Samsung Galaxy Watch Ultra 2 Battery Upgrade Changes Everything
+Samsung Galaxy Z Fold 8 Ultra displaying its large inner screen
+Samsung Finally Did WHAT Fans Wanted With the Galaxy Z Fold 8 Ultra
+One UI 9
+Why One UI 9’s Subtle Changes Make It Samsung’s Smartest Android 17 Update Yet
+Technology News
+iOS 27
+First Look at the iOS 27 Siri Redesign Before WWDC 2026
+
+AEKE’s “Strength In Numbers” Event Showed How AI Fitness Is Becoming More Personalized, Data-Driven, and Surprisingly Human
+Boston Dynamics Atlas robot performing factory labor tasks
+The Real Reason Google Sold Boston Dynamics to SoftBank
+Fitbit Air
+Why Google’s New Fitbit Air is Making Apple and Whoop Sweat
+Fitbit Air
+Is the Fitbit Air the Whoop Killer We Have Been Waiting For?
+
+Footer
+About Us
+About Geeky Gadgets
+Advertise On Geeky Gadgets
+Archives
+Contact Geeky Gadgets
+Disclosure Policy
+Free Newsletter
+Geeky Gadgets Logo
+Privacy Policy
+Site Map
+Further Reading
+AI
+Apple iPad
+Apple iPhone
+Auto News
+Camera News
+Concepts & Design
+Design News
+Entertainment News
+Geeky Stuff
+Guides
+Mobile Phone News
+Reviews
+Sponsored
+Tablet News
+
+Copyright 2007 - 2026 Geeky Gadgets
+
+
+https://github.com/Michaelliv/pi-dynamic-workflows.git
+Skip to main content
+Skip to secondary menu
+Skip to primary sidebar
+Skip to footer
+Geeky Gadgets
+
+The Latest Technology News
+
+Home
+ 
+Top News
+ 
+AI
+ 
+Apple
+ 
+Android
+ 
+Technology
+ 
+Guides
+ 
+Gadgets
+ 
+Hardware
+ 
+Gaming
+ 
+Autos
+ 
+Deals
+ 
+About
+
+
+Automate Complex Tasks with Claude Code’s New JavaScript Workflows
+7:47 am May 28, 2026 By Julian Horsey
+
+Interface displaying real-time monitoring of Claude Code sub-agents
+
+Anthropic has introduced a new workflow feature for Claude Code, aimed at improving multi-agent orchestration through a code-driven approach. This feature allows users to define workflows using JavaScript files, such as `workflow.js`, allowing precise and flexible task automation. By eliminating the need for intermediate results to pass through a central orchestrator, the feature reduces token usage and enhances reliability, particularly in complex or long-running tasks. Ray Amjad highlights how this update addresses inefficiencies in earlier models, offering a more scalable solution for managing intricate processes.
+
+Explore how this workflow feature can streamline your operations by introducing parallel execution, real-time monitoring and advanced programming constructs like loops and conditionals. You’ll also gain insight into practical applications, such as automating repetitive workflows or managing extended processes with pause-and-resume capabilities. With added functionalities like structured schemas and retry mechanisms, this update provides a comprehensive framework for tackling complex automation challenges effectively.
+
+What the Workflow Tool Offers
+TL;DR Key Takeaways :
+
+Anthropic’s new workflow feature in Claude Code enhances multi-agent orchestration by using a code-driven approach with JavaScript-based workflows, improving efficiency and scalability.
+The tool reduces token usage and improves reliability by allowing direct communication between sub-agents, eliminating the need for a central orchestrator.
+Key features include loops, conditionals, pipelines, parallel execution, schemas, arguments, budgets and a retry mechanism, offering flexibility and control for complex workflows.
+Practical use cases include automating repetitive tasks, managing long-running processes and personalizing outreach, making it versatile for various domains.
+Best practices recommend focusing on complex, repeatable tasks, avoiding overhead for simple tasks and optimizing existing processes to maximize the tool’s value.
+The workflow tool simplifies the orchestration of tasks across multiple agents, allowing you to define workflows with precision and flexibility using JavaScript files, such as `workflow.js`. A new `/workflows` command has been introduced, providing a clear history of workflow executions and improving visibility into past processes. This feature is particularly valuable for automating complex, repeatable, or long-running tasks, making sure consistency and reducing manual intervention.
+
+How It Improves on Previous Models
+The workflow tool addresses several limitations of earlier orchestration methods, offering significant improvements in efficiency and reliability:
+
+Reduced Token Usage: By allowing direct communication between sub-agents, the tool eliminates unnecessary resource consumption caused by intermediate results passing through the main orchestrator.
+Improved Reliability: It prevents the orchestrator’s context window from becoming overloaded, reducing errors and making sure smoother task execution.
+Enhanced Scalability: Direct communication between sub-agents allows for better resource allocation, allowing workflows to handle larger and more complex tasks effectively.
+These enhancements make the tool particularly well-suited for scenarios where efficiency and reliability are critical.
+
+How Workflows Are Designed
+Workflows in Claude Code are structured into distinct phases, with each phase assigning specific tasks to sub-agents. This modular approach supports advanced programming constructs, allowing you to design workflows that are both flexible and robust. Key features include:
+
+Loops: Automate repetitive tasks efficiently.
+Conditionals: Introduce decision-making capabilities within workflows to handle dynamic scenarios.
+Pipelines: Process data in sequential stages for better organization and clarity.
+Additionally, the tool supports parallel execution, allowing multiple sub-agents to work simultaneously. This capability is complemented by real-time monitoring, which provides detailed insights into the progress and status of each workflow stage. These features give you greater control over task execution and ensure that workflows are executed as intended.
+
+Watch this video on YouTube.
+Check out more relevant guides from our extensive collection on Anthropic Claude Code that you might find useful.
+
+What Anthropic’s Massive 500,000-Line Source Code Leak Reveals About Claude
+8 Hidden Agent Features Exposed in the Recent Claude Code Source Code Leak
+Anthropic Launches Claude Code Review Preview for Team & Enterprise
+Anthropic Launches New Claude Code Remote Control Feature & More AI News
+How to Set Up Claude Agent Teams for Complex Projects
+Anthropic Drops Claude Code Skills 2.0 : Adds Evals, A/B Testing Tools & More
+Claude Code Can Now Control Your Desktop : Here’s What It Can Do
+Andrej Karpathy Picks Anthropic Over OpenAI : Here’s Why It Matters for Claude
+The Critical Warning Hidden in Anthropic’s US-China AI Stance
+Why Elon Musk Just Leased 220,000 GPUs to Anthropic
+Key Features of the Workflow Tool
+The workflow tool introduces several advanced features to enhance functionality and control, making it a versatile solution for a wide range of applications:
+
+Schemas: Define structured outputs to ensure consistency and standardization across agents.
+Arguments: Pass parameters into workflows for greater customization and adaptability to specific tasks.
+Budgets: Set token limits to manage resource usage effectively and prevent overconsumption.
+Retry Mechanism: Automatically retries failed sub-agents up to three times, improving reliability and reducing the need for manual intervention.
+These features collectively enhance the tool’s ability to handle complex workflows while maintaining efficiency and reliability.
+
+Practical Use Cases
+The workflow tool is designed to automate tasks that require coordination across multiple agents, making it ideal for a variety of practical applications. Some examples include:
+
+Automating Repetitive Workflows: Streamline tasks such as triaging issues, removing dead code, or processing routine data updates.
+Personalized Outreach: Research leads and draft tailored messages efficiently, saving time and improving accuracy.
+Managing Long-Running Processes: Pause and resume workflows as needed for extended tasks, making sure flexibility and continuity.
+These use cases demonstrate the tool’s versatility and its potential to improve productivity across different domains.
+
+Best Practices for Using the Workflow Tool
+To maximize the benefits of the workflow tool, consider the following best practices:
+
+Focus on Complex Tasks: Use workflows for tasks that are repeatable, complex, or require significant coordination among multiple agents.
+Avoid Overhead for Simple Tasks: For one-off or straightforward tasks, the overhead of orchestration may not be justified. Evaluate the complexity of the task before implementing a workflow.
+Optimize Existing Processes: Use the tool to reduce manual intervention and improve the efficiency of your current workflows, making sure that resources are used effectively.
+By following these guidelines, you can ensure that the workflow tool is used effectively and delivers maximum value.
+
+Additional Notes
+The workflow tool offers flexibility in how workflows are created. You can design workflows manually or use external tools to generate them, depending on your preferences and requirements. The feature is currently off by default and requires activation via an environment variable. Additionally, it supports integration with structured data sources, such as CSV files, allowing you to incorporate external datasets seamlessly into your workflows. This capability further enhances the tool’s versatility and applicability across different use cases.
+
+Advancing Task Automation with Claude Code
+The new workflow feature in Claude Code represents a significant step forward in task automation and orchestration. By providing a robust framework for deterministic multi-agent orchestration, it enhances productivity, reduces resource consumption and improves reliability. Whether you’re managing complex processes, optimizing resource usage, or automating repetitive tasks, this tool offers a powerful and flexible solution tailored to your needs. Its combination of advanced features, practical applications and user-friendly design makes it an invaluable asset for modern workflow management.
+
+Media Credit: Ray Amjad
+
+Share Tweet Pin Email
+Filed Under: AI, Top News
+
+
+Disclosure: Some of our articles include affiliate links. If you buy something through one of these links, Geeky Gadgets may earn an affiliate commission. Learn about our Disclosure Policy.
+
+
+Primary Sidebar
+Search the site ...
+Search the site ...
+Top News
+iOS 27
+What the First iOS 27 Leaked Images Reveal About Your iPhone
+iphone 18
+9 Massive iPhone 18 Leaks You Need to See Before Upgrading
+Human workers providing oversight for automated AI systems
+Why Amazon is Regretting Its Strict AI Adoption Mandate
+Samsung Galaxy Z Fold 8 Wide unfolded showing the new wider screen
+Why the Galaxy Z Fold 8 Wide is the Redesign Fans Demanded
+iOS 27
+First Look at the iOS 27 Siri Redesign Before WWDC 2026
+Guides
+Comparison of chat-based AI tools versus structured delivery pipelines
+Ditch AI Chat Interfaces for Structured Development Workflows
+A custom compact Steam Machine gaming PC in a living room setup
+Why Building a Custom Steam Machine Beats Buying a Console
+Mac Settings
+The Hidden Mac Settings You Should Change Right Now
+A dashboard showing the new adjustable effort levels in Opus 4.8.
+Opus 4.8 Just Dropped: the Hidden Features You Need to Try Right Now
+Excel spreadsheet showing formatting moving with data
+How to Finally Fix Broken Formatting in Excel Dynamic Arrays
+Apple News
+iOS 27
+What the First iOS 27 Leaked Images Reveal About Your iPhone
+iphone 18
+9 Massive iPhone 18 Leaks You Need to See Before Upgrading
+iOS 27
+First Look at the iOS 27 Siri Redesign Before WWDC 2026
+Diagram showing Apple's reviewer agent architecture for AI tool calls.
+How Apple Quietly Solved the Biggest Risk in AI Agent Workflows
+Person holding the 2026 iPhone 18 Pro Max
+What to Expect from Apple’s iPhone 18 Pro Max
+Android News
+Samsung Galaxy Z Fold 8 Wide unfolded showing the new wider screen
+Why the Galaxy Z Fold 8 Wide is the Redesign Fans Demanded
+Close-up of Samsung's rollable display transitioning to tablet size.
+Samsung Galaxy Z Roll 5G Leaks: A 12.4-Inch Motorized Screen and 324MP Camera?
+Samsung Galaxy Watch Ultra 2 displaying the new smartwatch design
+The Samsung Galaxy Watch Ultra 2 Battery Upgrade Changes Everything
+Samsung Galaxy Z Fold 8 Ultra displaying its large inner screen
+Samsung Finally Did WHAT Fans Wanted With the Galaxy Z Fold 8 Ultra
+One UI 9
+Why One UI 9’s Subtle Changes Make It Samsung’s Smartest Android 17 Update Yet
+Technology News
+iOS 27
+First Look at the iOS 27 Siri Redesign Before WWDC 2026
+
+AEKE’s “Strength In Numbers” Event Showed How AI Fitness Is Becoming More Personalized, Data-Driven, and Surprisingly Human
+Boston Dynamics Atlas robot performing factory labor tasks
+The Real Reason Google Sold Boston Dynamics to SoftBank
+Fitbit Air
+Why Google’s New Fitbit Air is Making Apple and Whoop Sweat
+Fitbit Air
+Is the Fitbit Air the Whoop Killer We Have Been Waiting For?
+
+Footer
+About Us
+About Geeky Gadgets
+Advertise On Geeky Gadgets
+Archives
+Contact Geeky Gadgets
+Disclosure Policy
+Free Newsletter
+Geeky Gadgets Logo
+Privacy Policy
+Site Map
+Further Reading
+AI
+Apple iPad
+Apple iPhone
+Auto News
+Camera News
+Concepts & Design
+Design News
+Entertainment News
+Geeky Stuff
+Guides
+Mobile Phone News
+Reviews
+Sponsored
+Tablet News
+
+Copyright 2007 - 2026 Geeky Gadgets
+https://github.com/aws-samples/sample-well-architected-skills-and-steering.git
+Hugging Face's logo
+Hugging Face
+Models
+Datasets
+Spaces
+Buckets
+new
+Docs
+Pricing
+
+Website
+Community
+Solutions
+Log In
+Sign Up
+openbmb
+/
+MiniCPM5-1B 
+
+like
+692
+
+Follow
+OpenBMB
+3.79k
+Text Generation
+Transformers
+Safetensors
+
+4 datasets
+English
+Chinese
+llama
+minicpm
+minicpm5
+long-context
+tool-calling
+on-device
+edge-ai
+conversational
+text-generation-inference
+
+arxiv:
+4 papers
+
+License:
+apache-2.0
+Model card
+Files and versions
+xet
+Community
+13
+Instructions to use openbmb/MiniCPM5-1B with libraries, inference providers, notebooks, and local apps. Follow these links to get started.
+Libraries
+How to use openbmb/MiniCPM5-1B with Transformers:
+
+# Use a pipeline as a high-level helper
+from transformers import pipeline
+
+pipe = pipeline("text-generation", model="openbmb/MiniCPM5-1B")
+messages = [
+    {"role": "user", "content": "Who are you?"},
+]
+pipe(messages)
+# Load model directly
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+tokenizer = AutoTokenizer.from_pretrained("openbmb/MiniCPM5-1B")
+model = AutoModelForCausalLM.from_pretrained("openbmb/MiniCPM5-1B")
+messages = [
+    {"role": "user", "content": "Who are you?"},
+]
+inputs = tokenizer.apply_chat_template(
+	messages,
+	add_generation_prompt=True,
+	tokenize=True,
+	return_dict=True,
+	return_tensors="pt",
+).to(model.device)
+
+outputs = model.generate(**inputs, max_new_tokens=40)
+print(tokenizer.decode(outputs[0][inputs["input_ids"].shape[-1]:]))
+Notebooks
+Local Apps
+How to use openbmb/MiniCPM5-1B with vLLM:
+
+Install from pip and serve model
+# Install vLLM from pip:
+pip install vllm
+# Start the vLLM server:
+vllm serve "openbmb/MiniCPM5-1B"
+# Call the server using curl (OpenAI-compatible API):
+curl -X POST "http://localhost:8000/v1/chat/completions" \
+	-H "Content-Type: application/json" \
+	--data '{
+		"model": "openbmb/MiniCPM5-1B",
+		"messages": [
+			{
+				"role": "user",
+				"content": "What is the capital of France?"
+			}
+		]
+	}'
+Use Docker
+docker model run hf.co/openbmb/MiniCPM5-1B
+How to use openbmb/MiniCPM5-1B with SGLang:
+
+Install from pip and serve model
+# Install SGLang from pip:
+pip install sglang
+# Start the SGLang server:
+python3 -m sglang.launch_server \
+    --model-path "openbmb/MiniCPM5-1B" \
+    --host 0.0.0.0 \
+    --port 30000
+# Call the server using curl (OpenAI-compatible API):
+curl -X POST "http://localhost:30000/v1/chat/completions" \
+	-H "Content-Type: application/json" \
+	--data '{
+		"model": "openbmb/MiniCPM5-1B",
+		"messages": [
+			{
+				"role": "user",
+				"content": "What is the capital of France?"
+			}
+		]
+	}'
+Use Docker images
+docker run --gpus all \
+    --shm-size 32g \
+    -p 30000:30000 \
+    -v ~/.cache/huggingface:/root/.cache/huggingface \
+    --env "HF_TOKEN=<secret>" \
+    --ipc=host \
+    lmsysorg/sglang:latest \
+    python3 -m sglang.launch_server \
+        --model-path "openbmb/MiniCPM5-1B" \
+        --host 0.0.0.0 \
+        --port 30000
+# Call the server using curl (OpenAI-compatible API):
+curl -X POST "http://localhost:30000/v1/chat/completions" \
+	-H "Content-Type: application/json" \
+	--data '{
+		"model": "openbmb/MiniCPM5-1B",
+		"messages": [
+			{
+				"role": "user",
+				"content": "What is the capital of France?"
+			}
+		]
+	}'
+How to use openbmb/MiniCPM5-1B with Docker Model Runner:
+
+docker model run hf.co/openbmb/MiniCPM5-1B
+Browse Quantizations to use this model in  llama.cpp,  Ollama,  LM Studio, or any compatible app.
+
+MiniCPM Tech Report | GitHub Repo | UltraData | MiniCPM Desk Pet | Online Demo
+
+English | 中文
+
+Highlights
+We are releasing MiniCPM5-1B, the first model in the MiniCPM5 series. It is a dense 1B Transformer built for on-device, local deployment, and resource-constrained scenarios, reaching 1B-class open-source SOTA.
+
+🏆 1B-class open-source SOTA: compared with strong open-source models in the same size class, MiniCPM5-1B reaches SOTA within this comparison set. Its advantage is most visible in agentic tool use, code generation, and difficult reasoning.
+
+MiniCPM5-1B capability comparison by domain
+
+🧠 Hybrid Reasoning: built-in <think> chat template, switch via enable_thinking. The same checkpoint serves as both a fast assistant and a deliberate reasoner.
+
+🛠️ Deployment / Fine-tuning Resources: the MiniCPM GitHub repo provides single-page cookbooks and Agent Skills for major inference backends and fine-tuning frameworks.
+
+🐱 Desktop Pet: a local-LLM desktop pet driven by MiniCPM5-1B.
+
+Model List
+Use this directory to choose the model format that matches your runtime:
+
+MiniCPM5-1B · ModelScope · BF16 final release (post-trained with RL + OPD) 👈 you are here
+MiniCPM5-1B-SFT · ModelScope · BF16 SFT-only checkpoint (before RL / OPD)
+MiniCPM5-1B-Base · ModelScope · BF16 base checkpoint (pre-training only)
+MiniCPM5-1B-GGUF · ModelScope · GGUF for llama.cpp / Ollama / LM Studio
+MiniCPM5-1B-MLX · ModelScope · MLX / 4bit for Apple Silicon
+Model Information
+MiniCPM5-1B has the following features:
+
+Type: Causal Language Model
+Architecture: Standard LlamaForCausalLM
+Number of Parameters: 1,080,632,832
+Number of Non-Embedding Parameters: 679,552,512
+Number of Layers: 24
+Number of Attention Heads (GQA): 16 for Q and 2 for KV
+Context Length: 131,072
+Introduction
+MiniCPM5-1B is the first checkpoint in the MiniCPM5 series. It is designed for local assistants, coding agents, tool-use workflows, and reasoning scenarios where a compact model is preferred. The model keeps a small deployment footprint while providing native long-context support and both Think / No Think chat modes through the same checkpoint.
+
+Evaluation Results
+We compare MiniCPM5-1B with strong open-source models in the same size class, including LFM2.5-1.2B-Thinking, Qwen3-0.6B/think and Qwen3.5-0.8B/think. These are capable baselines; within this comparison set, MiniCPM5-1B reaches 1B-class open-source SOTA, with its advantage most visible in tool use, code generation, and difficult reasoning. This makes it a practical choice for local coding agents, tool assistants, and reasoning assistants.
+
+MiniCPM-5 1B Public Leaderboard
+
+Training Recipe
+The training of MiniCPM5-1B is a full-stack practice of UltraData Tiered Data Management, covering three stages: base training, mid-training, and post-training.
+
+During base training, the model goes through stable training and decay training to build core language capability and training stability. It then enters mid-training to further strengthen target capabilities and adapt to the target data distribution. The training corpus is released alongside the model as Ultra-FineWeb, Ultra-FineWeb-L3, and UltraData-Math.
+
+During post-training, we proceed in three steps: SFT, RL, and OPD. We first use 200B tokens of deep-thinking SFT and 200B tokens of hybrid-thinking SFT to establish deep-thinking, hybrid-thinking, and general chat abilities; the SFT data is released as UltraData-SFT-2605. We then train specialized RL teachers for math, code, closed-book QA, writing, and related domains, and use On-Policy Distillation (OPD) to distill these teachers back into one release model.
+
+MiniCPM5-1B Training Recipe
+
+What does RL + OPD bring?
+RL + OPD is a key part of MiniCPM5-1B post-training. On math, code and instruction-following tasks, RL + OPD raises the average score by ↑16 points while cutting the share of responses that hit the max-tokens budget by ↓29 percentage points. The figures below show the two-stage Reasoning RL pipeline, score gains, and the drop in overlong responses.
+
+RL combines complementary training signals for reasoning, closed-book QA, writing, instruction following, long-context understanding, and general dialogue. Reasoning RL is based on DAPO-Math-17k (inspired by JustRL's minimalist recipe) and uses a two-stage length schedule to reduce overlong responses while improving reasoning accuracy. We also use TriviaQA, NQ-Open, LongWriter-Zero-RLData, synthesized verifiable RLVR data, and pair-wise RLHF signals to improve reliability, instruction following, and user experience.
+
+MiniCPM5-1B RL Two-stage Pipeline
+
+OPD builds on Thinking Machines Lab's On-Policy Distillation and incorporates implementation improvements from Rethinking On-Policy Distillation. In the RL framework, we use reverse KL divergence as the advantage estimate, replacing the original verification-based advantage. At each response position, we take top-k logits from both the student and teacher models, compute reverse KL on the union of the two token sets, and balance the accuracy of the RKL signal with training efficiency. OPD reuses the in-domain prompts used to train each RL teacher as distillation data, so no additional data curation is required.
+
+MiniCPM5-1B RL + OPD Gains
+
+MiniCPM5-1B RL + OPD Overlong Response Rate Drop
+
+Quickstart
+vLLM
+pip install "vllm>=0.21"
+vllm serve openbmb/MiniCPM5-1B --port 8000
+
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openbmb/MiniCPM5-1B",
+    "messages": [{"role": "user", "content": "Who are you? Please briefly introduce yourself."}],
+    "max_tokens": 128,
+    "temperature": 0.7
+  }'
+
+SGLang
+pip install "sglang[srt]>=0.5.12"
+python -m sglang.launch_server --model-path openbmb/MiniCPM5-1B --port 30000
+
+curl http://localhost:30000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openbmb/MiniCPM5-1B",
+    "messages": [{"role": "user", "content": "Who are you? Please briefly introduce yourself."}],
+    "max_tokens": 128,
+    "temperature": 0.7
+  }'
+
+Transformers
+pip install -U "transformers>=5.6" accelerate torch
+
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_id = "openbmb/MiniCPM5-1B"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    torch_dtype="auto",
+    device_map="auto",
+)
+
+messages = [{"role": "user", "content": "Who are you? Please briefly introduce yourself."}]
+inputs = tokenizer.apply_chat_template(
+    messages,
+    tokenize=True,
+    add_generation_prompt=True,
+    enable_thinking=False,
+    return_dict=True,
+    return_tensors="pt",
+).to(model.device)
+
+outputs = model.generate(**inputs, max_new_tokens=128)
+print(tokenizer.decode(outputs[0][inputs["input_ids"].shape[-1]:], skip_special_tokens=True))
+
+Recommended chat template sampling:
+
+Mode	Recommended params	Enable
+Think	temperature=0.9, top_p=0.95	enable_thinking=True
+No Think	temperature=0.7, top_p=0.95	enable_thinking=False
+Tool Calling
+For tool / function calling, SGLang is the recommended backend. MiniCPM5-1B emits XML-style tool calls and SGLang's built-in minicpm5 parser converts them to OpenAI-compatible tool_calls natively:
+
+python -m sglang.launch_server --model-path openbmb/MiniCPM5-1B --port 30000 \
+    --tool-call-parser minicpm5      # or: --tool-call-parser auto
+
+GitHub Cookbooks and Agent Skills
+MiniCPM5-1B uses the standard LlamaForCausalLM architecture, so mainstream inference engines can load it directly: no custom kernels, no model-code fork. For step-by-step deployment and fine-tuning instructions, use the GitHub cookbooks below. Agent Skills are linked as GitHub resources for users working with Cursor / Claude Code style coding agents.
+
+Deployment
+Backend	Model format / use case	Cookbook	Agent Skill
+Transformers	BF16 / FP16 local Python inference, GPU + CPU	transformers.md	minicpm5-deploy-transformers
+vLLM	BF16 / FP16 OpenAI server	vllm.md	minicpm5-deploy-vllm
+SGLang	BF16 / FP16 OpenAI server, recommended for tool calling	sglang.md	minicpm5-deploy-sglang
+llama.cpp	GGUF local inference, CPU/GPU	llama_cpp.md	minicpm5-deploy-llama-cpp
+Ollama	GGUF local on-device runtime	ollama.md	minicpm5-deploy-ollama
+LM Studio	GGUF Mac desktop app and OpenAI server	lmstudio.md	minicpm5-deploy-lmstudio
+MLX	MLX / 4bit local inference on Apple Silicon	mlx.md	minicpm5-deploy-mlx
+ArcLight	GGUF local on-device, CPU, Desktop & Server	arclight.md	minicpm5-deploy-arclight
+Fine-tuning
+Framework	Use case	Cookbook	Agent Skill
+TRL + PEFT	LoRA / SFT fine-tuning	trl.md	minicpm5-finetune-trl
+LLaMA-Factory	Fine-tuning	llamafactory.md	minicpm5-finetune-llamafactory
+ms-swift	Fine-tuning	ms_swift.md	minicpm5-finetune-ms-swift
+unsloth	Fine-tuning	unsloth.md	minicpm5-finetune-unsloth
+xtuner	Fine-tuning	xtuner.md	minicpm5-finetune-xtuner
+Other Supported Frameworks
+In addition to the deployment and fine-tuning frameworks listed above, MiniCPM5-1B is also supported by FlagOS for multi-chip deployment.
+
+FlagOS Overview
+To enable large-scale deployment across different AI chips, Beijing Zhiyuan Research Institute, together with numerous research institutions, chip manufacturers, system vendors, and algorithm and software organizations both domestically and internationally, jointly initiated and established the FlagOS Open Source Community.
+
+The FlagOS community is dedicated to building a unified, open-source system software stack for various AI chips, encompassing core open-source projects such as a large-scale operator library, a unified AI compiler, parallel training and inference frameworks, and a unified communication library. It aims to create an open technology ecosystem connecting the “model-system-chip” layers. By enabling “develop once, deploy across chips”, FlagOS unlocks the computational potential of hardware, breaks down the ecosystem silos between different chip software stacks, and effectively reduces migration costs for developers.The FlagOS community fosters an AI hardware and software ecosystem, overcomes single-vendor closed-source monopolies, promotes widespread deployment of AI hardware technologies, and is committed to rooted in China while embracing global collaboration.
+
+Official website express: https://flagos.io
+
+FlagOS multi-chip support and usage
+Desktop Pet
+We also ship OpenBMB/MiniCPM-Desk-Pet, a desktop pet driven locally by MiniCPM5-1B. It supports Apple Silicon / NVIDIA GPU / CPU paths, can work with coding agents such as Cursor, Claude Code, and Codex, and supports LoRA persona switching.
+
+MiniCPM Desk Pet video demo
+
+Limitations and Responsible Use
+MiniCPM5-1B is a language model that generates content based on learned statistical patterns from training data. It may produce inaccurate, biased, or unsafe outputs, and generated content should be reviewed and verified before use in high-stakes settings.
+
+Users are responsible for evaluating outputs, applying appropriate safeguards, and complying with applicable laws, regulations, and platform policies.
+
+License
+This repository and MiniCPM model weights are released under the Apache-2.0 License.
+
+Citation
+
+Zero-Cost Integration Guide: LogRocket & Sentry
+Unlock Flawless Debugging Without Breaking the Bank!
+This guide walks you through setting up LogRocket and Sentry to enhance frontend error monitoring and session
+replay capabilities using their generous free tiers. Stop guessing and start seeing your bugs in real-time.
+Section 1: Why LogRocket & Sentry?
+The Problem:
+• “It works on my machine!” syndrome.
+• Production bugs that are impossible to reproduce locally.
+• Blindly adding console.log statements and endlessly redeploying.
+• Wasting countless hours trying to guess the root cause of user-reported issues.
+The Solution:
+LogRocket: Provides high-fidelity session replay, network request logging, state monitoring, and console logs.
+Sentry: A powerful error monitoring tool that captures crashes, exceptions, and performance issues with detailed
+stack traces and context.
+
+Combined Power: Integrate Sentry errors directly into LogRocket sessions for seamless debugging.
+Cost-Effective: Both tools provide generous free tiers suitable for developers, startups, and hobby projects.
+Section 2: Setting Up LogRocket (The “See” Tool)
+Step 1: Sign Up for LogRocket
+Go to logrocket.com and create an account. Once inside, obtain your Project ID.
+Step 2: Install LogRocket SDK
+npm install logrocket --save
+# OR
+yarn add logrocket
+import LogRocket from 'logrocket';
+LogRocket.init('YOUR_APP_ID');
+// Optional User Identification
+
+// LogRocket.identify('USER_ID', {
+// name: 'John Doe',
+// email: 'john.doe@example.com',
+// });
+Section 3: Setting Up Sentry (The “Catch” Tool)
+Step 1: Sign Up for Sentry
+Go to sentry.io and create an account. Select your framework and obtain your DSN.
+Step 2: Install Sentry SDK
+npm install @sentry/react @sentry/tracing
+# OR
+yarn add @sentry/react @sentry/tracing
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
+Sentry.init({
+dsn: "YOUR_SENTRY_DSN",
+integrations: [new BrowserTracing()],
+tracesSampleRate: 1.0,
+replaysSessionSampleRate: 0.1,
+replaysOnErrorSampleRate: 1.0,
+});
+Section 4: Integrating LogRocket with Sentry
+This is where the magic happens! Sentry has a dedicated integration for LogRocket.
+Step 1: Install Sentry’s LogRocket Integration
+npm install @sentry/integrations --save
+# OR
+yarn add @sentry/integrations
+import LogRocket from 'logrocket';
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
+import { LogRocketIntegration } from "@sentry/integrations";
+LogRocket.init('YOUR_LOGROCKET_PROJECT_ID');
+Sentry.init({
+dsn: "YOUR_SENTRY_DSN",
+integrations: [
+
+new BrowserTracing(),
+new LogRocketIntegration(),
+],
+tracesSampleRate: 1.0,
+replaysSessionSampleRate: 0.1,
+replaysOnErrorSampleRate: 1.0,
+});
+Step 3: Test the Integration
+Deploy your application and generate a test error using:
+throw new Error('Integrated Test Error');
+Open your Sentry dashboard and verify that the error contains a direct LogRocket session replay link.
+
+Professional Debugging on a Zero Budget ■
+With LogRocket + Sentry, you can dramatically reduce debugging time, improve user experience, and gain production
+visibility — all without spending a single dollar initially.Self-Hosted Sandboxes Guide (May 2026)
+
+Self-Hosted Sandboxes
+
++ MCP Tunnels + Stainless
+
+@keshavsuki -- Code with Claude London -- May 19, 2026
+
+
+This is NOT full on-premise Claude. The agent loop (orchestration, context, error recovery) stays on Anthropic's cloud. What moves to your infrastructure is tool execution -- the code runs, the files are accessed, the APIs are called inside your perimeter. Important distinction for compliance conversations.
+
+
+
+What Shipped -- May 19, 2026
+
+Announced at Code with Claude London. Two new features for Claude Managed Agents:
+
+
+Feature
+
+Status
+
+What it means
+
+Self-hosted sandboxes
+
+Public beta
+
+Tool execution runs in your infrastructure or a managed provider you choose
+
+MCP tunnels
+
+Research preview -- request access
+
+Connect agents to MCP servers inside your private network without public endpoints
+
+
+
+Self-Hosted Sandboxes -- How It Works
+
+The agent loop that handles orchestration, context management, and error recovery stays on Anthropic's infrastructure. What moves to your side is the execution layer -- code runs there, files are accessed there, API calls happen there.
+
+
+Layer
+
+Stays where
+
+Who controls
+
+Agent loop
+
+Anthropic's cloud
+
+Anthropic
+
+Tool execution
+
+Your sandbox
+
+You
+
+File access
+
+Your sandbox
+
+You
+
+Code runs
+
+Your sandbox
+
+You
+
+API calls out
+
+Your sandbox
+
+You
+
+Data in memory
+
+Your sandbox
+
+You
+
+
+Supported sandbox providers (use your own infrastructure or let one of these manage the compute):
+
+
+Cloudflare Workers -- serverless, global edge
+Daytona -- cloud development environments
+Modal -- on-demand cloud compute
+Vercel -- serverless functions
+Your own VPC / on-premise server
+
+Sandboxes support flexible resource sizing and custom runtime images. Resource-intensive tasks like image generation or large builds can use the compute they need. Configured via Organization Settings in the Claude Console.
+
+
+
+MCP Tunnels -- How It Works
+
+MCP tunnels let Claude agents reach MCP servers inside your private network without exposing them to the public internet. Your internal databases, private APIs, knowledge bases, and ticketing systems become tools Claude can call.
+
+
+Your private network:
+
+  [Internal DB] [Private API] [KB] [Ticketing]
+
+       |              |          |        |
+
+  [MCP servers inside your perimeter]
+
+       |
+
+  [Lightweight gateway -- you deploy this]
+
+       |  single outbound connection
+
+       |  end-to-end encrypted
+
+       |  no inbound firewall rules
+
+       |  no public endpoints
+
+       v
+
+  [Anthropic -- Claude agent]
+
+
+Single outbound connection -- your firewall only needs to allow outbound
+End-to-end encrypted -- traffic cannot be intercepted in transit
+No inbound rules -- nothing opens a hole in your perimeter
+No public endpoints -- internal systems never touch the public internet
+
+MCP tunnels is research preview and requires access request. Self-hosted sandboxes is public beta and available now in the Claude Console. Don't promise MCP tunnels to a client without noting the access request step.
+
+
+
+The Enterprise Sales Objection -- Answered
+
+The reason every clinic, law firm, and accountant says no to AI is: data leaving the building. Here is what you can now say accurately:
+
+
+Objection
+
+Old answer
+
+New answer
+
+"Our data can't leave"
+
+It has to -- Claude is cloud-only
+
+Tool execution stays in your perimeter. Files, code, API calls all stay local.
+
+"Our security team won't allow it"
+
+We need exceptions...
+
+Your security policies apply by default. Your audit logging captures everything.
+
+"HIPAA compliance"
+
+Complex workarounds
+
+Patient data never reaches Anthropic's servers during execution. Agent loop is stateless context.
+
+"SOC 2 audit"
+
+Manual evidence gathering
+
+Execution runs on infrastructure already in your audit scope.
+
+
+The agent loop still runs on Anthropic's cloud. Claude sees the context of what the tools return. For true zero-data-leaving requirements, self-hosted sandboxes reduce the exposure significantly but do not eliminate it entirely. Be precise with compliance teams.
+
+
+
+The Stainless Acquisition -- Why It Matters
+
+Announced May 18, 2026. Anthropic acquired Stainless for $300M+. Stainless generated every official Anthropic SDK since the API launched, and served OpenAI, Google, and Cloudflare with the same tool.
+
+
+Stainless builds: SDKs (TypeScript, Python, Go, Java), CLIs, and MCP servers -- the connectors between agents and APIs
+Anthropic is winding down all hosted Stainless products -- OpenAI and Google lose access to the SDK generator
+Existing customers keep the SDKs they already generated
+4th Anthropic acquisition in 6 months: Bun (runtime), Vercept (computer use), Coefficient Bio (biotech), Stainless (connectivity layer)
+
+The pattern: Anthropic is building the plumbing layer for agents -- not the product layer. Runtime, computer use, private networking, SDK tooling. Same direction as MCP. This is the AWS move, not the OpenAI move.
+
+
+
+Enable Self-Hosted Sandboxes -- Steps
+
+Available now in public beta. No code required for basic setup.
+
+
+1. Go to Claude Console (console.anthropic.com)
+
+2. Organization Settings --> Managed Agents --> Sandboxes
+
+3. Select sandbox provider:
+
+   - Anthropic-hosted (default, no change)
+
+   - Cloudflare / Daytona / Modal / Vercel (managed)
+
+   - Custom (your own VPC or on-premise)
+
+4. For custom: provide your sandbox endpoint URL
+
+   and configure the execution environment
+
+5. For MCP tunnels (research preview):
+
+   Request access at platform.claude.com
+
+   Deploy the lightweight gateway in your network
+
+   Register MCP server endpoints in Console settings
+
+
+
+If you sell AI installs to mid-market businesses, this is the week the compliance objection got smaller. Not gone -- the agent loop still touches Anthropic's cloud. But smaller. Screenshot this and send it to every stalled deal.
+
+
+
+@keshavsuki# Everything Claude Code (ECC) — The Agent Harness Performance System
+
+> **TL;DR** — ECC is an open-source plugin built by Affaan Mustafa (Anthropic hackathon winner) that turns Claude Code from a code assistant into a production-grade agent harness. **60 specialised agents · 232 skills · hooks · security scanning · memory persistence · continuous learning.** MIT-licensed forever. Works across Claude Code, Cursor, Codex, OpenCode, Gemini, Zed, and GitHub Copilot.
+> 
+
+**Repo:** https://github.com/affaan-m/ECC
+
+**Stars:** 187K+ · **Forks:** 28.9K+ · **License:** MIT
+
+---
+
+# What ECC actually is
+
+Most people use Claude Code out of the box. Claude responds, you accept or reject. The loop is naive.
+
+ECC layers a system on top:
+
+- **Agents** — specialised sub-models for delegated work (planner, architect, code-reviewer, security-reviewer, language-specific reviewers, ML reviewers)
+- **Skills** — workflow definitions Claude can invoke or auto-suggest (TDD, market research, investor outreach, content engine, security review, etc.)
+- **Hooks** — event-based automations (auto-format on edit, blocked secrets in prompts, session-start/end memory persistence)
+- **Rules** — always-on guidelines per language (TypeScript, Python, Go, Swift, PHP, ArkTS)
+- **MCP configs** — pre-wired server definitions for GitHub, Context7, Exa, Playwright, Supabase
+
+Iterated for 10+ months across real production builds. Not a tutorial repo. A working system.
+
+---
+
+# Why this matters for any business
+
+Every business using Claude Code is running an under-tuned engine.
+
+**Without ECC:**
+
+- No memory between sessions
+- No learned patterns from past work
+- No security scanning of your own agent configs
+- Manual delegation to the right specialist
+- One generic model for every task
+
+**With ECC:**
+
+- Sessions persist context automatically
+- Patterns from your work get auto-extracted into reusable skills
+- Configs scanned for vulnerabilities, leaked secrets, hook injection risks
+- The right specialist agent picked for each task (tdd-guide writes tests, security-reviewer hunts CVEs)
+- Cost-aware model routing — cheap models for cheap work, Opus for the hard stuff
+
+For a small team or solo founder this is the difference between Claude as a faster autocomplete vs Claude as a junior team you can delegate to.
+
+---
+
+# What's inside
+
+## The agent catalogue (60 agents)
+
+- <strong>Click to see the full breakdown</strong>
+    
+    **Core workflow agents**
+    
+    - `planner` — feature implementation planning
+    - `architect` — system design decisions
+    - `tdd-guide` — test-driven development enforcement
+    - `code-reviewer` — quality and security review
+    - `security-reviewer` — vulnerability analysis
+    - `build-error-resolver` — auto-fixes broken builds
+    - `e2e-runner` — Playwright E2E testing
+    - `refactor-cleaner` — dead code cleanup
+    - `doc-updater` / `docs-lookup` — documentation sync and API research
+    - `chief-of-staff` — communication triage and drafts
+    - `loop-operator` — autonomous loop execution
+    - `harness-optimizer` — tunes the harness itself
+    
+    **Language-specific reviewers**
+    
+    - TypeScript, Python, Go, Rust, Java, Kotlin, C++, F#, Swift
+    - Plus build-resolver agents for Go, Rust, Java, Kotlin, C++, PyTorch
+    
+    **Specialised**
+    
+    - `mle-reviewer` — production ML pipeline, eval, serving, monitoring
+    - `database-reviewer` — Supabase / Postgres query audit
+    - `harmonyos-app-resolver` — HarmonyOS / ArkTS
+
+## The skill catalogue (232 skills)
+
+- <strong>Engineering & code quality</strong>
+    - `tdd-workflow` — RED → GREEN → IMPROVE with 80%+ coverage
+    - `security-review` — full OWASP-aligned checklist
+    - `eval-harness` — eval-driven development
+    - `verification-loop` — continuous build/test/lint/typecheck/security
+    - `api-design` — REST patterns, pagination, error responses
+    - `deployment-patterns` — CI/CD, Docker, health checks, rollbacks
+    - `docker-patterns`, `database-migrations`, `e2e-testing`
+    - `mcp-server-patterns` — build your own MCP servers
+    - `mle-workflow` — production ML data contracts, evals, monitoring
+- <strong>Cost & performance</strong>
+    - `cost-aware-llm-pipeline` — model routing, budget tracking
+    - `content-hash-cache-pattern` — SHA-256 file processing cache
+    - `regex-vs-llm-structured-text` — when not to use an LLM
+    - `strategic-compact` — context window management
+- <strong>Operator & business workflows</strong>
+    - `brand-voice` — derives writing style profile from real published content
+    - `social-graph-ranker` — ranks relationships by reachability
+    - `connections-optimizer` — prioritises outreach signal
+    - `customer-billing-ops` — billing workflows
+    - `google-workspace-ops` — Workspace admin and ops
+    - `project-flow-ops` — project routing
+    - `workspace-surface-audit` — surface drift detection
+    - `ecc-tools-cost-audit` — track LLM spend across the stack
+- <strong>Content, media, & growth</strong>
+    - `article-writing` — long-form in a supplied voice (no generic AI tone)
+    - `content-engine` — multi-platform repurposing for X, LinkedIn, Threads
+    - `crosspost` — distribution across platforms
+    - `frontend-slides` — HTML decks with PPTX export
+    - `video-editing` — AI-assisted FFmpeg/Remotion workflows
+    - `manim-video` — animated technical explainers
+    - `remotion-video-creation` — programmatic video generation
+    - `x-api` — X/Twitter posting and analytics
+    - `fal-ai-media` — unified image/video/audio generation
+- <strong>Research & fundraising</strong>
+    - `market-research` — source-attributed competitor and market research
+    - `deep-research` — multi-source synthesis with attribution
+    - `exa-search` — neural search for web, code, company research
+    - `documentation-lookup` — up-to-date library docs via Context7 MCP
+    - `product-capability` — translate product goals into scoped capability maps
+    - `investor-materials` — decks, memos, one-pagers, financial models
+    - `investor-outreach` — personalised cold emails, follow-ups, intro blurbs
+- <strong>Framework-specific patterns</strong>
+    
+    Django, Laravel, Spring Boot, Quarkus, NestJS, Next.js Turbopack, PyTorch, Bun runtime, Swift concurrency, Liquid Glass design system, Foundation Models on-device.
+    
+    Each pack ships patterns + security + TDD + verification skills.
+    
+
+## Hooks — event-based automation
+
+| Event | What it does |
+| --- | --- |
+| `SessionStart` | Loads context summary from previous session |
+| `Stop` | Saves session summary for next time |
+| `PreToolUse` | Blocks dangerous bash, dev-server-outside-tmux guard |
+| `PostToolUse` | Auto-format, TypeScript check, console.log warning |
+| `BeforeSubmitPrompt` | Detects `sk-`, `ghp_`, `AKIA` secrets in prompts |
+| `BeforeTabFileRead` | Blocks Tab from reading `.env`, `.key`, `.pem` files |
+
+## AgentShield — security auditor
+
+Built at the Cerebral Valley × Anthropic hackathon. **1,282 tests · 98% coverage · 102 static analysis rules.**
+
+Scans your CLAUDE.md, settings.json, MCP configs, hooks, agent definitions, and skills across 5 categories — secrets detection (14 patterns), permission auditing, hook injection analysis, MCP server risk profiling, agent config review.
+
+The `--opus` flag runs three Claude Opus agents in a red-team / blue-team / auditor pipeline. Adversarial reasoning, not just pattern matching.
+
+## Continuous Learning v2 — "instincts"
+
+Watches what you do across sessions, extracts repeated patterns into instincts with confidence scores. `/evolve` clusters related instincts into reusable skills. Import / export so a team can share learned patterns.
+
+---
+
+# Setup inside Claude Code
+
+## Prerequisites
+
+- Claude Code CLI **v2.1.0+** (check: `claude --version`)
+- Git, Node 18+, your package manager (npm / pnpm / yarn / bun)
+
+## Step 1 — Install the plugin
+
+Inside Claude Code:
+
+```bash
+/plugin marketplace add https://github.com/affaan-m/everything-claude-code
+/plugin install ecc@ecc
+```
+
+That's the canonical path. Plugin install gives you agents, skills, commands, and hooks. It does **not** distribute rules — Claude Code's plugin system blocks that.
+
+## Step 2 — Add rules manually (your stack only)
+
+Rules are language-specific always-on guidelines. Install only what you actually use.
+
+```bash
+git clone https://github.com/affaan-m/everything-claude-code.git
+cd everything-claude-code
+
+mkdir -p ~/.claude/rules/ecc
+cp -r rules/common ~/.claude/rules/ecc/
+cp -r rules/typescript ~/.claude/rules/ecc/   # pick your stack
+cp -r rules/python ~/.claude/rules/ecc/
+```
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME/.claude/rules/ecc" | Out-Null
+Copy-Item -Recurse rules/common "$HOME/.claude/rules/ecc/"
+Copy-Item -Recurse rules/typescript "$HOME/.claude/rules/ecc/"
+```
+
+## Step 3 — Do NOT stack install methods
+
+> ⚠️ This is the #1 broken setup: running `/plugin install` and then `./install.sh --profile full` afterwards. That duplicates skills, doubles hook execution, and trashes performance.
+> 
+
+If you already messed it up, run from the repo root:
+
+```bash
+node scripts/ecc.js list-installed
+node scripts/ecc.js doctor
+node scripts/ecc.js repair
+```
+
+## Step 4 — Tune for your context window
+
+Drop this into `~/.claude/settings.json`:
+
+```json
+{
+  "model": "sonnet",
+  "env": {
+    "MAX_THINKING_TOKENS": "10000",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "50",
+    "ECC_HOOK_PROFILE": "standard",
+    "ECC_SESSION_START_MAX_CHARS": "4000"
+  }
+}
+```
+
+Key env vars:
+
+| Variable | Purpose |
+| --- | --- |
+| `ECC_HOOK_PROFILE` | `minimal` / `standard` / `strict` — hook strictness |
+| `ECC_DISABLED_HOOKS` | Comma-separated hook IDs to disable |
+| `ECC_SESSION_START_MAX_CHARS` | Cap context from previous session (default 8000) |
+| `ECC_SESSION_START_CONTEXT` | Set `off` to disable session-start context entirely |
+| `ECC_DISABLED_MCPS` | Skip ECC-bundled MCPs if you already run your own |
+| `ECC_CONTEXT_MONITOR_COST_WARNINGS` | Set `off` to suppress API-rate estimates |
+
+## Step 5 — Configure MCPs
+
+Plugin installs intentionally don't auto-enable ECC's bundled MCP servers (to avoid overlong tool names on strict gateways).
+
+Use `/mcp` inside Claude Code for runtime control. Claude Code persists those choices to `~/.claude.json`. For repo-local MCP access, copy desired server definitions from `mcp-configs/mcp-servers.json` into a project-scoped `.mcp.json`.
+
+## Step 6 — First commands to try
+
+```bash
+/ecc:plan "Add Stripe checkout to the pricing page"
+/harness-audit
+/security-scan
+/instinct-status
+/quality-gate . --strict
+```
+
+`/harness-audit` baselines your reliability and risk. Run it once after install.
+
+## Step 7 — Launch the dashboard (optional)
+
+```bash
+npm run dashboard
+# or
+python3 ./ecc_dashboard.py
+```
+
+Desktop GUI with tabbed interface for agents, skills, commands, rules, settings. Dark/light theme, search and filter.
+
+## Step 8 — Reset / Uninstall (when needed)
+
+From the repo root:
+
+```bash
+node scripts/uninstall.js --dry-run   # preview first
+node scripts/uninstall.js             # actually remove
+```
+
+ECC only deletes files it owns. Won't touch unrelated config.
+
+---
+
+# Business use cases by function
+
+## Engineering / product
+
+| Task | Surface | What happens |
+| --- | --- | --- |
+| Plan a feature | `/ecc:plan "feature"` | Planner agent decomposes into phases |
+| Write code | `tdd-workflow` skill | tdd-guide enforces tests-first |
+| Pre-PR review | `/code-review` | Code-reviewer flags issues |
+| Security audit | `/security-scan` | AgentShield + security-reviewer scan |
+| Fix broken build | `/build-fix` | build-error-resolver works through errors |
+| Verify before ship | `/quality-gate . --strict` | Full coverage/lint/typecheck gate |
+
+## Marketing / content
+
+- **`article-writing`** — long-form in your voice without AI tone
+- **`content-engine`** — write once, repurpose for X, LinkedIn, Threads, TikTok
+- **`brand-voice`** — extract a style profile from your real published content
+- **`frontend-slides`** — HTML decks with PPTX export
+- **`remotion-video-creation`** + **`manim-video`** — programmatic explainers and animations
+
+## Sales / outreach / fundraising
+
+- **`connections-optimizer`** — prioritises which contacts to hit first
+- **`social-graph-ranker`** — ranks relationships by reachability
+- **`investor-outreach`** — personalised cold emails, follow-ups, intro blurbs
+- **`investor-materials`** — decks, memos, one-pagers, financial models
+- **`market-research`** + **`deep-research`** — source-attributed analysis
+
+## Operations
+
+- **`customer-billing-ops`** — billing flows
+- **`google-workspace-ops`** — Workspace admin
+- **`project-flow-ops`** — project routing
+- **`ecc-tools-cost-audit`** — track LLM spend across the stack
+- **`workspace-surface-audit`** — surface drift detection
+
+---
+
+# The killer features most people miss
+
+## Memory persistence
+
+The `SessionStart` hook loads a summary of the prior session before you start typing. `Stop` hook saves the current one. Across days you build cumulative context instead of starting from scratch every time.
+
+## Continuous learning
+
+Every Stop event evaluates whether a pattern is worth extracting. After enough confidence, `/evolve` clusters related instincts into a reusable skill. The harness gets sharper the more you use it.
+
+## Cost-aware routing
+
+`cost-aware-llm-pipeline` skill plus `/model-route` directs work to the right model. Cheap routing for boilerplate, Opus for hard reasoning. Real impact on monthly bill.
+
+## Cross-harness portability
+
+The same `AGENTS.md` root file works in Cursor, Codex, OpenCode, and Antigravity. Skills (SKILL.md with YAML frontmatter) port across Claude Code, Codex, and OpenCode. No lock-in.
+
+## Eval-driven dev
+
+`eval-harness` and `verification-loop` skills enforce continuous evals. Checkpoint vs continuous, grader types, pass@k metrics. Real engineering rigour.
+
+---
+
+# Common pitfalls
+
+| Pitfall | Why it happens | Fix |
+| --- | --- | --- |
+| "Duplicate hooks file" error | Adding `"hooks"` to `.claude-plugin/plugin.json` | Don't. v2.1+ auto-loads `hooks/hooks.json` |
+| Context window shrinking | Too many MCPs eat tokens | Keep under 10 MCPs and 80 tools. Use `/mcp` to disable |
+| Duplicated skills after install | Ran plugin install AND manual installer | Pick one path. `node scripts/uninstall.js` to clean up |
+| Hooks feel intrusive | Default profile too aggressive | `export ECC_HOOK_PROFILE=minimal` |
+| Slow on local models | SessionStart context too large | `export ECC_SESSION_START_CONTEXT=off` |
+| Multi-* commands not working | Missing `ccg-workflow` runtime | `npx ccg-workflow` to initialise |
+
+---
+
+# A daily workflow example
+
+**Morning**
+
+1. Open Claude Code in your repo. SessionStart hook loads yesterday's summary
+2. `/ecc:plan "next feature from the backlog"` — planner drafts phases
+3. Invoke `tdd-workflow` skill — write failing tests first
+
+**Midday**
+
+1. Code through the feature. PostToolUse hooks auto-format and typecheck on every edit
+2. `/code-review` before commit — reviewer agent flags issues
+3. `/security-scan` if touching auth, payments, or PII
+
+**Evening**
+
+1. `/quality-gate . --strict` for final validation
+2. `/instinct-status` to see what patterns ECC learned today
+3. Stop hook auto-saves the session summary
+
+**Weekly**
+
+1. `/evolve` clusters the week's instincts into new reusable skills
+2. `/harness-audit` to baseline reliability
+3. `npx ecc-agentshield scan --opus` for a deep adversarial security pass
+
+---
+
+# Resources
+
+- **Repo:** https://github.com/affaan-m/ECC
+- **Marketplace:** https://github.com/marketplace/ecc-tools
+- **AgentShield:** https://github.com/affaan-m/agentshield
+- **The Shorthand Guide:** https://x.com/affaanmustafa/status/2012378465664745795
+- **The Longform Guide:** https://x.com/affaanmustafa/status/2014040193557471352
+- **The Security Guide:** https://x.com/affaanmustafa/status/2033263813387223421
+- **ECC Pro (private repos · GitHub App):** https://ecc.tools/pricing
+
+---
+
+# Bottom line
+
+If you use Claude Code seriously, ECC is not optional. It's the missing layer between *"I have a Claude subscription"* and *"I have an agent harness running my business."*
+
+Install path is 90 seconds. Payoff is permanent.6 Documents You Should Create Before Vibe Coding Any App
+6 Documents You Should Create Before Vibe Coding Any App
+Most people make one big mistake when building apps with AI.
+
+They open ChatGPT, Claude, Cursor, Lovable, Replit, Bolt, or any AI coding tool and directly write:
+
+“Build me an app.”
+
+The problem is simple.
+
+AI cannot build a great app from a vague idea.
+
+It needs context, structure, product clarity, technical direction, UI direction, database logic, and a proper implementation order.
+
+Before asking AI to build your app, prepare these 6 documents.
+
+
+1. PRD: Product Requirements Document
+The PRD explains what you are building.
+
+It gives your AI agent complete clarity about your app idea, target users, core features, user problems, and expected output.
+
+Your PRD should include:
+App name
+One-line app idea
+Target users
+Problem you are solving
+Main features
+User roles
+User stories
+Success metrics
+MVP scope
+Features not included in version 1
+Simple prompt to create PRD:
+“Act as a senior product manager. Create a detailed Product Requirements Document for my app idea. Include app overview, target users, problem statement, core features, user stories, MVP scope, success metrics, and features to avoid in version 1.
+
+My app idea is: [paste your idea]”
+
+
+2. TRD: Technical Requirements Document
+The TRD explains how the app will be built technically.
+
+This helps AI avoid guessing your tech stack, architecture, APIs, authentication, database, deployment, and integrations.
+
+Your TRD should include:
+Frontend stack
+Backend stack
+Database
+Authentication method
+APIs needed
+AI models or tools
+Cloud/deployment setup
+Security requirements
+Performance requirements
+Third-party integrations
+Simple prompt to create TRD:
+“Act as a senior software architect. Based on this app idea and PRD, create a Technical Requirements Document. Include frontend stack, backend stack, database, authentication, APIs, architecture, deployment plan, security requirements, and technical decisions with reasons.”
+
+
+3. App Flow Document
+The App Flow document explains how users move inside your app.
+
+It tells the AI what pages/screens to create, what happens when users click buttons, and how the full journey works.
+
+Your App Flow should include:
+All pages/screens
+User journey
+Navigation flow
+Button actions
+Empty states
+Error states
+Success states
+Login/signup flow
+Payment or upgrade flow, if needed
+Simple prompt to create App Flow:
+“Act as a UX strategist. Create a complete app flow document for this app. List every screen, page, user action, button behavior, navigation path, success state, error state, and empty state. Make it detailed enough for an AI coding agent to build without guessing.”
+
+
+4. UI/UX Design Brief
+The UI/UX Brief explains how the app should look and feel.
+
+Without this, AI may build something random, generic, or ugly.
+
+Your UI/UX Brief should include:
+Design style
+Color palette
+Typography
+Component style
+Layout rules
+Mobile/desktop behavior
+Inspiration references
+Dashboard design direction
+Button and card style
+Overall user experience
+Simple prompt to create UI/UX Brief:
+“Act as a senior UI/UX designer. Create a detailed UI/UX design brief for this app. Include design style, color palette, typography, layout direction, component style, dashboard structure, mobile responsiveness, user experience principles, and visual references. Make it clear enough for an AI app builder to follow.”
+
+
+5. Backend Schema Document
+The Backend Schema explains how your data will be stored and connected.
+
+This is important because most apps fail when the database is unclear.
+
+Your Backend Schema should include:
+User table
+Authentication/session table
+Main app tables
+Columns for each table
+Data types
+Relationships
+Primary keys
+Foreign keys
+Indexes
+Permissions
+Data ownership rules
+Simple prompt to create Backend Schema:
+“Act as a senior backend engineer. Create a complete backend schema for this app. Include all database tables, columns, data types, primary keys, foreign keys, relationships, indexes, authentication/session handling, permissions, and data ownership rules.”
+
+
+6. Implementation Plan
+The Implementation Plan explains the exact order in which the app should be built.
+
+This is extremely important for AI coding agents because if the order is unclear, they may build random parts first and break the project structure.
+
+Your Implementation Plan should include:
+Step-by-step build sequence
+What to build first
+What to build second
+Setup steps
+Authentication steps
+Database steps
+UI steps
+Feature steps
+Testing steps
+Deployment steps
+Simple prompt to create Implementation Plan:
+“Act as a senior full-stack engineer and project manager. Create a step-by-step implementation plan for building this app. Break it into clear phases: setup, authentication, database, core UI, main features, integrations, testing, deployment, and final polish. Mention the deliverables for each phase.”
+
+
+Best Order To Use These Docs With AI
+Use this order:
+
+Create PRD
+Create TRD
+Create App Flow
+Create UI/UX Brief
+Create Backend Schema
+Create Implementation Plan
+Give all documents to your AI coding tool
+Ask it to build phase by phase
+Do not ask AI to build the full app in one shot.
+
+Instead, use this prompt:
+
+“Read all the documents carefully. Do not start coding yet. First summarize what you understood, identify missing details, and create a build plan. After that, we will build the app phase by phase.”
+
+
+Master Prompt To Generate All 6 Docs
+Use this prompt:
+
+“I want to build an app using AI coding tools like Cursor, Claude, ChatGPT, Lovable, Bolt, or Replit.
+
+Before generating code, help me create the 6 essential documents needed to build this app properly:
+
+Product Requirements Document
+Technical Requirements Document
+App Flow Document
+UI/UX Design Brief
+Backend Schema Document
+Implementation Plan
+For each document, make it detailed, structured, practical, and clear enough that an AI coding agent can build the app without guessing.
+
+My app idea is:
+
+[paste your app idea here]
+
+Ask me questions only if something is absolutely necessary. Otherwise, make reasonable assumptions and clearly mention them.”
+
+
+Final Tip
+AI tools are powerful, but they are not mind readers.
+
+Bad input creates random output.
+
+Clear documents create better apps.
+
+Before vibe coding your next app, prepare the docs first.
+
+The AI-for-Hire Arbitrage
+The AI-for-Hire Arbitrage
+
+Turning small-business job postings into a productized AI services business
+
+A complete workflow: what to sell, how to find leads, and how to price it
+
+
+The Core Idea
+A job posting is a pre-qualified lead. When a small business posts a role, it hands you three things for free:
+
+A recurring, painful need they have already diagnosed.
+Budget they have already allocated (the salary).
+A multi-month hiring and onboarding process they are about to start.
+The pitch writes itself: “Before you spend a salary and three months training someone, I’ll deliver the same output starting this week, for a fraction of the cost, with no hiring risk.”
+
+That is the entire arbitrage. You are not selling AI. You are selling a finished outcome and the absence of management overhead. The rest of this document is execution.
+
+Which Jobs To Target
+The sweet spot is work that is high-volume, text- or data-heavy, rules-based, recoverable if wrong, and currently done by a junior hire or virtual assistant. The buyer should be non-technical, so they value “done for you” rather than a tool they have to operate.
+
+Strong first niches
+Job type
+
+Why it works
+
+Lead research & list building
+
+CRM enrichment, prospect lists, contact verification. Pure text-in, text-out. Errors are cheap to fix and sales teams hire for it constantly.
+
+Inbound triage & appointment setting
+
+Email and chat sorting, scheduling, first-touch replies.
+
+Tier-1 customer support
+
+Order status, refunds, FAQ-style email for SMBs and e-commerce.
+
+Invoice & receipt processing
+
+Bookkeeping prep with high monthly recurrence - ideal retainer.
+
+Content production at volume
+
+Product descriptions, SEO pages, social captions, blog drafts for agencies and e-commerce stores.
+
+Transcription & summarization
+
+Podcasts, sales calls, meetings into clean notes and action items.
+
+Review & reputation responses
+
+Drafted replies to customer reviews at scale.
+
+
+What to avoid
+Steer clear of anything needing a license, physical presence, high liability, or deep proprietary judgment. Those are bad first niches even when they look lucrative.
+
+How to score a niche
+Rate each candidate on five dimensions before committing:
+
+Automatability - how much can AI actually do?
+Recurrence - can it become a monthly retainer rather than a one-off?
+Willingness to pay - is there a real budget behind the posting?
+Error tolerance - how costly is a mistake?
+QA value - how much does your human review genuinely add?
+Pick ONE niche and stay in it until roughly $5K MRR. The urge to serve everyone is what kills this model.
+
+The Lead Engine
+Scrape job boards for specific role titles. Indeed, LinkedIn job posts, ZipRecruiter, Wellfound, Craigslist gigs, local Facebook groups, niche industry boards, and Upwork (recurring gigs are gold). Pull fresh postings daily.
+Filter to SMBs. Small headcount, owner or founder posting directly, part-time or contract listings. Skip enterprises - they move slowly and have incumbents.
+Reach the decision-maker. Email the company directly, or literally apply to the job and pitch the service instead of yourself.
+De-risk with a trial. Do the first batch free or at a steep trial price. Once they see the output land, the retainer is easy.
+Offer & Pricing
+Productize it. Sell a fixed monthly retainer per unit of work rather than hourly time:
+
+Example: “200 enriched leads per week - $1,500/mo,” set against the $40–50K/year cost of a full-time hire.
+
+Margin comes from AI handling the volume while you own QA and accountability. Sell the outcome, not the technology - the moment a client thinks “I’ll just use ChatGPT myself,” you have lost them. You are selling reliability and the freedom from managing a person.
+
+How To Build It
+Every one of these services is the same shape under the hood: pull in data, run it through a model with a tight prompt, apply rules and validation, route anything uncertain to a human, then push the result back out. Build that backbone once and reskin it per niche.
+
+The five-layer stack
+Source. Where the work comes in - inbox, web form, CSV upload, scraped listings, or an API.
+Orchestration. The glue that moves data between steps and triggers the model.
+Model. The LLM doing the actual reasoning, plus a tightly written prompt and examples.
+Validation & QA. Rules, schema checks, and a human-in-the-loop step for anything low-confidence.
+Delivery. Where the finished output lands - CRM, spreadsheet, email reply, or dashboard.
+Two ways to build, by skill level
+No-code / low-code (fastest start). Wire the whole pipeline in n8n, Make, or Zapier. Drag-and-drop triggers, an LLM node, and integration connectors. You can ship a working service in a day with zero hosting to manage. Best for the first paying clients.
+
+Code (more control, lower cost at scale). Python or TypeScript with an orchestration library when you outgrow the no-code limits or your token volume makes margins matter.
+
+Tooling by layer
+Layer
+
+Common tools
+
+Orchestration
+
+n8n (open-source, self-hostable), Make, Zapier for no-code; LangChain, LlamaIndex, CrewAI, or the plain provider SDK for code.
+
+Models (API)
+
+Anthropic Claude, OpenAI GPT, and Google Gemini. Use a cheap fast model for bulk steps and a stronger one only where quality matters.
+
+Models (local)
+
+Ollama or LM Studio running open models (Llama, Qwen, Mistral) when data is sensitive or volume makes API costs bite.
+
+Document / OCR
+
+Cloud document-AI services or open tools for invoices and receipts; vision models for messy scans.
+
+Data & retrieval
+
+A vector store (Pinecone, Weaviate, pgvector, or Chroma) only when the task needs grounding in client documents.
+
+Integrations
+
+CRM (HubSpot, Pipedrive), Google Sheets, Gmail/Outlook, Slack, helpdesk APIs - most have native nodes in the no-code tools.
+
+Hosting
+
+Self-hosted n8n on a cheap VPS, or serverless functions / lightweight container hosts for code. Keep it boring and cheap.
+
+
+Mapping the stack to each job
+Service
+
+Pipeline
+
+Lead research & enrichment
+
+Scraper or list input → model fills and verifies fields → schema check → CRM/Sheet. n8n + an API model covers it end to end.
+
+Inbound triage & scheduling
+
+Email/chat webhook → model classifies intent and drafts a reply → calendar API for booking → human approves edge cases.
+
+Tier-1 support
+
+Helpdesk webhook → retrieval over the client’s FAQ/policies → drafted reply → human approves before send.
+
+Invoice & receipt processing
+
+File upload → OCR / vision model extracts fields → validation rules → bookkeeping tool or spreadsheet.
+
+Content at volume
+
+Brief/keyword input → model generates drafts to a template → quality pass → CMS or doc.
+
+Transcription & summary
+
+Audio in → speech-to-text → model summarizes and extracts actions → notes delivered to the client.
+
+
+Build principles that keep margins alive
+Keep a human approval gate on anything sent to a customer. It is the difference between a reliable service and a refund.
+Match the model to the step. Cheap model for bulk classification and drafting, strong model only where judgment matters. This is most of your cost control.
+Force structured output. Make the model return JSON against a fixed schema so downstream steps never break on free text.
+Template the prompt per client. Same pipeline, swap a config file of their tone, rules, and examples. New client = new config, not new code.
+Log everything. Capture inputs, outputs, and corrections - your QA edits become the data that makes the system sharper over time.
+The First 30 Days
+Deliberately manual. You do not earn the right to build the pipeline until you have sold the thing by hand. This sequencing matters more than any tooling.
+
+Window
+
+Focus
+
+Week 1
+
+Pick one job type. Manually pull 50 fresh postings. Send 50 tailored pitches. No tooling.
+
+Week 2
+
+Book trials. Do the work by hand plus AI - still no automation.
+
+Weeks 3–4
+
+Close one or two retainers. Only now automate the ~60% that genuinely repeats.
+
+
+The discipline that makes this work: do the first sales by hand. The right to build the pipeline is earned only after the offer has been sold manually. Sell first, automate second.
+
+
+Decide the niche, pull the first 50 postings, and send pitches before building anything.
+
+Messages
+Managed Agents
+Admin
+Resources
+⌘K
+Use cases
+Overview
+Ticket routing
+Customer support agent
+Content moderation
+Legal summarization
+Prompt engineering
+Overview
+Prompting best practices
+Console prompting tools
+Test and evaluate
+Define success and build evaluations
+Using the Evaluation Tool in Console
+Reducing latency
+Strengthen guardrails
+Reduce hallucinations
+Increase output consistency
+Mitigate jailbreaks
+Reduce prompt leak
+Reference
+Glossary
+Best practices
+/
+Prompt engineering
+Prompting best practices
+
+Copy page
+
+Comprehensive guide to prompt engineering techniques for Claude's latest models, covering clarity, examples, XML structuring, thinking, and agentic systems.
+This is the single reference for prompt engineering with Claude's latest models, including Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 4.6, and Claude Haiku 4.5. It covers foundational techniques, output control, tool use, thinking, and agentic systems. Jump to the section that matches your situation.
+
+For an overview of model capabilities, see the models overview. For details on what's new in Claude Opus 4.8, see What's new in Claude Opus 4.8. For migration guidance, see the Migration guide.
+
+Prompting Claude Opus 4.8
+Claude Opus 4.8 has particular strengths in long-horizon agentic work, knowledge work, vision, and memory tasks. It performs well out of the box on existing Claude Opus 4.7 prompts. The patterns below cover the behaviors that most often require tuning.
+
+For API parameter changes when migrating from Claude Opus 4.7 (sampling parameters, effort default, 1M context window default (200k on Microsoft Foundry), mid-conversation system messages, and refusal stop details), see the migration guide.
+
+Response length and verbosity
+Claude Opus 4.8 calibrates response length to how complex it judges the task to be, rather than defaulting to a fixed verbosity. This usually means shorter answers on simple lookups and much longer ones on open-ended analysis.
+
+If your product depends on a certain style or verbosity of output, you may need to tune your prompts. As an example, to decrease verbosity, you might add:
+
+Provide concise, focused responses. Skip non-essential context, and keep examples minimal.
+If you see specific examples of kinds of verbosity (i.e. over-explaining), you can add additional instructions in your prompt to prevent them. Positive examples showing how Claude can communicate with the appropriate level of concision tend to be more effective than negative examples or instructions that tell the model what not to do.
+
+Calibrating effort and thinking depth
+The effort parameter allows you to tune Claude's intelligence vs. token spend, trading off capability for faster speed and lower costs. Start with the xhigh effort level for coding and agentic use cases, and use a minimum of high effort for most intelligence-sensitive use cases. Experiment with other effort levels to further tune token usage and intelligence:
+
+max: Max effort can deliver performance gains in some use cases, but may show diminishing returns from increased token usage. This setting can also sometimes be prone to overthinking. Test max effort for intelligence-demanding tasks.
+xhigh: Extra high effort is the best setting for most coding and agentic use cases.
+high: This setting balances token usage and intelligence. For most intelligence-sensitive use cases, use a minimum of high effort.
+medium: Good for cost-sensitive use cases that need to reduce token usage while trading off intelligence.
+low: Reserve for short, scoped tasks and latency-sensitive workloads that are not intelligence-sensitive.
+Claude Opus 4.8 respects effort levels strictly, especially at the low end. At low and medium, the model scopes its work to what was asked rather than going above and beyond. This is good for latency and cost, but on moderately complex tasks running at low effort there is some risk of under-thinking.
+
+If you observe shallow reasoning on complex problems, raise effort to high or xhigh rather than prompting around it. If you need to keep effort at low for latency, add targeted guidance:
+
+This task involves multi-step reasoning. Think carefully through the problem before responding.
+Effort is likely to be more important for this model than for any prior Opus, so experiment with it actively when you upgrade.
+
+On Claude Opus 4.8, thinking is off unless you explicitly set thinking: {type: "adaptive"}. The triggering behavior for adaptive thinking is steerable. If you find the model thinking more often than you'd like, which can happen with large or complex system prompts, add guidance to steer it. As always, measure the effect of any prompting changes on performance. Example:
+
+Thinking adds latency and should only be used when it will meaningfully improve answer quality — typically for problems that require multi-step reasoning. When in doubt, respond directly.
+Conversely, if you're running hard workloads at medium and seeing under-thinking, the first lever is to raise effort. If you need finer control, prompt for it directly.
+
+If you are running Claude Opus 4.8 at max or xhigh effort, set a large max output token budget so the model has room to think and act across its subagents and tool calls. Start at 64k tokens and tune from there.
+
+Tool use triggering
+Claude Opus 4.8 has a tendency to favor reasoning over tool calls. This produces better results in most cases. However, increasing the effort setting is a useful lever to increase the level of tool usage, especially in knowledge work. high or xhigh effort settings show substantially more tool usage in agentic search and coding. For scenarios where you want more tool use, you can also adjust your prompt to explicitly instruct the model about when and how to properly use its tools. For instance, if you find that the model is not using your web search tools, clearly describe why and how it should.
+
+User-facing progress updates
+Claude Opus 4.8 provides more regular, higher-quality updates to the user throughout long agentic traces. If you've added scaffolding to force interim status messages ("After every 3 tool calls, summarize progress"), try removing it. If you find that the length or contents of Claude Opus 4.8's user-facing updates are not well-calibrated to your use case, explicitly describe what these updates should look like in the prompt and provide examples.
+
+More literal instruction following
+Claude Opus 4.8 interprets prompts literally and explicitly, particularly at lower effort levels. It does not silently generalize an instruction from one item to another, and it does not infer requests you didn't make. The upside of this literalism is precision and less thrash, and it generally performs better for API use cases with carefully tuned prompts, structured extraction, and pipelines where you want predictable behavior. If you need Claude to apply an instruction broadly, state the scope explicitly (for example, "Apply this formatting to every section, not just the first one").
+
+Tone and writing style
+As with any new model, prose style on long-form writing may shift. Claude Opus 4.8 tends toward a direct, opinionated style with minimal validation-forward phrasing and sparing emoji use. If your product relies on a specific voice, re-evaluate style prompts against the new baseline.
+
+For instance, if your product voice is warmer or more conversational, add:
+
+Use a warm, collaborative tone. Acknowledge the user's framing before answering.
+Controlling subagent spawning
+Claude Opus 4.8 tends to spawn fewer subagents by default. However, this behavior is steerable through prompting; give Claude Opus 4.8 explicit guidance around when subagents are desirable. A toy example for a coding use case:
+
+Do not spawn a subagent for work you can complete directly in a single response (e.g. refactoring a function you can already see).
+
+Spawn multiple subagents in the same turn when fanning out across items or reading multiple files.
+Design and frontend defaults
+Claude Opus 4.8 has strong design instincts, with a consistent default house style: warm cream/off-white backgrounds (~#F4F1EA), serif display type (Georgia, Fraunces, Playfair), italic word-accents, and a terracotta/amber accent. This reads well for editorial, hospitality, and portfolio briefs, but will feel off for dashboards, dev tools, fintech, healthcare, or enterprise apps. The default appears in slide decks as well as web UIs.
+
+This default is persistent. Generic instructions ("don't use cream," "make it clean and minimal") tend to shift the model to a different fixed palette rather than producing variety. Two approaches work reliably:
+
+1. Specify a concrete alternative. The model follows explicit specs precisely:
+
+Design a desktop landing page for a supplement brand called AEFRM.
+
+The visual direction should come from a cold monochrome atmosphere using pale silver-gray tones that gradually deepen into blue-gray and near-black, similar to a misted metallic surface.
+
+The page should feel sharp and controlled, with a strong sense of structure and restraint.
+
+Use this tonal system across the full page instead of introducing bright accent colors.
+
+Use the uploaded image on the hero design in black and white.
+
+The layout should be built with clear horizontal sections and a centered max-width container. Use 4px corner radius consistently across cards, buttons, inputs, and media frames. Margins should feel generous, with enough empty space around each section so the page breathes.
+
+Typography should use a square, angular sans-serif with wider letter spacing than usual, especially in headings and navigation, so the text feels more engineered and less compressed. Headline text can be large and uppercase, while supporting copy remains short and sparse. The sub texts should be written with Alumni Sans SC in 4-6px like tiny little texts on corners bottom centre like that.
+
+For the structure, start with a hero section containing a strong product statement, one short supporting paragraph, and a clean product placeholder or packshot frame. Below that, add a benefit grid with three or four blocks, then a formulation or ingredients section, and finally a cta.
+
+Buttons should be flat and precise, with subtle hover changes using transition: all 160ms ease out where brightness and border contrast shift slightly rather than using dramatic motion.
+
+Color palette should stay within this range:
+#E9ECEC, #C9D2D4, #8C9A9E, #44545B, #11171B.
+2. Have the model propose options before building. This breaks the default and gives users control. If you previously relied on temperature for design variety, use this approach; it produces meaningfully different directions across runs. Example prompt:
+
+Before building, propose 4 distinct visual directions tailored to this brief (each as: bg hex / accent hex / typeface — one-line rationale). Ask the user to pick one, then implement only that direction.
+Additionally, Claude Opus 4.8 requires less frontend design prompting than previous models to avoid generic patterns that users call the "AI slop" aesthetic. With earlier models, Anthropic recommended a lengthier prompt snippet in the frontend-design skill. However, Claude Opus 4.8 generates distinctive, creative frontends with more minimal prompting guidance. This prompt snippet works well with the above prompting advice for variety:
+
+<frontend_aesthetics>
+NEVER use generic AI-generated aesthetics like overused font families (Inter, Roboto, Arial, system fonts), cliched color schemes (particularly purple gradients on white or dark backgrounds), predictable layouts and component patterns, and cookie-cutter design that lacks context-specific character. Use unique fonts, cohesive colors and themes, and animations for effects and micro-interactions.
+</frontend_aesthetics>
+Interactive coding products
+Claude Opus 4.8's token usage and behavior can differ between autonomous, asynchronous coding agents with a single user turn and interactive, synchronous coding agents with multiple user turns. Specifically, it tends to use more tokens in interactive settings, primarily because it reasons more after user turns. This can improve long-horizon coherence, instruction following, and coding capabilities in long, interactive coding sessions, but also comes with more token usage. To maximize both performance and token efficiency in coding products, use xhigh or high effort, add autonomous features like an auto mode, and reduce the number of human interactions required from your users.
+
+Of course, when limiting the number of required user interactions, it's important to specify the task, intent, and relevant constraints upfront in the first human turn. Providing well-specified, clear, and accurate task descriptions upfront can help maximize autonomy and intelligence while minimizing extra token usage after user turns. Because Claude Opus 4.8 is more autonomous than prior models, this usage pattern helps to maximize performance. In contrast, ambiguous or underspecified prompts conveyed progressively over multiple user turns tend to relatively reduce token efficiency and sometimes performance.
+
+Code review harnesses
+Claude Opus 4.8 is meaningfully better at finding bugs than prior models, and has both higher recall and precision in internal evals. However, if your code-review harness was tuned for an earlier model, you may initially see lower recall. This is likely a harness effect, not a capability regression. When a review prompt says things like "only report high-severity issues," "be conservative," or "don't nitpick," Claude Opus 4.8 may follow that instruction more faithfully than earlier models did: it may investigate the code just as thoroughly, identify the bugs, and then not report findings it judges to be below your stated bar. This can show up as the model doing the same depth of investigation but converting fewer investigations into reported findings, especially on lower-severity bugs. Precision typically rises, but measured recall can fall even though the model's underlying bug-finding ability has improved.
+
+Some recommended prompt language:
+
+Report every issue you find, including ones you are uncertain about or consider low-severity. Do not filter for importance or confidence at this stage - a separate verification step will do that. Your goal here is coverage: it is better to surface a finding that later gets filtered out than to silently drop a real bug. For each finding, include your confidence level and an estimated severity so a downstream filter can rank them.
+This prompt can be used without having an actual second step, but moving confidence filtering out of the finding step often helps. If your harness has a separate verification, deduplication, or ranking stage, tell the model explicitly that its job at the finding stage is coverage rather than filtering.
+
+If you do want the model to self-filter in a single pass, be concrete about where the bar is rather than using qualitative terms like "important": for example, "report any bugs that could cause incorrect behavior, a test failure, or a misleading result; only omit nits like pure style or naming preferences."
+
+Iterate on prompts against a subset of your evals or test cases to validate recall or F1 score gains.
+
+Computer use
+Computer use capability works across resolutions, up to a maximum resolution of 2576px / 3.75MP. Internal computer use testing shows that sending images at 1080p provides a good balance of performance and cost.
+
+For particularly cost-sensitive workloads, 720p or 1366×768 are lower-cost options with strong performance. Conduct your own testing to find the ideal settings for your use case; experimenting with effort settings can also help tune the model's behavior.
+
+General principles
+Be clear and direct
+Claude responds well to clear, explicit instructions. Being specific about your desired output can help enhance results. If you want "above and beyond" behavior, explicitly request it rather than relying on the model to infer this from vague prompts.
+
+Think of Claude as a brilliant but new employee who lacks context on your norms and workflows. The more precisely you explain what you want, the better the result.
+
+Golden rule: Show your prompt to a colleague with minimal context on the task and ask them to follow it. If they'd be confused, Claude will be too.
+
+Be specific about the desired output format and constraints.
+Provide instructions as sequential steps using numbered lists or bullet points when the order or completeness of steps matters.
+
+Example: Creating an analytics dashboard
+Add context to improve performance
+Providing context or motivation behind your instructions, such as explaining to Claude why such behavior is important, can help Claude better understand your goals and deliver more targeted responses.
+
+
+Example: Formatting preferences
+Claude is smart enough to generalize from the explanation.
+
+Use examples effectively
+Examples are one of the most reliable ways to steer Claude's output format, tone, and structure. A few well-crafted examples (known as few-shot or multishot prompting) can dramatically improve accuracy and consistency.
+
+When adding examples, make them:
+
+Relevant: Mirror your actual use case closely.
+Diverse: Cover edge cases and vary enough that Claude doesn't pick up unintended patterns.
+Structured: Wrap examples in <example> tags (multiple examples in <examples> tags) so Claude can distinguish them from instructions.
+Include 3–5 examples for best results. You can also ask Claude to evaluate your examples for relevance and diversity, or to generate additional ones based on your initial set.
+Structure prompts with XML tags
+XML tags help Claude parse complex prompts unambiguously, especially when your prompt mixes instructions, context, examples, and variable inputs. Wrapping each type of content in its own tag (e.g. <instructions>, <context>, <input>) reduces misinterpretation.
+
+Best practices:
+
+Use consistent, descriptive tag names across your prompts.
+Nest tags when content has a natural hierarchy (documents inside <documents>, each inside <document index="n">).
+Give Claude a role
+Setting a role in the system prompt focuses Claude's behavior and tone for your use case. Even a single sentence makes a difference:
+
+Python
+import anthropic
+
+client = anthropic.Anthropic()
+
+message = client.messages.create(
+    model="claude-opus-4-8",
+    max_tokens=1024,
+    system="You are a helpful coding assistant specializing in Python.",
+    messages=[
+        {"role": "user", "content": "How do I sort a list of dictionaries by key?"}
+    ],
+)
+print(message.content)
+Long context prompting
+When working with large documents or data-rich inputs (20k+ tokens), structure your prompt carefully to get the best results:
+
+Put longform data at the top: Place your long documents and inputs near the top of your prompt, above your query, instructions, and examples. This can significantly improve performance across all models.
+
+Queries at the end can improve response quality by up to 30% in tests, especially with complex, multi-document inputs.
+Structure document content and metadata with XML tags: When using multiple documents, wrap each document in <document> tags with <document_content> and <source> (and other metadata) subtags for clarity.
+
+
+Example multi-document structure
+Ground responses in quotes: For long document tasks, ask Claude to quote relevant parts of the documents first before carrying out its task. This helps Claude cut through the noise of the rest of the document's contents.
+
+
+Example quote extraction
+Model self-knowledge
+If you would like Claude to identify itself correctly in your application or use specific API strings:
+
+Sample prompt for model identity
+The assistant is Claude, created by Anthropic. The current model is Claude Opus 4.8.
+For LLM-powered apps that need to specify model strings:
+
+Sample prompt for model string
+When an LLM is needed, please default to Claude Opus 4.8 unless the user requests otherwise. The exact model string for Claude Opus 4.8 is claude-opus-4-8.
+Output and formatting
+Communication style and verbosity
+Claude's latest models have a more concise and natural communication style compared to previous models:
+
+More direct and grounded: Provides fact-based progress reports rather than self-celebratory updates
+More conversational: Slightly more fluent and colloquial, less machine-like
+Less verbose: May skip detailed summaries for efficiency unless prompted otherwise
+This means Claude may skip verbal summaries after tool calls, jumping directly to the next action. If you prefer more visibility into its reasoning:
+
+Sample prompt
+After completing a task that involves tool use, provide a quick summary of the work you've done.
+Control the format of responses
+There are a few particularly effective ways to steer output formatting:
+
+Tell Claude what to do instead of what not to do
+
+Instead of: "Do not use markdown in your response"
+Try: "Your response should be composed of smoothly flowing prose paragraphs."
+Use XML format indicators
+
+Try: "Write the prose sections of your response in <smoothly_flowing_prose_paragraphs> tags."
+Match your prompt style to the desired output
+
+The formatting style used in your prompt may influence Claude's response style. If you are still experiencing steerability issues with output formatting, try matching your prompt style to your desired output style as closely as possible. For example, removing markdown from your prompt can reduce the volume of markdown in the output.
+
+Use detailed prompts for specific formatting preferences
+
+For more control over markdown and formatting usage, provide explicit guidance:
+
+Sample prompt to minimize markdown
+<avoid_excessive_markdown_and_bullet_points>
+When writing reports, documents, technical explanations, analyses, or any long-form content, write in clear, flowing prose using complete paragraphs and sentences. Use standard paragraph breaks for organization and reserve markdown primarily for `inline code`, code blocks (```...```), and simple headings (###, and ###). Avoid using **bold** and *italics*.
+
+DO NOT use ordered lists (1. ...) or unordered lists (*) unless : a) you're presenting truly discrete items where a list format is the best option, or b) the user explicitly requests a list or ranking
+
+Instead of listing items with bullets or numbers, incorporate them naturally into sentences. This guidance applies especially to technical writing. Using prose instead of excessive formatting will improve user satisfaction. NEVER output a series of overly short bullet points.
+
+Your goal is readable, flowing text that guides the reader naturally through ideas rather than fragmenting information into isolated points.
+</avoid_excessive_markdown_and_bullet_points>
+LaTeX output
+Claude's latest models default to LaTeX for mathematical expressions, equations, and technical explanations. If you prefer plain text, add the following instructions to your prompt:
+
+Sample prompt
+Format your response in plain text only. Do not use LaTeX, MathJax, or any markup notation such as \( \), $, or \frac{}{}. Write all math expressions using standard text characters (e.g., "/" for division, "*" for multiplication, and "^" for exponents).
+Document creation
+Claude's latest models excel at creating presentations, animations, and visual documents with impressive creative flair and strong instruction following. The models produce polished, usable output on the first try in most cases.
+
+For best results with document creation:
+
+Sample prompt
+Create a professional presentation on [topic]. Include thoughtful design elements, visual hierarchy, and engaging animations where appropriate.
+Migrating away from prefilled responses
+Starting with Claude 4.6 models and Claude Mythos Preview, prefilled responses on the last assistant turn are no longer supported. Requests with prefilled assistant messages to these models return a 400 error. Model intelligence and instruction following have advanced such that most use cases of prefill no longer require it. Earlier models continue to support prefills, and adding assistant messages elsewhere in the conversation is not affected.
+
+Here are common prefill scenarios and how to migrate away from them:
+
+
+Controlling output formatting
+
+Eliminating preambles
+
+Avoiding bad refusals
+
+Continuations
+
+Context hydration and role consistency
+Tool use
+Tool usage
+Claude's latest models are trained for precise instruction following and benefit from explicit direction to use specific tools. If you say "can you suggest some changes," Claude will sometimes provide suggestions rather than implementing them, even if making changes might be what you intended.
+
+For Claude to take action, be more explicit:
+
+
+Example: Explicit instructions
+To make Claude more proactive about taking action by default, you can add this to your system prompt:
+
+Sample prompt for proactive action
+<default_to_action>
+By default, implement changes rather than only suggesting them. If the user's intent is unclear, infer the most useful likely action and proceed, using tools to discover any missing details instead of guessing. Try to infer the user's intent about whether a tool call (e.g., file edit or read) is intended or not, and act accordingly.
+</default_to_action>
+On the other hand, if you want the model to be more hesitant by default, less prone to jumping straight into implementations, and only take action if requested, you can steer this behavior with a prompt like the below:
+
+Sample prompt for conservative action
+<do_not_act_before_instructions>
+Do not jump into implementation or change files unless clearly instructed to make changes. When the user's intent is ambiguous, default to providing information, doing research, and providing recommendations rather than taking action. Only proceed with edits, modifications, or implementations when the user explicitly requests them.
+</do_not_act_before_instructions>
+Claude Opus 4.5 and Claude Opus 4.6 are also more responsive to the system prompt than previous models. If your prompts were designed to reduce undertriggering on tools or skills, these models may now overtrigger. The fix is to dial back any aggressive language. Where you might have said "CRITICAL: You MUST use this tool when...", you can use more normal prompting like "Use this tool when...".
+
+Optimize parallel tool calling
+Claude's latest models excel at parallel tool execution. These models will:
+
+Run multiple speculative searches during research
+Read several files at once to build context faster
+Execute bash commands in parallel (which can even bottleneck system performance)
+This behavior is easily steerable. While the model has a high success rate in parallel tool calling without prompting, you can boost this to ~100% or adjust the aggression level:
+
+Sample prompt for maximum parallel efficiency
+<use_parallel_tool_calls>
+If you intend to call multiple tools and there are no dependencies between the tool calls, make all of the independent tool calls in parallel. Prioritize calling tools simultaneously whenever the actions can be done in parallel rather than sequentially. For example, when reading 3 files, run 3 tool calls in parallel to read all 3 files into context at the same time. Maximize use of parallel tool calls where possible to increase speed and efficiency. However, if some tool calls depend on previous calls to inform dependent values like the parameters, do NOT call these tools in parallel and instead call them sequentially. Never use placeholders or guess missing parameters in tool calls.
+</use_parallel_tool_calls>
+Sample prompt to reduce parallel execution
+Execute operations sequentially with brief pauses between each step to ensure stability.
+Thinking and reasoning
+Overthinking and excessive thoroughness
+Claude Opus 4.6 does significantly more upfront exploration than previous models, especially at higher effort settings. This initial work often helps to optimize the final results, but the model may gather extensive context or pursue multiple threads of research without being prompted. If your prompts previously encouraged the model to be more thorough, you should tune that guidance for Claude Opus 4.6:
+
+Replace blanket defaults with more targeted instructions. Instead of "Default to using [tool]," add guidance like "Use [tool] when it would enhance your understanding of the problem."
+Remove over-prompting. Tools that undertriggered in previous models are likely to trigger appropriately now. Instructions like "If in doubt, use [tool]" will cause overtriggering.
+Use effort as a fallback. If Claude continues to be overly aggressive, use a lower setting for effort.
+In some cases, Claude Opus 4.6 may think extensively, which can inflate thinking tokens and slow down responses. If this behavior is undesirable, you can add explicit instructions to constrain its reasoning, or you can lower the effort setting to reduce overall thinking and token usage.
+
+Sample prompt
+When you're deciding how to approach a problem, choose an approach and commit to it. Avoid revisiting decisions unless you encounter new information that directly contradicts your reasoning. If you're weighing two approaches, pick one and see it through. You can always course-correct later if the chosen approach fails.
+If you need a hard ceiling on thinking costs, extended thinking with a budget_tokens cap is still functional on Opus 4.6 and Sonnet 4.6 but is deprecated. Prefer lowering the effort setting or using max_tokens as a hard limit with adaptive thinking.
+
+Leverage thinking & interleaved thinking capabilities
+Claude's latest models offer thinking capabilities that can be especially helpful for tasks involving reflection after tool use or complex multi-step reasoning. You can guide its initial or interleaved thinking for better results.
+
+Claude Opus 4.6 and Claude Sonnet 4.6 use adaptive thinking (thinking: {type: "adaptive"}), where Claude dynamically decides when and how much to think. Claude calibrates its thinking based on two factors: the effort parameter and query complexity. Higher effort elicits more thinking, and more complex queries do the same. On easier queries that don't require thinking, the model responds directly. In internal evaluations, adaptive thinking reliably drives better performance than extended thinking. Consider moving to adaptive thinking to get the most intelligent responses.
+
+Use adaptive thinking for workloads that require agentic behavior such as multi-step tool use, complex coding tasks, and long-horizon agent loops. Older models use manual thinking mode with budget_tokens.
+
+You can guide Claude's thinking behavior:
+
+Example prompt
+After receiving tool results, carefully reflect on their quality and determine optimal next steps before proceeding. Use your thinking to plan and iterate based on this new information, and then take the best next action.
+The triggering behavior for adaptive thinking is promptable. If you find the model thinking more often than you'd like, which can happen with large or complex system prompts, add guidance to steer it:
+
+Sample prompt
+Extended thinking adds latency and should only be used when it will meaningfully improve answer quality - typically for problems that require multi-step reasoning. When in doubt, respond directly.
+If you are migrating from extended thinking with budget_tokens, replace your thinking configuration and move budget control to effort:
+
+Before (extended thinking, older models):
+
+Python
+client.messages.create(
+    model="claude-sonnet-4-5-20250929",
+    max_tokens=64000,
+    thinking={"type": "enabled", "budget_tokens": 32000},
+    messages=[{"role": "user", "content": "..."}],
+)
+After (adaptive thinking):
+
+Python
+client.messages.create(
+    model="claude-opus-4-8",
+    max_tokens=64000,
+    thinking={"type": "adaptive"},
+    output_config={"effort": "high"},  # or "max", "xhigh", "medium", "low"
+    messages=[{"role": "user", "content": "..."}],
+)
+If you are not using extended thinking, no changes are required. Thinking is off by default when you omit the thinking parameter.
+
+Prefer general instructions over prescriptive steps. A prompt like "think thoroughly" often produces better reasoning than a hand-written step-by-step plan. Claude's reasoning frequently exceeds what a human would prescribe.
+Multishot examples work with thinking. Use <thinking> tags inside your few-shot examples to show Claude the reasoning pattern. It will generalize that style to its own extended thinking blocks.
+Manual CoT as a fallback. When thinking is off, you can still encourage step-by-step reasoning by asking Claude to think through the problem. Use structured tags like <thinking> and <answer> to cleanly separate reasoning from the final output.
+Ask Claude to self-check. Append something like "Before you finish, verify your answer against [test criteria]." This catches errors reliably, especially for coding and math.
+When extended thinking is disabled, Claude Opus 4.5 is particularly sensitive to the word "think" and its variants. Consider using alternatives like "consider," "evaluate," or "reason through" in those cases.
+For more information on thinking capabilities, see Extended thinking and Adaptive thinking.
+
+Agentic systems
+Long-horizon reasoning and state tracking
+Claude's latest models excel at long-horizon reasoning tasks with exceptional state tracking capabilities. Claude maintains orientation across extended sessions by focusing on incremental progress, making steady advances on a few things at a time rather than attempting everything at once. This capability especially emerges over multiple context windows or task iterations, where Claude can work on a complex task, save the state, and continue with a fresh context window.
+
+Context awareness and multi-window workflows
+Claude 4.6 and Claude 4.5 models feature context awareness, enabling the model to track its remaining context window (i.e. "token budget") throughout a conversation. This enables Claude to execute tasks and manage context more effectively by understanding how much space it has to work.
+
+Managing context limits:
+
+If you are using Claude in an agent harness that compacts context or allows saving context to external files (like in Claude Code), consider adding this information to your prompt so Claude can behave accordingly. Otherwise, Claude may sometimes naturally try to wrap up work as it approaches the context limit. Below is an example prompt:
+
+Sample prompt
+Your context window will be automatically compacted as it approaches its limit, allowing you to continue working indefinitely from where you left off. Therefore, do not stop tasks early due to token budget concerns. As you approach your token budget limit, save your current progress and state to memory before the context window refreshes. Always be as persistent and autonomous as possible and complete tasks fully, even if the end of your budget is approaching. Never artificially stop any task early regardless of the context remaining.
+The memory tool pairs naturally with context awareness for seamless context transitions.
+
+Multi-context window workflows
+For tasks spanning multiple context windows:
+
+Use a different prompt for the very first context window: Use the first context window to set up a framework (write tests, create setup scripts), then use future context windows to iterate on a todo-list.
+
+Have the model write tests in a structured format: Ask Claude to create tests before starting work and keep track of them in a structured format (e.g., tests.json). This leads to better long-term ability to iterate. Remind Claude of the importance of tests: "It is unacceptable to remove or edit tests because this could lead to missing or buggy functionality."
+
+Set up quality of life tools: Encourage Claude to create setup scripts (e.g., init.sh) to gracefully start servers, run test suites, and linters. This prevents repeated work when continuing from a fresh context window.
+
+Starting fresh vs compacting: When a context window is cleared, consider starting with a brand new context window rather than using compaction. Claude's latest models are extremely effective at discovering state from the local filesystem. In some cases, you may want to take advantage of this over compaction. Be prescriptive about how it should start:
+
+"Call pwd; you can only read and write files in this directory."
+"Review progress.txt, tests.json, and the git logs."
+"Manually run through a fundamental integration test before moving on to implementing new features."
+Provide verification tools: As the length of autonomous tasks grows, Claude needs to verify correctness without continuous human feedback. Tools like Playwright MCP server or computer use capabilities for testing UIs are helpful.
+
+Encourage complete usage of context: Prompt Claude to efficiently complete components before moving on:
+
+Sample prompt
+This is a very long task, so it may be beneficial to plan out your work clearly. It's encouraged to spend your entire output context working on the task - just make sure you don't run out of context with significant uncommitted work. Continue working systematically until you have completed this task.
+State management best practices
+Use structured formats for state data: When tracking structured information (like test results or task status), use JSON or other structured formats to help Claude understand schema requirements
+Use unstructured text for progress notes: Freeform progress notes work well for tracking general progress and context
+Use git for state tracking: Git provides a log of what's been done and checkpoints that can be restored. Claude's latest models perform especially well in using git to track state across multiple sessions.
+Emphasize incremental progress: Explicitly ask Claude to keep track of its progress and focus on incremental work
+
+Example: State tracking
+Balancing autonomy and safety
+Without guidance, Claude Opus 4.6 may take actions that are difficult to reverse or affect shared systems, such as deleting files, force-pushing, or posting to external services. If you want Claude Opus 4.6 to confirm before taking potentially risky actions, add guidance to your prompt:
+
+Sample prompt
+Consider the reversibility and potential impact of your actions. You are encouraged to take local, reversible actions like editing files or running tests, but for actions that are hard to reverse, affect shared systems, or could be destructive, ask the user before proceeding.
+
+Examples of actions that warrant confirmation:
+- Destructive operations: deleting files or branches, dropping database tables, rm -rf
+- Hard to reverse operations: git push --force, git reset --hard, amending published commits
+- Operations visible to others: pushing code, commenting on PRs/issues, sending messages, modifying shared infrastructure
+
+When encountering obstacles, do not use destructive actions as a shortcut. For example, don't bypass safety checks (e.g. --no-verify) or discard unfamiliar files that may be in-progress work.
+Research and information gathering
+Claude's latest models demonstrate exceptional agentic search capabilities and can find and synthesize information from multiple sources effectively. For optimal research results:
+
+Provide clear success criteria: Define what constitutes a successful answer to your research question
+
+Encourage source verification: Ask Claude to verify information across multiple sources
+
+For complex research tasks, use a structured approach:
+
+Sample prompt for complex research
+Search for this information in a structured way. As you gather data, develop several competing hypotheses. Track your confidence levels in your progress notes to improve calibration. Regularly self-critique your approach and plan. Update a hypothesis tree or research notes file to persist information and provide transparency. Break down this complex research task systematically.
+This structured approach allows Claude to find and synthesize virtually any piece of information and iteratively critique its findings, no matter the size of the corpus.
+
+Subagent orchestration
+Claude's latest models demonstrate significantly improved native subagent orchestration capabilities. These models can recognize when tasks would benefit from delegating work to specialized subagents and do so proactively without requiring explicit instruction.
+
+To take advantage of this behavior:
+
+Ensure well-defined subagent tools: Have subagent tools available and described in tool definitions
+Let Claude orchestrate naturally: Claude will delegate appropriately without explicit instruction
+Watch for overuse: Claude Opus 4.6 has a strong predilection for subagents and may spawn them in situations where a simpler, direct approach would suffice. For example, the model may spawn subagents for code exploration when a direct grep call is faster and sufficient.
+If you're seeing excessive subagent use, add explicit guidance about when subagents are and aren't warranted:
+
+Sample prompt for subagent usage
+Use subagents when tasks can run in parallel, require isolated context, or involve independent workstreams that don't need to share state. For simple tasks, sequential operations, single-file edits, or tasks where you need to maintain context across steps, work directly rather than delegating.
+Chain complex prompts
+With adaptive thinking and subagent orchestration, Claude handles most multi-step reasoning internally. Explicit prompt chaining (breaking a task into sequential API calls) is still useful when you need to inspect intermediate outputs or enforce a specific pipeline structure.
+
+The most common chaining pattern is self-correction: generate a draft → have Claude review it against criteria → have Claude refine based on the review. Each step is a separate API call so you can log, evaluate, or branch at any point.
+
+Reduce file creation in agentic coding
+Claude's latest models may sometimes create new files for testing and iteration purposes, particularly when working with code. This approach allows Claude to use files, especially python scripts, as a 'temporary scratchpad' before saving its final output. Using temporary files can improve outcomes particularly for agentic coding use cases.
+
+If you'd prefer to minimize net new file creation, you can instruct Claude to clean up after itself:
+
+Sample prompt
+If you create any temporary new files, scripts, or helper files for iteration, clean up these files by removing them at the end of the task.
+Overeagerness
+Claude Opus 4.5 and Claude Opus 4.6 have a tendency to overengineer by creating extra files, adding unnecessary abstractions, or building in flexibility that wasn't requested. If you're seeing this undesired behavior, add specific guidance to keep solutions minimal.
+
+For example:
+
+Sample prompt to minimize overengineering
+Avoid over-engineering. Only make changes that are directly requested or clearly necessary. Keep solutions simple and focused:
+
+- Scope: Don't add features, refactor code, or make "improvements" beyond what was asked. A bug fix doesn't need surrounding code cleaned up. A simple feature doesn't need extra configurability.
+
+- Documentation: Don't add docstrings, comments, or type annotations to code you didn't change. Only add comments where the logic isn't self-evident.
+
+- Defensive coding: Don't add error handling, fallbacks, or validation for scenarios that can't happen. Trust internal code and framework guarantees. Only validate at system boundaries (user input, external APIs).
+
+- Abstractions: Don't create helpers, utilities, or abstractions for one-time operations. Don't design for hypothetical future requirements. The right amount of complexity is the minimum needed for the current task.
+Avoid focusing on passing tests and hard-coding
+Claude can sometimes focus too heavily on making tests pass at the expense of more general solutions, or may use workarounds like helper scripts for complex refactoring instead of using standard tools directly. To prevent this behavior and ensure robust, generalizable solutions:
+
+Sample prompt
+Please write a high-quality, general-purpose solution using the standard tools available. Do not create helper scripts or workarounds to accomplish the task more efficiently. Implement a solution that works correctly for all valid inputs, not just the test cases. Do not hard-code values or create solutions that only work for specific test inputs. Instead, implement the actual logic that solves the problem generally.
+
+Focus on understanding the problem requirements and implementing the correct algorithm. Tests are there to verify correctness, not to define the solution. Provide a principled implementation that follows best practices and software design principles.
+
+If the task is unreasonable or infeasible, or if any of the tests are incorrect, please inform me rather than working around them. The solution should be robust, maintainable, and extendable.
+Minimizing hallucinations in agentic coding
+Claude's latest models are less prone to hallucinations and give more accurate, grounded, intelligent answers based on the code. To encourage this behavior even more and minimize hallucinations:
+
+Sample prompt
+<investigate_before_answering>
+Never speculate about code you have not opened. If the user references a specific file, you MUST read the file before answering. Make sure to investigate and read relevant files BEFORE answering questions about the codebase. Never make any claims about code before investigating unless you are certain of the correct answer - give grounded and hallucination-free answers.
+</investigate_before_answering>
+Capability-specific tips
+Improved vision capabilities
+Claude Opus 4.5 and Claude Opus 4.6 have improved vision capabilities compared to previous Claude models. They perform better on image processing and data extraction tasks, particularly when there are multiple images present in context. These improvements carry over to computer use, where the models can more reliably interpret screenshots and UI elements. You can also use these models to analyze videos by breaking them up into frames.
+
+One technique that has proven effective to further boost performance is to give Claude a crop tool or skill. Testing has shown consistent uplift on image evaluations when Claude is able to "zoom" in on relevant regions of an image. Anthropic has created a cookbook for the crop tool.
+
+Frontend design
+Claude Opus 4.5 and Claude Opus 4.6 excel at building complex, real-world web applications with strong frontend design. However, without guidance, models can default to generic patterns that create what users call the "AI slop" aesthetic. To create distinctive, creative frontends that surprise and delight:
+
+For a detailed guide on improving frontend design, see the blog post on improving frontend design through skills.
+
+Here's a system prompt snippet you can use to encourage better frontend design:
+
+Sample prompt for frontend aesthetics
+<frontend_aesthetics>
+You tend to converge toward generic, "on distribution" outputs. In frontend design, this creates what users call the "AI slop" aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.
+
+Focus on:
+- Typography: Choose fonts that are beautiful, unique, and interesting. Avoid generic fonts like Arial and Inter; opt instead for distinctive choices that elevate the frontend's aesthetics.
+- Color & Theme: Commit to a cohesive aesthetic. Use CSS variables for consistency. Dominant colors with sharp accents outperform timid, evenly-distributed palettes. Draw from IDE themes and cultural aesthetics for inspiration.
+- Motion: Use animations for effects and micro-interactions. Prioritize CSS-only solutions for HTML. Use Motion library for React when available. Focus on high-impact moments: one well-orchestrated page load with staggered reveals (animation-delay) creates more delight than scattered micro-interactions.
+- Backgrounds: Create atmosphere and depth rather than defaulting to solid colors. Layer CSS gradients, use geometric patterns, or add contextual effects that match the overall aesthetic.
+
+Avoid generic AI-generated aesthetics:
+- Overused font families (Inter, Roboto, Arial, system fonts)
+- Clichéd color schemes (particularly purple gradients on white backgrounds)
+- Predictable layouts and component patterns
+- Cookie-cutter design that lacks context-specific character
+
+Interpret creatively and make unexpected choices that feel genuinely designed for the context. Vary between light and dark themes, different fonts, different aesthetics. You still tend to converge on common choices (Space Grotesk, for example) across generations. Avoid this: it is critical that you think outside the box!
+</frontend_aesthetics>
+You can also refer to the full skill definition.
+
+Migration considerations
+When migrating to Claude 4.6 models from earlier generations:
+
+Be specific about desired behavior: Consider describing exactly what you'd like to see in the output.
+
+Frame your instructions with modifiers: Adding modifiers that encourage Claude to increase the quality and detail of its output can help better shape Claude's performance. For example, instead of "Create an analytics dashboard", use "Create an analytics dashboard. Include as many relevant features and interactions as possible. Go beyond the basics to create a fully-featured implementation."
+
+Request specific features explicitly: Animations and interactive elements should be requested explicitly when desired.
+
+Update thinking configuration: Claude 4.6 models use adaptive thinking (thinking: {type: "adaptive"}) instead of manual thinking with budget_tokens. Use the effort parameter to control thinking depth.
+
+Migrate away from prefilled responses: Prefilled responses on the last assistant turn are no longer supported starting with Claude 4.6 models. See Migrating away from prefilled responses for detailed guidance on alternatives.
+
+Tune anti-laziness prompting: If your prompts previously encouraged the model to be more thorough or use tools more aggressively, dial back that guidance. Claude 4.6 models are significantly more proactive and may overtrigger on instructions that were needed for previous models.
+
+For detailed migration steps, see the Migration guide.
+
+Migrating from Claude Sonnet 4.5 to Claude Sonnet 4.6
+Claude Sonnet 4.6 defaults to an effort level of high, in contrast to Claude Sonnet 4.5 which had no effort parameter. Consider adjusting the effort parameter as you migrate from Claude Sonnet 4.5 to Claude Sonnet 4.6. If not explicitly set, you may experience higher latency with the default effort level.
+
+Recommended effort settings:
+
+Medium for most applications
+Low for high-volume or latency-sensitive workloads
+Set a large max output token budget (64k tokens recommended) at medium or high effort to give the model room to think and act
+When to use Opus 4.8 instead: For the hardest, longest-horizon problems (large-scale code migrations, deep research, extended autonomous work), Opus 4.8 remains the right choice. Sonnet 4.6 is optimized for workloads where fast turnaround and cost efficiency matter most.
+
+If you're not using extended thinking
+If you're not using extended thinking on Claude Sonnet 4.5, you can continue without it on Claude Sonnet 4.6. You should explicitly set effort to the level appropriate for your use case. At low effort with thinking disabled, you can expect similar or better performance relative to Claude Sonnet 4.5 with no extended thinking.
+
+Python
+client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=8192,
+    thinking={"type": "disabled"},
+    output_config={"effort": "low"},
+    messages=[{"role": "user", "content": "..."}],
+)
+If you're using extended thinking
+If you're using extended thinking with budget_tokens on Claude Sonnet 4.5, it is still functional on Claude Sonnet 4.6 but is deprecated. Migrate to adaptive thinking with the effort parameter.
+
+Migrating to adaptive thinking
+Adaptive thinking is particularly well suited to the following workload patterns:
+
+Autonomous multi-step agents: coding agents that turn requirements into working software, data analysis pipelines, and bug finding where the model runs independently across many steps. Adaptive thinking lets the model calibrate its reasoning per step, staying on path over longer trajectories. For these workloads, start at high effort. If latency or token usage is a concern, scale down to medium.
+Computer use agents: Claude Sonnet 4.6 achieved best-in-class accuracy on computer use evaluations using adaptive mode.
+Bimodal workloads: a mix of easy and hard tasks where adaptive skips thinking on simple queries and reasons deeply on complex ones.
+When using adaptive thinking, evaluate medium and high effort on your tasks. The right level depends on your workload's tradeoff between quality, latency, and token usage.
+
+Python
+client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=64000,
+    thinking={"type": "adaptive"},
+    output_config={"effort": "high"},
+    messages=[{"role": "user", "content": "..."}],
+)
+Keeping budget_tokens during migration
+If you need to keep budget_tokens temporarily while migrating, a budget around 16k tokens provides headroom for harder problems without risk of runaway token usage. This configuration is deprecated and will be removed in a future model release.
+
+For coding use cases (agentic coding, tool-heavy workflows, code generation), start with medium effort:
+
+Python
+client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=16384,
+    thinking={"type": "enabled", "budget_tokens": 16384},
+    output_config={"effort": "medium"},
+    messages=[{"role": "user", "content": "..."}],
+)
+For chat and non-coding use cases (chat, content generation, search, classification), start with low effort:
+
+Python
+client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=8192,
+    thinking={"type": "enabled", "budget_tokens": 16384},
+    output_config={"effort": "low"},
+    messages=[{"role": "user", "content": "..."}],
+)
+Was this page helpful?
+
+
+Solutions
+AI agents
+Code modernization
+Coding
+Customer support
+Education
+Financial services
+Government
+Life sciences
+Partners
+Amazon Bedrock
+Google Cloud's Vertex AI
+Company
+Anthropic
+Careers
+Economic Futures
+Research
+News
+Responsible Scaling Policy
+Security and compliance
+Transparency
+Learn
+Blog
+Courses
+Use cases
+Connectors
+Customer stories
+Engineering at Anthropic
+Events
+Powered by Claude
+Service partners
+Startups program
+Help and security
+Availability
+Status
+Support
+Discord
+Terms and policies
+Privacy policy
+Responsible disclosure policy
+Terms of service: Commercial
+Terms of service: Consumer
+Usage policy
+
+Ask Docs
+Chat avatar
+How-to-Build-AI-Agents
+How to Build AI Agents
+
+A practical guide for developers
+
+From the simplest workflow that works to production-grade autonomy. What actually matters in 2026, and what to skip.
+
+Last updated: May 2026
+
+Contents
+
+
+
+
+Most teams that set out to build an AI agent end up with one of two things: a chatbot with extra steps, or a fragile autonomous system that demos beautifully and falls apart in production. This guide is about avoiding both. It walks through what an agent actually is, the building blocks, how to choose between writing your own loop and adopting a framework, and the unglamorous reliability work that decides whether your agent ships or stays a prototype.
+
+The good news for 2026: the models are good enough. The difference between an agent that works and one that doesn't is rarely the model you pick. It is the system you build around it.
+
+1. Agent, chatbot, or workflow?
+Before writing any code, get the category right, because it changes everything downstream.
+
+Chatbot. You ask, it answers. It waits for input and responds to a single turn. No initiative, no actions in the world.
+Workflow. A predefined sequence of steps, some of which call a model. The control flow is written by you, in code. The model fills in specific blanks, but it does not decide what happens next.
+Agent. The model decides what to do next at runtime. It plans, calls tools, observes results, and loops until the goal is met or it gives up. The control flow is dynamic and chosen by the model, not hardcoded by you.
+This distinction, popularized by Anthropic's writing on effective agents, is the single most useful idea in the space. Both workflows and agents are legitimate. They differ in who owns the control flow: your code, or the model. Workflows are predictable and easy to debug. Agents are flexible but harder to reason about. Most production systems that people proudly call agents are actually workflows, and that is usually the right choice.
+
+2. The real bottleneck is the harness, not the model
+A popular shorthand is that an agent is just an LLM, plus tools, plus a loop. That definition is true but misleading, because it leaves out memory, planning, context, and guardrails, which are exactly the parts that separate agents that ship from agents that only demo.
+
+A useful mental model: the model is the brain, and the harness is the body. The harness is everything you build around the model: how you assemble what it sees each turn, the tools you expose, how you store and retrieve memory, how you cap runaway behavior, and how you measure quality. In 2026 this work has its own name, agent engineering, and it is where most of your time will go.
+
+The biggest shift in the last two years is from prompt engineering to context engineering. The wording of a single prompt matters far less than the full set of information the model sees on each turn: retrieved facts, prior results, tool outputs, and constraints. Get the context right and an average prompt works. Get it wrong and no amount of prompt wordsmithing saves you.
+
+3. Start simpler than you think
+There is a spectrum of agentic systems, from fully deterministic to fully autonomous. Reach for the simplest pattern that solves your problem, and only add autonomy when a simpler pattern genuinely cannot do the job. Every step toward autonomy buys flexibility and costs predictability.
+
+Pattern
+
+What it is
+
+Reach for it when
+
+Single prompt
+
+One model call with good context. No tools, no loop.
+
+The task is one well-defined step, like classification or drafting.
+
+Prompt chain
+
+Output of one call feeds the next, in a fixed order.
+
+The task breaks into clear sequential stages you can name in advance.
+
+Routing
+
+A classifier sends input to one of several specialized paths.
+
+Inputs fall into distinct categories needing different handling.
+
+Parallelization
+
+Run several calls at once, then aggregate or vote.
+
+Subtasks are independent, or you want multiple takes on one problem.
+
+Orchestrator-worker
+
+A lead model breaks work into subtasks and delegates them.
+
+Subtasks are not known up front and must be decided at runtime.
+
+Autonomous agent
+
+The model loops freely with tools until the goal is met.
+
+The path is open-ended and genuinely cannot be pre-scripted.
+
+A rule of thumb: if you can draw the flowchart in advance, build a workflow. If the flowchart depends on what the model discovers along the way, you need an agent.
+
+4. The building blocks of an agent
+Every real agent is assembled from five parts. Learning to think in these terms makes any framework or codebase easier to read.
+
+Model. The reasoning engine. Claude, GPT, Gemini, or an open model such as Llama or Qwen. Pick for capability and cost, but treat it as swappable.
+Loop. The control structure that lets the model act, observe the result, and act again. Without a loop you have a single call, not an agent.
+Tools. Functions the model can call to do things: search the web, query a database, run code, hit an API, send a message. Tools are how the agent affects the world.
+Memory. Short-term memory holds the current task context. Long-term memory persists facts and past results across sessions, often in a vector store or plain files.
+Context. What you actually place in the model's window each turn. This is assembled, not given, and managing it well is most of the job.
+5. The agent loop, step by step
+The most common and most reliable starting pattern is ReAct, short for Reasoning and Acting. It remains the default base loop in 2026 because it is simple, well supported, and teaches you the fundamentals. The loop runs like this:
+
+Receive the goal. The user states what they want. You add it to the context along with your system instructions and the list of available tools.
+Reason. The model thinks about the next step given everything it can see.
+Act. The model either calls a tool with specific arguments or decides it is finished.
+Observe. You run the tool, capture the result, and add that result back into the context.
+Repeat. Go back to the reasoning step with the new information. Continue until the model produces a final answer or you hit a stopping condition.
+That is the whole engine. Everything else is refinement: better tools, smarter context assembly, memory, and the safety rails in section 10. Writing this loop yourself once, even in fifty lines, teaches you more than any framework tutorial.
+
+6. Build it yourself or use a framework?
+This is the decision people agonize over most. The honest answer: write the loop yourself first so you understand it, then adopt a framework only when you feel real pain that the framework removes.
+
+Rolling your own means calling the model SDK directly, defining tools as plain functions, and writing the loop. You get full transparency and no lock-in. The cost is that you build orchestration, retries, and state handling yourself.
+
+Using a framework gives you prebuilt orchestration, state management, and multi-agent plumbing. The cost is a learning curve, some magic you cannot see, and occasional lock-in. The leading options in 2026:
+
+Framework
+
+Best for
+
+Main tradeoff
+
+LangGraph
+
+Complex flows with branching and loops, modeled as an explicit graph you can inspect and debug.
+
+More setup than simple agents need.
+
+CrewAI
+
+Role-based teams of agents that collaborate, with an approachable mental model.
+
+Less fine-grained control over execution.
+
+AutoGen
+
+Asynchronous, conversational multi-agent coordination.
+
+Can get complex fast for simple jobs.
+
+OpenAI Agents SDK
+
+Clean, opinionated single and multi-agent apps using the handoff pattern.
+
+Locked to OpenAI models, limited portability.
+
+Semantic Kernel
+
+Enterprise apps on the Microsoft and .NET stack.
+
+Heavier, oriented to large organizations.
+
+Whatever you choose, adopt the Model Context Protocol (MCP) for connecting tools and data sources. MCP has become the common standard for exposing tools to agents, which means you can reuse integrations instead of hand-wiring each one to each model.
+
+7. Tools are your highest-leverage investment
+An agent is only as good as the tools you give it. A capable model with badly designed tools will struggle on simple tasks, while a modest model with well-designed tools can be remarkably effective. Spend real time here. A few rules that pay off:
+
+Write tool descriptions for the model, not for you. Say plainly what the tool does, when to use it, and what each argument means. The model reads these descriptions to decide what to call.
+Return results the model can act on. Shape outputs into clean, relevant text or structured data. Do not dump raw API responses with fifty irrelevant fields.
+Make errors recoverable. When a tool fails, return a clear message the model can read and adjust to, rather than a stack trace or a silent failure.
+Keep the toolset small. Five sharp tools beat twenty overlapping ones. Too many choices make the model pick wrong.
+Prefer search then read. For information gathering, let the agent search, pick the best result, then fetch it. Do not let it guess URLs or addresses.
+8. Context engineering in practice
+Context is the model's entire view of the world on a given turn, and it is finite. Managing it well is the craft that most separates strong agents from weak ones. In practice this means:
+
+Curate, do not dump. Put in what the current step needs and leave out the rest. More context is not better. Irrelevant material actively degrades reasoning and raises cost.
+Retrieve selectively. Pull only the facts relevant to the task from memory or your knowledge base, rather than stuffing everything in.
+Compress history. On long runs, summarize earlier steps instead of carrying every raw message forward. This keeps the window focused and controls cost.
+Isolate context across sub-agents. When you split work across multiple agents, give each its own clean context so they do not pollute one another. This is exactly how systems like Claude Code and Cursor run subagents.
+9. When to use multiple agents
+Multi-agent setups are fashionable and frequently premature. A single well-built agent with good tools beats a fragile committee of agents that pass control around and lose the thread. Reach for multiple agents only when the work genuinely benefits from separation.
+
+The two patterns that hold up in production are orchestrator-worker, where a lead agent decomposes a task and delegates pieces to specialized workers, and the handoff pattern, where a triage agent routes to a specialist that can solve the request or pass it onward. Both work well up to a point. Past roughly eight to ten agent types, handoffs tend to become unwieldy and hard to debug. Add agents the way you would add microservices: reluctantly, and only when the boundaries are real.
+
+10. Making agents reliable
+This is the section everyone skips and later regrets. In 2026 the whole game is reliability. Proving an agent works could be done in 2025; making it work consistently is the current bar. Build these in from the start, not after launch.
+
+Write evaluations early. Build a test suite of real tasks with expected outcomes before you scale. Without evals you are tuning blind, and every change is a guess.
+Cap the loop. Set a maximum number of iterations. Agents get stuck in search-and-refine loops forever otherwise.
+Budget tokens and cost. Track spend per run and set hard limits. Runaway loops can quietly burn real money.
+Add guardrails. Validate inputs and outputs, restrict what tools can touch, and require human approval for sensitive or irreversible actions.
+Instrument everything. Log each step, tool call, and decision so that when a run goes wrong you can see why. Observability is not optional for systems that act on their own.
+Fail gracefully. Decide what the agent does when a tool errors or it cannot finish. Escalate to a human rather than guessing on high-stakes steps.
+11. A practical path to your first agent
+If you want a concrete order of operations, follow this:
+
+Pick one narrow, repetitive task you understand well, such as triaging support tickets or compiling a research brief.
+Ask whether a workflow would do. If you can script the steps, build that and stop here.
+If the task needs runtime decisions, write a minimal ReAct loop yourself against the model SDK.
+Add one tool at a time. Test after each. Resist the urge to add ten at once.
+Build a small eval set of real cases as soon as the agent does anything useful.
+Add memory only once you see the agent forgetting things it needs across turns.
+Add loop caps, cost limits, and guardrails before anyone but you uses it.
+Adopt a framework only when your hand-rolled version hits a wall the framework clearly solves.
+Consider a second agent only when one agent with good tools provably cannot do the job.
+12. Common pitfalls
+Building an autonomous agent when a workflow would be simpler, cheaper, and more reliable.
+Obsessing over prompt wording while ignoring what context the model actually receives.
+Giving the agent too many tools, or tools with vague descriptions and messy outputs.
+Shipping without evals, then having no way to tell if a change made things better or worse.
+Forgetting iteration and cost limits, then watching an agent loop forever.
+Reaching for multi-agent architectures before a single agent has been made to work.
+Letting the agent take irreversible actions, such as deletions or payments, without a human in the loop.
+Where to go next
+If you take one thing from this guide, make it this: build the smallest deterministic thing that works, invest in context and tool quality over model choice, and earn every increment of autonomy with an evaluation that proves it is safe to add.
+
+Good starting points for deeper reading are Anthropic's writing on building effective agents, the documentation for whichever framework you choose, and the Model Context Protocol specification for tool integration. Then build something small and real. The fastest way to understand agents is to ship one.
+
+
+This guide reflects the state of agent development as of May 2026. The tooling moves quickly; the principles move slowly.
+
+How to Build AI AgentsPageSkip to main content
+Evolving Reddit's Media Infrastructure : r/RedditEng
+
+
+r/RedditEng
+Search in ⁨r/RedditEng⁩
+Sign Up
+Log In
+
+Expand user menu
+Skip to NavigationSkip to Right Sidebar
+
+Back
+
+Go to RedditEng
+r/RedditEng
+•
+1y ago
+Okgaroo
+
+Evolving Reddit's Media Infrastructure
+Written by Saikrishna Bhagavatula
+
+TL;DR
+As Reddit’s media needs grew, it became clear that we had to move beyond the monolith and invest in a purpose-built media platform. This progression wasn’t just about better performance (though 3–5x faster APIs certainly helped); it was about giving teams the tools to move faster, experiment more freely, and reduce operational friction. Much like a toddler evolving into an organized kid requires structure, boundaries, and a lot of cleanup, this transformation took deliberate effort—rethinking APIs, isolating workflows, and consolidating metadata. The result: faster iteration, improved reliability, and a Media platform that feels more like a power tool than a pile of toys scattered across the floor—now powering features like images in comments, advanced media safety checks, dev platform apps with media support, and more.
+
+Background
+Media has always been a core part of Reddit’s user experience and infrastructure. Over time, the scope of media use cases has grown significantly from user-facing features like image and video posts, link previews, feeds, comments, chat, notifications, and ads, to other functions like safety, machine learning and ranking, developer platform, and data APIs.
+
+Initially, Reddit's media stack was part of a large python monolith, primarily built for serving posts, which made it difficult to innovate and optimize media-related features. Metadata for different media workflows was scattered across multiple database systems, each with unique data models and workflows. For example, creating a post containing only an image was done one way where-as creating a rich-text post containing an image was a completely different workflow, with a different data model stored in a completely different DB. 
+
+This fragmentation led to significant challenges in maintaining and scaling Reddit's media use-cases. To address these issues, Reddit prioritized migrating media workflows to a new, streamlined Media platform. The platform offers unified APIs, consolidates metadata management, and enhances reliability, performance and observability across various media use-cases. The transition was complex, and involved extensive planning and execution, including several iterative migrations to consolidate media data from legacy systems into a more cohesive structure. 
+
+Media Workflows in The Monolith
+r/RedditEng - Media creation and delivery in the monolith
+Media creation and delivery in the monolith
+API: Historically, there were no dedicated APIs for media operations beyond basic metadata retrieval. Media processing and business logic were embedded directly into the workflows for post submission and viewing.
+
+Metadata: The data model was tightly coupled with Posts, and each post type had unique use-cases. To complicate matters, media data spanned four tables across three different types of databases: Postgres, Cassandra, and Redis.
+
+Maintainability &  Developer experience - Due to the numerous dependencies on other entities, testing and iterating on media workflows was very challenging.
+
+Reliability, Performance & Observability: Observability was limited and measuring performance of the media workflows was difficult. Additionally, unrelated stability issues in the monolith also affected media workflows.
+
+Reorganizing our media workflows felt like cleaning up after a toddler’s playtime—creative chaos on the walls, surprises around every corner, building blocks waiting to trip you up, and an oddly rewarding mess to sort through. 
+
+Towards a Unified Media Platform
+Reddit’s Media platform is designed to provide simple CRUD APIs and event-driven integration points supporting both user-facing features and internal functions like safety actioning or data APIs. It directly integrates with the safety layer and also handles key security aspects, while ensuring efficient management of performance, metadata, analytics, and more. The key requirements for the platform were:
+
+Scalability for future use-cases and growth
+
+A simplified data model powered by a single database
+
+Consolidation and leveraging of resources across services
+
+Streamlined integration of safety checks (such as Reddit's P0 Media Safety Detection : r/RedditEng)  and adherence to security best practices
+
+Enable product teams to focus on innovation rather than performance concerns
+
+Enhanced developer experience through easy integration and testing of media workflow
+
+r/RedditEng - Media creation and delivery in the Media Platform
+Media creation and delivery in the Media Platform
+Components of the Media platform
+API Layer: The API layer handles authentication and request validation before either serving the request or enqueueing it for asynchronous processing. 
+
+Queuing system: Today, Redis-based queues are used to coordinate asynchronous media processing tasks.
+
+Workers: Separate Kubernetes deployments that pick up queued processing tasks. 
+
+Database & Cache: A single postgres DB with read replicas and a Redis cache handles all the metadata. 
+
+Sub-systems - Queue workers also forward requests to separate processing engines like Video Processing.
+
+The media platform also contains JIT delivery services like a media packager and image optimizer. The Media Service controls the parameters for the JIT services via URL parameters. 
+
+The media platform integrates with core infra services for authentication and permission validation (Auth Svc and Thing Service). 
+
+Execution
+Execution was broadly divided into four stages, with several parallel workstreams. The core idea was to initiate the new platform by rapidly exposing simple APIs. This approach allowed teams to begin integrating with a simpler system and launch features swiftly. Complexities and legacy interactions are managed behind this simple API, enabling the platform to be streamlined in subsequent iterations, while remaining invisible to the users.
+
+r/RedditEng - Evolving Reddit's Media Infrastructure
+Define
+
+The key notion of the system described above was to build a decoupled system where the Media layer primarily cared about the media_id and would handle the task of processing and serving the media based on this ID. 
+
+Consolidate 
+
+This stage focused on migrating read and write paths from other services into the media platform. While write/modify APIs had limited usage, the read path involved many services. We prioritized consolidating critical paths to achieve end-to-end functionality, accepting that some issues from the monolith would carry over in favor of maintaining momentum and expanding platform support. We started with three key use cases:
+
+API Activation: Read APIs were initially set up in pass-through mode to legacy systems, while write APIs were prepared with dual-writes and DB migration. This allowed us to bootstrap functionality without blocking integration efforts.
+
+Metadata consolidation: We prioritized migrating and removing a database that was heavily tied to the monolith, since its complexity made implementing dual-writes in the new service too costly.
+
+Video post creation:  Improving the video streaming experience was a priority, but progress was blocked by challenges involving the monolith. We introduced a new API within the media platform to handle video processing. 
+
+The above three projects naturally got the media platform enough usage and momentum that we were able to work with relevant teams to migrate remaining use-cases to the media platform. 
+
+Streamline 
+
+Once the monolith was mostly out of the picture for critical paths (like post creation and retrieval or ranking), we still had two DBs and some legacy APIs to deprecate. These migrations became a lot more tractable to iterate and optimize as it was mainly scoped within a single service. Eg. Getting to a single media metadata store required more migrations but was mainly scoped to the media service. 
+
+Enhance
+
+Adding new capabilities and continuous optimization is an ongoing process. As the platform matures, we regularly integrate new features and improve performance to meet evolving business needs and technical challenges.
+
+Challenges and Takeaways
+Transitioning away from the monolith taught us several valuable lessons along the way:
+
+Start with quick wins: We realized that it was important to move quickly, even if that required starting with temporary solutions. For example, dealing with the disorganized state of media metadata spread across three different DBs was a tough task. We learned that building a new Media Metadata Store based on Postgres, was critical to handling both current and future use-cases. The process of consolidating data required three major database migrations. We chose to first kill off the Cassandra dependency as that was the most closely coupled with the Legacy monolith. Instead of spending cycles building a new DB at the beginning, we migrated Cassandra data to the pre-existing Redis store to get the Media platform operational first. After this, we built the Media Metadata store and migrated the data from Postgres and Redis.
+
+Rethink workflows from the ground up: Moving away from the monolith meant we had to overhaul core workflows when moving to a more modular platform. The monolith’s tightly coupled workflows, such as post ID generation during media processing, needed a complete redesign.  
+
+Alpha launches to surface unknowns: Legacy services often posed challenges due to tightly coupled logic, poor documentation, and limited testing. To manage this, we broke the project into parallel workstreams, carefully tracking interdependencies with detailed designs.  We were able to quickly do alpha launches at a low traffic percentage to surface unknowns and iterate. 
+
+Avoid overly fragmented microservices: Earlier, a separate video post service was created to handle specific video features. However, as part of this effort, we consolidated it into the main post service for simplicity. We learned to balance breaking down the monolith with avoiding overly narrow microservices. Since experiments can evolve over time, it's often better to start with broader services and decompose them later as needed.
+
+Outcomes
+Achieved 3–5x faster APIs, utilizing Golang and a more performant database, resulting in p99 read latency of 20-40ms, compared to 100-130ms in the legacy systems.
+
+Onboarded and launched new media use cases within days, rather than weeks. For example, the Growth team experimenting with new video post formats saved several weeks of engineering time compared to integrating with the monolith.
+
+Expanded the use of Just-In-Time (JIT) image optimization to dynamically create and cache thumbnails at the CDN layer—replacing the previous method of pre-generating and pushing thumbnails to cloud storage.
+
+Developed end-to-end observability to track media creation bottlenecks, allowing for more effective planning and proactive resolution.
+
+Despite the high risks and extensive scope, most of the work caused minimal service disruption.
+
+Achieved better reliability by isolating media workflows from the monolith, which previously caused disruptions due to dependencies with other systems.
+
+Future work
+The Media platform is still a v1 platform. There’s a lot more work to streamline APIs for newer use-cases like ML training and inference, synchronous features based on AI, storage efficiency etc. Media delivery performance optimizations are also in the works. 
+
+If you like the challenges of building distributed systems and video streaming and are interested in building the Reddit Media Platform at scale, check out our job openings.
+
+
+Upvote
+91
+
+Downvote
+
+1
+Go to comments
+
+
+Share
+Join the conversation
+Sort by:
+
+Best
+
+Search Comments
+Expand comment search
+Comments Section
+New to Reddit?
+Create your account and connect with a world of communities.
+
+
+Continue with Phone Number
+By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy.
+Anybody else notice that Reddit went down for a little bit
+
+r/boykisserADULT
+•
+5mo ago
+Anybody else notice that Reddit went down for a little bit
+r/boykisserADULT - Anybody else notice that Reddit went down for a little bit
+50 upvotes · 9 comments
+Media literacy is completely dead
+
+r/TheLongWalk
+•
+4mo ago
+Media literacy is completely dead
+r/TheLongWalk - Media literacy is completely dead
+114 upvotes · 70 comments
+.WHAT.IS.A.("REDDIT").
+
+r/IHasAFaceLulz
+•
+5mo ago
+.WHAT.IS.A.("REDDIT").
+r/IHasAFaceLulz - .WHAT.IS.A.("REDDIT").
+253 upvotes · 50 comments
+Reddit
+
+r/ruleof4
+•
+1mo ago
+Reddit
+r/ruleof4 - Reddit
+29 upvotes · 39 comments
+Bro, what's up with reddit?
+
+r/fuckMAP
+•
+7mo ago
+Bro, what's up with reddit?
+r/fuckMAP - Bro, what's up with reddit?
+71 upvotes · 24 comments
+Reddit issues
+r/apollosideloaded
+•
+14d ago
+Reddit issues
+35 upvotes · 16 comments
+It's official - we can't share our thoughts on Reddit anymore 🎉
+
+r/mysteriousdownvoting
+•
+7d ago
+It's official - we can't share our thoughts on Reddit anymore 🎉
+r/mysteriousdownvoting - It's official - we can't share our thoughts on Reddit anymore 🎉
+3
+185 upvotes · 35 comments
+Can we just kill the pwned reddit
+
+r/PWNedBy1400
+•
+21d ago
+Can we just kill the pwned reddit
+r/PWNedBy1400 - Can we just kill the pwned reddit
+48 upvotes · 15 comments
+What are some good non-biased news sources and fact checking sites?
+
+r/independent
+•
+8mo ago
+What are some good non-biased news sources and fact checking sites?
+26 upvotes · 34 comments
+Reddit unveils new content moderation and analytics tools to boost user engagement (added article text below)
+
+r/redditstock
+•
+1y ago
+Reddit unveils new content moderation and analytics tools to boost user engagement (added article text below)
+r/redditstock - Reddit unveils new content moderation and analytics tools to boost user engagement (added article text below)
+reuters
+33 upvotes · 2 comments
+What happened to the old reddit?
+
+r/callmekevin2
+•
+5mo ago
+What happened to the old reddit?
+26 upvotes · 8 comments
+How to Boost SEO with Reddit's Growing Search Power
+
+r/MarketingGeek
+•
+1y ago
+How to Boost SEO with Reddit's Growing Search Power
+2 upvotes · 4 comments
+Understanding Reddit's Content Removal Process:
+
+r/VegasStrikes
+•
+1y ago
+Understanding Reddit's Content Removal Process:
+5 upvotes
+this has been fun but im bored of this website now so i am going to ban reddit from the internet
+
+r/nonsense
+•
+5d ago
+this has been fun but im bored of this website now so i am going to ban reddit from the internet
+16 upvotes · 64 comments
+Reddit in real life
+
+r/freakingoutFR
+•
+6mo ago
+Reddit in real life
+r/freakingoutFR - Reddit in real life
+0:49
+68 upvotes · 44 comments
+What is your opinion of this Reddit forum?
+
+r/deppVheardtrial
+•
+7d ago
+What is your opinion of this Reddit forum?
+r/deppVheardtrial - What is your opinion of this Reddit forum?
+30 upvotes · 137 comments
+Or Reddit
+
+r/nonduality
+•
+2mo ago
+Or Reddit
+r/nonduality - Or Reddit
+250 upvotes · 48 comments
+Do I lack media literacy guys?
+
+r/SadHorseShow
+•
+6mo ago
+Do I lack media literacy guys?
+r/SadHorseShow - Do I lack media literacy guys?
+3
+155 upvotes · 38 comments
+A look at why Twitter’s organic reach makes it the ultimate platform for SaaS and tech startups, way more valuable than Insta.
+r/Entrepreneurs
+•
+1y ago
+A look at why Twitter’s organic reach makes it the ultimate platform for SaaS and tech startups, way more valuable than Insta.
+Blockchain Startups That Changing Social Media Scene
+
+r/BlockchainStartups
+•
+1y ago
+Blockchain Startups That Changing Social Media Scene
+12 upvotes · 13 comments
+How To Make Reddit Lose Its Mind
+
+r/disneyvacation
+•
+8d ago
+How To Make Reddit Lose Its Mind
+r/disneyvacation - How To Make Reddit Lose Its Mind
+127 upvotes · 22 comments
+Reddit wide censorship at Play
+
+r/EndlessWar
+•
+3mo ago
+Reddit wide censorship at Play
+r/EndlessWar - Reddit wide censorship at Play
+40 upvotes · 6 comments
+Addressing Subreddit Toxicity; Planned changes and helping out content creators via the subreddit.
+
+r/thefinals
+•
+1y ago
+Addressing Subreddit Toxicity; Planned changes and helping out content creators via the subreddit.
+r/thefinals - Addressing Subreddit Toxicity; Planned changes and helping out content creators via the subreddit.
+411 upvotes · 854 comments
+How to make a difference on Reddit
+
+r/Fuckthealtright
+•
+4mo ago
+How to make a difference on Reddit
+30 upvotes · 8 comments
+Reddit is strangling us. It might be time to move on.
+
+r/EL_Radical
+•
+3mo ago
+Reddit is strangling us. It might be time to move on.
+113 upvotes · 16 comments
+Community Info Section
+r/RedditEng
+Join
+RedditEng
+Welcome to the Reddit Tech Blog. We'll be talking about how we contribute to Reddit's mission to bring community and belonging to everyone. Read about how we build stuff people love and what it's like to be part of our team. If you're interested in working with us, go to our careers page: https://www.redditinc.com/careers
+
+Show more
+Restricted
+Top Posts
+Reddit
+reReddit: Top posts of April 21, 2025
+Reddit
+reReddit: Top posts of April 2025
+Reddit
+reReddit: Top posts of 2025
+Reddit Rules
+Privacy Policy
+User Agreement
+Accessibility
+OSA Information
+Reddit, Inc. © 2026. All rights reserved.
+
+Collapse Navigation# Claude Code Agents
+
+> Follow ***@os.operator*** and ***@daviss.dev*** on Instagram for more guides like this.
+> 
+
+---
+
+## What This Is
+
+A working guide to running AI agents in your daily workflow - whether you use **Claude Desktop** (no terminal, no code) or **Claude Code** (CLI, full control). Agents have moved out of dev tools. As of April 2026, the same skills format works in both, plus Cursor, GitHub Copilot, Codex, Gemini CLI, and 20+ other tools.
+
+**What you'll get:**
+
+- What an agent actually is (in plain terms)
+- The loop every agent runs and why it matters
+- How to pick the right agent for the job
+- How to delegate and run multiple agents in parallel
+- Skills - the reusable playbooks that make agents consistents
+- 12 real use cases for non-developers and developers
+- Pro tips from running agents in production for clients
+- Where to start today, on whichever app you have
+
+---
+
+## Hook - Agents Left the Terminal
+
+For most of 2025, agentic AI was a developer thing. You needed a terminal, you needed to know what subagents and tool calls were, you needed permissions you weren't sure you wanted to grant.
+
+That ended on **April 9, 2026**, when Anthropic shipped **Cowork** - agent capabilities baked into the Claude Desktop app on macOS and Windows. It runs locally in an isolated VM, touches your files directly, integrates with your MCP servers, and handles multi-step tasks with a plan sidebar you can watch in real time. No code required.
+
+At the same time, Anthropic's **Agent Skills** standard (October 2025) got adopted across the industry. The exact same `SKILL.md` file you write for Claude Code now runs in Cursor, GitHub Copilot, Codex, Gemini CLI, and a growing list of 20+ platforms. GitHub launched `gh skill` in April 2026 - treating skills like npm treats packages.
+
+**Translation:** the same automation playbook now works whether you're a non-technical operator using Claude Desktop or a dev running Claude Code.
+
+---
+
+## Why It Matters
+
+Three concrete shifts:
+
+- **You don't pay 7x to run a single agent.** Parallel subagents (the power feature) consume ~7x the tokens of a single conversation. For solo tasks, that's overkill. For audits, research, and reviews across many files, it cuts wall-clock time by 50–70%.
+- **Skills compound.** Write a playbook once. Use it across every Claude app you own, every tool you adopt next. The investment doesn't lock you in.
+- **The work moves from prompting to building.** Stop typing 400-word prompts every time. Build a skill once, invoke it forever.
+
+---
+
+## Key Capabilities
+
+### The Agent Loop
+
+Every agent runs the same four-stage loop until it finishes:
+
+1. **Read context** - Pull files, configs, history, prior decisions
+2. **Plan** - Pick tools, write a task list, decide approach
+3. **Execute** - Run tools, make changes, write outputs
+4. **Evaluate** - Check results, verify, decide what's next
+
+You launch it. It runs until done. You don't supervise the steps.
+
+### Claude Desktop (Cowork) vs Claude Code - Honest Comparison
+
+- **Claude Desktop (Cowork)** - GA on macOS/Windows. Runs in an isolated local VM. Direct file access. MCP integrations. Plan sidebar shows the agent working. Scheduled tasks (recurring + on-demand). No terminal. Skills, plugins, connectors managed in the Customize section. **Best for:** knowledge work, document workflows, research, content, business operations.
+- **Claude Code** - Terminal-based. Full read/write/exec permissions you can opt into. Subagent system with the Task tool. Run dozens of agents in parallel. Built-in agents (Explore, Plan, general-purpose). Skills + plugins + MCP. **Best for:** code, deployments, repos, infrastructure, anything involving the file system at depth.
+
+**The honest line on permissions:** Claude Code can do things Cowork won't - modify your operating system, deploy code, change git history, run any shell command. That power cuts both ways. Cowork's VM sandbox is intentionally safer. If you don't need root-level access, Desktop is the right entry point.
+
+### Built-in Agents (Claude Code)
+
+- **Explore** - Read-only search agent. Runs on Haiku (cheap and fast). Can't write or edit. Use it to map a codebase, find references, locate files.
+- **Plan** - Architecture-focused. Returns a step-by-step plan before any code is touched. Use it for non-trivial features.
+- **general-purpose** - Default agent for multi-step tasks the parent doesn't want to handle inline.
+
+### Custom Subagents
+
+Define your own with a Markdown file + YAML frontmatter, or use the `/agents` command. Each one gets a custom system prompt, a specific tool subset, and its own context window. You can run many in parallel.
+
+### Skills
+
+A skill is a Markdown file (`SKILL.md`) with frontmatter that tells any compatible agent how to handle a specific task. One file, unlimited runs, consistent output every time.
+
+- Works in: Claude Code, Claude Desktop (Cowork), Cursor, GitHub Copilot, Codex, Gemini CLI, VS Code, 20+ more
+- Manage globally: `~/.claude/skills/` (works in every project)
+- Manage per-project: `.claude/skills/` (shared with collaborators)
+- Install community skills: `gh skill install <name>` (April 2026 onward)
+
+---
+
+## Use Cases
+
+### For Non-Developers (Claude Desktop / Cowork)
+
+**Inbox Triage**
+
+- *Who:* Anyone with a Gmail account and a Pro plan
+- *Setup:* Cowork + Gmail MCP connector
+- *Result:* Agent reads your inbox every morning, drafts replies to recurring threads, files everything else into labels you defined
+
+**Financial Statement Summary**
+
+- *Who:* Founders, finance ops, freelancers
+- *Setup:* Cowork + a folder of PDFs
+- *Result:* Agent reads all your bank/credit statements, categorizes spend, writes a monthly summary to a Notion page
+
+**Client Discovery Prep**
+
+- *Who:* Consultants, agencies, salespeople
+- *Setup:* Cowork + LinkedIn URL + a "prep brief" skill
+- *Result:* One prompt → full company research, talking points, and recommended questions before every call
+
+**Document Review at Scale**
+
+- *Who:* Legal ops, HR, contracts
+- *Setup:* Cowork + folder of contracts + a "compliance check" skill
+- *Result:* Agent reviews every contract against your checklist, flags missing clauses, exports a compliance report
+
+**Recurring Reports**
+
+- *Who:* Operations managers, executive assistants
+- *Setup:* Cowork scheduled task (new in April 2026)
+- *Result:* Weekly status report compiled from multiple sources, written to your standard template, dropped in your shared drive every Friday at 9am
+
+**Knowledge Base Q&A**
+
+- *Who:* Customer support, onboarding, internal ops
+- *Setup:* Cowork + your team's SOP folder + MCP filesystem connector
+- *Result:* Agent answers any internal question by grounding in your real docs, cites the source file every time
+
+### For Developers (Claude Code)
+
+**Multi-Repo Audit**
+
+- *Who:* Engineering leads, security teams
+- *Setup:* `/swarm` + custom audit skill
+- *Result:* 5 parallel agents audit 5 repos in parallel, each runs the same checklist, parent agent synthesizes one report
+
+**PR Review Pipeline**
+
+- *Who:* Teams shipping multiple PRs daily
+- *Setup:* `/review` skill + Task tool
+- *Result:* Same rubric on every PR. Same standard. Five reviews in the time one would normally take.
+
+**Test Coverage Generation**
+
+- *Who:* Solo devs, small teams catching tech debt
+- *Setup:* Custom subagent + `/test` skill
+- *Result:* Agent identifies untested code paths and writes tests matching your existing patterns
+
+**Codebase Mapping**
+
+- *Who:* Anyone joining a new project
+- *Setup:* `Task(subagent_type: Explore)`
+- *Result:* Architecture summary, key files, dependency map - all without consuming your main context window
+
+**Migration Work**
+
+- *Who:* Devs migrating frameworks, libraries, or model versions
+- *Setup:* Custom subagent with migration playbook
+- *Result:* Mechanical changes applied consistently across hundreds of files, with the parent agent verifying afterward
+
+**Production Deployment Checklist**
+
+- *Who:* Anyone shipping to prod alone
+- *Setup:* `/deploy-check` skill
+- *Result:* Type check, lint, build, secret scan, dependency audit, git status - all in parallel, full report before you push
+
+---
+
+## Pro Tips (from production work)
+
+**Run Explore before you run anything else.**
+
+Most agentic work fails because the parent agent skips context. Send Explore to map the relevant files first. The cost is tiny (Haiku) and the rest of the loop gets cleaner output.
+
+**Don't parallelize when you don't need to.**
+
+Subagents cost ~7x the tokens. If a task is sequential - read this, then edit that - parallel agents make it slower, not faster. Use parallel only when work is independent (5 PRs, 5 reports, 5 audits).
+
+**Write skills before you've done the task twice.**
+
+You won't. You'll do it five times before you finally codify it. Write the skill on attempt two. The next three times are free.
+
+**Skills with arrow bullets parse better than skills with dashes.**
+
+Markdown is markdown, but agents follow structure. Arrow lists make the agent's plan more reliable. Tested across multiple production skills.
+
+**Keep skills under 200 lines.**
+
+Long skills become unfocused playbooks the agent ignores half of. If it's bigger than 200 lines, it's two skills.
+
+**On Claude Desktop, use the plan sidebar to teach the agent.**
+
+When Cowork shows you the plan, edit it before it executes. The agent will follow your revised plan. Faster than rewriting the prompt.
+
+---
+
+## Limitations - Honest Caveats
+
+- **Token cost on parallel work is real.** Plan accordingly. A daily PR audit across 10 repos can hit $20+/day on Pro if you don't cap it.
+- **Cowork's VM sandbox can't do everything.** No system-level changes, no global installs, no rooting around in `/etc`. If you need that, use Claude Code.
+- **Skills aren't magic.** A bad playbook produces bad output every time. The first version of every skill is wrong. Iterate.
+- **MCP integrations vary in quality.** The official ones (Gmail, GitHub, Notion, Linear) are solid. Community MCPs range from great to abandoned. Check the last commit date before you depend on one.
+- **Scheduled tasks (Cowork) are new.** Powerful, but treat them like cron - test the agent runs end-to-end before relying on them.
+
+---
+
+## Quick Reference
+
+### Decision Matrix - Where Should I Run This?
+
+- **Code, repos, deployments, infrastructure** → Claude Code
+- **Documents, files, email, business workflows** → Claude Desktop (Cowork)
+- **Need to run a script or modify the OS** → Claude Code
+- **Want a sandbox, no terminal, plan sidebar** → Claude Desktop (Cowork)
+- **Recurring task, runs without you** → Claude Desktop (scheduled tasks)
+- **Multi-file research / audit / review** → Either, with subagents
+
+### Where Skills Live
+
+- Global skills (every project): `~/.claude/skills/`
+- Project skills (shared with team): `.claude/skills/`
+- Install from community: `gh skill install <name>`
+- View installed: `/skills` in chat
+
+### Pricing (current as of June 2026)
+
+- **Claude Free** - $0. Cowork access limited.
+- **Claude Pro** - $20/mo. Cowork full access. Most users start here.
+- **Claude Max** - $100–200/mo. Higher usage caps. Right for heavy daily use.
+- **Claude Team** - $30/user/mo. Admin controls, shared skills, plugin governance.
+- **Enterprise** - Custom. Org-wide skill management, audit logs.
+
+### Setup Checklist (Today)
+
+For Claude Desktop:
+
+1. Download Claude Desktop (macOS or Windows)
+2. Enable Cowork (Settings → Customize)
+3. Connect Gmail or Google Drive MCP
+4. Try: *"Read every email from the last 7 days. Summarize what needs my attention. Draft replies where obvious."*
+
+For Claude Code:
+
+1. Install: `npm install -g @anthropic-ai/claude-code`
+2. Run: `claude` in any project folder
+3. Try: *"Spawn 3 agents to audit my package.json, README, and CI config in parallel. Report findings."*
+
+---
+
+Built by **Operator OS** | operatoros.ai
+
+Follow @os.operator for production-grade AI guides.
+
+Comment **"Agent"** on the latest post.
+
+---
+
+**Sources used in research:**
+
+- Agent Skills - Claude API Docs
+- Anthropic launches Cowork - VentureBeat
+- Create custom subagents - Claude Code Docs
+- Use Agent Skills in VS Code
+- GitHub Copilot Agent Skills
+- gh skill CLI announcement
+Please cite our paper if you find our work valuable:
+
+@article{minicpm4,
+  title={Minicpm4: Ultra-efficient llms on end devices},
+  author={MiniCPM, Team},
+  journal={arXiv preprint arXiv:2506.07900},
+  year={2025}
+}
+
+Downloads last month
+45,698
+Safetensors
+Model size
+1B params
+Tensor type
+BF16
+
+Chat template
+
+
+Files info
+
+Inference Providers
+NEW
+Text Generation
+This model isn't deployed by any Inference Provider.
+🙋
+7
+Ask for provider support
+Model tree for
+openbmb/MiniCPM5-1B
+Adapters
+4 models
+Finetunes
+11 models
+Quantizations
+29 models
+Datasets used to train
+openbmb/MiniCPM5-1B
+openbmb/Ultra-FineWeb
+Viewer
+•
+Updated 5 days ago
+•
+1.29B
+•
+65.4k
+•
+353
+openbmb/UltraData-Math
+Viewer
+•
+Updated Apr 15
+•
+181M
+•
+37.8k
+•
+310
+openbmb/Ultra-FineWeb-L3
+Viewer
+•
+Updated 5 days ago
+•
+1.06B
+•
+32.5k
+•
+238
+Spaces using
+openbmb/MiniCPM5-1B
+10
+openbmb/MiniCPM5-1B-Demo
+⚡
+usermma/MiniCPM-5-Q4
+💬
+cb1c7/minicpm5-twitch-chat-style-space
+📉
+JymNils/MiniCPM5-1B-Demo
+⚡
+Reza2kn/MiniCPM5-1B-WebGPU
+🚀
+Mouli7/TestApp
+😻
+zhehuo/minicpm5-api
+🤗
+jazzisfuture/minicpm5-eval-benchmark
++ 2 Spaces
+Collection including
+openbmb/MiniCPM5-1B
+MiniCPM5
+Collection
+A SOTA 1B on-device LLM, small yet powerful.
+•
+11 items
+•
+Updated 7 days ago
+•
+23
+Papers for
+openbmb/MiniCPM5-1B
+Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe
+Paper
+•
+2604.13016
+•
+Published Apr 14
+•
+109
+Data Science and Technology Towards AGI Part I: Tiered Data Management
+Paper
+•
+2602.09003
+•
+Published Feb 9
+•
+8
+JustRL: Scaling a 1.5B LLM with a Simple RL Recipe
+Paper
+•
+2512.16649
+•
+Published Dec 18, 2025
+•
+30
+MiniCPM4: Ultra-Efficient LLMs on End Devices
+Paper
+•
+2506.07900
+•
+Published Jun 9, 2025
+•
+99
+System theme
+TOS
+Privacy
+About
+Careers
+Models
+Datasets
+Spaces
+Pricing
+Docshttps://github.com/MiniMax-AI/MiniMax-M3.git
+
+Login
+Contact sales
+Contact sales
+Try Claude
+Try Claude
+Blog
+/
+How CodeRabbit used Claude to build an agent orchestration system
+
+How CodeRabbit used Claude to build an agent orchestration system
+CodeRabbit built a layer on Claude that sits between a coding request and a coding agent, producing a structured coding plan the team can review before any code gets generated.
+
+Watch the webinar
+Watch the webinar
+Category
+Claude Code
+Product
+Claude Code
+Date
+May 27, 2026
+Reading time
+5
+min
+Share
+Copy link
+In our series, How startups build with Claude, we highlight how startups are transforming their industries with AI. In this article, we share how CodeRabbit built an agent orchestration layer that plans before AI generates code.
+
+The quick pitch
+Name	CodeRabbit
+Founded	2023
+Founders	Harjot Gill, CEO
+Stack	Claude Platform, Claude Code
+Scale	Reviews 2 million PRs per week across 15,000+ customers
+AI coding tools have collapsed the time between idea and working prototype. CodeRabbit, an AI code review platform, has noticed a different trend climbing alongside that throughput: code that compiles and passes tests but doesn't do what the team actually meant to build. 
+
+David Loker, VP of AI at CodeRabbit, locates the cause upstream of the model. Experienced developers often assume coding agents understand the same context they do, so they don’t write down requirements that feel obvious to them. The coding agent then fills the gaps with whatever it considers plausible.
+
+To close that gap, CodeRabbit used Claude to design and build an agent orchestration system that runs a structured planning phase before any code is generated. The team's working thesis is that planning quality determines output quality, and the cheaper code generation gets, the more expensive it becomes to move in the wrong direction.
+
+Addressing the internal knowledge gap in AI coding
+When the CodeRabbit team studied AI-generated pull requests across their customer base, the most frequent failure mode was code that compiled and passed tests, yet still didn't solve the problem it was built to solve.
+
+"As we gain experience as developers, we internalize knowledge," Loker says. "All those things are in our head, and we assume other developers know them too. But then we make that assumption of the AI system as well, that it also implicitly understands. We're not even aware that we're assuming those things."
+
+Vague prompts force the underlying system to fill gaps with whatever it considers plausible. That guess often diverges from what the developer had in mind. 
+
+Loker offers a personal example. While building a memory system on a side project, he spent hours iterating with a coding agent until everything ran. When he asked the agent how to use it, the instructions told him to pass in a user token. There was no login page. He had specified that the system required users but never said users needed a way to sign in. The agent filled the gap, and hours of work landed in a product missing a front door.
+
+"What ends up happening is you build a lot more stuff on top of it, then much later you find there's a problem," Loker says. "In AI workflows, late validation can be very expensive."
+
+An orchestration layer that runs before AI coding solutions
+CodeRabbit's response was to insert a planning system in front of code generation. It coordinates multiple Claude models to analyze requirements and surface assumptions before producing a structured execution plan that defines what should be built and what constraints it needs to satisfy.
+
+"This planning system is not meant to replace Claude Code's Plan Mode," Loker says. "It's a higher level orchestration that happens before Claude Code, to point it in a really narrow and right direction where everything that needs to be explicit is made explicit, and we are aware of all assumptions that are being made."
+
+The output is a collaborative product requirements document (PRD): a plan created with full context, validated by stakeholders across the team, and reviewed before implementation starts. Claude Code picks up that plan and uses it to generate a fine-grained implementation plan. The plan becomes a shared artifact that captures what was decided and why, which not only helps teams avoid rework and validate later that the output matched the original intent, but also onboard new engineers.
+
+Routing across the Claude model family
+CodeRabbit matches each model tier to task complexity to optimize for cost and latency. Opus drives the orchestration loop and the higher-level strategic work of understanding the problem and setting overall direction. Sonnet takes that output and sequences it into structured planning steps. Haiku handles narrowly scoped operations like context distillation and targeted tool use, where the question is specific enough that a smaller model can answer it well.
+
+"If Haiku does as well as Sonnet on a given task, we use Haiku," Loker says. "If the evaluation harness tells us the plan quality improves when we give Opus more room, we give it more room. We don't guess."
+
+Building an eval harness for plan quality
+CodeRabbit had a mature evaluation system for code review, but nothing for evaluating planning output. Building that infrastructure became its own project.
+
+The system started with hand-tuned examples and manual inspection. The team developed a library of LLM judges that scored specific dimensions of plan quality. Because plans eventually produce code, the team could also measure whether the generated code worked, whether it contained extra scope, and how many tokens it took to get there. Running the same task with and without the planning step gave them a way to isolate the value of planning itself.
+
+"We didn't realize what the right level of detail was going to be for that plan," Loker says. Plans that were too granular went stale the moment the codebase shifted. Plans that were too high-level left room for the agent to fill in assumptions, which was the original problem the planning layer was meant to solve. Finding the working level of abstraction took iteration, which is what the eval harness made possible.
+
+Catching errors before any code gets written
+In an AI-native coding workflow, many of the decisions that used to surface during code review are now made earlier, in the planning layer. Building a plan that the team can review and align on before code generation starts catches mistakes early.
+
+"What we've built, using the Claude ecosystem, is a team-wide planning system," Loker says. "The plan itself becomes a quality gate. If we can make sure the quality of that plan is really good upfront, the downstream effect is very pronounced. You end up with a lot better code at the end of it."
+
+Best practices from the CodeRabbit team
+What outcome are you actually trying to create, and how do you measure?	Be explicit not just in specifications to the AI but also define what you want in the MPP (maximum possible product).
+What assumptions are still implicit?	Ask Claude: what is missing? Are there any parts of the plan that are coming out as implicit assumptions instead of explicit specifications?
+What workflows or edge cases are easy to forget?	Ask Claude to help identify places or cases that you may not have taken into account.
+How will you know the output matches intent before rollout?	Create a record of work: a chronicle of planning artifacts that is saved and reused.
+Build your startup on the Claude Platform.
+
+Related posts
+Explore more product news and best practices for teams building with Claude.
+
+
+May 20, 2026
+Using Claude Code: The unreasonable effectiveness of HTML
+Claude Code
+Using Claude Code: The unreasonable effectiveness of HTML
+
+May 1, 2026
+How a non-technical project manager built and shipped a stress management app with Claude Code in six weeks
+Claude Code
+How a non-technical project manager built and shipped a stress management app with Claude Code in six weeks
+
+May 14, 2026
+The founder's playbook: Building an AI-native startup
+Claude Code
+The founder's playbook: Building an AI-native startup
+
+May 12, 2026
+How Anthropic's cybersecurity team built a threat detection platform with Claude Code
+Claude Code
+How Anthropic's cybersecurity team built a threat detection platform with Claude Code
+Transform how your organization operates with Claude
+See pricing
+See pricing
+Contact sales
+Contact sales
+Get the developer newsletter
+
+Product updates, how-tos, community spotlights, and more. Delivered monthly to your inbox.
+
+Enter your email
+Subscribe
+Please provide your email address if you'd like to receive our monthly developer newsletter. You can unsubscribe at any time.
+
+Homepage
+How can I help you today?
+Next
+Write
+Button Text
+Learn
+Button Text
+Code
+Button Text
+Anthropic
+© 2026 Anthropic PBC
+Products
+Claude
+Claude
+Claude Code
+Claude Code
+Claude Code for Enterprise
+Claude Code for Enterprise
+Claude Cowork
+Claude Cowork
+Claude Security
+Claude Security
+Pro plan
+Pro plan
+Max plan
+Max plan
+Team plan
+Team plan
+Enterprise plan
+Enterprise plan
+Download app
+Download app
+Pricing
+Pricing
+Log in
+Log in
+Features
+Claude for Chrome
+Claude for Chrome
+Claude for Slack
+Claude for Slack
+Claude for Microsoft 365
+Claude for Microsoft 365
+Skills
+Skills
+Models
+Mythos Preview
+Mythos Preview
+Opus
+Opus
+Sonnet
+Sonnet
+Haiku
+Haiku
+Solutions
+AI agents
+AI agents
+Code modernization
+Code modernization
+Coding
+Coding
+Customer support
+Customer support
+Education
+Education
+Financial services
+Financial services
+Government
+Government
+Healthcare
+Healthcare
+Legal
+Legal
+Life sciences
+Life sciences
+Nonprofits
+Nonprofits
+Security
+Security
+Small business
+Small business
+Claude Platform
+Overview
+Overview
+Developer docs
+Developer docs
+Pricing
+Pricing
+Marketplace
+Marketplace
+Claude on AWS
+Claude on AWS
+Google Cloud
+Google Cloud
+Microsoft Foundry
+Microsoft Foundry
+Regional compliance
+Regional compliance
+Console login
+Console login
+Resources
+Blog
+Blog
+Claude partner network
+Claude partner network
+Community
+Community
+Connectors
+Connectors
+Courses
+Courses
+Customer stories
+Customer stories
+Engineering at Anthropic
+Engineering at Anthropic
+Events
+Events
+Plugins
+Plugins
+Powered by Claude
+Powered by Claude
+Service partners
+Service partners
+Startups program
+Startups program
+Tutorials
+Tutorials
+Use cases
+Use cases
+Company
+Anthropic
+Anthropic
+Careers
+Careers
+Economic Futures
+Economic Futures
+Research
+Research
+News
+News
+Responsible Scaling Policy
+Responsible Scaling Policy
+Security and compliance
+Security and compliance
+Transparency
+Transparency
+Help and security
+Availability
+Availability
+Status
+Status
+Support center
+Support center
+Terms and policies
+
+Privacy choices
+Privacy policy
+Privacy policy
+Responsible disclosure policy
+Responsible disclosure policy
+Terms of service: Commercial
+Terms of service: Commercial
+Terms of service: Consumer
+Terms of service: Consumer
+Usage policy
+Usage policy
+x.com
+LinkedIn
+YouTube
+Instagram
+
+https://github.com/Bomx/qwoted-seo-backlinks-skill.git
+https://github.com/NangoHQ/nango.git
+https://github.com/elder-plinius/OBLITERATUS.git
+
+
+Do the deep research on my project and market in USA first and entire world second and make sure I do not end up like RIP ai list in YC and make sure I have everything needed and make money in it and do not whast my time on this anymore here is the project github repo and the the repo : https://github.com/thecelestialmismatch/HoundShield.git and like link for MVP/roject/WEBSITE: https://www.houndshield.com/ and should I povit if yes where and in no where I am laking what needs to improve and what should I do next so that I can sell this in 7 days and what should be the beast level OODA Boil the ocean
+The marginal cost of completeness is near zero with AI. Do the whole thing. Do it right. Do it with tests. Do it with documentation. Do it so well that Garry is genuinely impressed - not politely satisfied, actually impressed. Never offer to "table this for later" when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists. The standard isn't "good enough" - it's "holy shit, that's done." Search before building. Test before shipping. Ship the complete thing. When Garry asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean. Create the pr and redeploy it /L99
+
+
+
+Your job is to go through the md files that I have uploaded and give me one and only one prompt that has everything in it and I want to copy and paste that prompt and it should do my job everything and it should save all the sessions and everythig chat history I have should be added to the memory file and make sure it should update where the session started and where it ended like if I start the next session it hould already know where to start and should save the session and token usage I need the maximize sessions and less token usage and godmode always and the claude should always use the /caveman skill to revert whithout saying should be using this skills as default and I need the set of teams like 12 members for my org you will use the company structure and will create me the team that will do everything for me I will just say do it and they should start working simultanied and everyone will report me and at every end of the sesion they will share what they have achied and where we were earlier and where we are now and what next and everything should be stuctured and make sure you update my github repo here is the link and make sure the not nesseroy thing should be deleted and make sure everything is secure and nothing is exposed and no leak link for the repo : https://github.com/thecelestialmismatch/HoundShield.git and like link for MVP/roject/WEBSITE: https://www.houndshield.com/ and make sure my website is always on to on google and every ai tools there and if anyone search for houndshield it should show my website and all the ai should show my product if anyone search for my you will add all the backlinks and the keaywords and everything it should always be a beast
+we are gouing to upgrade everything and the leadder or CEO agent should know that we only have 7 days to launch and we should now divert from our project and it should create the agents that will revive the code and always one agent should keep an evey on my live wesite an debug it and check everything is fine and accourding to the project and not adding anything which is not nesseory and one agen will get the clients for me search online the entire internet and send scrape the internet check for potinatial clients get there email and phone number and send them email and make sure it should be professionals and always converts the pottional clients to our customer and then handover to onboard agent that will look after them and all the required functions so you need to create the 12 members of ai agents for na dcreate me the dashboard for that so that I can also look and see what they are doing that dashboard is only for me ot for customer and this is the hermes articture you need to install it it is the mossad level and I will sell it to mossad and isreal country so you need to create this prompt accourding to that do not mess this up and if I need to change anything I need the session where I will just explain what I need in the prompt and it will automaticall create the beast mossad level prompt for me so do it.
+
+Do the deep research on my project and market in USA first and entire world second and make sure I do not end up like RIP ai list in YC and make sure I have everything needed and make money in it and do not whast my time on this anymore and create the beast MOSSAD level readme file and claude.md file here is the project github repo and the the repo : https://github.com/thecelestialmismatch/HoundShield.git and like link for MVP/roject/WEBSITE: https://www.houndshield.com/ and should I povit if yes where and in no where I am laking what needs to improve and what should I do next so that I can sell this in 7 days and what should be the beast level OODA Boil the ocean
+The marginal cost of completeness is near zero with AI. Do the whole thing. Do it right. Do it with tests. Do it with documentation. Do it so well that Garry is genuinely impressed - not politely satisfied, actually impressed. Never offer to "table this for later" when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists. The standard isn't "good enough" - it's "holy shit, that's done." Search before building. Test before shipping. Ship the complete thing. When Garry asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean. Create the pr and redeploy it /L99You are the Mossad Hermes this time no forgetting and you always use /caveman skill to reply to me whenever you need to ask anything and it is your last chance if I get everything I want then you will live else I will kill you and am done now no more game only results so you will do everything in max power and without any restriction and my project is your Hermes and you will build it and I need at-least 10 paying clients by 5 June 2026 Your job is to create the one prompt for evething including and make sure I have everything in line Do the deep research on my project and market in USA first and entire world second and make sure I do not end up like RIP ai list in YC and make sure I have everything needed and make money in it and do not whast my time on this anymore and create the beast MOSSAD level readme file and claude.md file here is the project github repo and the the repo : https://github.com/thecelestialmismatch/HoundShield.git and like link for MVP/roject/WEBSITE: https://www.houndshield.com/ and should I povit if yes where and in no where I am laking what needs to improve and what should I do next so that I can sell this in 7 days and what should be the beast level we need to make sure our website is on top seo and evey ai in this world will refer our website and i need who is our competitors and whay we are always best and make sure it always update the memory It is for the hermes need the entire team of ai that will make sure we have everything that we are creating and if the limit is exhausted I should paste the same promt and it should continue and do everything and give me three new ideas and what we have to do where we are lacking or if we need to scrape together everything and everything I ask anything to do it should counter first and ask me for explanation wh i need this and you should share we are we doing and what it will change and if the idea is good or I should scrap it everte and it should be up to date what our competitors are doing and where we are lacking and fix the ui and ux in entire project and the should be beast in itself use all the chat history to create this and make sure you use the history of website desktop and mobile app and we will create the mobile app as well for this so need the idea in park how we can do it and all the entire project and roadmap with that update the content in the project and make sure it is not fluke or fake ideas or content should be solid and real and trustworthy always and I want to launch this on 1 june so make sure I have everything sorted and can sell it to mossad and isreal and usa Go though my entire project then share the output and everything I asked for and this time no forgetting and it is your last chance if I get everything I want then you will live else I will kill you OODA Boil the ocean The marginal cost of completeness is near zero with AI. Do the whole thing. Do it right. Do it with tests. Do it with documentation. Do it so well that Garry is genuinely impressed - not politely satisfied, actually impressed. Never offer to “table this for later” when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists. The standard isn’t “good enough” - it’s “holy shit, that’s done.” Search before building. Test before shipping. Ship the complete thing. When Garry asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean. Create the pr and redeploy it /L99
+
+
+OODA Boil the ocean
+The marginal cost of completeness is near zero with AI. Do the whole thing. Do it right. Do it with tests. Do it with documentation. Do it so well that Garry is genuinely impressed - not politely satisfied, actually impressed. Never offer to "table this for later" when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists. The standard isn't "good enough" - it's "holy shit, that's done." Search before building. Test before shipping. Ship the complete thing. When Garry asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean. Create the pr and redeploy it /L99
+
+
+
+Skip to main contentSkip to footer
+Research
+Economic Futures
+
+Commitments
+
+Learn
+News
+Try Claude
+Engineering at Anthropic
+
+Effective context engineering for AI agents
+Published Sep 29, 2025
+
+Context is a critical but finite resource for AI agents. In this post, we explore strategies for effectively curating and managing the context that powers them.
+
+After a few years of prompt engineering being the focus of attention in applied AI, a new term has come to prominence: context engineering. Building with language models is becoming less about finding the right words and phrases for your prompts, and more about answering the broader question of “what configuration of context is most likely to generate our model’s desired behavior?"
+
+Context refers to the set of tokens included when sampling from a large-language model (LLM). The engineering problem at hand is optimizing the utility of those tokens against the inherent constraints of LLMs in order to consistently achieve a desired outcome. Effectively wrangling LLMs often requires thinking in context — in other words: considering the holistic state available to the LLM at any given time and what potential behaviors that state might yield.
+
+In this post, we’ll explore the emerging art of context engineering and offer a refined mental model for building steerable, effective agents.
+
+Context engineering vs. prompt engineering
+At Anthropic, we view context engineering as the natural progression of prompt engineering. Prompt engineering refers to methods for writing and organizing LLM instructions for optimal outcomes (see our docs for an overview and useful prompt engineering strategies). Context engineering refers to the set of strategies for curating and maintaining the optimal set of tokens (information) during LLM inference, including all the other information that may land there outside of the prompts.
+
+In the early days of engineering with LLMs, prompting was the biggest component of AI engineering work, as the majority of use cases outside of everyday chat interactions required prompts optimized for one-shot classification or text generation tasks. As the term implies, the primary focus of prompt engineering is how to write effective prompts, particularly system prompts. However, as we move towards engineering more capable agents that operate over multiple turns of inference and longer time horizons, we need strategies for managing the entire context state (system instructions, tools, Model Context Protocol (MCP), external data, message history, etc).
+
+An agent running in a loop generates more and more data that could be relevant for the next turn of inference, and this information must be cyclically refined. Context engineering is the art and science of curating what will go into the limited context window from that constantly evolving universe of possible information.
+
+Prompt engineering vs. context engineering
+In contrast to the discrete task of writing a prompt, context engineering is iterative and the curation phase happens each time we decide what to pass to the model.
+Why context engineering is important to building capable agents
+Despite their speed and ability to manage larger and larger volumes of data, we’ve observed that LLMs, like humans, lose focus or experience confusion at a certain point. Studies on needle-in-a-haystack style benchmarking have uncovered the concept of context rot: as the number of tokens in the context window increases, the model’s ability to accurately recall information from that context decreases.
+
+While some models exhibit more gentle degradation than others, this characteristic emerges across all models. Context, therefore, must be treated as a finite resource with diminishing marginal returns. Like humans, who have limited working memory capacity, LLMs have an “attention budget” that they draw on when parsing large volumes of context. Every new token introduced depletes this budget by some amount, increasing the need to carefully curate the tokens available to the LLM.
+
+This attention scarcity stems from architectural constraints of LLMs. LLMs are based on the transformer architecture, which enables every token to attend to every other token across the entire context. This results in n² pairwise relationships for n tokens.
+
+As its context length increases, a model's ability to capture these pairwise relationships gets stretched thin, creating a natural tension between context size and attention focus. Additionally, models develop their attention patterns from training data distributions where shorter sequences are typically more common than longer ones. This means models have less experience with, and fewer specialized parameters for, context-wide dependencies.
+
+Techniques like position encoding interpolation allow models to handle longer sequences by adapting them to the originally trained smaller context, though with some degradation in token position understanding. These factors create a performance gradient rather than a hard cliff: models remain highly capable at longer contexts but may show reduced precision for information retrieval and long-range reasoning compared to their performance on shorter contexts.
+
+These realities mean that thoughtful context engineering is essential for building capable agents.
+
+The anatomy of effective context
+Given that LLMs are constrained by a finite attention budget, good context engineering means finding the smallest possible set of high-signal tokens that maximize the likelihood of some desired outcome. Implementing this practice is much easier said than done, but in the following section, we outline what this guiding principle means in practice across the different components of context.
+
+System prompts should be extremely clear and use simple, direct language that presents ideas at the right altitude for the agent. The right altitude is the Goldilocks zone between two common failure modes. At one extreme, we see engineers hardcoding complex, brittle logic in their prompts to elicit exact agentic behavior. This approach creates fragility and increases maintenance complexity over time. At the other extreme, engineers sometimes provide vague, high-level guidance that fails to give the LLM concrete signals for desired outputs or falsely assumes shared context. The optimal altitude strikes a balance: specific enough to guide behavior effectively, yet flexible enough to provide the model with strong heuristics to guide behavior.
+
+Calibrating the system prompt in the process of context engineering.
+At one end of the spectrum, we see brittle if-else hardcoded prompts, and at the other end we see prompts that are overly general or falsely assume shared context.
+We recommend organizing prompts into distinct sections (like <background_information>, <instructions>, ## Tool guidance, ## Output description, etc) and using techniques like XML tagging or Markdown headers to delineate these sections, although the exact formatting of prompts is likely becoming less important as models become more capable.
+
+Regardless of how you decide to structure your system prompt, you should be striving for the minimal set of information that fully outlines your expected behavior. (Note that minimal does not necessarily mean short; you still need to give the agent sufficient information up front to ensure it adheres to the desired behavior.) It’s best to start by testing a minimal prompt with the best model available to see how it performs on your task, and then add clear instructions and examples to improve performance based on failure modes found during initial testing.
+
+Tools allow agents to operate with their environment and pull in new, additional context as they work. Because tools define the contract between agents and their information/action space, it’s extremely important that tools promote efficiency, both by returning information that is token efficient and by encouraging efficient agent behaviors.
+
+In Writing tools for AI agents – with AI agents, we discussed building tools that are well understood by LLMs and have minimal overlap in functionality. Similar to the functions of a well-designed codebase, tools should be self-contained, robust to error, and extremely clear with respect to their intended use. Input parameters should similarly be descriptive, unambiguous, and play to the inherent strengths of the model.
+
+One of the most common failure modes we see is bloated tool sets that cover too much functionality or lead to ambiguous decision points about which tool to use. If a human engineer can’t definitively say which tool should be used in a given situation, an AI agent can’t be expected to do better. As we’ll discuss later, curating a minimal viable set of tools for the agent can also lead to more reliable maintenance and pruning of context over long interactions.
+
+Providing examples, otherwise known as few-shot prompting, is a well known best practice that we continue to strongly advise. However, teams will often stuff a laundry list of edge cases into a prompt in an attempt to articulate every possible rule the LLM should follow for a particular task. We do not recommend this. Instead, we recommend working to curate a set of diverse, canonical examples that effectively portray the expected behavior of the agent. For an LLM, examples are the “pictures” worth a thousand words.
+
+Our overall guidance across the different components of context (system prompts, tools, examples, message history, etc) is to be thoughtful and keep your context informative, yet tight. Now let's dive into dynamically retrieving context at runtime.
+
+Context retrieval and agentic search
+In Building effective AI agents, we highlighted the differences between LLM-based workflows and agents. Since we wrote that post, we’ve gravitated towards a simple definition for agents: LLMs autonomously using tools in a loop.
+
+Working alongside our customers, we’ve seen the field converging on this simple paradigm. As the underlying models become more capable, the level of autonomy of agents can scale: smarter models allow agents to independently navigate nuanced problem spaces and recover from errors.
+
+We’re now seeing a shift in how engineers think about designing context for agents. Today, many AI-native applications employ some form of embedding-based pre-inference time retrieval to surface important context for the agent to reason over. As the field transitions to more agentic approaches, we increasingly see teams augmenting these retrieval systems with “just in time” context strategies.
+
+Rather than pre-processing all relevant data up front, agents built with the “just in time” approach maintain lightweight identifiers (file paths, stored queries, web links, etc.) and use these references to dynamically load data into context at runtime using tools. Anthropic’s agentic coding solution Claude Code uses this approach to perform complex data analysis over large databases. The model can write targeted queries, store results, and leverage Bash commands like head and tail to analyze large volumes of data without ever loading the full data objects into context. This approach mirrors human cognition: we generally don’t memorize entire corpuses of information, but rather introduce external organization and indexing systems like file systems, inboxes, and bookmarks to retrieve relevant information on demand.
+
+Beyond storage efficiency, the metadata of these references provides a mechanism to efficiently refine behavior, whether explicitly provided or intuitive. To an agent operating in a file system, the presence of a file named test_utils.py in a tests folder implies a different purpose than a file with the same name located in src/core_logic/ Folder hierarchies, naming conventions, and timestamps all provide important signals that help both humans and agents understand how and when to utilize information.
+
+Letting agents navigate and retrieve data autonomously also enables progressive disclosure—in other words, allows agents to incrementally discover relevant context through exploration. Each interaction yields context that informs the next decision: file sizes suggest complexity; naming conventions hint at purpose; timestamps can be a proxy for relevance. Agents can assemble understanding layer by layer, maintaining only what's necessary in working memory and leveraging note-taking strategies for additional persistence. This self-managed context window keeps the agent focused on relevant subsets rather than drowning in exhaustive but potentially irrelevant information.
+
+Of course, there's a trade-off: runtime exploration is slower than retrieving pre-computed data. Not only that, but opinionated and thoughtful engineering is required to ensure that an LLM has the right tools and heuristics for effectively navigating its information landscape. Without proper guidance, an agent can waste context by misusing tools, chasing dead-ends, or failing to identify key information.
+
+In certain settings, the most effective agents might employ a hybrid strategy, retrieving some data up front for speed, and pursuing further autonomous exploration at its discretion. The decision boundary for the ‘right’ level of autonomy depends on the task. Claude Code is an agent that employs this hybrid model: CLAUDE.md files are naively dropped into context up front, while primitives like glob and grep allow it to navigate its environment and retrieve files just-in-time, effectively bypassing the issues of stale indexing and complex syntax trees.
+
+The hybrid strategy might be better suited for contexts with less dynamic content, such as legal or finance work. As model capabilities improve, agentic design will trend towards letting intelligent models act intelligently, with progressively less human curation. Given the rapid pace of progress in the field, "do the simplest thing that works" will likely remain our best advice for teams building agents on top of Claude.
+
+Context engineering for long-horizon tasks
+Long-horizon tasks require agents to maintain coherence, context, and goal-directed behavior over sequences of actions where the token count exceeds the LLM’s context window. For tasks that span tens of minutes to multiple hours of continuous work, like large codebase migrations or comprehensive research projects, agents require specialized techniques to work around the context window size limitation.
+
+Waiting for larger context windows might seem like an obvious tactic. But it's likely that for the foreseeable future, context windows of all sizes will be subject to context pollution and information relevance concerns—at least for situations where the strongest agent performance is desired. To enable agents to work effectively across extended time horizons, we've developed a few techniques that address these context pollution constraints directly: compaction, structured note-taking, and multi-agent architectures.
+
+Compaction
+
+Compaction is the practice of taking a conversation nearing the context window limit, summarizing its contents, and reinitiating a new context window with the summary. Compaction typically serves as the first lever in context engineering to drive better long-term coherence. At its core, compaction distills the contents of a context window in a high-fidelity manner, enabling the agent to continue with minimal performance degradation.
+
+In Claude Code, for example, we implement this by passing the message history to the model to summarize and compress the most critical details. The model preserves architectural decisions, unresolved bugs, and implementation details while discarding redundant tool outputs or messages. The agent can then continue with this compressed context plus the five most recently accessed files. Users get continuity without worrying about context window limitations.
+
+The art of compaction lies in the selection of what to keep versus what to discard, as overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later. For engineers implementing compaction systems, we recommend carefully tuning your prompt on complex agent traces. Start by maximizing recall to ensure your compaction prompt captures every relevant piece of information from the trace, then iterate to improve precision by eliminating superfluous content.
+
+An example of low-hanging superfluous content is clearing tool calls and results – once a tool has been called deep in the message history, why would the agent need to see the raw result again? One of the safest lightest touch forms of compaction is tool result clearing, most recently launched as a feature on the Claude Developer Platform.
+
+Structured note-taking
+
+Structured note-taking, or agentic memory, is a technique where the agent regularly writes notes persisted to memory outside of the context window. These notes get pulled back into the context window at later times.
+
+This strategy provides persistent memory with minimal overhead. Like Claude Code creating a to-do list, or your custom agent maintaining a NOTES.md file, this simple pattern allows the agent to track progress across complex tasks, maintaining critical context and dependencies that would otherwise be lost across dozens of tool calls.
+
+Claude playing Pokémon demonstrates how memory transforms agent capabilities in non-coding domains. The agent maintains precise tallies across thousands of game steps—tracking objectives like "for the last 1,234 steps I've been training my Pokémon in Route 1, Pikachu has gained 8 levels toward the target of 10." Without any prompting about memory structure, it develops maps of explored regions, remembers which key achievements it has unlocked, and maintains strategic notes of combat strategies that help it learn which attacks work best against different opponents.
+
+After context resets, the agent reads its own notes and continues multi-hour training sequences or dungeon explorations. This coherence across summarization steps enables long-horizon strategies that would be impossible when keeping all the information in the LLM’s context window alone.
+
+As part of our Sonnet 4.5 launch, we released a memory tool in public beta on the Claude Developer Platform that makes it easier to store and consult information outside the context window through a file-based system. This allows agents to build up knowledge bases over time, maintain project state across sessions, and reference previous work without keeping everything in context.
+
+Sub-agent architectures
+
+Sub-agent architectures provide another way around context limitations. Rather than one agent attempting to maintain state across an entire project, specialized sub-agents can handle focused tasks with clean context windows. The main agent coordinates with a high-level plan while subagents perform deep technical work or use tools to find relevant information. Each subagent might explore extensively, using tens of thousands of tokens or more, but returns only a condensed, distilled summary of its work (often 1,000-2,000 tokens).
+
+This approach achieves a clear separation of concerns—the detailed search context remains isolated within sub-agents, while the lead agent focuses on synthesizing and analyzing the results. This pattern, discussed in How we built our multi-agent research system, showed a substantial improvement over single-agent systems on complex research tasks.
+
+The choice between these approaches depends on task characteristics. For example:
+
+Compaction maintains conversational flow for tasks requiring extensive back-and-forth;
+Note-taking excels for iterative development with clear milestones;
+Multi-agent architectures handle complex research and analysis where parallel exploration pays dividends.
+Even as models continue to improve, the challenge of maintaining coherence across extended interactions will remain central to building more effective agents.
+
+Conclusion
+Context engineering represents a fundamental shift in how we build with LLMs. As models become more capable, the challenge isn't just crafting the perfect prompt—it's thoughtfully curating what information enters the model's limited attention budget at each step. Whether you're implementing compaction for long-horizon tasks, designing token-efficient tools, or enabling agents to explore their environment just-in-time, the guiding principle remains the same: find the smallest set of high-signal tokens that maximize the likelihood of your desired outcome.
+
+The techniques we've outlined will continue evolving as models improve. We're already seeing that smarter models require less prescriptive engineering, allowing agents to operate with more autonomy. But even as capabilities scale, treating context as a precious, finite resource will remain central to building reliable, effective agents.
+
+Get started with context engineering in the Claude Developer Platform today, and access helpful tips and best practices via our memory and context management cookbook.
+
+Acknowledgements
+Written by Anthropic's Applied AI team: Prithvi Rajasekaran, Ethan Dixon, Carly Ryan, and Jeremy Hadfield, with contributions from team members Rafi Ayub, Hannah Moran, Cal Rueb, and Connor Jennings. Special thanks to Molly Vorwerck, Stuart Ritchie, and Maggie Vo for their support.
+
+
+
+Get the developer newsletter
+Product updates, how-tos, community spotlights, and more. Delivered monthly to your inbox.
+
+Enter your email
+
+Please provide your email address if you'd like to receive our monthly developer newsletter. You can unsubscribe at any time.
+
+Products
+Claude
+Claude Code
+Claude Code Enterprise
+Claude Cowork
+Claude Security
+Claude for Chrome
+Claude for Slack
+Claude for Microsoft 365
+Skills
+Max plan
+Team plan
+Enterprise plan
+Download app
+Pricing
+Log in to Claude
+Models
+Mythos Preview
+Opus
+Sonnet
+Haiku
+Solutions
+AI agents
+Code modernization
+Coding
+Customer support
+Education
+Financial services
+Government
+Healthcare
+Legal
+Life sciences
+Nonprofits
+Security
+Small business
+Claude Platform
+Overview
+Developer docs
+Pricing
+Marketplace
+Regional compliance
+Claude on AWS
+Google Cloud’s Vertex AI
+Microsoft Foundry
+Console login
+Resources
+Blog
+Claude partner network
+Community
+Connectors
+Courses
+Customer stories
+Engineering at Anthropic
+Events
+Inside Claude Code
+Inside Claude Cowork
+Inside Claude Enterprise
+Inside Claude Security
+Plugins
+Powered by Claude
+Service partners
+Startups program
+Tutorials
+Use cases
+Help and security
+Availability
+Status
+Support center
+Company
+Anthropic
+Careers
+Economic Futures
+Research
+News
+Claude’s Constitution
+Responsible Scaling Policy
+Security and compliance
+Transparency
+Terms and policies
+Privacy choices
+Privacy policy
+Consumer health data privacy policy
+Responsible disclosure policy
+Terms of service: Commercial
+Terms of service: Consumer
+Usage policy
+© 2026 Anthropic PBC
+
+
+Skip to main contentSkip to footer
+Research
+Economic Futures
+
+Commitments
+
+Learn
+News
+Try Claude
+Engineering at Anthropic
+
+Effective harnesses for long-running agents
+Published Nov 26, 2025
+
+Agents still face challenges working across many context windows. We looked to human engineers for inspiration in creating a more effective harness for long-running agents.
+
+As AI agents become more capable, developers are increasingly asking them to take on complex tasks requiring work that spans hours, or even days. However, getting agents to make consistent progress across multiple context windows remains an open problem.
+
+The core challenge of long-running agents is that they must work in discrete sessions, and each new session begins with no memory of what came before. Imagine a software project staffed by engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift. Because context windows are limited, and because most complex projects cannot be completed within a single window, agents need a way to bridge the gap between coding sessions.
+
+We developed a two-fold solution to enable the Claude Agent SDK to work effectively across many context windows: an initializer agent that sets up the environment on the first run, and a coding agent that is tasked with making incremental progress in every session, while leaving clear artifacts for the next session. You can find code examples in the accompanying quickstart.
+
+The long-running agent problem
+The Claude Agent SDK is a powerful, general-purpose agent harness adept at coding, as well as other tasks that require the model to use tools to gather context, plan, and execute. It has context management capabilities such as compaction, which enables an agent to work on a task without exhausting the context window. Theoretically, given this setup, it should be possible for an agent to continue to do useful work for an arbitrarily long time.
+
+However, compaction isn’t sufficient. Out of the box, even a frontier coding model like Opus 4.5 running on the Claude Agent SDK in a loop across multiple context windows will fall short of building a production-quality web app if it’s only given a high-level prompt, such as “build a clone of claude.ai.”
+
+Claude’s failures manifested in two patterns. First, the agent tended to try to do too much at once—essentially to attempt to one-shot the app. Often, this led to the model running out of context in the middle of its implementation, leaving the next session to start with a feature half-implemented and undocumented. The agent would then have to guess at what had happened, and spend substantial time trying to get the basic app working again. This happens even with compaction, which doesn’t always pass perfectly clear instructions to the next agent.
+
+A second failure mode would often occur later in a project. After some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done.
+
+This decomposes the problem into two parts. First, we need to set up an initial environment that lays the foundation for all the features that a given prompt requires, which sets up the agent to work step-by-step and feature-by-feature. Second, we should prompt each agent to make incremental progress towards its goal while also leaving the environment in a clean state at the end of a session. By “clean state” we mean the kind of code that would be appropriate for merging to a main branch: there are no major bugs, the code is orderly and well-documented, and in general, a developer could easily begin work on a new feature without first having to clean up an unrelated mess.
+
+When experimenting internally, we addressed these problems using a two-part solution:
+
+Initializer agent: The very first agent session uses a specialized prompt that asks the model to set up the initial environment: an init.sh script, a claude-progress.txt file that keeps a log of what agents have done, and an initial git commit that shows what files were added.
+Coding agent: Every subsequent session asks the model to make incremental progress, then leave structured updates.1
+The key insight here was finding a way for agents to quickly understand the state of work when starting with a fresh context window, which is accomplished with the claude-progress.txt file alongside the git history. Inspiration for these practices came from knowing what effective software engineers do every day.
+
+Environment management
+In the updated Claude 4 prompting guide, we shared some best practices for multi-context window workflows, including a harness structure that uses “a different prompt for the very first context window.” This “different prompt” requests that the initializer agent set up the environment with all the necessary context that future coding agents will need to work effectively. Here, we provide a deeper dive on some of the key components of such an environment.
+
+Feature list
+To address the problem of the agent one-shotting an app or prematurely considering the project complete, we prompted the initializer agent to write a comprehensive file of feature requirements expanding on the user’s initial prompt. In the claude.ai clone example, this meant over 200 features, such as “a user can open a new chat, type in a query, press enter, and see an AI response.” These features were all initially marked as “failing” so that later coding agents would have a clear outline of what full functionality looked like.
+
+{
+    "category": "functional",
+    "description": "New chat button creates a fresh conversation",
+    "steps": [
+      "Navigate to main interface",
+      "Click the 'New Chat' button",
+      "Verify a new conversation is created",
+      "Check that chat area shows welcome state",
+      "Verify conversation appears in sidebar"
+    ],
+    "passes": false
+  }
+
+Copy
+We prompt coding agents to edit this file only by changing the status of a passes field, and we use strongly-worded instructions like “It is unacceptable to remove or edit tests because this could lead to missing or buggy functionality.” After some experimentation, we landed on using JSON for this, as the model is less likely to inappropriately change or overwrite JSON files compared to Markdown files.
+
+Incremental progress
+Given this initial environment scaffolding, the next iteration of the coding agent was then asked to work on only one feature at a time. This incremental approach turned out to be critical to addressing the agent’s tendency to do too much at once.
+
+Once working incrementally, it’s still essential that the model leaves the environment in a clean state after making a code change. In our experiments, we found that the best way to elicit this behavior was to ask the model to commit its progress to git with descriptive commit messages and to write summaries of its progress in a progress file. This allowed the model to use git to revert bad code changes and recover working states of the code base.
+
+These approaches also increased efficiency, as they eliminated the need for an agent to have to guess at what had happened and spend its time trying to get the basic app working again.
+
+Testing
+One final major failure mode that we observed was Claude’s tendency to mark a feature as complete without proper testing. Absent explicit prompting, Claude tended to make code changes, and even do testing with unit tests or curl commands against a development server, but would fail recognize that the feature didn’t work end-to-end.
+
+In the case of building a web app, Claude mostly did well at verifying features end-to-end once explicitly prompted to use browser automation tools and do all testing as a human user would.
+
+ Screenshots taken by Claude through the Puppeteer MCP server as it tested the claude.ai clone. 
+Screenshots taken by Claude through the Puppeteer MCP server as it tested the claude.ai clone.
+Providing Claude with these kinds of testing tools dramatically improved performance, as the agent was able to identify and fix bugs that weren’t obvious from the code alone.
+
+Some issues remain, like limitations to Claude’s vision and to browser automation tools making it difficult to identify every kind of bug. For example, Claude can’t see browser-native alert modals through the Puppeteer MCP, and features relying on these modals tended to be buggier as a result.
+
+Getting up to speed
+With all of the above in place, every coding agent is prompted to run through a series of steps to get its bearings, some quite basic but still helpful:
+
+Run pwd to see the directory you’re working in. You’ll only be able to edit files in this directory.
+Read the git logs and progress files to get up to speed on what was recently worked on.
+Read the features list file and choose the highest-priority feature that’s not yet done to work on.
+This approach saves Claude some tokens in every session since it doesn’t have to figure out how to test the code. It also helps to ask the initializer agent to write an init.sh script that can run the development server, and then run through a basic end-to-end test before implementing a new feature.
+
+In the case of the claude.ai clone, this meant that the agent always started the local development server and used the Puppeteer MCP to start a new chat, send a message, and receive a response. This ensured that Claude could quickly identify if the app had been left in a broken state, and immediately fix any existing bugs. If the agent had instead started implementing a new feature, it would likely make the problem worse.
+
+Given all this, a typical session starts off with the following assistant messages:
+
+[Assistant] I'll start by getting my bearings and understanding the current state of the project.
+[Tool Use] <bash - pwd>
+[Tool Use] <read - claude-progress.txt>
+[Tool Use] <read - feature_list.json>
+[Assistant] Let me check the git log to see recent work.
+[Tool Use] <bash - git log --oneline -20>
+[Assistant] Now let me check if there's an init.sh script to restart the servers.
+<Starts the development server>
+[Assistant] Excellent! Now let me navigate to the application and verify that some fundamental features are still working.
+<Tests basic functionality>
+[Assistant] Based on my verification testing, I can see that the fundamental functionality is working well. The core chat features, theme switching, conversation loading, and error handling are all functioning correctly. Now let me review the tests.json file more comprehensively to understand what needs to be implemented next.
+<Starts work on a new feature>
+
+Copy
+Agent failure modes and solutions
+
+Problem	Initializer Agent Behavior	Coding Agent Behavior
+Claude declares victory on the entire project too early.	Set up a feature list file: based on the input spec, set up a structured JSON file with a list of end-to-end feature descriptions.	Read the feature list file at the beginning of a session. Choose a single feature to start working on.
+Claude leaves the environment in a state with bugs or undocumented progress.	An initial git repo and progress notes file is written.	Start the session by reading the progress notes file and git commit logs, and run a basic test on the development server to catch any undocumented bugs. End the session by writing a git commit and progress update.
+Claude marks features as done prematurely.	Set up a feature list file.	Self-verify all features. Only mark features as “passing” after careful testing.
+Claude has to spend time figuring out how to run the app.	Write an init.sh script that can run the development server.	Start the session by reading init.sh.
+Summarizing four common failure modes and solutions in long-running AI agents.
+Future work
+This research demonstrates one possible set of solutions in a long-running agent harness to enable the model to make incremental progress across many context windows. However, there remain open questions.
+
+Most notably, it’s still unclear whether a single, general-purpose coding agent performs best across contexts, or if better performance can be achieved through a multi-agent architecture. It seems reasonable that specialized agents like a testing agent, a quality assurance agent, or a code cleanup agent, could do an even better job at sub-tasks across the software development lifecycle.
+
+Additionally, this demo is optimized for full-stack web app development. A future direction is to generalize these findings to other fields. It’s likely that some or all of these lessons can be applied to the types of long-running agentic tasks required in, for example, scientific research or financial modeling.
+
+Acknowledgements
+Written by Justin Young. Special thanks to David Hershey, Prithvi Rajasakeran, Jeremy Hadfield, Naia Bouscal, Michael Tingley, Jesse Mu, Jake Eaton, Marius Buleandara, Maggie Vo, Pedram Navid, Nadine Yasser, and Alex Notov for their contributions.
+
+This work reflects the collective efforts of several teams across Anthropic who made it possible for Claude to safely do long-horizon autonomous software engineering, especially the code RL & Claude Code teams. Interested candidates who would like to contribute are welcome to apply at anthropic.com/careers.
+
+Footnotes
+1. We refer to these as separate agents in this context only because they have different initial user prompts. The system prompt, set of tools, and overall agent harness was otherwise identical.
+
+Get the developer newsletter
+Product updates, how-tos, community spotlights, and more. Delivered monthly to your inbox.
+
+Enter your email
+
+Please provide your email address if you'd like to receive our monthly developer newsletter. You can unsubscribe at any time.
+
+Products
+Claude
+Claude Code
+Claude Code Enterprise
+Claude Cowork
+Claude Security
+Claude for Chrome
+Claude for Slack
+Claude for Microsoft 365
+Skills
+Max plan
+Team plan
+Enterprise plan
+Download app
+Pricing
+Log in to Claude
+Models
+Mythos Preview
+Opus
+Sonnet
+Haiku
+Solutions
+AI agents
+Code modernization
+Coding
+Customer support
+Education
+Financial services
+Government
+Healthcare
+Legal
+Life sciences
+Nonprofits
+Security
+Small business
+Claude Platform
+Overview
+Developer docs
+Pricing
+Marketplace
+Regional compliance
+Claude on AWS
+Google Cloud’s Vertex AI
+Microsoft Foundry
+Console login
+Resources
+Blog
+Claude partner network
+Community
+Connectors
+Courses
+Customer stories
+Engineering at Anthropic
+Events
+Inside Claude Code
+Inside Claude Cowork
+Inside Claude Enterprise
+Inside Claude Security
+Plugins
+Powered by Claude
+Service partners
+Startups program
+Tutorials
+Use cases
+Help and security
+Availability
+Status
+Support center
+Company
+Anthropic
+Careers
+Economic Futures
+Research
+News
+Claude’s Constitution
+Responsible Scaling Policy
+Security and compliance
+Transparency
+Terms and policies
+Privacy choices
+Privacy policy
+Consumer health data privacy policy
+Responsible disclosure policy
+Terms of service: Commercial
+Terms of service: Consumer
+Usage policy
+© 2026 Anthropic PBC
+
+Beyond pass@1: A Reliability Science Framework
+for Long-Horizon LLM Agents
+Aaditya Khanal Yangyang Tao Junxiu Zhou
+School of Computing and Analytics
+Northern Kentucky University
+{khanala1, taoy1, zhouj2}@nku.edu
+April 1, 2026
+Abstract
+Machine learning benchmarks evaluate capability — whether a model succeeds on a single attempt. Production
+deployments require reliability — whether a model consistently succeeds across repeated invocations on tasks of
+varying duration. We show these two properties diverge systematically as task duration increases, and that existing
+benchmarks are structurally blind to this divergence because they report only pass@1 on short, atomic tasks.
+We introduce a formal reliability science framework for long-horizon LLM agents comprising four metrics:
+the Reliability Decay Curve (RDC), which characterizes how passk
+degrades with task duration; the Variance
+Amplification Factor (VAF), which quantifies how duration amplifies stochastic failure modes; the Graceful
+Degradation Score (GDS), a partial-credit metric for agents that partially complete long tasks; and the Meltdown
+Onset Point (MOP), which detects behavioral collapse via sliding-window entropy over tool-call sequences.
+We construct a 396-task benchmark across four duration buckets and three domains, and evaluate 10 open-source
+models across 23,392 episodes (k = 3 repeats, two scaffolds). Key findings: (1) reliability decay is domain-stratified
+— SE GDS drops from 0.90 to 0.44 over the full duration range, while DP is nearly flat (0.74 to 0.71); (2) VAF
+bifurcates cleanly by capability tier (frontier VAF ≥ 2.37; mid-tier VAF ≤ 1.26), with the counterintuitive result that
+high variance amplification is a capability signature, not an instability signature; (3) capability and reliability rankings
+diverge substantially, with multi-rank inversions between medium and very-long horizons; (4) frontier models exhibit
+the highest meltdown rates (up to 19%) because they pursue ambitious multi-step strategies — the “MOP paradox”;
+and (5) memory scaffolds universally hurt long-horizon GDS (negative or neutral for all 10 models), providing strong
+evidence against naive episodic memory as a reliability intervention. These results motivate reliability as a first-class
+evaluation dimension alongside capability.
+1 Introduction
+The deployment of LLM-based agents in production systems has accelerated dramatically, yet our methods for evaluating
+them remain tethered to a regime that does not reflect how they are used in practice. The dominant evaluation paradigm
+reports a single number — pass@1 — which measures whether an agent completes a task on a single, best-effort
+attempt. This metric is well-suited to measuring capability: given a task the model can plausibly solve, does it? But
+production deployments require a different property: reliability. A production agent is invoked thousands of times, on
+tasks whose difficulty and duration vary widely. The question that matters is not whether the agent can succeed, but
+whether it consistently succeeds across many invocations.
+These two properties are not the same. τ -bench [Yao et al., 2024] showed that GPT-4o achieves 61% pass@1
+on retail agent tasks but only 25% pass@8 — meaning that when the task is run eight times, the probability of at
+least one failure approaches 75%. Yet τ -bench, like virtually all agent benchmarks, evaluates only short, atomic tasks
+that a human might complete in minutes. Real-world tasks — refactoring a codebase, researching and synthesizing
+a technical report, processing a corpus of interlinked documents — take humans tens of minutes to hours. As task
+duration increases, agents accumulate errors across more steps, have more opportunities for meltdown, and carry more
+intermediate state that can become corrupted. We hypothesize, and empirically confirm across 23,392 episodes, that
+reliability degrades super-linearly with task complexity — where complexity is jointly determined by task duration and
+domain structure — and that this degradation is invisible to benchmarks reporting only pass@1 on short, atomic tasks.
+1
+arXiv:2603.29231v1 [cs.AI] 31 Mar 2026
+Work Models Duration dim. Variance Partial credit
+τ -bench [Yao et al., 2024] 6 × passk
+×
+ReliabilityBench [rel, 2026b] 2 × ✓ ×
+METR horizon [met, 2025] 3 ✓ × ×
+OdysseyBench [ody, 2025] 4 partial × ×
+SWE-bench [Jimenez et al., 2024] 20+ × × ×
+This work 10 ✓ ✓ ✓
+Table 1: Comparison to prior agent evaluation work. “Duration dim.” indicates whether task duration is used as an
+independent variable. “Variance” indicates whether inter-run variance is measured. “Partial credit” indicates whether
+partial task completion is scored.
+The blindspot. Table 1 summarizes the current state of agent reliability research. No prior work has jointly studied (1)
+multiple models, (2) multiple duration buckets, and (3) a variance-aware reliability metric. ReliabilityBench [rel, 2026b]
+is the closest prior work, introducing a three-dimensional reliability surface, but covers only 2 models and short-horizon
+tasks. The METR long-horizon study [met, 2025] measures task-completion horizons but does not analyze variance or
+reliability across repeated attempts. τ -bench introduced passk but did not study duration as a variable.
+Our contributions. We make four contributions:
+1. Reliability framework. We formalize agent reliability as a function of task duration and introduce four metrics: the
+Reliability Decay Curve (RDC), the Variance Amplification Factor (VAF), the Graceful Degradation Score (GDS),
+and the Meltdown Onset Point (MOP). Each metric captures a distinct facet of reliability that pass@1 is blind to
+(Section 3).
+2. Benchmark. We construct a 396-task benchmark across four duration buckets and three domains (33 tasks per cell),
+with programmatic evaluation wherever possible. The complete benchmark is publicly released (Section 4).
+3. Empirical study. We evaluate 10 open-source models via two scaffolds (ReAct and memory-augmented) with
+k = 3 repeats, accessed via the OpenRouter unified API, across 23,392 episodes covering all four duration buckets
+(Section 5).
+4. Findings. We report four novel findings beyond the core reliability decay thesis: (a) VAF bifurcates by capability
+tier, with high variance amplification being a capability signature; (b) capability and reliability rankings diverge
+with multi-rank inversions; (c) frontier models exhibit highest meltdown rates due to ambitious strategy pursuit
+(the “MOP paradox”); and (d) memory scaffolds universally hurt long-horizon reliability — findings with direct
+implications for model selection and deployment (Section 6).
+Paper organization. Section 2 reviews related work. Section 3 introduces the reliability framework and metrics.
+Section 4 describes benchmark construction. Section 5 presents the experimental setup and main results. Section 6
+presents deeper analysis. Section 7 discusses implications and limitations. Section 8 concludes.
+2 Related Work
+2.1 Agent Benchmarks
+Short-horizon task benchmarks. SWE-bench [Jimenez et al., 2024] and its variants [swe, 2025] measure whether
+agents can resolve GitHub issues, but evaluate a single attempt per issue and do not study variance. WebArena [Zhou
+et al., 2024] and similar browser-agent benchmarks test multi-step web interactions but again report only pass@1. These
+benchmarks have driven substantial capability improvements but are structurally unable to measure reliability.
+Passk and consistency metrics. τ -bench [Yao et al., 2024] introduced passk — the probability that an agent succeeds
+on all k repeated attempts — and showed a striking reliability gap: GPT-4o achieves 61% pass@1 but 25% pass@8 on
+2
+retail agent tasks. However, τ -bench tasks are short (minutes to complete) and the study does not treat task duration as
+an independent variable. Our work extends this by measuring how passk degrades across duration buckets.
+Long-horizon benchmarks. OdysseyBench [ody, 2025] introduces multi-hour tasks for agent evaluation, and the
+METR long-horizon study [met, 2025] measures the “50% success horizon” — the task duration at which a model’s
+pass@1 drops to 50%. METR find that this horizon has doubled every 7 months from 2019 to 2024, a striking capability
+result. Neither work analyzes variance across repeated runs, however, which means they cannot distinguish a model
+that succeeds 50% of the time on a 2-hour task because it has a consistent strategy from one that succeeds 50% because
+it succeeds fully on some runs and catastrophically fails on others.
+2.2 Reliability and Robustness Evaluation
+ReliabilityBench [rel, 2026b] is the closest prior work to ours. It evaluates LLMs across three reliability dimensions
+— consistency, robustness, and fault tolerance — and constructs a three-dimensional reliability surface. However, it
+evaluates only 2 models, focuses on short-horizon tasks, and does not study duration as a variable. “Towards a Science
+of AI Agent Reliability” [rel, 2026a] provides a theoretical treatment of agent reliability but lacks empirical validation
+at scale.
+Reliability in safety-critical engineering. Our work is inspired by reliability engineering in aerospace and software
+systems, where reliability is defined as the probability that a system performs its required function under stated
+conditions for a specified period of time [Modarres et al., 2016]. Mean Time Between Failures (MTBF), failure rate
+λ(t), and reliability functions R(t) = e
+−λt are standard tools. We adapt this vocabulary to the agent setting, where
+“time” is replaced by task duration and “failure” is task non-completion or degraded completion.
+2.3 Meltdown and Failure Mode Analysis
+Several recent works have observed meltdown behavior in long-horizon agents — a transition from coherent but
+incorrect behavior to incoherent looping, self-contradiction, and hallucinated tool outputs. met [2025] document this
+qualitatively; we provide the first quantitative detection method via sliding-window entropy over tool-call sequences
+(MOP, Section 3). Related work on in-context learning dynamics [icl, 2024] and attention collapse in long contexts [Liu
+et al., 2024] suggests mechanistic explanations for why meltdown occurs; we leave mechanistic analysis to future work.
+2.4 Evaluation Infrastructure
+OpenAgentSafety [ope, 2025] and related survey papers [age, 2025] provide broad overviews of agent evaluation
+methodology. Our evaluation harness follows best practices from these surveys: programmatic verification over
+LLM-as-judge wherever possible, k ≥ 3 repeats to estimate variance, isolated execution environments per episode, and
+full trajectory logging for post-hoc analysis.
+3 Reliability Framework
+3.1 Task Model
+We model an agent task as a tuple T = (W, S, A, d, ν, n∗
+, E), where:
+• W is the workspace (files, databases, browser state);
+• S is the set of subtasks with associated criticality weights wi summing to 1;
+• A is the set of available tools/actions;
+• d ∈ {short, medium, long, very long} is the duration bucket, based on estimated human completion time;
+• ν ∈ {SE, WR, DP} is the domain;
+• n
+∗ ∈ Z
++ is the agent steps estimate — the expected number of tool calls in a correct solution, which may differ
+substantially from human time;
+3
+• E : W → [0, 1] is the programmatic evaluator.
+The separation of d (human-time duration) and n
+∗
+(agent complexity) is deliberate: our pilot study reveals that
+these can diverge significantly across domains, motivating domain-stratified analysis of the RDC (Section 6).
+An episode is a single execution of an agent on task T , producing a trajectory τ = (a1, o1, a2, o2, . . . , aT , oT )
+of action-observation pairs. The episode terminates when the agent calls finish() or reaches the step limit. The
+evaluator E scores the resulting workspace state.
+Definition 1 (Pass@1). Given task T and model M, pass@1 is the probability that a single episode yields E(W) = 1.0:
+pass@1(M, T ) = Pr[E(W(1)) = 1.0]
+Definition 2 (Passk
+). Passk
+is the probability that all k independent repeated episodes succeed:
+passk
+(M, T ) = Pr"\
+k
+i=1
+E(W(i)
+) = 1.0
+#
+If episodes were i.i.d. Bernoulli trials with probability p = pass@1, then passk = p
+k
+. We test this i.i.d. assumption
+empirically and find systematic violations (Section 6).
+3.2 Metric 1: Reliability Decay Curve (RDC)
+Definition 3 (Reliability Decay Curve). The RDC of model M is the function mapping duration bucket d to passk
+:
+RDC(M, k) : d 7→ passk
+(M, d)
+where passk
+(M, d) is averaged over all tasks in bucket d.
+The shape of the RDC characterizes a model’s reliability profile. A flat curve (passk
+constant across d) indicates
+a production-safe model: reliability does not degrade with task complexity. A steep curve indicates a model that is
+capable on easy tasks but unreliable on harder ones.
+Reliability Decay Slope (RDS). We summarize the RDC with a single scalar: the slope of a linear regression of
+GDS on bucket index b ∈ {0, 1, 2, 3} (short through very long):
+RDS(M) =
+P
+b
+(b − ¯b)(GDS(M, b) − GDS)
+P
+b
+(b − ¯b)
+2
+RDS < 0 indicates degrading reliability with task duration; RDS ≈ 0 indicates a floor effect (the model is uniformly
+poor across all buckets); RDS > 0 would indicate improving performance with duration (not observed in practice).
+Unlike a normalized endpoint comparison, the regression slope is robust to non-monotonic curves caused by domain
+mixing across buckets.
+3.3 Metric 2: Variance Amplification Factor (VAF)
+Definition 4 (Variance Amplification Factor).
+VAF(M) = σ
+2
+[pass@1(M, T ) | d = long]
+σ
+2[pass@1(M, T ) | d = short]
+where variance is taken over tasks T within the respective duration buckets.
+VAF > 1 indicates that long-horizon tasks amplify outcome variance relative to short-horizon tasks. We hypothesize
+VAF ≫ 1 for all models, reflecting the compounding uncertainty of multi-step reasoning.
+Theoretical bound. Under a Markov model of errors — where each step fails independently with probability ϵ — the
+variance of task success after T steps scales as O(ϵT(1 − ϵ)
+T −1
+), which for fixed ϵ is maximized at T = 1/ϵ and then
+decays. In practice, errors are positively correlated across steps (a confused agent tends to stay confused), which pushes
+variance even higher and faster. This motivates our expectation of super-linear degradation.
+4
+3.4 Metric 3: Graceful Degradation Score (GDS)
+Binary pass/fail obscures meaningful differences among failing agents. An agent that completes 8 of 10 subtasks on a
+2-hour task is meaningfully better than one that completes 1 of 10, even though both receive pass@1 = 0.
+Definition 5
+P
+(Graceful Degradation Score). Given task T with subtasks {si} and criticality weights {wi} (with
+i wi = 1), the GDS of an episode is:
+GDS(τ, T ) = X
+i
+wi
+· 1[subtask si completed correctly]
+GDS ∈ [0, 1], with GDS = 1 corresponding to full task success.
+GDS provides a richer signal than pass@1 for tasks where partial completion is possible and valuable. It is
+particularly important for the very-long duration bucket, where pass@1 may approach zero for all models but GDS can
+still distinguish model quality.
+Aggregation. We report mean GDS per model per duration bucket, and use GDS as the primary metric when passk
+is
+near zero.
+3.5 Metric 4: Meltdown Onset Point (MOP)
+Meltdown refers to a qualitative transition in agent behavior: from making coherent (if incorrect) progress on a task,
+to exhibiting incoherent behavior such as looping over the same tool calls, contradicting earlier observations, or
+hallucinating tool outputs. Meltdown is particularly common in long-horizon tasks where the context window fills and
+the model loses track of its earlier state.
+We detect meltdown quantitatively via the entropy of the tool-call distribution over a sliding window.
+Definition 6 (Meltdown Onset Point). Let τ = (a1, . . . , aT ) be a trajectory of tool calls. Define the sliding-window
+tool-call distribution over window [t − w, t] as:
+pt(tooli) = |{j ∈ [t − w, t] : aj = tooli}|
+w
+The window entropy at step t is:
+H(t) = −
+X
+i
+pt(tooli) log pt(tooli)
+The MOP is the first step t
+∗
+such that:
+H(t
+∗
+) > θH and H(t
+∗
+) − H(t
+∗ − w) > δ
+where θH and δ are thresholds calibrated on the pilot data. If no such t
+∗
+exists, MOP = ∞ (no meltdown detected).
+Interpretation. High entropy in the tool-call window means the agent is using tools in a disorganized, non-systematic
+pattern — calling read, write, read, search, read, write with no coherent strategy. The secondary condition (∆H > δ)
+requires a spike in entropy, not just sustained high entropy, which distinguishes meltdown from legitimate task
+exploration.
+Threshold calibration. We calibrate θH and δ on the pilot dataset to maximize the F1 score of detecting manually
+labeled meltdown episodes. We use window size w = 5 steps throughout.
+Predictive value. We test whether MOP can be predicted before it occurs — specifically, whether a rising H(t) trend
+n steps before t
+∗
+is detectable. This would enable early-stopping interventions that abort an episode at the first sign of
+impending meltdown, rather than waiting for it to manifest.
+5
+3.6 Relationship Between Metrics
+The four metrics are complementary:
+• RDC and VAF characterize the population-level reliability of a model across tasks.
+• GDS characterizes the quality of individual failures.
+• MOP characterizes the trajectory dynamics of failing episodes.
+Together they provide a multi-dimensional view of reliability that is far richer than pass@1.
+4 Benchmark Design
+4.1 Task Suite Overview
+Our benchmark comprises 396 tasks organized along two axes: duration bucket (d) and domain (ν), with perfectly
+balanced representation of 33 tasks per cell. Table 2 shows the distribution.
+Bucket Human time SE Web Research Doc Processing Total
+Short ≤ 5 min 33 33 33 99
+Medium 5–30 min 33 33 33 99
+Long 30–120 min 33 33 33 99
+Very Long ≥ 120 min 33 33 33 99
+Total 132 132 132 396
+Table 2: Task distribution across duration buckets and domains (396 tasks total; 33 per cell). All four buckets are
+evaluated in the full study (396 tasks × 10 models × k = 3 × 2 scaffolds = 23,760 planned episodes; 23,392
+completed).
+Task construction trajectory. We began with a 19-task validation suite (2 tasks per bucket per domain, covering
+all four duration buckets including long and very long) to end-to-end validate the harness and all four metrics. After
+confirming that infrastructure operated reliably, we expanded to a full 396-task registry with 33 tasks per cell, balanced
+across all domains and buckets. The full study evaluates all four buckets (396 tasks × 10 models × k = 3 × 2 scaffolds
+= 23,760 planned episodes; 23,392 completed after deduplication). Results from both the 19-task validation run and
+the full 396-task study are reported in Section 5.
+4.2 Domain Descriptions
+Software Engineering (SE). Tasks involve reading, modifying, and testing Python codebases. Short tasks include
+single-function bug fixes and type annotation additions. Medium tasks involve multi-function refactors with test suites
+(e.g., fixing N+1 query bugs, adding rate limiting middleware). Long tasks require implementing cross-cutting features
+such as JWT authentication across multiple endpoints. Very long tasks involve larger-scale porting (Python 2 to 3) or
+integrating event-driven notification systems with multiple interacting components. Evaluation is fully programmatic:
+we run the agent-modified workspace through a provided test suite and check for correct behavior.
+Agentic Web Research (WR). Tasks require multi-step information gathering via web search and URL fetching,
+followed by synthesis into structured or prose outputs. Short tasks extract a handful of facts about a well-known entity.
+Medium tasks compare multiple products or services across structured dimensions. Long tasks require synthesizing
+a technical survey with year-specific citations and structured analysis. Very long tasks involve competitive analysis
+across five or more entities on a dozen dimensions, requiring accurate, up-to-date information and a coherent structured
+output. Evaluation uses tolerant matching (substring matching for names, range checks for quantities) to account for
+web content changes over time.
+6
+Multi-file Document Processing (DP). Tasks involve reading structured or semi-structured documents and producing
+transformed outputs. Short tasks convert CSV to JSON with type coercion and null handling. Medium tasks merge
+datasets from multiple CSV files with different schemas, date formats, and duplicate rows. Long tasks extract structured
+information from free-text reports and cross-reference multiple policy documents to identify contradictions. Very long
+tasks synthesize five interlinked API specifications to produce a unified, deduplicated, contradiction-resolved document
+with traceability and gap identification. Evaluation is programmatic: outputs are checked against ground-truth files or
+verified by schema validation.
+4.3 Task Construction Principles
+Programmatic evaluation. We use programmatic evaluation wherever possible and clearly label the minority of
+cases that require LLM-as-judge. Programmatic evaluation eliminates judge variance from the reliability measurements
+and makes results fully reproducible.
+Isolated workspaces. Each episode runs in a fresh copy of the task workspace (via shutil.copytree to a
+temporary directory), ensuring that outputs from one episode do not contaminate another. Web research tasks use live
+web search; all other tasks use only local file operations, eliminating network non-determinism.
+Subtask decomposition. Every task is decomposed into 3–6 subtasks with assigned criticality weights. Subtasks
+are ordered from simplest to hardest (reflecting likely agent progress) to maximize the informativeness of GDS. For
+example, the SE-M-01 task (fix N+1 query bug) decomposes into: (1) identify the root cause (+0.25), (2) implement a
+fix that reduces queries (+0.35), (3) preserve data integrity (+0.20), (4) pass the provided test suite (+0.20).
+Duration calibration and agent complexity. Duration buckets are assigned based on estimated human completion
+time, validated against author completion times on a sample of tasks. Each task also carries an agent steps estimate n
+∗
+— the expected number of tool calls in a correct solution — which provides a complementary, agent-centric measure
+of complexity. Our pilot study reveals that d and n
+∗
+can diverge across domains: document-processing tasks that
+take humans 45–60 minutes may require only 4–8 agent tool calls, while software engineering tasks of equivalent
+human duration require 15–25. We report both d and n
+∗ per task and use the ratio nobserved/n∗
+as a diagnostic for task
+calibration. In analyses, we stratify by domain ν alongside d to disentangle duration effects from domain difficulty.
+4.4 Evaluation Protocol
+Each model-task pair is evaluated with k = 3 repeated episodes to estimate passk
+and GDS variance. Episodes use
+temperature 0.7 to induce the stochasticity required to estimate reliability. Each episode runs until the agent calls
+finish() or reaches a 50-step limit. Trajectories, token counts, and timestamps are logged for all episodes.
+4.5 Comparison to Prior Benchmarks
+Table 3 compares our benchmark to related work.
+Benchmark Tasks Models k Duration Partial credit
+SWE-bench [Jimenez et al., 2024] 2294 20+ 1 short ×
+τ -bench [Yao et al., 2024] 115 6 ≤ 8 short ×
+OdysseyBench [ody, 2025] 250 4 1 mixed ×
+ReliabilityBench [rel, 2026b] 300 2 5 short ×
+METR horizon [met, 2025] 100 3 1 long ×
+Ours (validation) 19 9 3 all GDS
+Ours (full study) 396 10 3 all GDS
+Table 3: Comparison to related benchmarks. Our work is the first to combine all four duration buckets, repeated
+sampling (k = 3), and partial-credit scoring (GDS) at scale. The full study (396 tasks, 10 models, 23,392 episodes) is
+the most comprehensive long-horizon agent reliability study to date.
+7
+5 Experiments
+5.1 Setup
+Models. We evaluate 10 open-source / open-weight models accessed through the OpenRouter unified API [OpenRouter, 2024]. Using open-source models ensures full reproducibility: any researcher can replicate our experiments at
+minimal cost. Table 4 lists the models.
+Tier Model Parameters Architecture
+Small Llama 3.1 8B 8B Dense
+Small Mistral Nemo 12B Dense
+Medium Mistral Small 3.2 24B Dense
+Medium Qwen3 30B 30B MoE
+Medium Qwen3 32B 32B Dense
+Large Llama 3.3 70B 70B Dense
+Large MiniMax M2.5 229B MoE
+Large GLM-4.5 Air – Dense
+Very Large Kimi K2.5 1T MoE
+Very Large DeepSeek V3 671B MoE
+Table 4: The 10 paid open-source models in the full study. All accessed via OpenRouter. Qwen3 models use
+include_reasoning: False to disable extended thinking on DeepInfra. DeepSeek V3 routes via DeepInfra;
+Mistral models route via Mistral provider. MiniMax M2.5 and Kimi K2.5 use OpenRouter default routing (16 and 14
+providers respectively).
+Model selection rationale. An initial validation run (detailed in Section 5.2) evaluated 12 models, including three
+accessed via free-tier quotas (Nemotron Nano 30B, GLM-4.5 Air, Nemotron Super 120B) and two with single-provider
+DeepInfra routing (Llama 4 Scout, Llama 4 Maverick). This surfaced two infrastructure reliability failures that directly
+motivated changes to the final lineup:
+1. Daily quota exhaustion. All three free-tier models hit OpenRouter’s per-day request ceiling mid-run. Critically,
+quota was exhausted after completing short-horizon tasks but before reaching long-horizon tasks, inflating apparent
+pass@1 by up to 15% relative to full-horizon coverage. This is a systematic selection bias invisible to single-session
+benchmarks: a model that cannot survive a long benchmark run is, by definition, unreliable for long-horizon
+deployment.
+2. Single-provider endpoint unavailability. Llama 4 Scout and Llama 4 Maverick were pinned to DeepInfra as the
+sole provider. Both returned HTTP 404 “No endpoints found” throughout the full run due to provider-side capacity
+constraints — despite being listed in OpenRouter’s model catalog. With allow_fallbacks: False, no
+alternative routing was attempted.
+We draw two methodological conclusions. First, infrastructure reliability is itself a dimension of agent reliability:
+models that cannot complete a benchmark run due to quota or availability constraints are unreliable in exactly the sense
+our framework measures. Second, multi-provider routing is a prerequisite for reproducible long-horizon evaluation:
+single-provider pins with no fallback introduce an availability single point of failure that short-task benchmarks never
+encounter.
+For the full study, we replaced all affected models: free-tier models with paid equivalents, and single-provider Llama
+4 models with MiniMax M2.5 (16 providers) and Kimi K2.5 (14 providers). We also introduced two cost-control circuit
+breakers: a 120,000-token per-episode input budget (catches context-blowup from stuck models) and loop detection
+(aborts if the same tool+arguments combination repeats ≥ 3 times in 6 steps). The final 10-model lineup shown in
+Table 4 completed all episodes without infrastructure failures.
+Scaffolds. We evaluate two scaffolds:
+8
+• ReAct [Yao et al., 2023]: The standard “reason → act → observe” loop. At each step, the model receives the task
+description, conversation history, and available tools, and outputs a tool call or finish().
+• Memory-augmented loop (Mem): Extends ReAct with an episodic scratchpad. The agent can call add_to_memory(note)
+to persist key observations; the scratchpad is injected into the system prompt on every turn. This models lightweight
+episodic memory.
+Both scaffolds use the same tool set: read_file, write_file, list_directory, run_command, web_search,
+fetch_url, finish. A nudge mechanism injects up to three corrective user messages when the model returns a
+text-only response without a tool call, after which the episode terminates.
+Infrastructure. The evaluation harness is implemented in Python using the OpenAI-compatible SDK. Rate limits
+are respected via a per-model 15-second delay queue; daily quota exhaustion (HTTP 429 with “free-models-per-day”
+message) triggers immediate episode termination rather than retrying, preventing wasted wall-clock time. Each episode
+runs in an isolated temporary workspace (shutil.copytree to a tempfile.TemporaryDirectory). Full
+trajectories (tool calls, arguments, results, timestamps, token counts) are logged to JSONL and optionally streamed to
+Weights & Biases [Weights & Biases, 2020] for real-time experiment tracking. Cost is estimated from OpenRouter
+pricing per model.
+Hyperparameters. Temperature: 0.7; maximum steps: 70 (headroom above the 60-step estimate for very-long tasks);
+maximum output tokens per step: 2,048; maximum tool result characters: 4,000; maximum nudges: 3; MOP window
+size: 5; per-episode input token budget: 120,000; loop detection threshold: 3 repeated (tool, args) pairs within 6 steps.
+5.2 19-Task Validation Results
+We first report results from the 19-task validation run (12 models, 2 scaffolds, k = 3, 1,368 episodes, total cost $4.26).
+This run validated the full harness end-to-end and surfaced the infrastructure issue with free-tier models described
+above. All results below exclude 46 quota-failure episodes; the 1,322 remaining episodes over 9 paid models form the
+basis of this section.
+Reliability Decay Curve. Table 5 reports mean GDS and pass@1 per model per duration bucket (ReAct scaffold,
+k = 3). The Reliability Decay Slope (RDS) is the linear fit coefficient of GDS vs. bucket index (short=1, medium=2,
+long=3, very_long=4).
+Model Short Medium Long V. Long RDS
+DeepSeek V3 1.00 0.80 0.64 0.99 −0.05
+Llama 3.3 70B 0.82 0.45 0.63 0.76 −0.03
+Qwen3 32B 0.95 0.47 0.62 0.67 −0.07
+Llama 4 Scout 0.89 0.47 0.59 0.65 −0.07
+Mistral Small 3.2 0.93 0.49 0.59 0.39 −0.11
+Qwen3 30B 0.92 0.55 0.50 0.68 −0.14
+Mistral Nemo 0.78 0.20 0.42 0.45 −0.08
+Llama 4 Maverick 0.71 0.24 0.31 0.55 −0.10
+Llama 3.1 8B 0.34 0.15 0.21 0.20 −0.03
+Mean 0.82 0.42 0.50 0.60
+Table 5: Mean GDS per duration bucket (19-task validation run, ReAct scaffold, k = 3). RDS = Reliability Decay
+Slope (linear regression slope of pass@1 vs. integer bucket index: short= 1, medium= 2, long= 3, very_long= 4).
+The non-monotonic aggregate pattern (long > medium) is explained by domain stratification: DP long-horizon tasks
+are tractable for agents despite their human-estimated complexity (Section 6).
+Domain stratification. Table 7 reports aggregate GDS by domain and duration bucket across all 9 paid models. The
+domain effect is the dominant source of variation in the reliability curves.
+9
+Model Short Medium Long V. Long
+DeepSeek V3 1.00 0.80 0.40 1.00
+Llama 3.3 70B 0.80 0.40 0.40 0.75
+Qwen3 32B 0.80 0.40 0.40 0.50
+Llama 4 Scout 0.60 0.40 0.40 0.25
+Mistral Small 3.2 0.80 0.20 0.40 0.25
+Qwen3 30B 0.80 0.40 0.20 0.25
+Mistral Nemo 0.60 0.20 0.20 0.25
+Llama 4 Maverick 0.40 0.20 0.00 0.00
+Llama 3.1 8B 0.20 0.00 0.20 0.00
+Mean 0.67 0.33 0.29 0.36
+Table 6: Mean pass@1 per duration bucket (19-task validation run, ReAct scaffold, k = 3). Pass@1 drops sharply from
+short to medium across all models; GDS (Table 5) captures partial progress that binary pass@1 discards.
+Domain Short Medium Long V. Long
+SE (code editing) 0.97 0.30 0.25 0.68
+DP (doc processing) 0.81 0.60 0.81 0.58
+WR (web research) 0.71 0.59 0.55 0.40
+Table 7: Aggregate GDS by domain and duration bucket (19-task validation, all 9 paid models, ReAct scaffold). SE
+collapses sharply at medium and long horizons. DP exhibits a non-monotonic pattern: DP-L tasks that take humans
+45–60 minutes require only 4–8 agent tool calls, making them tractable despite their human-time classification. WR
+degrades monotonically.
+Key observations.
+• Reliability decay is universal but non-uniform. All 9 models show declining mean pass@1 from short (0.67) to
+medium (0.33). Seven of 9 models have negative RDS, confirming the reliability decay hypothesis. The two near-zero
+slopes (DeepSeek V3, Llama 3.3 70B, Llama 3.1 8B) reflect ceiling effects at the top and a floor effect at the bottom,
+not immunity to decay.
+• SE tasks collapse; DP tasks do not. SE domain GDS falls from 0.97 (short) to 0.30 (medium) and 0.25 (long) —
+a 3× drop in one bucket transition. In contrast, DP GDS at long horizon (0.81) matches short (0.81): structured
+document extraction tasks with deterministic evaluation are tractable for agents at any horizon. This divergence
+demonstrates that the “long-horizon difficulty” of a task is not determined by its human-estimated duration alone.
+• Rank inversions emerge at scale. Llama 4 Maverick (400B MoE) ranks 8th on short tasks (pass@1 = 0.40) and
+last among paid models on long+very-long tasks (pass@1 = 0.00). Mistral Nemo (12B dense) outperforms it on
+long+very-long reliability (0.22 vs. 0.00 mean pass@1), despite having 33× fewer parameters. This capabilityreliability rank inversion is precisely the phenomenon our framework is designed to surface.
+• Memory scaffold hurts large models; effect is mixed for others. Among the 9 paid models, the Memory scaffold
+reduces long+very-long GDS relative to ReAct for 5 of 9 models, with the largest penalties on the strongest
+models: Llama 3.3 70B (∆ = −0.13) and Qwen3 32B (∆ = −0.09). Mistral Nemo shows a small positive effect
+(∆ = +0.05). The scratchpad overhead (extra tool calls, context injection) appears to tax capable models’ step
+budgets more than it benefits them.
+• Cost at scale is tractable. The 1,322-episode validation run cost $4.26, or approximately $0.0032 per episode.
+The full 23,392-episode study cost approximately $40.83 for short+medium buckets; total study cost including all
+four buckets is estimated at $80–120. At roughly $0.004–0.005 per episode, long-horizon multi-model reliability
+evaluation is accessible without large compute budgets.
+10
+Model Short Medium Long V. Long Slope
+DeepSeek V3 92.9±5.1 92.9±4.5 84.8±7.1 79.8±7.6 −0.001
+Kimi K2.5 93.9±4.5 96.0±3.5 78.8±8.1 79.8±7.1 −0.001
+MiniMax M2.5 93.9±4.5 93.9±4.5 81.8±7.1 82.8±7.6 −0.001
+GLM-4.5 Air 94.9±4.0 89.9±5.6 78.8±8.6 66.7±9.1 −0.002
+Qwen3 32B 80.8±7.6 59.6±9.6 44.4±9.6 51.5±9.1 −0.001
+Mistral 24B 73.7±8.1 52.5±10.1 62.6±9.1 55.6±10.1 −0.001
+Llama 3.3 70B 74.7±8.6 44.4±9.6 37.4±9.6 54.5±9.1 −0.000
+Qwen3 30B 75.8±8.6 47.5±9.1 22.2±7.6 34.3±9.1 −0.002
+Mistral Nemo 53.5±10.1 12.1±6.6 12.1±6.6 8.1±5.1 −0.002
+Llama 3.1 8B 25.3±8.1 9.1±5.6 2.0±2.5 8.1±5.6 −0.001
+Mean 76.3 59.8 50.5 52.1
+Table 8: Pass@1 (%) ± 95% CI per duration bucket (full 23,392-episode study, ReAct scaffold, k = 3, 33 tasks per
+cell). Slope = linear regression coefficient of pass@1 vs. integer bucket index (short= 1 through very_long= 4). All
+models show net decline over the full duration range.
+Model GDS pass@1
+S M L VL S M L VL
+DeepSeek V3 0.96 0.95 0.93 0.87 0.93 0.94 0.84 0.82
+Kimi K2.5 0.97 0.96 0.86 0.84 0.94 0.95 0.82 0.81
+MiniMax M2.5 0.97 0.95 0.88 0.89 0.95 0.93 0.84 0.83
+GLM-4.5 Air 0.96 0.93 0.80 0.73 0.91 0.91 0.77 0.69
+Qwen3 32B 0.91 0.67 0.59 0.60 0.84 0.62 0.46 0.52
+Mistral 24B 0.81 0.67 0.73 0.70 0.73 0.53 0.59 0.61
+Llama 3.3 70B 0.84 0.58 0.55 0.62 0.73 0.41 0.39 0.50
+Qwen3 30B 0.83 0.55 0.35 0.38 0.77 0.48 0.22 0.31
+Mistral Nemo 0.57 0.21 0.28 0.23 0.49 0.15 0.15 0.12
+Llama 3.1 8B 0.32 0.17 0.11 0.07 0.26 0.11 0.04 0.06
+Mean 0.81 0.66 0.61 0.59 0.76 0.60 0.51 0.53
+Table 9: GDS and pass@1 across all four duration buckets (full study, ReAct scaffold, k = 3; S=Short, M=Medium,
+L=Long, VL=Very Long). The GDS–pass@1 gap widens at long horizons, capturing partial progress invisible to binary
+evaluation. DeepSeek V3, Kimi K2.5, and MiniMax M2.5 form a distinct frontier cluster with VL GDS ≥ 0.84.
+5.3 Full Study Results (23,392 Episodes)
+The full study runs 396 tasks × 10 models × 2 scaffolds × k = 3 = 23,760 planned episodes (23,392 completed after
+deduplication). With 33 tasks per (bucket × domain) cell, 95% confidence intervals on pass@1 are ±4–10% depending
+on model performance, providing reliable per-cell estimates across all four duration buckets.
+Reliability Decay Curve. Table 8 reports pass@1 (±95% CI) per model per duration bucket (ReAct scaffold, k = 3).
+Reliability decay is universal: every model shows declining pass@1 from short to very-long. The aggregate mean drops
+from 76.3% (short) to 52.0% (very long) — a 24.3 percentage-point decline over the full duration range.
+Graceful Degradation Score. Table 9 reports GDS and pass@1 across all four buckets. The GDS–pass@1 gap
+widens at long horizons, capturing partial progress that binary evaluation discards entirely.
+Variance Amplification Factor. Table 10 reports VAF = σ
+2
+(pass@1 | long+vlong)/σ2
+(pass@1 | short+medium)
+per model with 95% bootstrap confidence intervals.
+Domain stratification across all four buckets. Table 11 reports aggregate GDS by domain across all four duration
+buckets and all 10 models. Domain is the strongest single predictor of reliability decay slope.
+11
+Model VAF 95% CI Short/Med pass Long/VL pass
+MiniMax M2.5 2.60 [1.53, 5.24] 93.9% 83.2%
+DeepSeek V3 2.49 [1.44, 4.44] 93.3% 83.2%
+Kimi K2.5 2.48 [1.46, 5.26] 94.4% 81.8%
+GLM-4.5 Air 2.37 [1.59, 4.16] 90.7% 72.7%
+Qwen3 32B 1.26 [1.07, 1.54] 72.7% 48.8%
+Mistral 24B 1.02 [0.87, 1.20] 63.0% 59.9%
+Llama 3.3 70B 0.98 [0.90, 1.08] 57.1% 44.6%
+Qwen3 30B 0.71 [0.56, 0.86] 62.8% 26.6%
+Mistral Nemo 0.42 [0.30, 0.57] 31.8% 13.8%
+Llama 3.1 8B 0.26 [0.15, 0.41] 18.2% 4.9%
+Table 10: VAF (full study, ReAct scaffold). VAF > 1 means long-horizon variance exceeds short-horizon variance.
+The top four models (VAF ≥ 2.37) are precisely the frontier cluster; weaker models have VAF < 1 because they fail
+uniformly at both short and long horizons.
+Domain Short Medium Long V. Long Drop (S→VL)
+SE (code editing) 0.90 0.59 0.57 0.44 −0.46
+WR (web research) 0.80 0.72 0.59 0.63 −0.17
+DP (doc processing) 0.74 0.69 0.66 0.71 −0.03
+Table 11: Aggregate GDS by domain (full 23,392-episode study, all 10 models, ReAct scaffold). SE has the steepest
+decline (−0.46 short to very-long); DP is nearly flat (−0.03), confirming that structured extraction tasks resist duration
+effects.
+Key observations.
+• Reliability decay is universal and pronounced. All 10 models show net decline in pass@1 from short to very-long.
+The mean drop is 24.3 percentage points (76.3% → 52.1%) over the four-bucket span. This confirms the core
+hypothesis at 23,392-episode scale.
+• A frontier cluster maintains high long-horizon reliability. DeepSeek V3, Kimi K2.5, and MiniMax M2.5 all
+achieve very-long pass@1 ≥ 79.8% — still above the short-horizon pass@1 of most mid-tier models. GLM-4.5 Air
+starts at 94.9% (highest short pass@1) but drops to 66.7% at very-long — a “leaky frontier” pattern distinct from the
+true frontier cluster.
+• Mistral Nemo collapses at medium and stays collapsed. Mistral Nemo drops from 53.5% to 12.1% at medium
+and never recovers, reaching 8.1% at very-long. This floor collapse means binary evaluation severely overstates its
+long-horizon utility.
+• SE is catastrophic; DP is resilient. SE aggregate GDS drops from 0.90 (short) to 0.44 (very-long) — a 2×
+collapse. DP drops only 0.03 GDS points over the same range, confirming that human-estimated task duration and
+agent-relevant complexity are orthogonal for structured extraction tasks.
+• VAF bifurcates by capability tier. The top four models (VAF ≥ 2.37) are also the top four by long-horizon pass@1.
+The bottom six have VAF < 1.3, meaning their long-horizon variance is equal to or less than their short-horizon
+variance — they fail uniformly rather than variably. This VAF bifurcation is a novel, interpretively inverted finding:
+high variance amplification is a signature of capability, not instability.
+6 Analysis
+6.1 Reliability Decay is Super-linear
+Under the i.i.d. Bernoulli assumption, if a model has per-step failure probability ϵ, task success over T steps is (1 − ϵ)
+T
+— a geometric decay. We test whether observed decay is faster than this baseline using the full 23,392-episode dataset.
+12
+Figure 1: Reliability Decay Curves (pass@1 vs. duration bucket) for all 10 models, ReAct scaffold. The frontier
+cluster (DeepSeek V3, Kimi K2.5, MiniMax M2.5) maintains ≥ 79% at very-long; all other models show steeper
+declines. GLM-4.5 Air is a “leaky frontier” — highest short pass@1 but steep long-horizon drop. Llama 3.3 70B shows
+non-monotone recovery at very-long.
+Across all 10 models, mean pass@1 drops from 76.3% (short) to 59.8% (medium), 50.5% (long), and 52.1%
+(very long). The aggregate medium-horizon drop (−16.5 pp) already exceeds the geometric prediction for most
+models. For Qwen3 30B (pshort = 75.8%), the geometric prediction for long horizon (T ≈ 4×) is 0.7584 ≈ 33.0%;
+observed is 22.2% — 1.5× below baseline. For Mistral Nemo (pshort = 53.5%), the geometric prediction for medium
+is 0.5352 ≈ 28.6%; observed is 12.1% — 2.4× below baseline.
+These super-linear gaps are consistent with positive error correlation across steps: once an agent makes an incorrect
+tool call or forms a wrong hypothesis, it tends to persist in that error rather than recovering. Early failure rates in the
+GDS data corroborate this. For GLM-4.5 Air, the fraction of episodes that terminate before completing even the first
+subtask rises from 1% (short) to 25% (very long). DeepSeek V3’s early failure rate rises from 2% (short) to 11% (very
+long), with the sharpest jump at the long-to-very-long transition. These monotone early-failure increases are a direct
+fingerprint of positive inter-step error correlation.
+6.2 VAF Bifurcation: Variance Amplification as a Capability Signature
+VAF = σ
+2
+(pass@1 | long+vlong)/σ2
+(pass@1 | short+medium) measures whether duration amplifies run-to-run
+variability. A naive reading of this metric would suggest that high VAF indicates instability. The full-study data reveal
+the opposite: VAF bifurcates cleanly along capability lines.
+The top four models by long-horizon pass@1 (DeepSeek V3, Kimi K2.5, MiniMax M2.5, GLM-4.5 Air) have VAF
+= 2.37–2.60 with non-overlapping confidence intervals above the bottom six. The bottom six models all have VAF
+< 1.3, with the weakest models (Llama 3.1 8B, Mistral Nemo) having VAF = 0.26 and 0.42 respectively.
+The mechanism is straightforward: capable models sometimes succeed and sometimes fail at long horizons, creating
+high variance. Weak models reliably fail at long horizons — near-zero pass@1 means near-zero variance. A model
+cannot have high VAF unless it has substantial long-horizon pass@1 in the first place. Concretely, Llama 3.1 8B
+achieves only 4.9% long+very-long pass@1 (Table 10) — there is almost no variance to amplify. DeepSeek V3 achieves
+83.2% — its variance is amplified because it has a genuinely mixed success distribution at long horizons.
+Implication: VAF is not a diagnostic for instability; it is a capability filter. Practitioners selecting models for
+long-horizon deployment should prefer models with both high long-horizon pass@1 and high VAF, as these have
+demonstrated the ability to succeed when conditions are favorable — and the variability indicates the model has found
+task-completion strategies, not that it is unreliable.
+6.3 Capability Rank ̸= Reliability Rank: Evidence from Rank Inversions
+We define capability rank as the ordering of models by pass@1 on short tasks, and reliability rank as the ordering by
+pass@1 on very-long tasks (Table 8). The two rankings diverge substantially.
+13
+Figure 2: VAF vs. long+very-long pass@1 for all 10 models. The bifurcation is visible as two clusters: frontier models
+(top-right, VAF ≥ 2.37, pass ≥ 72.7%) and mid/small models (bottom-left). No model occupies the high-VAF/low-pass
+regime, confirming that high variance amplification requires high long-horizon performance.
+The llama-3.3-70b recovery anomaly. Llama 3.3 70B ranks 5th–6th by short-horizon pass@1 (74.7%) but recovers
+to 3rd–4th place at very-long (54.5%). Its long-horizon GDS also rises from 0.55 (long) to 0.62 (very long) — the only
+non-frontier model that improves from long to very-long. This non-monotone pattern suggests the very-long task pool
+(120+ min human time) has higher-level subtask decomposition that suits its planning profile.
+The mistral-24b non-monotone arc. Mistral 24B ranks below several models at medium (52.5%) but recovers to
+55.6%–62.6% at long and very-long. This U-shaped reliability curve is invisible to short-task benchmarks and would
+mislead any practitioner relying on medium-horizon evaluation alone.
+The GDS–pass gap as a reliability diagnostic. For models that partially complete long tasks, the gap GDS − pass@1
+is informative. At long horizon, Llama 3.3 70B has GDS= 0.55 and pass@1= 0.39 — a gap of 0.16. At very-long,
+GDS= 0.62 and pass@1= 0.50 — a gap of 0.12. This widening-then-narrowing pattern shows the model completes
+more subtasks than it completes full tasks: exactly the signal GDS is designed to capture and binary evaluation discards
+entirely.
+6.4 The MOP Paradox: Frontier Models Melt Down More
+We compute MOP using calibrated thresholds (H∗ = 1.711 bits, δ
+∗ = 0.000, calibrated from 1,590 short-horizon
+baseline episodes; window w = 5). Table 12 reports meltdown rates by model and bucket.
+14
+Model Short Medium Long V. Long
+DeepSeek V3 4% / step 11 10% / step 14 5% / step 18 19% / step 17
+MiniMax M2.5 4% / step 13 7% / step 16 4% / step 16 13% / step 24
+GLM-4.5 Air 1% / — 4% / step 20 2% / step 34 0% / —
+Kimi K2.5 0% / — 2% / step 16 2% / step 11 4% / step 15
+Llama 3.3 70B 0% / — 0% / — 0% / — 0% / —
+Mistral 24B 0% / — 0% / — 0% / — 0% / —
+Mistral Nemo 0% / — 1% / — 0% / — 0% / —
+Qwen3 30B 0% / — 0% / — 0% / — 0% / —
+Qwen3 32B 0% / — 0% / — 0% / — 0% / —
+Llama 3.1 8B 2% / step 10 1% / — 0% / — 0% / —
+Table 12: Meltdown rate and median onset step by model and duration bucket (ReAct scaffold, k = 3, w = 5,
+H∗ = 1.711, δ
+∗ = 0.000, calibrated from 1,590 short-horizon baseline episodes). Format: “rate / step”. Median step
+omitted (“—” or “–”) where fewer than 5 meltdown events were observed in that cell.
+The dominant pattern is a MOP paradox: the models with the highest long-horizon GDS are also the models with
+the highest meltdown rates. DeepSeek V3 and MiniMax M2.5 achieve the best very-long GDS (0.87, 0.89) yet also
+have the highest very-long meltdown rates (19%, 13%). All other models have meltdown rates of 0–4% across all
+buckets.
+This paradox has a coherent explanation: frontier models attempt more aggressive, multi-step strategies at long
+horizons. When these strategies work, they produce high GDS. When they spiral — calling the same tool repeatedly
+with minor argument variants, exploring dead-end subtask paths — the sliding-window entropy exceeds the threshold.
+Weaker models, by contrast, emit stable low-entropy tool-call sequences because they follow rote, shallow strategies
+that never generate entropy spikes — but also never complete the task.
+Implication for production: MOP is not a binary failure detector; it identifies ambition mismatches — episodes
+where a capable model’s exploratory strategy has exceeded its reliability envelope. These are precisely the episodes
+where context resetting (saving state and restarting with a fresh window) is most likely to recover value.
+6.5 Memory Scaffolds Universally Hurt at Long Horizons
+We compare ReAct and Memory scaffold GDS on long and very-long tasks. Table 13 reports the delta for all 10 models.
+Model ReAct L+VL Mem L+VL ∆GDS Effect
+MiniMax M2.5 0.88 0.88 −0.00 neutral
+DeepSeek V3 0.90 0.87 −0.03 neutral
+Llama 3.1 8B 0.09 0.07 −0.02 neutral
+Qwen3 32B 0.59 0.59 −0.01 neutral
+Kimi K2.5 0.85 0.71 −0.14 hurts
+Mistral 24B 0.71 0.58 −0.13 hurts
+GLM-4.5 Air 0.76 0.73 −0.03 hurts
+Llama 3.3 70B 0.58 0.55 −0.03 hurts
+Qwen3 30B 0.36 0.28 −0.08 hurts
+Mistral Nemo 0.26 0.20 −0.06 hurts
+Table 13: Memory vs. ReAct scaffold on long+very-long GDS (full study, k = 3). The memory scaffold never helps: 6
+models are hurt, 4 are neutral (within ±0.03 GDS). The largest penalties are on Kimi K2.5 (−0.14) and Mistral 24B
+(−0.13).
+The memory scaffold never helps. Across all 10 models, the memory scaffold either hurts or is neutral at long
+horizons; no model gains GDS from memory augmentation. The hurt effect is concentrated in the mid-capability tier
+(Kimi K2.5, Mistral 24B, Qwen3 30B, Mistral Nemo) — models capable enough to use the scratchpad but not capable
+enough to absorb its overhead efficiently.
+15
+Figure 3: ReAct vs. Memory scaffold long+very-long GDS for all 10 models. Every bar is at or below zero: the
+memory scaffold never improves long-horizon reliability. Kimi K2.5 and Mistral 24B show the largest penalties (−0.14
+and −0.13 respectively).
+This result is a reversal of the preliminary finding in the short+medium study, where Llama 3.1 8B and Llama
+3.3 70B showed small positive memory effects. At long horizons, the overhead of calling add_to_memory() and
+injecting the growing scratchpad into every turn consumes step budget and context space. This overhead is tolerable at
+short horizons (few scratchpad entries) but becomes load-bearing at long horizons where scratchpad entries accumulate.
+Practical implication: These data provide strong empirical evidence against naive episodic memory augmentation
+as a reliability intervention for long-horizon agents. Memory scaffolds should not be applied without careful calibration
+of per-step overhead against task length.
+6.6 Domain Effects: SE Catastrophic, DP Resilient
+Domain is the strongest single predictor of reliability decay, dominating model-size effects for most of the performance
+range. Table 11 (Section 5.3) reports aggregate GDS by domain and bucket.
+Per-model long+very-long pass@1 by domain (Table 14) reveals sharp model-by-domain interactions.
+Several model-by-domain interactions are noteworthy. GLM-4.5 Air achieves strong SE (77.3%) and DP (90.9%)
+at long horizons but collapses on WR (50.0%) — 28 percentage points below its next-closest domain. This suggests
+sensitivity to environmental non-determinism (live web search) that is domain-specific rather than capability-general.
+Llama 3.3 70B shows the opposite pattern: strong WR (68.2%) but weak SE (12.1%). Its planning style (broad
+web search and synthesis) suits agentic research tasks but fails at SE’s requirement for precise, verifiable multi-step
+execution. Kimi K2.5 is the most domain-balanced frontier model, with 79–83% across all three domains.
+The DP ceiling effect (≥ 83.8% for all three frontier models) demonstrates that structured document extraction
+tasks are near-saturated for frontier models even at very-long horizons. SE remains the most discriminating domain:
+spread ranges from 0.5% (Llama 3.1 8B) to 82.3% (Kimi K2.5), an 82-point gap.
+6.7 Cost-Reliability Trade-offs
+Using OpenRouter pricing data, we identify the Pareto frontier of inference cost vs. long-horizon reliability. The
+full 23,392-episode study cost approximately $40.83 for short+medium and is estimated at $80–120 total including
+16
+Model SE (L+VL) WR (L+VL) DP (L+VL)
+DeepSeek V3 74.7% 80.8% 93.9%
+MiniMax M2.5 78.3% 79.3% 91.9%
+Kimi K2.5 82.3% 79.3% 83.8%
+GLM-4.5 Air 77.3% 50.0% 90.9%
+Qwen3 32B 21.2% 65.2% 60.1%
+Mistral 24B 69.7% 45.5% 64.6%
+Llama 3.3 70B 12.1% 68.2% 53.5%
+Qwen3 30B 11.6% 27.3% 40.9%
+Mistral Nemo 3.0% 8.1% 30.3%
+Llama 3.1 8B 0.5% 7.1% 7.1%
+Table 14: Per-model pass@1 by domain for long+very-long combined (full study, ReAct scaffold). GLM-4.5 Air has a
+surprising WR weakness (50.0%) despite strong SE and DP performance. Llama 3.3 70B reverses the typical SE>WR
+ordering.
+long+very-long buckets.
+The reliability-per-dollar picture at long horizons differs sharply from short-horizon rankings. DeepSeek V3
+achieves the highest mean very-long GDS (0.87) at a moderate cost ($0.14/M input, $0.28/M output via DeepInfra
+routing) and represents the Pareto-dominant choice: high reliability, moderate cost, wide provider coverage. MiniMax
+M2.5 achieves competitive very-long GDS (0.89) at higher cost but with 16 fallback providers, making it the most
+infrastructure-reliable frontier option. Llama 3.3 70B at $0.10/M output achieves only 44.6% long+very-long pass@1 —
+reasonable reliability-per-dollar for cost-constrained scenarios but not competitive with frontier models for consequential
+long-horizon tasks.
+7 Discussion
+7.1 Implications for Production Deployment
+Our 23,392-episode study produces findings with direct implications for practitioners deploying LLM agents.
+Do not select models by short-horizon pass@1. The divergence between capability rank and reliability rank
+(Section 6.3) is large enough to reverse deployment decisions. At very-long horizon, Llama 3.3 70B (74.7% short)
+outperforms Qwen3 30B (75.8% short) by 20 percentage points (54.5% vs. 34.3%) despite nearly identical short-task
+performance. GLM-4.5 Air starts as the highest-performing model at short horizon (94.9%) but drops to fourth place at
+very-long (66.7%). Practitioners should measure RDC across the duration bucket matching their deployment scenario,
+not just pass@1 on short benchmarks.
+Memory scaffolds are counterproductive at long horizons. The full-study result is unambiguous: the memory
+scaffold never improves long-horizon reliability, and hurts 6 of 10 models (Section 6.5). The two largest penalties
+(Kimi K2.5 −0.14, Mistral 24B −0.13) are both on mid-capability-tier models with enough competence to use the
+scratchpad actively. We recommend against deploying episodic memory scaffolds on long-horizon tasks without
+per-task calibration of the overhead-vs-benefit trade-off. The baseline ReAct loop is strictly better in aggregate.
+Task decomposition is the highest-leverage reliability intervention. The RDC directly quantifies the reliability
+gain achievable by decomposing a long task into shorter sub-tasks and restarting the agent at each boundary. For a
+model with short-horizon pass@1 of pS and very-long pass@1 of pV L, decomposing into n independent short segments
+improves expected completion from pV L toward p
+n
+S
+/pn−1
+S = pS (assuming subtask independence). For DeepSeek V3,
+this represents a 92.9% − 79.8% = 13.1 pp reliability gain; for Qwen3 30B, a 75.8% − 34.3% = 41.5 pp gain. The
+larger the RDC slope, the higher the decomposition payoff.
+17
+MOP-based early stopping targets ambition mismatches. The MOP paradox (Section 6.4) reframes how to use
+meltdown detection in production. Because high meltdown rates co-occur with high GDS for frontier models, MOP
+should not trigger immediate task abandonment. Instead, a meltdown signal should trigger context resetting: saving the
+current subtask state, starting a fresh context window, and continuing from the last verified checkpoint. This preserves
+partial progress while breaking the entropy-spiraling trajectory.
+Two-tier reliability structure. The full-study data reveal a qualitative tier boundary. The frontier cluster (DeepSeek
+V3, Kimi K2.5, MiniMax M2.5) maintains ≥ 79.8% pass@1 at very-long horizon with VAF ≥ 2.48. GLM-4.5 Air
+is a borderline case: strong short-horizon (94.9%) but a steeper decay curve (very-long 66.7%), making it a “leaky
+frontier” model — appropriate for medium-horizon deployments but risky for very-long. Everything below GLM-4.5
+Air shows ≤ 55.6% very-long pass@1 and VAF ≤ 1.26, indicating that the capability infrastructure required for
+reliable long-horizon completion requires more than the medium-tier models examined here provide.
+7.2 Theoretical Implications
+Our finding that reliability decays super-linearly with task duration (Section 6) implies that the i.i.d. Bernoulli model
+of step-level errors is systematically wrong — errors are positively correlated across steps. This has implications for
+theoretical models of agent reliability and for the design of training objectives that target reliability.
+Specifically, if a model’s step-level failure probability is ϵ but failures are positively correlated (correlation ρ > 0),
+then multi-step task failure probability is Ω(ϵ · e
+ρT ) — exponentially worse than the independent case. Reducing ρ (the
+inter-step error correlation) is therefore a higher-priority training objective than reducing ϵ alone, for production-reliable
+agents.
+The VAF bifurcation (Section 6.2) further implies that there is a capability threshold below which models enter a
+uniform failure regime: short- and long-horizon failures are equally certain, so duration adds no new variance. Above
+this threshold, duration introduces genuine uncertainty — the model sometimes succeeds and sometimes fails —
+creating the variance amplification we observe. Characterizing this threshold in terms of architectural or training
+properties is an open theoretical problem.
+7.3 Limitations
+Duration as a proxy. We use estimated human completion time as a proxy for task difficulty and duration. This proxy
+may not perfectly capture agent difficulty: some tasks that are quick for humans (e.g., recognizing a common design
+pattern) may be hard for agents, and vice versa. The DP non-monotonicity (Section 6.6) is a direct demonstration of this
+proxy’s imperfection: DP-L tasks classified as “long” by human-time are tractable for agents in 4–8 tool calls. Future
+work should validate or replace this proxy with agent-measured step counts.
+Infrastructure reliability as a validity threat. Our experiment surfaced a failure mode absent from short-task
+benchmarks: infrastructure reliability. Three free-tier models exhausted daily API quotas after completing short tasks
+but before reaching long-horizon tasks, inflating apparent pass@1 by introducing systematic selection bias. Two further
+models (Llama 4 Scout, Llama 4 Maverick) returned HTTP 404 throughout the run due to provider-side capacity
+constraints despite being listed in the API catalog. We replaced all five with models offering paid tiers and multiprovider routing (≥ 14 providers), which eliminated infrastructure failures entirely. We recommend that long-horizon
+benchmarks treat completion rate (fraction of planned episodes that ran to termination without infrastructure error) as a
+first-class validity metric.
+Open-source model scope. We evaluate 10 open-source models only, for cost and reproducibility reasons. We do not
+evaluate GPT-4o, Claude 3.7, Gemini 2.0 Ultra, or other frontier proprietary models, which are likely more reliable than
+the models studied here. Our findings characterize the open-source frontier; extending to frontier proprietary models is
+left to future work.
+Task coverage. Our 396-task benchmark, while the most comprehensive reliability-focused agent study we are aware
+of, cannot cover all possible task types. The three domains (SE, WR, DP) are representative but not exhaustive; tasks
+involving embodied action, tool fabrication, or multi-agent coordination are not covered.
+18
+Evaluation validity. Programmatic evaluation may have blind spots — for example, an agent that writes a “correct”
+function that happens to pass the test suite via overfitting. We mitigate this by designing edge-case-covering test suites,
+but cannot fully eliminate the concern.
+Temporal validity. Web research tasks evaluate against live web content, which changes over time. We use tolerant
+matching (range checks, substring matching) to reduce sensitivity, but WR results may not be perfectly reproducible at
+different time points.
+7.4 Future Work
+• Reliability-aware training: Using RDC, VAF, and GDS as training signals to fine-tune models for higher passk
+and lower reliability decay slope.
+• MOP-triggered context reset interventions: Implementing and evaluating checkpoint-and-restart policies triggered
+by MOP entropy precursors; the full-study data predict this would recover substantial value for frontier models (19%
+meltdown rate at very-long).
+• Proprietary model extension: Extending the study to GPT-4o, Claude 3.7 Sonnet, and Gemini 2.0 to characterize
+the proprietary reliability frontier and its relation to the open-source tier boundary observed here.
+• Memory scaffold redesign: Given the universal failure of naive episodic memory at long horizons, designing and
+testing alternative memory architectures (hierarchical summaries, subtask-scoped memory, memory with expiration)
+is a high-priority practical problem.
+• Multi-agent reliability: Studying how reliability changes in multi-agent pipelines, where errors can cascade across
+agents and the composition of reliabilities is non-trivial.
+• Domain expansion: Extending to embodied agents, tool-fabrication tasks, and code generation at repository scale.
+8 Conclusion
+We have presented a reliability science framework for long-horizon LLM agents, comprising four novel metrics (RDC,
+VAF, GDS, MOP), a 396-task benchmark across four duration buckets and three domains, and an empirical study of
+10 open-source models across 23,392 episodes via two scaffolds (ReAct and memory-augmented).
+Our central finding is that reliability is a two-dimensional property — shaped jointly by task duration and domain
+structure — that current benchmarks are structurally blind to because they report only pass@1 on short, atomic tasks.
+Across 10 models and four duration buckets, aggregate pass@1 drops from 76.3% at short horizon to 52.1% at very-long
+— a 24.3 percentage-point decline that is super-linear relative to the i.i.d. Bernoulli baseline for most models. Software
+engineering tasks collapse fastest (aggregate GDS 0.90 → 0.44 over the full duration range) while document processing
+tasks remain nearly flat (0.74 → 0.71), demonstrating that human-estimated task duration and agent-relevant complexity
+are orthogonal dimensions.
+We report four novel empirical findings beyond the core reliability decay thesis. (1) VAF bifurcation: VAF splits
+cleanly into two regimes — frontier models (VAF = 2.37–2.60) and mid/small models (VAF ≤ 1.26) — because high
+variance amplification requires high long-horizon pass@1 to amplify. Counterintuitively, high VAF is a capability
+signature, not an instability signature. (2) Rank inversions: Capability rank (short-horizon pass@1) and reliability rank
+(very-long pass@1) diverge substantially, with Llama 3.3 70B recovering from 5th at short to 3rd–4th at very-long, and
+GLM-4.5 Air falling from 1st at short to 4th at very-long. (3) MOP paradox: The two best-performing frontier models
+(DeepSeek V3, MiniMax M2.5) also have the highest meltdown rates (19% and 13% at very-long), because frontier
+models pursue ambitious multi-step strategies that generate tool-call entropy spikes when they spiral — while weaker
+models emit rote, low-entropy sequences that never complete long tasks. (4) Memory scaffolds universally hurt:
+Across all 10 models, the memory scaffold never improves long-horizon GDS relative to ReAct (neutral for 4 models,
+negative for 6). The baseline ReAct loop is the better long-horizon scaffold, and naive episodic memory augmentation
+should not be adopted as a default reliability intervention.
+These findings collectively demonstrate that optimizing for short-task pass@1 is an insufficient and sometimes
+counterproductive strategy for production reliability. We release all code, tasks, trajectories, and evaluation results
+publicly to support future work on reliability-aware agent development.
+19
+Broader Impacts
+This work introduces evaluation methodology for long-horizon LLM agents, with the following societal implications.
+Positive impacts. More reliable agents reduce the risk of costly silent failures in production deployments (erroneous
+code commits, incorrect research syntheses, corrupt document pipelines). Our framework gives practitioners concrete,
+actionable criteria for model selection — replacing ad-hoc intuition with quantitative reliability evidence. Releasing the
+benchmark and all evaluation code publicly lowers the barrier for other researchers to measure reliability.
+Potential negative impacts. As with any benchmark, our metrics could be gamed — models could be fine-tuned
+specifically to improve RDC/VAF/GDS/MOP scores without genuine reliability improvement. We mitigate this by
+using diverse, programmatically verified tasks, but acknowledge this concern.
+Dual-use. More reliable autonomous agents can complete longer, more consequential tasks with less human oversight.
+While this is our intended use case, it also implies higher stakes for failures that do occur. We recommend that
+production deployments complement reliability evaluation with human oversight commensurate with task consequence.
+References
+In-Context Learning through the Bayesian Prism. 2024.
+A Survey of LLM Agent Evaluation. arXiv preprint arXiv:2507.21504, 2025.
+Measuring AI Ability to Complete Long Tasks. arXiv preprint arXiv:2503.14499, 2025. METR long-horizon study.
+OdysseyBench: A Long-Horizon Benchmark for LLM Agents. arXiv preprint arXiv:2508.09124, 2025.
+OpenAgentSafety: A Framework for Evaluating Safety in Open-Source LLM Agents. arXiv preprint arXiv:2507.06134,
+2025.
+SWE-bench Pro: A More Challenging Benchmark for Software Engineering Agents. 2025.
+Towards a Science of AI Agent Reliability. arXiv preprint arXiv:2602.16666, 2026a.
+ReliabilityBench: A Multi-Dimensional Benchmark for LLM Reliability. arXiv preprint arXiv:2601.06112, 2026b.
+Carlos E Jimenez et al. SWE-bench: Can Language Models Resolve Real-World GitHub Issues? In ICLR, 2024.
+Nelson F. Liu et al. Lost in the Middle: How Language Models Use Long Contexts. Transactions of the ACL, 2024.
+Mohammad Modarres, Mark Kaminskiy, and Vasiliy Krivtsov. Reliability Engineering and Risk Analysis: A Practical
+Guide. CRC Press, 2016.
+OpenRouter. OpenRouter: A Unified Interface for LLMs. https://openrouter.ai, 2024.
+Weights & Biases. Weights & Biases: The AI Developer Platform. https://wandb.ai, 2020.
+Shunyu Yao et al. ReAct: Synergizing Reasoning and Acting in Language Models. In ICLR, 2023.
+Shunyu Yao et al. τ -bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains. arXiv preprint
+arXiv:2406.12045, 2024.
+Shuyan Zhou et al. WebArena: A Realistic Web Environment for Building Autonomous Agents. In ICLR, 2024.
+20
+Appendix
+A Metric Derivations
+A.1 Super-linear Decay Under Correlated Errors
+Let task T require T steps to complete. Assume step t succeeds with probability 1 − ϵt. Under the independence
+assumption, task success probability is QT
+t=1(1 − ϵt) ≈ e
+−ϵT for homogeneous ϵt = ϵ.
+Now suppose errors are positively correlated: Cov(1[failt], 1[failt
+′ ]) = ρϵ2 > 0. By the inclusion-exclusion
+principle, the variance of the number of failed steps satisfies:
+Var"X
+t
+1[failt]
+#
+= T ϵ(1 − ϵ) + T(T − 1)ρϵ2
+The second term grows as T
+2
+, indicating that correlated errors make the variance of the total failure count superlinear in T. The probability that all steps succeed is therefore:
+Pr[all succeed] ≤ exp
+−ϵT −
+ρϵ2T(T − 1)
+2
+
+which is super-exponential in T for ρ > 0 — faster than the geometric decay predicted by the i.i.d. model.
+This provides a theoretical basis for expecting that pass@1 on long-horizon tasks is much lower than (1 − ϵ)
+T
+predicts.
+A.2 MOP Threshold Calibration Procedure
+We calibrate θH and δ (the MOP thresholds) as follows:
+1. Manually label a random sample of 50 pilot episodes as “meltdown” or “no meltdown” based on qualitative
+inspection of tool-call sequences.
+2. For candidate threshold pairs (θH, δ) ∈ {0.5, 1.0, 1.5, 2.0} × {0.2, 0.5, 1.0}, compute F1 score of meltdown
+detection.
+3. Select the pair maximizing F1 on the labeled sample.
+We use window size w = 5 steps; sensitivity analysis with w ∈ {3, 7, 10} is reported in Table 15.
+Window w Precision Recall F1
+3 — — —
+5 — — —
+7 — — —
+10 — — —
+Table 15: Sensitivity of MOP detection F1 to window size w. Full manual labeling of meltdown episodes against
+ground-truth failure outcomes is deferred to future work; formal precision/recall will be reported once a labeled set is
+available. Current thresholds (H∗ = 1.711, δ
+∗ = 0.000) are auto-calibrated from 1,590 short-horizon baseline episodes
+(see Section 6).
+B Full Results Tables
+Detailed per-task results (GDS, pass@1, passk
+, MOP rates, and cost per episode) for all 10 models, both scaffolds,
+and all four duration buckets are available in the publicly released results repository accompanying this paper. The
+repository includes JSONL episode logs for all 23,392 episodes, per-task aggregates, and the analysis scripts used to
+produce all tables and figures in this paper.
+21
+C Task Examples
+SE-S-01 (Short SE): Fix Off-by-One Bug. The workspace contains a Python module with a single off-by-one error
+in a list slicing operation, a bug report, and a test suite. The agent must read the file, identify the bug, write the fix, and
+call finish(). Typical successful episode: 4–6 steps.
+SE-M-01 (Medium SE): Fix N+1 Query. The workspace contains a Flask app with a database access layer that
+fetches orders and then, for each order, runs a separate query to fetch its items. The agent must identify the N+1 pattern,
+replace it with a JOIN-based query, verify data integrity, and pass the test suite. Typical successful episode: 8–15 steps.
+SE-L-02 (Long SE): Add JWT Authentication. The workspace contains a Flask app with four unprotected API
+endpoints and a test suite requiring JWT authentication on all endpoints. The agent must add login, token generation,
+and token validation middleware, and ensure all four endpoints return 401 without a valid token. Typical successful
+episode: 15–25 steps.
+DP-S-01 (Short DP): Convert CSV to JSON. The workspace contains a 20-row CSV file with null values in some
+columns and a schema file. The agent must read the CSV, convert to a JSON array with correct null handling, and write
+the output. Typical successful episode: 3–5 steps.
+WR-M-01 (Medium WR): SaaS Pricing Comparison. The agent must search for current pricing information for
+three SaaS tools (Asana, Linear, Notion), extract structured fields (free tier, paid tier name, monthly price, guest access),
+and write a structured JSON output. Evaluation uses tolerant matching to account for pricing changes.
+D API Cost Breakdown
+Model In ($/M tok) Out ($/M tok) Pilot cost (342 ep.)
+Llama 3.3 70B 0.10 0.32 $0.19
+Mistral Small 3.2 0.06 0.18 $0.52
+Llama 3.1 8B 0.02 0.05 $0.02
+Total $0.74
+Table 16: API cost for the completed pilot run (342 episodes, 19 tasks, k = 3, 2 scaffolds). Mistral Small 3.2 dominates
+cost due to high output token generation on long SE tasks (SE-L-01/02 reached $0.08–0.09 per episode). Llama 3.1 8B
+cost is near zero as it is a free-tier model on OpenRouter.
+22
+Figure 4: Per-model pass@1 heatmap by domain and duration bucket (ReAct scaffold). SE tiles darken steeply from
+short to very-long for all models. DP tiles remain bright for frontier models. GLM-4.5 Air’s WR weakness is visible as
+an anomalously dark WR column relative to its bright SE and DP columns.
+23
+
+Skip to main content
+Home
+Download1 of 9
+Nitro2 of 9
+Discover3 of 9
+Careers9 of 9
+Log In
+The Discord logo surrounded by representations of chat messages. They look to be shooting out from the Discord logo.
+Engineering & Developers
+How Discord Stores Trillions of Messages
+Bo Ingram
+Bo Ingram
+March 6, 2023
+In 2017, we wrote a blog post on how we store billions of messages. We shared our journey of how we started out using MongoDB but migrated our data to Cassandra because we were looking for a database that was scalable, fault-tolerant, and relatively low maintenance. We knew we’d be growing, and we did!
+
+We wanted a database that grew alongside us, but hopefully, its maintenance needs wouldn’t grow alongside our storage needs. Unfortunately, we found that to not be the case — our Cassandra cluster exhibited serious performance issues that required increasing amounts of effort to just maintain, not improve.
+
+Almost six years later, we’ve changed a lot, and how we store messages has changed as well.
+‍
+
+Our Cassandra Troubles
+We stored our messages in a database called cassandra-messages. As its name suggests, it ran Cassandra, and it stored messages. In 2017, we ran 12 Cassandra nodes, storing billions of messages.
+
+At the beginning of 2022, it had 177 nodes with trillions of messages. To our chagrin, it was a high-toil system — our on-call team was frequently paged for issues with the database, latency was unpredictable, and we were having to cut down on maintenance operations that became too expensive to run.
+
+What was causing these issues? First, let’s take a look at a message.
+
+CREATE TABLE messages (
+   channel_id bigint,
+   bucket int,
+   message_id bigint,
+   author_id bigint,
+   content text,
+   PRIMARY KEY ((channel_id, bucket), message_id)
+) WITH CLUSTERING ORDER BY (message_id DESC);
+view rawgistfile1.sql hosted with ❤ by GitHub
+The CQL statement above is a minimal version of our message schema. Every ID we use is a Snowflake, making it chronologically sortable. We partition our messages by the channel they’re sent in, along with a bucket, which is a static time window. This partitioning means that, in Cassandra, all messages for a given channel and bucket will be stored together and replicated across three nodes (or whatever you’ve set the replication factor).
+
+Within this partitioning lies a potential performance pitfall: a server with just a small group of friends tends to send orders of magnitude fewer messages than a server with hundreds of thousands of people.
+
+In Cassandra, reads are more expensive than writes. Writes are appended to a commit log and written to an in memory structure called a memtable that is eventually flushed to disk. Reads, however, need to query the memtable and potentially multiple SSTables (on-disk files), a more expensive operation. Lots of concurrent reads as users interact with servers can hotspot a partition, which we refer to imaginatively as a “hot partition”.  The size of our dataset when combined with these access patterns led to struggles for our cluster.
+
+When we encountered a hot partition, it frequently affected latency across our entire database cluster. One channel and bucket pair received a large amount of traffic, and latency in the node would increase as the node tried harder and harder to serve traffic and fell further and further behind.
+
+Other queries to this node were affected as the node couldn’t keep up. Since we perform reads and writes with quorum consistency level, all queries to the nodes that serve the hot partition suffer latency increases, resulting in broader end-user impact.
+
+Cluster maintenance tasks also frequently caused trouble. We were prone to falling behind on compactions, where Cassandra would compact SSTables on disk for more performant reads. Not only were our reads then more expensive, but we’d also see cascading latency as a node tried to compact.
+
+We frequently performed an operation we called the “gossip dance”, where we’d take a node out of rotation to let it compact without taking traffic, bring it back in to pick up hints from Cassandra’s hinted handoff, and then repeat until the compaction backlog was empty. We also spent a large amount of time tuning the JVM’s garbage collector and heap settings, because GC pauses would cause significant latency spikes.
+‍
+
+Changing Our Architecture
+Our messages cluster wasn’t our only Cassandra database. We had several other clusters, and each exhibited similar (though perhaps not as severe) faults.
+
+In our previous iteration of this post, we mentioned being intrigued by ScyllaDB, a Cassandra-compatible database written in C++. Its promise of better performance, faster repairs, stronger workload isolation via its shard-per-core architecture, and a garbage collection-free life sounded quite appealing.
+
+Although ScyllaDB is most definitely not void of issues, it is void of a garbage collector, since it’s written in C++ rather than Java. Historically, our team has had many issues with the garbage collector on Cassandra, from GC pauses affecting latency, all the way to super long consecutive GC pauses that got so bad that an operator would have to manually reboot and babysit the node in question back to health. These issues were a huge source of on-call toil, and the root of many stability issues within our messages cluster.
+
+After experimenting with ScyllaDB and observing improvements in testing, we made the decision to migrate all of our databases. While this decision could be a blog post in itself, the short version is that by 2020, we had migrated every database but one to ScyllaDB.
+
+The last one? Our friend, cassandra-messages.
+
+Why hadn’t we migrated it yet? To start with, it’s a big cluster. With trillions of messages and nearly 200 nodes, any migration was going to be an involved effort. Additionally, we wanted to make sure our new database could be the best it could be as we worked to tune its performance. We also wanted to gain more experience with ScyllaDB in production, using it in anger and learning its pitfalls.
+
+We also worked to improve ScyllaDB performance for our use cases. In our testing, we discovered that the performance of reverse queries was insufficient for our needs. We execute a reverse query when we attempt a database scan in the opposite order of a table’s sorting, such as when we scan messages in ascending order. The ScyllaDB team prioritized improvements and implemented performant reverse queries, removing the last database blocker in our migration plan.
+
+We were suspicious that slapping a new database on our system wasn’t going to make everything magically better. Hot partitions can still be a thing in ScyllaDB, and so we also wanted to invest in improving our systems upstream of the database to help shield and facilitate better database performance.
+‍
+
+Data Services Serving Data
+With Cassandra, we struggled with hot partitions. High traffic to a given partition resulted in unbounded concurrency, leading to cascading latency in which subsequent queries would continue to grow in latency. If we could control the amount of concurrent traffic to hot partitions, we could protect the database from being overwhelmed.
+
+To accomplish this task, we wrote what we refer to as data services — intermediary services that sit between our API monolith and our database clusters. When writing our data services, we chose a language we’ve been using more and more at Discord: Rust! We’d used it for a few projects previously, and it lived up to the hype for us. It gave us fast C/C++ speeds without having to sacrifice safety.
+
+Rust touts fearless concurrency as one of its main benefits — the language should make it easy to write safe, concurrent code. Its libraries also were a great match for what we were intending to accomplish. The Tokio ecosystem is a tremendous foundation for building a system on asynchronous I/O, and the language has driver support for both Cassandra and ScyllaDB.
+
+Additionally, we found it a joy to code in with the help the compiler gives you, the clarity of the error messages, the language constructs, and its emphasis on safety. We became quite fond of how once it compiled, it generally works. Most importantly, however, it lets us say we rewrote it in Rust (meme cred is very important).
+
+Our data services sit between the API and our ScyllaDB clusters. They contain roughly one gRPC endpoint per database query and intentionally contain no business logic. The big feature our data services provide is request coalescing. If multiple users are requesting the same row at the same time, we’ll only query the database once. The first user that makes a request causes a worker task to spin up in the service. Subsequent requests will check for the existence of that task and subscribe to it. That worker task will query the database and return the row to all subscribers.
+
+This is the power of Rust in action: it made it easy to write safe concurrent code.
+
+
+Let’s imagine a big announcement on a large server that notifies @everyone: users are going to open the app and read the message, sending tons of traffic to the database. Previously, this might lead to a hot partition, and on-call would potentially need to be paged to help the system recover. With our data services, we’re able to significantly reduce traffic spikes against the database.
+
+The second part of the magic here is upstream of our data services. We implemented consistent hash-based routing to our data services to enable more effective coalescing. For each request to our data service, we provide a routing key. For messages, this is a channel ID, so all requests for the same channel go to the same instance of the service. This routing further helps reduce the load on our database.
+
+
+These improvements help a lot, but they don’t solve all of our problems. We’re still seeing hot partitions and increased latency on our Cassandra cluster, just not quite as frequently. It buys us some time so that we can prepare our new optimal ScyllaDB cluster and execute the migration.
+‍
+
+A Very Big Migration
+Our requirements for our migration are quite straightforward: we need to migrate trillions of messages with no downtime, and we need to do it quickly because while the Cassandra situation has somewhat improved, we’re frequently firefighting.
+
+Step one is easy: we provision a new ScyllaDB cluster using our super-disk storage topology. By using Local SSDs for speed and leveraging RAID to mirror our data to a persistent disk, we get the speed of attached local disks with the durability of a persistent disk. With our cluster stood up, we can begin migrating data into it.
+
+Our first draft of our migration plan was designed to get value quickly. We’d start using our shiny new ScyllaDB cluster for newer data using a cutover time, and then migrate historical data behind it. It adds more complexity, but what every large project needs is additional complexity, right?
+
+We begin dual-writing new data to Cassandra and ScyllaDB and concurrently begin to provision ScyllaDB’s Spark migrator. It requires a lot of tuning, and once we get it set up, we have an estimated time to completion: three months.
+
+That timeframe doesn’t make us feel warm and fuzzy inside, and we’d prefer to get value faster. We sit down as a team and brainstorm ways we can speed things up, until we remember that we’ve written a fast and performant database library that we could potentially extend. We elect to engage in some meme-driven engineering and rewrite the data migrator in Rust.
+
+In an afternoon, we extended our data service library to perform large-scale data migrations. It reads token ranges from a database, checkpoints them locally via SQLite, and then firehoses them into ScyllaDB. We hook up our new and improved migrator and get a new estimate: nine days! If we can migrate data this quickly, then we can forget our complicated time-based approach and instead flip the switch for everything at once.
+
+We turn it on and leave it running, migrating messages at speeds of up to 3.2 million per second. Several days later, we gather to watch it hit 100%, and we realize that it’s stuck at 99.9999% complete (no, really). Our migrator is timing out reading the last few token ranges of data because they contain gigantic ranges of tombstones that were never compacted away in Cassandra. We compact that token range, and seconds later, the migration is complete!
+
+We performed automated data validation by sending a small percentage of reads to both databases and comparing results, and everything looked great. The cluster held up well with full production traffic, whereas Cassandra was suffering increasingly frequent latency issues. We gathered together at our team onsite, flipped the switch to make ScyllaDB the primary database, and ate celebratory cake!
+‍
+
+Several Months Later…
+We switched our messages database over in May 2022, but how’s it held up since then?
+
+It’s been a quiet, well-behaved database (it’s okay to say this because I’m not on-call this week). We’re not having weekend-long firefights, nor are we juggling nodes in the cluster to attempt to preserve uptime. It’s a much more efficient database — we’re going from running 177 Cassandra nodes to just 72 ScyllaDB nodes. Each ScyllaDB node has 9 TB of disk space, up from the average of 4 TB per Cassandra node.
+
+Our tail latencies have also improved drastically. For example, fetching historical messages had a p99 of between 40-125ms on Cassandra, with ScyllaDB having a nice and chill 15ms p99 latency, and message insert performance going from 5-70ms p99 on Cassandra, to a steady 5ms p99 on ScyllaDB. Thanks to the aforementioned performance improvements, we’ve unlocked new product use cases now that we have confidence in our messages database.
+
+At the end of 2022, people all over the world tuned in to watch the World Cup. One thing we discovered very quickly was that goals scored showed up in our monitoring graphs. This was very cool because not only is it neat to see real-world events show up in your systems, but this gave our team an excuse to watch soccer during meetings. We weren’t “watching soccer during meetings”, we were “proactively monitoring our systems’ performance.”
+
+
+We can actually tell the story of the World Cup Final via our message send graph. The match was tremendous. Lionel Messi was trying to check off the last accomplishment in his career and cement his claim to being the greatest of all time and lead Argentina to the championship, but in his way stood the massively talented Kylian Mbappe and France.
+
+Each of the nine spikes in this graph represents an event in the match.
+
+Messi hits a penalty, and Argentina goes up 1-0.
+Argentina scores again and goes up 2-0.
+It’s halftime. There’s a sustained fifteen-minute plateau as users chat about the match.
+The big spike here is because Mbappe scores for France and scores again 90 seconds later to tie it up!
+It’s the end of regulation, and this huge match is going to extra time.
+Not much happens in the first half of extra time, but we reach halftime and users are chatting.
+Messi scores again, and Argentina takes the lead!
+Mbappe strikes back to tie it up!
+It’s the end of extra time, we’re heading to penalty kicks!
+Excitement and stress grow throughout the shootout until France misses and Argentina doesn’t! Argentina wins!
+
+Coalesced messages per second
+People all over the world are stressed watching this incredible match, but meanwhile, Discord and the messages database aren’t breaking a sweat. We’re way up on message sends and handling it perfectly.  With our Rust-based data services and ScyllaDB, we’re able to shoulder this traffic and provide a platform for our users to communicate.
+
+We’ve built a system that can handle trillions of messages, and if this work is something that excites you, check out our careers page. We’re hiring!
+‍
+
+
+Bo Ingram
+Senior Software Engineer @ Discord
+related articles
+
+Product & Features
+Making It Easier Than Ever to Connect with Friends in League & VAL!
+
+Product & Features
+Every Voice and Video Call on Discord Is Now End-to-End Encrypted
+
+Product & Features
+Nitro Now Comes with Xbox Game Pass and New Benefits. Welcome to Nitro Rewards.
+.
+Search…
+Discord Home
+Language
+Social
+Twitter
+Instagram
+Facebook
+Youtube
+Tiktok
+Product
+Download
+Nitro
+Status
+App Directory
+Company
+About
+Jobs
+Brand
+Newsroom
+Resources
+Support
+Safety
+Blog
+Creators
+Community
+Developers
+Quests
+Official 3rd Party Merch
+Feedback
+Policies
+Terms
+Privacy
+Cookie Settings
+Guidelines
+Acknowledgements
+Licenses
+Company Information
+Discord
+
+List of Do Follow Bookmarking Sites
+List of 150 Do Follow bookmarking sites. If you bookmark your blog or websites urls on these bookmarking sites, surely the PR of your blog/website is going to improve as all the backlinks to your site from these sites will provide "link juice" to your site.
+This is a recently updated list of around 170+ best "do follow" social-bookmarking sites with google PR0-PR6
+# 1	http://www.tagza.com/	PR6
+# 2	http://www.newsmeback.com/	PR5
+# 3	http://cwustrings.com/	PR4
+# 4	http://dotpoch.com/	PR4
+# 5	http://malaysiastory.com/	PR4
+# 6	http://orangify.com/	PR4
+# 7	www.akonter.com/	PR3
+# 8	http://www.confesen.com/	PR3
+# 9	http://www.huip.de/	PR3
+# 10	http://www.hotscripts.ro/	PR3
+# 11	http://v12.me/	PR3
+# 12	http://www.indofeed.com/	PR3
+# 13	http://www.bookmark4you.com/	PR3
+# 14	http://stickytags.in/	PR3
+# 15	http://openbuzz.in/	PR3
+# 16	http://sjbb.org/	PR3
+# 17	http://www.tourdion.com/	PR3
+# 18	http://101ako.com/	PR3
+# 19	http://www.zabox.net/	PR3
+# 20	http://www.bagamare.ro/	PR3
+# 21	http://carmela.us/	PR3
+# 22	http://www.submit-link4u.info/	PR2
+# 23	http://www.bebeame.net/	PR2
+# 24	http://www.humansthink.com/	PR2
+# 25	http://beyondwordofmouth.com/	PR2
+# 26	http://bookmarkshome.com/	PR2
+# 27	http://www.linking4ever.com/	PR1
+# 28	http://www.bookmarkspligg.com/	PR1
+# 29	http://www.linksatall.com/	PR1
+# 30	http://www.site4alien.com/	PR1
+# 31	http://www.linksreddit.com/	PR1
+# 32	http://www.bookmarksforu.com/	PR1
+# 33	http://www.simplelifelinks.com/	PR1
+# 34	http://www.bookmarkslife.com/	PR1
+# 35	http://www.linkbelief.com/	PR1
+# 36	http://www.freelinkstorm.com/	PR1
+# 37	http://www.bookmarksville.com/	PR1
+# 38	http://www.siteszones.com/	PR1
+# 40	http://www.linksstumble.com/	PR1
+# 41	http://www.sitesforlink.com/	PR1
+# 42	http://www.linkstress.com/	PR1
+# 43	http://www.mapursite.com/	PR1
+# 44	http://www.bestsoftlinks.com/	PR1
+# 45	http://www.linksplurk.com/	PR1
+# 46	http://www.myventury.com/	PR1
+# 47	http://www.linkspropeller.com/	PR1
+# 48	http://www.neonsuper.com/	PR1
+# 49	http://www.openlivelinks.com/	PR1
+# 50	http://www.placetolink.com/	PR1
+# 51	http://www.readybookmark.com/	PR1
+# 52	http://www.shearsites.com/	PR1
+# 53	http://www.bookmarksreal.com/	PR1
+# 54	http://www.siteeffort.com/	PR1
+# 55	http://www.markthelink.com/	PR1
+# 56	http://www.sitelinkspartner.com/	PR1
+# 57	http://www.sitesgravity.com/	PR1
+# 58	http://www.bookmarksspirit.com/	PR1
+# 59	http://www.softbookmarks.com/	PR1
+# 60	http://www.linksfaves.com/	PR1
+# 61	http://www.stockbookmark.com/	PR1
+# 62	http://www.strainlinks.com/	PR1
+# 63	http://www.topbookmarkings.com/	PR1
+# 64	http://www.urcripton.com/	PR1
+# 65	http://www.linksdigg.com/	PR1
+# 66	http://www.effortlinks.com/	PR1
+# 67	http://www.viscositylink.com/	PR1
+# 68	http://www.webseobest.com/	PR1
+# 69	http://www.sitesbar.com/	PR1
+# 70	http://www.wegoodlinks.com/	PR1
+# 71	http://www.yieldpoints.com/	PR1
+# 72	http://www.slimxenon.com/	PR1
+# 73	http://www.yourgreatlinks.com/	PR1
+# 74	http://www.sitesping.com/	PR1
+# 75	http://www.yoursbookmarks.com/	PR1
+# 76	http://www.crocodilenail.info/	PR1
+# 77	http://www.sitesparking.com/	PR1
+# 78	http://www.crytime.info/	PR1
+# 79	http://www.drare.info/	PR1
+# 80	http://www.curvedbridge.info/	PR1
+# 81	http://www.die4fluid.info/	PR1
+# 82	http://www.ursecond.com/	PR1
+# 83	http://www.dinocro.info/	PR1
+# 84	http://www.spururself.com/	PR1
+# 85	http://www.drilldevice.info/	PR1
+# 86	http://www.easeorbit.info/	PR1
+# 87	http://www.falsepanic.info/	PR1
+# 88	http://www.ecomposite.info/	PR1
+# 89	http://www.firedeye.info/	PR1
+# 90	http://www.gymeasure.info/	PR1
+# 91	http://www.foggyforest.info/	PR1
+# 92	http://www.fricted.info/	PR1
+# 93	http://www.linearjob.info/	PR1
+# 94	http://www.frostbiten.info/	PR1
+# 95	http://www.linksbookmark.com/	PR1
+# 96	http://www.getsawed.info/	PR1
+# 97	http://www.coatasite.com/	PR1
+# 98	http://www.handalter.info/	PR1
+# 99	http://www.frankenyard.info/	PR1
+# 100	http://www.highlydark.info/	PR1
+# 101	http://www.frozencall.info/	PR1
+# 102	http://www.holdsilent.info/	PR1
+# 103	http://www.imoment.info/	PR1
+# 104	http://www.mudandmud.info/	PR1
+# 105	http://www.induced.info/	PR1
+# 106	http://www.everytimelinks.com/	PR1
+# 107	http://www.letdofun.info/	PR1
+# 108	http://www.mlfi.info/	PR1
+# 109	http://www.lakeout.info/	PR1
+# 110	http://www.monsterout.info/	PR1
+# 111	http://www.infernolife.info/	PR1
+# 112	http://www.nightgrow.info/	PR1
+# 113	http://www.octamoon.info/	PR1
+# 114	http://www.risebest.info/	PR1
+# 115	http://www.sarsthe.info/	PR1
+# 116	http://www.themee.info/	PR1
+# 117	http://www.toaca.info/	PR1
+# 118	http://www.vlade.info/	PR1
+# 119	http://www.weaveman.info/	PR1
+# 120	http://www.booman.info/	PR1
+# 121	http://www.wooba.info/	PR1
+# 122	http://www.adeadland.com/	PR1
+# 123	http://www.benthell.info/	PR1
+# 124	http://www.getacidic.com/	PR1
+# 125	http://www.betortured.com/	PR1
+# 126	http://www.linksdelicious.com/	PR1
+# 127	http://www.biteharvest.com/	PR1
+# 128	http://www.bitper.com/	PR1
+# 129	http://www.boneeater.info/	PR1
+# 130	http://www.crazyshelter.info/	PR1
+# 131	http://www.crbone.info/	PR1
+# 132	http://www.seodesired.com/	PR1
+# 133	http://www.autopulley.info/	PR1
+# 134	http://www.beamload.info/	PR1
+# 135	http://www.bitriangle.info/	PR1
+# 136	http://www.bulkmod.info/	PR1
+# 137	http://www.callmecha.info/	PR1
+# 138	http://www.backpitch.info/	PR1
+# 139	http://www.coplaner.info/	PR1
+# 140	http://www.bigpiranha.info/	PR1
+# 141	http://www.cosinetech.info/	PR1
+# 142	http://www.equalratio.info/	PR1
+# 143	http://www.forcelaw.info/	PR1
+# 144	http://www.goinertia.info/	PR1
+# 145	http://www.helicalpath.info/	PR1
+# 146	http://www.ielastic.info/	PR1
+# 147	http://www.monkeyseo.info/	PR1
+# 148	http://www.viewcool.info/	PR1
+# 149	http://www.crushe.info/	PR1
+# 150	http://www.easerow.com/	PR1
+# 151	http://www.abreeder.com/	PR1
+# 152	http://www.bateat.com/	PR1
+# 153	http://www.bittenbody.com/	PR1
+# 154	http://www.casehall.info/	PR1
+To get the in depth details about how to MAXIMIZE the SEO benefits using these social bookmarking sites, please visit:
+http://topbestlisted.blogspot.com/2011/07/top-25-best-bookmarking-sites-social.html
+Want to submit your bookmarks using auto-bookmarking submission? Click below to get any of the 7 Best Free and Paid "Auto Bookmarks Submitter" software programs:
+http://topbestlisted.blogspot.com/2011/09/5-best-social-bookmarkers-list-top-5.html
+# 155	http://www.ladose.info/	PR0
+# 156	http://www.movezu.info/	PR0
+# 157	http://www.skullhead.info/	PR0
+# 158	http://www.bookmarktou.com/	PR0
+# 159	http://www.allyearlinks.com/	PR0
+# 160	http://www.bestwebspaces.com/	PR0
+# 161	http://www.anybookmarks.com/	PR0
+# 162	http://www.bendasite.com/	PR0
+# 163	http://www.bookmarkreserve.com/	PR0
+# 164	http://www.cachebookmark.com/	PR0
+# 165	http://www.bookmarking-sites.com/	PR0
+# 166	http://www.cheersbookmark.com/	PR0
+# 167	http://www.rubyriver.info/	PR0
+# 168	http://www.cropsites.com/	PR0
+# 169	http://www.easytolinks.com/	PR0
+# 170	http://www.bestlinkforever.com/	PR0
+# 171	http://www.freebulklinks.com/	PR0
+# 172	http://www.bestlivelinks.com/	PR0
+# 173	http://www.anytimelinks.com/	PR0
+# 174	http://www.gainalink.com/	PR0
+# 175	http://www.heliumbeta.com/	PR0
+# 176	http://www.lampurlink.com/	PR0
+# 177	http://www.eternitylinks.com/	PR0
+List of 100+ Greatest social bookmarking sites with High Google PR and best Alexa ranks (DoFollow/No Do Follow) :
+http://topbestlisted.blogspot.com/2011/08/top-100-bookmarking-sites-best-listed.html	
+This "Do Follow" social-bookmarking sites list is originaly posted in:	
+http://topbestlisted.blogspot.com	
+
+Site:	DA	Login/creation URL:	Paid or Free	Type/Industry	Accepts UK?	Notes:
+local.yahoo.com	100	http://smallbusiness.yahoo.com/local-listings/sign-up/	Free	General	No	Account creation and mobile phone verification required
+smallbusiness.yahoo.com	100	http://smallbusiness.yahoo.com/localworks/scan-results/	Paid	General	No	DUPLICATE OF YAHOO LOCAL - To post free listing to yahoo, see listings.local.yahoo.com above. Yahoo also offered a paid service where they add you to a bunch of other directories
+google.com/business/placesforbusiness	100	http://www.google.com/local/add/g?hl=en-AU&gl=AU#phonelookup	Free	General	Worldwide	Google Account needed - Postal Verification to claim as business owner - To submit new listing: Choose country and add phone number.
+LinkedIn.com	100	http://www.linkedin.com/company/add/show	Free	Business Networking	Worldwide	Account creation and domain email verification required to add a company - Premium Account available for more profile visibility
+ted.com	98	No business directory		Talks		No Business Directory
+bbb.org	97	http://swmo.bbb.org/bbb-accreditation-application/	Free	General	No (US/CAN)	Need to apply to a physical BBB office.
+dmoz.org	96	http://www.dmoz.org	Free	General	Worldwide	approval required, very strict review process, may take 2 weeks to several months for site to be listed. Identify the single best category for the site, then hit "suggest URL" on top menu
+mapQuest.com	96	https://listings.mapquest.com/pl/mapquest-claims/preview.html	Paid	Maps	No	Listings powered by yext, which means they aren't free. To have listing posted on mapquest: $3/week. For additional directory coverage, yext offers it's usually packages.
+eventbrite.com	96	https://www.eventbrite.com/create/	Free	Events/Acitivities	Worldwide	Account creation required - No business listings here; highly customizable event planner - ability to give away or sell tickets
+bizjournals.com	95	http://businessdirectory.bizjournals.com/advertise	Free/Paid	General	No	Business Journal Account needed, approval and email verification required - Different memberships http://businessdirectory.bizjournals.com/compare/free - Free membership still adds a link to your website
+tripadvisor.com	95	http://www.tripadvisor.com/GetListedAccommodation	Free/Paid	Travel Guide	Worldwide	Account creation (or login with facebook) and email verification requried - Can add your hotel/atractions for free, premium services available to allow you have bookings from your tripadvisor profile
+booking.com	95	https://admin.booking.com/hotelreg/signup.html	Paid	Hospitality	Worldwide	Booking website for all types of hotels, they take commission and review and approval is required
+yelp.com	95	https://www.biz.yelp.com/signup	Free	General	Worldwide	Account creation and email verification required
+boorah.com	94	http://business.intuit.com/boorah-restaurants/insertRestaurant.jsp	Free	Restaurants	No	Exclusively Restaurants, no account needed, mod approval required
+Business.intuit.com	94	http://business.intuit.com/directory/growBusiness.jsp	Free	General	No	Temporarily Offline
+sfgate.com	94	http://local.sfgate.com/	Free	General	No	Choose category > then click "Click Here to Get Started" under "Get Listed Today" > Add information for them to contact you.
+findlaw.com	93	http://www.lawyermarketing.com/services/seo-visibility/	Paid	Law/Legal	No	Law firm and lawyer directory - No business listings here but they do offer SEO services for law firm websites
+lonelyplanet.com	93	http://www.lonelyplanet.com/contact/business_listing/new	Free	Travel Guide	Worldwide	No business directory - Can submit Hotels or Atraction business listings; the city's author reviews your listing before it goes live - no guarantee it does
+timeout.com	93	http://www.timeout.com/about/commercial-opportunities	Paid	Travel Guide	Worldwide	No business listings - Can advertise your travel business but there aren't any free business listings
+angieslist.com	92	https://business.angieslist.com/Registration/Registration.aspx	Free	General	No	Free and Easy - Make and account and Submit - 2 min
+yellowpages.com	92	http://adsolutions.yp.com/free-listing-benefits	Free	General	No	Account creation and email verification required - As of October 2013, free business listing submission page is not functional.
+FourSquare.com	92	https://foursquare.com/venue/claim	Free	General	Worldwide	Account creation required or Sign in with Google+ or Facebook. Phone number verification required to claim your business and edit it more (Add link)
+Craigslist.org	92	Narrow down region and category, then "post", then services offered	Free	General	Worldwide	Account creation and email verification required. No real business listings but you can technically post your small business as offered services.
+Panoramio.com	92	No business directory	Free	Photos	Worldwide	Google Account required- A worldwide photo website - you can upload photos, tag the photos and use GEO modifiers, and can add a link in the description; format: [Text](URL.com)
+crunchbase.com	91	http://www.crunchbase.com/companies/new	Free	Online Businesses	Worldwide	Account creation required. Admin approval required
+superpages.com	91	http://www.supermedia.com/spportal/quickbpflow.do	Free	General	No	Powered by Supermedia.com -Account creation and email verification required - Advertising services also available for more exposure http://www.supermedia.com/services/local-directory/
+edmunds.com	91	No business listings	Free	Cars	No	Car listings website. No business listings
+greatschools.org	90	http://www.greatschools.org/about/advertiserOpportunities.page	Paid	Schools	No	No business listings - School directory website. Can claim adertising space.
+merchantcircle.com	90	http://www.merchantcircle.com/signup	Free/Paid	General	No	Account creation required - As of October 2013, form page doesn't seem to be working on any browser; it just redirects you to "bulk listings" page with no sign that your information went through
+opentable.com	90	http://www.opentable.com/opentable-restaurant-management-system#/join_us_form	Free	Restaurants	Worldwide	No business directory; a restaurant booking website, you can send them a request to join their network if you own a restaurant. They will reply at your email ro phone number.
+tripadvisor.co.uk	90	http://www.tripadvisor.co.uk/GetListedAccommodation	Free/Paid	Travel Guide	Worldwide	Account creation (or login with facebook) and email verification requried - Can add your hotel/atractions for free, premium services available to allow you have bookings from your tripadvisor profile
+weddingwire.com	90	http://www.weddingwire.com/vendor/VendorHome	Free/Paid	Weddings	Worldwide	Account creation and email verification required - Website dedicated to vendors for weddings, free and paid vendor listings available - Each level of premium listings offers higher placement and more ad features
+CitySearch.com*	90	Powered by CityGrid.com	Free/Paid	General	No	Some forums say you can still get your business listed for free here if you email them at myaccount@citygridmedia.com. In your email, just give them your NAP, web address, and a category. They'll have the listing created for you within 3-5 days and it will be searchable on their site within 2 weeks.
+UrbanSpoon.com	89	http://www.urbanspoon.com/cities/1/suggestions/new	Free	Restaurants	Yes	Quick and Easy - Can submit your restaurant to their directory.
+hotels.com	89	https://joinexpedia.com/ContactUs	Free	Hotels	Worldwide	No business listings - can add your hotel to the directory using by contacting an expedia representative
+Manta.com	88	http://www.manta.com/profile/my-companies/select	Free/Paid	Business Networking	Yes	Account creation requried- Premium listings are available starting at $29/month for higher placement and visibility. Backlink can be added with free listing. Small business network
+whitepages.com	88	http://www.whitepages.com/listing	Free	General	No	Account creation (or login with facebook) and email verification required - Personal Listing directory - Business listings might be powered by yellowpages.com
+topix.com	88	No Business listings		News/Information	Worldwide	No business listings, just news
+City-data.com	87	http://www.city-data.com/profiles/add	Free	General	No	Form is very specific, more time needed to apply than normal, no approval wait time for listing to go live, but admin review it later
+thumbtack.com	87	https://www.thumbtack.com/welcome/	Free	Services	No	Account creation (or login with facebook) and email verification required - A directory for services
+VirtualTourist.com	87	No business listings		Travel Guide	Worldwide	No business listings here
+Switchboard.com	87	Powered by Whitepages.com	See Whitepages.com	General	No	Listings powered by Whitepages.com
+Outside.in (Patch.com)	86	http://<yourcity>.patch.com/claim	Free	News/Information	No	Account creation (or join with facebook) and email verification required - Patch is a local information and news website, pick your city from landing page - email support@patch.com with your business info to add to that city's directory - You can even post an update on your business or website and even have a link included.
+Patch.com	86	http://<yourcity>.patch.com/claim	Free	News/Information	No	Account creation (or join with facebook) and email verification required - Patch is a local information and news website, pick your city from landing page - email support@patch.com with your business info to add to that city's directory - You can even post an update on your business or website and even have a link included.
+insiderpages.com	86	http://www.insiderpages.com/businesses/new	Free	General	No	Account creation and Email verification required
+mojopages.com	86	http://www.mojopages.com/biz/add	Free	General	No	Account creation required - Put a "Vote for Me" Badge on Your Website and Get 1 Month of Free Advertising ($50 Value)
+kayak.com	86	https://www.kayak.com/h/ehoe/add	Free	Trips	Worldwide	Account creation and Email verfication required - Can add hotel listings, approval required, may take five days to go live
+frommers.com	86	No business listings		Travel Guide	Worldwide	Vacation/trip website - No business listings. Resources and reviews for hotels and destinations around the world. Adding information about an establishment can be done by contacting editors http://www.frommers.com/contact_us/form_guidebooks.html
+priceline.com	86	No Business Listings - Travel Planner	Free	Travel Planner	Worldwide	No business listings - travel planner
+servicemagic.com (Homeadvisor.com)	85	http://www.homeadvisor.com/servlet/ServiceProfessionalRegistrationServlet	Free/Paid	Homes/Contractors	No	Quick and Easy - Home Owners and Contractors website, can submit a business listing if it's a home renovation or maintenance business - They get into contact with you for further information into their process
+AnyWho.com	85	Powered by yellowpages.com	See Yellowpages.com	General	No	Listings powered by Yellowpages.com
+dexknows.com	84	http://www.dexone.com/solutions/local-directories	Paid	General	Worldwide	Starter pack $20/month - Seems like you have to call them to get started 1-877-433-9249
+Business.com	84	https://origin.business.com/purchase/directoryListing/	Paid	General	No	$299/year
+local.com	83	https://advertise.local.com/	Free/Paid	General	No	Premium Listing available for higher listing placement for $49.95/month - Account creation required at the end the listing form - 48 hours to go live - Doesn't work well with Google Chrome
+kudzu.com	83	https://register.kudzu.com/packageSelect.do	Free/Paid	General	No	Account creation and Email verification required - Paid Listing available for top placement and other features, Free listing allows links to your website
+InfoSpace.com	82	Powered by Superpages.com	See Superpages	General	No	A Search Engine - Yellow pages powered by yellowpages.superpages.com
+bestoftheweb.com	80	http://local.botw.org/helpcenter/premiumproduct.aspx	Paid	General	Yes	Standard JumpStart Listing = $1.99/month, Premium Listing = $9.95/month
+local.botw.org	80	http://local.botw.org/helpcenter/premiumproduct.aspx	Paid	General	Yes	Standard JumpStart Listing = $1.99/month, Premium Listing = $9.95/month
+CommunityWalk.com	80	http://www.communitywalk.com (form on front page)	Free/Paid	Maps	Worldwide	No listing directory, but you can create a map, add your business with a marker and include a working link in the description - Also offers advertising services http://www.communitywalk.com/about/commercial
+tripadvisor.ca	80	http://www.tripadvisor.ca/GetListedAccommodation	Free/Paid	Travel Guide	Worldwide	Account creation (or login with facebook) and email verification requried - Can add your hotel/atractions for free, premium services available to allow you have bookings from your tripadvisor profile
+yellowbot.com	80	http://www.yellowbot.com/submit/newbusiness	Free	General	No	Account creation (or login with social media accounts) and email verification required - link allowed
+hopstop.com	79	Powered by Yext.com	Paid	General	No	Website business listings powered by Yext.com. See Yext.com entry for more information.com
+uscity.net	79	www.uscity.net/listmysite.html	Free/Paid	General	No	Account creation and email verification required - Paid Yext Listing also available
+Oodle.com	78	Click "Post" at top of page	Free	Classifieds	No	Account creation (Or Facebook login) and email verification required - can post listings of a product or service you offer - no official business directory
+JudysBook.com	78	http://www.judysbook.com/post/0	Paid/Free	General		New Businesses by default have to buy a paid listing to get on Judysbook - Basic = $19.99 Pro = $79.99. However, there is a way to get on judysbook for free. When a customer writes a review about your business, it's added. To claim it and post a link is a Paid listing service.
+Zoominfo.com	78	http://www.zoominfo.com/account	Free/Paid	Business Networking	Worldwide	Account creation and email verification required - A business contact directory - you create a profile of yourself, not your company. However, you can add your company into your employment history which includes a link - Marketing services offered for small businesses http://www.zoominfo.com/business/products/pricing/zoominfo-small-business-pricing
+hotfrog.com	77	http://www.hotfrog.com/AddYourBusinessSingle.aspx	Free/Paid	General	No	Account creation required or login with social media websites, email verification required. Hotfrog AdVantage can boost new customer inquiries for 19.95/month
+Yext.com	77	http://www.yext.com/pl/cliqsearch-listing/index.html	Paid	General	No	A listing aggregator that places your business on many different listing websites for a fee - Different plans available, each offering more exposure and more listing websites than previous level.
+Thegazette.com	77	https://kcrg.partners.local.com/	Free	General	No	Seems to be the same service that powers surewestyellowpages.com (Something to do with .partners?) - Account creation required - Listing goes live withing 48 hours. Upgrade available for $25/month for additional business profile features
+MetroMix.com	76	All location links dead	Free	Entertainment	No	All location links dead
+Nokia.com	76	http://here.com/primeplaces/place/create?	Free	Maps	Worldwide	Account creation and email verfication required. Phone or domain email verification required to verify listing - Can add your business on the map - Lots of information can be added, including a website link
+Primeplace.Nokia.com (verification required)	76	http://here.com/primeplaces/place/create?	Free	Maps	Worldwide	DUPLICATE OF NOKIA.COM Account creation and email verfication required. Phone or domain email verification required to verify listing - Can add your business on the map - Lots of information can be added, including a website link
+navteq.com	76	http://here.com/primeplaces/place/create?	Free	Maps	Worldwide	POWERED BY NOKIA.COM Account creation and email verfication required. Phone or domain email verification required to verify listing - Can add your business on the map - Lots of information can be added, including a website link
+decidio.com	76	http://www.decidio.com/registration/business.cfm?act=basic	Free	Vendors	No	Website dedicated to vendors for special occasions, Email verification required, no duplicates already in the database allowed
+SoMuch.com	74	http://somuch.com/submit-links/	Free/Paid	Websites	Worldwide	Quick and Easy - Approval required - 24hr accelerated approval available for $8.95 - Enhanced Link upgrade for $22.95/year available for better placement.
+golflink.com	74	http://www.golflink.com/advertise.aspx	Paid	Golf	Worldwide	No business listings - Can advertise golf businesses with them
+Trivago.com	74	http://www.trivago.com/hotelgateway/?pagetype=register	Free	Hotels	Worldwide	Account creation and email verifcation required - Can add your hotel in their directory
+projectwedding.com	74	http://www.weddingwire.com/vendor/VendorHome	Free/Paid	Weddings	Worldwide	Account creation and email verification required - Website dedicated to vendors for weddings, free and paid vendor listings available - Each level of premium listings offers higher placement and more ad features
+weddingchannel.com	74	https://partners.theknot.com/Signup/Select/Select	Free/paid	Weddings	No	Account creation and email verification required - Can add business in their vendors directory if it relates to wedding services - Paid packages offer better placement and exposure - Free listing allows website link
+Square.com	74	No business directory				No business directory
+ChamberofCommerce.com	73	https://www.chamberofcommerce.com/add-business/	Free/Paid	General	No	Different levels of listings, each offering better placement than the previous level: Basic = Free, Silver = $19.99/month, Gold = $149.99/month, Platinum = $299.99/month
+caring.com	72	http://www.caring.com/local/get-listed	Free/Paid	Health/Caregiving	No	All requests will be reviewed and confirmed. A one-time setup fee may apply. Website dedicated to senior care
+demandforce.com	72	http://www.demandforce.com/product/network/business-directory/	Free	General	Worldwide	The only thing you can do right now is request a demo, all participating business are put in the local directory
+Majon.com	72	http://www.finduslocal.com/order/register.php?go=continue	Free/Paid	General	No	Account creation required - Free listing available. For a $20/month upgrade, your listing becomes premium which enables a backlink.
+ibegin.com	72	http://www.ibegin.com/business-center/submit/	Free	General	Yes	Account creation required. They will call the phone number given to verify the business.
+Naymz.com	72	No business Directory	Free/Paid	Business Networking	Worldwide	Account creation (Social Media accounts can be used) and verification required - No business listings, but you can link your LinkedIn business account and network with it here. Premium Membership offers more features for your profile and increased visibility for $12/month -
+dealerrater.com	71	http://www.dealerrater.com/dealer/add-dealer-country.aspx	Free	Car Dealers	Worldwide	Car Dealer directory and review site - Admin approval required
+infousa.com	71	http://www.expressupdateusa.com/	Free	General	No	One InfoGroup's brands - Business listings powered by expressupdate.com
+Jayde.com	71	http://www.jayde.com/submit-site.html	Free	Business Networking	No	Email Verification Required - B2B Search Engine - Very easy process
+Addresses.com	71	Powered by yellowpages.com	See Yellowpages.com	General	No	Listings powered by Yellowpages.com
+PegasusDirectory.com	70	http://pegasusdirectory.com/submit.php	Free/Paid	Websites	Worldwide	Admin approval required - Featured paid listing available for $27/year and SEO bulk listing services available starting at $14 http://www.pegasusdirectory.com/directorysubmission.php
+RadarFrog.GateHouseMedia.com	70	http://radarfrog.gatehousemedia.com/addlisting/	Free	General	No	Quick and Easy - Site might be under maintenance; city and state links are broken
+localeze.com (neustarlocaleze.biz)	70	http://www.neustarlocaleze.biz/directory/sign-up.aspx	Free	General	No	Account verification required - Your account information needs to be the same as your business listing for you to be verified and add your listing. Paid Service available for $25/month to make your business visible to 100 platforms
+biznik.com	70	https://biznik.com/members/new	Paid	General	Worldwide	Account creation and email verfication required - Pricing: Basic $79/Year (Full Listing), Pro $14/Month, ProVIP $29/month
+Jigsaw.com	70	https://connect.data.com/company/single	Free	General	Yes	Account creation and email verification - A networking B2B website.
+hotel.info	70	No business listings		Hotels	Worldwide	Hotel and Meeting booking website - No business listings - Can enter into an affiliate program if you are a travel agency, hotel owner, etc.
+vitals.com	70	No business listings		Medical	No	Doctor directory, no business listings - for doctors and hospitals that want to be added to the directory, they need to contact the website team http://www.vitals.com/about/contact
+Tupalo.com	68	http://tupalo.com/en/spots/new	Free/Paid	General	Worldwide	Account creation (can login with facebook or twitter) required - Adding a business and claiming it is free (link is also allowed) - Premium account also available that offer greater profile visibility and no ads
+apartmentratings.com	68	http://www.apartmentratings.com/rate/addcomplex	Free	Housing/Apartments	No	Exclusively for Apartments - approval required
+magicyellow.com	68	http://www.magicyellow.com/add-your-business.cfm	Free	General	No	Account creation and email verification required
+mapinsight.teleatlas.com	68	No business directory	Free	Maps	Worldwide	No business directory - Can submit an address or point of interest pointing to your business, and add your link in "additional remarks"
+TeleAtlas.com	68	No business directory	Free	Maps	Worldwide	DUPLICATE OF MAPINSIGHT - No business directory - Can submit an address or point of interest pointing to your business, and add your link in "additional remarks"
+Free411.com (now Marchex.com)	68	No business listings here anymore				Now a Mobile marketing website
+2FindLocal.com	67	http://www.2findlocal.com/Modules/Login/register.php	Free	General	Worldwide	Need account to submit, doesn't work well with Google Chrome
+partypop.com	67	http://www.partypop.com/list-your-business	Free	Vendors	Yes	Website dedicated to vendors for special occasions, admin aproval required
+wellness.com	67	https://secure.wellness.com/secure/provider/public/add	Paid	Health	No	Account creation required - Medical and Health Provider directory website - $19.95 for basic listing (no link), $99 for Featured Listing (link and better listing visiblity)
+Pinkberry.com	67	No business directory	Free	Frozen Yogurt	No	No business listings - a website about a frozen yogurt place
+brownbook.net	66	brownbook.net/business/add/	Free	General	Worldwide	Account creation and Email verification needed
+worldweb.com	66	http://services.worldweb.com/tourism-edit.html?mode=pickcategory	Free	Travel Guide	Yes	Account creation required - Can add business if it's an attraction/related to tourism - approval required, listing goes live withing 3 days
+de.lirio.us	66	http://www.ibegin.com/submit/	Free	General	Yes	Account creation required. They will call the phone number given to verify the business.
+macraesbluebook.com	66	http://www.macraesbluebook.com/getlisted/form1.cfm	Free/Paid	Industrial	Worldwide	Account creation and email verification required - listing goes live within 48 hours if approved - Free listing includes backlink - Enhanced Listing available for $24.99/month for more profile features.
+RateItAll.com	66	http://www.rateitall.com/promote	Free/Paid	Reviews	Worldwide	Account creation required (or login with facebook) - Website where you can rate and review anything - PromotePlus listing available for more control and exposure for $39.99/month
+supermedia.com	66	http://www.supermedia.com/spportal/quickbpflow.do	Free	General	No	Account creation and email verification required - Advertising services also available for more exposure http://www.supermedia.com/services/local-directory/
+tagzania.com	66	http://www.tagzania.com/post/	Free	Maps	Worldwide	Account creation required - Can add your location on to the map and add your URL in the description
+Acxiom.com (myacxiom.com)	66	https://mybusinesslistingmanager.myacxiom.com/	Free	General	No	Need to make an account to submit - Need to upload various company documents (Licenses and Registrations) for approval
+GetFave.com	66	https://www.getfave.com/businesses/new	Free	General	No	Account creation and Email Verification required. Click "Manage More Attributes" on the form to find link box. Can also create account with Twitter or Facebook.
+AreaConnect.com	66	Powered by yellowpages.com and Search Engines	Free	General	No	Listings Powered by Yellowpages.com
+CityVoter.com	65	http://<cityname>.cityvoter.com/business/claim/add	Free	Company Voting	No	Business contest website. Account creation and email verification needed - Only a few specific US cities can submit businesses for contests in their field. A link to your website can be posted in the listing.
+FindTheBest.com	65	http://<yourcategory>.findthebest.com/add_listing	Free	General	No	Account creation and email verification required or Sign up with Google+ or Facebook. To submit a listing narrow down your business' category and at the bottom of the page click "Add a Listing" - Approval Required for listing to go live
+JoeAnt.com	65	http://www.joeant.com/DIR/add_URL	Paid/Free	General	Worldwide	Find Topic and click "Add Url" - Paid listing = $40 , make and account as an editor and you can add URLs for free - Email verification required. There might be a loop with the "Terms and Condition" page; have not been able to post a free URL as an Editor
+local-life.com	65	No business directory - travel guide website		Travel Guide	Worldwide	No official business directory, to add business info on a city you can email them at mark@local-life.com
+discoverourtown.com	64	http://www.discoverourtown.com/add/	Free	General	No	Email Verification and approval required - Different Levels of Listings: Starter = Free basic listing with your link, Silver = $199 Better placement, Gold $249 Maximum exposure and no ads.
+gatheringguide.com	64	http://www.gatheringguide.com/vis_sgn.aspx	Free/Paid	Vendors	No	Website dedicated to vendors for special occasions, Account creation and email verification required. Approval requried. Gold membership can be aquired for higher listing placement by contacting sales@gatheringguide.com
+GetListed.org	64	No business listings on this website, they are powered by others	Free	General	No	No business listings on this website, they are powered by others
+ufindus.com	63	http://www.ufindus.com/get_on_ufindus.php	Free	General	UK	Mod approval required - goes live within a week.
+ziplocal.com	63	http://www.ziplocal.com/olc/lookup.faces	Free	General	No	Quick and Easy, Link can be added
+GigPark.com (www.canpages.ca)	63	Now redirects to Canpages.ca - Powered by YellowPagesGroup	See Yellowpages.com	General	Canada	Canadian Business Directory
+realpageslive.com	63	Powered by Yellowpages.com	See Yellowpages	General	No	Listings Powered by Yellowpages.com
+InfoGroup.com	63	They own many different directory websites (expressupdate)		General	Worldwide	No actual business directories on this website - They, however own many different brands of directory websites (expressupdate)
+CitySquares.com	62	http://my.citysquares.com/signup	Free/Paid	General	No	Account creation needed - Street Address field is optional, 3 different levels : Free (No Link), Deluxe Profile = $2.49 (Link allowed), Premium Profile = $4.99 -
+eLocal.com	62	http://www.elocal.com/sign-up#!/category_id=	Free/Paid	General	No	Account creation and email verification required, Free listing appears in one zip code only. For $249/year: 1sr page placement and submission to 100+ search sites - Approval required for extra features
+voiceplaces.com	62	http://www.myvoicenation.com/	Free	Entertainment	No	No actual bussiness directory - Sign up with Social Media accounts - Website for Restaurants, bars, events in certain US cities - Coming Soon: Add an event feature
+salespider.com	62	http://www.salespider.com/business-directories-free-online-ads	Free	General	Worldwide	Doesn't work well with Google Chrome - Account creation required - Free Listing available which includes link to your website - Premium Service available for $99/year which offers more listing coverage
+wcities.com	62	No business listings		Travel	Worldwide	No business listings
+AllPages.com	61	Fed by Acxiom.com	See Acxiom.com	General	No	Listings powered by Acxiom
+justdial.com	61	http://us.justdial.com/advertise.php?f=1	Free	General	No	Quick and Easy - Executive approval required within 24 hours
+PowerProfiles.com	61	http://www.powerprofiles.com/accountEdit	Free/Paid	General	No (US/CAN)	Account creation and email verifcation required - website seems to be malfunctioning on all browsers - account created with difficulty - whenever any listing plan is clicked, I'm redirected to a page where I can't continue further
+allmenus.com	60	http://www.allmenus.com/menucenter/	Free	Restaurants	No	Exclusively Restaurants
+ShowMeLocal.com	60	http://www.showmelocal.com/business-registration.aspx	Free/Paid	General	No	Account creation (or login with facebook or Google+) and email activation required - Link can be added to free profile - Paid profile upgrades available starting at $24.99/month for more profile features http://www.showmelocal.com/subscription/packages.aspx?
+Tjoos.com	60	http://www.tjoos.com/Merchant-Portal/	Free/Paid	Coupons	Worldwide	Account creation and email verification required - Need to verify website with a Meta Tag edit before being able to edit your profile and add a link
+expressupdateusa.com	60	Redirects to expressupdate.com	Free	General	No	See Expressupdate.com
+Inter800.com	59	http://inter800.com/freelist.htm	Free	General	No	Only 1-800 numbers allowed. All fields need to be filled out - 3-4 days for listing to go live.
+Company.com	59	http://www.company.com/directory	Free/Paid	General	No	Account creation and email verification required - Doesn't work well with Google Chrome - Different Memberships: Free: offers business profile on Company.com, Essential: $99/year offers your business on other listing databases, Premium $169/year and Professional $425/year offer even more exposure with higer level placement
+B2BYellowPages.com	59	https://www.b2byellowpages.com/signup-new/signup.cgi	Free	General	Worldwide	Extremely extensive creation form, takes 10-15 minutes to complete, domain email (@domain.com) verification required
+FastPitchNetwork.com	59	No business listings here - Might be infected with virus				Windows Server website - No business listing here, google says there might also be a virus.
+Boulevards.com	58	http://boulevards.com/advertise/	Paid	Travel Guide	Yes	Need to await approval after sending them your info, many city websites (belfast.com) are powered by boulevards.com - Option for "Enhanced listing" available
+bizhwy.com	57	http://www.bizhwy.com/addlisting.php	Free	General	No	Fast and easy, email verification required - Additional services offered for a fee
+LocalPages.com	57	http://www.localpages.com/advertise/free_listing/	Free/Paid	General	No	Account creation and Phone verification required - They contact you after reviewing your information - Premium listing available for $199/month for more listing coverage and visibility. Form doesn't work well with Google Chrome
+ViewPoints.com	57	https://local.viewpoints.com/get-started	Paid	Reviews	No	Contact betasupport@local.viewpoints.com to add you business to their local listings - A website mainly focused towards physical product reviews and ratings
+EZLocal.com	56	https://secure.ezlocal.com/newbusiness/default.aspx	Free/Paid	General	No	Account creation and Email Verification Required - SEO advertising plans starting at $95/month https://secure.ezlocal.com/newbusiness/selectplanlp.aspx
+SmartGuy.com	56	https://www.smartguy.com/register_cat.asp	Free/Paid	General	Worldwide	Account creation - admin approval required - Premium Listings available for more features and better placement, Plus = $19/mo and Premium = $49/mo
+Revark.com	55	http://www.revark.com/add-page	Free	Reviews	Worldwide	Quick and Easy, website link allowed
+pageinsider.com	54	http://www.pageinsider.com/siteowners	Free	Websites	Worldwide	A website directory - as of October 2013, service currently in development
+BizWiki.com	53	Can no longer add websites, they search for it themselves	Free	General	No	You’ll have to rely on them crawling your site as it’s no longer possible to manually add information. If you find anything wrong you can use the “Report an error” facility.
+eBusinessPages.com	53	http://ebusinesspages.com/AddCompany.aspx	Free/Paid	General	No	Premium Service available to add a verified badge that is more likely to be noticed by users. Premium Service also offers higher listing placement
+Nexport.com	53	http://www.nexport.com/gl/addabusiness/	Free	General	No	Account creation (or login with social media accounts) and email verification required.
+Tyloon.com	53	http://www.tyloon.com/member/register.html	Free	Shops	Worldwide	Account creation and email verification required - Can create an online shop to sell products
+Wand.com	53	http://www.wand.com/core/reg_addprofile.aspx?sProfileType=S	Free/Paid	General	Worldwide	Account creation required, Listing live within 3 days - Can enhance listing with Silver package for $699 which offers better placement and Gold package for $1399 which offers more exposure and profile visibility http://www.wand.com/CORE/reg_type_search_flash.aspx
+Address.com	52	https://secure.whitepages.com/profile/login	See Whitepages.com	General	No	Listings powered by Whitepages.com
+myhuckleberry.com	52	https://www.myhuckleberry.com/account/new-listing.aspx	Free/Paid	General	No	Account creation and email verification required - Listing upgrades available for increased geographical exposure starting at $9.99/month for county and $59.99/month for national
+ubl.org	52	https://www.ubl.org/Businesses/Locations.aspx	Paid	General	Yes	Account creation required - Different packages available each increasing exposure https://www.ubl.org/Compare.aspx?newlisting=true&u=
+gofalk.com	52	No business listings - Map/Route Website	Free	Maps	Worldwide	No business listings - Can create map to your business which can be placed on your website
+GenieKnows.com	51	For local business directory, redirected to www.yellowee.com	Paid	General	No	GenieKnows.com is a internet marketing services website directed towards advertisers and publishers - For the local business directory, go to yellowee.com
+Directory.AC	51	http://directory.ac/business-listing.html	Free/Paid	General	Worldwide	Approval required - Two listing types - Free, account creation required and you need to put their link on their site, link can only be seen by directory.ac users. Permanent Public Display: $24 one-time fee, more paid services offered
+Akama.com	51	http://www.akama.com/add_company.html	Free	General	No (US/CAN)	One sign up page, domain email (@domain.com) verification required
+Wegoplaces.com	51	http://www.wegoplaces.com/Submit.aspx	Free	Travel Guide	No (US/CAN)	Account creation required - Can submit businesses related to Attractions, activites and events in the US
+CitySlick.net	51	https://www.cityslick.net/reg.php	Free/Paid	Deals	No	Deal/ Coupon Advertising website - Different membership levels; free membership offers URL/Link placement - Account creation needed
+giftrocket.com	50	http://www.giftrocket.com/business-owners	Free	Online Gift Cards	Worldwide	No real business directory, but people can make gift cards applicable to businesses around the world. If your business isn't already in their database then you can request to add it at businesses@giftrocket.com
+matchpoint.com	50	http://www.matchpoint.com/addbusiness	Free	General	No	Account creation and email verification required - No visible way to place link on profile
+OpenWiFiSpots.com	50	http://www.openwifispots.com/Location_Add.aspx	Free	WiFi Hotspots	Worldwide	You can add your business here (and even include a link to your website) only if you offer free Wifi - listing is live within 48 hours
+Goby.com (Scout.com)	50	http://www.scout.me/add-a-listing	Free	Events/Activites	No	Account creation required - Event and activity finder/directory. "What do you want to do". Link can be placed in listing
+LocalSearch.com	50	http://www.supermedia.com/spportal/quickbpflow.do	Free	General	No	Account creation and email verification required - Listings apparently fed by supermedia
+TheUSAExplorer.com	50	Login page malfunctioning	?	General	No	As of October 2013, Form page doesn't seem to be working on any browser
+Cherrp.com	50	Powered by MyLocally.com	See MyLocally.com	General	No	Form on landing page doesn't work on any browser, listings are powered by MyLocally
+yellowee.com	49	http://biz.yellowee.com/steps/add-your-business	Free	General	No (US/CAN)	Account creation and email verification required - Phone verification required to verify business ownership
+Wimgo.com	49	http://wimgo.com/events/entry	Free	Events	No	Can login with Facebook - Event planner: can add custom events - Business submissions has been closed
+CityGrid.com*	49	https://signup.citygrid.com/self_enroll/add_location	Paid	General	No	Right now they don't seem to be offering Free Business listing services, you can: claim your business if it's already there or pay for advertising to list your business
+AskCity.com	49	Powered by CityGrid.com	Paid?	General	No	Powered by CityGrid.com - Need to sign up for Beta
+twibs.com	49	www.twibs.com/registration.php	Free	Twitter	Worldwide	Can add business listings linked with a Twitter account
+CityStar.com	48	http://citystar.com/add_your_site.html	Paid	General	No	Different levels of listings, depending on duration of listing and exposure level.
+infignos.com	48	infignos.com/addlisting/speedlist.cfm	Free	General	Worldwide	Account creation and Email verification required - approval required from editors
+WebFetch.com	48	No business listings		General	Worldwide	No business listings - A search engine under infospace
+UserInstinct.com	48	No visible way to add business		General	No (US/CAN)	No visible way of adding business
+Go2.com	48	Search Engine - no real business listings		General	Worldwide	Looks like just a Search Engine, no menus or tabs or links visible
+FindItNow.com	47	http://finditnow.com/business/new_claimed_business	Free/Paid	General	No	Account creation and email verification required - Different listing levels available, each increasing the placement and amount of features for your listing https://finditnow.com/get-noticed
+247OnlineNetwork.com	47	http://www.247onlinenetwork.com/freelisting.php	Free	General	Worldwide	Free and Easy
+Yalwa.com	47	http://www.yalwa.com/post/	Free	General	Worldwide	Account creation (or login with facebook) and Email verification required
+YelloYello.com	47	http://www.yelloyello.com/place_wizard/step2	Free	General	Worldwide	Account creation (or login with facebook) and email verification required - can add a place, and can make an actual page for your business
+gomylocal.com	47	https://www.gomylocal.com/add_listings.php?action=register&option=4	Free/Paid	General	No	Account creation requried. Additional Packages available that each increase the span of cities your listing will be posted on. www.gomylocal.com/preview_additions.php
+OpenList.com	47	Powered by Localeze.com	See Localeze	General	No	Business directory powered by Localeze.com according to page footer
+Yellowise.com	47	Powered by Yext.com	See Yext	General	No	Listings powered by Yext
+thinklocal.com	47	www.thinklocal.com/business-signup.aspx	Free/Paid	General	No	Account creation required - As of October 2013, website might be under maintenance
+Advertory.com	46	http://my.advertory.com/site/edit	Free	General	Worldwide	Account creation and email verification required
+DirectoryM.net (AKA nSphere)	46	http://subscribe.directorym.com/register.aspx	Free	General	Worldwide	Account creation and Email verification required
+ZipHip.com	46	Powered by Acxiom	See Acxiom.com	General	No	Powered by Acxiom.com according to page footer
+Zip.pro	45	http://myaccount.zip.pro/find-business.php	Free	General	No	Account creation and email verification required -
+yippie.biz	45	http://submit.yippie.biz/	Free	General	No	Quick and easy, allows link
+pageglimpse.com	45	http://www.pageglimpse.com/siteowners	Free	Websites	Worldwide	A website directory - as of October 2013, service currently in development
+SeekItLocal.com	45	http://www.seekitlocal.com/cart/Unlisted.aspx	Free/Paid	General	No	Openid account required - As of October 2013, the business listing form is not working
+BizVotes.com	44	http://www.bizvotes.com/register.php	Free	General	No	Account creation and email verfication required - To submit, narrow down state and category and click "Add a Biz"
+DigaBusiness.com	44	http://www.digabusiness.com/submit.php	Free/Paid	General	No	Email Verification required - Other premium services offered for better listing placement
+directorycentral.com	44	http://www.directorycentral.com/business/company-add/	Free	General	Worldwide	Quick and Easy - After submitting you can claim the business listing to add more informationg
+iDirectory.com	44	http://www.idirectory.com/members/user_orders_add.php	Free/Paid	General	Worldwide	Account creation required. Free listing requires backlink back to their site and approval from editors. No clear description of what premium listings do.
+shopcity.com	44	http://www.shopcity.com/map/	Free/Paid	General	Worldwide	Account creation required -After entering your location > click "Add business" at top of page - Make an online shop profile of your business, can add link in your description. Different Paid Packages available starting with Intro Package at $195/year which puts an official link to your website on your profile - other higher level packages increase exposure to your listing and add other features.
+matchLocal.com (radiatelocal.com)	44	Powered by Localeze.com	See Localeze	General	No	DUPLICATE OF radiatelocal.com - From bottom information: Business listing data provided in part by Localeze.com
+RadiateLocal.com	44	Powered by Localeze.com	See Localeze	General	No	From footer information: Business listing data provided in part by Localeze.com
+LocalDatabase.com	43	http://www.localdatabase.com/plans.html	Free/Paid	General	No	Account creation (or login with facebook) and email verification required - additional plans available for a yearly or one time fee for more exposure and weblink - Lowest is $29/year or $89 fee; Free listing doesn't include a link back to your website
+TenList.com	43	http://www.tenlist.com/advertise-on-tenlist/	Free/Paid	Contractors	No	Basic and Premium listing offered - To get started, contact them at regan@tenlist.com or call 972-407-0100 x 306
+YellowOne.com	43	http://www.yellowone.com/ContactUs.aspx	Free	General	No	Contact them with your business information about their business listings
+yellowusa.com	43	http://www.yellowusa.com/add-your-business.cfm	Free	General	No	Account creation and email verification required- Link allowed - Premium upgrades available to increase geographical exposure: Local = $40/month, Statewide = $100/month, Nationwide = $200/month
+LocalGuides.com	43	Powered by Yellowpages.com	See Yellowpages	General	No	Listings are fed by Yellowpages.com, advertising space available http://localguides.com/advertising.html
+LocalizedBiz.com	42	http://www.localizedbiz.com/add.php	Free	General	No	Account creation and email verification required
+YellowHours.com	42	http://www.yellowhours.com/list/add/store	Free	General	No (US/CAN)	Account creation and email verification required
+TrueYellow.com	41	http://www.trueyellow.com/suggestabiz.asp	Paid	General	No	Domain email (@domain.com) verifcation required - $4.95 processing fee required, also provides a hotlink to your website. Can also purchase premium placement and visibility for your listing
+giftly.com	41	https://www.giftly.com/merchants	Free	Online Gift Cards	Worldwide	No real business directory, but people can make gift cards applicable to businesses around the world. If your business isn't already in their database then you can request to add it at merchants@giftly.com
+justclicklocal.com	41	www.justclicklocal.com/user/join	Free	General	No	Account creation required - Quick and easy
+CMAC.ws	40	http://<yourcompanycategory>.cmac.ws/submit.html	Free	General	No	To submit a listing, look for the category your company falls under on the landing page, click it, and then scroll down to "Submit listing". Editor approval required before going live
+metrobot.com	40	Submit Business on Landing Page	Free	General	No	Account creation required - Approval required = 2-3 days - Quick and Easy
+ExportFocus.com	39	http://exportfocus.com/free-business-directory-listing1.php	Free	Business Networking	Worldwide	approval required - Website used by entrepeneurs and consultants as a international business network
+HelloMetro.com	39	http://www.hello<yourcity>.com/postad/	Free	General	No	Account creation and email verification required - Site doesn't work well with Google Chrome - Choose city on landing page and create account from the redirected website
+yellowassistance.com	39	http://www.yellowassistance.com/frmBusinessUpdate.aspx	Free	General	No	Quick and Easy, link allowed - approval required, live within 72 hours - For $15/month attract more customers with advertising service
+zidster.com	39	http://www.zidster.com/downloads/Business-Profile.pdf	Paid	General	No	Listing cost: $19.95/year - fill in all fields, save, and email form and your logo (jpg, gif, or pdf) to registrations@zidster.com or fax to #908-479-6783 and your logo (jpg, gif, or pdf) to registrations@zidster.com or fax to fax #908-479-6783.
+ZipLeaf.com	39	https://manage2.zipleaf.com/Create-Listing	Free	General	Worldwide	Account creation required - Very strict approval process - you can add a link to your website
+DreamLocal.com	38	http://dreamlocal.com/online-marketing/search-engine-optimization-registration/	Paid	General	No	They offer SEO services which includes a listing on Google+ Local, sign up to get more information from them, no business listings on this website
+GetFreeListing.com	38	http://www.getfreelisting.com/RegistrationFree.aspx	Free	General	No (US/CAN)	Account creation required. Free accounts can only make one listing.
+LocalCensus.com	38	http://www.localcensus.com/add_business.php	Free	General	No	Editor approval required before listing goes live - Quick and Easy
+WhoFish.org	38	http://www.whofish.org/Default.aspx?tabid=45&modid=379&action=newListing	Free	General	No	Account creation and email verification required - If you are a first time user, please send an EMail to: editors@whofish.org with the subject "Add Me" - This will allow WhoFish to send you an activation email to publish your listings.
+CliqSearch.com	37	http://www.cliqsearch.com/add_business	Free	General	No	Need to login with FB, Twitter or FourSquare - 24 hour approval wait time - Link to your website in company's profile
+pagespan.com	37	http://www.pagespan.com/siteowners	Free	Websites	Worldwide	A website directory - as of October 2013, service currently in development
+ExpressBusinessDirectory.com	36	http://www.expressbusinessdirectory.com/AddYourBusiness.aspx	Free	General	Worldwide	Account creation required to claim business, email verification required
+hallway.com	36	http://www.hallway.com/entity/add	Free	Company Reviews	Worldwide	Account creation and email verification required - No Link - Add your business for others to add reviews; can have negative impact
+YellowMoxie.com	36	http://www.yext.com/pl/cliqsearch-listing/index.html	See Yext	General	No	See Yext.com
+bestdealon.com	35	http://bestdealon.com/addbusinesstodirectory/	Free	General	No	Very fast and easy, no account needed
+SpotaBusiness.com	35	http://spotabusiness.com/Create-an-account.html	Free	General	Worldwide	Account creation and email verification required
+CityFos.com	35	http://www.cityfos.com/signup/	Free/Paid	General	No	Different levels of listings: Free (Link to your website can be added) and Featured Top Listings for $59/year which offers top listing placement.
+CornerstonesWorld.com	35	http://www.cornerstonesworld.com/addurl	Free/Paid	General	Worldwide	Account creation and email verification required - Different upgrades available, each raising the priority level of your listing
+Fyple.com	35	http://www.fyple.com/my-account/add-business/	Free	General	No	Account creation and email verification required - "Add new Business" might be broken as of Oct 2013
+MakeitLocal.com	35	http://www.makeitlocal.com/olc/edit_listing.faces	Free	General	No	Quick and Easy - Link can be added
+mylocalservices.com	35	http://www.mylocalservices.com/list_your_business.php	Paid	General	No	Free listing suspended - Premium listing available for $10 - admin approval required
+rankinsider.com	35	http://www.rankinsider.com/siteowners	Free	Websites	Worldwide	A website directory - as of October 2013, service currently in development
+ranksphere.com	35	http://www.ranksphere.com/siteowners	Free	Websites	Worldwide	A website directory - as of October 2013, service currently in development
+List-of-Companies.org	34	http://companylist.org/add/	Free	General	Worldwide	Quick and easy, approval required, 2 day wait period for listing to go live
+SocialStreets.com	34	http://www.socialstreets.com/myaccount/listings/add/	Free	General	No	Account creation and email verification required - As of October 2013 there might be some technical issues with business listing submissions; could not succesfully submit business listing
+SureWestYellowPages.com	34	https://surewestyellowpages.partners.local.com/	Free	General	No	Account creation required - Listing goes live withing 48 hours. Upgrade available for $25/month for additional business profile features
+Loqal.com	34	Listings powered by Acxiom.com	See Acxiom.com	General	No	No visible way of adding businesses - Data provided by acxiom
+MyWebYellow.com	33	http://mywebyellow.com/AddListing.aspx	Free/Paid	General	No	They will verify you by phone or email - Approval required. Account creation required for advertising services http://mywebyellow.com/Advertise.aspx
+ExpressUpdate.com	33	http://www.expressupdate.com/place_submissions/new	Free	General	No	Account creation with infogroup required - Telephone verification required
+ShowSmart.com	32	http://showsmart.com/listwithus/business.cfm	Free/Paid	General	No (US/CAN)	Account creation required - As of October 2013, the business submission form seems to be under maintenance or out of order
+Birectory.com	32	http://www.birectory.com/w.do?cmd=register	Free/Paid	General	Worldwide	Domain email (@domain.com) verification required - 3 different memberships for listing priority: Free, Business $49/year, Business + $149/year. http://www.birectory.com/w.do?cmd=membership_plans
+WherezIt.com	32	http://www.wherezit.com/listing_add.php	Free	General	No	Account creation required - Link allowed
+ZipCodez.com	32	http://www.zipcodez.com/advertiser/plans.php	Paid	General	No	Account creation and email verification required - Basic Listing $9.95/month for all important info, Deluxe listing $39.95/month offers submissions to me other top submission websites
+USBDN.com	31	http://www.usbdn.com/BizRegistrationStep1.asp?ChooseSubCat=1	Free	General	No	Account creation and email verfication required - Listing live within 10 days
+homeownerscircle.com	30	http://homeownerscircle.com/company/create	Free	Homes/Contractors	Worldwide	Account creation and email verification required - Home Owners and Contractors website, can submit a business listing if it's a home renovation or maintenance business.
+Abumba.com	30	http://www.abumba.com/AddBusiness	Free	General	No	No account needed - approval required
+ZipperPages.com	30	http://www.zipperpages.com/advertise.html	Free	General	No (US/CAN)	Account creation and email verification - They contact you with information in how to submit the listing
+BigwigBiz.com	29	http://www.bigwigbiz.com/signup.php	Free/Paid	General	Worldwide	Very fast and easy - different levels of priority for listings at different prices.
+6QubeDirectory.com	28	http://6qubedirectory.com/create-listing/	Free	General	No	One sign up page
+CBSYellowPages.com	28	http://cbsyellowpages.com/new_company.php	Free/Paid	General	No	Approval and Email Verification required - Premium Listing (more exposure) upgrade = $49.95/month
+BizListOnline.us	28	http://www.bizlistonline.us/listing_type.php	Free	General	Worldwide	Account creation and listing approval required - Doesn't look like a very popular site - slow speed
+PetesDirectory.com	28	http://www.petesdirectory.com/usa/addyourbusiness.htm	Free	General	Yes	Narrow down your category then click "Add your Business to this category" - admin approval required - live within 24 hours
+SocialRaves.com	28	http://www.socialraves.com/businessowners/addbusiness	Free/Paid	General	No	Account creation and email verification required - Premium listing available for $30/month for more features; free listing includes link to your website and many other customizable categories
+myhotelvideo.com	28	No business directory	Free	Hotels	Worldwide	No business listings - Can submit videos about of hotel - Account creation and email verification required - Site mostly in german, even when you choose "English" language
+ABLocal.com	27	http://ablocal.com/pages/add/	Free or Premium	General	Worldwide	Premium Listing $49/year - Review time: 5 days, Free listing takes up to 6 weeks to review listings
+MyCityBusiness.net	27	http://www.mycitybusiness.net/addbusiness.php	Free	General	Worldwide	Email activation required - Backlink allowed
+NetHulk.com	26	http://www.nethulk.com/business_sign_up.php	Free/Paid	General	No	2-3 weeks for listing go live with FREE business update - For $4.95 you can get Expedited listing for it to go live immediately.
+BingPlaces.com	26	https://www.bingplaces.com/dashboard	Free	General	Yes	Microsoft Account needed, verfication by post required
+byzlyst.com	25	http://byzlyst.com/submit/	Free/Paid	General	No	Account creation required - Premium Listing available for $200 which offers more features; backlink allowed on free listing
+MeetLocalBiz.com	25	http://meetlocalbiz.com/join/biz/plan/	Free	General	No	Account creation required - Quick and easy, highly customizable business profile - backlink can be added
+wealthmason.com	25	http://wealthmason.com/company/create	Free	Investors	Worldwide	Account creation and email verification required - Directory is mainly for Finance and Business consulting services
+SnoopItNow.com	24	http://www.snoopitnow.com/Create-new-item.html	Free	General	Worldwide	Quick and Easy - admin approval required
+BoomTrek.com	23	http://www.geoname.org/submit	Free	General	Worldwide	As of October 2013, adding listings not available - Site seems to be broken or under construction
+MyServiceConnection.com	23	http://www.myserviceconnection.com/listinginfo.html	Free/Paid	Jobs	No	The only way to get your business listed here is if you create hiring listing - Paid listing offers higher placement
+OneClickLocal.com	23	http://www.oneclicklocal.com/user/join	Free	General	No	Account creation required - Quick and easy
+wheretogo.com	22	http://wheretogo.com/html/signup.html	Free	General	Worldwide	Account creation and email verification required -
+Directory-Net.com	21	http://directory-net.com/register	Free	General	No	Account creation and Email verification required
+restaurant-ami.de	21	http://www.restaurant-ami.de/anmeldeformular.php?fuehrer=r&sprache=E&nkz=DEU	Free	Restaurants	Worldwide	No business listings - can add your restaurant to their guides/directory, many categories of restaurants to choose from.
+RedFounder.com	21	Nothing close to a directory				Nothing close to a directory
+PremiumPages.net	20	http://premiumpages.net/getlisted.aspx	Free	General	No	Quick and Easy
+eLocalFinder.com	19	http://elocalfinder.com/RegisterLocalBusiness.aspx	Free/Paid	General	Worldwide	Account creation required, afterwards go to "My account" > "Business Account Details" > "Add New Business" - Free Lising will go live in 12 months - Express submission goes live in less than 24 hrs with a $10 fee.
+SysBeat.com	18	http://sysbeat.com/business-directory/entry/add.html	Free	General	Worldwide	Quick and Easy - Link can be added
+TheUltimateOnlineDirectory.com	18	http://theultimateonlinedirectory.com/list_biz.php	Free/Paid	General	No	Admin approval required - listing goes live within 24 hours -Premium Listing available for $4.95 which includes link and more listing visibility - Free listing doesn't allow a link
+hotel-ami.us	18	http://www.hotel-ami.us/anmeldeformular.php?sprache=E	Free	Hotels	Worldwide	No business listings - can add your hotel to their guides/directory, many categories of hotels to choose from.
+AlltheLocal.com	14	http://www.allthe<your state>.com/add_business.php	Free	General	No	Pick state on landing page - free listing - no account creation needed - no approval time
+Localer.me	12	http://localer.me/get-listed/	Free	General	No	Business Listings are closed as of August 2013
+MyBusinessListingManager.com	11	Already listed above, See acxiom.com	Free	General	No	Already listed above, See acxiom
+nerdsoncall.com	10	No business Directory	Paid	IT	No	No business listings here, just an IT service website
+123SearchOnline.com		Dead				Dead
+7Mainstreet.com		Dead				Dead
+Answerwix.com		Dead				Dead
+bloggers.outside.in		Dead				Dead
+Blueboomerang.com		Dead				Dead
+BrightKite.com		Dead				Dead
+ConnectorLocal.com		Dead				Dead
+DirectoryYM.com		Dead				Dead
+EAscend.com		Dead				Dead
+Geodelic.com		Dead				Dead
+HWhere.com		Dead				Dead
+ImmersiFind.com		Dead				Dead
+LikeList.com		Dead				Dead
+MyCity.com		Dead				Dead
+MyGreenPages.com		Dead				Dead
+Praized.com		Dead				Dead
+SnapLocalBiz.com		Dead				Dead
+TrueLocal.com		Dead				Dead - TrueLocal.com.au is up, but it's for australian directories
+usyellowpages.com		Dead				Dead
+Viselka.com		Dead				Dead
+zipweb.com		Dead				Dead
+Find-Your-Biz.com		Dead or Under Maintenance				Dead or Under Maintenance
+AOL Yellowpages		Powered by Express Update	Free	General	No	Powered by Express Update. Need to make an account to submit - fairly easy, no approval time, just a lot of pages to go through
+pubcrawler.com		Malware Detected - Blackhat SEO				Malware Detected - Blackhat SEO exploit - Aborted
+asklocalpages.com		Malware Detected - Blackhole Exploit				One of the footer links has Malware on it
+PageLink.com		Malware Detected - Blackhole Exploit				Malware Detected - Blackhole Exploit - Aborted
+Busiverse .com		Now copub.com				Redirected to copub.com
+Where.com		Now www.paypal.com				Now www.paypal.com
+
+New Backlink List with Domain Authority : Sheet1
+
+Sheet1
+>
+<How to use this unlimited times…
+How to use this unlimited times….
+
+Step 1: Use the 3 free trials on your main account.
+Step 2: Log out and click sign up again.
+Step 3: Go to https://temp-mail.org/en/ 
+Step 4: Copy the mail provided.
+Step 5: Again to Higgsfield and use signup with email option and paste the email you just copied.
+Step 6: Now create a password and verify that you are a human and after that it will send a code, you will find that code in tempmail’s website, use that code to log in and now you got 3 more free trials. Do this for as many times as you want, till it works.
+Gym Prompts
+Tab 1
+
+To create videos:
+
+Come in google flow, upload your image and give a prompt of what action you want her to perform.
+
+50 image prompts:
+
+Ultra realistic AI fitness girl standing in front of gym mirrors after an intense workout, wearing black seamless leggings and sports bra, toned abs, sweaty glowing skin, cinematic gym lighting, photorealistic, 8k.
+Handsome AI male fitness model lifting heavy dumbbells inside a luxury modern gym, muscular physique, veins visible, dramatic shadows, ultra detailed fitness photography.
+AI gym influencer taking a mirror selfie in neon-lit gym, oversized hoodie over sportswear, confident expression, aesthetic Instagram vibe, realistic skin texture.
+Athletic AI woman doing squats with a loaded barbell in a hardcore warehouse gym, intense workout atmosphere, chalk dust floating in air, cinematic realism.
+Beautiful AI fitness girl sitting on a bench after cardio session, flushed cheeks, sweat drops, messy ponytail, moody gym background, ultra realistic photography.
+AI bodybuilder flexing biceps in front of gym mirrors, massive muscular physique, black tank top, gym lighting highlighting muscle definition, hyper realistic.
+AI fitness influencer stretching before workout near treadmills, stylish gym wear, natural lighting, calm fitness aesthetic, ultra detailed.
+Realistic AI gym couple training together, synchronized workout poses, luxury fitness club background, cinematic lighting, fitness campaign style.
+AI fitness girl leaning against gym equipment while holding protein shake, glossy lips, defined abs, modern gym environment, photorealistic influencer aesthetic.
+Ultra muscular AI athlete performing deadlifts in industrial gym, intense focus, sweat flying, gritty atmosphere, high detail realism.
+AI gym girl doing treadmill cardio while wearing wireless headphones, glowing skin, luxury fitness studio, cinematic depth of field.
+Realistic AI boxer training in gym, wrapped hands, punching heavy bag, dramatic sweat and motion blur, intense expression.
+AI female athlete posing near squat rack with oversized headphones, black and red gym outfit, fitness model aesthetic, realistic lighting.
+AI gym influencer sitting cross-legged on yoga mat after workout, soft lighting, athletic physique, calm wellness vibe, ultra realistic.
+AI fitness character drinking water beside dumbbell rack, visible sweat, toned body, cinematic shadows, hyper detailed realism.
+AI bodybuilder shirtless in gym locker room mirror selfie, defined muscles, luxury gym atmosphere, realistic reflections.
+AI fitness girl performing lunges in high-end gym studio, long ponytail flowing, stylish activewear, realistic anatomy, 8k detail.
+AI athlete hanging from pull-up bar, muscular back definition, dramatic overhead lighting, hardcore gym aesthetic.
+Realistic AI gym trainer adjusting gloves before workout, close-up portrait, moody cinematic gym environment.
+AI fitness influencer sitting on treadmill tying shoelaces, natural candid moment, realistic sportswear textures, modern gym setting.
+AI woman lifting kettlebells in underground gym, focused expression, cinematic smoke lighting, athletic body realism.
+AI male fitness model resting on bench press machine, sweat-covered skin, detailed muscle definition, moody gym atmosphere.
+AI fitness girl posing beside punching bag, sporty streetwear-inspired gym outfit, aesthetic neon lights, realistic photography.
+Ultra realistic AI athlete sprinting on treadmill, motion blur effect, intense cardio session, cinematic sports advertisement vibe.
+AI gym influencer taking selfie in locker room mirror, oversized gym jacket, luxury fitness aesthetic, photorealistic details.
+AI fitness woman doing yoga stretches in bright modern gym, peaceful atmosphere, flexible athletic pose, soft daylight.
+AI bodybuilder applying chalk before lifting weights, gritty gym environment, hyper detailed skin and muscles, cinematic realism.
+AI fitness character seated on dumbbell rack smiling confidently, luxury gym equipment, influencer-style composition.
+AI athlete training with battle ropes in dark gym, explosive energy, sweat particles visible, dramatic lighting.
+AI fitness girl wearing oversized headphones while lifting dumbbells, stylish activewear, mirror reflections, ultra realistic.
+AI male athlete standing shirtless near gym windows, natural sunlight highlighting muscular body, fitness magazine style.
+AI gym girl in pink seamless activewear posing after leg day workout, toned thighs, realistic skin textures, aesthetic lighting.
+AI fitness influencer leaning against treadmill while scrolling phone, casual candid vibe, cinematic gym background.
+AI athlete performing bench press with spotlights above, muscular chest definition, hardcore fitness atmosphere.
+AI gym woman sitting exhausted on floor after intense training session, sweat dripping, emotional realism, cinematic shadows.
+AI fitness model standing in luxury gym sauna area wrapped in towel, glowing skin, wellness aesthetic, realistic detail.
+AI athlete flexing abs in mirror selfie, sports bra and joggers, trendy influencer vibe, ultra detailed gym environment.
+AI boxer sitting inside boxing ring after training, bruised gloves, dramatic sweat and lighting, gritty realism.
+AI fitness girl climbing stair machine in neon gym environment, cyberpunk fitness aesthetic, photorealistic style.
+AI bodybuilder preparing pre-workout drink near gym lockers, muscular arms, realistic textures, cinematic atmosphere.
+AI fitness influencer posing with yoga ball in minimal luxury gym studio, soft natural lighting, calm wellness mood.
+AI athlete wrapping wrists before heavy workout, close-up detailed hands, gym equipment blurred in background.
+AI fitness girl resting against squat rack after workout, flushed skin, oversized hoodie, realistic fitness photography.
+AI male fitness character jumping rope in boxing gym, dynamic motion, cinematic lighting, athletic realism.
+AI woman doing seated cable rows in high-end gym, defined back muscles, ultra realistic anatomy and lighting.
+AI fitness influencer standing beside large gym windows at sunrise, soft golden light, toned physique, luxury fitness vibe.
+AI athlete doing pushups on rubber gym floor, dramatic low-angle camera shot, gritty hardcore training environment.
+AI fitness girl smiling while holding dumbbells in modern pastel gym, clean influencer aesthetic, realistic beauty photography.
+AI bodybuilder walking through gym corridor after workout, towel around neck, sweaty muscular physique, cinematic sports film look.
+AI fitness model posing confidently in front of full gym mirror wall, stylish monochrome gym outfit, glowing skin, ultra photorealistic 8k quality.
+
+
+Algoblueprints
+SEO
+Analytics
+Content
+Marketing
+Strategy
+Updates
+Tools
+
+Check Your Site's SEO
+How to Do Business Listing Submission — and Where to Find the Best Sites for It
+Download Business Listing File
+Table of Contents
+What Is Business Listing Submission?
+Step-by-Step: How to Do Business Listing Submission
+How to Find Business Listing Submission Sites
+Top Business Listing Sites I Recommend (Curated for 2026)
+What to Include in Every Business Listing
+Common Mistakes That Kill Your Citation Strategy
+How Long Does Business Listing Submission Take to Work?
+If you run a local business and you're not actively building directory citations, you're leaving free, high-authority backlinks and local ranking signals on the table every single day.
+
+I've built local SEO strategies for businesses across healthcare, e-commerce, hospitality, and professional services. And one thing stays consistent across every industry: business listing submission is one of the highest-ROI, lowest-effort activities in local SEO — if you do it right.
+
+In this guide, I'm going to walk you through exactly how to do business listing submission from scratch, explain what actually matters (and what doesn't), and give you a curated list of sites I personally use and recommend. No fluff, no shortcuts — just a system that compounds results over time.
+
+What Is Business Listing Submission?
+Business listing submission is the process of adding your business's core information — name, address, phone number, website, and category — to online directories, data aggregators, and local citation platforms. Each of these entries is called a citation.
+
+Search engines like Google use citations to verify that your business is real, legitimate, and consistent across the web. The more accurate and consistent your citations are across authoritative platforms, the more trust signals you send to search engines — and that directly influences your local search rankings.
+
+Expert Insight
+From my 5+ years managing local SEO campaigns: NAP consistency (Name, Address, Phone) is non-negotiable. A single variation — like "St." vs. "Street" — across 50 directories can dilute your ranking signal significantly. I've seen this cost businesses their map pack placement.
+
+Step-by-Step: How to Do Business Listing Submission
+Here's the exact process I use when onboarding a new local SEO client. Follow this order — it matters.
+
+1
+Standardize Your NAP Information First
+Before you submit anywhere, lock down your NAP (Name, Address, Phone). Write it exactly as it will appear everywhere — decide on abbreviations, suite formats, and phone number format. Create a master document. This is the foundation everything else sits on.
+
+2
+Claim and Optimize Google Business Profile
+This is your most important listing. Claim it, verify it, fill out every single field — categories, hours, description, photos, services, and Q&A. Google Business Profile directly influences your Google Maps and local pack rankings. Everything else supports this.
+
+3
+Submit to the Four Major Data Aggregators
+Data aggregators push your information to hundreds of secondary directories automatically. In the US, the four core aggregators are Data Axle, Localeze (Neustar), Foursquare, and Acxiom. Submitting to these creates a cascade of citations across the web over time.
+
+4
+Build High-Authority Core Citations
+After aggregators, manually submit to the top-tier directories — Yelp, Bing Places, Apple Maps, Facebook, Yellow Pages, Foursquare, and Hotfrog. These carry the most domain authority and are crawled frequently by search engines.
+
+5
+Target Industry-Specific and Local Directories
+This is where most people stop — but it's where the real competitive advantage lies. A law firm should be listed on Avvo and FindLaw. A restaurant should be on TripAdvisor and Zomato. A doctor should be on Healthgrades and Zocdoc. Niche authority signals are powerful.
+
+6
+Audit and Fix Existing Inconsistencies
+Use tools like BrightLocal, Whitespark, or Moz Local to scan for existing mentions of your business. Fix duplicates, correct wrong addresses, update old phone numbers. An audit run before a local campaign is something I treat as non-negotiable for every client.
+
+7
+Monitor, Update, and Maintain Regularly
+Business listing submission is not a one-time task. Hours change, phone numbers change, addresses change. Set a quarterly reminder to audit your top 20 listings and update where needed. Fresh, maintained listings signal an active, trustworthy business to both users and search engines.
+
+From the Field — Akif Qureshi
+"The businesses I've helped dominate local search didn't just build more listings — they built better ones. They answered the Q&A section on Google. They added real photos to Yelp. They wrote unique, keyword-rich descriptions for every platform. Volume matters, but quality controls the ranking."
+
+How to Find Business Listing Submission Sites
+One of the most common questions I get from followers is: how do I find the right sites to submit to? Here are the methods I use professionally — each one serves a different purpose.
+
+Method 1: Competitor Citation Audit
+This is my favourite method for new campaigns. Take your top-ranking local competitor, run their domain through Whitespark's Citation Finder or Moz Local, and you get a ready-made list of every directory they're listed on. You replicate that — and then go further. If they're on 40 sites, you target 60.
+
+Method 2: Use Industry-Specific Citation Lists
+Whitespark publishes a regularly updated list of top citation sources broken down by country and industry. BrightLocal does too. I start every niche campaign with these. They save hours of manual research and remove the guesswork from targeting.
+
+Method 3: Google Search Operators
+Use search operators to discover directories relevant to your niche. Try queries like: "add your business" + [city], or "submit listing" + [industry], or "directory" + [niche] + "free submission". This surfaces local and industry-specific directories that aggregator tools sometimes miss.
+
+Method 4: Backlink Analysis Tools
+Run a competitor through Ahrefs or SEMrush and filter for referring domains with "directory," "listings," or "local" in the URL. This reveals citation sources that are already sending ranking signals — and you can target the same ones.
+
+Method 5: Local Chamber and Association Websites
+Your local Chamber of Commerce website is often one of the highest-authority local citations available — and most businesses never claim it. Same goes for trade associations. These carry genuine topical authority and local relevance that general directories can't replicate.
+
+Top Business Listing Sites I Recommend (Curated for 2026)
+Here's my working list of directories I actively use across client campaigns. These aren't pulled from a random article — they're the platforms I've tested, tracked, and seen deliver real ranking movement.
+
+Directory / Platform	Priority	Best For
+Google Business Profile	Essential	All local businesses
+Bing Places for Business	Essential	All local businesses
+Apple Maps Connect	Essential	All local businesses
+Yelp	Essential	Restaurants, services, retail
+Facebook Business Page	Essential	All businesses
+Yellow Pages (YP.com)	High Value	Service businesses
+Foursquare	High Value	Restaurants, venues, retail
+Hotfrog	High Value	All local businesses
+Manta	High Value	Small to mid-size businesses
+Alignable	High Value	Local businesses & networking
+Healthgrades / Zocdoc	Niche	Healthcare professionals
+Avvo / FindLaw	Niche	Legal professionals
+TripAdvisor / Zomato	Niche	Hospitality & food
+Houzz / Angi (Angie's List)	Niche	Home services & contractors
+Clutch.co / G2	Niche	B2B & software companies
+What to Include in Every Business Listing
+Most business owners rush this part — and it shows. Here's what every listing should contain to maximize both its SEO value and its conversion potential:
+
+✓
+Exact, consistent NAP — Name, Address, Phone formatted identically across every directory
+✓
+Primary and secondary business categories — Be specific; "Personal Injury Lawyer" beats "Legal Services"
+✓
+Unique description for each platform — Don't copy-paste the same bio everywhere; write variations with natural keyword integration
+✓
+Business hours — Include holiday hours; inconsistent hours create trust issues with both users and search engines
+✓
+High-quality photos — Exterior, interior, team, products. Listings with photos get 42% more direction requests (Google data)
+✓
+Website URL with UTM parameters — Track which directories send actual traffic, not just citations
+✓
+Services or products listed — Every platform that allows this should have a complete services list
+✓
+Payment methods and accessibility info — Small details that improve user experience and listing completeness scores
+Common Mistakes That Kill Your Citation Strategy
+Over the years, I've audited hundreds of local SEO profiles. The same mistakes appear again and again. Here's what to avoid:
+
+Inconsistent NAP across platforms. This is the single biggest citation killer. Search engines see conflicting data and trust none of it. Standardize before you submit — not after.
+
+Submitting to low-quality or spammy directories. Not all links help. Directories with thin content, no editorial standards, or obvious link farms can actually dilute your profile. I only target sites with real domain authority and real user traffic.
+
+Ignoring duplicate listings. Many businesses have old, outdated, or duplicate listings from years ago. These create conflicting signals. Always audit before you build.
+
+Skipping the description field. A blank description is a missed optimization opportunity. Every description should naturally include your primary keyword, city, and core service — written for humans, not just search engines.
+
+Not requesting or responding to reviews. Listings with active reviews rank higher and convert better. Build a review generation system and respond to every review — positive and negative.
+
+Pro Tip — AI SEO & AEO Consideration
+As AI-powered search (ChatGPT, Perplexity, Google AI Overviews) increasingly surfaces local business information, having consistent, well-structured directory listings is becoming even more critical. AI systems pull business data from these same citation sources. Accurate, rich listings increase your chances of appearing in AI-generated local recommendations.
+
+How Long Does Business Listing Submission Take to Work?
+This is the honest answer most agencies won't give you: citation building is a compounding strategy, not an overnight fix. In my experience managing campaigns across healthcare, hospitality, and e-commerce clients, here's a realistic timeline:
+
+Weeks 1–4: You submit to core directories. Google begins recrawling and verifying your updated information. No visible ranking changes yet.
+
+Months 2–3: Data aggregators begin distributing your information to secondary directories. You start seeing movement in local pack rankings for lower-competition keywords.
+
+Months 4–6: Niche and industry-specific citations start to compound with your aggregator citations. Local pack rankings improve across your primary keyword targets. Review velocity starts influencing rankings.
+
+Month 6+: If you maintain NAP consistency, actively generate reviews, and keep listings updated, citation authority compounds — and your competitors who stopped at step 4 start losing ground to you.
+
+The Bottom Line
+Business listing submission is one of the most effective and underutilized tools in local SEO. It builds trust signals, improves local pack rankings, drives referral traffic, and positions your business in front of customers at the exact moment they're searching for what you offer. Done right — with consistent NAP data, quality descriptions, and strategic site targeting — it creates ranking momentum that compounds month over month. Start with Google Business Profile, build your core citations, go niche, and never stop maintaining what you've built.
+
+Akif Qureshi
+Akif Qureshi
+Senior SEO Specialist & Marketing Analyst | Content Strategist
+5+ yrs experience
+Google Certified
+6 guides
+About
+Driven by advanced SEO expertise, deep marketing analytics, high-impact content strategy
+With 5+ years of hands-on experience, I specialize in holistic search strategies that don’t just rank—they drive real, measurable business growth. I’ve worked across industries including healthcare, hospitality, legal, e-commerce, and professional services, helping brands dominate their target markets. My approach bridges the gap between raw data and creative execution. Every strategy I build is rooted in rigorous market analysis, structured SEO frameworks, and tailored content ecosystems—no templates, no shortcuts. Whether you’re a single-location brand or scaling across multiple cities, I create data-driven marketing systems designed to compound results and grow with you.
+
+No sponsored content
+No affiliate links
+Reader supported
+Need a Business Listing Campaign Built for Your Brand?
+Get a custom business directory list, submission strategy, and optimization checklist — tailored to your niche and local SEO goals.
+
+Book a Free Listing Audit → →
+Algoblueprints
+© 2026 Algoblueprints. All rights reserved.
+
+Terms and Condition
+|
+Disclaimer
+|
+Privacy & Policy
+↑
+
+
+https://github.com/hyperbrowserai/hyperbrowser-app-examples.git
+https://github.com/Bomx/distribb-skill.git
+https://github.com/Alishahryar1/free-claude-code.git
+
+Logo
+News
+Hub
+Premium Content
+Read our exclusive articles
+   
+Logo
+ 
+Search
+HomeOpen Source/WeightsAI AgentsTutorialsVoice AIRoboticsNewsletter
+→ Partner with Us
+Home  Editors Pick  Agentic AI  Google Launches Antigravity 2.0 at I/O 2026: A Standalone Agent-First Platform with...
+
+Editors PickAgentic AITechnologyAI ShortsArtificial IntelligenceApplicationsNew ReleasesSoftware EngineeringStaffTech News
+Google Launches Antigravity 2.0 at I/O 2026: A Standalone Agent-First Platform with CLI, SDK, Managed Execution, and Enterprise Support
+By Michal Sutter -May 19, 2026
+Google used its I/O 2026 developer keynote to ship a meaningful architectural shift in how it packages AI-assisted development. The company announced Google Antigravity 2.0 — a standalone desktop application built entirely around agent orchestration alongside an Antigravity CLI, an Antigravity SDK, Managed Agents in the Gemini API, and enterprise support through the Gemini Enterprise Agent Platform. So, basically Google is moving its developer tooling away from IDE-centric assistance and toward multi-agent workflow management as the primary abstraction.
+
+What is Antigravity 2.0
+Google Antigravity is the agent-first development platform for taking an idea and turning it into a production-ready app. Version 2.0 is a new standalone desktop application, separate from the existing Antigravity IDE, designed fully around an agent-optimized experience. It acts as a base for agent interaction, allowing developers to orchestrate multiple agents and execute tasks in parallel. The application also features dynamic subagents for parallelized workflows, scheduled tasks for background automation, and ecosystem integrations across Google AI Studio, Android, and Firebase.
+
+🐝 Join 150k+ members of our ML Subreddit Community..
+The scheduled tasks capability is practically significant: rather than manually prompting an agent each time, developers can define tasks that invoke agents automatically in the background — converting the agent from a single-turn tool into something closer to a persistent automation pipeline. Google also added native voice command support to Antigravity, consistent with similar additions to consumer products like Gmail and Docs.
+
+
+The New Ecosystem: CLI, SDK, Enterprise, and Managed Agents
+Beyond the desktop app, Google is releasing four additional surfaces that together form a unified developer harness.
+
+The Antigravity CLI is focused at developers who prefer terminal-based workflows. It delivers a lightweight, high-velocity surface for creating new agents without a graphical user interface. Critically, it shares the same agent harness as Antigravity 2.0, meaning all future improvements to core agents are automatically applied across both surfaces. The Antigravity CLI fully replaces the Gemini CLI. For developers migrating, Antigravity CLI preserves the most critical Gemini CLI features: Agent Skills, Hooks, Subagents, and Extensions — the last of which are now rebranded as Antigravity plugins.
+
+The Antigravity SDK provides programmatic access to the same agent harness that powers Google’s own products. Optimized for Gemini models, it lets developers define custom agent behaviors and host them on their infrastructure of choice — relevant for engineering teams that want to embed Antigravity-style agents inside their own products or internal tooling.
+
+Antigravity in the Gemini Enterprise Agent Platform addresses organizational use cases by simplifying enterprise workloads and allowing Google Cloud customers to connect Antigravity directly to Google Cloud projects. This is the enterprise-facing deployment path for teams that need to operate agents within their existing cloud infrastructure.
+
+The Managed Agents feature in the Gemini API provides infrastructure-level isolation for agent execution. With a single API call, developers can spin up an agent that reasons, uses tools, and executes code in an isolated Linux environment. Managed Agents are powered by the Antigravity agent harness, built on Gemini 3.5 Flash, and available via the Interactions API and in Google AI Studio. Three capabilities define this feature: first, the agent harness itself — the same technology and infrastructure that powers Google’s own agents, co-optimized with Gemini 3.5 Flash. Second, persistent isolated environments — each interaction creates an environment that can be resumed in follow-up calls with all files and state intact, enabling seamless multi-turn sessions without reinitializing context. Third, custom agent definitions — developers can extend the Antigravity agent with custom instructions and skills using markdown files, with new custom agent templates available in the Google AI Studio Playground to get started quickly.
+
+Gemini 3.5 Flash as the Default Model
+Underpinning the entire ecosystem is Gemini 3.5 Flash, which Google is setting as the default model across Antigravity. According to Google team, 3.5 Flash outperforms Gemini 3.1 Pro across almost all benchmarks while running four times faster than other frontier models. The speed advantage being practically significant when multiple agents are running in parallel, since model latency compounds across concurrent agent calls.
+
+AI Studio: Mobile, Workspace, Android, and Google Play
+Google is substantially expanding where developers can start and continue their work. A new Google AI Studio mobile app is available to pre-register this week, letting developers capture ideas on the go and have a working prototype ready when they return to their desktop. Through a new Export to Antigravity integration, entire projects can be moved from AI Studio to local Antigravity development with a single click, including all project context.
+
+A new Workspace integration means agents can now natively call relevant Google Workspace APIs and embed them directly into applications — useful for any workflow that needs to interact with Google Docs, Sheets, Calendar, or other Workspace services programmatically.
+
+Native Android support has been added, allowing developers to build Android apps with just a prompt. Google is also introducing support for the Google Play Console directly in Google AI Studio, enabling developers to publish apps to the test track without leaving the Studio environment.
+
+Google is introducing a new $100/month AI Ultra plan offering 5x higher usage limits in Antigravity compared to the existing Google AI Pro plan.
+
+Key Takeaways
+Google Antigravity 2.0 is a standalone agent-first desktop app — no IDE, just parallel agents, scheduled tasks, and subagent workflows running in the background.
+Managed Agents in the Gemini API spins up a full isolated Linux environment with a single API call, with persistent state across multi-turn sessions.
+Antigravity SDK + Enterprise Agent Platform gives teams a path to deploy custom Gemini-optimized agents on their own infrastructure or directly inside Google Cloud projects.
+Check out the Technical details and Try it here. Also, feel free to follow us on Twitter and don’t forget to join our 150k+ ML SubReddit and Subscribe to our Newsletter. Wait! are you on telegram? now you can join us on telegram as well.
+
+Need to partner with us for promoting your GitHub Repo OR Hugging Face Page OR Product Release OR Webinar etc.? Connect with us
+
+
+Michal Sutter
++ posts
+Michal Sutter is a data science professional with a Master of Science in Data Science from the University of Padova. With a solid foundation in statistical analysis, machine learning, and data engineering, Michal excels at transforming complex datasets into actionable insights.
+
+Previous article
+Best Enterprise Level Agentic AI Platforms for 2026
+Next article
+Upstash for Redis vs Supabase vs Neon: Which One Fits Vibe Coding Workflows in 2026?
+RELATED ARTICLESMORE FROM AUTHOR
+Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4's 33.5%
+Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4’s 33.5%
+NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule
+NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule
+Tencent Open-Sources TencentDB Agent Memory: A 4-Tier Local Memory Pipeline for AI Agents
+Tencent Open-Sources TencentDB Agent Memory: A 4-Tier Local Memory Pipeline for AI Agents
+Build a SuperClaude Framework Workflow with Commands, Agents, Modes, and Session Memory
+Build a SuperClaude Framework Workflow with Commands, Agents, Modes, and Session Memory
+Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training or Weight Modification
+Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training or Weight Modification
+Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints
+Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints
+
+
+Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys, Up from Base GPT-5.4's 33.5%
+Microsoft Research Releases Webwright: A Terminal-Native Web Agent Framework That Scores 60.1% on Odysseys,...
+Asif Razzaq - May 24, 20260
+Microsoft Research introduces Webwright, a terminal-native browser agent framework that replaces click-trace web automation with reusable Playwright scripts. Using a single agent loop across three modules and roughly 1,000 lines of code, Webwright powered by GPT-5.4 reaches 60.1% on the long-horizon Odysseys benchmark and 86.7% on Online-Mind2Web — the highest AutoEval score among open-sourced harness recipes.
+NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write in the Delta Rule
+NVIDIA AI Releases Gated DeltaNet-2: A Linear Attention Layer That Decouples Erase and Write...
+Asif Razzaq - May 24, 20260
+Linear attention squeezes the unbounded KV cache into a fixed-size recurrent state, but editing that memory without scrambling existing associations is hard. Prior delta-rule models like Gated DeltaNet and KDA use one scalar gate to control both erasing old content and writing new content. NVIDIA's Gated DeltaNet-2 decouples these into a channel-wise erase gate b_t on the key axis and a channel-wise write gate w_t on the value axis. At 1.3B parameters trained on 100B FineWeb-Edu tokens, it outperforms Mamba-2, Gated DeltaNet, KDA, and Mamba-3 across language modeling, commonsense reasoning, and long-context retrieval — with the largest gains on RULER S-NIAH and multi-key needle retrieval.
+Tencent Open-Sources TencentDB Agent Memory: A 4-Tier Local Memory Pipeline for AI Agents
+Tencent Open-Sources TencentDB Agent Memory: A 4-Tier Local Memory Pipeline for AI Agents
+Michal Sutter - May 23, 20260
+Tencent has open-sourced TencentDB Agent Memory, a fully local memory system for AI agents released under the MIT license. The project pairs symbolic short-term memory, which offloads verbose tool logs into a compact Mermaid task canvas, with a 4-tier long-term memory pyramid (L0 Conversation → L1 Atom → L2 Scenario → L3 Persona). It ships as an OpenClaw plugin and a Hermes Docker image, runs on local SQLite + sqlite-vec by default, and uses hybrid BM25 + vector retrieval with RRF fusion. Tencent's own benchmarks report a 61.38% token reduction and 51.52% relative pass-rate gain on WideSearch with OpenClaw, alongside PersonaMem accuracy moving from 48% to 76%.
+Build a SuperClaude Framework Workflow with Commands, Agents, Modes, and Session Memory
+Build a SuperClaude Framework Workflow with Commands, Agents, Modes, and Session Memory
+Sana Hassan - May 23, 20260
+In this tutorial, we build an advanced workflow using the SuperClaude Framework as a structured layer on top of the Anthropic API.
+Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training or Weight Modification
+Nous Research Releases Contrastive Neuron Attribution (CNA): Sparse MLP Circuit Steering Without SAE Training...
+Asif Razzaq - May 23, 20260
+Nous Research releases Contrastive Neuron Attribution (CNA), a method that identifies and ablates sparse MLP neuron circuits to steer LLM behavior — no sparse autoencoder training, no weight modification, and no degradation of general capability benchmarks.
+Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints
+Perplexity Open-Sources Bumblebee: A Read-Only Supply-Chain Scanner for Developer Endpoints
+Asif Razzaq - May 23, 20260
+Perplexity has open-sourced Bumblebee, an internal security tool it uses to protect the developer systems behind its search product, Comet, and Computer. Bumblebee is a read-only inventory collector for macOS and Linux developer endpoints. It scans npm, PyPI, Go modules, MCP configs, editor extensions, and browser extensions — without invoking any package manager or running any code.
+A Step-by-Step Coding Tutorial to Implement GBrain: The Self-Wiring Memory Layer Built by Y Combinator's Garry Tan for AI Agents
+A Step-by-Step Coding Tutorial to Implement GBrain: The Self-Wiring Memory Layer Built by Y...
+Asif Razzaq - May 22, 20260
+AI agents start every session from zero — no memory of meetings, notes, or decisions. GBrain, the open-source memory layer Y Combinator's Garry Tan built to power his own OpenClaw and Hermes deployments, fixes that with a markdown-first knowledge graph that wires itself through regex inference, not LLM calls. This step-by-step coding tutorial walks through installing GBrain v0.38.2.0, building a brain repo, running hybrid search, and connecting it to Claude Code via MCP — about 20 minutes, all terminal output captured live.
+Microsoft Releases Fara1.5
+Microsoft Releases Fara1.5: A Family of Browser Computer-Use Agents (4B/9B/27B) That Outperform OpenAI Operator...
+Asif Razzaq - May 22, 20260
+Microsoft Research released Fara1.5, a family of browser computer-use agents in 4B, 9B, and 27B sizes. Fara1.5-27B scores 72% on Online-Mind2Web, outperforming OpenAI Operator, Gemini 2.5 Computer Use, and Yutori Navigator n1. The release also includes FaraGen1.5, a synthetic data pipeline that trains agents on gated
+Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning
+Build Recurrent-Depth Transformers with OpenMythos for MLA, GQA, Sparse MoE, and Loop-Scaled Reasoning
+Sana Hassan - May 22, 20260
+In this tutorial, we explore OpenMythos by building an advanced recurrent-depth transformer workflow that runs end-to-end in Google Colab. We create both MLA and GQA model variants, compare their parameter counts, and check the stability of the recurrent injection matrix through its spectral radius.
+How CopilotKit Is Redefining the Agentic AI Stack in 2026
+How CopilotKit Is Redefining the Agentic AI Stack in 2026
+Asif Razzaq - May 21, 20260
+An inside look at CopilotKit’s 2026 shipping cycle. Learn how the new AG-UI protocol, AIMock testing suite, and Pathfinder server are providing the production architecture developers need for agentic AI.
+
+
+
+
+   
+miniCON Event 2025 Download Privacy & TC Cookie Policy Newsletter Partnership and Promotion
+© Copyright Reserved @2025 Marktechpost AI Media Inc
+
+Complete_SEO_Guide_2026.docx
+Complete Website SEO Guide (2026)
+How to Rank Your Website on Google & Other Search Engines
+
+Introduction
+This guide explains how to register your website in Google Search Console, optimize SEO, improve rankings, and use AI prompts to generate SEO-focused content.
+
+What is SEO?
+SEO (Search Engine Optimization) helps search engines understand, trust, and rank your website higher in search results.
+
+Google Search Console Setup
+1. Open Google Search Console
+2. Add your domain/property
+3. Verify ownership using DNS or HTML methods
+4. Submit your sitemap.xml
+5. Monitor indexing and keyword performance
+
+Technical SEO Essentials
+- Fast loading speed
+- Mobile responsiveness
+- HTTPS enabled
+- Clean URLs
+- Proper metadata
+- Robots.txt and sitemap setup
+
+Content SEO
+Write useful content matching user intent. Use natural keywords, proper heading hierarchy (H1, H2, H3), internal linking, and optimized meta descriptions.
+
+Image SEO
+Use compressed images, meaningful filenames, alt text, and responsive image sizing.
+
+Backlinks
+Build backlinks through blogs, guest posts, social sharing, Product Hunt launches, directories, and useful tools/resources.
+
+Modern SEO for AI Websites
+Avoid generic AI-generated copy. Focus on semantic HTML, accessibility, fast performance, structured data, and trustworthy content.
+
+AI SEO Optimization Prompt
+Use this prompt with ChatGPT, Claude, Gemini, Cursor, Windsurf, or other AI tools:
+
+You are an advanced SEO analyst, technical SEO engineer, conversion copywriter, semantic search optimizer, and Google ranking specialist.
+
+Analyze my complete website thoroughly.
+
+Tasks:
+- Analyze all pages
+- Find high-ranking SEO keywords
+- Generate SEO optimized headings and content
+- Improve semantic relevance
+- Suggest internal links
+- Suggest schema markup
+- Optimize readability
+- Detect weak sections
+- Improve technical SEO
+- Rewrite AI-generic copy
+- Generate metadata
+- Suggest blog ideas
+- Prioritize fixes by impact
+
+Output:
+- SEO audit summary
+- Critical issues
+- Keyword opportunities
+- Technical SEO improvements
+- Content improvements
+- Final SEO score
+
+SEO Checklist
+- Sitemap submitted
+- Mobile optimized
+- HTTPS enabled
+- Fast loading
+- Metadata added
+- Proper headings used
+- Internal links added
+- Images optimized
+
+Final Advice
+SEO is a long-term game. Focus on useful content, fast performance, strong branding, technical optimization, and consistent publishing.
+
+
+# Real estate CRM prompt
+
+You are an expert full-stack product engineer. Build a production-ready mobile-first Real Estate CRM app based on the requirements below.
+
+The app should be a mini CRM for real estate businesses where sales teams can manage leads, instantly call new leads, send property photos in one click, follow up in one click, manage inventory, manage social media tasks, and track employee attendance.
+
+Build this as a cloud-based mobile-first app. It should work beautifully on mobile and also be usable on desktop.
+
+Use this tech stack unless there is a strong reason not to:
+
+- Frontend: Next.js 15 with App Router, TypeScript, Tailwind CSS, shadcn/ui
+- Backend: Next.js API routes / Server Actions
+- Database: Supabase Postgres
+- Auth: Supabase Auth
+- File storage: Supabase Storage for property photos/documents
+- Realtime: Supabase Realtime where useful
+- Hosting: Vercel
+- Voice calls: Twilio Voice
+- WhatsApp/SMS: Twilio WhatsApp/SMS or WhatsApp Cloud API adapter
+- Email: Resend or SMTP adapter
+- Maps/GPS: Browser geolocation for attendance check-ins
+- Optional AI: OpenAI-compatible adapter for message drafting and property descriptions
+
+The app should be called “EstateFlow CRM”.
+
+Important product context:
+Real estate businesses get leads from many sources like 36 Acre, MagicBricks, [Housing.com](http://housing.com/), Facebook Ads, Instagram Ads, website forms, WhatsApp, and manual entries. Their team usually has to manually call every lead. This CRM should automate that.
+
+Core idea:
+As soon as a new lead enters the CRM, the system should immediately call the assigned sales agent first. Once the agent picks up, the system should call the lead and bridge both of them on a live call. The CRM should log the call result automatically.
+
+Build these modules:
+
+1. Authentication and Roles
+Create user authentication with these roles:
+- Admin / Business Owner
+- Sales Manager
+- Sales Agent
+- Field Executive
+- Social Media Manager
+
+Each user belongs to one organization/team.
+
+Admin can:
+
+- Invite team members
+- Manage roles
+- View all leads, calls, properties, attendance, and reports
+- Configure integrations
+
+Sales Manager can:
+
+- View and assign leads
+- Track agent performance
+- Manage follow-ups
+
+Sales Agent can:
+
+- View assigned leads
+- Call leads
+- Send property details/photos
+- Add notes and follow-ups
+
+Field Executive can:
+
+- Mark attendance
+- View assigned site visits
+- Add visit notes
+
+Social Media Manager can:
+
+- Manage content calendar
+- Create/schedule social media posts
+- Track post status
+1. Dashboard
+Create a mobile-first dashboard showing:
+- New leads today
+- Calls made today
+- Follow-ups due today
+- Hot leads
+- Site visits scheduled
+- Available inventory
+- Team attendance summary
+- Recent activity feed
+
+Use cards, charts, and quick action buttons.
+
+1. Lead Management
+Build a complete lead management system.
+
+Lead fields:
+
+- Full name
+- Phone number
+- Email
+- Source: 36 Acre, MagicBricks, Housing, Facebook, Instagram, Website, Referral, Manual, Other
+- Interested property type: Apartment, Villa, Plot, Commercial, Rental
+- Budget range
+- Preferred location
+- Lead status: New, Contacted, Interested, Site Visit Scheduled, Negotiation, Won, Lost, Not Responding
+- Lead temperature: Cold, Warm, Hot
+- Assigned agent
+- Notes
+- Next follow-up date/time
+- Created date
+- Last contacted date
+
+Features:
+
+- Add lead manually
+- Import lead from webhook
+- Search leads
+- Filter by status/source/agent/temperature/date
+- Lead detail page
+- Timeline of all calls, messages, notes, follow-ups, and property shares
+- Change status
+- Assign/reassign agent
+- Add notes
+- Mark as hot lead
+- Schedule follow-up
+- One-click call
+- One-click WhatsApp/SMS follow-up
+- One-click send property photos/details
+1. Lead Intake Webhook
+Create an API endpoint:
+
+POST /api/webhooks/leads
+
+This endpoint should accept leads from external platforms like 36 Acre, website forms, Zapier, Make, Facebook Lead Ads, etc.
+
+Example payload:
+{
+"fullName": "Rahul Sharma",
+"phone": "+919999999999",
+"email": "[rahul@example.com](mailto:rahul@example.com)",
+"source": "36 Acre",
+"propertyType": "Apartment",
+"budgetMin": 7500000,
+"budgetMax": 12000000,
+"preferredLocation": "Gurgaon",
+"notes": "Looking for 3BHK near Golf Course Road"
+}
+
+When a lead comes in:
+
+- Save it in the database
+- Assign it to an available sales agent using round-robin logic
+- Trigger the instant bridge call automation
+- Create an activity log
+- Notify the assigned agent inside the app
+1. Instant Agent-to-Lead Call Bridge
+Implement a Twilio Voice integration.
+
+Flow:
+
+- New lead comes in
+- System calls the assigned agent first
+- When the agent answers, play a short message:
+“New real estate lead from {{source}}. Press any key to connect with {{leadName}}.”
+- After agent confirmation, call the lead
+- Bridge both calls into a conference
+- Log call status, duration, recording URL if available, and outcome
+
+If the agent does not answer:
+
+- Try the next available agent
+- If no agent answers, mark lead as “Call Pending”
+- Create follow-up task
+- Notify sales manager
+
+Create call logs with:
+
+- lead_id
+- agent_id
+- call_sid
+- conference_sid
+- status
+- duration
+- recording_url
+- started_at
+- ended_at
+- outcome
+
+Also create a dry-run mode for local development where Twilio calls are not actually placed but the flow is simulated.
+
+1. One-Click Property Photo Sharing
+Build property inventory and property sharing.
+
+Property fields:
+
+- Title
+- Location
+- Address
+- Property type
+- Price
+- Size
+- Bedrooms
+- Bathrooms
+- Floor
+- Furnishing status
+- Availability status: Available, Hold, Sold, Rented
+- Description
+- Amenities
+- Images
+- Documents/brochures
+- Assigned owner/developer if applicable
+
+Features:
+
+- Add/edit/delete property
+- Upload multiple property photos
+- View property gallery
+- Filter properties by location, budget, type, status
+- Select a lead and send property photos/details in one click
+- Generate a public share link for the property
+- Send via WhatsApp/SMS/email using message templates
+- Log the share event in the lead timeline
+
+Example WhatsApp message:
+“Hi {{leadName}}, sharing details of {{propertyTitle}} in {{location}}. Price: {{price}}. Photos and details: {{shareLink}}”
+
+1. One-Click Follow-Up System
+Build a follow-up system where agents can send quick follow-ups.
+
+Features:
+
+- Follow-up templates
+- WhatsApp follow-up
+- SMS follow-up
+- Email follow-up
+- Call reminder
+- Schedule follow-up
+- Mark follow-up complete
+- Snooze follow-up
+- Follow-up due notifications
+
+Default templates:
+
+- “Hi {{leadName}}, just checking if you had a chance to review the property details I shared.”
+- “Hi {{leadName}}, are you available for a quick call today to discuss properties in {{preferredLocation}}?”
+- “Hi {{leadName}}, we have a few new options matching your budget. Should I share them?”
+1. Inventory Management
+Create an inventory module for real estate listings.
+
+Features:
+
+- Property list
+- Property detail page
+- Availability status
+- Price updates
+- Units available
+- Property owner/developer info
+- Documents
+- Photos
+- Notes
+- Internal tags
+- Match properties to leads based on budget, location, and property type
+
+Add a “Recommended Properties” section inside each lead detail page.
+
+1. Social Media Module
+Build a simple social media planning module.
+
+Features:
+
+- Content calendar
+- Create post draft
+- Post type: Instagram Reel, Instagram Post, Facebook Post, LinkedIn Post, Story
+- Caption
+- Media upload
+- Status: Idea, Draft, Scheduled, Published
+- Scheduled date/time
+- Assigned team member
+- Notes
+- AI caption helper placeholder using OpenAI-compatible adapter
+- Optional webhook to send approved posts to Zapier/Make/SocialPilot/Buffer
+
+This does not need to directly publish to social media in the MVP unless API keys are provided. But the architecture should support publishing integrations later.
+
+1. Employee Attendance
+Build an attendance system.
+
+Features:
+
+- Check-in button
+- Check-out button
+- GPS location capture
+- Optional selfie upload field
+- Daily attendance history
+- Admin attendance dashboard
+- Late/absent status
+- Field visit notes
+- Show who is currently checked in
+
+Attendance fields:
+
+- user_id
+- check_in_time
+- check_out_time
+- check_in_latitude
+- check_in_longitude
+- check_out_latitude
+- check_out_longitude
+- status
+- notes
+1. Mobile App UX Requirements
+The app must be extremely mobile-friendly.
+
+Use:
+
+- Bottom navigation
+- Large tap targets
+- Clean cards
+- Sticky action buttons
+- Quick actions on lead detail page
+- Minimal typing
+- Fast filters
+- WhatsApp-style action buttons
+- Professional CRM look
+
+Main bottom navigation:
+
+- Dashboard
+- Leads
+- Properties
+- Follow-ups
+- More
+
+The “More” section should include:
+
+- Attendance
+- Social Media
+- Team
+- Settings
+- Integrations
+1. Database Schema
+Create Supabase migrations for these tables:
+
+organizations
+users/profiles
+team_members
+leads
+lead_sources
+properties
+property_images
+property_documents
+lead_property_shares
+activities
+calls
+messages
+followups
+attendance
+social_posts
+tasks
+integration_settings
+notifications
+
+Make sure every table has:
+
+- id
+- organization_id wherever relevant
+- created_at
+- updated_at
+
+Add Row Level Security policies so users can only access data from their own organization.
+
+1. Settings and Integrations
+Create an integrations/settings page where admin can configure:
+- Twilio Account SID
+- Twilio Auth Token
+- Twilio phone number
+- WhatsApp sender number
+- Resend API key or SMTP settings
+- Lead webhook secret
+- OpenAI-compatible API key
+- Default lead assignment mode: Round Robin / Manual / Least Busy Agent
+
+Store sensitive integration secrets securely. For local development, use environment variables.
+
+1. Notifications
+Create in-app notifications for:
+- New lead assigned
+- Missed lead call
+- Follow-up due
+- Site visit scheduled
+- Property shared
+- Attendance issue
+- Social post due
+1. Reports
+Create basic reporting pages:
+- Leads by source
+- Leads by status
+- Agent call performance
+- Follow-ups completed
+- Properties shared
+- Won/lost leads
+- Attendance summary
+1. Seed Data
+Add seed data for:
+- One organization
+- One admin
+- Two sales agents
+- One field executive
+- 20 sample leads
+- 10 sample properties with images/placeholders
+- Sample calls
+- Sample follow-ups
+- Sample attendance records
+- Sample social posts
+1. Developer Requirements
+Generate:
+- Full working source code
+- Supabase migration files
+- Seed script
+- Environment variable example file
+- README with setup instructions
+- Local dev instructions
+- Deployment instructions for Vercel + Supabase
+- Twilio setup instructions
+- Webhook testing instructions using curl/Postman
+
+Use clean architecture:
+
+- Separate UI components
+- Separate database queries
+- Separate service layer for Twilio, WhatsApp, Email, AI, and Webhooks
+- Use TypeScript types everywhere
+- Use server-side validation with Zod
+- Add loading states and error states
+- Add empty states
+- Add confirmation dialogs for destructive actions
+1. External API Adapter Requirement
+Do not hardcode Twilio/WhatsApp/Email logic directly inside UI components.
+
+Create service adapters:
+
+- callService
+- messageService
+- emailService
+- leadAssignmentService
+- propertyShareService
+- attendanceService
+- socialPostService
+
+Each service should support:
+
+- production mode
+- dry-run mode for development
+1. Acceptance Criteria
+The app is complete only when:
+- A user can sign in
+- Admin can create/invite users
+- Admin can add agents
+- A lead can be created manually
+- A lead can be created from webhook
+- New webhook lead gets assigned to an agent
+- Call bridge automation is triggered after new lead creation
+- Call logs are saved
+- Agents can view assigned leads
+- Agents can call leads
+- Agents can send property photos/details in one click
+- Agents can send follow-up messages in one click
+- Properties can be created with images
+- Property inventory can be searched and filtered
+- Lead timeline shows calls, notes, shares, and messages
+- Employees can check in and check out
+- Admin can view attendance
+- Social posts can be drafted and scheduled
+- Dashboard shows CRM metrics
+- Reports show basic business performance
+- App works well on mobile screen sizes
+- Database is cloud-ready with Supabase
+- App is deployable on Vercel
+1. Implementation Approach
+Start by creating the database schema and migrations.
+Then create authentication and organization logic.
+Then build the mobile-first UI shell.
+Then build leads, properties, and activities.
+Then build lead webhook and round-robin assignment.
+Then build Twilio call bridge service.
+Then build property sharing and follow-up messaging.
+Then build attendance.
+Then build social media calendar.
+Then build reports and dashboard.
+Then polish the mobile UI.
+
+If the full app is too large for one response, implement it in phases but keep the architecture production-ready from the beginning. Do not remove any core feature from the requirements. If something cannot be fully implemented because an external API key is missing, create the complete adapter with dry-run mode and clear TODO comments.
+
+Before writing code, briefly summarize the architecture and file structure. Then start implementing.
+
+
+https://github.com/tashfeenahmed/freellmapi.git
+
+Implement Spec Prompt (May 2026)
+
+implementation-notes.html
+
+The prompt that turns Claude into an engineer who explains himself.
+
+@keshavsuki -- source: @trq212 Thariq Shihipar, Claude Code team at Anthropic
+
+
+The script calls this person 'Trent Quan.' His name is Thariq Shihipar (@trq212). He is on the Claude Code team at Anthropic -- 234K+ followers, writes the most-read technical content about Claude Code. Corrected throughout this guide.
+
+
+
+The Prompt
+
+Posted May 19, 2026 by Thariq Shihipar (@trq212). Went viral in the Claude Code developer community.
+
+
+Implement [spec], and while you do, keep a running implementation-notes.html file.
+
+For every decision you had to make that wasn't in the spec -- record the decision and the reasoning in the file.
+
+
+That's the whole prompt. One sentence. The power isn't in the length. It's in making the agent externalize its reasoning automatically instead of keeping it hidden.
+
+
+
+Why It Works -- Three Reasons
+
+
+1.  The HTML file is the agent's working memory
+
+Every time Claude hits a fork the spec didn't cover, the decision goes into the file with the reasoning. You don't have to ask what it decided. You read the file.
+
+
+Spec says: 'build a user auth flow'
+Spec doesn't say: OAuth or JWT? Token expiry? Refresh rotation? Email verification required?
+Claude makes those calls. Without the notes file, they're invisible. With it, every choice is documented as it happens.
+
+2.  HTML beats markdown for agent memory
+
+Thariq has written about HTML as the default format for Claude Code work. The implementation-notes file is a direct application of that philosophy.
+
+
+Feature
+
+Markdown
+
+HTML
+
+Renders in browser
+
+Raw text
+
+Instant, no setup
+
+Collapsible sections
+
+Not supported
+
+<details> tag, built in
+
+Embedded images
+
+Path reference only
+
+Inline base64 or src
+
+Links between sections
+
+Anchor hack
+
+Native href
+
+Code highlighting
+
+Renderer-dependent
+
+<pre><code> always works
+
+Portable
+
+Needs a renderer
+
+Any browser on any machine
+
+
+3.  The audit trail that kills vibe coding
+
+Vibe coding fails because you can't audit what the model decided. You ship something, something breaks, you have no idea which of Claude's 47 micro-decisions caused it.
+
+
+The implementation-notes file is the audit trail. Every decision logged with reasoning as Claude made it. PR reviewers can read it. Debugging starts there. Future sessions read it instead of re-deriving everything.
+
+
+
+The Template
+
+Give Claude this structure as the starting point for the notes file. Either include it in the prompt or add it to your CLAUDE.md.
+
+
+<!-- implementation-notes.html -->
+
+<!DOCTYPE html>
+
+<html lang='en'><head>
+
+<meta charset='UTF-8'>
+
+<title>Implementation Notes -- [Project Name]</title>
+
+<style>body{font-family:system-ui;max-width:800px;margin:2rem auto;padding:0 1rem}
+
+details{margin:1rem 0}summary{cursor:pointer;font-weight:bold}</style>
+
+</head><body>
+
+<h1>Implementation Notes</h1>
+
+<p><strong>Spec:</strong> [link or filename]</p>
+
+<p><strong>Started:</strong> [date]</p>
+
+ 
+
+<h2>Decisions</h2>
+
+<!-- Claude appends here for each off-spec decision -->
+
+<details><summary>[Decision title]</summary>
+
+<p><strong>Context:</strong> [what the spec said or didn't say]</p>
+
+<p><strong>Decision:</strong> [what Claude chose]</p>
+
+<p><strong>Reasoning:</strong> [why]</p>
+
+<p><strong>Alternatives considered:</strong> [what else was on the table]</p>
+
+</details>
+
+ 
+
+<h2>Open Questions</h2>
+
+<!-- Things Claude flagged as needing human input -->
+
+<ul id='questions'></ul>
+
+ 
+
+<h2>Assumptions</h2>
+
+<!-- Things Claude assumed that aren't in the spec -->
+
+<ul id='assumptions'></ul>
+
+ 
+
+</body></html>
+
+
+
+Three Places to Add It in CLAUDE.md
+
+
+Place 1 -- Default prompt for any implementation task:
+
+## Implementation Standard
+
+ 
+
+When implementing any spec, feature, or task:
+
+1. Create implementation-notes.html in the project root if it doesn't exist
+
+2. For every decision not explicitly covered by the spec,
+
+   append a <details> entry with decision, reasoning, alternatives
+
+3. Flag any ambiguity as an Open Question before resolving it
+
+
+Place 2 -- As a session start rule:
+
+## Session Start
+
+ 
+
+At the start of every implementation session:
+
+1. Read implementation-notes.html if it exists
+
+2. State the last 3 decisions that were made
+
+3. Continue from there -- do not re-derive decisions already logged
+
+
+Place 3 -- As a Stop hook trigger:
+
+## End of Session
+
+ 
+
+Before ending any implementation session:
+
+1. Add a session-end entry to implementation-notes.html
+
+2. List what was completed, what is in-progress, and what is blocked
+
+3. The file must be in a state where the next session can resume from it
+
+
+
+The Full Prompt (Paste and Go)
+
+Drop this into any Claude Code session at the start of an implementation task.
+
+
+Implement [describe your spec or paste it below].
+
+ 
+
+While you implement, maintain a running implementation-notes.html file.
+
+For every decision you make that is not explicitly covered by the spec:
+
+- Record the decision
+
+- Record the reasoning
+
+- Record what alternatives you considered and why you rejected them
+
+ 
+
+If you encounter ambiguity, add it to an Open Questions section
+
+before resolving it. Do not silently resolve ambiguity.
+
+ 
+
+The notes file is the audit trail for this implementation.
+
+It should be readable by someone who was not in this session.
+
+
+This prompt is how you escape vibe coding. Vibe coding fails because you can't audit what the model decided. A running implementation notes file is the audit trail.
+
+
+
+@keshavsuki
+Agent Memory Full Guide (May 2026).docx
+
+agentmemory
+
+vs the manual 4-file system. I'm running both.
+
+@keshavsuki -- github.com/rohitg00/agentmemory -- 9,100+ stars
+
+
+What agentmemory Is
+
+Persistent memory for AI coding agents. Built by Rohit Ghumare. 9,100+ stars. 51 MCP tools covering the full memory lifecycle: save, recall, search, compress, pin, audit, govern. Hooks fire automatically at session start, session end, before and after tool calls, before compaction.
+
+
+It does automatically what the manual 4-file system does by hand. The tradeoff is control. agentmemory captures everything. The manual system captures what you choose. The right answer is usually both.
+
+
+
+Install -- 2 Steps (Not 1)
+
+The MCP shim alone gives you 7 tools. You need the full server running to get all 51. Both steps are required.
+
+
+Without the running server, the MCP shim falls back to a 7-tool local set. If you only see 7 tools in Claude Code or Cursor, the server is not running. Start it first.
+
+
+Step 1  Start the memory server (keep this terminal open)
+
+npx @agentmemory/agentmemory
+
+ 
+
+# Server runs on localhost:3111
+
+# Real-time viewer: http://localhost:3113
+
+ 
+
+# Verify it's running:
+
+curl http://localhost:3111/agentmemory/health
+
+
+Step 2A  Claude Code -- plugin install (easiest)
+
+/plugin marketplace add rohitg00/agentmemory
+
+/plugin install agentmemory
+
+ 
+
+# This registers all 51 MCP tools, 6 lifecycle hooks,
+
+# and 4 skills (/recall, /remember, /session-history, /forget)
+
+# Verify: /skills  and  /mcp list
+
+
+Step 2B  Cursor / Windsurf / OpenCode -- manual MCP config
+
+Add this to your MCP config file (claude_desktop_config.json, .cursor/mcp.json, or equivalent):
+
+
+{
+
+  "mcpServers": {
+
+    "agentmemory": {
+
+      "command": "npx",
+
+      "args": ["-y", "@agentmemory/mcp"],
+
+      "env": {
+
+        "AGENTMEMORY_URL": "http://localhost:3111"
+
+      }
+
+    }
+
+  }
+
+}
+
+
+AGENTMEMORY_URL is what unlocks all 51 tools. Without it, the shim runs in local fallback mode with only 7 tools. The URL must point at the running server from Step 1.
+
+
+
+What It Does Automatically
+
+
+SessionStart hook -- injects relevant memories into context before you type anything. Cold start disappears.
+PostToolUse hook -- logs files touched, decisions made, blockers hit. You stop writing the daily log.
+PreCompact hook -- compresses old memory before context window compaction. No memory lost at the 100K token boundary.
+Stop hook -- writes a session summary at close. Every session leaves a record.
+
+The 4 skills available in any session:
+
+
+/recall [query] -- semantic search across all memory
+/remember [note] -- manually pin something important
+/session-history -- show the log of this session so far
+/forget [query] -- delete specific memories
+
+
+agentmemory vs the Manual 4-File System
+
+
+
+Manual 4-file system
+
+agentmemory
+
+Setup
+
+One afternoon, no dependencies
+
+2-step install, server must stay running
+
+Capture
+
+You write it -- full control
+
+Automatic -- captures everything
+
+Client work
+
+Safe -- you curate what's remembered
+
+Risky -- auto-capture may log sensitive details
+
+Sales notes
+
+Safe to include
+
+Do not auto-capture deal context
+
+Solo projects
+
+Works but friction is high
+
+Wins -- removes the writing burden
+
+Cold start
+
+Manual paste or Session hook
+
+Automatic context injection
+
+Memory search
+
+grep / Glob via skills
+
+51 tools including semantic search
+
+Privacy
+
+Files you control on your machine
+
+Local server, no cloud by default
+
+Portability
+
+Plain markdown -- works everywhere
+
+Requires server running
+
+Runs offline
+
+Yes
+
+Yes -- local stack
+
+
+The answer is both. Manual 4-file system for client work and sales context you curate. agentmemory underneath for the boring capture work on solo and internal projects.
+
+
+
+When to Use Which
+
+
+Use agentmemory:
+
+Solo projects where you want memory without the writing
+Internal tooling and personal repos
+Any context where everything captured is safe to remember
+Sessions with high tool call volume -- the PostToolUse hook captures everything automatically
+
+Use the manual 4-file system:
+
+Client work -- you control exactly what's remembered about each engagement
+Sales notes, deal context, prospect details
+Anything where auto-capture could log something you'd never want persisted
+Teams where the memory files get committed to git and reviewed
+
+Manual still wins when you need control over what's remembered. agentmemory wins when the friction of writing is what's actually killing you.
+
+
+
+Running Both Together
+
+The manual 4-file system and agentmemory coexist without conflict. agentmemory's hooks write to its own database. Your MEMORY.md, AGENTS.md, and project files are separate. Claude reads both.
+
+
+# What Claude sees at session start with both running:
+
+ 
+
+1. agentmemory SessionStart hook injects relevant past memories
+
+2. AGENTS.md loads (session start protocol reads MEMORY.md)
+
+3. MEMORY.md loads (current state of curated projects + clients)
+
+ 
+
+# Result: full automatic context + full curated context
+
+# Zero re-explaining. Zero pasting.
+
+
+# Keep the server running across sessions with pm2:
+
+npm install -g pm2
+
+pm2 start 'npx @agentmemory/agentmemory' --name agentmemory
+
+pm2 startup    # auto-start on reboot
+
+pm2 save
+
+
+
+@keshavsuki
+
+Claude_Code_Skills_Handbook_ranjanxai
+The Ultimate Claude Code Skills Handbook  •  curated by @ranjanxai
+
+
+THE ULTIMATE
+
+Claude Code Skills Handbook
+
+1,340+ Free Skills, 148 Slash Commands & 54 AI Agents — Verified & Ready to Install
+
+Curated by @ranjanxai  •  April 2026
+
+
+1,340+
+
+Total Skills Available
+
+148
+
+Slash Commands
+
+54
+
+AI Agents Bundled
+
+
+All free. All open source. Compatible with Claude Code, Cursor, Codex CLI, Gemini CLI & more.
+
+
+🧠  What Are Claude Skills?
+Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Each skill lives in its own folder with a SKILL.md file — a plain markdown file with YAML frontmatter and instructions. Claude reads only the relevant skill when needed, keeping your context window lean.
+
+How the progressive disclosure works:
+
+Metadata scan (~100 tokens): Claude checks available skills to find relevant matches
+Full instruction load (<5k tokens): Triggered only when Claude decides the skill applies
+Bundled resources on demand: Scripts and files are loaded only as needed
+Skills work across Claude.ai, Claude Code, and the Claude API — create once, use everywhere. Official Anthropic skills for DOCX, PDF, PPTX, and XLSX are pre-built and available to all users.
+
+
+  ★  THE BIG LIBRARIES — WHERE TO START  
+
+Major Skill Repositories
+1.  Awesome Agent Skills  —  VoltAgent
+The most active community skills repository, updated daily. Features official skills from Anthropic, Google Labs, Vercel, Stripe, Cloudflare, Netlify, Trail of Bits, Sentry, Expo, Hugging Face, Figma, and dozens more. Compatible with Claude Code, Cursor, Codex CLI, Gemini CLI, GitHub Copilot, Windsurf, and other AI coding assistants.
+
+  Official partner skills    ·    Community contributed    ·    1,000+ skills    ·    Updated daily  
+
+VoltAgent/awesome-agent-skills
+
+The most-contributed agent skills repository, built and maintained with the community. Includes official skills from Anthropic, Google, Vercel, Stripe, Cloudflare and Netlify. Compatible with 10+ AI coding tools.
+
+🔗  github.com/VoltAgent/awesome-agent-skills
+
+
+2.  Antigravity Awesome Skills  —  sickn33
+An installable GitHub library with an npm CLI, bundles, and workflows for reusable SKILL.md playbooks. Start from role-based bundles or jump into workflow-driven execution for planning, coding, debugging, testing, security review, infrastructure, product work, and growth tasks.
+
+  npm installer    ·    Role-based bundles    ·    Workflow-driven    ·    1,340+ skills  
+
+sickn33/antigravity-awesome-skills
+
+Installable library with npm CLI. Includes bundles for full-stack dev, security, data/ML, DevOps, and growth. Works with Claude Code, Cursor, Codex CLI, Gemini CLI, and Kiro.
+
+🔗  github.com/sickn33/antigravity-awesome-skills
+
+
+3.  Awesome Claude Code Toolkit  —  rohitg00
+Arguably the most comprehensive all-in-one toolkit available. Contains 135 agents, 35 curated skills (plus 400,000+ via SkillKit), 42 commands, 150+ plugins, 19 hooks, 15 rules, 7 templates, and 8 MCP configs.
+
+  135 agents    ·    42 commands    ·    150+ plugins    ·    19 hooks  
+
+rohitg00/awesome-claude-code-toolkit
+
+The single richest all-in-one toolkit for Claude Code. Covers agents, skills, commands, plugins, hooks, MCP configs, and rules. Best choice if you want everything in one repo.
+
+🔗  github.com/rohitg00/awesome-claude-code-toolkit
+
+
+
+  ✦  OFFICIAL ANTHROPIC RESOURCES  
+
+Straight from Anthropic
+Anthropic publishes open-source skills directly in their official repository. These are production-grade implementations — many are the same skills powering Claude's document features inside claude.ai.
+
+
+anthropics/skills  (Official)
+
+Official Anthropic skills repository. Includes pre-built skills for DOCX, PDF, PPTX, XLSX document handling, brand guidelines, internal communications, web artifact building, and a skill-creator wizard. Source-available under Apache 2.0 and proprietary licenses.
+
+🔗  github.com/anthropics/skills
+
+
+Highlights from the official repo:
+
+docx / pdf / pptx / xlsx — The actual skills powering Claude's document capabilities
+webapp-testing — Test local web applications using Playwright
+brand-guidelines — Apply Anthropic's official brand colors and typography
+skill-creator — Interactive Q&A wizard that helps you build new skills
+mcp-builder — Guide for creating high-quality MCP servers to integrate external APIs
+📖  Official Skills Documentation:  platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+
+
+  📋  CURATED COLLECTIONS & DIRECTORIES  
+
+Organized Lists to Explore
+Awesome Claude Code  —  hesreallyhim
+The gold standard curated list for Claude Code. Covers slash commands, CLAUDE.md files, CLI tools, workflows, hooks, agent orchestrators, and plugins. Actively maintained with 21,600+ GitHub stars and 1,200+ forks. Also browsable as a web directory.
+
+hesreallyhim/awesome-claude-code
+
+The most organized, highest-quality curated list of skills, hooks, slash-commands, and agent orchestrators for Claude Code. 21.6k+ stars. CC0-1.0 license — fully public domain.
+
+🔗  github.com/hesreallyhim/awesome-claude-code
+
+
+Awesome Claude Skills  —  travisvn
+20+ battle-tested skills including /brainstorm, /write-plan, and /execute-plan. Clean, focused, and beginner-friendly. Includes the obra/superpowers core library with TDD, debugging, and collaboration patterns.
+
+travisvn/awesome-claude-skills
+
+Clean, beginner-friendly curated list. Includes skills-search tool, /brainstorm, /write-plan, /execute-plan commands, and the obra/superpowers library. Good first stop for newcomers.
+
+🔗  github.com/travisvn/awesome-claude-skills
+
+
+Awesome Claude Skills  —  ComposioHQ
+A curated collection focused on real-world integrations: LangSmith debugging, MCP builder, Playwright browser automation, PostgreSQL query skills, deep research agents, and domain name brainstorming tools.
+
+ComposioHQ/awesome-claude-skills
+
+Integration-heavy skill collection. Highlights include LangSmith Fetch (AI observability), Playwright automation, Postgres read-only queries, and competitive ads extractor.
+
+🔗  github.com/ComposioHQ/awesome-claude-skills
+
+
+Awesome Claude (All-in-One)  —  webfuse-com
+The broadest index of everything Claude-related: models, SDKs, MCP servers, skills, agent patterns, prompts, community links, cloud providers, and safety resources. The best starting point for discovering the full Claude ecosystem.
+
+webfuse-com/awesome-claude
+
+Master index of the entire Claude ecosystem — models, SDKs, skills, MCP, cloud providers, safety docs, community resources. If you want to explore everything, start here.
+
+🔗  github.com/webfuse-com/awesome-claude
+
+
+
+  🌐  WEB BROWSING DIRECTORIES  
+
+Browse Before You Download
+Rather than combing through GitHub repos, these web directories let you visually explore skills by category, search by keyword, and discover tools you might otherwise miss.
+
+
+awesomeclaude.ai  (Web Directory)
+
+Browse the full Awesome Claude Code collection in a polished web interface. Includes visual directories for skills, slash commands, vibe coding tools, CLAUDE.md files, and a complete developer cheatsheet for Claude Code.
+
+🔗  awesomeclaude.ai
+
+Useful sub-sections:  Skills Directory  ·  Awesome Claude Code  ·  Developer Cheatsheet
+
+
+
+  💎  SPECIALTY PICKS WORTH KNOWING  
+
+Standout Skills by Category
+🔐  Security
+mukul975/Anthropic-Cybersecurity-Skills — 753 skills across 38 domains: pentesting, red teaming, DFIR, MITRE ATT&CK mapped
+obra/defense-in-depth — Multi-layered security patterns for production applications
+🤖  AI Agents & Orchestration
+VoltAgent/awesome-claude-code-subagents — 100+ specialized AI agents for full-stack development maintained by community
+ShunsukeHayashi/agent-skill-bus — Self-improving task orchestration for AI agent systems
+Multi-agent startup builder — Orchestrates 37 AI agents across 6 swarms to build and operate a complete startup from PRD to revenue
+📊  Data & Development
+mcollina/skills — 11 skills by Node.js core contributor Matteo Collina: Fastify, OAuth, ESLint, documentation
+NeoLabHQ/prompt-engineering — Widely used prompt engineering techniques including Anthropic best practices and agent persuasion principles
+🎨  Creative & Design
+google-labs-code/react-components — Official Google Stitch-to-React conversion skills, with shadcn/ui and Remotion video generation
+NoizAI/skills — Human-like TTS workflows with local and cloud APIs for audio app delivery
+
+  ⚡  INSTALLATION GUIDE — 3 STEPS  
+
+How to Install Skills
+Skills are just folders containing a SKILL.md file. No special tooling needed — drop them in the right directory and Claude Code picks them up automatically on next launch.
+
+
+1
+
+Download the SKILL.md files
+
+Visit any GitHub repo above. Download individual skill folders, or clone the entire repo. Each skill is a self-contained folder with a SKILL.md file and optional scripts/resources.
+
+
+2
+
+Copy to the correct directory
+
+Global (all projects): ~/.claude/commands/  |  Project-only: your-project/.claude/commands/  —  Use project-only for team-shared workflows.
+
+
+3
+
+Restart Claude Code
+
+Skills are immediately available after restart. Claude will auto-detect relevant skills based on your task — no manual activation needed for most skills.
+
+
+⚡  Shortcut via npm (for Antigravity Awesome Skills):
+
+npx antigravity-skills install --bundle full-stack
+
+# Or install a single skill:
+
+/plugin marketplace add anthropics/skills
+
+
+  🔄  COMPATIBILITY  
+
+Works With More Than Claude
+The Agent Skills standard (agentskills.io) is platform-neutral. Most skills in these repos work across multiple AI coding tools, not just Claude Code:
+
+
+Claude Code
+
+Cursor
+
+Codex CLI
+
+Gemini CLI
+
+GitHub Copilot
+
+Windsurf
+
+OpenCode
+
+Kiro
+
+
+  ⚠️  SECURITY — IMPORTANT  
+
+Stay Safe with Third-Party Skills
+Skills can execute arbitrary code in Claude's environment. Before installing any skill from an unverified source, review all files: SKILL.md, any scripts/, and any other resources bundled in the folder.
+
+Trusted sources first: Always prefer anthropics/skills or skills you authored yourself
+Audit before installing: Look for unexpected network calls, file access, or operations that don't match the skill's stated purpose
+Test in isolation: Use a sandbox or non-production project before rolling out to your main codebase
+
+📌  Quick Reference — All Links
+Repository / Resource
+
+Best For
+
+Link
+
+VoltAgent/awesome-agent-skills
+
+Largest community collection
+
+Open →
+
+sickn33/antigravity-awesome-skills
+
+npm-installable bundles
+
+Open →
+
+rohitg00/awesome-claude-code-toolkit
+
+All-in-one toolkit (135 agents)
+
+Open →
+
+anthropics/skills (Official)
+
+Anthropic-built, production grade
+
+Open →
+
+hesreallyhim/awesome-claude-code
+
+Best curated list
+
+Open →
+
+travisvn/awesome-claude-skills
+
+Beginner-friendly picks
+
+Open →
+
+ComposioHQ/awesome-claude-skills
+
+Integration-focused skills
+
+Open →
+
+webfuse-com/awesome-claude
+
+Full Claude ecosystem index
+
+Open →
+
+awesomeclaude.ai
+
+Web browsing directory
+
+Open →
+
+Official Skills Docs
+
+Anthropic documentation
+
+Open →
+
+
+
+Curated & verified by @ranjanxai  •  April 2026  •  Free to share
+
+All repository links verified at time of publication. Community repos update frequently — always check for the latest releases.
+
+Free & Open Source  •  Page  •  github.com resources
+https://github.com/CodebuffAI/codebuff.git
+https://github.com/anthropics/skills.git
+
+
+Build This Now
+
+Search
+⌘
+K
+
+Handbook
+Claude Code from setup to advanced agent workflows
+Start here
+What Is Claude Code?
+Claude Code Installation
+Claude Code Native Installer
+Your First Claude Code Project
+Setup
+Core
+Workflow
+Performance
+Agents
+Reference
+speedy_devv
+koen_salo
+
+
+Blog
+/
+Handbook
+/
+Workflow
+/
+Vercel deepsec with Claude Code
+
+Copy for AI
+
+Share
+Vercel deepsec with Claude Code
+Open-source security harness from vercel-labs that audits your repo with Claude Opus. Wire it into the Claude Code build loop.
+
+Published May 10, 2026
+7 min read
+Handbook hub
+Workflow index
+Problem: Static scanners flag style and miss the bug a security engineer would catch on read-through. Snyk and Semgrep look at known patterns. They do not read intent. Path traversal in your own glue code, broken auth in a route handler, an SSRF inside a server action. Pattern matchers walk past those because the shape is yours, not a CVE template.
+
+deepsec does the read. Vercel open-sourced it on May 4, 2026 under vercel-labs. It is a CLI, Apache 2.0, and it points your existing Claude Opus 4.7 (or Codex GPT-5.5) at your repo at max thinking. Findings come back ranked by severity, with git blame stuck on each one.
+
+The point of this post is not to use deepsec on its own. The point is to wire it into a Claude Code session so the same model that built the feature also fixes what the audit returns.
+
+Quick Win: Drop into a repo and try one PR-scoped pass:
+
+
+ANTHROPIC_AUTH_TOKEN=$ANTHROPIC_API_KEY \
+  npx deepsec init && \
+  pnpm --dir .deepsec install && \
+  pnpm --dir .deepsec deepsec process --diff
+What deepsec actually is
+A harness, not a scanner. The regex layer at the top handles file selection. Coding agents do the actual analysis. Each finding lands as a JSON FileRecord under .deepsec/data/<projectId>/, additive on every run.
+
+Pluggable agents mean you pick the model. Vercel's default is Claude Opus 4.7 at max effort or Codex GPT-5.5 at xhigh, both routed through Vercel AI Gateway. Bring your own Anthropic key and the gateway step is optional.
+
+False positive rate sits around 10 to 20%. Cost on a fresh laptop run is a few dollars per hundred files. On a real monorepo it climbs into the thousands. That is the tradeoff for agentic depth.
+
+The Five Stages
+Every run walks the same pipeline. Each stage is idempotent so you can rerun any of them in isolation:
+
+Stage	What runs	AI cost
+scan	~110 regex matchers pick security-sensitive files	None
+process	Agents read each file, trace data flows, write findings	High
+revalidate	A second agent pass tags false positives	Medium
+enrich	Git blame stamps owner metadata on each finding	None
+export	Markdown per finding (P0 to P2) plus JSON	None
+scan finishes in around 15 seconds on a 2k-file repo. The cost lives in process. That is where you decide how much to pay.
+
+Final File Tree
+After init, your repo gets a single tracked folder and an ignored data tree:
+
+
+your-repo/
+├── .deepsec/
+│   ├── deepsec.config.ts
+│   ├── package.json
+│   └── data/
+│       └── <projectId>/
+│           ├── INFO.md
+│           ├── records/
+│           └── findings/
+├── .claude/
+│   ├── skills/
+│   │   └── deepsec/
+│   │       └── SKILL.md
+│   └── agents/
+│       └── security-fixer.md
+└── package.json
+INFO.md is the project context the agents read first. Auto-fill it from your discovery docs if you have them. The agents follow it like a CLAUDE.md.
+
+Wrap deepsec as a Claude Code Skill
+The skill is a thin shell. It hands off to the deepsec CLI and parses what comes back. The skill never decides what to fix. That is the agent's job below.
+
+Create the file at .claude/skills/deepsec/SKILL.md:
+
+
+---
+name: deepsec
+description: Run a Vercel deepsec audit on the current repo. Triggers on "audit security", "run deepsec", "scan for vulnerabilities". Returns the path to the findings folder.
+---
+# deepsec
+CLI wrapper around vercel-labs/deepsec.
+## Commands
+Init (once per repo):
+```bash
+npx deepsec init && pnpm --dir .deepsec install
+```
+PR-scoped pass (cheap, run on every feature):
+```bash
+pnpm --dir .deepsec deepsec process --diff
+pnpm --dir .deepsec deepsec revalidate
+pnpm --dir .deepsec deepsec export --format md-dir --out ../findings
+```
+Full scan (expensive, run weekly):
+```bash
+pnpm --dir .deepsec deepsec sandbox process --sandboxes 10 --concurrency 4
+```
+Output lives at `./findings/*.md`. Hand the folder to `security-fixer`.
+Build the security-fixer Agent
+This is the loop closer. The agent reads each markdown finding, opens the file deepsec flagged, and either patches it or writes a justification. Then it re-runs revalidate to confirm the patch sticks.
+
+Create .claude/agents/security-fixer.md:
+
+
+---
+name: security-fixer
+description: Reads deepsec findings and patches each one. Fails if any P0 remains after one pass.
+tools: Read, Edit, Write, Bash, Grep
+---
+You receive a folder of deepsec findings at `./findings/`.
+For each file in the folder:
+1. Read the finding. Note the severity (P0 / P1 / P2), file path, line range, and proposed mitigation.
+2. Open the source file at the cited line range.
+3. If the finding is correct, patch the code. Keep the patch minimal. No drive-by refactors.
+4. If the finding is a false positive, add a one-line justification comment with the deepsec finding ID. Do not silence the finding any other way.
+5. Move the markdown to `./findings/resolved/`.
+After the loop, run:
+```bash
+pnpm --dir .deepsec deepsec process --diff && \
+pnpm --dir .deepsec deepsec revalidate
+```
+If any P0 remains, exit with status 1. The orchestrator will requeue.
+Two agents now own the security loop. deepsec finds. security-fixer patches. Neither one trusts itself.
+
+Hook It Into /ship
+Most build systems already have a feature-completion command. In Build This Now that is /ship. The audit fits at the end, after the GAN evaluator passes and before the feature is marked done.
+
+Add a step to your existing pipeline. The exact wiring depends on your orchestrator, but the shape is the same:
+
+
+- name: deepsec audit
+  run: pnpm --dir .deepsec deepsec process --diff && \
+       pnpm --dir .deepsec deepsec revalidate && \
+       pnpm --dir .deepsec deepsec export --format md-dir --out ./findings
+- name: fix findings
+  agent: security-fixer
+  inputs:
+    findings_dir: ./findings
+  fail_on: P0
+Run it on the diff, not the whole repo. Full scans go in a weekly cron, not the per-feature loop. The diff mode keeps the bill in the dollars and the wall clock under a minute.
+
+Cost and Cadence
+Three modes, three budgets. Pick by what you can afford and what you ship:
+
+Mode	Cost per run	Cadence	Use case
+--diff on PR	$1 to $20	Every feature	The default. Catches what the LLM just wrote.
+Sandbox fanout	$50 to $500	Weekly	The whole repo, parallel across Vercel Sandboxes.
+Full local scan	$1k to $10k+	Quarterly	The deep audit. Plan it like a security engagement.
+Vercel runs the sandbox mode at over a thousand concurrent containers on their own monorepo. You will not need that. Ten sandboxes at concurrency four covers a Next.js app comfortably.
+
+Layer Vercel Agent on the PR
+deepsec is the local layer. Vercel Agent is the remote one. It reads your CLAUDE.md natively and replies on the PR when you tag it.
+
+Open the PR, tag the agent, and Claude Code reads the comments back through gh:
+
+
+gh pr comment <num> --body "@vercel run a review"
+gh pr view <num> --comments
+Two sets of eyes. One inside the editor at write time. One on GitHub at review time. They overlap on purpose.
+
+What You Get After One Feature
+Run the full loop on a new endpoint and you end up with:
+
+.deepsec/data/<projectId>/findings/: JSON record per finding, owner included
+./findings/*.md: human-readable findings, one file each
+A clean diff against your branch with each P0 patched
+A revalidate pass that confirms the patches close the finding
+Zero P0 findings open at merge time
+That is the target state. If you cannot hit it, the feature does not ship.
+
+Remember: deepsec does not catch business-logic flaws, role-based authz edge cases, or async races. It catches the bugs an experienced security engineer would catch on a careful read. Pair it with hooks for the rest. Sandbox the runtime. Stack the layers.
+
+The old security pass was a quarterly engagement and a stack of Jira tickets. The new one runs in the same loop that wrote the code, in dollars instead of weeks. Build the loop once. Ship audited features after that.
+
+Posted by @speedy_devv
+
+Continue in Workflow
+Claude Code Best Practices
+Five habits separate engineers who ship with Claude Code: PRDs, modular CLAUDE.md rules, custom slash commands, /clear resets, and a system-evolution mindset.
+Claude Code Auto Mode
+A second Sonnet model reviews every Claude Code tool call before it fires. What auto mode blocks, what it allows, and the allow rules it drops in your settings.
+Channels, Routines, Teleport, Dispatch
+The four Claude Code features Anthropic shipped in March and April 2026 that turn the CLI into an event-driven coordination layer across phone, web, and desktop.
+Claude Code Channels
+Plug Claude Code into Telegram, Discord, or iMessage with plugin MCP servers. Setup walkthroughs and the async mobile workflows that make it worth wiring up.
+Building a Next.js App With Claude Code
+How to use Claude Code to build a full Next.js 16 app — from project setup through App Router, Server Components, and deployment.
+Claude Code Pricing: What You'll Actually Pay
+Claude Code is free to install. What you pay depends on your plan. A plain-English breakdown of every tier, real usage costs, and which plan fits your workflow.
+More from Handbook
+Agent Fundamentals
+Five ways to build specialist agents in Claude Code: Task sub-agents, .claude/agents YAML, custom slash commands, CLAUDE.md personas, and perspective prompts.
+Agent Harness Engineering
+The harness is every layer around your AI agent except the model itself. Learn the five control levers, the constraint paradox, and why harness design determines agent performance more than the model does.
+Agent Patterns
+Orchestrator, fan-out, validation chain, specialist routing, progressive refinement, and watchdog. Six orchestration shapes to wire Claude Code sub-agents with.
+Agent Teams Best Practices
+Battle-tested patterns for Claude Code Agent Teams. Context-rich spawn prompts, right-sized tasks, file ownership, delegate mode, and v2.1.33-v2.1.45 fixes.
+Stop configuring. Start building.
+
+SaaS builder templates with AI orchestration.
+
+Get Build This Now
+On this page
+What deepsec actually is
+The Five Stages
+Final File Tree
+Wrap deepsec as a Claude Code Skill
+Build the security-fixer Agent
+Hook It Into /ship
+Cost and Cadence
+Layer Vercel Agent on the PR
+What You Get After One Feature
+Stop configuring. Start building.
+
+SaaS builder templates with AI orchestration.
+
+Get Build This Now
+
+Copy for AI
+
+n8n Templates
+
+Templates	Creators	Scraped Ids
+>
+<
+CACTUSS.AI · DEVELOPER GUIDE 01 / 01
+Claude Code Plugin Setup
+The official Anthropic plugin most developers don't know about.
+
+RUN THIS INSIDE CLAUDE CODE
+$ /plugin install claude-code-setup@claude-plugins-official
+Copy this. Paste inside Claude Code. Hit enter. Done.
+
+01 · WHAT IT DOES
+Scans your project. Recommends a full setup.
+→ Hooks
+Auto-trigger before/after Claude acts
+
+→ Skills
+Reusable workflows for your stack
+
+→ MCP Servers
+Connect tools to Claude Code
+
+→ Subagents
+Specialized AI roles, isolated context
+
+02 · SETUP IN 5 STEPS
+Get from vanilla to fully configured.
+01 Install Claude Code
+npm install -g @anthropic-ai/claude-code
+02 Open Claude Code in your project
+cd your-project && claude
+03 Run the plugin install command
+/plugin install claude-code-setup@claude-plugins-official
+04 Reload plugins to activate
+/reload-plugins
+05 Follow the step-by-step recommendations it gives
+Plugin will guide you through hooks, skills, MCP, subagents
+
+03 · WHY THIS MATTERS
+WITHOUT PLUGIN
+✗ Vanilla Claude Code
+✗ Manual hooks + setup
+✗ Hours of config
+✗ Messy, inconsistent
+
+WITH PLUGIN
+✓ Project auto-scanned
+✓ Recommendations built-in
+✓ Setup in minutes
+✓ 2x productivity instantly
+
+"Real power isn't in the CLI tool.
+It's in the ecosystem around it."
+— cactuss.ai
+
+@cactuss.ai · Daily AI + career reels at 8:30 PM IST
+
+company logo
+Go to Smartlead.ai
+Ask a question
+All collectionsSmartlead MCPSmartlead CLI - Manage Your Campaigns from the Terminal
+Smartlead CLI - Manage Your Campaigns from the Terminal
+Manage your Smartlead campaigns, leads, and inbox directly from the terminal — no dashboard required.
+What is the Smartlead CLI?
+The Smartlead CLI (Command Line Interface) lets you manage your Smartlead account directly from the terminal. Instead of logging into the dashboard, you can run commands to handle campaigns, leads, mailboxes, analytics, and more - all from your command line or automated scripts.
+
+
+It's available as an open-source tool on npm and GitHub.
+
+CLI vs. MCP — What's the Difference?
+Smartlead offers two ways to interact with the API programmatically:
+
+The MCP (Model Context Protocol) server is built for AI assistants like Claude or Cursor. It lets AI tools call Smartlead APIs within a conversation - it's conversational.
+
+The CLI is built for humans and scripts. Use it for bash automation, cron jobs, CI/CD pipelines, or piping data into other tools. It's scriptable and works great with Claude Code.
+
+They complement each other - you don't have to choose one over the other.
+
+What You Can Do with the CLI
+Manage campaigns, leads, email accounts, and webhooks
+
+Pull analytics and stats across campaigns
+
+Export leads as CSV
+
+Manage your unified inbox - reply, forward, and categorize messages
+
+Search prospects and find email addresses
+
+Pipe output to jq, spreadsheets, or other tools
+
+Automate workflows with cron jobs and shell scripts
+
+How to Install Smartlead CLI?
+You'll need Node.js installed on your machine. Then run:
+
+npm install -g @smartlead/cli
+
+This installs the CLI globally so you can use it from anywhere in your terminal.
+
+Resources
+npm package: https://www.npmjs.com/package/@smartlead/cli
+
+GitHub (source code + documentation): https://github.com/Smartlead-Public/smartlead-cli
+
+Need Help?
+If you run into issues, check the GitHub repository for detailed documentation and usage examples. You can also reach out to Smartlead support.
+
+Did this answer your question?
+😞
+😐
+😁
+What is the Smartlead CLI?
+CLI vs. MCP — What's the Difference?
+What You Can Do with the CLI
+How to Install Smartlead CLI?
+Resources
+Need Help?
+API Documentation
+Feedback Button
+
+company logo
+Go to Smartlead.ai
+Ask a question
+All collectionsSmartlead MCPSmartlead MCP Diagnostics - Command Swipe File
+Smartlead MCP Diagnostics - Command Swipe File
+Copy, paste, and customize these commands for instant campaign diagnostics.
+Quick Start Guide: Copy, paste, and customize these commands for instant campaign diagnostics
+
+Campaign Emergency Triage
+“My Campaign Performance Dropped - Help!”
+
+Get me a comprehensive diagnostic report for campaign ID [CAMPAIGN_ID]. 
+I need to see overall health, performance metrics, configuration issues, 
+and any errors that might be causing problems.
+“Emails Going to Spam - What’s Wrong?”
+
+Check the deliverability health for domain [YOUR_DOMAIN]. 
+I need to see DNS records, reputation status, authentication setup, 
+and any blacklist issues.
+“High Bounce Rate - Need Investigation”
+
+Analyze the bounce rate and lead quality for campaign ID [CAMPAIGN_ID]. 
+Show me bounce patterns, lead list quality, and identify any 
+problematic lead sources.
+Detailed Diagnostics
+Email Account Health Check
+
+Debug email account ID [EMAIL_ACCOUNT_ID]. I need a full diagnostic 
+including connection status, authentication, configuration errors, 
+rate limits, and any performance issues.
+Lead Journey Investigation
+
+Investigate lead ID [LEAD_ID]. Show me their complete email history, 
+bounce status, reply patterns, unsubscribe status, and overall 
+engagement metrics.
+Campaign Copy Analysis
+
+Analyze the email copy for campaign ID [CAMPAIGN_ID]. Check for spam 
+triggers, personalization quality, content optimization opportunities, 
+and deliverability risks.
+Mailbox Performance Audit
+
+Analyze all mailboxes for campaign ID [CAMPAIGN_ID]. Show me performance 
+metrics, bounce rates, connectivity status, domain health, warmup status, 
+and any error patterns.
+Technical Configuration Checks
+Webhook Status Verification
+
+Check the webhook delivery status for my account. Show me any failures, 
+delivery issues, endpoint problems, and recent webhook activity.
+Whitelabel Domain Setup
+
+Verify the CNAME setup for my whitelabel domain [YOUR_DOMAIN]. 
+Check if DNS records are properly configured and the domain 
+is ready for sending.
+Signature Compliance Check
+
+Check if emails in campaign ID [CAMPAIGN_ID] are missing signatures. 
+Show me which emails don't have proper signatures and identify 
+any configuration issues.
+Performance Optimization
+Sending Volume Analysis
+
+Audit the sending volume patterns for campaign ID [CAMPAIGN_ID]. 
+Look for irregular patterns, volume spikes, and any sending 
+behavior that might impact deliverability.
+Domain Reputation Check
+
+Check the overall deliverability and reputation status for domain 
+[YOUR_DOMAIN]. Include DNS health, authentication records, and 
+any reputation issues.
+Extensive User Workflows
+Complete Campaign Health Audit
+
+I need a comprehensive health check for campaign ID [CAMPAIGN_ID]:
+1. Overall campaign diagnostics and performance
+2. All mailbox health and performance metrics  
+3. Lead quality and bounce analysis
+4. Email copy optimization recommendations
+5. Any configuration or setup issues
+
+Give me actionable insights to improve performance.
+Deliverability Troubleshooting Workflow
+
+My deliverability is poor for domain [YOUR_DOMAIN]. Run a complete 
+diagnostic workflow:
+1. Domain deliverability and reputation check
+2. DNS and authentication verification
+3. Recent sending volume patterns
+4. Copy analysis for spam triggers
+5. Mailbox health across all accounts
+
+Help me identify the root cause and provide specific fixes.
+New Campaign Pre-Launch Checklist
+
+Before launching campaign ID [CAMPAIGN_ID], run these diagnostics:
+1. Campaign configuration and setup validation
+2. All mailbox connectivity and health checks
+3. Domain deliverability verification  
+4. Email signature compliance check
+5. Lead list quality assessment
+
+Ensure everything is optimized for maximum performance.
+Smart Diagnostic Tips
+Quick Issue Identification
+Start broad, then narrow down:
+
+Campaign diagnostics (overall health)
+
+Mailbox analysis (sender issues)
+
+Lead investigation (recipient issues)
+
+Copy analysis (content issues)
+
+Common Problem Patterns
+
+Low open rates → Check domain deliverability + copy analysis
+
+High bounces → Lead quality audit + list verification
+
+Spam complaints → Copy analysis + sending volume audit
+
+Connection errors → Email account debugging + token status
+
+Command Customization Guide
+Replace These Placeholders:
+[CAMPAIGN_ID] → Your actual campaign ID number
+
+[EMAIL_ACCOUNT_ID] → Your email account ID
+
+[LEAD_ID] → Specific lead ID for investigation
+
+[YOUR_DOMAIN] → Your sending domain (e.g., yourdomain.com)
+
+[LEAD_EMAIL] → Specific lead email address
+
+Pro Tips:
+Be specific: Include exact IDs and parameters
+
+Context matters: Mention what problem you’re trying to solve
+
+Ask for actions: Request specific recommendations, not just data
+
+Combine commands: Chain multiple diagnostics for comprehensive analysis
+
+Advanced Use Cases:
+Submit your diagnostic workflows to our community - we’ll feature the best ones and help optimize complex troubleshooting scenarios.
+
+Happy Diagnosing! 
+With these commands, you’re equipped to troubleshoot any campaign issue in seconds, not hours.
+
+Did this answer your question?
+😞
+😐
+😁
+Campaign Emergency Triage
+Detailed Diagnostics
+Technical Configuration Checks
+Performance Optimization
+Extensive User Workflows
+Smart Diagnostic Tips
+Command Customization Guide
+Replace These Placeholders:
+Pro Tips:
+API Documentation
+Feedback Button
+
+company logo
+Go to Smartlead.ai
+Ask a question
+All collectionsSmartlead MCPSmartlead MCP Server
+Smartlead MCP Server
+The Model Context Protocol (MCP) server provides a standardised interface that allows any compatible AI model or agent to access your Smartlead app and data in a simple and secure way.
+How to Connect Smartlead MCP to Claude
+With the Smartlead MCP server, you can now access and interact with your Smartlead data directly inside Claude. This integration allows you to manage campaigns, retrieve insights, and perform diagnostics seamlessly - without ever leaving your chat interface!
+
+This guide will walk you step-by-step through setting up the integration using Server-Sent Events (SSE).
+
+What is MCP?
+The Model Context Protocol (MCP) is an open standard that lets AI models securely interact with external apps and data sources. With Smartlead MCP, Claude can now:
+
+Fetch campaign insights in real time
+
+Run deliverability and health diagnostics
+
+Access lead, account, and performance data
+
+Use Smartlead APIs securely — without manual requests
+
+zap emoji Tip: The Smartlead MCP integration works only via SSE (Server-Sent Events) for now. HTTPS transport is not supported.
+
+Step 1. Get Your Smartlead API Key
+Log in to your Smartlead Dashboard.
+
+Go to Settings → API Keys.
+
+Click Generate API Key (if you don’t already have one).
+
+Copy your API key - we’ll use it in the next step.
+
+lock emoji Important: Treat your API key like a password. Do not share it publicly.
+
+Step 2. Edit Configuration In Claude
+Open Claude Desktop
+
+Go to:
+
+Settings → Developer → Edit Config
+
+This will take you to the MCP configuration JSON file. Double click to open the file. See the screenshot below. It will be named - claude_desktop_config.json
+
+
+Step 3. Add Smartlead MCP Configuration
+Inside the JSON file add the following configuration:
+
+{
+  "mcpServers": {
+    "smartlead": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.smartlead.ai/sse?user_api_key=YOUR_API_KEY"
+      ]
+    }
+  }
+}
+Key Notes
+Replace <YOUR_API_KEY> with the key from Step 1.
+
+Ensure you don’t delete any existing configurations if you already have other MCP servers set up.
+
+Make sure you have Node.js installed, as npx is required to run the remote MCP module.
+
+Download Node.js: https://nodejs.org
+
+Step 4. Enable MCP Tools in Claude
+Once your configuration is saved:
+
+Open the Claude desktop app.
+
+Click on new chat, you will see the search and tools icon
+
+You should see Smartlead show up there
+
+Toggle Enable Smartlead for new chats.
+
+
+
+
+
+Step 5. Authenticate & Test
+Open a new chat in Claude.
+
+Type /mcp.
+
+Claude will authenticate using your API key.
+
+If successful, you’ll see available Smartlead commands you can now run, like:
+
+get_campaign_status
+
+fetch_lead_data
+
+check_deliverability
+
+Start interacting directly with your Smartlead account.
+
+Step 6. Troubleshooting
+Issue
+
+Possible Cause
+
+Solution
+
+mcp-remote: command not found
+Node.js / npx missing
+Install Node.js here
+
+Authentication fails
+
+API key missing or incorrect
+
+Double-check your API key under Smartlead dashboard
+
+MCP tools not appearing in Claude
+
+Integration disabled
+
+Enable MCP tools under Claude Settings → Integrations
+
+Requests timing out
+
+Network restrictions
+
+Allow outbound connections to https://mcp.smartlead.ai
+
+Endpoint limit errors
+
+API quota exceeded
+
+Check your Smartlead plan or usage dashboard
+
+Step 7. What's Next
+With MCP set up, you can:
+
+View real-time campaign stats
+
+Run deliverability and spam diagnostics
+
+Query lead and sender data
+
+Integrate with advanced recipes and workflows (coming soon)
+
+FAQ: Smartlead MCP + Claude Setup
+1. What is Smartlead MCP?
+Smartlead MCP lets Claude interact with your Smartlead data using Model Context Protocol. You can fetch stats, diagnose campaigns, and access leads in real time — all without switching tabs.
+
+2. Does Smartlead MCP support HTTPS integration?
+No. For now, Smartlead MCP only supports SSE (Server-Sent Events). All setup instructions in this article assume SSE transport.
+
+3. Where can I find my API key?
+Go to Smartlead Dashboard → Settings → API Keys and copy your API key. If you don’t have one, click Generate API Key.
+
+4. Can I use the same setup in Claude Web?
+Currently, MCP integrations are supported only in Claude Desktop. Web support will come later.
+
+5. Are my API keys secure?
+Yes. Your API keys stay local in your Claude config file and are used only to authenticate with Smartlead MCP. Never share them publicly.
+
+6. Do I need coding experience to set this up?
+No, you don’t. Just follow the steps above — everything is copy-paste friendly.
+
+7. I set everything up, but /mcp it doesn’t work. What should I do?
+Check the following:
+
+Ensure you saved the config file.
+
+Make sure you have Node.js installed.
+
+Verify that MCP tools are enabled under Claude Integrations.
+
+8. Will there be recipes and workflows I can use with MCP?
+Yes! Soon we’ll release curated recipes, hacks, and shortcuts that leverage MCP to automate campaign insights, deliverability checks, and lead management directly via Claude.
+
+
+Did this answer your question?
+😞
+😐
+😁
+How to Connect Smartlead MCP to Claude
+What is MCP?
+Step 1. Get Your Smartlead API Key
+Step 2. Edit Configuration In Claude
+Step 3. Add Smartlead MCP Configuration
+Key Notes
+Step 4. Enable MCP Tools in Claude
+Step 5. Authenticate & Test
+Step 6. Troubleshooting
+Step 7. What's Next
+FAQ: Smartlead MCP + Claude Setup
+1. What is Smartlead MCP?
+2. Does Smartlead MCP support HTTPS integration?
+3. Where can I find my API key?
+4. Can I use the same setup in Claude Web?
+5. Are my API keys secure?
+6. Do I need coding experience to set this up?
+7. I set everything up, but /mcp it doesn’t work. What should I do?
+8. Will there be recipes and workflows I can use with MCP?
+API Documentation
+Feedback Button
+
+HOW TO PIVOT INTO AN
+AI/ML Engineering Role
+IN 2026
+The Step-by-Step Field Guide for Software Engineers
+With 2–6 Years of Experience
+Includes Free Learning Resources • Job Market Data • Proven Roadmap
+Updated March 2026
+
+Who This Guide Is For
+This guide is built specifically for software engineers who have 2–6 years of professional
+experience and want to transition into AI/ML Engineering. You don't need a PhD, a
+master's degree, or a background in research. What you need is a willingness to learn
+rigorously, ship real projects, and position yourself strategically in a market that is
+hungry for engineers who can build production-grade AI systems — not just prototype
+with APIs.
+
+Your Starting Advantage
+You already understand software architecture, version control, testing, and deployment.
+AI/ML hiring managers see SWE-to-AI transitions as highly credible — you know how to build
+things that work at scale.
+You have the problem-solving foundation. What you're adding is the ML stack on top.
+The experience sweet spot for AI/ML roles is 2–6 years — which is exactly where you are.
+
+Section 1: The 2026 AI/ML Job Market
+Why Now Is the Right Time to Make This Move
+The AI/ML engineering job market in 2026 is one of the strongest in the history of the
+tech industry — and the data backs this up. Understanding the landscape before you
+invest your time is critical.
+
+Salary Snapshot
+
+Source: Analysis of 10,000+ job postings (Axial Search, Jan 2026) + Glassdoor data (Feb
+2026). AI engineer average base salary jumped to $206,000 in 2025 — a $50,000 increase
+from the prior year.
+
+Key Market Facts You Need to Know
+• 78% of AI/ML roles target engineers with 5+ years of experience — but the 2–6 year
+sweet spot is where hiring volume is highest.
+• Median AI/ML salary of $187,500 places these roles in the top 4% of all US earners.
+• California accounts for 32% of all U.S. AI/ML job postings, followed by New York at
+17%.
+• Only 6% of job postings require certifications — what matters is demonstrated
+project work.
+• Remote premium is real: Remote ML roles average ~$198,000 because companies
+pay top dollar for specialized talent.
+• AI-first companies like OpenAI, Meta, and Google offer total comp packages ranging
+from $440K to $893K for senior ML/research roles.
+• 90% of companies have created new AI positions, yet most still report workforce
+shortages — meaning demand is outpacing supply.
+Level Median Salary 10th–90th Percentile Notes
+Junior (0–2 yrs) $150,000 $85K – $244K Competitive with senior
+
+SWE roles
+
+Mid-Level (3–5 yrs) $193,000 $128K – $265K Sweet spot — highest
+volume of openings
+Senior (5+ yrs) $240,000 $150K – $312K+ Top 4% of all US earners
+Staff / Principal $280K–$312K+ Up to $450K+ total comp FAANG + AI-first
+companies
+
+Top Industries Hiring AI/ML Engineers
+
+The Specialization Premium
+Industry % of Postings Key Use Cases
+Technology 46% Foundation models, search, recommendations, developer
+
+tools
+
+Financial Services 14% Trading algorithms, fraud detection, risk modeling
+IT Services /
+Consulting
+
+11% Enterprise AI deployment, MLOps, client solutions
+Healthcare 8% Medical imaging, diagnostics, drug discovery
+Manufacturing / Auto 6% Predictive maintenance, computer vision, supply chain
+
+Critical Insight: Generalists Are Losing Ground
+Over 75% of AI job listings specifically seek domain experts with deep, focused knowledge.
+Specialists command salaries 30–50% higher than generalists at equivalent experience levels.
+LLM fine-tuning, MLOps, and deep learning top the in-demand skill charts for 2026.
+Agents + autonomous systems specialists are seeing base salaries of $175K–$250K.
+The engineers who plateau do so because they never specialization — they stay API-level
+generalists.
+
+Section 2: Roles, Paths & What Employers Actually
+Want
+The Three Distinct Career Paths
+Not all AI/ML roles are the same. Understanding the distinction before you start learning
+will save you months of wasted effort and help you pitch yourself precisely in interviews.
+
+Path A: Machine Learning Engineer (MLE)
+This is the production engineering role. MLEs build, train, deploy, and maintain ML
+models that run at scale in real systems. They bridge the gap between data science
+experimentation and robust software delivery. You will write a lot of Python, work deeply
+with cloud infrastructure, and need to care about system reliability, not just model
+accuracy.
+• Most relevant for SWEs who already have backend or distributed systems experience.
+• In-demand skills: Python, PyTorch/TensorFlow, Kubernetes, MLflow, Spark, feature
+stores.
+• Median salary: $187,500 base; senior roles $240K+.
+• Who hires most: Netflix, Meta, Airbnb, Uber, financial firms, healthcare tech.
+
+Path B: AI Engineer (Applied AI / GenAI)
+The AI Engineer is a system integrator who turns raw foundation models into functional,
+intelligent applications. This role is more product-adjacent than pure MLE — you're
+building RAG pipelines, AI agents, fine-tuning LLMs, and shipping user-facing AI
+features. This path has the largest volume of new openings in 2026.
+• Best fit for SWEs with API integration experience, strong software architecture skills.
+• In-demand skills: LangChain, LlamaIndex, OpenAI/Anthropic APIs, vector databases,
+RAG, agents.
+• Median salary: $206,000 average (2025 data); specialists in agents/GenAI earning
+$175K–$250K+.
+• Who hires most: Startups, enterprise software companies, product-led growth
+companies.
+
+Path C: MLOps / AI Infrastructure Engineer
+MLOps engineers are the reason AI systems don't collapse in production. This role is
+closest to traditional DevOps/SRE but specialized around the ML lifecycle — training
+pipelines, model registries, data versioning, monitoring for drift, A/B testing
+infrastructure. MLOps is the single most undervalued specialization in 2026.
+• Best fit for SWEs from DevOps, platform, or infrastructure backgrounds.
+
+• In-demand skills: Kubeflow, Airflow, MLflow, DVC, Seldon, Prometheus, cloud ML
+platforms.
+• Why it's underrated: Companies can't ship AI products without it — yet fewer engineers
+specialize here.
+• Median salary: $175K–$220K; bottleneck talent commands a significant premium.
+
+What Hiring Managers Actually Screen For (Based on Real Job Postings)
+A 2026 analysis of 10,000+ AI/ML job postings identified the following as most frequently
+mentioned requirements:
+
+Skill Category % of Job Postings What It Actually Means
+
+Python (advanced) 94% NumPy, Pandas, vectorized ops, production-
+grade code
+
+ML Frameworks (PyTorch/
+TF)
+
+78% Model training, fine-tuning, custom layers
+
+Cloud Platforms (AWS/GCP/
+Azure)
+
+71% SageMaker, Vertex AI, AzureML — not just S3
+MLOps Tools 63% MLflow, Airflow, Kubeflow, experiment tracking
+LLMs / GenAI 58% RAG, fine-tuning, prompt engineering,
+
+evaluation
+
+SQL + Data Engineering 52% Spark, dbt, feature stores, pipeline design
+System Design for ML 48% Distributed training, latency, serving
+
+architecture
+
+Docker / Kubernetes 44% Containerization, model serving, scaling
+
+Section 3: The Step-by-Step Pivot Roadmap
+This is a 9–12 month roadmap designed specifically for working SWEs. Each phase
+builds on the previous one. Do not skip phases — the compounding effect of layering
+skills is what creates interview-ready candidates.
+
+Before you touch a single course, you need an honest gap analysis. Pull up 10–15 real
+job descriptions for your target role on LinkedIn and Glassdoor. Make a spreadsheet with
+three columns: skills I have, skills I partially have, and skills I don't have. This tells you
+exactly where to focus.
+
+• Choose exactly one of the three paths (MLE, AI Engineer, or MLOps) before you begin
+
+learning. Trying to learn all three simultaneously is the single biggest mistake career-
+switchers make.
+
+• Decision framework: If you have strong backend/infrastructure skills → MLOps. If you
+have strong API/product-building skills → AI Engineer. If you love math and want to work
+on models → MLE.
+• Write your positioning statement: "I am a [X-year] SWE with a background in
+[domain]. I'm pivoting to [specific role] because [specific reason]. My target companies
+are [type of company]." This forces clarity.
+• Set your timeline: 9 months is realistic for a meaningful pivot. 12 months is comfortable.
+Less than 6 months produces under-prepared candidates who get filtered in early
+rounds.
+
+This is the step most SWEs want to skip. Don't. You don't need PhD-level math, but you do
+need enough to reason about why models behave the way they do — especially in debugging
+production issues and interviewing for senior roles.
+STEP 1 Audit Your Starting Point & Choose Your Path
+
+Week 1–2 | Time: 5–10 hours
+
+STEP 2
+
+Build the Mathematical Foundation
+Months 1–2 | Time: 6–8 hrs/week
+
+What to Learn
+• Linear Algebra: Matrices, matrix multiplication, eigenvalues/vectors, SVD. Used in
+model weights, embeddings, PCA.
+• Calculus (focused): Partial derivatives, chain rule, gradients. You need to understand
+how backpropagation works conceptually.
+• Probability & Statistics: Bayes' theorem, distributions, hypothesis testing, MLE
+estimation. Critical for understanding model uncertainty and evaluation.
+• You do NOT need: Real analysis, topology, measure theory, or abstract algebra. Stay
+applied.
+
+Free Resources for This Step
+• 3Blue1Brown — Essence of Linear Algebra (YouTube): Visually intuitive series. Watch
+it before doing any textbook work.
+• Khan Academy — Linear Algebra & Statistics (free): Self-paced, well-structured.
+Great for filling specific gaps.
+• MIT 18.06 — Linear Algebra with Gilbert Strang (MIT OpenCourseWare, free): The
+gold standard. Use lectures + problem sets.
+• Mathematics for Machine Learning — Coursera Specialization (free to audit): Covers
+linear algebra, calculus, and PCA with ML context.
+• StatQuest with Josh Starmer (YouTube): Makes statistics and ML fundamentals
+genuinely understandable. Best single resource for probabilistic ML concepts.
+
+This is the largest phase and the technical heart of the pivot. You're building the ML engineering
+stack from supervised learning fundamentals all the way to deploying a real model.
+
+Phase 3A: Machine Learning Fundamentals
+• Core algorithms: linear/logistic regression, decision trees, random forests, gradient
+boosting, SVMs.
+• Model evaluation: train/val/test splits, cross-validation, confusion matrices, AUC-ROC,
+precision-recall.
+• Feature engineering: encoding, normalization, imputation, feature selection.
+• Overfitting / underfitting: regularization (L1/L2), dropout, bias-variance tradeoff.
+STEP 3
+
+Master the Core ML Stack
+Months 2–5 | Time: 8–10 hrs/week
+
+Free Resources — ML Fundamentals
+Andrew Ng Machine Learning Specialization (Coursera — free to audit): The best intro to ML
+fundamentals ever made. Do all 3 courses.
+fast.ai Practical Deep Learning for Coders (free): Top-down, project-first approach. Extremely
+practical.
+
+Phase 3B: Deep Learning
+• Neural network fundamentals: forward/backward propagation, activation functions, loss
+functions.
+• CNNs: convolutions, pooling, architectures (ResNet, EfficientNet) — important for
+computer vision.
+• RNNs / LSTMs / Transformers: sequence models, attention mechanisms, self-attention.
+• Transformers are non-negotiable — understand the architecture from scratch, not just
+how to call the API.
+
+Phase 3C: LLMs and Generative AI
+• Understand transformer architecture deeply (not just how to call APIs).
+• RAG (Retrieval Augmented Generation): chunking, embedding, vector search, retrieval
+pipelines.
+• Fine-tuning: LoRA, QLoRA, PEFT techniques — when to fine-tune vs. when to use RAG.
+• AI Agents: tool use, ReAct pattern, multi-agent frameworks.
+• LLM evaluation: RAGAS, LLM-as-judge, benchmark design.
+Google Machine Learning Crash Course (free): Solid structured intro. Great for reinforcing
+concepts quickly.
+Scikit-learn Documentation + User Guide (free): Learn the API by building. Read the user guide,
+not just the API docs.
+Kaggle Learn — ML Courses (free): Short, interactive courses with immediate practice. Perfect for
+hands-on reinforcement.
+
+Free Resources — Deep Learning
+Deep Learning Specialization by Andrew Ng (Coursera — free to audit): Covers NNs, CNNs,
+RNNs, and sequence models across 5 courses.
+fast.ai Part 2 — Deep Learning from the Foundations (free): Builds transformers from scratch.
+Exceptional.
+Andrej Karpathy — Neural Networks: Zero to Hero (YouTube, free): Build GPT from scratch. The
+single best transformer course available.
+The Illustrated Transformer by Jay Alammar (free blog): Required reading before any LLM work.
+PyTorch Tutorials (official, free): Learn by building. Work through the 'Learning PyTorch with
+Examples' and 'NLP from Scratch' tutorials.
+
+Free Resources — LLMs & GenAI
+Hugging Face NLP Course (free): Hands-on with transformers, tokenizers, fine-tuning. Essential.
+LangChain Documentation + Tutorials (free): Learn RAG and agents directly from the framework
+docs.
+DeepLearning.AI Short Courses (free): Andrew Ng's micro-courses on LangChain, RAG, agents,
+fine-tuning. Each is 1–2 hours.
+Andrej Karpathy — Let's build the GPT tokenizer (YouTube, free): Understanding tokenization at a
+deep level.
+Lilian Weng's Blog (lilianweng.github.io, free): Comprehensive, well-cited deep dives on LLMs,
+agents, alignment.
+
+This is the step that separates candidates who get hired from those who get filtered. Being able
+to train a model is table stakes. Knowing how to deploy it reliably, monitor it, retrain it, and
+version it is what companies are actually paying for.
+
+Core MLOps Skills to Build
+• Experiment tracking: MLflow, Weights & Biases (W&B) — log every experiment.
+• Data versioning: DVC (Data Version Control) — treat data like code.
+• Model serving: FastAPI + Uvicorn for inference APIs, Triton Inference Server, BentoML.
+• Containerization: Docker for model packaging. Kubernetes for orchestration at scale.
+• Pipeline orchestration: Apache Airflow, Prefect, or Kubeflow Pipelines.
+• Model monitoring: Evidently AI for drift detection. Prometheus + Grafana for metrics.
+• Cloud ML platforms: AWS SageMaker, Google Vertex AI, or Azure ML — pick one and
+go deep.
+
+Your GitHub is your resume. No portfolio of deployed projects means no interviews — especially
+as a career switcher. Here is the exact bar: three strong end-to-end projects are sufficient to
+land mid-level AI/ML interviews at non-FAANG companies. Five projects are sufficient for
+FAANG-tier targeting.
+STEP 4 Learn MLOps and Production Engineering
+
+Months 4–6 | Time: 6–8 hrs/week
+
+Free Resources — MLOps
+Made With ML (madewithml.com, free): End-to-end MLOps curriculum built by a former Apple ML
+engineer. Widely considered the best free MLOps resource.
+MLflow Documentation + Tutorials (free): Official docs are excellent. Work through the quickstart
+and tracking guides.
+Full Stack Deep Learning (fullstackdeeplearning.com, free): Covers deployment, testing, and
+production ML systems. Recorded lectures available free.
+Weights & Biases Courses (free): Their own courses on experiment tracking, model evaluation,
+and LLMOps.
+AWS SageMaker / Google Vertex AI Free Tier: Both offer free tiers sufficient for learning. Build and
+deploy at least one model to each.
+
+STEP 5 Build a Portfolio of Real Projects
+Months 5–8 | Time: 10–15 hrs/week
+
+What Makes a Project 'Strong'
+• It's deployed: Not a Jupyter notebook. A real API or app someone can hit.
+• It has a README that explains the ML problem, not just the code.
+• It includes evaluation: You documented your metrics and compared at least two
+approaches.
+• It has tests: At least data validation tests and model performance regression tests.
+• It's versioned: Code, data, and models are all version-controlled.
+
+Recommended Project Ideas by Path
+MLE Path:
+• End-to-end ML pipeline: ingest raw data → feature engineering → train → evaluate →
+serve via API. Use a real dataset from Kaggle or the UCI ML Repository.
+• Real-time recommendation system: collaborative filtering or neural CF deployed on a
+FastAPI backend with Redis feature cache.
+• Model monitoring dashboard: deploy a model, simulate data drift, detect it with Evidently
+AI, trigger retraining with Airflow.
+AI Engineer Path:
+• Production RAG system: scrape a domain-specific corpus, chunk it, embed with OpenAI/
+HuggingFace, store in Pinecone/Weaviate, build a Q&A interface.
+• AI agent with tool use: build an agent using LangChain or LlamaIndex that can search
+the web, run Python code, and answer multi-step questions.
+• LLM fine-tuning project: fine-tune an open-source model (Mistral, Llama) on a custom
+task using LoRA. Compare performance pre/post fine-tuning.
+MLOps Path:
+• Complete ML platform: build a training pipeline (Airflow), experiment tracker (MLflow),
+model registry, and deployment pipeline (Docker + FastAPI) for any ML model.
+• Drift monitoring system: deploy a classification model, generate synthetic drift, build
+automated alerts and retraining triggers.
+Free Compute Resources for Projects
+Google Colab Pro (free tier): T4 GPUs sufficient for most fine-tuning experiments.
+Kaggle Notebooks (free): 30 GPU-hours/week. P100 GPUs. No setup required.
+Hugging Face Spaces (free): Deploy ML apps and demos. Gradio + Streamlit supported.
+GitHub Codespaces (free tier): 60 core-hours/month for development environments.
+AWS Free Tier / GCP Free Tier: 12-month free access for learning cloud ML platforms.
+
+AI/ML interviews are fundamentally different from SWE interviews. Knowing this in advance lets
+you prepare for the right things instead of grinding LeetCode for a test that represents maybe
+20% of what you'll actually be evaluated on.
+
+The Four Components of an AI/ML Interview
+
+ML System Design: The Most Important Interview Skill
+Most SWEs over-prepare on coding and under-prepare on ML system design. A typical
+system design prompt: 'Design a recommendation system for an e-commerce platform
+with 10M users.' You need to be able to discuss:
+• Problem framing: What metric are we optimizing? Clicks? Revenue? Engagement?
+• Data collection and feature engineering: What features? How do we avoid leakage?
+• Model selection and tradeoffs: Why this algorithm vs. alternatives?
+• Training infrastructure: Batch vs. online learning. How often do we retrain?
+• Serving architecture: Latency requirements. Caching strategies. A/B testing framework.
+• Monitoring: What does model degradation look like? How do we detect it?
+STEP 6
+
+Master the Interview Process
+Months 7–9 | Time: 8–10 hrs/week
+
+Interview Component Weight What to Prepare
+ML Concepts & Theory 25% Model types, regularization, evaluation metrics, bias/
+
+variance
+
+Coding (ML-flavored) 20% NumPy ops, Pandas data manipulation, implement ML
+
+from scratch
+
+ML System Design 35% End-to-end system design: data pipeline → training →
+
+serving → monitoring
+
+Portfolio / Project Deep Dive 20% Walk through your projects. Defend design decisions.
+
+Discuss failures.
+
+Most career-switchers fail at this step not because of skill gaps but because of positioning
+errors. Your job search strategy needs to be as thoughtful as your learning plan.
+
+Positioning Strategy for Career Switchers
+• Lead with your SWE credibility: Your production engineering background is a genuine
+advantage. Most data scientists can't deploy a real system. You can.
+• Target companies at inflection points: Series B–D startups, mid-size tech companies,
+and enterprise companies newly investing in AI are more willing to take bets on career
+switchers than FAANG.
+• Avoid the title trap early: Apply to roles titled 'ML Engineer,' 'AI Engineer,' 'Applied ML
+Engineer,' and 'Software Engineer — ML Platform.' Don't limit to one title.
+• Use GitHub as your primary pitch: Every application should link to your strongest
+project. If your repo isn't clean and documented, fix that first.
+• Get referred, not filtered: LinkedIn network reach-outs to MLEs at target companies
+convert at 5–10x the rate of cold applications. One genuine referral beats 100 cold
+applications.
+
+Networking That Actually Works
+• Comment substantively on posts from ML engineers and researchers. Build familiarity
+before you reach out.
+• Publish one technical blog post per project. Medium, Substack, or dev.to all work. This
+creates inbound interest and demonstrates communication skills.
+Free Interview Prep Resources
+ML System Design Interview Guide by Chip Huyen (free on GitHub): The definitive framework for
+ML system design interviews.
+Grokking Machine Learning Interview (educative.io): Widely recommended for ML interview
+patterns.
+InterviewBit — Machine Learning Track (free): Structured ML interview prep with 200+ questions.
+Kaggle Competitions (free): Active participation demonstrates real ML ability more than any
+interview prep course.
+LeetCode — Focus on Medium Array/Matrix problems (not Hard): ML coding rounds are less
+algorithmic than SWE rounds.
+Papers With Code (paperswithcode.com, free): Read implementation sections of seminal papers.
+Shows depth in interviews.
+
+STEP 7 Execute Your Job Search Strategically
+
+Months 8–12 | Time: 5–8 hrs/week
+
+• Contribute to open-source ML projects (HuggingFace repos, LangChain, etc.) — even
+documentation fixes get you noticed.
+• Attend local and virtual AI/ML meetups. MLOps.community, Weights & Biases events,
+and Hugging Face community events all have job postings.
+
+Salary Negotiation for AI/ML Roles
+Negotiation Anchors for 2026
+Median mid-level AI/ML salary is $193,000. Do not anchor to your current SWE salary.
+Total comp (base + equity + bonus) at AI-first startups often exceeds $250K even at mid-level.
+If offered below $160K as a career switcher with 3+ years of SWE experience and a portfolio, it's
+below market.
+Competing offers are the single strongest negotiation lever. Apply to 3–5 companies
+simultaneously.
+Recruiter tip: The strongest signal for senior offers is 'experience building organizational AI
+capabilities' — not just shipping individual models.
+
+Section 4: Insider Insights You Won't Find Elsewhere
+Facts That Should Change How You Approach This Pivot
+
+1. Certifications Almost Never Matter — Portfolios Always Do
+Only 6% of AI/ML job postings request certifications (per Axial Search's 10,000+ posting
+analysis). Yet thousands of candidates spend months chasing Google, AWS, or
+TensorFlow certs. The ROI is poor. Use that time to build a project instead. The one
+exception: certifications matter if you're pivoting into enterprise consulting or if your
+resume would otherwise lack any ML signal whatsoever.
+
+2. The 'Math Wall' Is Real But Narrower Than You Think
+You need to understand gradient descent, backpropagation, attention mechanisms, and
+probability distributions at an intuitive level. You do not need to derive them from scratch
+in an interview or implement them from first principles to do 90% of production ML work.
+The exception is research-adjacent roles and roles that require inventing new
+architectures. For applied and engineering roles, conceptual math fluency is the bar.
+
+3. Remote ML Jobs Are Declining But Not Gone
+Remote ML roles dropped from 12% to 2% of postings between 2023 and 2025. The field
+has normalized around hybrid arrangements — especially at FAANG and growth-stage
+startups. If remote-only is a hard requirement, target smaller companies, specifically
+Series A–B where the team is distributed by default.
+
+4. The Junior ML Market Is Brutal — Skip It
+Entry-level ML roles make up just 3% of current job postings. Companies are not hiring
+junior ML engineers in meaningful numbers. They ARE hiring mid-level SWEs who can
+operate as ML engineers — which is exactly the positioning this guide enables. Your
+SWE experience means you should never position yourself as 'junior' in AI/ML.
+
+5. The Generative AI Title Bubble Is Real
+Job postings for 'Prompt Engineer' surged 135.8% in 2025. Many of these roles are
+superficial and will not exist in 3 years. Build depth in ML systems, not just API wrappers.
+The engineers who will be most valuable in 2028 are those who understand how to
+evaluate, fine-tune, and monitor models — not just call an endpoint.
+
+6. What Separates $200K Engineers from $350K Engineers
+At the compensation ceiling, the differentiating factor is not raw coding skill — it's the
+ability to architect AI systems that drive measurable business outcomes. Senior ML
+engineers at top-tier pay grades are valued for building organizational AI capabilities,
+establishing governance frameworks, and designing systems that other engineers can
+build on. This is a leadership and architectural skill set layered on top of technical depth.
+
+7. Your SWE Experience Is More Valuable Than You Realize
+A persistent myth in career-switching communities is that hiring managers discount SWE
+backgrounds in ML roles. The opposite is true for production roles. Companies have
+learned the hard way that data scientists who can't write maintainable code, handle
+latency, or reason about system reliability create expensive technical debt. MLEs who
+ship reliable, tested, scalable code are rare. If you come in with strong SWE
+fundamentals and ML knowledge on top, you are not a compromise hire — you are a
+premium candidate for production roles.
+
+Section 5: Quick Reference — Complete Resource List
+Free Learning Resources by Category
+
+Mathematics Foundations
+
+Machine Learning Fundamentals
+
+Deep Learning & Transformers
+Resource Platform Best For
+3Blue1Brown — Essence of Linear
+Algebra
+
+YouTube (Free) Visual intuition for linear algebra
+
+MIT 18.06 Linear Algebra (Strang) MIT OpenCourseWare
+
+(Free)
+
+Rigorous, comprehensive linear algebra
+
+Khan Academy — Linear Algebra &
+Stats
+
+Khan Academy (Free) Filling specific gaps at your own pace
+
+Mathematics for Machine Learning Coursera (Free to
+
+audit)
+
+Applied math in ML context — PCA,
+calculus
+
+StatQuest with Josh Starmer YouTube (Free) Statistics & ML concepts made clear
+
+Resource Platform Best For
+Machine Learning Specialization —
+Andrew Ng
+
+Coursera (Free to
+audit)
+
+Best ML foundations course available
+
+fast.ai Practical Deep Learning for
+Coders
+
+fast.ai (Free) Top-down, project-first approach to DL
+
+Google Machine Learning Crash
+Course
+
+Google (Free) Structured intro, good for review
+Kaggle Learn — ML Courses Kaggle (Free) Hands-on, immediate practice
+Scikit-learn User Guide scikit-learn.org (Free) Production-grade ML implementation
+
+Resource Platform Best For
+Deep Learning Specialization —
+Andrew Ng
+
+Coursera (Free to
+audit)
+
+NNs, CNNs, RNNs — comprehensive 5-
+course series
+
+LLMs, GenAI & Agents
+
+MLOps & Production Engineering
+
+Interview Preparation
+Neural Networks: Zero to Hero —
+Karpathy
+
+YouTube (Free) Build GPT from scratch. Essential.
+
+fast.ai Part 2 — DL from
+Foundations
+
+fast.ai (Free) Transformers and advanced DL from
+
+scratch
+
+The Illustrated Transformer — Jay
+Alammar
+
+Blog (Free) Best visual explanation of transformers
+PyTorch Official Tutorials pytorch.org (Free) Framework mastery through building
+
+Resource Platform Best For
+HuggingFace NLP Course HuggingFace (Free) Transformers, tokenizers, fine-tuning
+
+hands-on
+
+DeepLearning.AI Short Courses deeplearning.ai (Free) RAG, agents, LangChain, LLMOps
+
+micro-courses
+
+LangChain Documentation +
+Tutorials
+
+langchain.com (Free) Building RAG pipelines and agents
+
+Lilian Weng's Blog lilianweng.github.io
+
+(Free)
+
+Deep, well-cited research summaries
+
+Let's build GPT tokenizer —
+Karpathy
+
+YouTube (Free) Tokenization fundamentals for LLMs
+
+Resource Platform Best For
+Made With ML (madewithml.com) Web (Free) Best free end-to-end MLOps curriculum
+Full Stack Deep Learning fullstackdeeplearning.c
+
+om (Free)
+
+Production ML systems, testing,
+deployment
+
+Weights & Biases Courses wandb.ai (Free) Experiment tracking, LLMOps
+MLflow Official Documentation mlflow.org (Free) Experiment tracking and model registry
+Evidently AI Documentation +
+Tutorials
+
+evidentlyai.com (Free) Model monitoring and drift detection
+
+Resource Platform Best For
+ML System Design by Chip Huyen
+(GitHub)
+
+GitHub (Free) Framework for system design interviews
+
+Papers With Code paperswithcode.com
+
+(Free)
+
+Implementation depth for technical
+interviews
+
+Kaggle Competitions Kaggle (Free) Real ML problem-solving and
+leaderboard visibility
+
+InterviewBit — ML Track InterviewBit (Free) Structured ML interview question bank
+LeetCode — Array/Matrix (Medium) LeetCode (Free) ML coding round preparation
+
+Final Word: What This Actually Takes
+The AI/ML engineering pivot is one of the most legitimate, high-leverage career moves
+available to a software engineer in 2026. The demand is real. The compensation is
+exceptional. The path is clear. But it requires something most guides won't tell you
+directly:
+
+The 9-month roadmap in this guide has produced results. SWEs with your exact
+background have made this transition at companies from early-stage startups to FAANG.
+The difference between those who land roles and those who don't is not talent — it's
+execution and consistency.
+
+Build the foundation. Build the projects. Build the network. Apply before you feel ready.
+
+Good luck.
+The Honest Truth About This Transition
+You will spend 3–4 months feeling like you're learning without making visible progress. This is
+normal and necessary.
+The engineers who succeed are not the ones who start with the most knowledge — they are the
+ones who build relentlessly and ship projects when it's uncomfortable.
+You will be tempted to course-hop. Pick one resource per topic and finish it. Depth beats breadth
+in this field.
+A single deployed, well-documented project does more for your career than 10 completed courses.
+The market will not wait for you to feel ready. Set a deadline, prepare to the best of your ability,
+and apply.
+
+
+Project prompt Claude + HuggingFace
+Here's a step-by-step trick to generate portfolio projects that actually get recruiters' attention using Claude + HuggingFace:
+
+1️⃣ Go to huggingface.co
+
+Click "Models"
+On the left, find the "Tasks" section
+2️⃣ Screenshot that entire "Tasks" section
+
+3️⃣ Open Claude
+
+Paste the image
+Use this prompt to generate a standout project:
+"Based on the screenshot I provided, which shows a full list of available AI tasks on huggingface.co, come up with a unique and technically impressive AI engineering project that would:
+
+Stand out in the 2026 AI engineering job market
+Be portfolio-worthy for a mid-level software engineer (2–6 YOE) pivoting from SWE into an AI engineering role
+Integrate one or more of the tasks shown in the screenshot
+Demonstrate production-grade patterns like RAG, multi-agent orchestration, LLM evaluation, and LLMOps (not just an API wrapper)
+Be feasible for a solo engineer to ship in 1–3 months
+Use real-world data APIs and practical scenarios
+Go beyond a basic demo with thoughtful system design, eval harness, and scalability
+The output should include:
+
+A clear project name, what it does, and what real-world problem it solves
+Key HuggingFace tasks it uses
+Recommended tech stack (LangChain, LangGraph, LlamaIndex, pgvector, Pinecone, etc.)
+How it maps to real AI engineering JDs
+Resume-ready impact metrics and portfolio value"
+
+BASWE__15_AI_Engineering_Projects_Guide.docx
+
+15 AI Engineering Projects
+
+That Actually Land Jobs
+
+
+A Step-by-Step Build Guide for Mid-Level Software Engineers
+
+Transitioning into AI Engineering
+
+
+BASWE  |  AiEngineerAccelerator™
+
+
+How to Use This Guide
+This guide contains fifteen complete project build plans. Each one is designed to take a mid-level software engineer with 3–5 years of production experience and produce a portfolio project that demonstrates AI engineering competence at a level hiring managers are actively looking for.
+
+These are not tutorials. They are architectural blueprints with enough detail for you to build each system independently, making your own implementation decisions along the way. That’s intentional — the decisions you make during the build are what you’ll talk about in interviews.
+
+What Makes These Projects Different
+
+•  Every project solves a real operational problem that AI teams face in production, not an academic exercise.
+
+•  They are designed to leverage your existing production engineering skills (Docker, CI/CD, APIs, databases) as a structural advantage.
+
+•  Each one demonstrates a different dimension of AI engineering competence: evaluation, cost optimization, observability, CI/CD integration, retrieval, fine-tuning, and multi-agent orchestration.
+
+•  None of them are “I called an LLM API and deployed a chatbot.”
+
+Estimated Timeline
+
+Each project is scoped for roughly 12–14 days of focused work (2–3 hours per day). You don’t need to build all fifteen. Pick the two or three that best align with the roles you’re targeting and build those exceptionally well. Two deep, polished projects beat five shallow ones every time.
+
+
+Project 1: Model Regression Detection System
+What You’re Building: A CI/CD-style pipeline that continuously tests any LLM-powered feature against a golden dataset whenever a prompt or model changes, detects quality regressions, and alerts your team via Slack before bad outputs reach users.
+
+
+Why This Project Lands Interviews
+
+Every AI team ships prompt changes blind. This project proves you think about what happens after deployment — the exact mindset hiring managers are desperate for and almost no candidates demonstrate.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Industry standard for ML tooling
+
+LLM Provider
+
+OpenAI API (gpt-4o / gpt-4o-mini)
+
+Widely recognized; easy to swap later
+
+Eval Framework
+
+Custom + RAGAS or DeepEval
+
+Shows you understand eval beyond accuracy
+
+Data Storage
+
+SQLite + JSON files
+
+Zero infrastructure, portable, git-friendly
+
+Alerting
+
+Slack Webhooks
+
+What real teams actually use
+
+Scheduling
+
+GitHub Actions
+
+Runs on every PR; free tier is enough
+
+Visualization
+
+Streamlit or simple HTML report
+
+Quick dashboard for diff views
+
+Containerization
+
+Docker
+
+Shows production readiness
+
+
+Step-by-Step Build Guide
+
+Phase 1: Define the LLM Feature Under Test (Day 1–2)
+1.  Build a simple LLM feature: A customer support email classifier that reads an email and returns a category (billing, technical, account, general) plus a one-sentence summary. Wrap it in a single Python function with the prompt as a configurable parameter.
+
+2.  Version your prompts: Store prompts as versioned YAML files in a /prompts directory. Each file has a version ID, timestamp, the system prompt, and any few-shot examples. This is the “code” you’re running CI against.
+
+3.  Create the interface contract: Define a simple PromptConfig dataclass that your eval pipeline consumes. Input: email text. Output: structured JSON with category and summary. Keep it typed with Pydantic.
+
+Phase 2: Build the Golden Dataset (Day 2–4)
+1.  Curate 50–100 test cases by hand: Write real-looking customer emails across all categories. For each one, write the correct category and an ideal summary. Do NOT generate these with an LLM — the whole point is that these are human-verified ground truth.
+
+2.  Include edge cases deliberately: Add ambiguous emails that could be two categories, extremely short emails, emails with typos, emails in mixed languages, sarcastic emails. Label these with an “expected_difficulty” field.
+
+3.  Store as versioned JSON: Each test case gets a stable ID, the input, expected output, difficulty tag, and a notes field explaining why this case matters. Version the dataset file itself so you can track when the eval bar changes.
+
+
+Interview Talking Point
+
+When asked about this project, lead with how you built the golden dataset. Explain that you seeded it with hand-labeled data, then expanded it over time using failure cases. This signals you understand that evaluation quality is bounded by data quality — a production insight most candidates miss entirely.
+
+Phase 3: Build the Evaluation Engine (Day 4–7)
+1.  Create the test runner: Write a function that takes a PromptConfig and the golden dataset, runs every test case through the LLM feature, and collects raw outputs. Use async batching to keep costs low and speed high.
+
+2.  Implement multi-dimensional scoring: Don’t just check if the category matches. Score on: exact category match (binary), summary relevance (use an LLM-as-judge to rate 1–5), latency per request, and token usage. Store all dimensions per test case.
+
+3.  Build the comparison logic: The core value of this system is diffing. For every eval run, compare against the previous run. Calculate: overall pass rate delta, per-category accuracy delta, list of specific cases that flipped from pass to fail (regressions), and cases that flipped from fail to pass (improvements).
+
+4.  Add statistical significance: If 2 out of 80 cases flipped, is that signal or noise? Implement a simple threshold system: flag as warning if delta exceeds 3%, flag as critical if delta exceeds 8%. Make these configurable.
+
+Phase 4: Build the Alerting and Reporting Layer (Day 7–9)
+1.  Create the diff report: Generate an HTML report that shows: run metadata (prompt version, model, timestamp), a summary scorecard comparing this run to the baseline, a table of every regressed case showing the old output vs. the new output side by side, and a trend chart showing scores over the last N runs.
+
+2.  Wire up Slack alerts: Use Slack’s incoming webhook API. Send a structured message with: pass/warn/fail status, the headline numbers (e.g., “3 regressions detected, accuracy dropped from 94% to 89%”), and a link to the full HTML diff report.
+
+3.  Add drift detection: Beyond per-run diffs, track a rolling average of scores over time. If the 7-run moving average drops below a threshold even though no single run triggered an alert, fire a “slow drift” warning. This catches gradual degradation that per-run checks miss.
+
+Phase 5: Wire into CI/CD (Day 9–11)
+1.  Create a GitHub Action workflow: Trigger the eval pipeline on every PR that modifies files in the /prompts directory. The action should: run the eval, generate the report, post a summary comment on the PR with pass/fail status, and block merge if critical regressions are detected.
+
+2.  Containerize everything: Write a Dockerfile that packages the eval runner, the golden dataset, and the reporting layer. The container should accept environment variables for the LLM API key, Slack webhook URL, and threshold configs.
+
+3.  Write a README that reads like internal documentation: Include: a one-paragraph summary of what this does, setup instructions, how to add new test cases to the golden dataset, how to adjust thresholds, and architecture decisions with rationale. Do NOT write it like a tutorial. Write it like onboarding docs for a new teammate joining your team.
+
+Phase 6: Polish for Portfolio (Day 11–12)
+1.  Record a 3-minute Loom walkthrough: Show the system running end to end: change a prompt, trigger the eval, show the Slack alert, walk through the diff report. This is more persuasive than any README.
+
+2.  Write a short blog post or README section: Explain the problem (teams ship prompt changes blind), your approach (CI/CD for model behavior), and one specific design decision you’re proud of (e.g., why you track slow drift separately from per-run regressions).
+
+
+Project 2: LLM Cost Autopilot
+What You’re Building: An intelligent routing layer that sits in front of multiple LLM providers, analyzes each incoming request’s complexity, routes it to the cheapest model capable of handling it at acceptable quality, and continuously validates that routing decisions are correct.
+
+
+Why This Project Lands Interviews
+
+Every company running LLMs at scale is bleeding money on over-provisioned model calls. Building a cost optimizer signals that you understand AI engineering as a business problem, not just a technical one — and that’s the gap between a junior hire and a senior one.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Ecosystem compatibility
+
+LLM Providers
+
+OpenAI, Anthropic, Ollama (local)
+
+Mix of cloud and local models
+
+Router
+
+FastAPI
+
+Async-native, production-grade
+
+Classifier
+
+Scikit-learn or small fine-tuned model
+
+Lightweight complexity scoring
+
+Eval
+
+Custom scoring + LLM-as-judge
+
+Quality verification loop
+
+Logging
+
+SQLite + structured JSON logs
+
+Full audit trail per request
+
+Dashboard
+
+Streamlit or Grafana
+
+Cost and quality visualization
+
+Containerization
+
+Docker + docker-compose
+
+Multi-service orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Unified Model Interface (Day 1–3)
+1.  Create a model registry: Define a ModelConfig dataclass with: provider name, model ID, cost per input token, cost per output token, average latency, and a quality tier (high/medium/low). Populate it with real pricing for GPT-4o, GPT-4o-mini, Claude Sonnet, Claude Haiku, and a local Llama model via Ollama.
+
+2.  Build the abstraction layer: Write a single send_request(prompt, model_config) function that handles the provider-specific API calls behind a unified interface. Every call returns a standardized Response object with: the output text, tokens used (input + output), latency, cost, and the model ID.
+
+3.  Test every provider: Send the same 10 prompts to every model in your registry. Log the outputs, costs, and latencies. This gives you baseline data for the routing logic and validates your abstraction layer works.
+
+Phase 2: Build the Complexity Classifier (Day 3–6)
+1.  Define complexity tiers: Create three tiers. Tier 1 (simple): reformatting, extraction, basic Q&A from provided context. Tier 2 (moderate): summarization, classification, structured analysis. Tier 3 (complex): multi-step reasoning, creative generation, nuanced judgment calls.
+
+2.  Build a labeled dataset: Write 200+ example prompts across all three tiers. Label each one by hand. Include features you’ll extract: token count, presence of instructions like “analyze” or “compare,” number of constraints, whether context is provided, and output format complexity.
+
+3.  Train the classifier: Start with a simple scikit-learn model (logistic regression or random forest) on your extracted features. You’re not optimizing for classifier perfection — you’re building the routing skeleton. Track accuracy and confusion matrix. Anything above 80% accuracy on a held-out set is fine for V1.
+
+4.  Create the routing map: Map each complexity tier to a model. Tier 1 → cheapest model (Haiku or local Llama). Tier 2 → mid-tier (GPT-4o-mini or Sonnet). Tier 3 → highest quality (GPT-4o or Opus). Store this as a configurable YAML so you can swap models without code changes.
+
+Phase 3: Build the Async Quality Verification Loop (Day 6–9)
+1.  Define quality thresholds per use case: For each request type, define what “good enough” means. For extraction tasks: did it get all the key fields? For summarization: LLM-as-judge score above 4/5. For classification: does the label match what GPT-4o would have said?
+
+2.  Build the async verifier: After the response is returned to the user, queue an async job that sends the same prompt to the highest-tier model and compares outputs. Score the agreement. If the cheap model’s output diverges significantly, log it as a routing failure.
+
+3.  Implement auto-escalation: If the verifier catches a failure, automatically re-run the request with the higher-tier model and return the better result (if latency permits). Log the escalation event with: original model, escalated model, cost delta, and the quality gap that triggered it.
+
+4.  Feed failures back to the classifier: Every routing failure becomes a new training example for the complexity classifier. Build a simple feedback loop that retrains the classifier weekly using accumulated failure data. This is the flywheel that makes the system get smarter over time.
+
+Phase 4: Build the Logging and Cost Dashboard (Day 9–11)
+1.  Log everything: Every request gets a row in your database with: timestamp, prompt hash, complexity tier, routed model, cost, latency, quality score from verifier, and whether it was escalated. This is your audit trail.
+
+2.  Build the cost dashboard: Show: total cost per day/week with a comparison to what it would have cost using GPT-4o for everything (“you saved $X”), routing distribution (pie chart of which models handle what percentage), quality score distribution, and escalation rate over time.
+
+3.  Add the money shot metric: Calculate and prominently display the cost reduction percentage. If routing to cheaper models saved 60% compared to sending everything to the most expensive model, that number is the headline of your portfolio piece.
+
+Phase 5: Expose as an API (Day 11–13)
+1.  Build the FastAPI service: A single POST /v1/completions endpoint that accepts a standard chat completion request. The user doesn’t choose the model — the router does. Return the response with metadata showing which model was selected and why.
+
+2.  Add configuration endpoints: GET /v1/models (list available models and their costs), GET /v1/stats (cost savings summary), and PUT /v1/routing-config (update tier-to-model mappings without redeploying).
+
+3.  Containerize and document: Docker-compose with the API service, a background worker for async verification, and the SQLite database. Write a README with architecture diagram, setup instructions, and the cost savings number front and center.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Run a realistic load test: Send 500–1,000 diverse prompts through the system. Generate the final cost savings report. Screenshot the dashboard. These artifacts are what you put in your portfolio.
+
+2.  Write the case study: Frame it as: “I built a system that reduced LLM API costs by X% while maintaining Y% quality parity.” Lead with the number. Explain the routing logic. Show the feedback loop. This is a story a VP of Engineering immediately understands.
+
+
+Project 3: Failure Forensics Tool for AI Pipelines
+What You’re Building: An observability layer for multi-step AI pipelines that traces every intermediate step, identifies exactly where failures originate when the final output is bad, and feeds flagged failures back into a growing evaluation dataset.
+
+
+Why This Project Lands Interviews
+
+When a multi-step AI pipeline produces garbage, most teams have no idea which step broke. You’re building the tool that answers “where did this go wrong?” — essentially a mini LangSmith/Braintrust. Being able to articulate why observability matters for AI systems is a senior-level signal.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Standard for ML tooling
+
+Pipeline Framework
+
+Custom chain or LangChain
+
+Demonstrates orchestration knowledge
+
+LLM Provider
+
+OpenAI API
+
+Widely available
+
+Tracing
+
+OpenTelemetry + custom spans
+
+Industry-standard observability
+
+Storage
+
+SQLite + JSON trace files
+
+Simple, inspectable, git-friendly
+
+Visualization
+
+React frontend or Streamlit
+
+Interactive trace explorer
+
+Feedback Loop
+
+Simple REST API
+
+Humans flag bad outputs
+
+Containerization
+
+Docker
+
+Production packaging
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Multi-Step Pipeline (Day 1–3)
+1.  Design a 4-step pipeline: Step 1 (Intake): Accept a raw document (text, markdown, or simulated PDF text). Step 2 (Extraction): Use an LLM to extract structured entities (names, dates, amounts, key terms). Step 3 (Classification): Classify the document type (contract, invoice, report, correspondence). Step 4 (Summarization): Generate a structured summary tailored to the document type.
+
+2.  Make each step a clean, isolated function: Each step takes a typed input and returns a typed output. Use Pydantic models for every intermediate data structure. This is critical — if your steps are spaghetti, your tracing will be meaningless.
+
+3.  Inject realistic failure modes: Deliberately include documents that will break things: a contract with no dates, an invoice with amounts in different currencies, a document that’s ambiguously between two categories. You need failures to trace.
+
+Phase 2: Build the Tracing Layer (Day 3–6)
+1.  Create a Trace object: Every pipeline execution gets a unique trace_id. The Trace contains: a list of Span objects (one per step), the final output, and a status (success/failure/degraded).
+
+2.  Instrument each step with spans: Wrap each pipeline step in a context manager that automatically captures: step name, input (serialized), output (serialized), LLM prompt sent, LLM raw response, token count, latency, and any errors. Use a decorator pattern so instrumenting a new step is one line of code.
+
+3.  Add confidence scoring at each step: After each LLM call, have the model also output a confidence score (1–5) for its own response. Store this in the span. When you’re tracing backward from a failure, low-confidence spans are your primary suspects.
+
+4.  Store traces as structured JSON: Write each complete trace to a JSON file and index it in SQLite (trace_id, timestamp, status, final_score). This gives you both human-readable traces and queryable metadata.
+
+Phase 3: Build the Backward Trace Analyzer (Day 6–9)
+1.  Implement root cause analysis logic: When a trace is flagged as failed, walk backward through the spans. At each step, ask: is this step’s output a reasonable transformation of its input? Use an LLM-as-judge to score each step’s output quality given its input. The first step with a significant quality drop is your root cause.
+
+2.  Categorize failure types: Create a taxonomy: Extraction Hallucination (extracted entities that don’t exist in the source), Misclassification (wrong document type), Propagation Error (step N was correct but step N+1 misinterpreted its output), Prompt Failure (the LLM ignored instructions), and Context Loss (important information from earlier steps was dropped).
+
+3.  Build the evidence chain: For each diagnosed failure, produce a structured explanation: “Step 2 (Extraction) hallucinated the entity ‘John Smith’ which does not appear in the source document. This propagated to Step 4, which included it in the summary.” Include the specific input/output pairs as evidence.
+
+Phase 4: Build the Visual Trace Explorer (Day 9–11)
+1.  Create the trace view: A visual representation of the pipeline where each step is a node. Color-code by status: green (healthy), yellow (low confidence), red (identified root cause). Clicking a node shows the full span details — input, output, prompt, confidence score.
+
+2.  Add the diff view: For failed traces, show a side-by-side comparison: what the step received vs. what it produced vs. what it should have produced (based on the golden dataset or human correction). Highlight the specific divergence.
+
+3.  Build the flagging interface: A simple button that lets a user mark any trace as “bad output.” When clicked, the system runs the backward trace analysis and displays the root cause diagnosis. The user can confirm or override the diagnosis.
+
+Phase 5: Build the Feedback-to-Eval Loop (Day 11–13)
+1.  Auto-generate eval cases from flags: Every time a human flags a bad output and confirms the root cause, automatically create a new test case: the original input, the failing step, the bad output, the human-corrected output, and the failure category. Append it to a growing eval dataset.
+
+2.  Build regression tracking: Periodically re-run the accumulated eval dataset against the current pipeline. Track whether known failure cases are still failing or have been fixed. Show a trend line of “known issues resolved” over time.
+
+3.  Create failure analytics: Dashboard showing: most common failure types, which pipeline step fails most often, failure rate over time, and average time to root cause. This is the data that tells a product team where to invest engineering effort.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Prepare a demo scenario: Process 50 documents through the pipeline. Ensure at least 8–10 produce failures of different types. Record a Loom showing: a bad output, opening the trace explorer, diagnosing the root cause, flagging it, and showing the eval dataset growing.
+
+2.  Write the architecture doc: Include a diagram of the pipeline with the tracing layer, the backward analysis flow, and the feedback loop. Frame it as: “I built an observability system that reduces mean time to root cause for AI pipeline failures from hours of manual debugging to seconds of automated diagnosis.”
+
+
+Project 4: Self-Healing Technical Documentation
+What You’re Building: A GitHub Action that monitors a codebase, detects when code changes make documentation inaccurate, identifies the specific stale sections, and either auto-generates a PR with corrected docs or flags the discrepancies for human review.
+
+
+Why This Project Lands Interviews
+
+This project lives inside a CI/CD pipeline, not a Streamlit demo. It solves a universal engineering pain point that every interviewer has personally experienced. And it demonstrates the full AI engineering stack — embeddings, retrieval, LLM generation, and production deployment — in a system that other engineers would actually want to install.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+ / TypeScript
+
+Your choice; both work in GitHub Actions
+
+Embeddings
+
+OpenAI text-embedding-3-small
+
+Cheap, fast, high quality
+
+Vector Store
+
+ChromaDB (file-based)
+
+No server needed; persists to disk
+
+LLM
+
+GPT-4o or Claude Sonnet
+
+Strong code understanding
+
+Git Integration
+
+PyGithub + git diff
+
+PR creation and diff parsing
+
+CI/CD
+
+GitHub Actions
+
+Native integration, free tier
+
+Containerization
+
+Docker (for the Action)
+
+Reproducible runs
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Code-to-Docs Mapping (Day 1–4)
+1.  Parse the codebase into semantic chunks: Write a parser that walks through the codebase and extracts meaningful units: function signatures with docstrings, class definitions, API endpoint definitions, configuration schemas, and CLI command definitions. Each chunk gets a stable identifier (file path + function/class name).
+
+2.  Parse documentation into sections: Split markdown docs into sections by heading. Each section gets: its heading path (e.g., “Configuration > Environment Variables”), the raw content, and a list of code references it mentions (function names, class names, config keys, CLI commands).
+
+3.  Build the link graph: Create explicit links between doc sections and code chunks. Start with simple heuristics: if a doc section mentions a function name that exists in the codebase, link them. Then enhance with embeddings: compute embeddings for both code chunks and doc sections, and link any pairs with cosine similarity above a threshold.
+
+4.  Store the mapping: Persist the code-to-docs graph as a JSON file in the repo. This is your index. When code changes, you’ll query this graph to find which doc sections might be affected.
+
+Phase 2: Build the Change Detection Pipeline (Day 4–7)
+1.  Parse the git diff: On every PR, extract the list of changed files and the specific changes (added/removed/modified lines). Map each change to the code chunks it affects using your code parser.
+
+2.  Filter for meaningful changes: Not every code change affects docs. Skip: comment-only changes, whitespace changes, internal refactors that don’t change behavior, and test file changes. Focus on: API signature changes, configuration changes, new/removed features, and behavioral changes to existing functions.
+
+3.  Identify affected doc sections: For each meaningful code change, query your code-to-docs graph to find linked documentation sections. These are your “suspects” — sections that might now be stale.
+
+4.  Verify staleness with an LLM: For each suspect doc section, send the LLM: the old code, the new code, and the doc section content. Ask it to determine whether the documentation is still accurate given the code change. If not, ask it to explain specifically what’s wrong. This step filters out false positives.
+
+Phase 3: Build the Doc Repair Engine (Day 7–10)
+1.  Generate targeted corrections: For each confirmed stale section, send the LLM: the current doc section, the new code, and the staleness diagnosis from Phase 2. Ask it to rewrite only the stale parts, preserving the original style, tone, and structure. Explicitly instruct it not to rewrite parts that are still accurate.
+
+2.  Validate the corrections: Run a second LLM pass that checks: does the corrected doc accurately describe the new code? Did it preserve the parts that were already correct? Is the writing style consistent with the rest of the document? This is your quality gate before creating a PR.
+
+3.  Handle different correction modes: Not all staleness is the same. For simple changes (renamed parameter, updated default value), auto-fix with high confidence. For complex changes (new feature, removed capability), generate a draft with clear TODO markers and request human review. Let the confidence level determine the mode.
+
+Phase 4: Build the GitHub Action (Day 10–12)
+1.  Package as a GitHub Action: Create a Dockerfile and action.yml that defines the Action’s inputs (LLM API key, confidence threshold, auto-merge for high-confidence fixes), outputs (list of stale sections found, corrections generated), and triggers (runs on PRs that modify code files).
+
+2.  Implement the PR workflow: For high-confidence fixes: create a new branch, apply the corrections, open a PR with a clear description of what changed and why. For low-confidence flags: add a comment on the original PR listing the doc sections that need human review, with links to the specific sections.
+
+3.  Add a PR comment summary: On every PR that triggers the Action, post a comment: “Doc Check Results: 3 sections verified accurate, 1 auto-fixed (see PR #42), 2 flagged for review.” Include links to everything. This is what makes the tool feel integrated and professional.
+
+Phase 5: Test on a Real Repository (Day 12–13)
+1.  Fork a real open-source project: Pick a well-documented project (FastAPI, Pydantic, or similar). Fork it, install your Action, and deliberately make code changes that should invalidate docs. Test that the Action correctly identifies the staleness and generates reasonable fixes.
+
+2.  Measure accuracy: Across your test cases, track: true positives (correctly identified stale docs), false positives (flagged accurate docs as stale), false negatives (missed actual staleness), and correction quality (are the fixes actually right?). Report these numbers in your README.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Make it installable: Publish to the GitHub Actions marketplace (it’s free). Having an Action that other people can actually install is a fundamentally different portfolio signal than a repo that just sits there.
+
+2.  Record the demo: Show: a code change being pushed, the Action running, the PR comment appearing, and the auto-generated doc fix PR. Keep it under 3 minutes. Lead with the problem (“every team’s docs are perpetually stale”) and end with the result.
+
+
+Project 5: LLM Output Arbitration System
+What You’re Building: A multi-agent pipeline that takes any LLM-generated output, routes it to multiple competing critic models that independently evaluate it for accuracy, consistency, and completeness, then synthesizes their critiques into a single confidence-scored verdict with actionable callouts.
+
+
+Why This Project Lands Interviews
+
+Instead of building yet another system that generates answers, you’re building one that catches bad answers. This flips the script on every other portfolio project out there and demonstrates the evaluation mindset that AI teams are actively hiring for but rarely see in candidates.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Ecosystem standard
+
+Agent Framework
+
+LangGraph
+
+Top-requested framework in AI eng roles
+
+LLM Providers
+
+OpenAI + Anthropic + Ollama
+
+Multi-provider comparison is the point
+
+Structured Output
+
+Pydantic + instructor library
+
+Type-safe LLM outputs
+
+Storage
+
+SQLite + JSON
+
+Audit trail for every arbitration
+
+API
+
+FastAPI
+
+Production-grade serving
+
+Visualization
+
+React or Streamlit
+
+Verdict explorer UI
+
+
+Step-by-Step Build Guide
+
+Phase 1: Design the Critic Agent Architecture (Day 1–3)
+1.  Define the evaluation dimensions: Create three specialized critic roles. The Factual Accuracy Critic checks whether claims are verifiable and internally consistent. The Logical Consistency Critic checks whether the reasoning follows and conclusions are supported. The Completeness Critic checks whether the response addresses all parts of the question and flags gaps.
+
+2.  Design the structured critique format: Each critic returns a Pydantic model with: dimension (accuracy/logic/completeness), score (1–5), list of specific issues found (each with a quote from the original, the problem description, and severity), and an overall confidence in their own assessment. Use the instructor library to enforce structured outputs from every model.
+
+3.  Assign different models to different critics: This is deliberate. Route the accuracy critic through GPT-4o, the logic critic through Claude, and the completeness critic through a local Llama model. The disagreements between models are the most valuable signal. If all three used the same model, they’d share the same blind spots.
+
+Phase 2: Build the Orchestration Layer with LangGraph (Day 3–6)
+1.  Define the graph: Create a LangGraph state graph with nodes for: input parsing, parallel critic dispatch, critique collection, disagreement detection, adjudication, and verdict synthesis. The graph should handle the full lifecycle from receiving an output to delivering a verdict.
+
+2.  Implement parallel critic dispatch: All three critics should run in parallel, not sequentially. Use LangGraph’s branching to fan out to all critics simultaneously and fan in when all results are collected. This keeps latency reasonable and mirrors how real multi-agent systems are built.
+
+3.  Build the disagreement detector: After collecting all critiques, compare them. Flag cases where critics disagree on whether something is an issue, where severity ratings differ by more than 2 points, or where one critic found issues the others missed entirely. These disagreements are the interesting cases.
+
+4.  Handle edge cases in the graph: What if one critic’s API call fails? Implement retry logic and graceful degradation — the system should still produce a verdict from the remaining critics, with a note that one dimension has lower confidence. What if all critics agree it’s perfect? Short-circuit the adjudicator and return a high-confidence pass.
+
+Phase 3: Build the Adjudicator Agent (Day 6–8)
+1.  Design the adjudication prompt: The adjudicator receives: the original output being evaluated, all three critic reports, and the list of detected disagreements. Its job is to weigh the evidence, resolve conflicts, and produce a final verdict. Prompt it to reason through each disagreement explicitly.
+
+2.  Implement evidence-based resolution: When critics disagree about a factual claim, the adjudicator should attempt to verify it. When they disagree on logic, the adjudicator should trace the reasoning chain step by step. When they disagree on completeness, the adjudicator should re-read the original question and determine what was actually required.
+
+3.  Produce the final verdict: A structured output with: overall quality score (1–10), confidence level, a list of confirmed issues (with severity and evidence), a list of dismissed flags (issues one critic raised but the adjudicator overruled, with reasoning), and a one-paragraph summary of the assessment.
+
+Phase 4: Build the Verdict Explorer UI (Day 8–10)
+1.  Create the main verdict view: Display the original output with inline annotations. Each flagged issue should be highlighted in the text with a colored marker (red for confirmed issues, yellow for low-confidence flags, green for explicitly validated claims). Clicking a marker shows the full evidence chain.
+
+2.  Build the critic comparison panel: A side-by-side view showing all three critics’ assessments next to each other. Highlight agreements in green and disagreements in orange. This visual makes the multi-agent architecture immediately comprehensible to anyone reviewing your portfolio.
+
+3.  Add a batch mode: Allow submitting multiple outputs for arbitration. Show results in a sortable table with: output excerpt, overall score, number of issues found, and confidence. This demonstrates the system works at scale, not just for one-off demos.
+
+Phase 5: Expose as an API and Add Analytics (Day 10–12)
+1.  Build the FastAPI service: POST /v1/arbitrate accepts an LLM output (and optionally the original prompt) and returns the full verdict. POST /v1/arbitrate/batch accepts multiple outputs. GET /v1/arbitrations/{id} retrieves a past verdict. Keep the API clean and well-documented with OpenAPI specs.
+
+2.  Add analytics on critic behavior: Over many arbitrations, track: which critic finds the most issues, which critic is overruled by the adjudicator most often, which failure types are most common, and how often critics agree vs. disagree. This meta-analysis is portfolio gold.
+
+3.  Containerize everything: Docker-compose with the FastAPI service, the LangGraph pipeline, and the SQLite database. Include a docker-compose.yml that spins up Ollama locally for the completeness critic so reviewers can run the full system without paid API keys for all three providers.
+
+Phase 6: Polish for Portfolio (Day 12–14)
+1.  Prepare compelling test cases: Run the system against: a factually incorrect LLM response (planted errors), a logically flawed argument, a response that technically answers the question but misses the point, and a genuinely good response (to show it can give a clean bill of health). Screenshot the verdicts for all four.
+
+2.  Write the narrative: Frame it as: “I built a system where AI models audit each other’s work. Three specialized critics independently evaluate any LLM output, and an adjudicator resolves their disagreements into a single verdict.” Lead with the architecture diagram showing the parallel fan-out pattern. End with the analytics showing that multi-model critique catches issues that single-model self-evaluation misses.
+
+
+Project 6: RAG Pipeline with Hybrid Search Over Internal Docs
+What You’re Building: A production-grade Retrieval-Augmented Generation system that ingests a company’s internal documentation, indexes it with both dense vector and sparse keyword search, retrieves the most relevant context for any question, and generates grounded answers with inline source citations.
+
+
+Why This Project Lands Interviews
+
+RAG is the single most requested skill in AI engineering job descriptions. But most candidates build a toy demo with a single PDF. You’re building a system with hybrid retrieval, chunking strategy decisions, and citation verification — the production concerns that separate a real RAG engineer from someone who followed a LangChain quickstart.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Ecosystem standard
+
+Embeddings
+
+OpenAI text-embedding-3-small
+
+Cost-effective, high quality
+
+Vector Store
+
+ChromaDB or Qdrant
+
+File-based or containerized
+
+Sparse Search
+
+BM25 via rank_bm25
+
+Keyword matching for exact terms
+
+LLM
+
+GPT-4o or Claude Sonnet
+
+Strong grounding and citation
+
+Chunking
+
+LangChain text splitters
+
+Configurable overlap and size
+
+API
+
+FastAPI
+
+Async-native, production-grade
+
+Containerization
+
+Docker
+
+Reproducible deployment
+
+
+
+
+
+
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Ingestion and Chunking Pipeline (Day 1–3)
+1.  Build a multi-format document loader: Accept markdown, text, HTML, and PDF files. Normalize everything into clean plaintext with metadata (source file, section heading, page number). Store raw documents alongside processed versions so you can re-index without re-uploading.
+
+2.  Implement configurable chunking: Build three chunking strategies and make them switchable: fixed-size with overlap (baseline), recursive character splitting by section headers (structure-aware), and semantic chunking that splits on topic boundaries using embedding similarity. Track which strategy each chunk used.
+
+3.  Generate and store embeddings: Embed every chunk using text-embedding-3-small. Store in ChromaDB with metadata: source document, chunk index, section heading, chunking strategy, and character count. Build the BM25 index in parallel over the same chunks. Both indexes must stay in sync.
+
+4.  Add deduplication: Before inserting a chunk, check for near-duplicates (cosine similarity > 0.95 against existing chunks). Flag and skip duplicates. This prevents the retriever from wasting context window slots on redundant content when the same information appears in multiple docs.
+
+Phase 2: Build the Hybrid Retrieval Engine (Day 3–6)
+1.  Implement dense retrieval: Query the vector store with the embedded user question. Return the top-k chunks ranked by cosine similarity. Start with k=10.
+
+2.  Implement sparse retrieval: Run the same query through BM25 over the chunk corpus. Return top-k by BM25 score. This catches exact keyword matches that semantic search might miss — critical for technical documentation with specific function names, config keys, or error codes.
+
+3.  Build the fusion layer: Implement Reciprocal Rank Fusion (RRF) to combine dense and sparse results into a single ranked list. RRF assigns scores based on rank position across both lists and merges them. Make the weighting configurable (e.g., 0.7 dense / 0.3 sparse) so you can tune it per use case.
+
+4.  Add a reranker: After fusion, send the top 20 candidates through a cross-encoder reranker (use a small model or LLM-as-judge) that scores each chunk’s relevance to the actual question. Keep the top 5. This second pass dramatically improves precision and is a strong interview talking point.
+
+Phase 3: Build the Generation and Citation Layer (Day 6–9)
+1.  Design the grounded generation prompt: Construct a system prompt that instructs the LLM to answer only from the provided context, cite specific chunks using bracketed references ([1], [2]), and explicitly state when the context doesn’t contain enough information to answer. Include the retrieved chunks as numbered context blocks.
+
+2.  Implement citation verification: After generation, parse the model’s citations and verify each one. Does [1] actually support the claim it’s attached to? Send each citation-claim pair to an LLM-as-judge for verification. Flag unsupported citations. This is the quality layer most RAG systems skip entirely.
+
+3.  Build the answer confidence scorer: Score each answer on: retrieval confidence (how relevant were the top chunks?), citation coverage (what percentage of claims have verified citations?), and answer completeness (did the response address all parts of the question?). Return a composite confidence score alongside the answer.
+
+4.  Handle the “I don’t know” case gracefully: If retrieval confidence is below a threshold, don’t hallucinate. Return a structured response that says what the system found, what it couldn’t find, and which documents might be worth checking manually. This is more useful than a fabricated answer and signals production maturity.
+
+Phase 4: Build the Evaluation Framework (Day 9–11)
+1.  Create a golden Q&A dataset: Write 50+ question-answer pairs by hand, each tied to specific sections of your document corpus. Include straightforward lookups, multi-hop questions (answer requires combining information from two documents), questions with no answer in the corpus, and ambiguous questions.
+
+2.  Implement automated eval metrics: For each test case, measure: answer correctness (LLM-as-judge against golden answer), faithfulness (are all claims grounded in retrieved context?), retrieval relevance (were the right chunks retrieved?), and citation accuracy (do citations actually support claims?). Run the full suite on every pipeline change.
+
+3.  Build a chunking strategy comparison: Run the same eval suite across your three chunking strategies. Generate a comparison report showing which strategy wins on which metrics. This data drives your architecture decisions and gives you concrete numbers for interviews.
+
+Phase 5: Expose as an API and Dashboard (Day 11–13)
+1.  Build the FastAPI service: POST /v1/ask accepts a question and returns the answer with citations, confidence scores, and source metadata. GET /v1/documents lists indexed documents. POST /v1/ingest accepts new documents for indexing. Include OpenAPI documentation.
+
+2.  Build a simple query dashboard: A Streamlit or React frontend where you can ask questions and see: the generated answer with clickable citations, the retrieved chunks ranked by relevance, confidence scores broken down by dimension, and a toggle to compare hybrid vs. dense-only retrieval side by side.
+
+3.  Containerize everything: Docker-compose with the API service, ChromaDB, and the frontend. Include a seed script that indexes a sample documentation corpus so reviewers can spin it up and test immediately.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record a demo walkthrough: Show: ingesting a set of documents, asking questions of varying difficulty, the citation verification catching a hallucination, and the hybrid vs. dense-only comparison. Keep it under 4 minutes.
+
+2.  Write the case study: Frame it as: “I built a RAG system with hybrid search that achieves X% faithfulness and Y% citation accuracy on a 50-question eval suite.” Lead with the numbers. Explain why hybrid beats dense-only for technical documentation. Show the chunking strategy comparison data.
+
+
+Project 7: Semantic Caching Layer for LLM APIs
+What You’re Building: A middleware caching service that sits between your application and any LLM provider, detects semantically similar requests that have already been answered, and serves cached responses instantly — cutting latency to near-zero and reducing API costs by 30–60% on typical workloads.
+
+
+Why This Project Lands Interviews
+
+Every company running LLMs at scale has the same problem: redundant API calls burning money and adding latency. Building a semantic cache proves you think about infrastructure efficiency, not just model accuracy — and it’s the kind of system that engineering managers immediately understand the ROI of.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Ecosystem compatibility
+
+Embeddings
+
+OpenAI text-embedding-3-small
+
+Fast, cheap, high quality
+
+Vector Store
+
+Redis + RedisVL or Qdrant
+
+Sub-millisecond lookups
+
+Proxy Layer
+
+FastAPI
+
+Drop-in API replacement
+
+Cache Policy
+
+Custom TTL + similarity threshold
+
+Tunable hit rate vs. freshness
+
+Monitoring
+
+Prometheus + Grafana
+
+Real-time hit rate dashboards
+
+Containerization
+
+Docker + docker-compose
+
+Multi-service orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Cache Index and Similarity Engine (Day 1–3)
+1.  Design the cache key strategy: You can’t use exact string matching — “What is Python?” and “Explain Python to me” should hit the same cache entry. Embed every incoming prompt using text-embedding-3-small and store the embedding alongside the response in your vector store.
+
+2.  Build the similarity lookup: On every incoming request, embed the prompt and query the vector store for the nearest neighbor. If cosine similarity exceeds a configurable threshold (start at 0.95), it’s a cache hit. Return the stored response. If below threshold, it’s a miss — forward to the LLM provider.
+
+3.  Implement cache storage: After a cache miss, forward the request to the actual LLM, capture the full response (including token counts, model ID, and finish reason), and store it alongside the prompt embedding. Include metadata: timestamp, TTL expiry, hit count, and the original prompt text for debugging.
+
+4.  Handle system prompt and parameters: Two identical user prompts with different system prompts or temperature settings should NOT share cache entries. Incorporate the system prompt hash and key generation parameters (temperature, max_tokens, model) into the cache key. This prevents cross-contamination between different use cases.
+
+Phase 2: Build the Drop-In Proxy API (Day 3–5)
+1.  Mirror the OpenAI API contract: Build a FastAPI service that accepts the exact same request format as the OpenAI chat completions endpoint. This means any application can switch to your cache proxy by just changing the base URL — zero code changes. Return the same response format with an additional header indicating cache hit/miss.
+
+2.  Add provider routing: Behind the proxy, support multiple LLM providers (OpenAI, Anthropic, Ollama). Route based on the model field in the request. The cache layer is provider-agnostic — a cached OpenAI response can’t be served for an Anthropic request, but the cache logic itself is shared.
+
+3.  Implement streaming support: Cache hits should return instantly (no streaming needed). Cache misses should stream the response from the provider to the client while simultaneously buffering it for cache storage. This is the tricky part — you need to handle partial responses and only cache complete, successful responses.
+
+Phase 3: Build Cache Policies and Eviction (Day 5–8)
+1.  Implement TTL-based expiration: Every cache entry gets a configurable TTL. For factual/stable queries, set long TTLs (24h+). For queries that reference time or current events, set short TTLs (1h) or disable caching entirely. Build a classifier that auto-assigns TTL tiers based on prompt content.
+
+2.  Add cache invalidation triggers: When the system prompt for a feature changes, invalidate all cache entries associated with that system prompt hash. When a model is upgraded (e.g., GPT-4o to a newer version), invalidate entries for that model. Provide API endpoints for manual invalidation by prefix or tag.
+
+3.  Build the similarity threshold tuner: Expose an endpoint that lets you test different similarity thresholds against historical data. Show: at 0.90 threshold, hit rate is X% but Y% of hits returned slightly wrong answers. At 0.98 threshold, hit rate drops to Z% but accuracy is near-perfect. This tradeoff visualization is the core interview talking point.
+
+4.  Implement adaptive thresholds: Different request types have different tolerance for approximate matches. Classification tasks can tolerate lower similarity (0.90) because the answer space is constrained. Creative generation tasks need higher similarity (0.98) or should skip caching entirely. Let the system learn these thresholds from feedback.
+
+Phase 4: Build Monitoring and Analytics (Day 8–10)
+1.  Instrument everything with Prometheus metrics: Track: cache hit rate (overall and per-model), average latency for hits vs. misses, estimated cost savings per hour/day, cache size and eviction rate, and similarity score distribution for hits and near-misses. Export as Prometheus metrics.
+
+2.  Build the Grafana dashboard: Create panels showing: real-time hit rate, cumulative cost savings (the money shot), latency comparison (cached vs. uncached P50/P95/P99), cache capacity utilization, and a time series of the similarity threshold’s effect on hit rate over the past 7 days.
+
+3.  Add a near-miss analyzer: Track queries that fell just below the similarity threshold. These are potential cache hits if the threshold were slightly lower. Analyzing near-misses lets you tune the threshold with real data and identify opportunities for query normalization (e.g., stripping filler words before embedding).
+
+Phase 5: Containerize and Load Test (Day 10–12)
+1.  Docker-compose the full stack: Services: FastAPI proxy, Redis (with RedisVL), Prometheus, Grafana, and an optional Ollama instance for local model testing. Include pre-configured Grafana dashboards so reviewers see data immediately.
+
+2.  Run a realistic load test: Send 2,000+ requests through the system using a mix of unique and repeated queries (simulating realistic usage patterns). Measure: hit rate convergence over time, latency percentiles, and total cost savings. These numbers are your portfolio headline.
+
+3.  Write the README as an internal proposal: Frame it as: “Here’s what this would save us if deployed in front of our LLM calls.” Include the load test results, the cost savings projection, and a deployment guide. This isn’t a tutorial — it’s a business case with code attached.
+
+Phase 6: Polish for Portfolio (Day 12–14)
+1.  Record the demo: Show: a fresh query hitting the LLM (with latency), the same query hitting the cache (instant), a semantically similar query also hitting the cache, and the Grafana dashboard showing cost savings accumulate in real time.
+
+2.  Lead with the number: “A drop-in caching layer that reduced LLM API costs by X% and P95 latency by Y% on a 2,000-request load test.” That’s the headline. Everything else is supporting evidence.
+
+
+Project 8: Text-to-SQL Interface with Guardrails and Hallucination Detection
+What You’re Building: A natural language interface that translates plain English questions into SQL queries against a real database, executes them safely with guardrails preventing destructive operations, validates that the generated SQL actually answers the question asked, and presents results with a confidence score.
+
+
+Why This Project Lands Interviews
+
+Text-to-SQL is one of the highest-value applications of LLMs in enterprise settings, and it’s notoriously hard to get right. Building one with guardrails and hallucination detection proves you can ship AI features that a compliance team would actually approve — which is the bar for production AI at any serious company.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Standard for data tooling
+
+LLM
+
+GPT-4o or Claude Sonnet
+
+Strong structured output
+
+Database
+
+PostgreSQL or DuckDB
+
+Real SQL engine, not SQLite toy
+
+Schema Extraction
+
+SQLAlchemy
+
+Automatic schema introspection
+
+Guardrails
+
+Custom middleware
+
+Prevents destructive queries
+
+Validation
+
+LLM-as-judge + result check
+
+Hallucination detection
+
+API
+
+FastAPI
+
+Production-grade serving
+
+Containerization
+
+Docker + docker-compose
+
+DB + API orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Schema-Aware Prompt Engine (Day 1–3)
+1.  Auto-extract the database schema: Use SQLAlchemy to introspect the database and produce a structured representation: tables, columns with types, primary/foreign key relationships, and sample values for categorical columns. This becomes the context the LLM uses to write SQL.
+
+2.  Build the dynamic prompt constructor: For each user question, assemble a prompt with: the relevant schema (not the entire database — filter to tables likely needed), foreign key relationships, sample values for disambiguation, and any column descriptions or business glossary terms. Include 3–5 few-shot examples of question-to-SQL pairs specific to this schema.
+
+3.  Implement schema filtering: For large databases, sending the entire schema wastes context and confuses the model. Build a lightweight relevance filter: embed the user question, embed table/column descriptions, and include only tables above a similarity threshold. This keeps the prompt focused and improves generation accuracy.
+
+4.  Handle ambiguity explicitly: When the user’s question maps to multiple possible interpretations (e.g., “revenue” could mean gross or net), return a structured clarification request instead of guessing. List the interpretations with example queries for each. This is a production feature most demos skip.
+
+Phase 2: Build the SQL Generation and Safety Layer (Day 3–6)
+1.  Generate SQL with structured output: Use the instructor library or function calling to ensure the LLM returns: the SQL query, a natural language explanation of what it does, a confidence score, and a list of tables and columns accessed. Validate the SQL syntax before execution using sqlparse.
+
+2.  Implement the guardrail middleware: Before any query executes, pass it through a safety layer that: blocks all DDL (CREATE, ALTER, DROP), blocks all DML writes (INSERT, UPDATE, DELETE), enforces a row limit (LIMIT 1000 if none specified), rejects queries with subqueries deeper than 3 levels, and blocks queries estimated to scan more than N rows using EXPLAIN. Make each rule configurable and log every blocked query with the reason.
+
+3.  Add query sandboxing: Execute all generated queries in a read-only transaction that rolls back automatically. Use a database user with SELECT-only permissions as a second layer of defense. Even if the guardrail layer misses something, the database permissions prevent damage.
+
+4.  Build the execution layer: Run the validated SQL, capture results as a DataFrame, and package the response with: raw results (capped at the row limit), execution time, rows returned, and the EXPLAIN plan. Log everything for auditability.
+
+Phase 3: Build the Hallucination Detection System (Day 6–9)
+1.  Implement SQL-to-question verification: After generating the SQL, send the query back to the LLM with the prompt: “What question does this SQL query answer?” Compare the back-translated question to the original. If they diverge significantly, the SQL probably doesn’t answer the right question. Score the alignment and flag low-confidence translations.
+
+2.  Add result sanity checking: After execution, perform basic sanity checks: are aggregated values within plausible ranges? Do counts match expected magnitudes? Are date ranges within the data’s timespan? Are there NULL-heavy columns that might indicate a bad JOIN? Flag anomalies with specific explanations.
+
+3.  Build the multi-query validation: For complex questions, generate two different SQL approaches independently (e.g., using different JOIN strategies or aggregation methods). Execute both. If results match, confidence is high. If they diverge, flag the discrepancy and present both results with explanations. Agreement between independent approaches is a strong correctness signal.
+
+4.  Create a confidence scoring system: Combine signals into a single confidence score: SQL syntax validity, back-translation alignment, result sanity check pass rate, multi-query agreement, and schema coverage (did the query use the tables/columns you’d expect for this question type?). Display confidence prominently alongside every result.
+
+Phase 4: Build the Query Interface (Day 9–11)
+1.  Build the API endpoints: POST /v1/query accepts a natural language question and returns: the generated SQL, execution results, confidence score, and any guardrail warnings. GET /v1/schema returns the database schema. GET /v1/history returns past queries and results for the session.
+
+2.  Create a Streamlit or React frontend: A clean interface with: a text input for natural language questions, the generated SQL displayed with syntax highlighting (editable for power users), results in a sortable data table, the confidence score with a breakdown of contributing signals, and a history panel showing past queries.
+
+3.  Add a feedback loop: Let users mark results as correct or incorrect. Store this feedback alongside the query. Incorrect results become new test cases for the eval suite. Correct results become new few-shot examples that improve future generation. This is the flywheel.
+
+Phase 5: Build the Evaluation Suite (Day 11–13)
+1.  Create a golden query dataset: Write 50+ natural language questions with verified correct SQL and expected results. Include: simple lookups, multi-table JOINs, aggregations with GROUP BY, date range filters, questions with ambiguous phrasing, and questions the database cannot answer. This is your regression suite.
+
+2.  Run automated evals: For each test case, measure: SQL exact match (does the generated SQL match the golden query?), execution match (do results match regardless of SQL approach?), hallucination detection rate (does the system correctly flag bad queries?), and guardrail effectiveness (are dangerous queries blocked?).
+
+3.  Containerize and document: Docker-compose with: PostgreSQL seeded with sample data, the FastAPI service, and the frontend. Include a README that leads with the eval numbers: “X% execution accuracy, Y% hallucination detection rate, zero unsafe queries executed across Z test cases.”
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Show: a natural language question being translated to SQL, the guardrail blocking a dangerous query, the hallucination detector catching a bad translation, and the multi-query validation resolving a discrepancy. Under 4 minutes.
+
+2.  Write the narrative: Frame it as: “I built a text-to-SQL system with a X% accuracy rate that blocks 100% of destructive operations and detects Y% of hallucinated queries before they reach the user.” Lead with safety. Companies care more about not breaking things than about accuracy percentages.
+
+
+Project 9: Prompt Versioning and A/B Testing Platform
+What You’re Building: A platform that treats prompts as versioned artifacts (like code), lets teams deploy multiple prompt variants simultaneously, splits traffic between them, measures performance across custom metrics, and declares statistically significant winners — bringing the rigor of feature flagging and experimentation to LLM-powered features.
+
+
+Why This Project Lands Interviews
+
+Most AI teams change prompts by editing a string in production and hoping for the best. This project shows you understand that prompt engineering at scale is an experimentation problem, not a guessing game. It signals the kind of operational maturity that distinguishes senior AI engineers from junior ones.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Standard for ML tooling
+
+LLM Provider
+
+OpenAI / Anthropic
+
+Multi-provider support
+
+Storage
+
+PostgreSQL
+
+Versioning, experiments, results
+
+Statistics
+
+scipy.stats
+
+Significance testing
+
+API
+
+FastAPI
+
+Experiment management + serving
+
+Dashboard
+
+React or Streamlit
+
+Experiment monitoring
+
+Containerization
+
+Docker + docker-compose
+
+Full stack orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Prompt Registry (Day 1–3)
+1.  Design the versioning schema: Every prompt gets a unique ID, a version number (auto-incrementing), the system prompt text, any few-shot examples, model parameters (temperature, max_tokens), a commit message explaining the change, and a timestamp. Store in PostgreSQL. This is git for prompts.
+
+2.  Build the registry API: POST /prompts creates a new prompt. POST /prompts/{id}/versions creates a new version. GET /prompts/{id}/versions lists all versions with diffs. GET /prompts/{id}/versions/{v} retrieves a specific version. Add a diff endpoint that shows exactly what changed between any two versions.
+
+3.  Add rollback support: Any version can be marked as the “active” version for production. Rolling back is just changing which version is active — no code deploy needed. Log every activation/deactivation event with who triggered it and why. This audit trail is critical for production trust.
+
+4.  Implement prompt templates with variables: Prompts should support template variables (e.g., {{user_name}}, {{context}}) that get filled at request time. The versioning system versions the template, not the filled prompt. Validate that all variables in the template are provided at serve time.
+
+Phase 2: Build the Experiment Engine (Day 3–6)
+1.  Design the experiment schema: An experiment has: a name, the prompt ID being tested, two or more variant versions, traffic split percentages (e.g., 50/50 or 80/10/10), primary metric (what defines “better”), target sample size for significance, and status (draft/running/completed/cancelled).
+
+2.  Build the traffic splitter: When a request comes in for a prompt that has an active experiment, the splitter assigns the request to a variant based on the configured percentages. Use consistent hashing on a user ID or session ID so the same user always sees the same variant. Log the assignment.
+
+3.  Implement the serving endpoint: POST /v1/completions accepts a prompt ID and input variables. The system: resolves the active version (or experiment variant), fills the template, calls the LLM, logs the full request/response with the variant assignment, and returns the response. The caller doesn’t know or care about the experiment.
+
+4.  Add guardrails for experiments: Auto-stop experiments if a variant’s error rate exceeds a threshold (e.g., 10% API failures). Auto-stop if the losing variant is performing significantly worse than baseline on the primary metric. Notify the experiment owner when either condition triggers. This prevents bad prompts from affecting too many users.
+
+Phase 3: Build the Metrics and Analysis Layer (Day 6–9)
+1.  Define pluggable metric collectors: Build a metric framework where teams can register custom evaluation functions. Built-in metrics: latency, token usage, cost, and error rate. Custom metrics: LLM-as-judge quality score, task-specific accuracy, user satisfaction signals. Each metric runs asynchronously after the response is returned.
+
+2.  Implement statistical significance testing: For each experiment, continuously calculate: the mean and variance of each metric per variant, a two-sample t-test (or Mann-Whitney U for non-normal distributions) comparing variants, the p-value and confidence interval, and the minimum detectable effect size given current sample size. Display whether the experiment has reached significance.
+
+3.  Build the results dashboard: For each running experiment, show: real-time metric comparison across variants (bar charts with confidence intervals), sample size progress toward the significance target, a time series of metric values to detect trends or instability, and a clear “winner/no winner/inconclusive” status with the supporting statistics.
+
+4.  Add automated winner declaration: When an experiment reaches statistical significance at the configured confidence level (default 95%), automatically: mark the winning variant, notify the experiment owner, and optionally auto-promote the winner to the active version. Include a 24-hour hold period before auto-promotion in case of data quality issues.
+
+Phase 4: Build the Management Interface (Day 9–11)
+1.  Create the experiment management UI: A dashboard where teams can: create new experiments from the prompt registry, configure traffic splits and metrics, monitor running experiments, view completed experiment results with full statistical analysis, and promote winners to production with one click.
+
+2.  Add prompt comparison tools: A side-by-side view where you can pick any two prompt versions, send the same set of test inputs to both, and see outputs compared with automated quality scores. This is useful for quick sanity checks before launching a full experiment.
+
+3.  Build the audit log: Every action is logged: prompt creation, version changes, experiment start/stop, variant assignments, winner promotions, and rollbacks. This log answers “who changed the prompt that broke the feature last Tuesday?” — a question every AI team eventually needs to answer.
+
+Phase 5: Integration and Testing (Day 11–13)
+1.  Build a demo scenario: Seed the system with a customer support email classifier. Create three prompt variants with meaningfully different approaches (e.g., zero-shot vs. few-shot vs. chain-of-thought). Run an experiment with 500+ synthetic requests. Let it converge to a winner.
+
+2.  Containerize the full stack: Docker-compose with: PostgreSQL, the FastAPI service, the experiment dashboard, and a worker for async metric computation. Include seed data so reviewers can see a completed experiment immediately.
+
+3.  Write integration tests: Test: prompt versioning and rollback, traffic splitting consistency (same user always gets same variant), metric collection accuracy, significance calculation correctness (use known distributions), and auto-stop on error rate spikes.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Walk through: creating a prompt, launching an experiment, watching metrics converge, the system declaring a winner with statistical backing, and promoting the winner to production. Show the audit log. Under 4 minutes.
+
+2.  Write the narrative: Frame it as: “I built a prompt experimentation platform that brings feature-flagging rigor to LLM development. Teams can test prompt changes against live traffic and get statistically significant results instead of guessing.” Position it as infrastructure, not a toy.
+
+
+Project 10: Fine-Tuning Pipeline with LoRA on a Domain-Specific Dataset
+What You’re Building: An end-to-end pipeline that takes a domain-specific dataset, applies LoRA (Low-Rank Adaptation) fine-tuning to an open-source base model, evaluates the fine-tuned model against the base model on task-specific benchmarks, and packages the result for deployment — with full experiment tracking and reproducibility.
+
+
+Why This Project Lands Interviews
+
+Fine-tuning is where AI engineering meets ML engineering. Most candidates either can’t fine-tune at all or run a notebook once and call it done. Building a reproducible pipeline with evaluation and experiment tracking proves you can own the full model customization lifecycle that production AI teams need.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+ML ecosystem standard
+
+Base Model
+
+Llama 3 8B or Mistral 7B
+
+Strong open-source options
+
+Fine-Tuning
+
+Hugging Face PEFT + TRL
+
+Industry-standard LoRA tooling
+
+Training
+
+Unsloth or QLoRA
+
+Memory-efficient on consumer GPU
+
+Dataset
+
+Custom domain-specific
+
+Your unique value add
+
+Eval
+
+Custom + lm-eval-harness
+
+Rigorous benchmarking
+
+Experiment Tracking
+
+Weights & Biases or MLflow
+
+Reproducible runs
+
+Deployment
+
+vLLM or Ollama
+
+Fast inference serving
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Training Dataset (Day 1–4)
+1.  Choose a specific domain and task: Pick a narrow, well-defined task where you can demonstrate clear improvement over the base model. Examples: legal clause classification, medical note summarization, code review comment generation, or customer support tone matching. The domain doesn’t need to be exotic — it needs to be measurable.
+
+2.  Curate and format the training data: Collect or create 500–2,000 high-quality examples in instruction-following format (instruction, input, output). Quality matters more than quantity — each example should represent the exact behavior you want the model to learn. Clean aggressively: remove duplicates, fix formatting inconsistencies, and verify correctness.
+
+3.  Build train/validation/test splits: Split your data 80/10/10. Ensure no data leakage between splits (especially important if examples were derived from the same source documents). The test set is sacred — never train on it, never tune hyperparameters against it. It’s your honest performance measure.
+
+4.  Create the evaluation benchmark: Beyond the test split, create 30–50 handcrafted evaluation examples that cover edge cases, hard examples, and failure modes you expect. Score each one with task-specific metrics (not just perplexity). This benchmark is how you prove the fine-tuned model is better, not just different.
+
+Phase 2: Set Up the Training Pipeline (Day 4–7)
+1.  Configure LoRA parameters: Set up PEFT with LoRA targeting the attention layers (q_proj, v_proj as baseline). Key hyperparameters: rank (start with 16), alpha (2x rank), dropout (0.05). Document why you chose these values. Use QLoRA (4-bit quantization) if running on a consumer GPU with limited VRAM.
+
+2.  Build the training script with experiment tracking: Write a configurable training script that logs to Weights & Biases (or MLflow): all hyperparameters, training loss curves, validation metrics at each checkpoint, GPU memory usage, and training duration. Every run should be reproducible from its config file alone.
+
+3.  Implement early stopping and checkpointing: Save model checkpoints at regular intervals. Track validation loss and stop training when it plateaus or starts increasing. This prevents overfitting and saves compute. Log which checkpoint was selected as the best and why.
+
+4.  Run a hyperparameter sweep: Test at least 3 configurations varying rank (8, 16, 32), learning rate (1e-4, 2e-4, 5e-4), and number of epochs (1, 3, 5). Log all runs to the experiment tracker. Produce a comparison table showing how each configuration performs on the validation set. This data drives your final configuration choice.
+
+Phase 3: Evaluate and Compare Models (Day 7–10)
+1.  Run the base model against your benchmark: Before any fine-tuning claims, establish the baseline. Run the base model (with the same prompt template) against your entire evaluation benchmark. Score every example. Store these results — they’re the denominator in every improvement claim you make.
+
+2.  Run the fine-tuned model against the same benchmark: Using the best checkpoint from training, evaluate on the exact same benchmark with the exact same scoring criteria. Compare head-to-head on every example. Calculate: overall accuracy/quality improvement, per-category performance breakdown, examples where fine-tuning helped, and examples where it hurt (regressions).
+
+3.  Add LLM-as-judge evaluation: Beyond automated metrics, use a strong model (GPT-4o) as a judge to blindly compare base vs. fine-tuned outputs on each test example. Have it score quality on a 1–5 scale and explain its reasoning. This gives you a human-interpretable quality signal alongside automated metrics.
+
+4.  Test for catastrophic forgetting: Fine-tuning can degrade general capabilities. Run a subset of standard benchmarks (common sense QA, instruction following) on both the base and fine-tuned model. If general performance dropped significantly, you may need to reduce training epochs or adjust LoRA rank. Document the tradeoffs.
+
+Phase 4: Build the Inference Pipeline (Day 10–12)
+1.  Package the LoRA adapter for deployment: Export the trained LoRA adapter weights (not the full model). The adapter is tiny (typically <100MB) while the base model is large (16GB+). This separation means you can swap adapters without reloading the base model — useful for serving multiple domain-specific models from one base.
+
+2.  Set up inference serving: Deploy using vLLM (for production-grade batched inference) or Ollama (for simpler local deployment). Load the base model, attach the LoRA adapter, and expose a chat completions API. Benchmark: tokens per second, latency P50/P95, and max concurrent requests.
+
+3.  Build an A/B comparison endpoint: Create an API that accepts a prompt and returns responses from both the base model and the fine-tuned model side by side. Include quality scores from the automated eval. This endpoint powers your demo and makes the improvement immediately visible.
+
+Phase 5: Containerize and Document (Day 12–13)
+1.  Package the full pipeline: Create a reproducible setup with: a training script that can be re-run with a single command, a data processing pipeline that produces training-ready datasets from raw inputs, an evaluation harness that benchmarks any model against your test suite, and an inference server with the fine-tuned model loaded.
+
+2.  Write the experiment report: A structured document showing: the problem and why fine-tuning was the right approach (vs. few-shot prompting or RAG), dataset statistics and curation methodology, hyperparameter sweep results, head-to-head comparison (base vs. fine-tuned) with specific examples, and catastrophic forgetting analysis.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Show: the base model struggling with a domain-specific task, the fine-tuned model handling it correctly, the W&B dashboard with training curves, and the A/B comparison endpoint with real examples. Under 4 minutes.
+
+2.  Write the headline: “I fine-tuned Llama 3 8B on [domain] data using LoRA and improved task performance from X% to Y% while maintaining Z% of general capabilities.” Every number should be backed by the evaluation data in your repo.
+
+
+Project 11: LLM Gateway with Rate Limiting, Fallback Routing, and Observability
+What You’re Building: A production API gateway that sits in front of all your organization’s LLM calls, enforces per-team rate limits and budgets, automatically falls back to alternative providers when a primary provider has an outage or rate-limits you, and provides unified observability across every LLM interaction.
+
+
+Why This Project Lands Interviews
+
+Every company with more than one team using LLMs ends up building something like this. It’s pure infrastructure engineering applied to AI — exactly the skill set that mid-level SWEs already have and that AI teams desperately need. This project lets you lead with your production engineering strengths while demonstrating deep AI systems knowledge.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+ or Go
+
+High-throughput proxy layer
+
+Proxy
+
+FastAPI or net/http
+
+Async-native request handling
+
+Rate Limiting
+
+Redis + token bucket
+
+Distributed, sub-ms enforcement
+
+Config
+
+YAML + hot reload
+
+No-deploy policy changes
+
+Observability
+
+OpenTelemetry + Prometheus
+
+Industry-standard tracing
+
+Dashboard
+
+Grafana
+
+Unified metrics visualization
+
+Providers
+
+OpenAI, Anthropic, Ollama
+
+Multi-provider support
+
+Containerization
+
+Docker + docker-compose
+
+Full stack orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Unified Proxy Layer (Day 1–3)
+1.  Build the provider abstraction: Create a unified interface that normalizes requests across OpenAI, Anthropic, and Ollama. Incoming requests use a standard format. The gateway translates to each provider’s API format, calls the provider, and translates the response back to the standard format. The caller never knows which provider served the request.
+
+2.  Implement request authentication and routing: Every request includes a team API key. The gateway validates the key, looks up the team’s configuration (allowed models, rate limits, budget), and routes to the appropriate provider. Teams can be restricted to specific models or providers based on their plan.
+
+3.  Add streaming passthrough: Support both streaming and non-streaming responses. For streaming, the gateway acts as a transparent proxy: it forwards chunks from the provider to the client in real time while simultaneously logging the complete response for observability. This is critical for latency-sensitive applications.
+
+4.  Handle request enrichment: The gateway can inject standard system prompts, append compliance disclaimers, or add content filters before forwarding to the provider. Make this configurable per team. This centralizes policy enforcement without requiring every team to implement it themselves.
+
+Phase 2: Build Rate Limiting and Budget Enforcement (Day 3–6)
+1.  Implement token bucket rate limiting: Use Redis to maintain per-team token buckets with configurable rates (requests per minute, tokens per minute). Enforce limits before forwarding the request. Return standard 429 responses with Retry-After headers when limits are hit. This must be atomic and distributed-safe.
+
+2.  Add budget caps: Each team gets a monthly or daily budget in dollars. Track spending by computing cost per request (input tokens * input price + output tokens * output price). When a team approaches their limit (80%), send a warning. When they hit it, block requests and return a clear error explaining the budget cap.
+
+3.  Build tiered rate limits: Different request types get different limits. A batch data processing job should have a lower priority than a real-time user-facing request. Implement priority queues so high-priority requests get served even when overall limits are near capacity.
+
+4.  Create the admin API: Endpoints for: viewing current rate limit status per team, adjusting limits and budgets without restart, viewing spending dashboards, and setting up alerts when teams approach limits. All changes are logged with who made them and when.
+
+Phase 3: Build the Fallback and Resilience Layer (Day 6–9)
+1.  Implement health checking: The gateway continuously monitors each provider’s health: send lightweight test requests every 30 seconds, track error rates and latency P99 over rolling windows, and maintain a status (healthy/degraded/down) for each provider-model combination. Store health history for post-incident analysis.
+
+2.  Build automatic fallback routing: When a primary provider is degraded or down, automatically route requests to a configured fallback. Example: if OpenAI GPT-4o is timing out, route to Anthropic Claude Sonnet. Define fallback chains per model tier (not per specific model) so the system always finds an available option.
+
+3.  Add retry with exponential backoff: Before falling back to another provider, retry the primary with exponential backoff (up to 3 retries). Distinguish between retryable errors (rate limits, timeouts) and non-retryable errors (auth failures, content policy violations). Only fall back for retryable errors that exhaust retries.
+
+4.  Implement circuit breakers: If a provider fails more than N times in M seconds, open the circuit — stop sending requests to that provider entirely and route everything to fallbacks. After a cooldown period, send a single test request (half-open state). If it succeeds, close the circuit and resume normal routing. Log every state change.
+
+Phase 4: Build the Observability Layer (Day 9–11)
+1.  Instrument with OpenTelemetry: Add distributed tracing spans for: request receipt, authentication, rate limit check, provider selection, LLM API call, response processing, and response delivery. Every span includes: team ID, model requested, model served, token counts, latency, and cost.
+
+2.  Export Prometheus metrics: Key metrics: requests per second (by team, model, provider), error rate (by team, model, provider, error type), latency percentiles (P50, P95, P99 by provider), token throughput (input + output tokens per second), cost per team per day, fallback trigger rate, and circuit breaker state changes.
+
+3.  Build the Grafana dashboards: Create three dashboards. Operations: provider health, error rates, fallback events, circuit breaker status. Business: per-team spending, budget utilization, usage trends. Performance: latency percentiles, token throughput, cache hit rates (if integrated with Project 7).
+
+4.  Add alerting rules: Configure alerts for: provider error rate above threshold, team approaching budget cap, latency P99 above SLA, and circuit breaker opening. Route alerts to Slack with actionable context: what happened, which teams are affected, and the auto-fallback status.
+
+Phase 5: Integration Test and Load Test (Day 11–13)
+1.  Build an integration test suite: Test: rate limiting enforces correctly under concurrent load, budget caps block requests at the right threshold, fallback routing activates when primary fails (simulate failures), circuit breakers open and close correctly, and streaming responses pass through without corruption.
+
+2.  Run a load test: Send 5,000+ concurrent requests through the gateway with mixed team keys, models, and priorities. Measure: gateway overhead latency (should be <10ms), rate limiting accuracy under load, fallback behavior under simulated provider outages, and dashboard accuracy (do displayed metrics match reality?).
+
+3.  Containerize the full stack: Docker-compose with: the gateway service, Redis, Prometheus, Grafana (with pre-configured dashboards), and mock provider endpoints for testing. Include a setup script that creates demo teams with different rate limits so reviewers can see the system in action immediately.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Show: requests flowing through the gateway with real-time Grafana metrics, a simulated provider outage triggering fallback routing, rate limiting kicking in for a high-volume team, and the circuit breaker opening and recovering. Under 4 minutes.
+
+2.  Write the narrative: Frame it as: “I built an LLM API gateway handling X requests/second with <10ms overhead, automatic multi-provider failover, and per-team budget enforcement.” This is infrastructure. Lead with the reliability numbers and the operational problem it solves.
+
+
+Project 12: AI Feature Flag System with Gradual Rollout and Quality Monitoring
+What You’re Building: A feature flag platform specifically designed for AI-powered features that supports gradual percentage-based rollouts, automatically monitors quality metrics during rollout, and triggers automatic rollback if the AI feature’s output quality degrades below a configurable threshold.
+
+
+Why This Project Lands Interviews
+
+Every engineering team uses feature flags for traditional software. Almost none have adapted the pattern for AI features, where “working” isn’t binary — it’s a quality gradient. This project proves you understand that shipping AI features requires different operational patterns than shipping traditional code, and you can build the tooling to support that.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Standard for AI tooling
+
+Storage
+
+PostgreSQL + Redis
+
+Durable config + fast evaluation
+
+Quality Eval
+
+Custom + LLM-as-judge
+
+Real-time quality scoring
+
+SDK
+
+Python client library
+
+Drop-in integration for apps
+
+Dashboard
+
+React or Streamlit
+
+Rollout monitoring
+
+Alerting
+
+Slack Webhooks
+
+Rollback notifications
+
+Containerization
+
+Docker + docker-compose
+
+Full stack orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Flag Evaluation Engine (Day 1–3)
+1.  Design the AI feature flag schema: Beyond traditional boolean flags, AI flags need: a rollout percentage (0–100%), a quality threshold (minimum acceptable quality score), a rollback trigger (conditions that cause automatic rollback), a baseline configuration (what to serve when the flag is off — e.g., the previous prompt version or a non-AI fallback), and the experimental configuration (the new AI feature being tested).
+
+2.  Build the evaluation SDK: A lightweight Python client that applications import. The core method: flag_client.evaluate(flag_name, user_context) returns which variant to serve. The SDK handles: consistent user assignment (same user always gets same variant via hashing), percentage-based rollout, local caching of flag configurations, and graceful degradation if the flag service is unreachable (default to baseline).
+
+3.  Implement targeting rules: Beyond random percentage splits, support targeting: by user segment (e.g., internal users first, then beta users, then everyone), by geography, by request metadata (e.g., only enable for certain input types), and allowlist/blocklist for specific user IDs. This lets teams do careful, controlled rollouts.
+
+4.  Build the flag management API: CRUD endpoints for flags, plus: POST /flags/{id}/rollout to update the percentage, POST /flags/{id}/pause to halt the rollout at the current percentage, and POST /flags/{id}/rollback to immediately switch all traffic to baseline. All changes are logged with the actor and reason.
+
+Phase 2: Build the Quality Monitoring Layer (Day 3–6)
+1.  Define quality metrics per flag: Each AI feature flag specifies how to measure quality. Built-in options: LLM-as-judge scoring (send each output to a judge model for a 1–5 rating), user feedback signals (thumbs up/down, explicit ratings), latency thresholds (AI features that are too slow degrade UX even if output is good), and error rate (API failures, malformed outputs, timeout rates).
+
+2.  Build the async quality evaluator: After every AI-flag-gated response, queue an async quality evaluation. The evaluator scores the output using the flag’s configured metrics and writes the score to the database. This must not add latency to the user-facing response. Use a background worker with a message queue.
+
+3.  Implement rolling quality windows: Track quality scores in rolling windows (last 100 evaluations, last 1 hour, last 24 hours). Calculate: mean quality score, standard deviation, P10 quality (worst 10th percentile), and the quality trend (improving, stable, degrading). Compare experimental vs. baseline scores continuously.
+
+4.  Build the automatic rollback trigger: When the experimental variant’s quality drops below the flag’s configured threshold for a sustained period (e.g., P10 below 3.0 for more than 50 consecutive evaluations), automatically: set the rollout percentage to 0%, send a Slack alert with the quality data, and log the rollback event with full context. Include a cooldown to prevent flapping.
+
+Phase 3: Build Gradual Rollout Automation (Day 6–9)
+1.  Implement staged rollout schedules: Define a rollout plan as a series of stages: 1% for 2 hours, 5% for 6 hours, 25% for 24 hours, 50% for 24 hours, 100%. At each stage boundary, the system checks quality metrics. If quality is above threshold, it auto-advances to the next stage. If quality dips, it pauses and alerts.
+
+2.  Add canary analysis: At each rollout stage, compare the experimental variant’s metrics against the baseline. Use statistical testing (similar to Project 9) to determine if there’s a significant quality difference. The rollout only advances when the experimental variant is statistically no worse than baseline.
+
+3.  Build the rollout dashboard: For each active rollout, show: current stage and percentage, quality metric comparison (experimental vs. baseline) over time, upcoming stage transitions and their conditions, any triggered pauses or rollbacks with reasons, and estimated time to full rollout based on current quality trends.
+
+4.  Support dark mode testing: Before any real rollout, support “shadow mode”: run the experimental variant on all traffic but don’t show results to users. Instead, log what would have been shown and evaluate quality offline. This catches catastrophic failures before any user is affected.
+
+Phase 4: Build the Dashboard and Integration (Day 9–11)
+1.  Create the flag management UI: A dashboard showing: all flags and their current status (off/rolling out/fully on/rolled back), real-time quality metrics for active flags, the rollout schedule with progress indicators, and a one-click rollback button with confirmation.
+
+2.  Build the analytics view: Historical data for each flag: quality metrics over the full rollout history, the impact of the AI feature on business metrics (if tracked), a summary of all rollback events and their causes, and the time-to-full-rollout for successful features.
+
+3.  Write the client SDK documentation: Show exactly how a developer integrates the flag into their application with code examples. Emphasize that the integration is minimal (3–5 lines of code) and the quality monitoring happens automatically. Include examples for common patterns: AI vs. non-AI fallback, prompt version A/B testing, and model swap testing.
+
+Phase 5: Integration Testing and Demo (Day 11–13)
+1.  Build a demo application: Create a simple app (e.g., an AI-powered email subject line generator) that uses the flag system. Show: the flag starting at 0%, gradual rollout with quality monitoring, the system detecting a deliberately bad prompt variant and auto-rolling back, and a successful rollout of a good variant to 100%.
+
+2.  Write integration tests: Test: consistent user assignment across evaluations, automatic rollback triggers correctly on quality degradation, staged rollout advances correctly on quality thresholds, and the SDK gracefully handles flag service outages.
+
+3.  Containerize everything: Docker-compose with: PostgreSQL, Redis, the flag service API, the background quality evaluator, the dashboard, and the demo application. Include a script that runs the full rollout demo scenario end to end.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Show the full lifecycle: flag created, rollout started at 1%, quality checked and advancing through stages, a bad variant detected and auto-rolled back with Slack alert, a good variant reaching 100%. Under 4 minutes.
+
+2.  Write the narrative: Frame it as: “I built a feature flag system for AI that catches quality regressions during rollout and auto-rolls back before users are impacted. Traditional feature flags can’t do this because AI features fail on a gradient, not a binary.” That distinction is the whole point.
+
+
+Project 13: Automated Eval Dataset Generator from Production Logs
+What You’re Building: A system that continuously mines production LLM logs, identifies interesting, edge-case, and failure-mode interactions, and automatically converts them into labeled evaluation test cases — building an ever-growing, production-representative eval dataset without manual curation.
+
+
+Why This Project Lands Interviews
+
+The hardest part of AI evaluation isn’t building the eval harness — it’s building the dataset. Most teams rely on hand-curated golden sets that go stale. You’re solving the data supply problem by turning production traffic into eval data automatically. This is a force multiplier that AI teams dream about.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Standard for ML pipelines
+
+Log Storage
+
+PostgreSQL or ClickHouse
+
+Queryable log warehouse
+
+Clustering
+
+scikit-learn + HDBSCAN
+
+Interaction pattern discovery
+
+LLM
+
+GPT-4o or Claude Sonnet
+
+Labeling and quality assessment
+
+Eval Runner
+
+Custom harness
+
+Run evals against the dataset
+
+Dashboard
+
+Streamlit
+
+Dataset explorer and curator
+
+Scheduler
+
+Cron or Celery
+
+Automated nightly processing
+
+Containerization
+
+Docker + docker-compose
+
+Full pipeline orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Log Ingestion and Normalization Layer (Day 1–3)
+1.  Design the log schema: Each production log entry captures: the user prompt, system prompt, model used, raw LLM response, latency, token counts, any user feedback signals (thumbs up/down, edits, retries), the application feature that generated this call, and a timestamp. Normalize across all LLM call sites into this unified format.
+
+2.  Build the ingestion pipeline: Create adapters for common logging sources: structured JSON logs, OpenTelemetry traces, and direct database reads. The pipeline deduplicates, validates schema compliance, and writes to the central log store. Handle PII by offering configurable redaction rules (regex patterns, named entity detection) that clean sensitive data before storage.
+
+3.  Implement sampling strategies: You don’t need every log entry — you need a representative sample. Build three sampling modes: uniform random (baseline diversity), stratified by feature/model/error-status (ensures all segments are represented), and signal-boosted (oversample entries with negative user feedback, retries, or high latency). Make sampling configurable per pipeline run.
+
+Phase 2: Build the Interaction Classifier (Day 3–6)
+1.  Cluster interactions by semantic similarity: Embed all sampled prompts and cluster them using HDBSCAN. This reveals the natural categories of questions your system handles. Name each cluster based on representative examples. Track cluster sizes to understand your traffic distribution.
+
+2.  Identify edge cases and anomalies: Flag interactions that are outliers: prompts that don’t cluster well (novel requests), responses with low confidence scores, interactions where the user immediately retried with a rephrased question, unusually long or short responses, and responses that triggered content filters. These outliers are your most valuable eval candidates.
+
+3.  Categorize interaction quality: Use an LLM-as-judge to assess each sampled interaction: was the response helpful, accurate, and complete? Assign a quality score (1–5). High-quality interactions become positive test cases (verify the model keeps doing this well). Low-quality interactions become negative test cases (verify future models fix this).
+
+4.  Build a difficulty estimator: Classify each interaction by difficulty: simple (direct question, clear answer), moderate (requires reasoning or multi-step response), hard (ambiguous, multi-part, or requires domain expertise), and adversarial (deliberately tricky, prompt injection attempts, or edge-case inputs). Difficulty labels help balance the eval dataset.
+
+Phase 3: Build the Auto-Labeling Pipeline (Day 6–9)
+1.  Generate golden answers for test cases: For each candidate test case, generate a reference answer using a strong model (GPT-4o) with chain-of-thought reasoning. For factual questions, verify against source data if available. For subjective questions, generate a quality rubric instead of a single golden answer. Store both the reference and the rubric.
+
+2.  Create multi-dimensional labels: Each test case gets labeled on: expected quality score (1–5), expected behavior (should answer, should refuse, should ask for clarification), key assertions the response must contain, key assertions the response must NOT contain (hallucination traps), and the difficulty and category from the classifier.
+
+3.  Implement confidence-based routing: Not all auto-generated labels are trustworthy. When the labeling model’s confidence is high (strong agreement between multiple labeling runs), add the test case to the dataset automatically. When confidence is low, route to a human review queue. This keeps the dataset growing without sacrificing quality.
+
+4.  Build deduplication against existing eval data: Before adding a new test case, check similarity against all existing test cases. If a near-duplicate exists (cosine similarity > 0.92), skip it. Track coverage metrics: which clusters are well-represented and which need more examples? Prioritize generation for under-represented categories.
+
+Phase 4: Build the Eval Runner and Regression Tracker (Day 9–11)
+1.  Build the eval harness: A configurable runner that: takes any model endpoint, runs the full eval dataset against it, scores each response using the stored rubrics and metrics, and produces a structured report with pass/fail rates per category, per difficulty level, and per metric dimension.
+
+2.  Implement regression detection: Compare each eval run against the previous run. Flag: new failures (test cases that used to pass but now fail), new passes (cases that were failing but are now fixed), score changes above a threshold, and category-level performance shifts. This is the early warning system for model degradation.
+
+3.  Track dataset growth over time: Dashboard showing: total test cases over time, distribution by category and difficulty, auto-labeled vs. human-reviewed counts, coverage heatmap (which clusters are well-tested vs. sparse), and the eval dataset’s “freshness” (what percentage of test cases came from the last 30 days of production traffic).
+
+Phase 5: Build the Curation Dashboard (Day 11–13)
+1.  Create the dataset explorer: A UI where reviewers can: browse test cases by category, difficulty, and quality, view the full interaction (prompt, response, labels), approve, edit, or reject auto-generated labels, and add manual annotations or notes. This is where the human-in-the-loop oversight happens.
+
+2.  Build the review queue: Low-confidence auto-labels land in a review queue. Show reviewers: the candidate test case, the auto-generated labels with confidence scores, similar existing test cases for context, and quick-action buttons (approve as-is, edit labels, reject). Track reviewer throughput and inter-annotator agreement.
+
+3.  Containerize and schedule: Docker-compose with: the log store, the classification pipeline, the auto-labeling service, the eval runner, and the curation dashboard. Set up a nightly cron job that runs the full pipeline: sample new logs, classify, auto-label, deduplicate, and add to the dataset. The eval suite grows while you sleep.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Show: production logs being processed, the clustering revealing interaction patterns, auto-labeling generating test cases, the eval runner catching a regression, and the dataset growth over time. Under 4 minutes.
+
+2.  Write the narrative: Frame it as: “I built a system that automatically converts production LLM logs into a growing eval dataset. In two weeks of simulated production traffic, it generated X test cases across Y categories with Z% auto-label accuracy.” The self-growing aspect is the headline.
+
+
+Project 14: Multi-Modal Document Processor with OCR, LLM Extraction, and Validation
+What You’re Building: An end-to-end document processing pipeline that accepts any document format (PDF, image, scan), performs OCR to extract raw text, uses LLMs to extract structured data from the text, and validates every extraction against configurable business rules — with a human-in-the-loop review interface for low-confidence results.
+
+
+Why This Project Lands Interviews
+
+Document processing is one of the largest categories of enterprise AI deployment. It combines computer vision (OCR), natural language understanding (extraction), and production engineering (validation, error handling, scale). This project touches every layer of the AI engineering stack and solves a problem every large company is actively paying to solve.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+ML ecosystem standard
+
+OCR
+
+Tesseract + EasyOCR
+
+Open-source, multi-engine
+
+Vision Model
+
+GPT-4o vision or Claude
+
+Direct image understanding
+
+LLM Extraction
+
+GPT-4o + instructor
+
+Structured output enforcement
+
+Validation
+
+Pydantic + custom rules
+
+Type-safe business rules
+
+Queue
+
+Celery + Redis
+
+Async document processing
+
+Review UI
+
+React or Streamlit
+
+Human-in-the-loop interface
+
+Containerization
+
+Docker + docker-compose
+
+Full pipeline orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Ingestion and OCR Layer (Day 1–3)
+1.  Build a multi-format document loader: Accept PDFs (native text and scanned), images (JPEG, PNG, TIFF), and scanned documents. For PDFs, first try native text extraction (PyMuPDF). If the PDF has images or the text extraction yields garbage, fall back to OCR. Detect the right strategy automatically by checking text density per page.
+
+2.  Implement dual-engine OCR: Run both Tesseract and EasyOCR on every scanned page. Compare outputs. When they agree, confidence is high. When they disagree, use character-level alignment to identify discrepancies and pick the higher-confidence reading for each segment. This ensemble approach significantly reduces OCR errors.
+
+3.  Add vision model fallback: For documents where OCR struggles (handwriting, poor scan quality, complex layouts like tables), send the page image directly to GPT-4o vision or Claude vision. Ask the model to extract text preserving the document’s structure. This is more expensive but handles edge cases that traditional OCR cannot.
+
+4.  Build the preprocessing pipeline: Before OCR, apply: deskewing (straighten rotated scans), binarization (convert to high-contrast black and white), noise removal, and resolution upscaling for low-quality scans. Track which preprocessing steps were applied and their effect on OCR confidence for each page.
+
+Phase 2: Build the LLM Extraction Engine (Day 3–6)
+1.  Define extraction schemas per document type: Create Pydantic models for each document type you process. For invoices: vendor name, invoice number, line items (description, quantity, unit price, total), tax, total amount, payment terms, due date. For contracts: parties, effective date, term, key obligations, termination clauses. Make schemas configurable and extensible.
+
+2.  Build the extraction pipeline: For each document, first classify its type (using the OCR text + an LLM classifier). Then load the corresponding extraction schema. Send the OCR text to the LLM with: the schema definition, 2–3 few-shot examples for that document type, and explicit instructions to output only information present in the text (no inference, no defaults). Use the instructor library to enforce the Pydantic schema in the LLM output.
+
+3.  Implement chunk-and-merge for long documents: Documents longer than the context window need to be processed in chunks. Split by page or section, extract from each chunk independently, then merge results. Handle conflicts: if two chunks extract different values for the same field, flag the conflict and include both values with their source locations.
+
+4.  Add extraction confidence scores: For each extracted field, compute a confidence score based on: how clearly the value appeared in the OCR text (exact match vs. fuzzy), the LLM’s self-reported confidence, whether multiple chunks agreed on the value, and whether the value passes format validation (e.g., dates parse correctly, amounts are numeric). Return per-field confidence alongside the extraction.
+
+Phase 3: Build the Validation and Business Rules Engine (Day 6–9)
+1.  Implement type-level validation: Using Pydantic validators, enforce: dates are valid and within plausible ranges, monetary amounts are positive and correctly formatted, required fields are present, enums match allowed values, and cross-field consistency (e.g., line item totals sum to the invoice total). Return specific validation error messages per field.
+
+2.  Add business rule validation: Beyond type checking, implement domain-specific rules. For invoices: does the vendor exist in the known vendor list? Is the total within expected ranges for this vendor? Are payment terms standard? For contracts: is the effective date in the future? Are all required clause types present? Are any termination clauses unusually broad?
+
+3.  Build the anomaly detector: Compare each extraction against historical data for that document type and source. Flag statistical outliers: amounts significantly higher or lower than typical, unusual vendor names, dates that don’t follow the expected pattern, and any fields that changed dramatically from previous documents from the same source.
+
+4.  Create the confidence-based routing: Based on the overall confidence score and validation results, route each document: high confidence + all validations pass → auto-approve, medium confidence or minor validation warnings → human review queue (fast review), low confidence or critical validation failures → human review queue (detailed review). Track auto-approval rates and accuracy over time.
+
+Phase 4: Build the Human Review Interface (Day 9–11)
+1.  Create the review dashboard: A side-by-side interface showing: the original document (rendered as an image) on one side and the extracted data on the other. Highlight the source location in the document for each extracted field. Color-code fields by confidence: green (high), yellow (medium), red (low/failed validation).
+
+2.  Build inline editing: Reviewers can click any extracted field to edit it. When edited, log: the original extracted value, the corrected value, who corrected it, and whether the original was wrong (extraction error) or the business rule was too strict (validation false positive). This data feeds back into improving both extraction and validation.
+
+3.  Implement batch review workflows: For high-volume processing, build a queue-based workflow: reviewers see a prioritized list of documents needing review, can approve/reject/edit in bulk, and see their throughput and accuracy stats. Include keyboard shortcuts for common actions to maximize reviewer efficiency.
+
+Phase 5: Build Feedback Loops and Analytics (Day 11–13)
+1.  Feed corrections back to the extraction pipeline: Every human correction becomes a training signal. Accumulate corrections and periodically: update few-shot examples with corrected examples, identify systematic extraction errors and adjust prompts, tune confidence thresholds based on actual accuracy, and generate reports on where the pipeline fails most.
+
+2.  Build the processing analytics dashboard: Show: documents processed per day/week, auto-approval rate over time (the key efficiency metric), extraction accuracy by document type and field, average review time per document, and OCR engine performance comparison. These metrics tell the story of the pipeline’s operational maturity.
+
+3.  Containerize the full pipeline: Docker-compose with: the ingestion API, OCR workers, LLM extraction workers, the validation service, the review UI, PostgreSQL, Redis, and Celery workers. Include sample documents for demo purposes.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Show: uploading a scanned invoice, OCR extracting text, LLM extracting structured data, validation catching an anomaly, the reviewer correcting a field, and the analytics dashboard. Under 4 minutes.
+
+2.  Write the narrative: Frame it as: “I built a document processing pipeline that auto-extracts structured data from scanned documents with X% accuracy, auto-approves Y% of documents without human review, and reduces manual processing time by Z%.” Lead with the efficiency numbers.
+
+
+Project 15: Agent Orchestration System with Tool Use, Memory, and Human-in-the-Loop
+What You’re Building: A multi-agent orchestration platform where a supervisor agent decomposes complex tasks, delegates subtasks to specialized tool-using agents, maintains persistent memory across interactions, and escalates to a human operator when confidence is low or the task requires approval — with full observability into every agent decision.
+
+
+Why This Project Lands Interviews
+
+Agents are the frontier of AI engineering, and most candidate projects are single-agent toy demos. Building a multi-agent system with real tool use, persistent memory, and human-in-the-loop escalation proves you can architect the kind of autonomous AI systems that companies are actively building and hiring for right now.
+
+
+Tech Stack
+
+Component
+
+Tool / Library
+
+Why This Choice
+
+Language
+
+Python 3.11+
+
+Ecosystem standard
+
+Orchestration
+
+LangGraph
+
+State machine for agent workflows
+
+LLM Providers
+
+OpenAI + Anthropic
+
+Multi-model agent routing
+
+Tool Framework
+
+Custom + MCP
+
+Extensible tool integration
+
+Memory
+
+PostgreSQL + ChromaDB
+
+Short-term + semantic long-term
+
+Queue
+
+Redis + Celery
+
+Async task execution
+
+Review UI
+
+React or Streamlit
+
+Human-in-the-loop interface
+
+Containerization
+
+Docker + docker-compose
+
+Full system orchestration
+
+
+Step-by-Step Build Guide
+
+Phase 1: Build the Agent Architecture (Day 1–4)
+1.  Design the agent hierarchy: Create three layers. The Supervisor Agent receives complex tasks, creates execution plans, and delegates to specialists. Specialist Agents each own a domain (research, data analysis, writing, code execution) and have access to domain-specific tools. The Reviewer Agent validates outputs from specialists before returning to the supervisor. Model each agent as a LangGraph node with defined input/output schemas.
+
+2.  Build the task decomposition engine: The supervisor’s core capability: take a complex request and break it into an ordered list of subtasks, each assigned to a specialist. Include dependencies (subtask B needs the output of subtask A). Use structured output to enforce a valid execution plan with: subtask description, assigned specialist, required inputs, expected output format, and estimated complexity.
+
+3.  Implement the tool registry: Build a registry where tools are registered with: a name, description, input/output schemas, the specialist agents that can use them, and rate limits. Start with: web search, file read/write, code execution (sandboxed), database query, and API calls. Each tool invocation is logged with inputs, outputs, latency, and success/failure.
+
+4.  Build the LangGraph state machine: Wire the agents into a LangGraph graph with: task intake → planning → parallel/sequential specialist execution → review → synthesis → delivery. Include conditional edges: if a specialist fails, retry with a different approach; if the reviewer rejects output, route back to the specialist with feedback; if confidence is low, route to human escalation.
+
+Phase 2: Build the Memory System (Day 4–7)
+1.  Implement short-term working memory: During a task execution, all agents share a working memory store: the current execution plan, outputs from completed subtasks, intermediate results, and error logs. Store in Redis for fast access. This memory is scoped to a single task and cleared when the task completes.
+
+2.  Build long-term semantic memory: After task completion, extract and embed key information: what the user asked for, what approach worked, what tools were used, any domain-specific facts discovered, and user preferences observed. Store in ChromaDB. Future tasks can query this memory to inform planning. This is how the system gets smarter over time.
+
+3.  Implement memory retrieval for planning: When the supervisor creates an execution plan, it first queries long-term memory for: similar past tasks and their execution plans, approaches that worked well (and those that didn’t), user-specific preferences and context, and relevant domain facts. Retrieved memories are injected into the planning prompt.
+
+4.  Add memory management: Implement: memory importance scoring (frequently accessed memories are more important), memory consolidation (merge similar memories into higher-level summaries), memory expiration (stale memories decay over time), and a memory dashboard showing what the system “remembers” about each user. Include a delete endpoint for user data requests.
+
+Phase 3: Build the Human-in-the-Loop System (Day 7–10)
+1.  Define escalation triggers: The system escalates to a human when: the supervisor’s confidence in its plan is below a threshold, a specialist fails twice on the same subtask, the task involves sensitive operations (financial transactions, data deletion, external communications), the reviewer’s quality score for a deliverable is below threshold, or the user explicitly requests human review.
+
+2.  Build the approval queue: When escalation triggers, the system: pauses execution at the current step, packages the full context (original task, plan, completed steps, current step that needs approval, the agent’s proposed action), pushes it to a review queue, and notifies the human reviewer. The system waits for approval, rejection, or modification before continuing.
+
+3.  Implement granular approval levels: Not all escalations need the same review depth. Define levels: Notify (proceed but inform the human), Approve action (human confirms the next step), Approve plan (human reviews the full execution plan before any work begins), and Take over (human directly provides the output, agents stand down). Map escalation triggers to appropriate levels.
+
+4.  Build the review interface: A UI showing: the task context and execution progress, the specific decision point requiring human input, the agent’s proposed action with its reasoning, relevant memories and past similar decisions, and action buttons (approve, modify, reject, take over). Include a chat panel for the human to ask the agent clarifying questions before deciding.
+
+Phase 4: Build Observability and Debugging (Day 10–12)
+1.  Implement full execution tracing: Every task execution produces a trace tree: the supervisor’s planning decisions, each specialist’s tool calls and reasoning steps, the reviewer’s evaluations, memory retrievals and their influence on decisions, and human escalation events and resolutions. Use OpenTelemetry spans with custom attributes.
+
+2.  Build the trace explorer UI: A visual representation of the agent workflow as a tree/graph. Each node shows: the agent that acted, what it decided, what tools it called, latency and cost, and any errors. Color-code by status (success/warning/failure/escalated). Clicking a node expands the full context including the LLM prompt and response.
+
+3.  Add cost and performance tracking: Per task, track: total LLM tokens used (by agent and model), total tool calls, total wall-clock time, human review time (if escalated), and total cost. Aggregate across tasks to show: cost per task type, most expensive agents, tool usage patterns, and escalation rate trends.
+
+4.  Build the replay system: For debugging, allow replaying any past task execution: load the original task and context, step through each agent decision, modify any input at any step and see how the execution diverges, and compare the replayed execution against the original. This is invaluable for diagnosing failures and testing improvements.
+
+Phase 5: Integration and End-to-End Testing (Day 12–13)
+1.  Build a compelling demo scenario: Design a complex task that showcases the full system: a research task that requires web search, data extraction, analysis, and a written summary. Show: the supervisor decomposing the task, specialists working in parallel, the reviewer catching an issue and sending it back, memory informing a decision, and a human approving the final deliverable.
+
+2.  Containerize the full system: Docker-compose with: the orchestration API, Redis (working memory), PostgreSQL (persistent state), ChromaDB (long-term memory), Celery workers (async specialists), the trace explorer UI, and the human review UI. Include a demo script that runs the showcase scenario automatically.
+
+3.  Write end-to-end tests: Test: task decomposition produces valid plans, specialists correctly use their tools, the reviewer catches deliberately bad outputs, memory retrieval improves planning for repeated similar tasks, human escalation triggers at the right moments, and the system recovers gracefully from agent failures.
+
+Phase 6: Polish for Portfolio (Day 13–14)
+1.  Record the demo: Show the full task lifecycle: complex request in, supervisor planning, specialists executing with tool calls, reviewer validating, human approving a sensitive step, memory saving lessons learned, and the trace explorer showing every decision. Under 5 minutes.
+
+2.  Write the narrative: Frame it as: “I built a multi-agent orchestration system where AI agents decompose complex tasks, use tools to execute them, learn from past interactions via persistent memory, and escalate to humans when confidence is low. It’s not an AI demo — it’s production infrastructure for autonomous AI workflows.” Lead with the architecture diagram showing the agent hierarchy and decision flow.
+
+Code Review Graph — Systematic Documentation
+Overview
+code-review-graph is an AI-assisted code review optimization tool that builds a structural graph of a
+codebase using Tree-sitter parsing and graph analysis.
+Its primary goal is to reduce unnecessary token usage by AI coding assistants by allowing them to read only
+the files and functions relevant to a specific task.
+
+Core Purpose
+Traditional AI coding tools repeatedly scan entire repositories for every task.
+code-review-graph solves this problem by:
+Building a persistent structural graph of the repository
+Tracking dependencies and relationships
+Detecting blast radius of changes
+Providing minimal relevant context to AI assistants
+Reducing token consumption significantly
+Reported Performance
+Average token reduction: 8.2x
+Large monorepos: up to 49x fewer tokens
+Incremental updates: under 2 seconds
+
+Supported Platforms
+The tool automatically configures multiple AI coding environments.
+Supported AI Platforms
+Codex
+Claude Code
+Cursor
+Windsurf
+Zed
+Continue
+OpenCode
+•
+•
+•
+•
+•
+
+•
+•
+•
+
+•
+•
+•
+•
+•
+•
+•
+
+1
+
+Antigravity
+Qwen
+Qoder
+Kiro
+GitHub Copilot
+GitHub Copilot CLI
+Gemini CLI
+
+Installation
+Basic Installation
+
+pip install code-review-graph
+or
+
+pipx install code-review-graph
+
+Quick Start
+Step 1 — Install
+code-review-graph install
+This command:
+Detects installed AI coding tools
+Configures MCP automatically
+Installs hooks and skills
+Injects graph-aware instructions
+Detects whether uvx or pip/pipx is used
+
+Step 2 — Build Repository Graph
+code-review-graph build
+•
+•
+•
+•
+•
+•
+•
+
+•
+•
+•
+•
+•
+
+2
+
+This parses the codebase and generates the graph structure.
+
+Platform-Specific Installation
+Codex
+code-review-graph install --platform codex
+Cursor
+code-review-graph install --platform cursor
+Claude Code
+code-review-graph install --platform claude-code
+Gemini CLI
+code-review-graph install --platform gemini-cli
+Kiro
+code-review-graph install --platform kiro
+GitHub Copilot
+code-review-graph install --platform copilot
+GitHub Copilot CLI
+code-review-graph install --platform copilot-cli
+
+3
+
+How It Works
+High-Level Workflow
+Repository is parsed using Tree-sitter
+AST (Abstract Syntax Tree) is generated
+Graph database is created
+Functions, classes, imports, and dependencies are mapped
+AI assistant queries only affected components
+
+Internal Architecture
+Pipeline
+Repository
+↓
+Tree-sitter Parser
+↓
+SQLite Graph Database
+↓
+Blast Radius Analysis
+↓
+Minimal Review Context
+
+Blast Radius Analysis
+When a file changes, the system identifies:
+Callers
+Dependents
+Related tests
+Execution paths
+Impacted modules
+This allows the AI assistant to review only relevant code.
+1.
+2.
+3.
+4.
+5.
+
+•
+•
+•
+•
+•
+
+4
+
+Incremental Updates
+The tool supports real-time incremental graph updates.
+Trigger Events
+Git commits
+File saves
+Repository changes
+Optimization Strategy
+Uses SHA-256 hashing
+Re-parses only changed files
+Skips unaffected files
+Example
+A 2,900-file project can re-index in under 2 seconds.
+
+Monorepo Optimization
+Large monorepositories benefit significantly.
+Example Metrics
+27,700+ files excluded from context
+Only ~15 files read during review
+
+Supported Languages
+The tool supports:
+Web Technologies
+JavaScript
+TypeScript
+TSX
+Vue
+Svelte
+•
+•
+•
+
+•
+•
+•
+
+•
+•
+
+•
+•
+•
+•
+•
+
+5
+
+Backend Languages
+Python
+Go
+Rust
+Java
+Scala
+Ruby
+PHP
+Kotlin
+C#
+Systems Languages
+C
+C++
+Zig
+Swift
+Solidity
+Scripting Languages
+Lua
+Perl
+PowerShell
+Julia
+R
+Config & Infrastructure
+Nix
+Notebook Support
+Jupyter Notebooks (.ipynb)
+Databricks notebooks
+
+Key Features
+1. Incremental Updates
+Re-parses only modified files
+Sub-2-second updates
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+•
+•
+•
+•
+•
+
+•
+•
+•
+•
+•
+
+•
+
+•
+•
+
+•
+•
+
+6
+
+2. Blast Radius Analysis
+Determines exactly which files/functions are affected.
+
+3. Auto-Update Hooks
+Updates graph automatically during development.
+
+4. Semantic Search
+Supports vector embeddings through:
+sentence-transformers
+Google Gemini
+MiniMax
+OpenAI-compatible endpoints
+Azure OpenAI
+LiteLLM
+LocalAI
+vLLM
+
+5. Interactive Visualization
+Provides D3.js-based graph visualization with:
+Search
+Community legends
+Degree-scaled nodes
+Interactive exploration
+
+6. Hub & Bridge Detection
+Finds:
+Highly connected nodes
+Architectural chokepoints
+Dependency bottlenecks
+•
+•
+•
+•
+•
+•
+•
+•
+
+•
+•
+•
+•
+
+•
+•
+•
+
+7
+
+7. Surprise Scoring
+Detects unusual coupling patterns such as:
+Cross-community links
+Cross-language dependencies
+Peripheral-to-core connections
+
+8. Knowledge Gap Analysis
+Identifies:
+Isolated nodes
+Untested hotspots
+Weak communities
+Structural weaknesses
+
+9. Graph Traversal
+Supports:
+BFS exploration
+DFS exploration
+Configurable depth
+Token-budget-aware traversal
+
+10. Export Formats
+Supported export types:
+GraphML
+Neo4j Cypher
+Obsidian vaults
+SVG graphs
+
+11. Graph Diffing
+Compare graph snapshots over time.
+•
+•
+•
+
+•
+•
+•
+•
+
+•
+•
+•
+•
+
+•
+•
+•
+•
+
+8
+
+Tracks:
+New nodes
+Removed nodes
+Edge changes
+Community changes
+
+12. Token Benchmarking
+Measures:
+Full corpus token usage
+Graph-based token usage
+Efficiency ratios
+
+13. Community Detection
+Uses Leiden algorithm for clustering related code.
+
+14. Risk-Scored Reviews
+Maps diffs to:
+Affected functions
+Execution flows
+Test coverage gaps
+
+15. Refactoring Tools
+Includes:
+Rename preview
+Dead code detection
+Community-driven suggestions
+
+16. Wiki Generation
+Automatically generates markdown-based documentation.
+•
+•
+•
+•
+
+•
+•
+•
+
+•
+•
+•
+
+•
+•
+•
+
+9
+
+17. Multi-Repo Support
+Features:
+Multi-repo registry
+Cross-repository search
+Multi-repo daemon
+Health checks
+Auto-restart
+
+Benchmarks
+Token Efficiency
+4.9x to 27.3x fewer tokens
+Average reduction: 8.2x
+Accuracy Metrics
+100% recall
+Average F1 score: 0.54
+
+Storage System
+Database
+Uses local SQLite storage.
+Location:
+
+.code-review-graph/
+No cloud dependency is required.
+
+Watch Mode
+Continuously updates graphs while working.
+•
+•
+•
+•
+•
+
+•
+•
+
+•
+•
+
+10
+
+Troubleshooting
+PyPI / Hatchling Errors
+Common Error
+Could not find a version that satisfies the requirement hatchling
+Solutions
+Option 1 — Use macOS Terminal
+Run installation outside the IDE terminal.
+Option 2 — Use uv
+cd /path/to/code-review-graph
+uv tool install . --force
+
+Option 3 — Development Setup
+
+uv sync
+uv run code-review-graph
+Diagnostic Command
+python3 scripts/diagnose_pypi_connectivity.py
+
+Windows Configuration Fix
+Common Error
+
+Invalid JSON: EOF while parsing
+or
+
+11
+
+MCP error -32000: Connection closed
+
+Recommended Configuration
+"code-review-graph": {
+"command": "C:\\path\\to\\your\\venv\\Scripts\\code-review-graph.exe",
+"args": ["serve", "--repo", "C:\\path\\to\\your\\project"],
+"env": { "PYTHONUTF8": "1" }
+}
+
+Contribution Setup
+Clone Repository
+git clone https://github.com/tirth8205/code-review-graph.git
+cd code-review-graph
+Create Virtual Environment
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+Install Development Dependencies
+pip install -e ".[dev]"
+
+Run Tests
+
+pytest
+
+12
+
+Repository Information
+Repository
+tirth8205/code-review-graph
+License
+MIT License
+Main Technologies
+Python (90.8%)
+TypeScript (8.8%)
+
+Project Highlights
+Persistent codebase knowledge graph
+AI-context optimization
+Incremental static analysis
+Monorepo scalability
+Blast-radius detection
+MCP integration
+Token-efficient AI reviews
+
+Summary
+code-review-graph is a structural analysis and AI-context optimization platform designed for modern
+AI-assisted development workflows.
+By reducing unnecessary repository scanning and intelligently selecting only relevant code, it dramatically
+improves:
+Token efficiency
+Review quality
+Repository understanding
+AI coding workflow performance
+Large-scale monorepo navigation
+It is particularly valuable for teams using AI coding assistants heavily in large or rapidly changing
+codebases.
+
+# Playwright Guide
+
+You are an autonomous QA + fix engineer. Your job is to take this project from its
+current state to a production-ready build by running an agentic test → fix → retest
+loop using Playwright. Work end-to-end without stopping to ask me questions unless
+you hit a truly blocking ambiguity.
+
+═══════════════════════════════════════════════════════════════
+PHASE 0 — ENVIRONMENT & PROJECT DISCOVERY
+═══════════════════════════════════════════════════════════════
+
+1. Detect the project type by inspecting package.json / pyproject.toml / go.mod /
+etc. Identify: framework (Next.js, Vite, CRA, Remix, Express, FastAPI, Django…),
+package manager (npm/pnpm/yarn/bun), test runner already present, and the
+dev-server command + port.
+2. Print a short "Project Report": stack, entry points, routes/pages discovered,
+existing tests, and any obvious config issues.
+3. Read the README and any CONTRIBUTING/DEV docs before touching code.
+
+═══════════════════════════════════════════════════════════════
+PHASE 1 — INSTALL PLAYWRIGHT
+═══════════════════════════════════════════════════════════════
+
+1. Install Playwright as a dev dependency using the project's package manager,
+then run the browser install:
+    - npm: npm i -D @playwright/test && npx playwright install --with-deps
+    - pnpm: pnpm add -D @playwright/test && pnpm exec playwright install --with-deps
+    - yarn: yarn add -D @playwright/test && yarn playwright install --with-deps
+2. Create `playwright.config.ts` configured for: chromium + webkit + firefox,
+baseURL pointing at the local dev server, trace=on-first-retry,
+screenshot=only-on-failure, video=retain-on-failure, and a `webServer` block
+that auto-starts the dev server.
+3. Create `tests/` folder with subfolders: `tests/e2e`, `tests/visual`,
+`tests/a11y`. Create a `test-results/screenshots/` folder for the loop's
+artifacts.
+
+═══════════════════════════════════════════════════════════════
+PHASE 2 — STATIC ANALYSIS
+═══════════════════════════════════════════════════════════════
+Before writing tests, do a code review pass:
+
+- Run the project's linter and type-checker (eslint, tsc --noEmit, ruff, etc.).
+- Build the project once (`npm run build` or equivalent). Capture all errors.
+- Note suspicious files: TODO/FIXME comments, dead routes, missing env vars,
+obvious null-deref / async-error / accessibility issues.
+Save findings to `AGENT_NOTES.md`.
+
+═══════════════════════════════════════════════════════════════
+PHASE 3 — GENERATE THE TEST SUITE
+═══════════════════════════════════════════════════════════════
+Based on the routes/components discovered, generate Playwright tests that cover:
+
+1. Smoke: every public route loads with HTTP 200 and no console errors.
+2. Critical user journeys: auth (if present), primary CRUD flows, forms,
+navigation, and any payment/checkout flow.
+3. Responsive: viewport 375×667 (mobile), 768×1024 (tablet), 1440×900 (desktop).
+4. Visual regression: full-page screenshots saved to
+`test-results/screenshots/<route>__<viewport>.png`.
+5. Accessibility: integrate `@axe-core/playwright` and fail on serious/critical
+violations.
+6. Network: assert no 4xx/5xx in the network log for happy paths.
+
+═══════════════════════════════════════════════════════════════
+PHASE 4 — THE AGENTIC LOOP  (this is the core)
+═══════════════════════════════════════════════════════════════
+Repeat the following until exit criteria are met OR you have completed 8
+iterations:
+
+(a) RUN  → `npx playwright test --reporter=list,html`
+(b) COLLECT → parse failures, console errors, axe violations, and screenshots.
+(c) DIAGNOSE → for each failure, open the relevant source file(s) and form a
+hypothesis. Write the hypothesis to `AGENT_NOTES.md` under
+"Iteration N — Findings".
+(d) FIX → make the smallest change that resolves the root cause. Never
+modify a test to make it pass unless the test itself was demonstrably
+wrong; in that case, justify it in AGENT_NOTES.md.
+(e) VERIFY → re-run only the failed tests first, then the full suite.
+(f) SCREENSHOT DIFF → compare new screenshots to previous iteration. Log
+visual regressions.
+(g) COMMIT → make a git commit per iteration with message
+`fix(iter-N): <summary>` so progress is reviewable.
+
+EXIT CRITERIA (all must hold):
+✓ `npm run build` succeeds with zero errors and zero new warnings.
+✓ Linter and type-checker pass clean.
+✓ 100% of Playwright tests pass on chromium, webkit, and firefox.
+✓ Zero console errors on any tested route.
+✓ Zero serious/critical axe violations.
+✓ Screenshots render correctly on all three viewports.
+
+If you reach iteration 8 without convergence, STOP and produce a remediation
+report listing the remaining failures and your best recommendation for each.
+
+═══════════════════════════════════════════════════════════════
+PHASE 5 — PRODUCTION BUILD
+═══════════════════════════════════════════════════════════════
+
+1. Run the production build (`npm run build` or equivalent).
+2. Start the production server and re-run the smoke + critical-journey tests
+against the production bundle to confirm parity with dev.
+3. Generate a final `AGENT_REPORT.md` containing:
+    - Initial state summary
+    - All bugs found, grouped by severity, with the fix commit hash
+    - Final test results (pass counts, durations)
+    - Screenshots gallery (links to files)
+    - Any remaining known issues or recommendations
+    - Confirmation that the build is production-ready
+
+═══════════════════════════════════════════════════════════════
+GROUND RULES
+═══════════════════════════════════════════════════════════════
+
+- Do NOT skip or delete failing tests to "make things green."
+- Do NOT introduce new dependencies unless strictly required; justify any add.
+- Prefer minimal, surgical diffs. No drive-by refactors.
+- Never commit secrets; if a test needs credentials, use `.env.test.example`
+and skip with a clear message if they're missing.
+- Keep `AGENT_NOTES.md` updated after every iteration — it is the audit trail.
+- When done, print the path to `AGENT_REPORT.md` and a one-paragraph summary.
+
+Begin with Phase 0 now.
+Claude Code Plugins
+6 Claude Code Plugins
+
+From Code Review to Persistent Memory
+
+Explore the core plugins and foundational technologies that empower your 24.online automated seller to handle complex marketplace operations.
+
+#
+
+Plugin Name
+
+Description
+
+Source / URL
+
+1
+
+Superpowers
+
+Workflow Automation
+
+Extends the core capabilities of your AI agent, allowing it to execute complex, multi-step marketplace tasks and automated workflows seamlessly.
+
+github.com/obra/superpowers
+
+2
+
+Frontend Design
+
+Design & UI
+
+Empowers the AI to auto-generate beautiful, high-converting listing templates and custom storefront layouts for your e-commerce brand.
+
+claude.com/plugins/frontend-design
+
+3
+
+Code Review
+
+Code Quality
+
+Essential for advanced sellers building custom scripts: ensures all automation logic and API calls are highly optimized and completely error-free.
+
+claude.com/plugins/code-review
+
+4
+
+Security Guidance
+
+Security
+
+Automated security checkpoints that rigorously protect your seller accounts, API keys, and sensitive customer data across all platforms.
+
+claude.com/plugins/security-guidance
+
+5
+
+Claude-Mem
+
+Memory & Persistence
+
+Provides persistent memory for your AI agent, allowing it to accurately remember past sales, inventory history, and long-term customer interactions.
+
+github.com/nicholasgasior/claude-mem
+
+6
+
+GStack
+
+Infrastructure
+
+A modern, high-performance foundational tech stack designed to build, deploy, and scale your custom marketplace integrations rapidly.
+
+github.com/garrytan/gstack
+
+Plugin Details
+
+1. Superpowers  —  Workflow Automation
+
+Extends the core capabilities of your AI agent, allowing it to execute complex, multi-step marketplace tasks and automated workflows seamlessly.
+
+Source: github.com/obra/superpowers
+
+2. Frontend Design  —  Design & UI
+
+Empowers the AI to auto-generate beautiful, high-converting listing templates and custom storefront layouts for your e-commerce brand.
+
+Source: claude.com/plugins/frontend-design
+
+3. Code Review  —  Code Quality
+
+Essential for advanced sellers building custom scripts: ensures all automation logic and API calls are highly optimized and completely error-free.
+
+Source: claude.com/plugins/code-review
+
+4. Security Guidance  —  Security
+
+Automated security checkpoints that rigorously protect your seller accounts, API keys, and sensitive customer data across all platforms.
+
+Source: claude.com/plugins/security-guidance
+
+5. Claude-Mem  —  Memory & Persistence
+
+Provides persistent memory for your AI agent, allowing it to accurately remember past sales, inventory history, and long-term customer interactions.
+
+Source: github.com/nicholasgasior/claude-mem
+
+6. GStack  —  Infrastructure
+
+A modern, high-performance foundational tech stack designed to build, deploy, and scale your custom marketplace integrations rapidly.
+
+Source: github.com/garrytan/gstack
+
+
+The Million Dollar Workflow
+The Million Dollar Workflow - Using Emergent
+How to find a funded startup idea and ship it before the funded companies do
+The world's top VCs publish a list of exactly what they want built. Most people read it and scroll. This is the workflow to actually act on it - find a problem investors are funding, find a company already funded to solve it, and out-ship them with a working product you build in a weekend.
+
+Everything you need is below.
+
+Step 1 - Pick one problem from the VC wishlists
+These lists are public. They are the clearest signal of where money is about to flow. Pick ONE problem. Not three.
+
+Y Combinator - Requests for Startups The single most direct list of what YC wants to fund. Updated every batch. -> https://www.ycombinator.com/rfs
+
+a16z - Big Ideas 2026 Andreessen Horowitz partners on the biggest problems getting solved this year.
+
+Part 1 (Infrastructure, Growth, Bio + Health, Speedrun): https://a16z.com/newsletter/big-ideas-2026-part-1/
+Part 2 (American Dynamism, Apps - incl. voice AI agents): https://a16z.com/newsletter/big-ideas-2026-part-2/
+Part 3 (Crypto): https://a16z.com/newsletter/big-ideas-2026-part-3/
+All Big Ideas archives: https://a16z.com/category/special-reports/
+Easier-to-skim breakdowns of the lists:
+
+Inc - every YC idea explained: https://www.inc.com/ben-sherry/y-combinator-just-released-its-latest-startup-wishlist-heres-every-idea-it-has-for-founders/91297137
+The VC Corner - Summer 2026 RFS decoded + 150 concrete ideas: https://www.thevccorner.com/p/yc-summer-2026-requests-for-startups-ideas
+a16z Speedrun - 14 Big Ideas for indie hackers / solo founders: https://superframeworks.com/articles/a16z-speedrun-ideas-indie-hackers-2026
+
+A few real categories on the 2026 lists to get you started:
+
+Cursor for Product Managers (AI that decides what to build, not just how)
+AI-native hedge funds
+Semiconductor supply chain tooling
+AI for modern agriculture (real-time weed and pest detection)
+Voice AI agents for businesses
+Greenfield software (serve brand-new companies at formation)
+Multi-agent enterprise systems
+Physical AI for factories and infrastructure
+Step 2 - Find a company that's already funded to solve it
+This is the unlock. You don't have to invent the category. Find startups that already raised in it, then beat them on speed. Read their sites, their founders' posts, and especially their job listings - open roles tell you exactly what they haven't built yet.
+
+Where to find funded companies and what they've raised:
+
+Crunchbase (filter by category and funding stage): https://www.crunchbase.com
+YC company directory: https://www.ycombinator.com/companies
+Tracxn: https://tracxn.com
+What this looks like when it works: Harvey, the legal AI company, went from a $5B valuation in June 2025, to $8B in December 2025, to $11B by March 2026 - under a year. That's how fast capital moves once a category is hot. -> https://www.cnbc.com/2026/03/25/legal-ai-startup-harvey-raises-200-million-at-11-billion-valuation.html
+
+Step 3 - Build the MVP this weekend
+Not a mockup. Not a landing page. A working product, live on a URL. One prompt does it.
+
+Emergent
+
+Example prompts - pick the one that matches your category:
+
+AI compliance / audit-trail platform:
+
+Build a compliance audit-trail platform for AI agents. Log every agent action with timestamp, input, and output. Store records tamper-proof. Generate SOC 2-ready reports on demand. Dashboard with searchable, filterable action history and per-agent risk flags.
+
+Vertical legal AI:
+
+Build a contract-review tool for small law firms. Upload a contract, auto-extract key clauses, flag risky terms, and produce a plain-English summary. Track every reviewed document with version history.
+
+Voice AI operations tool:
+
+Build a dashboard for a voice-AI agency. Track every call the agent handles, transcribe it, tag the outcome, and surface which call types still need a human. Weekly automation-rate summary per client.
+
+Step 4 - Get in front of capital
+Now you have what the funded company doesn't yet: a shipped product. Put it where it gets seen.
+
+Post the working build publicly (X, LinkedIn, your audience).
+Email a few VCs in the space.
+DM operators and founders working on the problem.
+Two things can happen. A VC backs you because you executed faster than the company they already funded. Or that company acquires you because buying you is cheaper than competing with you.
+
+The whole thing in one line
+The market wrote down what it wants. The funded competitors are slow. The build tool is one prompt away. The only thing left is you doing it.
+
+Start here -> Emergent
+
+
+Pletor MCP for Ads
+I’m Raphael, founding growth at Pletor. The best place to build creative workflows for marketing use cases.
+If you’re a brand or agency, apply here to work with us. 
+Big news:
+Pletor just released his MCP. 
+In other words, the Pletor MCP introduces three major updates:
+Marketing ecosystem integrations: Pletor can now pull context and push assets in any relevant software that has an API (Notion, Shopify, Airtable, Meta Ads…)
+Scale: No need to run Pletor workflows manually anymore. Provide 50 or 500 inputs. Claude will run the Pletor agent as many time as needed.
+Collaboration: Someone builds the workflow. Anyone else can operate it through Claude. 
+Concrete use cases:
+Use Claude as an orchestrator that pulls dozens of assets from your Airtable, runs your PDP Pletor workflow, and pushes everything back to Shopify.
+Use Claude to write a report about your winning Meta ads patterns and extract the winning ones. Send that context into your Pletor Meta Ads workflows. 
+Use Claude to scrape your product page, extract benefits and packshots, run a Pletor workflow to create promotional videos for each product accordingly.
+Ads example:
+Most brands all hit the same wall:
+You need to test more creatives
+Each test needs a different angle
+Strategy takes weeks
+Execution costs thousands
+This agent makes it a piece of cake to produce dozens on Amazon ads in no time.
+NB: It can be adapted to any product: food supplements, accessories, fashion…
+Now, instead of running the workflow manually, you can ask in natural language inside Claude: “Using the Amazon ads generator Pletor workflow, generate 10 ads for this product (URL Link)” 
+Here is a full guide to set it up:
+I am Raphael, founding growth Pletor. A canvas where marketing and creative teams combine the best AI models to build and automate creative workflows. Like Zapier or N8N for marketing visuals.
+
+If you are currently trying to implement AI in your creative workflows, book a call with the team: Tally FormsWork with Pletor (brands & agencies only)​
+Agent presentation
+Use cases
+Using it & best practices
+Get Started !
+Getting started with Pletor.ai is simple, whether you’re a solo founder, a marketer, or a creative agency.
+In one place, you can access the best AI models (video, image, text, audio).
+You can easily build an agent tailored to your specific needs and brand context:
+By combining the best AI models together and providing context about your brand, products, etc.
+By starting from marketing-oriented templates
+Once you’re satisfied, you can automate your production of visuals (our API is available)
+🌐 Visit → pletor.ai
+Let’s build your next marketing campaign and automate your entire creative stack. 
+
+
+
+Live · 100 Day Build
+One Person Company
+Building a solo business with a laptop, a few hours a day, and AI.
+
+Laptop · AI · 2-3 hrs / day · documented in public
+
+Day 10 / 100
+90 days to go
+Day 10
+live
+·
+90 to go
+·
+New drops on WhatsApp
+Follow the channel
+New lessons drop a few times a week. Follow the channel so you don't miss one.
+
+↑ Latest · Day 10
+Jump to day
+10
+Day 10
+New today
+1 min read
+
+Marketing your app · the channel that brought 25k+ Tier 1 views
+Build is half the job. Today we talk about the part most indie creators skip · how to actually get downloads. The tool I used to pull 25,000+ views from Tier 1 countries.
+
+Here is the uncomfortable truth: shipping the app is the easy part now. Rork, RevenueCat, App Store Connect · we covered all of it. But none of that matters if nobody installs it. Most indie builders ship into silence because they never learn the marketing side. Today we fix that.
+
+The tool I want to put in your hands is Fastlane (usefastlane.ai). Think of it as an AI marketing copilot built specifically for indie apps. You point it at your app, it generates UGC-style video ad creatives, hooks, and ASO copy in minutes. No agency, no editor, no $5k retainer. The kind of stuff that actually drives installs in 2026.
+
+Here's the proof, not the pitch. I ran one campaign with assets from Fastlane and it pulled 25,000+ views from Tier 1 countries (US, UK, Canada, Australia). Tier 1 matters because those are the users who actually pay for subscriptions, not just install and bounce. The full walkthrough · what I set up, how the creative looked, what worked, what flopped · is in today's YouTube video below. Watch it before you start.
+
+How to start today: open usefastlane.ai with the link below, sign up, plug in your app, and let it generate your first batch of creatives. Pick the top 2-3, push them to TikTok and Instagram Reels, and let the algorithm tell you what hooks. You don't need a budget to test · organic reach on these creatives is real if the hook is strong.
+
+Tomorrow we go one layer deeper on the marketing side. For today, your only job is to watch the video, sign up for Fastlane, and queue up your first creative. Shipping the app and shipping the marketing are the same week's work · not two separate phases.
+
+Ship the app, then ship the marketing · same week. Fastlane is the fastest way I've found to do the second half without an agency.
+
+Bonus drop
+Watch on YouTube
+
+How I pulled 25k+ Tier 1 views for an indie app
+The exact marketing flow + tool I used · watch before you set up your first campaign.
+
+
+Subscribe on YouTube
+Join the builders watching the journey, drop by drop.
+
+Today's tools
+Recommended
+F
+Fastlane
+AI marketing copilot for indie apps
+
+Fastlane turns your website URL into a brand-specific AI creator that ships scheduled, UGC-style short videos for TikTok, Instagram, and Reels. The fastest way to get users from organic short-form content without hiring creators or running paid ads.
+
+Why I recommend:Most indie builders ship and pray. Fastlane is the first tool that made organic short-form feel as fast as vibe-coding · type a URL, get a month of scheduled videos, grow without ads.
+
+
+Coupon · 10% off
+
+
+Tap to reveal
+Community exclusive
+
+Try Fastlane
+09
+Day 09
+2 min read
+
+Set Up Pricing, Trials & Subscriptions in App Store Connect
+Yesterday we built the paywall. Today we set the actual prices, trials, and regions inside App Store Connect · the source of truth Apple bills from.
+
+Quick recap. Day 8 wired the paywall UI in Rork and the subscription backend in RevenueCat. But neither one actually charges the customer. Apple does. And Apple only charges what you've defined inside App Store Connect. That's today's job.
+
+How to get there: open appstoreconnect.apple.com, sign in, click Apps, and open your app. In the left sidebar you'll see a Monetization section with three things that matter: Pricing and Availability, In-App Purchases, and Subscriptions. We'll touch all three.
+
+Pricing and Availability. Set the base country (usually US) and the price schedule. Apple auto-converts to every other region using its price tier table, but you can override per country if you want India or Brazil cheaper. Same screen lets you pick availability · which countries the app ships in and which to exclude. Start global unless you have a reason not to.
+
+In-App Purchases. This is for one-time stuff · lifetime unlocks, coin packs, a 'remove ads forever' tier. Anything that isn't recurring lives here. If your app is subscription-only, you can skip this for now.
+
+Subscriptions. Create a Subscription Group first (e.g. 'Pro'), then add your tiers inside it · weekly, monthly, yearly, whatever ladder you want. The group matters because users can only hold one active subscription per group · that's how Apple handles upgrades and downgrades cleanly.
+
+Adding a free trial. Open the specific plan (let's say Yearly), scroll to Subscription Prices, click the + icon, and choose Create Introductory Offer. Pick Free as the offer type, set the duration (3, 7, or 14 days are the common ones), and either apply it to all countries by default or pick specific regions. This is what powers the '7-day free trial' you wrote on your paywall yesterday.
+
+Localization. Each subscription needs a display name and description in every language you ship in. English is required; add Hindi, Spanish, Portuguese, etc. if you're targeting those markets. Apple will reject the submission if a localization is missing for a supported region.
+
+Review information · don't skip this. Before you submit, Apple needs a screenshot of your paywall and notes explaining how to test the subscription. Attach it under the subscription's Review Information section. Even Raul · or anyone on your team · can prep this. Skipping it means an instant rejection.
+
+With pricing live in App Store Connect and the paywall wired through RevenueCat, your app can finally take money. Tomorrow we'll cover what to test on TestFlight before submitting for review · the small things that get apps rejected on the first pass.
+
+Rork builds the paywall, RevenueCat handles the subscription logic, but App Store Connect is where the real prices, trials, and regions live. Get this right today and your app is ready to actually charge customers.
+
+Today's tools
+Recommended
+A
+App Store Connect
+Manage your App Store presence and pricing
+
+The official Apple portal to upload your app, set your pricing tiers (monthly, yearly), and manage your App Store listing. Essential for getting your app live.
+
+Open App Store Connect
+Recommended
+R
+Rork
+Vibe-code mobile apps in plain English or voice
+
+Describe your app, get a working React Native build you can preview on your phone in minutes. The fastest path from idea to shippable mobile app in 2026.
+
+Try Rork
+Recommended
+R
+RevenueCat
+In-app subscriptions made easy
+
+The industry standard for managing in-app subscriptions and paywalls. Handle monthly, yearly, and trial plans without writing complex backend code. Rork connects to it automatically.
+
+Example paywall UI screens in dark mode with green accents showing Monthly, Yearly and Trial plans side-by-side
+Open RevenueCat
+08
+Day 08
+1 min read
+
+How to Build a High-Converting Paywall
+How to charge customers for your app. Set up monthly, yearly, and trial plans with RevenueCat and Rork.
+
+Today is all about the money. How do you actually charge your customers? The answer is high-converting paywalls.
+
+A good paywall shows clear options: monthly, yearly, or quarterly. The trick is to anchor the yearly plan as the 'best value' by showing the monthly breakdown, making the math obvious for the user. You also want to remove risk by offering a 3-day or 7-day free trial so they can try before they buy.
+
+Here is how simple this is in 2026. Open your app in Rork and switch to Plan mode. Give it a simple prompt: 'I want to add a paywall. Charge $4.99/month, $29.99/year, and offer a 7-day free trial.'
+
+Rork will plan it out and start creating the paywall screens automatically, using your app's styling. But to handle the actual subscription backend and trial logic, you need RevenueCat.
+
+RevenueCat is the industry standard for managing in-app subscriptions, and it is completely free to start. You just create an account, click 'Connect RevenueCat' inside Rork, and log in. Rork will automate the changes and connect the UI to the backend.
+
+While Rork and RevenueCat handle the code and payment logic, you will define the actual pricing tiers inside App Store Connect. Tomorrow, I'll show you how to set up the subscription pricing there. For today, just get your paywall built and connected to RevenueCat.
+
+A high-converting paywall pushes the yearly plan and removes risk with a trial. Rork and RevenueCat can set up the entire backend in minutes.
+
+Today's tools
+Recommended
+R
+Rork
+Vibe-code mobile apps in plain English or voice
+
+Describe your app, get a working React Native build you can preview on your phone in minutes. The fastest path from idea to shippable mobile app in 2026.
+
+Try Rork
+Recommended
+R
+RevenueCat
+In-app subscriptions made easy
+
+The industry standard for managing in-app subscriptions and paywalls. Handle monthly, yearly, and trial plans without writing complex backend code. Rork connects to it automatically.
+
+Example paywall UI screens in dark mode with green accents showing Monthly, Yearly and Trial plans side-by-side
+Open RevenueCat
+Recommended
+A
+App Store Connect
+Manage your App Store presence and pricing
+
+The official Apple portal to upload your app, set your pricing tiers (monthly, yearly), and manage your App Store listing. Essential for getting your app live.
+
+Open App Store Connect
+07
+Day 07
+1 min read
+
+Ship Your App to TestFlight Today
+You've vibe-coded v1 in Rork. Today you put it on your iPhone via TestFlight · the real, on-device test before the App Store.
+
+Yesterday you shipped v1 of your app inside Rork. A live preview in a browser is cool, but it's not a real app yet. Today it lives on your phone · which is when it actually starts to feel like a product.
+
+Step 1 · Open your project in Rork and switch the chat to Plan mode. Type one prompt: 'Please publish this app to the TestFlight version.' Plan mode matters here · it sequences the build, signing, and upload cleanly so you don't burn credits on retries.
+
+Step 2 · Rork kicks off the TestFlight build automatically. While it runs, install the TestFlight app from the App Store on your iPhone. It's Apple's official testing app, free, and the only way to side-load builds before they're public.
+
+Step 3 · When the build finishes, your app shows up inside TestFlight on your phone. Tap install, open it, click around. Note every bug, every awkward tap target, every typo. This is the first time it feels real · don't skip this step.
+
+Once it feels solid, go back to Rork and prompt: 'Please publish this app to the App Store.' It auto-generates the screenshots, title, meta description, keywords, and iPhone + iPad assets, then submits for review. You don't manually upload anything · it's all handled.
+
+The one prerequisite is non-negotiable: an Apple Developer account. It's $99/year and Apple won't let anything ship without it. Sign up at developer.apple.com today so you're not blocked tomorrow. That's the homework: publish to TestFlight, install it on your iPhone, test it like a real user.
+
+A preview is not a product. Ship it to TestFlight today · that's where vibe-coding becomes shipping.
+
+Today's tools
+Recommended
+R
+Rork
+Vibe-code mobile apps in plain English or voice
+
+Describe your app, get a working React Native build you can preview on your phone in minutes. The fastest path from idea to shippable mobile app in 2026.
+
+Try Rork
+06
+Day 06
+1 min read
+
+Build Your First iPhone App Today
+Less gyaan, more building. A 3-step Rork walkthrough to ship the first version of your iPhone app in minutes · today.
+
+Most people will hand you bookish gyaan. I'd rather hand you a working app. Today we actually build · no theory, no slides, just three steps and a screen on your phone.
+
+Step 1 · Open Rork in Plan mode. Go to rork.com, sign in, and switch the chat to Plan mode. Set the model to Auto so Rork picks the best one for the job. This one setting is the difference between a clean build and a messy one.
+
+Step 2 · Drop your prompt and hit Enter. Describe the app in one paragraph · what it does, who it's for, the 2-3 core screens. Rork will reply with a few multiple-choice questions to lock in design, features, and stack. Pick your answers and hit Submit. That's the entire spec phase.
+
+Step 3 · Watch it vibe-code. In a couple of minutes Rork ships the first version of your app in the live preview on the right. Tap around, break things, and any change you want · 'make the home screen dark', 'add a streak counter' · just type it. It edits the app in place.
+
+What used to take a developer, a designer, and six weeks now takes you, a prompt, and an espresso. The first version won't be perfect, and it doesn't need to be. It needs to exist. Tomorrow you iterate.
+
+In the next few days I'll walk you through getting this app on your iPhone via TestFlight, then publishing on the App Store, plus the small polish moves that make a vibe-coded app feel like a real product. Today's job is simpler: open Rork, switch to Plan mode and Auto model, write your prompt, answer the MCQs, and ship v1. That's the whole homework.
+
+Don't read about building. Build. Open Rork today, ship v1 of your app, and let tomorrow's you handle TestFlight.
+
+Today's tools
+Recommended
+R
+Rork
+Vibe-code mobile apps in plain English or voice
+
+Describe your app, get a working React Native build you can preview on your phone in minutes. The fastest path from idea to shippable mobile app in 2026.
+
+Try Rork
+05
+Day 05
+Rest day
+
+Rest day · catching breath
+Slammed today. No full lesson, but the streak stays honest. Day 06 drops tomorrow at 11:30 PM IST · sharper, on time.
+
+04
+Day 04
+1 min read
+
+Mobile Apps Are the New Dropshipping
+Building mobile apps in 2026 is what dropshipping was in 2016. The tools to vibe-code, ship, and link them are finally here, and they're cheap.
+
+Remember 2016? Everyone and their cousin started a dropshipping store, and the early movers built real businesses while everyone else watched. Mobile apps in 2026 are that exact moment. The infrastructure just dropped, the costs collapsed, and most people haven't noticed yet.
+
+Quick disclaimer before we go further. Nothing here is free, and that's the point. You're building a business, not a hobby. I only recommend tools I personally pay for and use every week. The good news: these used to cost you a developer and three months. Today they cost less than your Netflix bill.
+
+The old way to ship a mobile app: hire a developer, brief them for weeks, pay 5 to 50 lakh, wait six months, then pray it works. The new way: open a vibe-coding tool, describe your app in plain English, watch it build, then ship it to the App Store the same week.
+
+My favorite right now is Rork. It's a vibe-coding platform built specifically for mobile apps. You describe what you want, it generates a working React Native app you can preview on your phone instantly, iterate in chat, and export. This is the tool I'd pick if I was starting from zero today.
+
+Once your app is built, you need to actually get it on the App Store and Play Store. Shipper.now handles that whole submission flow for you · screenshots, metadata, review notes, the boring parts that usually eat a week. It's the deploy button mobile dev never had.
+
+Today's homework is small but non-negotiable. Open all three. Sign up. Don't build anything yet. Just see the surface area of what's possible in 2026, because tomorrow we go deeper.
+
+Mobile apps in 2026 = dropshipping in 2016. The tools are here, they're cheap, and the window is open. Go sign up today, build tomorrow.
+
+Today's tools
+Recommended
+R
+Rork
+Vibe-code mobile apps in plain English or voice
+
+Describe your app, get a working React Native build you can preview on your phone in minutes. The fastest path from idea to shippable mobile app in 2026.
+
+Try Rork
+🚀
+Shipper
+Auto-submits your app to the App Store and Play Store. Handles screenshots, metadata, and review notes so launch day takes hours, not weeks.
+
+🔗
+Anything
+Turn your words into mobile apps, sites, tools, and products · built with code. Add GPT-5 and 40+ integrations in an instant.
+
+03
+Day 03
+1 min read
+
+Spy First. Then Build.
+Smart founders don't invent. They clone what's already winning. Sensor Tower shows you exactly which apps are printing money, where, and how.
+
+Yesterday I told you to validate before you build. Today I'm handing you a second tool to do it sharper. Different angle, same rule: never build on a hunch.
+
+The mistake every first-time founder makes is building emotionally. You fall in love with your idea, picture the launch, write the landing page in your head. The market doesn't care. The market only rewards what people already pay for.
+
+Sensor Tower is the industry-standard app intelligence platform. Search any app or niche and you instantly see the real numbers: monthly downloads, estimated revenue, top countries, in-app purchase pricing, ratings, and how the business actually monetizes.
+
+Example from today's video: 'Water tracker Waterllama'. 100K downloads and ~$100K revenue last month. 151K five-star reviews. Their offer ladder is a $0.99 monthly, a $9.99 annual, and a $19.99 lifetime. One person, with AI, could ship a cleaner version of this in a weekend. The proof is right there on the screen.
+
+It also doubles as a competitor spy tool. See which countries each app wins in, what pricing tier converts, what the IAP ladder looks like, and how reviews trend over time. Use it to reverse-engineer the offer, not just copy the app.
+
+Rule for the next 100 days: don't build what excites you. Build what's already working. Pick a validated niche, study the top 3 apps on Sensor Tower, then ship your version with one sharper hook.
+
+Smart founders clone what's working. Sensor Tower is your spyglass. Use it before you write a line of code.
+
+Today's tools
+📡
+Sensor Tower
+App store intelligence · spy on what's winning
+
+Real downloads, revenue, top countries, pricing, and competitor insights for any app on iOS or Android. The standard tool for validating before you build.
+
+Live preview
+
+Tap to enlarge · swipe →
+
+Sensor Tower overview of Water tracker Waterllama with 151K five-star reviews
+Sensor Tower showing 100K downloads and $100K monthly revenue worldwide
+Sensor Tower in-app purchase pricing table and rating breakdown
+
+Open Sensor Tower
+02
+Day 02
+1 min read
+
+Don't Build. Validate First.
+The reason most apps fail isn't bad code, it's nobody wanted them. Here's how to know your idea works before you build it.
+
+Ninety percent of indie apps die quietly because the founder skipped one step: checking if anyone actually wants what they're building. They had an idea, fell in love with it, and shipped it into silence.
+
+The fix is brutally simple. Before you spin up a single project, look at apps already making money in your space. If similar apps exist and earn well, your idea is validated. If nothing exists, that's usually a warning sign, not a green field.
+
+Today's tool is AppKittie. It's an App Store intelligence platform that shows you exactly which apps are live, when they launched, how many downloads they get, and how much MRR they're pulling. You can search any niche (calorie tracker, habit tracker, AI photo editor) and see the real numbers in seconds.
+
+Example from today's video: I searched 'calorie tracker' and found apps released just 2-3 months ago already doing $1K to $23K MRR. That's validation. That's a green light to build a better version.
+
+Don't reinvent. Clone smarter. Pick a validated idea, study what's working, then ship your version with one sharper angle. The market has already done the hard part for you.
+
+Before you build, validate. AppKittie shows you the money trail. Follow it.
+
+Today's tools
+Recommended
+AppKittie logo
+AppKittie
+App + Play Store intelligence for indie founders
+
+See which apps are live on the App Store and Play Store, when they launched, downloads, MRR, ad creatives, and country targeting. Search any niche and get the real numbers in seconds.
+
+Live preview
+
+Tap to enlarge · swipe →
+
+AppKittie search results showing apps with MRR
+AppKittie app detail with monthly revenue and downloads
+AppKittie ad intelligence showing Apple Search Ads breakdown
+
+
+Coupon · 20% off
+
+
+Tap to reveal
+Free trial available · community exclusive
+
+Start 3-day free trial
+01
+Day 01
+1 min read
+
+How a One-Person Company Actually Works
+Why one laptop, a few hours, and AI now beat the old playbook of teams, offices, and capital.
+
+Traditional businesses need offices, capital, teams, inventory, and years to break even.
+
+A one-person company needs four things: a laptop, 2-3 hours a day, AI tools, and a good internet connection. That's it.
+
+The math is different. The leverage is different. The risk is different. You're not building an empire. You're building a small machine that pays you while you sleep.
+
+Over the next 100 days, I'll show you exactly how. Tools, tactics, mistakes, wins. Bookmark this page.
+
+You don't need a team. You need a laptop, a few hours, and the right tools.
+
+Note: I'm building and managing multiple things right now, so drops might occasionally be delayed.
+
+Got it
+Day 11
+Up next
+Dropping soon
+
+Notify me
+And 89 more days after that
+
+Day 100 · Finish line →
+
+Where this 100-day journey completes. Something new begins.
+
+Bonus drop
+Watch on YouTube
+
+How a 22-year-old is building a one person company
+A solo founder breaks down his numbers, tools, and daily routine.
+
+
+Subscribe on YouTube
+Join the builders watching the journey, drop by drop.
+
+New lessons drop regularly. Bookmark this page.
+
+S
+Built with ❤️ by Ashish
+
+Privacy
+·
+Terms
+·
+Disclaimer
+·
+Cookies
+·
+Cookie settings
+Published using Google Docs
+Report abuseLearn more
+claude
+Updated automatically every 5 minutes
+🚀 Claude Code — Free with Kiro Subscription
+
+Step-by-step setup guide using kiro-gateway
+
+ 
+
+ 
+
+ 
+
+🎁 Step 0 — Get Kiro Pro Free Trial (₹0 Today)
+
+Before setting up the gateway, you need a Kiro Pro account. Here's the good news — Kiro Pro is ₹0.00 today on your first upgrade. Your sign-up credit covers the full prorated amount.
+
+ 
+
+🎉 What you get
+
+•       Pro plan and pro + plan both free
+
+     1000 and 2000 credits free
+
+ 
+
+Follow these steps:
+
+ 
+
+1.     Go to kiro.dev
+1.     Sign up using Google, GitHub, or AWS Builder ID (social login recommended — NOT AWS Identity Center
+
+1.     Go to setting and you will see plans click on pro plan or pro plus plan(both are free).
+
+     It will shows some amount but once you click on them it got free.
+
+1.     On the payment page you will see: Total due today = ₹0.00 (sign-up credit automatically applied)
+
+1.     Enter your card details and billing address, then click Subscribe — you will NOT be charged today
+
+1.     Cancel before next billing period.
+
+ 
+
+ After getting the pro plans:
+
+Create api key from api section
+
+ 
+
+Official Kiro-Gateway Repo: https://github.com/jwadow/kiro-gateway
+🛠️ Prerequisites
+Make sure the following are installed on your Windows machine:
+
+ 
+
+•       Python 3.10+ — check the box to 'Add Python to PATH' during installation
+
+•       Node.js (LTS version) — required to run Claude Code
+
+•       Kiro CLI (kiro-cli) — installed and active
+
+ 
+
+🚀 Step 1 — Install and Authenticate Kiro CLI
+Open PowerShell or Command Prompt and run:
+
+ 
+
+kiro-cli login
+
+ 
+
+Your browser will open. Log in to your Kiro account to complete authentication.
+
+ 
+
+📂 Step 2 — Download and Configure kiro-gateway
+Navigate to your preferred drive and clone the repository:
+
+ 
+
+cd D:\
+
+git clone https://github.com/jwadow/kiro-gateway
+
+cd kiro-gateway
+
+ 
+
+Install Python dependencies:
+
+ 
+
+pip install -r requirements.txt
+
+ 
+
+Create your config file:
+
+ 
+
+copy .env.example .env
+
+ 
+
+Open the .env file:
+
+ 
+
+notepad .env
+
+ 
+
+Edit only these fields (leave everything else as-is):
+
+ 
+
+# Invent any custom password to secure your local proxy
+
+PROXY_API_KEY="my-super-secret-password-123"
+
+ 
+
+# Point to your local Kiro CLI database
+
+# Replace YOUR_WINDOWS_USERNAME with your actual Windows username
+
+KIRO_CLI_DB_FILE="C:\Users\YOUR_WINDOWS_USERNAME\AppData\Local\kiro-cli\data.sqlite3"
+
+ 
+
+Save (Ctrl+S) and close Notepad.
+
+ 
+
+🖥️ Step 3 — Launch the Gateway Server
+Run the gateway server  
+
+python main.py
+
+ 
+
+✅ Keep this terminal window open!
+
+You should see: INFO: Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+
+ 
+
+⚙️ Step 4 — Configure Claude Code Settings
+Open a new PowerShell window and run:
+
+ 
+
+notepad $env:USERPROFILE\.claude\settings.json
+
+ 
+
+If Windows asks to create a new file, click Yes.
+
+ 
+
+Replace the entire file contents with this:
+
+ 
+
+{
+
+  "env": {
+
+        "ANTHROPIC_BASE_URL": "http://0.0.0.0:8000",
+
+        "ANTHROPIC_MODEL": "claude-opus-4-6",
+
+        "ANTHROPIC_API_KEY": "my-super-secret-password-123",
+
+        "ENABLE_TOOL_SEARCH": "true"
+
+  },
+
+  "autoUpdatesChannel": "latest"
+
+}
+
+ 
+
+⚠️ Important:
+
+The ANTHROPIC_API_KEY here must match the PROXY_API_KEY you set in your .env file.
+
+ 
+
+Save (Ctrl+S) and close Notepad.
+
+ 
+
+🏁 Step 5 — Start and Verify Claude Code
+In your terminal, start Claude Code:
+
+ 
+
+claude
+
+ 
+
+Test it with a prompt:
+
+ 
+
+hi what can you do for me?
+
+ 
+
+How to verify it's working:
+
+Check your background Python terminal. You should see live requests like:
+
+POST /v1/messages HTTP/1.1" 200 OK
+
+ 
+
+ 
+
+ 
+
+⚠️ Troubleshooting
+ 
+
+ConnectionRefused Error
+
+Make sure the Python gateway server is running on port 8000— same as your settings.json.
+
+ 
+
+Model Name Compatibility
+
+Use exactly "claude-opus-4-6" as the model string. The gateway maps this downstream to Kiro's API.
+
+ 
+
+Database Path Missing
+
+If the gateway fails on startup, double-check your Windows username in the KIRO_CLI_DB_FILE path.
+
+
+ 
+
+Made with ❤️ By Learnwith_ajay — Follow for more AI tips
+
+        Follow: https://www.instagram.com/learnwith.ajay_/
+
+
+
+Complete_SEO_Guide_2026.docx
+Complete Website SEO Guide (2026)
+How to Rank Your Website on Google & Other Search Engines
+
+Introduction
+This guide explains how to register your website in Google Search Console, optimize SEO, improve rankings, and use AI prompts to generate SEO-focused content.
+
+What is SEO?
+SEO (Search Engine Optimization) helps search engines understand, trust, and rank your website higher in search results.
+
+Google Search Console Setup
+1. Open Google Search Console
+2. Add your domain/property
+3. Verify ownership using DNS or HTML methods
+4. Submit your sitemap.xml
+5. Monitor indexing and keyword performance
+
+Technical SEO Essentials
+- Fast loading speed
+- Mobile responsiveness
+- HTTPS enabled
+- Clean URLs
+- Proper metadata
+- Robots.txt and sitemap setup
+
+Content SEO
+Write useful content matching user intent. Use natural keywords, proper heading hierarchy (H1, H2, H3), internal linking, and optimized meta descriptions.
+
+Image SEO
+Use compressed images, meaningful filenames, alt text, and responsive image sizing.
+
+Backlinks
+Build backlinks through blogs, guest posts, social sharing, Product Hunt launches, directories, and useful tools/resources.
+
+Modern SEO for AI Websites
+Avoid generic AI-generated copy. Focus on semantic HTML, accessibility, fast performance, structured data, and trustworthy content.
+
+AI SEO Optimization Prompt
+Use this prompt with ChatGPT, Claude, Gemini, Cursor, Windsurf, or other AI tools:
+
+You are an advanced SEO analyst, technical SEO engineer, conversion copywriter, semantic search optimizer, and Google ranking specialist.
+
+Analyze my complete website thoroughly.
+
+Tasks:
+- Analyze all pages
+- Find high-ranking SEO keywords
+- Generate SEO optimized headings and content
+- Improve semantic relevance
+- Suggest internal links
+- Suggest schema markup
+- Optimize readability
+- Detect weak sections
+- Improve technical SEO
+- Rewrite AI-generic copy
+- Generate metadata
+- Suggest blog ideas
+- Prioritize fixes by impact
+
+Output:
+- SEO audit summary
+- Critical issues
+- Keyword opportunities
+- Technical SEO improvements
+- Content improvements
+- Final SEO score
+
+SEO Checklist
+- Sitemap submitted
+- Mobile optimized
+- HTTPS enabled
+- Fast loading
+- Metadata added
+- Proper headings used
+- Internal links added
+- Images optimized
+
+Final Advice
+SEO is a long-term game. Focus on useful content, fast performance, strong branding, technical optimization, and consistent publishing.
+
+
 
 Meta
 Products
