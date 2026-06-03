@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HoundShield — Roadmap to June 10</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #0a0c0f;
+    --surface: #111318;
+    --border: #1e2330;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --green: #00ff87;
+    --yellow: #ffcc00;
+    --red: #ff3b3b;
+    --text: #e8eaf0;
+    --muted: #5a6070;
+    --font: 'Courier New', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+
+  .sys-line {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .target {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .target span {
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .countdown {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+
+  .count-item {
+    text-align: center;
+  }
+
+  .count-num {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+  }
+
+  .count-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .count-sep {
+    font-size: 32px;
+    color: var(--border);
+    align-self: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .week-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .week-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .week-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .week-dates {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .day-row {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .day-row:last-child { border-bottom: none; }
+
+  .day-label {
+    font-size: 10px;
+    color: var(--muted);
+    width: 32px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .day-tasks { flex: 1; }
+
+  .task {
+    font-size: 11px;
+    color: var(--text);
+    margin-bottom: 4px;
+    padding-left: 8px;
+    border-left: 2px solid var(--border);
+  }
+
+  .task.p0 { border-left-color: var(--red); }
+  .task.p1 { border-left-color: var(--yellow); }
+  .task.close { border-left-color: var(--green); }
+
+  .priority-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .priority-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .priority-card.p0 { border-top: 2px solid var(--red); }
+  .priority-card.p1 { border-top: 2px solid var(--yellow); }
+  .priority-card.p2 { border-top: 2px solid var(--accent); }
+
+  .priority-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .p0 .priority-label { color: var(--red); }
+  .p1 .priority-label { color: var(--yellow); }
+  .p2 .priority-label { color: var(--accent); }
+
+  .priority-item {
+    font-size: 11px;
+    color: var(--text);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .priority-item:last-child { border-bottom: none; }
+
+  .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .p0 .dot { background: var(--red); }
+  .p1 .dot { background: var(--yellow); }
+  .p2 .dot { background: var(--accent); }
+
+  .channels {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 40px;
+  }
+
+  .channel-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .channel-row:last-child { border-bottom: none; }
+
+  .channel-rank {
+    font-size: 10px;
+    color: var(--muted);
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  .channel-name {
+    font-size: 12px;
+    font-weight: 700;
+    width: 200px;
+    flex-shrink: 0;
+  }
+
+  .channel-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    position: relative;
+  }
+
+  .channel-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+  }
+
+  .channel-note {
+    font-size: 10px;
+    color: var(--muted);
+    width: 180px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .idea-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-top: 2px solid var(--accent2);
+  }
+
+  .idea-num {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .idea-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .idea-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+
+  .idea-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .metric-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+
+  .metric-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .footer {
+    text-align: center;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .priority-grid { grid-template-columns: 1fr; }
+    .ideas-grid { grid-template-columns: 1fr; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="sys-line">HERMES // HOUNDSHIELD OPERATING SYSTEM // ACTIVE</div>
+  <h1>LAUNCH ROADMAP</h1>
+  <div class="target">Target: <span>10 paying customers</span> by June 10, 2026</div>
+  
+  <div class="countdown">
+    <div class="count-item">
+      <span class="count-num" id="days">16</span>
+      <div class="count-label">Days</div>
+    </div>
+    <div class="count-sep">:</div>
+    <div class="count-item">
+      <span class="count-num" id="hours">00</span>
+      <div class="count-label">Hours</div>
+    </div>
+    <div class="count-sep">:</div>
+    <div class="count-item">
+      <span class="count-num" id="mins">00</span>
+      <div class="count-label">Minutes</div>
+    </div>
+    <div class="count-sep">:</div>
+    <div class="count-item">
+      <span class="count-num" id="secs">00</span>
+      <div class="count-label">Seconds</div>
+    </div>
+  </div>
+</div>
+
+<div class="metrics">
+  <div class="metric-card">
+    <span class="metric-num">80,000</span>
+    <div class="metric-label">US defense contractors need CMMC Level 2</div>
+  </div>
+  <div class="metric-card">
+    <span class="metric-num">1%</span>
+    <div class="metric-label">Have certified so far — window is open</div>
+  </div>
+  <div class="metric-card">
+    <span class="metric-num">$150K</span>
+    <div class="metric-label">Max C3PAO assessment cost — your $199 wins</div>
+  </div>
+  <div class="metric-card">
+    <span class="metric-num">Nov 10</span>
+    <div class="metric-label">2026 CMMC Phase 2 enforcement deadline</div>
+  </div>
+</div>
+
+<div class="section-title">PRIORITY MATRIX</div>
+<div class="priority-grid">
+  <div class="priority-card p0">
+    <div class="priority-label">P0 — Block Sales — Fix Today</div>
+    <div class="priority-item"><div class="dot"></div>Fix or remove broken Brain AI from homepage</div>
+    <div class="priority-item"><div class="dot"></div>Verify live scanner demo works flawlessly</div>
+    <div class="priority-item"><div class="dot"></div>Run secrets audit on GitHub repo</div>
+    <div class="priority-item"><div class="dot"></div>Add real founder bio and face to site</div>
+    <div class="priority-item"><div class="dot"></div>Remove fictional "Jordan M." persona or make real</div>
+  </div>
+  <div class="priority-card p1">
+    <div class="priority-label">P1 — Generates Revenue — This Week</div>
+    <div class="priority-item"><div class="dot"></div>Contact 10 C3PAOs with partnership pitch</div>
+    <div class="priority-item"><div class="dot"></div>Send 50 LinkedIn ICP messages per day</div>
+    <div class="priority-item"><div class="dot"></div>Publish "Can defense contractors use ChatGPT?"</div>
+    <div class="priority-item"><div class="dot"></div>Publish "Nightfall creates DFARS violations"</div>
+    <div class="priority-item"><div class="dot"></div>List on G2, Capterra, Product Hunt</div>
+  </div>
+  <div class="priority-card p2">
+    <div class="priority-label">P2 — Builds Moat — This Month</div>
+    <div class="priority-item"><div class="dot"></div>Open-source the detection pattern library</div>
+    <div class="priority-item"><div class="dot"></div>Sign Docker image, publish SBOM</div>
+    <div class="priority-item"><div class="dot"></div>GitHub CI with passing test badge</div>
+    <div class="priority-item"><div class="dot"></div>5 SEO articles live and indexed</div>
+    <div class="priority-item"><div class="dot"></div>MSP partner dashboard</div>
+  </div>
+</div>
+
+<div class="section-title">WEEK-BY-WEEK EXECUTION</div>
+<div class="grid">
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-title">WEEK 1 — TRUST + OUTREACH</div>
+      <div class="week-dates">May 26 – June 1</div>
+    </div>
+    
+    <div class="day-row">
+      <div class="day-label">D1</div>
+      <div class="day-tasks">
+        <div class="task p0">Fix Brain AI or remove from homepage</div>
+        <div class="task p0">Run trufflehog on GitHub repo</div>
+        <div class="task p0">Add founder bio + face to site</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D2</div>
+      <div class="day-tasks">
+        <div class="task p1">Build 200-contact target list from LinkedIn + SAM.gov</div>
+        <div class="task p1">Set up outreach tracking spreadsheet</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D3</div>
+      <div class="day-tasks">
+        <div class="task p1">Send C3PAO partnership pitch to 10 assessors</div>
+        <div class="task p1">Post on DIBcommunity.com and CMMC-AB forum</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D4</div>
+      <div class="day-tasks">
+        <div class="task p1">Publish "Can defense contractors use ChatGPT?"</div>
+        <div class="task p1">Publish "Nightfall creates DFARS violations"</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D5</div>
+      <div class="day-tasks">
+        <div class="task p1">50 LinkedIn ICP outreach messages — day 1</div>
+        <div class="task p1">Submit to G2 and Capterra</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D6</div>
+      <div class="day-tasks">
+        <div class="task p1">Post on Hacker News (Show HN)</div>
+        <div class="task p1">Post on r/CMMC, r/netsec, r/cybersecurity</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D7</div>
+      <div class="day-tasks">
+        <div class="task p1">Follow up all responses, schedule demo calls</div>
+        <div class="task p1">Launch on Product Hunt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="week-block">
+    <div class="week-header">
+      <div class="week-title">WEEK 2 — CLOSE</div>
+      <div class="week-dates">June 2 – June 10</div>
+    </div>
+    
+    <div class="day-row">
+      <div class="day-label">D8</div>
+      <div class="day-tasks">
+        <div class="task close">Demo calls + 50 more LinkedIn messages</div>
+        <div class="task close">First customer target: close 1–2</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D9</div>
+      <div class="day-tasks">
+        <div class="task close">Follow up every HN/Reddit response</div>
+        <div class="task close">Publish 3rd SEO article</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D10</div>
+      <div class="day-tasks">
+        <div class="task close">C3PAO partner follow-up calls</div>
+        <div class="task close">Target: 3–5 paying customers</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D11</div>
+      <div class="day-tasks">
+        <div class="task close">Onboard early customers, get first testimonial</div>
+        <div class="task close">Publish 4th SEO article</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D12</div>
+      <div class="day-tasks">
+        <div class="task close">Demo calls — close the pipeline</div>
+        <div class="task close">Target: 7–8 paying customers</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D13</div>
+      <div class="day-tasks">
+        <div class="task close">Final push — follow up every open lead</div>
+        <div class="task close">Offer limited-time annual bundle deal</div>
+      </div>
+    </div>
+    <div class="day-row">
+      <div class="day-label">D14</div>
+      <div class="day-tasks">
+        <div class="task close">LAUNCH DAY — June 10, 2026</div>
+        <div class="task close">Target: 10 paying customers achieved</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">CHANNEL ROI — RANKED FOR 14-DAY WINDOW</div>
+<div class="channels">
+  <div class="channel-row">
+    <div class="channel-rank">01</div>
+    <div class="channel-name" style="color: var(--green)">C3PAO/RPO Partnerships</div>
+    <div class="channel-bar-wrap"><div class="channel-bar" style="width: 95%"></div></div>
+    <div class="channel-note">40 C3PAOs x 10 clients = 400 prospects</div>
+  </div>
+  <div class="channel-row">
+    <div class="channel-rank">02</div>
+    <div class="channel-name" style="color: var(--accent)">LinkedIn ICP Outreach</div>
+    <div class="channel-bar-wrap"><div class="channel-bar" style="width: 75%"></div></div>
+    <div class="channel-note">50/day, 2–5% conversion</div>
+  </div>
+  <div class="channel-row">
+    <div class="channel-rank">03</div>
+    <div class="channel-name" style="color: var(--accent)">CMMC Community Forums</div>
+    <div class="channel-bar-wrap"><div class="channel-bar" style="width: 60%"></div></div>
+    <div class="channel-note">High trust, organic, free</div>
+  </div>
+  <div class="channel-row">
+    <div class="channel-rank">04</div>
+    <div class="channel-name" style="color: var(--yellow)">Hacker News Show HN</div>
+    <div class="channel-bar-wrap"><div class="channel-bar" style="width: 50%"></div></div>
+    <div class="channel-note">Variable — can spike hard</div>
+  </div>
+  <div class="channel-row">
+    <div class="channel-rank">05</div>
+    <div class="channel-name" style="color: var(--yellow)">SEO / Content</div>
+    <div class="channel-bar-wrap"><div class="channel-bar" style="width: 35%"></div></div>
+    <div class="channel-note">Low 14-day ROI, high 30-day+</div>
+  </div>
+  <div class="channel-row">
+    <div class="channel-rank">06</div>
+    <div class="channel-name">Product Hunt</div>
+    <div class="channel-bar-wrap"><div class="channel-bar" style="width: 25%"></div></div>
+    <div class="channel-note">Awareness, some conversion</div>
+  </div>
+</div>
+
+<div class="section-title">THREE VALIDATED REVENUE IDEAS</div>
+<div class="ideas-grid">
+  <div class="idea-card">
+    <div class="idea-num">IDEA 01</div>
+    <div class="idea-title">CMMC AI Gap Report</div>
+    <div class="idea-price">$499 one-time</div>
+    <div class="idea-desc">Bespoke PDF showing which AI tools an org uses, which NIST 800-171 controls are at risk, and what HoundShield covers. C3PAOs want clients to produce this. Build it as a Brain AI feature. Sell it standalone. Priced at 1% of the assessment cost it prevents.</div>
+  </div>
+  <div class="idea-card">
+    <div class="idea-num">IDEA 02</div>
+    <div class="idea-title">C3PAO Partner Program</div>
+    <div class="idea-price">30% referral</div>
+    <div class="idea-desc">Let C3PAOs and RPOs recommend and resell HoundShield to their clients. 40 authorized C3PAOs each serving 10+ clients is 400+ potential customers through one channel. This is how Vanta scaled from zero. This is how you scale.</div>
+  </div>
+  <div class="idea-card">
+    <div class="idea-num">IDEA 03</div>
+    <div class="idea-title">Annual Compliance Bundle</div>
+    <div class="idea-price">$2,000/year</div>
+    <div class="idea-desc">HoundShield Pro + 4 quarterly PDF audit exports + 1 AI gap report + annual review call. Priced below two hours of CMMC consultant time. Annual commitment improves your cash flow. Defense contractors prefer annual procurement cycles.</div>
+  </div>
+</div>
+
+<div class="footer">
+  HERMES SYSTEM ACTIVE — HOUNDSHIELD — LAUNCH: JUNE 10, 2026 — GOAL: 10 PAYING CUSTOMERS
+</div>
+
+<script>
+  function updateCountdown() {
+    const launch = new Date('2026-06-10T00:00:00');
+    const now = new Date();
+    const diff = launch - now;
+    
+    if (diff <= 0) {
+      document.getElementById('days').textContent = '00';
+      document.getElementById('hours').textContent = '00';
+      document.getElementById('mins').textContent = '00';
+      document.getElementById('secs').textContent = '00';
+      return;
+    }
+    
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    document.getElementById('days').textContent = String(d).padStart(2, '0');
+    document.getElementById('hours').textContent = String(h).padStart(2, '0');
+    document.getElementById('mins').textContent = String(m).padStart(2, '0');
+    document.getElementById('secs').textContent = String(s).padStart(2, '0');
+  }
+  
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
