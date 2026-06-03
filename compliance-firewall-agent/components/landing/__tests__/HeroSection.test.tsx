@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
 
 // Mock Next.js dynamic (PlatformDashboard is SSR:false)
 vi.mock("next/dynamic", () => ({
@@ -22,6 +22,17 @@ vi.mock("framer-motion", () => ({
 import { HeroSection } from "../HeroSection";
 
 describe("HeroSection", () => {
+  // Freeze the clock so the "days until CMMC Phase 2 (Nov 10, 2026)" countdown
+  // is deterministic. Without this the snapshot drifts by one every calendar
+  // day and CI goes red on any day except the one the snapshot was generated.
+  beforeAll(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-02T12:00:00Z"));
+  });
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
   it("renders the main headline", () => {
     render(<HeroSection />);
     // Headline text is split across spans; match a substring that's all in one node
