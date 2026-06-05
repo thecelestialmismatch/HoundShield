@@ -112,14 +112,14 @@ export default function HomePage() {
       <NavV3 />
 
       {/* ── 1. HERO ─────────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="spotlight relative pt-28 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-mesh-gradient pointer-events-none" />
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-30 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse, rgba(129,166,198,0.15), transparent 70%)' }}
         />
 
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="flex justify-center mb-6">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--hs-border)] bg-white text-xs font-medium text-[var(--hs-ink-secondary)] font-[var(--font-body)] shadow-[var(--shadow-sm)]">
               <span className="relative flex h-1.5 w-1.5">
@@ -222,8 +222,8 @@ export default function HomePage() {
       <FeaturesGrid />
 
       {/* ── 5. HOW IT WORKS ─────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]">
-        <div className="max-w-6xl mx-auto">
+      <section className="spotlight py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]">
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <h2
               className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4"
@@ -314,8 +314,8 @@ export default function HomePage() {
       </section>
 
       {/* ── 7. PRICING ──────────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]" id="pricing">
-        <div className="max-w-6xl mx-auto">
+      <section className="spotlight py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]" id="pricing">
+        <div className="relative z-10 max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <h2
               className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4"
@@ -387,8 +387,8 @@ export default function HomePage() {
       </section>
 
       {/* ── 8. FAQ ──────────────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto">
+      <section className="spotlight py-20 px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-2xl mx-auto">
           <h2
             className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] text-center mb-12"
             style={{ fontFamily: 'var(--font-display)' }}
