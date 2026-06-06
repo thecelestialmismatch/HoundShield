@@ -53,13 +53,13 @@ const PILLARS = [
   },
   {
     icon: Timer,
-    iconBg: "bg-emerald-50 border-emerald-200",
-    iconColor: "text-emerald-700",
+    iconBg: "bg-[var(--hs-success-bg)] border-[rgba(5,150,105,0.25)]",
+    iconColor: "text-[var(--hs-success)]",
     eyebrow: "vs. VPNs and endpoint agents",
     title: "Under 10ms. Zero behaviour change.",
     body: "A single URL swap is all your engineers change. houndshield sits inline at the gateway — invisible to users, impenetrable to leaks.",
     stat: { label: "Deploy time", value: 15, suffix: " min" },
-    accentColor: "text-emerald-700",
+    accentColor: "text-[var(--hs-success)]",
   },
   {
     icon: FileCheck,

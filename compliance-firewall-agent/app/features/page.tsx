@@ -55,8 +55,8 @@ const bentoFeatures = [
     title: "CMMC Self-Assessment",
     desc: "Walk through all 110 NIST SP 800-171 controls with guided questionnaires. Your SPRS score updates in real time as you complete each practice.",
     icon: ShieldCheck,
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/10 border-emerald-500/20",
+    color: "text-[var(--hs-success)]",
+    bg: "bg-[rgba(5,150,105,0.1)] border-[rgba(5,150,105,0.2)]",
     stat: "110 Controls",
     wide: true,
   },
@@ -73,8 +73,8 @@ const bentoFeatures = [
     title: "SSP & POA&M Generation",
     desc: "Auto-generate your System Security Plan and Plan of Action & Milestones documents ready for C3PAO review.",
     icon: FileText,
-    color: "text-purple-400",
-    bg: "bg-purple-500/10 border-purple-500/20",
+    color: "text-[var(--hs-steel)]",
+    bg: "bg-[rgba(129,166,198,0.1)] border-[rgba(129,166,198,0.2)]",
     stat: "1-Click",
     wide: false,
   },
@@ -151,7 +151,7 @@ export default function FeaturesPage() {
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-[1.1]">
               Everything you need for{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-emerald-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)]">
                 CMMC Level 2
               </span>
             </h1>
@@ -239,7 +239,7 @@ export default function FeaturesPage() {
                         return (
                           <td key={p.name} className="text-center py-3.5 px-3">
                             {v === true ? (
-                              <Check className="w-4 h-4 text-emerald-400 mx-auto" />
+                              <Check className="w-4 h-4 text-[var(--hs-success)] mx-auto" />
                             ) : v === false ? (
                               <Minus className="w-4 h-4 text-slate-400 mx-auto" />
                             ) : (

@@ -165,14 +165,14 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
 
     if (connected) {
         return (
-            <div className="glass-card p-5 border-emerald-500/20">
+            <div className="glass-card p-5 border-[rgba(5,150,105,0.2)]">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-emerald-400" />
+                    <div className="w-10 h-10 rounded-xl bg-[rgba(5,150,105,0.2)] border border-[rgba(5,150,105,0.3)] flex items-center justify-center">
+                        <Building2 className="w-5 h-5 text-[var(--hs-success)]" />
                     </div>
                     <div>
                         <p className="text-sm font-bold text-white">{companyName}</p>
-                        <p className="text-xs text-emerald-400">Connected — Scanning as {companyName}</p>
+                        <p className="text-xs text-[var(--hs-success)]">Connected — Scanning as {companyName}</p>
                     </div>
                     <button onClick={() => { setConnected(false); setCompanyName(""); setCompanyDomain(""); }} className="ml-auto text-xs text-slate-400 hover:text-slate-300 transition-colors">
                         Disconnect
@@ -187,7 +187,7 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
             <div className="flex items-center gap-3 mb-4">
                 <Building2 className="w-5 h-5 text-brand-400" />
                 <h3 className="text-sm font-bold text-slate-300">Connect Your Company</h3>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 font-semibold">OPTIONAL</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(5,150,105,0.2)] text-[var(--hs-success)] border border-[rgba(5,150,105,0.2)] font-semibold">OPTIONAL</span>
             </div>
             <p className="text-xs text-slate-400 mb-4">Tag your scan results with your company name. No data leaves your browser.</p>
             <div className="grid grid-cols-2 gap-3">
@@ -255,7 +255,7 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     </div>
                     {/* Recommended Action */}
                     <div className="flex gap-3">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] mt-0.5 shrink-0" />
                         <div>
                             <p className="text-xs font-bold text-slate-300 mb-1">Permanent Fix</p>
                             <p className="text-xs text-slate-500 leading-relaxed">{result.fix}</p>
@@ -321,7 +321,7 @@ export default function FreeDemoPage() {
         <div className="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden">
             <ScrollProgressBar />
             <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
-            <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
+            <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-[rgba(129,166,198,0.05)] rounded-full blur-[150px] pointer-events-none -z-10" />
 
             <Navbar variant="dark" />
 
@@ -331,7 +331,7 @@ export default function FreeDemoPage() {
                     {/* ═══ HEADER ═══ */}
                     <div className="text-center mb-12">
                         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-                            Test Your AI Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-emerald-400">Right Now</span>
+                            Test Your AI Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)]">Right Now</span>
                         </h1>
                         <p className="text-lg text-slate-500 max-w-3xl mx-auto leading-relaxed">
                             Paste any prompt, code, or message your team sends to AI tools like ChatGPT, Claude, or Copilot.
@@ -343,9 +343,9 @@ export default function FreeDemoPage() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
                         {[
                             { step: "1", title: "Connect (optional)", desc: "Tag scans with your company name", icon: Building2, color: "text-brand-400" },
-                            { step: "2", title: "Paste Your Prompt", desc: "Or pick from our sample scenarios", icon: FileText, color: "text-purple-400" },
+                            { step: "2", title: "Paste Your Prompt", desc: "Or pick from our sample scenarios", icon: FileText, color: "text-[var(--hs-steel)]" },
                             { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-brand-400" },
-                            { step: "4", title: "Get Fix Reports", desc: "Detailed impact + remediation tips", icon: Lightbulb, color: "text-emerald-400" },
+                            { step: "4", title: "Get Fix Reports", desc: "Detailed impact + remediation tips", icon: Lightbulb, color: "text-[var(--hs-success)]" },
                         ].map((s) => {
                             const Icon = s.icon;
                             return (
@@ -449,10 +449,10 @@ export default function FreeDemoPage() {
                                 {/* All Clear */}
                                 {scanComplete && results.length === 0 && (
                                     <div className="flex-1 flex flex-col items-center justify-center py-8">
-                                        <div className="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center mb-4">
-                                            <ShieldCheck className="w-8 h-8 text-emerald-400" />
+                                        <div className="w-16 h-16 rounded-full bg-[rgba(5,150,105,0.2)] border-2 border-[rgba(5,150,105,0.4)] flex items-center justify-center mb-4">
+                                            <ShieldCheck className="w-8 h-8 text-[var(--hs-success)]" />
                                         </div>
-                                        <p className="text-emerald-400 font-bold text-lg mb-1">All Clear!</p>
+                                        <p className="text-[var(--hs-success)] font-bold text-lg mb-1">All Clear!</p>
                                         <p className="text-slate-400 text-sm text-center">No sensitive data detected. This prompt is safe to send to AI.</p>
                                     </div>
                                 )}
@@ -489,7 +489,7 @@ export default function FreeDemoPage() {
                                         ))}
 
                                         {/* CTA */}
-                                        <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-purple-500/15 border border-brand-500/25">
+                                        <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-[rgba(129,166,198,0.15)] border border-brand-500/25">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Package className="w-4 h-4 text-brand-400" />
                                                 <p className="text-sm font-bold text-white">Hound Shield Pro Package</p>
@@ -567,7 +567,7 @@ export default function FreeDemoPage() {
                                     <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-300">Hound Shield Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-emerald-300 mb-2">6. Get the Full Package</h3>
+                                    <h3 className="text-sm font-bold text-[var(--hs-success)] mb-2">6. Get the Full Package</h3>
                                     <p className="text-xs text-slate-500 leading-relaxed">Ready to protect your company? Sign up for Hound Shield Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
                                 </div>
                             </div>

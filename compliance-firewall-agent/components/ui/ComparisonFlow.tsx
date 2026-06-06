@@ -81,9 +81,9 @@ export function ComparisonFlow() {
           </div>
 
           <div className="mt-4 text-[11px] text-[var(--hs-ink-secondary)] font-[var(--font-body)] space-y-1">
-            <div className="flex items-center gap-1.5"><span className="text-emerald-500">✓</span> Data never leaves your network</div>
-            <div className="flex items-center gap-1.5"><span className="text-emerald-500">✓</span> Tamper-proof audit trail</div>
-            <div className="flex items-center gap-1.5"><span className="text-emerald-500">✓</span> CMMC Level 2 compliant</div>
+            <div className="flex items-center gap-1.5"><span className="text-[var(--hs-success)]">✓</span> Data never leaves your network</div>
+            <div className="flex items-center gap-1.5"><span className="text-[var(--hs-success)]">✓</span> Tamper-proof audit trail</div>
+            <div className="flex items-center gap-1.5"><span className="text-[var(--hs-success)]">✓</span> CMMC Level 2 compliant</div>
           </div>
         </div>
       </div>

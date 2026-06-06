@@ -94,21 +94,21 @@ function LiveScanner() {
         {/* Status header */}
         <div className="flex items-center gap-2 mb-3">
           <div className="relative">
-            <div className="w-2 h-2 rounded-full bg-emerald-400" />
-            <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-75" />
+            <div className="w-2 h-2 rounded-full bg-[var(--hs-success)]" />
+            <div className="absolute inset-0 w-2 h-2 rounded-full bg-[var(--hs-success)] animate-ping opacity-75" />
           </div>
-          <span className="text-[11px] font-medium text-emerald-400 uppercase tracking-widest">
+          <span className="text-[11px] font-medium text-[var(--hs-success)] uppercase tracking-widest">
             Live Scanning
           </span>
-          <Activity className="w-3 h-3 text-emerald-400/60 ml-auto animate-pulse" />
+          <Activity className="w-3 h-3 text-[rgba(5,150,105,0.6)] ml-auto animate-pulse" />
         </div>
 
         {/* Live log lines */}
         <div className="space-y-1.5 font-mono text-[10px]">
           {[
-            { status: "PASS", msg: "GPT-4o request — PII check cleared", color: "text-emerald-400/70" },
+            { status: "PASS", msg: "GPT-4o request — PII check cleared", color: "text-[rgba(5,150,105,0.7)]" },
             { status: "BLOCK", msg: "Claude req — SSN pattern detected", color: "text-red-400/70" },
-            { status: "PASS", msg: "Gemini request — compliant payload", color: "text-emerald-400/70" },
+            { status: "PASS", msg: "Gemini request — compliant payload", color: "text-[rgba(5,150,105,0.7)]" },
             { status: "FLAG", msg: "DeepSeek req — PHI proximity alert", color: "text-brand-400/70" },
           ].map((line, i) => (
             <div
@@ -120,7 +120,7 @@ function LiveScanner() {
             >
               <span
                 className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${line.status === "PASS"
-                  ? "bg-emerald-500/10 text-emerald-400"
+                  ? "bg-[rgba(5,150,105,0.1)] text-[var(--hs-success)]"
                   : line.status === "BLOCK"
                     ? "bg-red-500/10 text-red-400"
                     : "bg-brand-500/10 text-brand-400"
@@ -145,7 +145,7 @@ function LiveScanner() {
           </div>
           <div>
             <p className="text-[10px] text-slate-500 uppercase tracking-wider">Latency</p>
-            <p className="text-lg font-bold text-emerald-400">&lt;23ms</p>
+            <p className="text-lg font-bold text-[var(--hs-success)]">&lt;23ms</p>
           </div>
         </div>
       </div>
@@ -276,7 +276,7 @@ export default function AuthPage() {
 
         {/* Floating orbs */}
         <div className="absolute top-16 left-8 w-72 h-72 bg-brand-500/20 rounded-full blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-24 right-12 w-56 h-56 bg-purple-500/15 rounded-full blur-[100px] animate-float" />
+        <div className="absolute bottom-24 right-12 w-56 h-56 bg-[rgba(129,166,198,0.15)] rounded-full blur-[100px] animate-float" />
         <div className="absolute top-1/2 left-1/3 w-40 h-40 bg-pink-500/10 rounded-full blur-[80px] animate-float" style={{ animationDelay: "-3s" }} />
 
         <div className="relative z-10 max-w-lg w-full">
@@ -318,7 +318,7 @@ export default function AuthPage() {
                     {item.text}
                   </span>
                   {item.highlight && (
-                    <span className="ml-auto text-[10px] font-mono font-bold text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                    <span className="ml-auto text-[10px] font-mono font-bold text-[rgba(5,150,105,0.8)] bg-[rgba(5,150,105,0.1)] px-2 py-0.5 rounded-full">
                       {item.highlight}
                     </span>
                   )}

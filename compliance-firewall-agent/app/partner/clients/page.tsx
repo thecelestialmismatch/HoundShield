@@ -137,7 +137,7 @@ export default function ClientsPage() {
                     <span
                       className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${
                         client.status === "active"
-                          ? "bg-emerald-500/10 text-emerald-400"
+                          ? "bg-[rgba(5,150,105,0.1)] text-[var(--hs-success)]"
                           : client.status === "trial"
                           ? "bg-brand-500/10 text-brand-400"
                           : "bg-slate-700/50 text-slate-400"

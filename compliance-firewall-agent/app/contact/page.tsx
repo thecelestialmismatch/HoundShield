@@ -56,7 +56,7 @@ export default function ContactPage() {
 
   const cards = [
     { icon: Mail, color: "text-brand-400", label: "General Inquiries", value: "contact@houndshield.com", sub: "Sales, partnerships, and general questions" },
-    { icon: CalendarCheck, color: "text-emerald-400", label: "Technical Support", value: "support@houndshield.com", sub: "Integration help and troubleshooting" },
+    { icon: CalendarCheck, color: "text-[var(--hs-success)]", label: "Technical Support", value: "support@houndshield.com", sub: "Integration help and troubleshooting" },
     { icon: Clock, color: "text-brand-400", label: "Response Time", value: "< 4 hours", sub: "During business hours (ET)" },
   ];
 
@@ -71,7 +71,7 @@ export default function ContactPage() {
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
-              Talk to our <span className="bg-gradient-to-r from-brand-400 to-emerald-400 bg-clip-text text-transparent">CMMC experts</span>
+              Talk to our <span className="bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] bg-clip-text text-transparent">CMMC experts</span>
             </h1>
             <p className="text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
               Whether you need help with NIST 800-171, SPRS scoring, or C3PAO preparation -- our team is ready to guide you.
@@ -106,7 +106,7 @@ export default function ContactPage() {
               <AnimatePresence mode="wait">
                 {submitted ? (
                   <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
-                    <CheckCircle2 className="w-14 h-14 text-emerald-400 mx-auto mb-4" />
+                    <CheckCircle2 className="w-14 h-14 text-[var(--hs-success)] mx-auto mb-4" />
                     <h3 className="text-2xl font-bold mb-2">Message sent</h3>
                     <p className="text-slate-400 mb-8">We will respond within 4 business hours.</p>
                     <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-sm font-semibold transition-colors cursor-pointer">
