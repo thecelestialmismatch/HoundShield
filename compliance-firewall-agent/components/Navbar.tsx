@@ -44,16 +44,16 @@ function LiveShieldBadge() {
     return () => clearInterval(t);
   }, []);
   return (
-    <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+    <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)]">
       <span className="relative flex h-1.5 w-1.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--hs-success)] opacity-75" />
+        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--hs-success)]" />
       </span>
       <motion.span
         key={count}
         initial={{ opacity: 0.5 }}
         animate={{ opacity: 1 }}
-        className="text-[10px] font-mono font-bold text-emerald-400 tabular-nums"
+        className="text-[10px] font-mono font-bold text-[var(--hs-success)] tabular-nums"
       >
         {count.toLocaleString()} blocked
       </motion.span>
@@ -283,7 +283,7 @@ function ProductsMenu({ isDark }: { isDark: boolean }) {
                       <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">{p.useCase}</p>
                     </div>
                     <div className="mt-auto">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--hs-success)] bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] px-2 py-0.5 rounded-full">
                          Saves: {p.saves}
                       </span>
                     </div>

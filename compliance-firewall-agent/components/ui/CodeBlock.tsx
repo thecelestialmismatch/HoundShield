@@ -44,7 +44,7 @@ export function CodeBlock({ code, language = 'bash', filename }: CodeBlockProps)
             aria-label="Copy code"
             className="flex items-center gap-1 px-2 py-1 rounded text-[11px] text-[var(--hs-ink-tertiary)] hover:text-white hover:bg-white/10 transition-colors font-[var(--font-body)]"
           >
-            {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+            {copied ? <Check className="w-3 h-3 text-[var(--hs-success)]" /> : <Copy className="w-3 h-3" />}
             {copied ? 'Copied' : 'Copy'}
           </button>
         </div>
