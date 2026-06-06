@@ -54,8 +54,8 @@ export default function ForgotPasswordPage() {
 
         {sent ? (
           <div className="text-center space-y-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto">
-              <CheckCircle className="w-6 h-6 text-emerald-400" />
+            <div className="w-12 h-12 rounded-full bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] flex items-center justify-center mx-auto">
+              <CheckCircle className="w-6 h-6 text-[var(--hs-success)]" />
             </div>
             <h1 className="text-xl font-bold text-white">Check your email</h1>
             <p className="text-sm text-slate-400 leading-relaxed">
@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-500 text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {loading ? "Sending..." : "Send reset link"}
               </button>
