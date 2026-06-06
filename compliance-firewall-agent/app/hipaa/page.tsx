@@ -100,8 +100,8 @@ export default function HIPAAPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[rgba(5,150,105,0.2)] bg-[rgba(5,150,105,0.08)] text-[var(--hs-success)] text-xs font-semibold uppercase tracking-widest mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--hs-success)] animate-pulse" />
               HIPAA Security Rule · 45 CFR Part 164 · Healthcare AI Compliance
             </div>
           </motion.div>
@@ -113,7 +113,7 @@ export default function HIPAAPage() {
             className="font-editorial text-[clamp(36px,6vw,72px)] font-bold leading-[1.05] tracking-[-1px] max-w-[900px] mx-auto mb-6 text-white"
           >
             AI Compliance Firewall for{" "}
-            <span className="italic bg-gradient-to-r from-emerald-400 via-brand-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="italic bg-gradient-to-r from-[var(--hs-steel-dark)] via-[var(--hs-steel)] to-[var(--hs-sky)] bg-clip-text text-transparent">
               Healthcare
             </span>
           </motion.h1>
@@ -136,7 +136,7 @@ export default function HIPAAPage() {
           >
             <Link
               href="/signup"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(16,185,129,0.35)] text-base"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[var(--hs-steel-dark)] hover:bg-[var(--hs-steel)] text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(129,166,198,0.35)] text-base"
             >
               Scan Your AI Risk Free
               <ArrowRight className="w-4 h-4" />
@@ -257,7 +257,7 @@ export default function HIPAAPage() {
       <section className="py-24 md:py-32 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-16">
-            <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-emerald-400 mb-4">
+            <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--hs-success)] mb-4">
               Complete Coverage
             </div>
             <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
@@ -272,7 +272,7 @@ export default function HIPAAPage() {
             {PHI_IDENTIFIERS.map((id, i) => (
               <FadeIn key={id} delay={i * 0.03}>
                 <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0" />
                   <span className="text-sm text-slate-300">{id}</span>
                 </div>
               </FadeIn>
@@ -285,7 +285,7 @@ export default function HIPAAPage() {
       <section className="py-24 md:py-32 border-t border-white/[0.06]">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <FadeIn>
-            <Shield className="w-14 h-14 mx-auto text-emerald-400 mb-6" />
+            <Shield className="w-14 h-14 mx-auto text-[var(--hs-success)] mb-6" />
             <h2 className="text-[clamp(28px,4vw,44px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
               Start protecting PHI today
             </h2>
@@ -295,7 +295,7 @@ export default function HIPAAPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/signup"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(16,185,129,0.35)] text-base"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-[var(--hs-steel-dark)] hover:bg-[var(--hs-steel)] text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(129,166,198,0.35)] text-base"
               >
                 Scan Your AI Risk Free
                 <ArrowRight className="w-4 h-4" />

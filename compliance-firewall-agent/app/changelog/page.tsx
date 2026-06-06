@@ -24,7 +24,7 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 }
 
 const badgeStyles = {
-  Feature: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
+  Feature: "bg-[rgba(5,150,105,0.15)] text-[var(--hs-success)] border-[rgba(5,150,105,0.25)]",
   Improvement: "bg-brand-500/15 text-brand-400 border-brand-500/25",
   Fix: "bg-brand-500/15 text-brand-400 border-brand-500/25",
 };
@@ -108,7 +108,7 @@ export default function ChangelogPage() {
           <FadeIn>
             <p className="text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold mb-4">Changelog</p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
-              What&apos;s new in <span className="bg-gradient-to-r from-brand-400 to-emerald-400 bg-clip-text text-transparent">Hound Shield</span>
+              What&apos;s new in <span className="bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] bg-clip-text text-transparent">Hound Shield</span>
             </h1>
             <p className="text-lg text-slate-400 max-w-xl mx-auto">Every improvement, shipped fast.</p>
           </FadeIn>
@@ -129,15 +129,15 @@ export default function ChangelogPage() {
                   <div className="relative flex items-start gap-6">
                     {/* Dot on line */}
                     <div className="hidden sm:flex flex-col items-center shrink-0">
-                      <div className={`w-10 h-10 rounded-full border flex items-center justify-center ${i === 0 ? "border-emerald-500/40 bg-emerald-500/10" : "border-white/10 bg-white/[0.03]"}`}>
-                        <Icon className={`w-4 h-4 ${i === 0 ? "text-emerald-400" : "text-slate-400"}`} />
+                      <div className={`w-10 h-10 rounded-full border flex items-center justify-center ${i === 0 ? "border-[rgba(5,150,105,0.4)] bg-[rgba(5,150,105,0.1)]" : "border-white/10 bg-white/[0.03]"}`}>
+                        <Icon className={`w-4 h-4 ${i === 0 ? "text-[var(--hs-success)]" : "text-slate-400"}`} />
                       </div>
                     </div>
 
                     {/* Card */}
                     <div className="flex-1 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8">
                       <div className="flex flex-wrap items-center gap-3 mb-5">
-                        <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${i === 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/25" : "bg-white/[0.05] text-slate-400 border-white/10"}`}>
+                        <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${i === 0 ? "bg-[rgba(5,150,105,0.15)] text-[var(--hs-success)] border-[rgba(5,150,105,0.25)]" : "bg-white/[0.05] text-slate-400 border-white/10"}`}>
                           v{r.version}
                         </span>
                         <span className="text-xs text-slate-400 flex items-center gap-1.5">
@@ -198,7 +198,7 @@ export default function ChangelogPage() {
       <section className="pb-24 px-6">
         <FadeIn>
           <div className="max-w-3xl mx-auto text-center border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl py-14 px-8">
-            <Sparkles className="w-6 h-6 text-emerald-400 mx-auto mb-4" />
+            <Sparkles className="w-6 h-6 text-[var(--hs-success)] mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-3">Ship with confidence</h3>
             <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">Start protecting your AI pipeline today. Free tier available with no credit card required.</p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-600 hover:bg-brand-500 text-sm font-semibold transition-colors cursor-pointer">
