@@ -64,9 +64,10 @@ describe('HomePage', () => {
     expect(h1.textContent).toMatch(/Stop your team from leaking/i)
   })
 
-  it('renders PlatformDashboard in hero', () => {
+  it('renders the live scan-log card in hero', () => {
     render(<HomePage />)
-    expect(screen.getByTestId('platform-dashboard-mock')).toBeTruthy()
+    // Hero now shows the brand-demo scan-log terminal (HeroScanLog), not the dashboard
+    expect(screen.getByText('proxy-config.env')).toBeTruthy()
   })
 
   it('renders FeaturesGrid section', () => {
