@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Navbar } from '@/components/Navbar'
+import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ShieldCheck, Plug, FileText } from 'lucide-react'
 
@@ -27,7 +27,7 @@ const STEPS = [
 export default function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
-      <Navbar variant="light" />
+      <NavV3 />
 
       {/* Hero */}
       <section className="pt-32 pb-16 px-6 text-center">
@@ -87,10 +87,7 @@ export default function HowItWorksPage() {
           <p className="text-[var(--hs-ink-secondary)] mb-8">
             No credit card required. Assess all 110 controls and see your SPRS score in under 30 minutes.
           </p>
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-brand-500 to-emerald-500 hover:from-brand-600 hover:to-emerald-600 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors"
-          >
+          <Link href="/signup" className="btn-primary">
             Get started free
           </Link>
         </div>
