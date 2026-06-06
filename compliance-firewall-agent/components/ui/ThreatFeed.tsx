@@ -47,8 +47,8 @@ const INITIAL: ThreatItem[] = Array.from({ length: 5 }, (_, i) => makeItem(i))
 
 const STATUS_CONFIG: Record<ThreatStatus, { label: string; bg: string; text: string; dot: string; Icon: typeof ShieldAlert }> = {
   BLOCKED: { label: 'BLOCKED', bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-500', Icon: ShieldAlert },
-  FLAGGED: { label: 'FLAGGED', bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-500', Icon: AlertTriangle },
-  PASSED:  { label: 'PASSED',  bg: 'bg-emerald-50', text: 'text-emerald-600', dot: 'bg-emerald-500', Icon: ShieldCheck },
+  FLAGGED: { label: 'FLAGGED', bg: 'bg-[var(--hs-warn-bg)]', text: 'text-[var(--hs-warn)]', dot: 'bg-[var(--hs-warn)]', Icon: AlertTriangle },
+  PASSED:  { label: 'PASSED',  bg: 'bg-[var(--hs-success-bg)]', text: 'text-[var(--hs-success)]', dot: 'bg-[var(--hs-success)]', Icon: ShieldCheck },
 }
 
 export function ThreatFeed() {
@@ -73,8 +73,8 @@ export function ThreatFeed() {
       <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--hs-border-subtle)] bg-[var(--hs-surface-1)]">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--hs-success)] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--hs-success)]" />
           </span>
           <span className="text-xs font-medium text-[var(--hs-ink)] font-[var(--font-body)]">
             Live intercept feed

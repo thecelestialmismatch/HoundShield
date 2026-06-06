@@ -19,9 +19,6 @@ vi.mock('next/navigation', () => ({
 }))
 
 // Stub all complex client components
-vi.mock('@/components/landing/PlatformDashboardClient', () => ({
-  PlatformDashboardClient: () => <div data-testid="platform-dashboard-mock" />,
-}))
 vi.mock('@/components/ui/CountdownTimer',() => ({ CountdownTimer:() => <div data-testid="countdown-mock">days</div> }))
 vi.mock('@/components/ui/ComparisonFlow',() => ({ ComparisonFlow:() => <div data-testid="comparison-flow-mock" /> }))
 vi.mock('@/components/ui/FaqAccordion',  () => ({
