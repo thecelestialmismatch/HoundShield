@@ -29,8 +29,8 @@ const plans = [
     id: "free",
     name: "Starter",
     icon: Zap,
-    iconColor: "text-emerald-400",
-    iconBg: "bg-emerald-500/10 border-emerald-500/20",
+    iconColor: "text-[var(--hs-success)]",
+    iconBg: "bg-[rgba(5,150,105,0.1)] border-[rgba(5,150,105,0.2)]",
     monthlyPrice: 0,
     annualPrice: 0,
     annualTotal: 0,
@@ -79,8 +79,8 @@ const plans = [
     id: "growth",
     name: "Growth",
     icon: ShieldCheck,
-    iconColor: "text-purple-400",
-    iconBg: "bg-purple-500/10 border-purple-500/20",
+    iconColor: "text-[var(--hs-steel)]",
+    iconBg: "bg-[rgba(129,166,198,0.1)] border-[rgba(129,166,198,0.2)]",
     monthlyPrice: 499,
     annualPrice: 4790,
     annualTotal: 4790,
@@ -411,7 +411,7 @@ export default function PricingPage() {
                   }`}
               >
                 Annual
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-[rgba(5,150,105,0.2)] text-[var(--hs-success)] text-[11px] font-semibold">
                   Save 20%
                 </span>
               </button>
@@ -443,13 +443,13 @@ export default function PricingPage() {
                   >
                     {/* Gradient border for highlighted card */}
                     {plan.highlighted && (
-                      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-brand-400 via-brand-500/50 to-purple-500/30 opacity-100" />
+                      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-brand-400 via-brand-500/50 to-[rgba(129,166,198,0.3)] opacity-100" />
                     )}
 
                     {/* Badge */}
                     {plan.badge && (
                       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 text-white text-xs font-semibold">
+                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-brand-500 to-[var(--hs-steel)] text-white text-xs font-semibold">
                           <Star className="w-3 h-3" />
                           {plan.badge}
                         </div>
@@ -547,7 +547,7 @@ export default function PricingPage() {
                             <Check
                               className={`w-4 h-4 flex-shrink-0 mt-0.5 ${plan.highlighted
                                   ? "text-brand-400"
-                                  : "text-emerald-400/70"
+                                  : "text-[rgba(5,150,105,0.7)]"
                                 }`}
                             />
                             <span className="text-slate-400">{feature}</span>
@@ -568,8 +568,8 @@ export default function PricingPage() {
         <AnimatedSection>
           <div className="max-w-3xl mx-auto">
             <div className="glass-card p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-8 h-8 text-emerald-400" />
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] flex items-center justify-center flex-shrink-0">
+                <ShieldCheck className="w-8 h-8 text-[var(--hs-success)]" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white mb-2">
@@ -669,7 +669,7 @@ export default function PricingPage() {
                             >
                               {typeof val === "boolean" ? (
                                 val ? (
-                                  <Check className="w-4 h-4 text-emerald-400 mx-auto" />
+                                  <Check className="w-4 h-4 text-[var(--hs-success)] mx-auto" />
                                 ) : (
                                   <Minus className="w-4 h-4 text-slate-700 mx-auto" />
                                 )
@@ -711,7 +711,7 @@ export default function PricingPage() {
                 icon: Clock,
                 stat: "<50ms",
                 label: "Average latency",
-                color: "text-emerald-400",
+                color: "text-[var(--hs-success)]",
               },
               {
                 icon: Lock,
@@ -723,7 +723,7 @@ export default function PricingPage() {
                 icon: Users,
                 stat: "500+",
                 label: "Teams protected",
-                color: "text-purple-400",
+                color: "text-[var(--hs-steel)]",
               },
             ].map((item, i) => (
               <div
@@ -774,7 +774,7 @@ export default function PricingPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="glass-card-glow p-12 md:p-16 relative overflow-hidden">
               {/* Background glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-500/8 via-transparent to-purple-500/5" />
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-500/8 via-transparent to-[rgba(129,166,198,0.05)]" />
               <div className="absolute inset-0 bg-dot-grid opacity-30" />
 
               <div className="relative z-10">

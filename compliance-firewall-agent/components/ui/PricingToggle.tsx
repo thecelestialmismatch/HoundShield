@@ -59,7 +59,7 @@ export function PricingToggle({ onChange }: PricingToggleProps) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200"
+              className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-[var(--hs-success-bg)] text-[var(--hs-success)] border border-[rgba(5,150,105,0.25)]"
             >
               −20%
             </motion.span>

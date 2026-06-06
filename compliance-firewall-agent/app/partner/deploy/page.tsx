@@ -128,7 +128,7 @@ const openai = new OpenAI({
                 className="ml-auto text-slate-400 hover:text-white transition-colors"
               >
                 {copied === "key" ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <Check className="w-3.5 h-3.5 text-[var(--hs-success)]" />
                 ) : (
                   <Copy className="w-3.5 h-3.5" />
                 )}
@@ -164,8 +164,8 @@ const openai = new OpenAI({
               >
                 {copied === key ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
+                    <Check className="w-3.5 h-3.5 text-[var(--hs-success)]" />
+                    <span className="text-[var(--hs-success)]">Copied</span>
                   </>
                 ) : (
                   <>
@@ -183,8 +183,8 @@ const openai = new OpenAI({
       </div>
 
       {/* Instructions footer */}
-      <div className="rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-5">
-        <h3 className="text-sm font-semibold text-emerald-300 flex items-center gap-2 mb-2">
+      <div className="rounded-2xl bg-[rgba(5,150,105,0.05)] border border-[rgba(5,150,105,0.2)] p-5">
+        <h3 className="text-sm font-semibold text-[var(--hs-success)] flex items-center gap-2 mb-2">
           <Box className="w-4 h-4" />
           What to tell the client&apos;s IT team (2-minute onboarding)
         </h3>
