@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { CountdownTimer } from '@/components/ui/CountdownTimer'
-import { PlatformDashboardClient } from '@/components/landing/PlatformDashboardClient'
+import { HeroScanLog } from '@/components/landing/HeroScanLog'
 import { ComparisonFlow } from '@/components/ui/ComparisonFlow'
 import { FaqAccordion, type FaqItem } from '@/components/ui/FaqAccordion'
 import { CodeBlock } from '@/components/ui/CodeBlock'
@@ -164,9 +164,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative rounded-xl overflow-hidden shadow-[var(--shadow-xl)] border border-[var(--hs-border)]">
-              <PlatformDashboardClient />
-            </div>
+            <HeroScanLog />
           </div>
         </div>
       </section>
