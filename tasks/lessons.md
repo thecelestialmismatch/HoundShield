@@ -103,3 +103,41 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 **What:** Skipping tests on CUI detection paths left audit trail gaps that would fail a C3PAO review.
 **Root cause:** Treating test coverage as a quality metric rather than a compliance artifact.
 **Rule:** 100% coverage of all CUI/PII/PHI detection functions. Test both detection (true positive) and non-detection (false positive) cases. Audit log paths must have integration tests.
+
+---
+
+## 2026-06-06
+
+### Branch truth: origin/main was stale; prod deploys from feature/beast-ui-v3
+**What:** The primer claimed `origin/main` is production (29 ahead). `git fetch` proved origin/main = `1d1a498` (May 13) with NO v3 steel design and none of the cleanup targets. The v3 design + Vercel prod deploy live on `feature/beast-ui-v3` (27 ahead).
+**Root cause:** Stale primer + ~30 forked branches; trusting branch claims without verifying the remote.
+**Rule:** `git fetch origin`, then VERIFY content (`git show <ref>:path`, `git log <ref>`) before trusting which branch is production. Base design work on `feature/beast-ui-v3`.
+
+### Security: refuse leaked API keys, always
+**What:** A repo + pasted `sk-…` keys were offered as "free LLM API keys" — leaked/stolen OpenAI secrets.
+**Root cause:** "Free API keys" repos are often dumps of stolen credentials.
+**Rule:** Never wire third-party/leaked keys. Use each provider's own free tier with the user's OWN key in gitignored `.env.local` (verify it's gitignored first). For a compliance product, stolen creds are existential risk.
+
+### Tooling: `| tail` masks the real exit code
+**What:** `npm run build 2>&1 | tail` reported "exit 0" while the build actually FAILED (`Cannot find module @sentry/nextjs`). The exit was tail's.
+**Rule:** For gates, run without a masking pipe (or `&& echo OK`) and READ the output for "Compiled successfully" / the test summary. Never trust a piped exit code.
+
+### Build env: deps declared-but-uninstalled; the app has its own node_modules
+**What:** Local build broken — `@sentry/nextjs` + `@vitejs/plugin-react` declared but not installed.
+**Rule:** On module-not-found, `cd compliance-firewall-agent && npm install` (app uses its own node_modules, npm per package-lock). Repair env before assuming a code bug.
+
+### Shell: zsh does NOT word-split unquoted `$VAR`
+**What:** `for f in $LIST` (space-joined string) ran sed ONCE on the whole string → silent no-op + a false "ZERO ✓".
+**Rule:** In zsh, iterate a literal list or a command-substitution (`$(find …)` DOES split), not `$VAR`. Verify a transform actually applied — don't trust a grep that ran on an invalid path.
+
+### QA: never ship UI blind — verify in a real browser
+**What:** HeroScanLog / NavV3 mega-menu / spotlight passed jsdom tests + a green build but were never rendered. A real-browser pass confirmed they look great AND surfaced a `/features` dup-key console error + a stray `rose-*` color the tests/build missed.
+**Rule:** After substantial UI work, run the dev server + load it in Playwright, screenshot, read the console. Build-green + tests-green ≠ renders-correct.
+
+### Token pass: scan the FULL palette + components, not just emerald/purple/amber/indigo
+**What:** First pass only hit 4 colors on `app/**/page.tsx`; the browser found `rose-*` and that `components/` were missed.
+**Rule:** Off-brand = ANY Tailwind color that isn't `brand`/`slate`/`--hs-`/semantic. Scan `app` AND `components`, full palette. Light → `--hs-` tokens; dark dashboard → direct Tailwind is design-permitted.
+
+### Architecture flag: two navs coexist (NavV3 vs Navbar)
+**What:** `NavV3` (light, 2 pages) and `Navbar` (rich: flyouts + mega-menu + counter + variants, 11 pages) both exist; Navbar is the richer one.
+**Rule:** Consolidating onto one nav is a design decision — surface to the founder, don't unilaterally migrate (NavV3 would downgrade 11 pages).
