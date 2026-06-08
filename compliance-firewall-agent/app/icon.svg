@@ -1,13 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="rgba(99,102,241,0.2)"/>
-      <stop offset="100%" stop-color="rgba(52,211,153,0.2)"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="8" fill="#0a0a0f"/>
-  <rect width="32" height="32" rx="8" fill="url(#bg)"/>
-  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" fill="none" stroke="rgba(99,102,241,0.3)" stroke-width="1"/>
-  <path d="M16 6 L24 10 L24 18 C24 22.4 20.4 25.6 16 27 C11.6 25.6 8 22.4 8 18 L8 10 Z" fill="rgba(99,102,241,0.15)" stroke="#818cf8" stroke-width="1.5" stroke-linejoin="round"/>
-  <path d="M17.5 12 L14.5 17 H16.5 L15 21 L19.5 15.5 H17 Z" fill="#34d399" stroke="#34d399" stroke-width="0.5" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#0a0a0f"/>
+  <path fill="#E48B6A" fill-rule="evenodd"
+    d="M16 31 Q3 24 3 18 L3 9 Q3 7 5 7 L8 7 L9.5 2 L12 7 Q14 5.5 16 5.5 Q18 5.5 20 7 L22.5 2 L24 7 L27 7 Q29 7 29 9 L29 18 Q29 24 16 31Z
+       M8 15 L13 13.5 L13 14.5 L8 16Z
+       M24 15 L19 13.5 L19 14.5 L24 16Z
+       M9 18.5 Q12 16 14.5 17 Q14 20 11.5 20 Q9 19.5 9 18.5Z
+       M23 18.5 Q20 16 17.5 17 Q18 20 20.5 20 Q23 19.5 23 18.5Z"
+  />
 </svg>

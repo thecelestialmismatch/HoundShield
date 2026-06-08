@@ -86,7 +86,7 @@ export default function PartnerDashboard() {
       label: "Active Proxies (24h)",
       value: stats.active_proxies,
       icon: Box,
-      color: "emerald",
+      color: "success",
     },
   ];
 
@@ -174,7 +174,7 @@ export default function PartnerDashboard() {
                 <div
                   className={`w-2 h-2 rounded-full flex-shrink-0 ${
                     client.status === "active"
-                      ? "bg-emerald-500"
+                      ? "bg-[var(--hs-success)]"
                       : client.status === "trial"
                       ? "bg-brand-500"
                       : "bg-slate-600"

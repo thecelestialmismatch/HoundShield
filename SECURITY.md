@@ -1,27 +1,31 @@
-# Security Policy
+# Security
 
-## Supported Versions
+## Snyk High Risk Rating
 
-Currently, the following versions of the Hound Shield compliance firewall are supported with security updates.
+`caveman-compress` receives a Snyk High Risk rating due to static analysis heuristics. This document explains what the skill does and does not do.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| v2.0.x  | :white_check_mark: |
-| < 2.0   | :x:                |
+### What triggers the rating
 
-## Reporting a Vulnerability
+1. **subprocess usage**: The skill calls the `claude` CLI via `subprocess.run()` as a fallback when `ANTHROPIC_API_KEY` is not set. The subprocess call uses a fixed argument list — no shell interpolation occurs. User file content is passed via stdin, not as a shell argument.
 
-Hound Shield maintains a **zero-tolerance policy** for vulnerabilities concerning data sovereignty or AI traffic interception boundaries.
+2. **File read/write**: The skill reads the file the user explicitly points it at, compresses it, and writes the result back to the same path. A `.original.md` backup is saved alongside it. No files outside the user-specified path are read or written.
 
-If you identify a security flaw in this software, **do not submit a public issue or pull request**.
+### What the skill does NOT do
 
-Please contact our security operations center immediately by emailing:
-**info@houndshield.com**
+- Does not execute user file content as code
+- Does not make network requests except to Anthropic's API (via SDK or CLI)
+- Does not access files outside the path the user provides
+- Does not use shell=True or string interpolation in subprocess calls
+- Does not collect or transmit any data beyond the file being compressed
 
-Please include:
-1. A descriptive subject line.
-2. Steps to reproduce the vulnerability.
-3. Proof-of-concept (PoC) code or logs, if applicable.
-4. The specific environment or version you are testing against.
+### Auth behavior
 
-We will acknowledge receipt of your vulnerability report within 24 hours and strive to send you regular updates about our progress. If the vulnerability is accepted, we will coordinate a fix and public disclosure timeline with you.
+If `ANTHROPIC_API_KEY` is set, the skill uses the Anthropic Python SDK directly (no subprocess). If not set, it falls back to the `claude` CLI, which uses the user's existing Claude desktop authentication.
+
+### File size limit
+
+Files larger than 500KB are rejected before any API call is made.
+
+### Reporting a vulnerability
+
+If you believe you've found a genuine security issue, please open a GitHub issue with the label `security`.

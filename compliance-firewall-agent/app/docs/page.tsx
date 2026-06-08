@@ -368,7 +368,7 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
 }
 
 const METHOD_COLORS: Record<string, string> = {
-  GET: "bg-emerald-500/10 text-emerald-400",
+  GET: "bg-[rgba(5,150,105,0.1)] text-[var(--hs-success)]",
   POST: "bg-brand-500/10 text-brand-400",
   "GET / POST": "bg-brand-500/10 text-brand-400",
   GUIDE: "bg-brand-500/10 text-brand-400",
@@ -459,7 +459,7 @@ export default function DocsPage() {
           {activeSection === "quickstart" ? (
             <div className="max-w-3xl space-y-8">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-4">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] text-[var(--hs-success)] text-xs font-semibold uppercase tracking-widest mb-4">
                   <Zap className="w-3 h-3" /> Quickstart
                 </div>
                 <h1 className="text-2xl font-bold text-white mb-2">
@@ -492,7 +492,7 @@ export default function DocsPage() {
                 <h3 className="text-xs font-medium text-slate-400 uppercase tracking-widest mb-2">Your Gateway URL</h3>
                 <div className="flex items-center gap-2 bg-slate-900 border border-white/10 rounded-xl px-4 py-3">
                   <Globe className="w-4 h-4 text-slate-600 shrink-0" />
-                  <code className="flex-1 text-emerald-400 text-sm font-mono">{GATEWAY_BASE}</code>
+                  <code className="flex-1 text-[var(--hs-success)] text-sm font-mono">{GATEWAY_BASE}</code>
                   <CopyButton text={GATEWAY_BASE} />
                 </div>
               </div>

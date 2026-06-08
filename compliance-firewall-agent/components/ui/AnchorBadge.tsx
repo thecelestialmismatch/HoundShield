@@ -48,7 +48,7 @@ export function AnchorBadge({ eventId, txHash, chain = "base-sepolia", compact =
       <span
         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
           verified === true
-            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+            ? "bg-[rgba(5,150,105,0.1)] text-[var(--hs-success)] border border-[rgba(5,150,105,0.2)]"
             : verified === false
             ? "bg-red-500/10 text-red-400 border border-red-500/20"
             : "bg-brand-400/10 text-brand-400 border border-brand-400/20"

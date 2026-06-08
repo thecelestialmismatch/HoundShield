@@ -422,7 +422,6 @@ export function estimateTimeToTarget(
   let projectedScore = current.total;
   let totalHours = 0;
   let controlsToFix = 0;
-  const quickWins: NISTControl[] = [];
 
   for (const control of priorities) {
     if (projectedScore >= clampedTarget) break;
@@ -434,13 +433,12 @@ export function estimateTimeToTarget(
     projectedScore += gain;
     totalHours += Number.isFinite(control.estimatedHours) ? control.estimatedHours : 0;
     controlsToFix++;
-
-    if (control.estimatedHours <= 8) {
-      // Exclude the augmented fields before pushing into quickWins
-      const { status: _s, deductionApplied: _d, ...baseControl } = control;
-      quickWins.push(baseControl as NISTControl);
-    }
   }
+
+  // Quick wins = ALL unmet controls with estimatedHours ≤ 8 (not just the greedy fix set)
+  const quickWins: NISTControl[] = priorities
+    .filter((c) => c.estimatedHours <= 8)
+    .map(({ status: _s, deductionApplied: _d, ...base }) => base as NISTControl);
 
   return { totalHours, controlsToFix, quickWins };
 }

@@ -66,9 +66,9 @@ function BlogJsonLd({ posts }: { posts: BlogPost[] }) {
 // ── Category badge ────────────────────────────────────────────────────────────
 const categoryColors: Record<BlogCategory, string> = {
   "CMMC Compliance": "bg-blue-900/40 text-blue-300 border-blue-800",
-  "HIPAA Compliance": "bg-emerald-900/40 text-emerald-300 border-emerald-800",
-  "AI Security": "bg-amber-900/40 text-amber-300 border-amber-800",
-  "SOC 2": "bg-purple-900/40 text-purple-300 border-purple-800",
+  "HIPAA Compliance": "bg-[rgba(5,150,105,0.25)] text-[var(--hs-success)] border-[rgba(5,150,105,0.4)]",
+  "AI Security": "bg-brand-900/40 text-brand-300 border-brand-800",
+  "SOC 2": "bg-[rgba(129,166,198,0.25)] text-[var(--hs-steel-light)] border-[rgba(129,166,198,0.4)]",
   "How-To": "bg-slate-800 text-slate-300 border-slate-700",
   "Industry News": "bg-rose-900/40 text-rose-300 border-rose-800",
 };
