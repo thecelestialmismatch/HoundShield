@@ -84,7 +84,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
                 </h3>
                 <ul className="space-y-2.5">
                   {links.map((link) => (
-                    <li key={link.href}>
+                    <li key={link.label}>
                       <Link
                         href={link.href}
                         className="text-xs text-slate-500 hover:text-slate-200 transition-colors font-[var(--font-body)]"
@@ -162,7 +162,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
               </h3>
               <ul className="space-y-2.5">
                 {links.map((link) => (
-                  <li key={link.href}>
+                  <li key={link.label}>
                     <Link
                       href={link.href}
                       className="text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] transition-colors font-[var(--font-body)]"
