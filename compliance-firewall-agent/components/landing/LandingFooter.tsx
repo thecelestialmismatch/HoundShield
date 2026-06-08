@@ -58,7 +58,7 @@ export function LandingFooter() {
             </p>
             <div className="flex items-center gap-3 text-[10px] font-mono text-slate-600 uppercase tracking-wider">
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--hs-success)]" />
                 All systems operational
               </span>
             </div>

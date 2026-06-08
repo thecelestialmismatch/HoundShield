@@ -1,0 +1,524 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - navigation "Main navigation" [ref=e4]:
+      - generic [ref=e6]:
+        - link "HoundShield HoundShield" [ref=e7] [cursor=pointer]:
+          - /url: /
+          - img "HoundShield" [ref=e9]
+          - generic [ref=e10]: HoundShield
+        - generic [ref=e11]:
+          - link "Product" [ref=e12] [cursor=pointer]:
+            - /url: /features
+          - link "How it works" [ref=e13] [cursor=pointer]:
+            - /url: /how-it-works
+          - link "Pricing" [ref=e14] [cursor=pointer]:
+            - /url: /pricing
+          - link "Docs" [ref=e15] [cursor=pointer]:
+            - /url: /docs
+          - link "Blog" [ref=e16] [cursor=pointer]:
+            - /url: /blog
+        - generic [ref=e17]:
+          - link "Sign in" [ref=e18] [cursor=pointer]:
+            - /url: /sign-in
+          - link "Start free" [ref=e19] [cursor=pointer]:
+            - /url: /sign-up
+    - generic [ref=e21]:
+      - generic [ref=e23]: "CMMC Level 2 deadline: November 2026"
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - heading "Your team uses AI. Your CUI stays yours." [level=1] [ref=e29]:
+            - text: Your team uses AI.
+            - text: Your CUI stays yours.
+          - paragraph [ref=e30]: HoundShield intercepts every AI prompt before it leaves your network. 16 detection engines. Sub-10ms latency. CMMC Level 2, HIPAA, and SOC 2 — enforced simultaneously.
+          - generic [ref=e31]:
+            - link "Start free — no card required" [ref=e32] [cursor=pointer]:
+              - /url: /sign-up
+              - text: Start free — no card required
+              - img [ref=e33]
+            - link "See how it works" [ref=e35] [cursor=pointer]:
+              - /url: /how-it-works
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - img [ref=e38]
+              - text: One URL change
+            - generic [ref=e41]:
+              - img [ref=e42]
+              - text: Local-only
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - text: Free to start
+            - generic [ref=e49]:
+              - img [ref=e50]
+              - text: C3PAO-ready
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e60]: Live intercept feed
+            - generic [ref=e61]: 5 recent
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - img [ref=e64]
+              - generic [ref=e67]: PASSED
+              - generic [ref=e69]: Cursor — clean — no violations
+              - generic [ref=e70]: 5ms
+            - generic [ref=e71]:
+              - img [ref=e72]
+              - generic [ref=e74]: BLOCKED
+              - generic [ref=e76]: "Gemini — ITAR: export control ref"
+              - generic [ref=e77]: 8ms
+            - generic [ref=e78]:
+              - img [ref=e79]
+              - generic [ref=e81]: BLOCKED
+              - generic [ref=e83]: "Codeium — ITAR: export control ref"
+              - generic [ref=e84]: 5ms
+            - generic [ref=e85]:
+              - img [ref=e86]
+              - generic [ref=e88]: BLOCKED
+              - generic [ref=e90]: "Codeium — PHI: patient name + DOB"
+              - generic [ref=e91]: 7ms
+            - generic [ref=e92]:
+              - img [ref=e93]
+              - generic [ref=e95]: FLAGGED
+              - generic [ref=e97]: "Copilot — CUI: contract number"
+              - generic [ref=e98]: 6ms
+    - generic [ref=e100]:
+      - paragraph [ref=e101]: Protecting teams at
+      - generic [ref=e102]:
+        - generic [ref=e103]: Defense contractors
+        - generic [ref=e104]: Healthcare orgs
+        - generic [ref=e105]: Government agencies
+        - generic [ref=e106]: Tech companies
+        - generic [ref=e107]: Consulting firms
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - heading "Your AI tools talk to the cloud. HoundShield intercepts first." [level=2] [ref=e111]:
+          - text: Your AI tools talk to the cloud.
+          - text: HoundShield intercepts first.
+        - paragraph [ref=e112]: Most organizations have no idea what their employees are sending to ChatGPT, Copilot, or Claude. One careless prompt can trigger a CMMC violation.
+      - generic [ref=e113]:
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - img [ref=e118]
+            - generic [ref=e120]: Without HoundShield
+          - generic [ref=e121]:
+            - generic [ref=e123]: Employee
+            - generic [ref=e127]: AI prompt
+            - generic [ref=e129]:
+              - img [ref=e130]
+              - text: Cloud AI
+              - generic [ref=e132]: (CUI exposed)
+          - generic [ref=e133]:
+            - generic [ref=e134]:
+              - generic [ref=e135]: ✗
+              - text: Sensitive data leaves your network
+            - generic [ref=e136]:
+              - generic [ref=e137]: ✗
+              - text: No audit trail
+            - generic [ref=e138]:
+              - generic [ref=e139]: ✗
+              - text: CMMC violation risk
+        - generic [ref=e142]:
+          - generic [ref=e143]:
+            - img [ref=e144]
+            - generic [ref=e146]: With HoundShield
+          - generic [ref=e147]:
+            - generic [ref=e150]: Employee
+            - generic [ref=e154]:
+              - generic [ref=e155]: HoundShield
+              - generic [ref=e156]: scans locally <10ms
+            - generic [ref=e160]:
+              - generic [ref=e161]: Cloud AI
+              - generic [ref=e162]: clean prompts only
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - generic [ref=e165]: ✓
+              - text: Data never leaves your network
+            - generic [ref=e166]:
+              - generic [ref=e167]: ✓
+              - text: Tamper-proof audit trail
+            - generic [ref=e168]:
+              - generic [ref=e169]: ✓
+              - text: CMMC Level 2 compliant
+    - generic [ref=e171]:
+      - generic [ref=e172]:
+        - heading "Up and running in 10 minutes" [level=2] [ref=e173]
+        - paragraph [ref=e174]: No agents. No code changes. One environment variable.
+      - generic [ref=e175]:
+        - generic [ref=e176]:
+          - generic [ref=e177]: "01"
+          - heading "Change one URL" [level=3] [ref=e178]
+          - paragraph [ref=e179]: Replace api.openai.com with your HoundShield endpoint. No agents, no code changes, no firewall rules.
+          - generic [ref=e180]:
+            - generic [ref=e186]:
+              - generic [ref=e187]: env
+              - button "Copy code" [ref=e188] [cursor=pointer]:
+                - img [ref=e189]
+                - text: Copy
+            - code [ref=e193]: OPENAI_BASE_URL=https://proxy.houndshield.com
+        - generic [ref=e194]:
+          - generic [ref=e195]: "02"
+          - heading "Every prompt scanned locally" [level=3] [ref=e196]
+          - paragraph [ref=e197]: 16 detection engines check each request in under 10ms on your infrastructure. The AI never knows.
+        - generic [ref=e198]:
+          - generic [ref=e199]: "03"
+          - heading "You get a compliance record" [level=3] [ref=e200]
+          - paragraph [ref=e201]: Tamper-proof SHA-256 signed logs. Exportable PDF evidence for your C3PAO or auditor on demand.
+    - generic [ref=e203]:
+      - heading "Everything a CISO needs. Nothing employees notice." [level=2] [ref=e205]:
+        - text: Everything a CISO needs.
+        - text: Nothing employees notice.
+      - generic [ref=e206]:
+        - generic [ref=e207]:
+          - img [ref=e209]
+          - heading "Sub-10ms scanning" [level=3] [ref=e211]
+          - paragraph [ref=e212]: 16 detection engines fire in parallel. No perceptible latency. Your team uses AI exactly as before — they just can't leak CUI.
+        - generic [ref=e213]:
+          - img [ref=e215]
+          - heading "CMMC Level 2 ready" [level=3] [ref=e217]
+          - paragraph [ref=e218]: All 110 NIST 800-171 Rev 2 controls mapped. SPRS score calculated live. C3PAO-ready PDF evidence generated on demand.
+        - generic [ref=e219]:
+          - img [ref=e221]
+          - heading "Local-only architecture" [level=3] [ref=e224]
+          - paragraph [ref=e225]: Prompt content never leaves your infrastructure. License hash + scan count go external. Nothing else. Verifiable in 5 minutes.
+        - generic [ref=e226]:
+          - img [ref=e228]
+          - heading "Tamper-proof audit trail" [level=3] [ref=e232]
+          - paragraph [ref=e233]: SHA-256 signed log entries. Every blocked prompt timestamped, categorized, and stored. Exportable for auditors at any time.
+        - generic [ref=e234]:
+          - img [ref=e236]
+          - heading "HIPAA + SOC 2 coverage" [level=3] [ref=e239]
+          - paragraph [ref=e240]: PHI detection for 18 HIPAA identifiers. SOC 2 CC6.x controls mapped. One proxy, three compliance frameworks simultaneously.
+        - generic [ref=e241]:
+          - img [ref=e243]
+          - heading "One URL change" [level=3] [ref=e245]
+          - paragraph [ref=e246]: Change one environment variable. Works with ChatGPT, Copilot, Claude, Gemini, Cursor — any OpenAI-compatible API. Zero code changes.
+    - generic [ref=e248]:
+      - generic [ref=e249]:
+        - heading "Three frameworks. One proxy." [level=2] [ref=e250]
+        - paragraph [ref=e251]: Most tools pick one compliance standard. HoundShield enforces CMMC Level 2, HIPAA, and SOC 2 simultaneously — from a single deployment.
+      - generic [ref=e252]:
+        - generic [ref=e253]:
+          - generic [ref=e255]: CMMC Level 2
+          - generic [ref=e256]: 110 controls
+          - generic [ref=e257]: NIST 800-171 Rev 2 mapped
+        - generic [ref=e258]:
+          - generic [ref=e260]: HIPAA
+          - generic [ref=e261]: 18 identifiers
+          - generic [ref=e262]: PHI detection patterns
+        - generic [ref=e263]:
+          - generic [ref=e265]: SOC 2
+          - generic [ref=e266]: CC6.x controls
+          - generic [ref=e267]: Logical access coverage
+        - generic [ref=e268]:
+          - generic [ref=e270]: DFARS 7012
+          - generic [ref=e271]: CUI safeguarding
+          - generic [ref=e272]: Adequate security
+      - link "View full CMMC control map" [ref=e274] [cursor=pointer]:
+        - /url: /command-center/shield/coverage
+        - text: View full CMMC control map
+        - img [ref=e275]
+    - generic [ref=e279]:
+      - generic [ref=e280]:
+        - generic [ref=e281]: <10ms
+        - generic [ref=e282]: Scan latency
+        - generic [ref=e283]: Median across 16 engines
+      - generic [ref=e284]:
+        - generic [ref=e285]: "110"
+        - generic [ref=e286]: NIST controls
+        - generic [ref=e287]: Rev 2 mapped
+      - generic [ref=e288]:
+        - generic [ref=e289]: "16"
+        - generic [ref=e290]: Detection patterns
+        - generic [ref=e291]: CUI · PHI · PII · IP
+      - generic [ref=e292]:
+        - generic [ref=e293]: 100%
+        - generic [ref=e294]: Local-only
+        - generic [ref=e295]: Prompt content stays on-prem
+    - generic [ref=e297]:
+      - generic [ref=e298]:
+        - heading "Pricing that scales with your team" [level=2] [ref=e299]
+        - paragraph [ref=e300]: Start free. Upgrade when you need PDF evidence, gateway mode, or dedicated support.
+      - generic [ref=e301]:
+        - generic [ref=e302]:
+          - generic [ref=e303]: Free
+          - generic [ref=e305]: $0
+          - paragraph [ref=e306]: Try HoundShield risk-free
+          - list [ref=e307]:
+            - listitem [ref=e308]:
+              - img [ref=e309]
+              - text: 1 user
+            - listitem [ref=e312]:
+              - img [ref=e313]
+              - text: 1,000 scans/mo
+            - listitem [ref=e316]:
+              - img [ref=e317]
+              - text: Basic compliance reports
+            - listitem [ref=e320]:
+              - img [ref=e321]
+              - text: CMMC pattern detection
+          - link "Start free" [ref=e324] [cursor=pointer]:
+            - /url: /sign-up
+        - generic [ref=e325]:
+          - generic [ref=e326]: Most popular
+          - generic [ref=e327]: Pro
+          - generic [ref=e328]:
+            - generic [ref=e329]: $199
+            - generic [ref=e330]: /mo
+          - paragraph [ref=e331]: For compliance-conscious teams
+          - list [ref=e332]:
+            - listitem [ref=e333]:
+              - img [ref=e334]
+              - text: 5 users
+            - listitem [ref=e337]:
+              - img [ref=e338]
+              - text: Unlimited scans
+            - listitem [ref=e341]:
+              - img [ref=e342]
+              - text: PDF evidence export
+            - listitem [ref=e345]:
+              - img [ref=e346]
+              - text: SPRS score tracking
+            - listitem [ref=e349]:
+              - img [ref=e350]
+              - text: Webhook alerts
+          - link "Start Pro" [ref=e353] [cursor=pointer]:
+            - /url: /sign-up?plan=pro
+        - generic [ref=e354]:
+          - generic [ref=e355]: Growth
+          - generic [ref=e356]:
+            - generic [ref=e357]: $499
+            - generic [ref=e358]: /mo
+          - paragraph [ref=e359]: For multi-team organizations
+          - list [ref=e360]:
+            - listitem [ref=e361]:
+              - img [ref=e362]
+              - text: 25 users
+            - listitem [ref=e365]:
+              - img [ref=e366]
+              - text: Gateway mode
+            - listitem [ref=e369]:
+              - img [ref=e370]
+              - text: HIPAA + SOC 2 coverage
+            - listitem [ref=e373]:
+              - img [ref=e374]
+              - text: Audit trail export
+            - listitem [ref=e377]:
+              - img [ref=e378]
+              - text: Priority support
+          - link "Start Growth" [ref=e381] [cursor=pointer]:
+            - /url: /sign-up?plan=growth
+        - generic [ref=e382]:
+          - generic [ref=e383]: Enterprise
+          - generic [ref=e384]:
+            - generic [ref=e385]: $999
+            - generic [ref=e386]: /mo
+          - paragraph [ref=e387]: C3PAO assessment ready
+          - list [ref=e388]:
+            - listitem [ref=e389]:
+              - img [ref=e390]
+              - text: Unlimited users
+            - listitem [ref=e393]:
+              - img [ref=e394]
+              - text: C3PAO-ready reports
+            - listitem [ref=e397]:
+              - img [ref=e398]
+              - text: On-prem deployment
+            - listitem [ref=e401]:
+              - img [ref=e402]
+              - text: SLA guarantee
+            - listitem [ref=e405]:
+              - img [ref=e406]
+              - text: Dedicated CSM
+          - link "Contact sales" [ref=e409] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e410]:
+          - generic [ref=e411]: Federal
+          - generic [ref=e412]:
+            - generic [ref=e413]: $2499
+            - generic [ref=e414]: /mo
+          - paragraph [ref=e415]: Multi-agency deployments
+          - list [ref=e416]:
+            - listitem [ref=e417]:
+              - img [ref=e418]
+              - text: Multi-tenant
+            - listitem [ref=e421]:
+              - img [ref=e422]
+              - text: FedRAMP alignment
+            - listitem [ref=e425]:
+              - img [ref=e426]
+              - text: Custom integrations
+            - listitem [ref=e429]:
+              - img [ref=e430]
+              - text: CMMC advisory
+            - listitem [ref=e433]:
+              - img [ref=e434]
+              - text: SLA + NDA
+          - link "Contact sales" [ref=e437] [cursor=pointer]:
+            - /url: /contact
+      - paragraph [ref=e438]: Annual plans save 20% · All plans include 30-day money-back guarantee
+    - generic [ref=e440]:
+      - heading "What security teams say" [level=2] [ref=e441]
+      - generic [ref=e442]:
+        - generic [ref=e443]:
+          - paragraph [ref=e444]: “We went from zero visibility to a live SPRS dashboard in one afternoon. Our C3PAO assessor was impressed.”
+          - generic [ref=e445]:
+            - generic [ref=e446]: CISO
+            - generic [ref=e447]: DoD subcontractor, 180 employees
+        - generic [ref=e448]:
+          - paragraph [ref=e449]: “It's the only AI compliance tool that actually keeps data on-prem. Legal signed off in 48 hours.”
+          - generic [ref=e450]:
+            - generic [ref=e451]: IT Security Manager
+            - generic [ref=e452]: Healthcare technology company
+        - generic [ref=e453]:
+          - paragraph [ref=e454]: “Changed one environment variable. Two weeks later we passed our CMMC Level 2 audit.”
+          - generic [ref=e455]:
+            - generic [ref=e456]: VP of Engineering
+            - generic [ref=e457]: Defense electronics manufacturer
+    - generic [ref=e459]:
+      - heading "Frequently asked" [level=2] [ref=e460]
+      - generic [ref=e461]:
+        - generic [ref=e462]:
+          - button "Does prompt content ever leave my network?" [ref=e463] [cursor=pointer]:
+            - generic [ref=e464]: Does prompt content ever leave my network?
+            - img [ref=e466]
+          - paragraph [ref=e467]: No. HoundShield runs entirely on your infrastructure. The scanning engine, detection patterns, and audit logs all stay local. Only a license key hash and prompt count (no content) go external for billing.
+        - generic [ref=e468]:
+          - button "How long does setup take?" [ref=e469] [cursor=pointer]:
+            - generic [ref=e470]: How long does setup take?
+            - img [ref=e472]
+          - paragraph [ref=e473]: Under 10 minutes for most organizations. Change one environment variable to point AI tools at your HoundShield endpoint. Docker deployment is 3 commands. No agents, no firewall rules, no code changes.
+        - generic [ref=e474]:
+          - button "Which AI tools does HoundShield support?" [ref=e475] [cursor=pointer]:
+            - generic [ref=e476]: Which AI tools does HoundShield support?
+            - img [ref=e478]
+          - paragraph [ref=e479]: "Any tool using an OpenAI-compatible API: ChatGPT, Copilot, Claude, Gemini, Cursor, Codeium, and open-source models. It operates at the network layer, so it's model-agnostic."
+        - generic [ref=e480]:
+          - button "Is HoundShield CMMC Level 2 compliant?" [ref=e481] [cursor=pointer]:
+            - generic [ref=e482]: Is HoundShield CMMC Level 2 compliant?
+            - img [ref=e484]
+          - paragraph [ref=e485]: HoundShield maps all 110 NIST 800-171 Rev 2 controls and generates C3PAO-ready PDF evidence. Because it's local-only, CUI never crosses your control boundary — satisfying NIST 3.13.1 and supporting CMMC Level 2 certification.
+        - generic [ref=e486]:
+          - button "What happens when a violation is detected?" [ref=e487] [cursor=pointer]:
+            - generic [ref=e488]: What happens when a violation is detected?
+            - img [ref=e490]
+          - paragraph [ref=e491]: The prompt is blocked and the user receives a policy violation message. A tamper-proof, SHA-256 signed log entry is created with the timestamp, matched pattern, and affected framework. Webhook notifications are available on Pro and above.
+        - generic [ref=e492]:
+          - button "Can I export audit reports for my assessor?" [ref=e493] [cursor=pointer]:
+            - generic [ref=e494]: Can I export audit reports for my assessor?
+            - img [ref=e496]
+          - paragraph [ref=e497]: Yes. Pro and above plans support one-click PDF export of compliance evidence. Reports are formatted for C3PAO assessors and include control coverage maps, scan statistics, and violation records.
+    - generic [ref=e501]:
+      - generic [ref=e502]: CMMC Level 2 deadline
+      - generic [ref=e504]:
+        - generic [ref=e505]:
+          - generic [ref=e506]:
+            - generic [ref=e507]: "173"
+            - generic [ref=e508]: DD
+          - generic [ref=e509]: ":"
+        - generic [ref=e510]:
+          - generic [ref=e511]:
+            - generic [ref=e512]: "17"
+            - generic [ref=e513]: HH
+          - generic [ref=e514]: ":"
+        - generic [ref=e515]:
+          - generic [ref=e516]:
+            - generic [ref=e517]: "11"
+            - generic [ref=e518]: MM
+          - generic [ref=e519]: ":"
+        - generic [ref=e521]:
+          - generic [ref=e522]: "08"
+          - generic [ref=e523]: SS
+      - heading "The audit doesn't care if you were busy." [level=2] [ref=e524]
+      - paragraph [ref=e525]: One URL change. 10 minutes to full AI compliance coverage. Your assessor will ask what changed — the answer is everything.
+      - generic [ref=e526]:
+        - link "Start free — deploy in 10 min" [ref=e527] [cursor=pointer]:
+          - /url: /sign-up
+          - text: Start free — deploy in 10 min
+          - img [ref=e528]
+        - link "Talk to a compliance expert" [ref=e530] [cursor=pointer]:
+          - /url: /contact
+    - contentinfo [ref=e531]:
+      - generic [ref=e532]:
+        - generic [ref=e533]:
+          - generic [ref=e534]:
+            - link "HoundShield HoundShield" [ref=e535] [cursor=pointer]:
+              - /url: /
+              - img "HoundShield" [ref=e537]
+              - generic [ref=e538]: HoundShield
+            - paragraph [ref=e539]: Local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. Prompt content never leaves your network.
+            - generic [ref=e540]:
+              - generic [ref=e541]:
+                - img [ref=e542]
+                - text: CMMC LVL 2
+              - generic [ref=e544]:
+                - img [ref=e545]
+                - text: HIPAA
+              - generic [ref=e547]:
+                - img [ref=e548]
+                - text: SOC 2
+              - generic [ref=e550]:
+                - img [ref=e551]
+                - text: NIST 800-171
+          - generic [ref=e553]:
+            - heading "Product" [level=3] [ref=e554]
+            - list [ref=e555]:
+              - listitem [ref=e556]:
+                - link "Features" [ref=e557] [cursor=pointer]:
+                  - /url: /features
+              - listitem [ref=e558]:
+                - link "How it works" [ref=e559] [cursor=pointer]:
+                  - /url: /how-it-works
+              - listitem [ref=e560]:
+                - link "Pricing" [ref=e561] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e562]:
+                - link "Changelog" [ref=e563] [cursor=pointer]:
+                  - /url: /changelog
+              - listitem [ref=e564]:
+                - link "Roadmap" [ref=e565] [cursor=pointer]:
+                  - /url: /changelog
+          - generic [ref=e566]:
+            - heading "Compliance" [level=3] [ref=e567]
+            - list [ref=e568]:
+              - listitem [ref=e569]:
+                - link "CMMC Level 2" [ref=e570] [cursor=pointer]:
+                  - /url: /features
+              - listitem [ref=e571]:
+                - link "HIPAA" [ref=e572] [cursor=pointer]:
+                  - /url: /hipaa
+              - listitem [ref=e573]:
+                - link "SOC 2" [ref=e574] [cursor=pointer]:
+                  - /url: /features
+              - listitem [ref=e575]:
+                - link "NIST 800-171" [ref=e576] [cursor=pointer]:
+                  - /url: /features
+              - listitem [ref=e577]:
+                - link "DFARS 7012" [ref=e578] [cursor=pointer]:
+                  - /url: /features
+          - generic [ref=e579]:
+            - heading "Resources" [level=3] [ref=e580]
+            - list [ref=e581]:
+              - listitem [ref=e582]:
+                - link "Documentation" [ref=e583] [cursor=pointer]:
+                  - /url: /docs
+              - listitem [ref=e584]:
+                - link "Blog" [ref=e585] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e586]:
+                - link "Partners" [ref=e587] [cursor=pointer]:
+                  - /url: /partners
+              - listitem [ref=e588]:
+                - link "Contact" [ref=e589] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e590]:
+                - link "About" [ref=e591] [cursor=pointer]:
+                  - /url: /about
+        - generic [ref=e592]:
+          - paragraph [ref=e593]: © 2026 HoundShield. All rights reserved.
+          - generic [ref=e594]:
+            - link "Privacy" [ref=e595] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms" [ref=e596] [cursor=pointer]:
+              - /url: /terms
+  - button "Chat with Brain AI" [ref=e597] [cursor=pointer]:
+    - img "Hound Shield" [ref=e598]

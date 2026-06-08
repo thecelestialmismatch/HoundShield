@@ -53,23 +53,23 @@ const PILLARS = [
   },
   {
     icon: Timer,
-    iconBg: "bg-emerald-50 border-emerald-200",
-    iconColor: "text-emerald-700",
+    iconBg: "bg-[var(--hs-success-bg)] border-[rgba(5,150,105,0.25)]",
+    iconColor: "text-[var(--hs-success)]",
     eyebrow: "vs. VPNs and endpoint agents",
     title: "Under 10ms. Zero behaviour change.",
     body: "A single URL swap is all your engineers change. houndshield sits inline at the gateway — invisible to users, impenetrable to leaks.",
     stat: { label: "Deploy time", value: 15, suffix: " min" },
-    accentColor: "text-emerald-700",
+    accentColor: "text-[var(--hs-success)]",
   },
   {
     icon: FileCheck,
-    iconBg: "bg-amber-50 border-amber-200",
-    iconColor: "text-amber-700",
+    iconBg: "bg-brand-50 border-brand-200",
+    iconColor: "text-brand-600",
     eyebrow: "vs. manual audit prep",
     title: "Audit-ready from day one.",
     body: "Every blocked query is logged in an immutable SHA-256 hash chain. Export your complete audit trail in seconds — SOC 2, HIPAA, or C3PAO.",
     stat: { label: "Audit findings prevented (avg)", value: 94, suffix: "%" },
-    accentColor: "text-amber-700",
+    accentColor: "text-brand-600",
   },
 ];
 
@@ -78,7 +78,7 @@ export function WhyHoundshield() {
     <section className="py-24 px-6 bg-slate-50 border-y border-slate-100">
       <div className="max-w-5xl mx-auto">
         <FadeIn className="mb-14">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0369A1] mb-3">Why houndshield</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-600 mb-3">Why houndshield</p>
           <h2 className="text-[clamp(26px,3.5vw,42px)] font-display font-bold tracking-tight leading-[1.1] text-slate-900">
             One tool does what three tools used to.
           </h2>

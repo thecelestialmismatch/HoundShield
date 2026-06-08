@@ -69,8 +69,8 @@ export default function SignupPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="relative z-10 w-full max-w-md bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center shadow-xl shadow-black/30"
         >
-          <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+          <div className="w-16 h-16 rounded-full bg-[var(--hs-success-bg)] flex items-center justify-center mx-auto mb-4">
+            <CheckCircle2 className="w-8 h-8 text-[var(--hs-success)]" />
           </div>
           <h2 className="text-xl font-bold text-white mb-2">Check your email</h2>
           <p className="text-slate-400 text-sm mb-6">
@@ -104,7 +104,7 @@ export default function SignupPage() {
       >
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-3 mb-8">
-          <Logo className="w-10 h-10" />
+          <Logo className="w-10" />
           <TextLogo variant="dark" />
         </Link>
 

@@ -201,7 +201,7 @@ function CommissionCalculator() {
           <div className="text-xs text-slate-500 mt-1">Your monthly cut</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-extrabold text-emerald-400 font-mono">
+          <div className="text-2xl font-extrabold text-[var(--hs-success)] font-mono">
             ${annualCommission.toLocaleString()}
           </div>
           <div className="text-xs text-slate-500 mt-1">Annual passive</div>
@@ -266,7 +266,7 @@ export default function PartnersPage() {
         <div
           className="absolute inset-0 pointer-events-none opacity-30"
           style={{
-            background: "radial-gradient(ellipse 80% 40% at 50% 60%, rgba(218,119,86,0.12) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 80% 40% at 50% 60%, rgba(129,166,198,0.12) 0%, transparent 70%)",
           }}
         />
         <div className="relative z-10 max-w-5xl mx-auto px-6">
@@ -379,7 +379,7 @@ export default function PartnersPage() {
                     "Automated evidence collection per client",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2.5 text-sm text-slate-300">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
                       {item}
                     </li>
                   ))}
@@ -401,7 +401,7 @@ export default function PartnersPage() {
                     "Early access to CMMC 2.0 Level 3 pattern updates",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2.5 text-sm text-slate-300">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
                       {item}
                     </li>
                   ))}
@@ -473,7 +473,7 @@ export default function PartnersPage() {
                   <ul className="flex flex-col gap-2 mb-5 flex-1">
                     {tier.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-[13px] text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
                         {f}
                       </li>
                     ))}
@@ -565,8 +565,8 @@ export default function PartnersPage() {
           {submitted ? (
             <FadeIn>
               <div className="glass-card rounded-xl p-8 text-center">
-                <div className="w-14 h-14 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-7 h-7 text-emerald-500" />
+                <div className="w-14 h-14 rounded-full bg-[rgba(5,150,105,0.1)] flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-7 h-7 text-[var(--hs-success)]" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-2">
                   Application received

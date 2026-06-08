@@ -98,13 +98,13 @@ function AgentSimulator() {
 
   const execution = [
     { phase: "OBSERVE", thought: "Received request: 'Analyze Q3 financials for compliance risks'. Gathering context from knowledge base...", tool: null, color: "text-brand-400" },
-    { phase: "THINK", thought: "This involves financial data analysis. I need to: (1) scan for PII, (2) check regulatory compliance, (3) identify risk patterns.", tool: null, color: "text-purple-400" },
+    { phase: "THINK", thought: "This involves financial data analysis. I need to: (1) scan for PII, (2) check regulatory compliance, (3) identify risk patterns.", tool: null, color: "text-[var(--hs-steel)]" },
     { phase: "ACT", thought: "Running compliance scan on input data...", tool: "Compliance Scan", color: "text-brand-400" },
     { phase: "OBSERVE", thought: "Scan complete: 0 PII violations found. Document contains revenue figures and M&A projections.", tool: null, color: "text-brand-400" },
-    { phase: "THINK", thought: "Revenue data is sensitive but allowed under company policy. M&A projections need quarantine-level review. Routing to classification.", tool: null, color: "text-purple-400" },
+    { phase: "THINK", thought: "Revenue data is sensitive but allowed under company policy. M&A projections need quarantine-level review. Routing to classification.", tool: null, color: "text-[var(--hs-steel)]" },
     { phase: "ACT", thought: "Classifying sensitivity levels and generating compliance report...", tool: "Data Query", color: "text-brand-400" },
     { phase: "ACT", thought: "Generating visual compliance summary...", tool: "Chart Gen", color: "text-brand-400" },
-    { phase: "RESULT", thought: "Analysis complete. 2 items flagged for review. Compliance report generated with risk assessment.", tool: null, color: "text-emerald-400" },
+    { phase: "RESULT", thought: "Analysis complete. 2 items flagged for review. Compliance report generated with risk assessment.", tool: null, color: "text-[var(--hs-success)]" },
   ];
 
   useEffect(() => {
@@ -136,9 +136,9 @@ function AgentSimulator() {
   const current = execution[step];
   const phaseColors: Record<string, string> = {
     OBSERVE: "bg-brand-500/20 text-brand-400 border-brand-500/30",
-    THINK: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+    THINK: "bg-[rgba(129,166,198,0.2)] text-[var(--hs-steel)] border-[rgba(129,166,198,0.3)]",
     ACT: "bg-brand-500/20 text-brand-400 border-brand-500/30",
-    RESULT: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+    RESULT: "bg-[rgba(5,150,105,0.2)] text-[var(--hs-success)] border-[rgba(5,150,105,0.3)]",
   };
 
   return (
@@ -149,12 +149,12 @@ function AgentSimulator() {
           <span className="text-sm font-semibold text-white">Agent Execution — ReAct Loop</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${isRunning ? "bg-emerald-400 animate-pulse" : "bg-white/20"}`} />
+          <div className={`w-2 h-2 rounded-full ${isRunning ? "bg-[var(--hs-success)] animate-pulse" : "bg-white/20"}`} />
           <button
             onClick={() => setIsRunning(!isRunning)}
             className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] transition-all"
           >
-            {isRunning ? <Pause className="w-3.5 h-3.5 text-slate-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
+            {isRunning ? <Pause className="w-3.5 h-3.5 text-slate-400" /> : <Play className="w-3.5 h-3.5 text-[var(--hs-success)]" />}
           </button>
         </div>
       </div>
@@ -203,7 +203,7 @@ function AgentSimulator() {
       {/* Progress Bar */}
       <div className="mt-4 h-1 rounded-full bg-white/[0.06] overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-brand-500 via-purple-500 via-brand-500 to-emerald-500 transition-all duration-500"
+          className="h-full rounded-full bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] transition-all duration-500"
           style={{ width: `${((step + 1) / execution.length) * 100}%` }}
         />
       </div>
@@ -227,9 +227,9 @@ export default function AgentsPage() {
 
   const tools = [
     { icon: Search, name: "Web Search", desc: "Real-time web intelligence for threat analysis and compliance research", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
-    { icon: Code2, name: "Code Execution", desc: "Sandboxed code runner for data processing, validation, and automated scripts", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
+    { icon: Code2, name: "Code Execution", desc: "Sandboxed code runner for data processing, validation, and automated scripts", color: "text-[var(--hs-success)]", bg: "bg-[rgba(5,150,105,0.1)] border-[rgba(5,150,105,0.2)]" },
     { icon: Shield, name: "Compliance Scan", desc: "Instant PII and sensitive data detection across 16 pattern types", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
-    { icon: Database, name: "Data Query", desc: "Structured data analysis with SQL-like queries on compliance events", color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20" },
+    { icon: Database, name: "Data Query", desc: "Structured data analysis with SQL-like queries on compliance events", color: "text-[var(--hs-steel)]", bg: "bg-[rgba(129,166,198,0.1)] border-[rgba(129,166,198,0.2)]" },
     { icon: Eye, name: "File Analysis", desc: "Deep document parsing for contracts, policies, and regulatory filings", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
     { icon: LineChart, name: "Chart Generation", desc: "Visual data reporting with auto-generated compliance dashboards", color: "text-rose-400", bg: "bg-rose-500/10 border-rose-500/20" },
     { icon: BookOpen, name: "Knowledge Base", desc: "RAG-powered retrieval from your organization's compliance documentation", color: "text-cyan-400", bg: "bg-cyan-500/10 border-cyan-500/20" },
@@ -265,7 +265,7 @@ export default function AgentsPage() {
     {
       name: "Legal Reviewer",
       icon: Gavel,
-      color: "purple",
+      color: "steel",
       desc: "Contract analysis and regulatory compliance review with automated clause extraction.",
       capabilities: ["Contract parsing", "Risk identification", "Clause comparison", "Regulatory mapping"],
       model: "GPT-4o",
@@ -274,7 +274,7 @@ export default function AgentsPage() {
     {
       name: "Financial Auditor",
       icon: TrendingUp,
-      color: "emerald",
+      color: "success",
       desc: "Financial data compliance with SOX requirements, anomaly detection, and audit reporting.",
       capabilities: ["Anomaly detection", "SOX compliance", "Audit trails", "Report generation"],
       model: "GPT-4o",
@@ -338,8 +338,8 @@ export default function AgentsPage() {
 
   const colorMap: Record<string, { bg: string; border: string; text: string; iconBg: string }> = {
     brand: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
-    purple: { bg: "bg-purple-500/5", border: "border-purple-500/30", text: "text-purple-400", iconBg: "bg-purple-500/10 border-purple-500/20" },
-    emerald: { bg: "bg-emerald-500/5", border: "border-emerald-500/30", text: "text-emerald-400", iconBg: "bg-emerald-500/10 border-emerald-500/20" },
+    steel: { bg: "bg-[rgba(129,166,198,0.05)]", border: "border-[rgba(129,166,198,0.3)]", text: "text-[var(--hs-steel)]", iconBg: "bg-[rgba(129,166,198,0.1)] border-[rgba(129,166,198,0.2)]" },
+    success: { bg: "bg-[rgba(5,150,105,0.05)]", border: "border-[rgba(5,150,105,0.3)]", text: "text-[var(--hs-success)]", iconBg: "bg-[rgba(5,150,105,0.1)] border-[rgba(5,150,105,0.2)]" },
     amber: { bg: "bg-brand-500/5", border: "border-brand-500/30", text: "text-brand-400", iconBg: "bg-brand-500/10 border-brand-500/20" },
     rose: { bg: "bg-rose-500/5", border: "border-rose-500/30", text: "text-rose-400", iconBg: "bg-rose-500/10 border-rose-500/20" },
     cyan: { bg: "bg-cyan-500/5", border: "border-cyan-500/30", text: "text-cyan-400", iconBg: "bg-cyan-500/10 border-cyan-500/20" },
@@ -365,7 +365,7 @@ export default function AgentsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] mb-8">
-              <Brain className="w-3.5 h-3.5 text-purple-400" />
+              <Brain className="w-3.5 h-3.5 text-[var(--hs-steel)]" />
               <span className="text-xs text-slate-400">Agentic AI System</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-display font-bold tracking-tight mb-6">
@@ -414,7 +414,7 @@ export default function AgentsPage() {
         <div className="bg-aurora absolute inset-0" />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center mb-12">
-            <span className="text-xs font-medium tracking-widest uppercase text-purple-400 mb-4 block">Live Demo</span>
+            <span className="text-xs font-medium tracking-widest uppercase text-[var(--hs-steel)] mb-4 block">Live Demo</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               Watch an Agent <span className="text-gradient-brand">Think in Real Time</span>
             </h2>
@@ -449,16 +449,16 @@ export default function AgentsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { name: "Observe", icon: Eye, color: "brand", desc: "Receives the request and gathers context. Reads previous conversation, tool outputs, and environmental state.", num: "01" },
-              { name: "Think", icon: Brain, color: "purple", desc: "Chain-of-thought reasoning about the best approach. Considers multiple strategies and selects the optimal path.", num: "02" },
+              { name: "Think", icon: Brain, color: "steel", desc: "Chain-of-thought reasoning about the best approach. Considers multiple strategies and selects the optimal path.", num: "02" },
               { name: "Act", icon: Zap, color: "amber", desc: "Executes selected tools in parallel. Runs compliance scans, queries data, generates reports, searches the web.", num: "03" },
-              { name: "Iterate", icon: RefreshCw, color: "emerald", desc: "Evaluates the result. If the task isn't complete, loops back to Observe with new context. Continues until done.", num: "04" },
+              { name: "Iterate", icon: RefreshCw, color: "success", desc: "Evaluates the result. If the task isn't complete, loops back to Observe with new context. Continues until done.", num: "04" },
             ].map((step, i) => {
               const Icon = step.icon;
               const colors: Record<string, { bg: string; text: string; border: string }> = {
                 brand: { bg: "bg-brand-500/10", text: "text-brand-400", border: "border-brand-500/20" },
-                purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/20" },
+                steel: { bg: "bg-[rgba(129,166,198,0.1)]", text: "text-[var(--hs-steel)]", border: "border-[rgba(129,166,198,0.2)]" },
                 amber: { bg: "bg-brand-500/10", text: "text-brand-400", border: "border-brand-500/20" },
-                emerald: { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/20" },
+                success: { bg: "bg-[rgba(5,150,105,0.1)]", text: "text-[var(--hs-success)]", border: "border-[rgba(5,150,105,0.2)]" },
               };
               const c = colors[step.color];
               return (
@@ -531,7 +531,7 @@ export default function AgentsPage() {
         <div className="bg-dot-grid absolute inset-0" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center mb-12">
-            <span className="text-xs font-medium tracking-widest uppercase text-emerald-400 mb-4 block">Model Router</span>
+            <span className="text-xs font-medium tracking-widest uppercase text-[var(--hs-success)] mb-4 block">Model Router</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
               <span className="text-gradient-brand">13 AI Models</span> — 8 Free
             </h2>
@@ -547,9 +547,9 @@ export default function AgentsPage() {
                 <div className="glass-card p-4 flex items-center justify-between group hover:border-white/10 transition-all">
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                      model.type === "Premium" ? "bg-brand-500/10 border border-brand-500/20" : "bg-emerald-500/10 border border-emerald-500/20"
+                      model.type === "Premium" ? "bg-brand-500/10 border border-brand-500/20" : "bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)]"
                     }`}>
-                      <Cpu className={`w-4 h-4 ${model.type === "Premium" ? "text-brand-400" : "text-emerald-400"}`} />
+                      <Cpu className={`w-4 h-4 ${model.type === "Premium" ? "text-brand-400" : "text-[var(--hs-success)]"}`} />
                     </div>
                     <div>
                       <div className="text-sm font-medium text-white">{model.name}</div>
@@ -560,7 +560,7 @@ export default function AgentsPage() {
                     <span className={`text-[10px] px-2 py-0.5 rounded-full border ${
                       model.type === "Premium"
                         ? "text-brand-400 bg-brand-500/10 border-brand-500/20"
-                        : "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                        : "text-[var(--hs-success)] bg-[rgba(5,150,105,0.1)] border-[rgba(5,150,105,0.2)]"
                     }`}>
                       {model.type === "Premium" ? "PRO" : "FREE"}
                     </span>
@@ -698,15 +698,15 @@ export default function AgentsPage() {
                 {/* Step 2 */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
-                      <span className="text-xs font-bold text-purple-400">2</span>
+                    <div className="w-7 h-7 rounded-lg bg-[rgba(129,166,198,0.2)] border border-[rgba(129,166,198,0.3)] flex items-center justify-center">
+                      <span className="text-xs font-bold text-[var(--hs-steel)]">2</span>
                     </div>
                     <span className="text-sm font-semibold text-white">Select Tools</span>
                   </div>
                   <div className="glass-card p-4 space-y-2">
                     {["Compliance Scan", "Data Query", "File Analysis", "Knowledge Base"].map((tool, i) => (
                       <div key={tool} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08]">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[var(--hs-success)]" />
                         <span className="text-xs text-slate-400">{tool}</span>
                       </div>
                     ))}
@@ -720,8 +720,8 @@ export default function AgentsPage() {
                 {/* Step 3 */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-                      <span className="text-xs font-bold text-emerald-400">3</span>
+                    <div className="w-7 h-7 rounded-lg bg-[rgba(5,150,105,0.2)] border border-[rgba(5,150,105,0.3)] flex items-center justify-center">
+                      <span className="text-xs font-bold text-[var(--hs-success)]">3</span>
                     </div>
                     <span className="text-sm font-semibold text-white">Deploy</span>
                   </div>
@@ -732,9 +732,9 @@ export default function AgentsPage() {
                     </div>
                     <div>
                       <label className="text-[10px] uppercase tracking-wider text-slate-500 block mb-1">Status</label>
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        <span className="text-xs text-emerald-400 font-medium">Ready to Deploy</span>
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)]">
+                        <div className="w-2 h-2 rounded-full bg-[var(--hs-success)] animate-pulse" />
+                        <span className="text-xs text-[var(--hs-success)] font-medium">Ready to Deploy</span>
                       </div>
                     </div>
                     <button className="btn-primary w-full text-sm !py-2.5">
@@ -756,7 +756,7 @@ export default function AgentsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection>
             <div className="glass-card-glow p-8 md:p-12 text-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/[0.05] via-transparent to-brand-500/[0.05]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[rgba(129,166,198,0.05)] via-transparent to-brand-500/[0.05]" />
               <div className="relative z-10">
                 <Brain className="w-12 h-12 text-brand-400 mx-auto mb-6" />
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">

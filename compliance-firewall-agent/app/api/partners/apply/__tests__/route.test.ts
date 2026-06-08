@@ -8,18 +8,20 @@
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
-const mockInsert = jest.fn();
-const mockFrom = jest.fn();
+const mockInsert = vi.fn();
+const mockFrom = vi.fn();
 
-jest.mock("@/lib/supabase/client", () => ({
-  createServiceClient: jest.fn(() => ({
+vi.mock("@/lib/supabase/client", () => ({
+  createServiceClient: vi.fn(() => ({
     from: mockFrom,
   })),
 }));
 
-const mockResendSend = jest.fn().mockResolvedValue({ id: "email-123" });
-jest.mock("resend", () => ({
-  Resend: jest.fn(() => ({ emails: { send: mockResendSend } })),
+const { mockResendSend } = vi.hoisted(() => ({
+  mockResendSend: vi.fn().mockResolvedValue({ id: "email-123" }),
+}));
+vi.mock("resend", () => ({
+  Resend: vi.fn().mockImplementation(function () { return { emails: { send: mockResendSend } }; }),
 }));
 
 // ── Import route handler after mocks ──────────────────────────────────────
@@ -104,7 +106,7 @@ describe("POST /api/partners/apply — validation", () => {
 
 describe("POST /api/partners/apply — success", () => {
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
     setupInsertSuccess();
     delete process.env.RESEND_API_KEY;
   });

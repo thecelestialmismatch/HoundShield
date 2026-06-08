@@ -1,0 +1,473 @@
+
+<h2 class="sr-only">LeakWall admin dashboard — team leak event monitoring and policy management interface</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0F0E;--surface:#1A1A18;--surface2:#222220;--border:rgba(255,255,255,0.07);
+  --text:#F0EEE8;--muted:#888780;--faint:#444441;
+  --red:#E24B4A;--red-bg:rgba(226,75,74,0.12);--red-border:rgba(226,75,74,0.25);
+  --amber:#EF9F27;--amber-bg:rgba(239,159,39,0.12);--amber-border:rgba(239,159,39,0.25);
+  --green:#5DCAA5;--green-bg:rgba(93,202,165,0.1);--green-border:rgba(93,202,165,0.2);
+  --blue:#378ADD;--blue-bg:rgba(55,138,221,0.1);
+  --mono:ui-monospace,'IBM Plex Mono','Cascadia Code',monospace;
+  --sans:-apple-system,'Helvetica Neue',sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;min-height:560px}
+.shell{display:grid;grid-template-columns:180px 1fr;height:580px;overflow:hidden;border:1px solid var(--border);border-radius:10px}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0}
+.logo{padding:18px 16px 14px;border-bottom:1px solid var(--border)}
+.logo-mark{font-size:15px;font-weight:700;letter-spacing:-0.02em}
+.logo-mark span{color:var(--red)}
+.org-badge{font-size:10px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-top:3px}
+.nav{padding:10px 8px;flex:1;display:flex;flex-direction:column;gap:2px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:all 0.12s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border)}
+.nav-icon{width:14px;height:14px;opacity:0.7;font-size:12px;flex-shrink:0}
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border)}
+.plan-badge{background:var(--amber-bg);border:0.5px solid var(--amber-border);border-radius:4px;padding:4px 8px;font-size:10px;color:var(--amber);font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
+
+/* MAIN */
+.main{display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.page-title{font-size:14px;font-weight:600;letter-spacing:-0.01em}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.range-select{background:var(--surface2);border:0.5px solid var(--border);border-radius:5px;color:var(--text);font-size:11px;padding:5px 8px;cursor:pointer}
+.refresh-btn{background:var(--red-bg);border:0.5px solid var(--red-border);border-radius:5px;color:var(--red);font-size:11px;padding:5px 10px;cursor:pointer;font-weight:600}
+.content{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex-shrink:0}
+.stat{background:var(--surface);border:0.5px solid var(--border);border-radius:8px;padding:12px 14px}
+.stat.critical{border-color:var(--red-border);background:var(--red-bg)}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
+.stat-value{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1;letter-spacing:-0.02em}
+.stat-value.red{color:var(--red)}
+.stat-value.amber{color:var(--amber)}
+.stat-value.green{color:var(--green)}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:4px}
+
+/* GRID PANELS */
+.mid-row{display:grid;grid-template-columns:1fr 200px;gap:10px;flex-shrink:0}
+.panel{background:var(--surface);border:0.5px solid var(--border);border-radius:8px;padding:14px}
+.panel-title{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+
+/* CHART */
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:80px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.bar-stack{display:flex;flex-direction:column;justify-content:flex-end;width:100%;border-radius:3px 3px 0 0;overflow:hidden;cursor:pointer;transition:opacity 0.1s}
+.bar-stack:hover{opacity:0.8}
+.bar-seg{width:100%}
+.bar-label{font-size:9px;color:var(--faint);font-family:var(--mono);margin-top:4px}
+
+/* TOOL BREAKDOWN */
+.tool-list{display:flex;flex-direction:column;gap:6px}
+.tool-row{display:flex;align-items:center;gap:6px}
+.tool-name{font-size:11px;color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tool-bar-bg{flex:2;height:4px;background:var(--faint);border-radius:2px;overflow:hidden}
+.tool-bar-fill{height:100%;border-radius:2px;background:var(--red);transition:width 0.4s}
+.tool-count{font-family:var(--mono);font-size:11px;color:var(--text);min-width:18px;text-align:right}
+
+/* MEMBER TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:6px 8px;text-align:left;border-bottom:0.5px solid var(--border)}
+td{padding:8px 8px;border-bottom:0.5px solid var(--faint);font-size:12px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.avatar{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;letter-spacing:0.02em}
+.member-cell{display:flex;align-items:center;gap:8px}
+.badge-sev{display:inline-flex;align-items:center;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.badge-critical{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border)}
+.badge-high{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border)}
+.badge-medium{background:rgba(55,138,221,0.1);color:var(--blue);border:0.5px solid rgba(55,138,221,0.2)}
+.badge-low{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border)}
+.badge-blocked{background:rgba(255,255,255,0.06);color:var(--faint);font-size:9px;padding:2px 5px;border-radius:3px;border:0.5px solid var(--border)}
+.badge-blocked.active{color:var(--red);border-color:var(--red-border);background:var(--red-bg)}
+.count-mono{font-family:var(--mono);font-size:12px}
+.sparkbar{display:inline-flex;align-items:flex-end;gap:1px;height:16px}
+.sparkbar div{width:3px;border-radius:1px;background:var(--faint)}
+.sparkbar div.has{background:var(--red);opacity:0.7}
+
+/* EVENTS FEED */
+.event-list{display:flex;flex-direction:column;gap:0}
+.event-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--faint);cursor:pointer}
+.event-row:last-child{border-bottom:none}
+.event-row:hover{background:rgba(255,255,255,0.015)}
+.event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.event-dot.critical{background:var(--red)}
+.event-dot.high{background:var(--amber)}
+.event-dot.medium{background:var(--blue)}
+.event-dot.low{background:var(--green)}
+.event-body{flex:1;min-width:0}
+.event-type{font-size:12px;font-weight:500;color:var(--text)}
+.event-meta{font-size:10px;color:var(--muted);margin-top:2px}
+.event-time{font-family:var(--mono);font-size:10px;color:var(--faint);flex-shrink:0;padding-top:3px}
+
+/* POLICY VIEW */
+.policy-grid{display:flex;flex-direction:column;gap:6px}
+.policy-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface2);border:0.5px solid var(--border);border-radius:6px}
+.policy-cat{flex:1;font-size:12px;font-weight:500}
+.policy-seg{display:flex;border-radius:5px;overflow:hidden;border:0.5px solid var(--border)}
+.policy-opt{padding:4px 9px;font-size:10px;font-weight:600;letter-spacing:0.04em;cursor:pointer;background:var(--surface);color:var(--muted);border:none;transition:all 0.1s}
+.policy-opt:hover{background:var(--surface2)}
+.policy-opt.sel-block{background:var(--red-bg);color:var(--red)}
+.policy-opt.sel-warn{background:var(--amber-bg);color:var(--amber)}
+.policy-opt.sel-log{background:var(--green-bg);color:var(--green)}
+.toggle{width:28px;height:16px;border-radius:8px;background:var(--faint);border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0}
+.toggle.on{background:var(--green)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform 0.2s}
+.toggle.on::after{transform:translateX(12px)}
+
+/* NAV TABS visible sections */
+.section{display:none}
+.section.active{display:flex;flex-direction:column;gap:14px}
+
+.alert-bar{background:var(--red-bg);border:0.5px solid var(--red-border);border-radius:6px;padding:9px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.alert-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.alert-text{font-size:12px;color:var(--red)}
+.alert-text strong{font-weight:700}
+</style>
+
+<div class="shell">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">Leak<span>Wall</span></div>
+      <div class="org-badge">Acme Agency</div>
+    </div>
+    <div class="nav">
+      <button class="nav-item active" onclick="setPage('overview')">
+        <span class="nav-icon">◈</span> Overview
+      </button>
+      <button class="nav-item" onclick="setPage('team')">
+        <span class="nav-icon">◎</span> Team
+      </button>
+      <button class="nav-item" onclick="setPage('events')">
+        <span class="nav-icon">◉</span> Events
+      </button>
+      <button class="nav-item" onclick="setPage('policies')">
+        <span class="nav-icon">◧</span> Policies
+      </button>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="plan-badge">Team Plan</div>
+      <div style="font-size:10px;color:var(--faint);margin-top:8px">7 of 8 seats active</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="page-title" id="page-title">Overview</span>
+      <div class="topbar-actions">
+        <select class="range-select" id="range-select" onchange="updateRange(this.value)">
+          <option value="7">Last 7 days</option>
+          <option value="14">Last 14 days</option>
+          <option value="30">Last 30 days</option>
+        </select>
+        <button class="refresh-btn" onclick="sendPrompt('Show me which LeakWall members are most at risk and what I should do about it')">Ask AI ↗</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- OVERVIEW -->
+      <div class="section active" id="sec-overview">
+        <div class="alert-bar" id="alert-bar">
+          <div class="alert-dot"></div>
+          <div class="alert-text"><strong>2 critical events</strong> in the last 2 hours — GitHub and AWS API keys pasted into ChatGPT. Both blocked.</div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat"><div class="stat-label">Total events</div><div class="stat-value" id="s-total">17</div><div class="stat-sub" id="s-total-sub">this week</div></div>
+          <div class="stat critical"><div class="stat-label">Critical</div><div class="stat-value red" id="s-crit">5</div><div class="stat-sub" id="s-crit-sub">requires action</div></div>
+          <div class="stat"><div class="stat-label">Blocked</div><div class="stat-value green" id="s-blocked">9</div><div class="stat-sub">auto-prevented</div></div>
+          <div class="stat"><div class="stat-label">Dismissed</div><div class="stat-value amber" id="s-dismissed">5</div><div class="stat-sub">user bypassed warning</div></div>
+        </div>
+
+        <div class="mid-row">
+          <div class="panel">
+            <div class="panel-title">Daily events — <span id="chart-label">last 7 days</span></div>
+            <div class="chart-bars" id="chart-bars"></div>
+            <div style="display:flex;gap:12px;margin-top:10px">
+              <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--red);display:inline-block"></span>Critical</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--amber);display:inline-block"></span>High</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)"><span style="width:8px;height:8px;border-radius:2px;background:var(--blue);display:inline-block"></span>Medium/Low</span>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">By AI tool</div>
+            <div class="tool-list" id="tool-list"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Recent events</div>
+          <div class="event-list" id="recent-events"></div>
+        </div>
+      </div>
+
+      <!-- TEAM -->
+      <div class="section" id="sec-team">
+        <div class="panel" style="flex:1">
+          <div class="panel-title">Team members — event breakdown</div>
+          <div class="table-wrap">
+            <table id="member-table">
+              <thead><tr>
+                <th style="width:40%">Member</th>
+                <th>Events</th>
+                <th>Highest</th>
+                <th>Blocked</th>
+                <th>Dismissed</th>
+                <th>Tools</th>
+              </tr></thead>
+              <tbody id="member-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENTS -->
+      <div class="section" id="sec-events">
+        <div class="panel" style="flex:1">
+          <div class="panel-title">All events — most recent first</div>
+          <div class="event-list" id="all-events"></div>
+        </div>
+      </div>
+
+      <!-- POLICIES -->
+      <div class="section" id="sec-policies">
+        <div class="panel">
+          <div class="panel-title">Detection &amp; response policies</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Block = paste prevented entirely. Warn = user sees alert but can proceed. Log = silently recorded.</div>
+          <div class="policy-grid" id="policy-grid"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Dismissed warnings — this week</div>
+          <div style="font-size:12px;color:var(--amber);margin-bottom:8px">5 warnings dismissed by employees. Consider upgrading these categories to Block.</div>
+          <div id="dismissed-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  7: {
+    total:17, critical:5, blocked:9, dismissed:5,
+    daily:[
+      {d:'M',c:1,h:1,m:0},{d:'Tu',c:1,h:1,m:1},{d:'W',c:0,h:1,m:1},
+      {d:'Th',c:1,h:1,m:0},{d:'F',c:0,h:1,m:1},{d:'Sa',c:1,h:0,m:0},{d:'Su',c:1,h:1,m:0}
+    ],
+    tools:[{n:'ChatGPT',v:9},{n:'Gemini',v:3},{n:'Copilot',v:2},{n:'Claude',v:2},{n:'Perplexity',v:1}],
+  },
+  14: {
+    total:25, critical:7, blocked:13, dismissed:8,
+    daily:[
+      {d:'M',c:0,h:1,m:1},{d:'Tu',c:1,h:0,m:0},{d:'W',c:1,h:1,m:1},{d:'Th',c:0,h:1,m:0},
+      {d:'F',c:1,h:0,m:1},{d:'Sa',c:0,h:0,m:0},{d:'Su',c:0,h:1,m:0},
+      {d:'M',c:1,h:1,m:0},{d:'Tu',c:1,h:1,m:1},{d:'W',c:0,h:1,m:1},
+      {d:'Th',c:1,h:1,m:0},{d:'F',c:0,h:1,m:1},{d:'Sa',c:1,h:0,m:0},{d:'Su',c:1,h:1,m:0}
+    ],
+    tools:[{n:'ChatGPT',v:13},{n:'Gemini',v:5},{n:'Copilot',v:3},{n:'Claude',v:2},{n:'Perplexity',v:2}],
+  },
+  30: {
+    total:48, critical:11, blocked:24, dismissed:15,
+    daily: Array.from({length:30},(_,i)=>({d:''+(i+1),c:Math.round(Math.random()*1.4),h:Math.round(Math.random()*1.8),m:Math.round(Math.random())})),
+    tools:[{n:'ChatGPT',v:24},{n:'Gemini',v:10},{n:'Copilot',v:6},{n:'Claude',v:5},{n:'Perplexity',v:3}],
+  }
+};
+
+const MEMBERS = [
+  {name:'Sam Rivera',   initials:'SR', color:'#534AB7', events:4, crit:2, high:1, med:1, blocked:3, dismissed:1, tools:['ChatGPT','Perplexity']},
+  {name:'Jordan Wu',    initials:'JW', color:'#0F6E56', events:4, crit:2, high:1, med:1, blocked:2, dismissed:1, tools:['Gemini','Copilot']},
+  {name:'Casey Kim',    initials:'CK', color:'#993C1D', events:3, crit:1, high:1, med:1, blocked:2, dismissed:1, tools:['ChatGPT']},
+  {name:'Riley Torres', initials:'RT', color:'#185FA5', events:2, crit:0, high:1, med:1, blocked:0, dismissed:1, tools:['ChatGPT','Perplexity']},
+  {name:'Morgan Patel', initials:'MP', color:'#3B6D11', events:2, crit:1, high:1, med:0, blocked:2, dismissed:0, tools:['ChatGPT','Gemini']},
+  {name:'Drew Okafor',  initials:'DO', color:'#854F0B', events:1, crit:0, high:0, med:1, blocked:0, dismissed:0, tools:['Claude']},
+  {name:'Alex Chen',    initials:'AC', color:'#993556', events:1, crit:0, high:0, med:0, blocked:0, dismissed:0, tools:['Gemini']},
+];
+
+const EVENTS = [
+  {sev:'critical',type:'GitHub API Token',tool:'ChatGPT',   member:'Sam Rivera',  time:'2h ago',  blocked:true},
+  {sev:'critical',type:'AWS API Key',     tool:'Gemini',    member:'Jordan Wu',   time:'5h ago',  blocked:true},
+  {sev:'critical',type:'Password',        tool:'ChatGPT',   member:'Casey Kim',   time:'2d ago',  blocked:true},
+  {sev:'critical',type:'Stripe API Key',  tool:'Gemini',    member:'Jordan Wu',   time:'5d ago',  blocked:true},
+  {sev:'critical',type:'AWS API Key',     tool:'ChatGPT',   member:'Sam Rivera',  time:'12d ago', blocked:true},
+  {sev:'high',    type:'Social Security No.', tool:'ChatGPT', member:'Morgan Patel','time':'4d ago', blocked:true},
+  {sev:'high',    type:'Source Code',     tool:'Copilot',   member:'Casey Kim',   time:'8d ago',  blocked:false},
+  {sev:'high',    type:'Source Code',     tool:'ChatGPT',   member:'Riley Torres','time':'3d ago', blocked:false},
+  {sev:'high',    type:'Credit Card No.', tool:'Gemini',    member:'Morgan Patel','time':'6h ago', blocked:true},
+  {sev:'high',    type:'Credit Card No.', tool:'Claude',    member:'Sam Rivera',  time:'10d ago', blocked:true},
+  {sev:'medium',  type:'Customer PII',    tool:'ChatGPT',   member:'Morgan Patel','time':'10d ago',blocked:false},
+  {sev:'medium',  type:'Customer PII',    tool:'Claude',    member:'Drew Okafor', time:'4d ago',  blocked:false},
+  {sev:'medium',  type:'Financial Data',  tool:'ChatGPT',   member:'Sam Rivera',  time:'8d ago',  blocked:false},
+  {sev:'medium',  type:'Financial Data',  tool:'Copilot',   member:'Jordan Wu',   time:'1d ago',  blocked:false},
+  {sev:'low',     type:'Email Address',   tool:'Perplexity',member:'Riley Torres','time':'9d ago', blocked:false},
+  {sev:'low',     type:'Phone Number',    tool:'Perplexity',member:'Sam Rivera',  time:'3d ago',  blocked:false},
+  {sev:'low',     type:'Email Address',   tool:'Gemini',    member:'Alex Chen',   time:'6d ago',  blocked:false},
+];
+
+const POLICIES = [
+  {cat:'API Keys & Tokens', action:'block', on:true},
+  {cat:'Passwords',         action:'block', on:true},
+  {cat:'Credit Card Numbers',action:'block',on:true},
+  {cat:'Social Security Numbers',action:'block',on:true},
+  {cat:'Source Code',       action:'warn',  on:true},
+  {cat:'Medical Records',   action:'warn',  on:true},
+  {cat:'Financial Data',    action:'warn',  on:true},
+  {cat:'Customer PII',      action:'warn',  on:true},
+  {cat:'Email Addresses',   action:'log',   on:true},
+  {cat:'Phone Numbers',     action:'log',   on:false},
+];
+
+let currentRange = 7;
+let currentPage = 'overview';
+
+function setPage(p) {
+  currentPage = p;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+  document.getElementById('sec-'+p).classList.add('active');
+  const titles = {overview:'Overview',team:'Team',events:'Events',policies:'Policies'};
+  document.getElementById('page-title').textContent = titles[p];
+  if(p==='team') renderTeam();
+  if(p==='events') renderAllEvents();
+  if(p==='policies') renderPolicies();
+}
+
+function updateRange(v) {
+  currentRange = parseInt(v);
+  renderOverview();
+}
+
+function renderOverview() {
+  const d = DATA[currentRange];
+  document.getElementById('s-total').textContent = d.total;
+  document.getElementById('s-total-sub').textContent = `last ${currentRange} days`;
+  document.getElementById('s-crit').textContent = d.critical;
+  document.getElementById('s-crit-sub').textContent = d.critical > 0 ? 'requires action' : 'all clear';
+  document.getElementById('s-blocked').textContent = d.blocked;
+  document.getElementById('s-dismissed').textContent = d.dismissed;
+  document.getElementById('chart-label').textContent = `last ${currentRange} days`;
+
+  const maxVal = Math.max(...d.daily.map(x => x.c+x.h+x.m), 1);
+  const bars = document.getElementById('chart-bars');
+  bars.innerHTML = d.daily.map(day => {
+    const total = day.c+day.h+day.m;
+    const pct = total/maxVal;
+    const H = 72;
+    const ch = Math.round(day.c/maxVal*H);
+    const hh = Math.round(day.h/maxVal*H);
+    const mh = Math.round(day.m/maxVal*H);
+    return `<div class="bar-col">
+      <div class="bar-stack" style="height:${Math.max(pct*H,total>0?6:0)}px;background:transparent;display:flex;flex-direction:column;justify-content:flex-end">
+        ${day.m>0?`<div class="bar-seg" style="height:${mh}px;background:var(--blue);opacity:0.7"></div>`:''}
+        ${day.h>0?`<div class="bar-seg" style="height:${hh}px;background:var(--amber)"></div>`:''}
+        ${day.c>0?`<div class="bar-seg" style="height:${ch}px;background:var(--red)"></div>`:''}
+        ${total===0?`<div style="height:2px;background:var(--faint);border-radius:2px"></div>`:''}
+      </div>
+      <div class="bar-label">${day.d}</div>
+    </div>`;
+  }).join('');
+
+  const maxTool = Math.max(...d.tools.map(t=>t.v));
+  document.getElementById('tool-list').innerHTML = d.tools.map(t=>`
+    <div class="tool-row">
+      <span class="tool-name">${t.n}</span>
+      <div class="tool-bar-bg"><div class="tool-bar-fill" style="width:${Math.round(t.v/maxTool*100)}%"></div></div>
+      <span class="tool-count">${t.v}</span>
+    </div>`).join('');
+
+  document.getElementById('recent-events').innerHTML = EVENTS.slice(0,6).map(e=>`
+    <div class="event-row">
+      <div class="event-dot ${e.sev}"></div>
+      <div class="event-body">
+        <div class="event-type">${e.type} ${e.blocked?'<span class="badge-blocked active">BLOCKED</span>':''}</div>
+        <div class="event-meta">${e.member} → ${e.tool}</div>
+      </div>
+      <div class="event-time">${e.time}</div>
+    </div>`).join('');
+}
+
+function renderTeam() {
+  const avatarColors = ['#534AB7','#0F6E56','#993C1D','#185FA5','#3B6D11','#854F0B','#993556'];
+  document.getElementById('member-tbody').innerHTML = MEMBERS.map((m,i)=>{
+    const sev = m.crit>0?'critical':m.high>0?'high':m.med>0?'medium':'low';
+    const spark = Array.from({length:7},(_,j)=>j<m.events?1:0).sort(()=>Math.random()-0.5);
+    return `<tr>
+      <td><div class="member-cell">
+        <div class="avatar" style="background:${m.color}22;color:${m.color}">${m.initials}</div>
+        <div>
+          <div style="font-weight:500">${m.name}</div>
+          <div style="font-size:10px;color:var(--muted)">${m.tools.join(', ')}</div>
+        </div>
+      </div></td>
+      <td><span class="count-mono">${m.events}</span></td>
+      <td><span class="badge-sev badge-${sev}">${sev}</span></td>
+      <td><span class="count-mono ${m.blocked>0?'':''}">
+        ${m.blocked>0?`<span style="color:var(--green)">${m.blocked}</span>`:'-'}
+      </span></td>
+      <td><span class="count-mono">
+        ${m.dismissed>0?`<span style="color:var(--amber)">${m.dismissed}</span>`:'-'}
+      </span></td>
+      <td><div class="sparkbar">${spark.map(s=>`<div class="${s?'has':''}"></div>`).join('')}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAllEvents() {
+  document.getElementById('all-events').innerHTML = EVENTS.map(e=>`
+    <div class="event-row">
+      <div class="event-dot ${e.sev}"></div>
+      <div class="event-body">
+        <div class="event-type">
+          <span class="badge-sev badge-${e.sev}" style="margin-right:6px">${e.sev}</span>
+          ${e.type}
+          ${e.blocked?'<span class="badge-blocked active" style="margin-left:6px">BLOCKED</span>':''}
+        </div>
+        <div class="event-meta">${e.member} pasted into ${e.tool}</div>
+      </div>
+      <div class="event-time">${e.time}</div>
+    </div>`).join('');
+}
+
+function renderPolicies() {
+  document.getElementById('policy-grid').innerHTML = POLICIES.map((p,i)=>`
+    <div class="policy-row">
+      <span class="policy-cat">${p.cat}</span>
+      <div class="policy-seg">
+        <button class="policy-opt ${p.action==='block'?'sel-block':''}" onclick="setPolicy(${i},'block')">Block</button>
+        <button class="policy-opt ${p.action==='warn'?'sel-warn':''}" onclick="setPolicy(${i},'warn')">Warn</button>
+        <button class="policy-opt ${p.action==='log'?'sel-log':''}" onclick="setPolicy(${i},'log')">Log</button>
+      </div>
+      <button class="toggle ${p.on?'on':''}" onclick="togglePolicy(${i})" title="${p.on?'Enabled':'Disabled'}"></button>
+    </div>`).join('');
+
+  const dismissed = EVENTS.filter(e=>!e.blocked && (e.sev==='critical'||e.sev==='high')).slice(0,4);
+  document.getElementById('dismissed-list').innerHTML = dismissed.map(e=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--faint)">
+      <div>
+        <span class="badge-sev badge-${e.sev}" style="margin-right:6px">${e.sev}</span>
+        <span style="font-size:12px">${e.type} → ${e.tool}</span>
+      </div>
+      <button onclick="sendPrompt('Set the LeakWall policy for ${e.type} to Block — walk me through the steps')" style="background:var(--amber-bg);border:0.5px solid var(--amber-border);border-radius:4px;color:var(--amber);font-size:10px;font-weight:600;padding:3px 8px;cursor:pointer">Set to Block ↗</button>
+    </div>`).join('');
+}
+
+function setPolicy(i, action) {
+  POLICIES[i].action = action;
+  renderPolicies();
+}
+function togglePolicy(i) {
+  POLICIES[i].on = !POLICIES[i].on;
+  renderPolicies();
+}
+
+renderOverview();
+</script>

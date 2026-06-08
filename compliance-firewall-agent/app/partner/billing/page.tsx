@@ -66,7 +66,7 @@ export default function PartnerBillingPage() {
           label: "Monthly Billings",
           value: `$${billing.monthly_revenue.toLocaleString()}`,
           icon: TrendingUp,
-          color: "emerald",
+          color: "success",
           sub: `$${PARTNER_RATE_PER_CLIENT}/client/mo`,
         },
         {
