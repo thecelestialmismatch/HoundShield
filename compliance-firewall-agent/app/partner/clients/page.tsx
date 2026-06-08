@@ -152,7 +152,7 @@ export default function ClientsPage() {
                     <span className="text-sm font-semibold text-white">
                       {(client.blocked_count ?? 0).toLocaleString()}
                     </span>
-                    <div className="text-[10px] text-rose-400 flex items-center gap-0.5 justify-end">
+                    <div className="text-[10px] text-[var(--hs-danger)] flex items-center gap-0.5 justify-end">
                       <Shield className="w-2.5 h-2.5" /> blocked
                     </div>
                   </div>

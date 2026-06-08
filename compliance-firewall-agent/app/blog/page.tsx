@@ -70,7 +70,7 @@ const categoryColors: Record<BlogCategory, string> = {
   "AI Security": "bg-brand-900/40 text-brand-300 border-brand-800",
   "SOC 2": "bg-[rgba(129,166,198,0.25)] text-[var(--hs-steel-light)] border-[rgba(129,166,198,0.4)]",
   "How-To": "bg-slate-800 text-slate-300 border-slate-700",
-  "Industry News": "bg-rose-900/40 text-rose-300 border-rose-800",
+  "Industry News": "bg-[rgba(220,38,38,0.2)] text-[#FCA5A5] border-[rgba(220,38,38,0.3)]",
 };
 
 function CategoryBadge({ category }: { category: BlogCategory }) {
