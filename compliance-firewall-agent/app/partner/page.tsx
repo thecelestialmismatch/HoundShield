@@ -195,7 +195,7 @@ export default function PartnerDashboard() {
                     <p className="text-sm font-semibold text-white">
                       {(client.blocked_count ?? 0).toLocaleString()}
                     </p>
-                    <p className="text-[10px] text-rose-400 flex items-center gap-1 justify-end">
+                    <p className="text-[10px] text-[var(--hs-danger)] flex items-center gap-1 justify-end">
                       <Shield className="w-2.5 h-2.5" /> Blocked
                     </p>
                   </div>
