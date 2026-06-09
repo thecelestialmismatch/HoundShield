@@ -44,7 +44,7 @@ const PRICING = [
     desc: 'Try HoundShield risk-free',
     features: ['1 user', '1,000 scans/mo', 'Basic compliance reports', 'CMMC pattern detection'],
     cta: 'Start free',
-    href: '/sign-up',
+    href: '/signup',
   },
   {
     name: 'Pro',
@@ -52,7 +52,7 @@ const PRICING = [
     desc: 'For compliance-conscious teams',
     features: ['5 users', 'Unlimited scans', 'PDF evidence export', 'SPRS score tracking', 'Webhook alerts'],
     cta: 'Start Pro',
-    href: '/sign-up?plan=pro',
+    href: '/signup?plan=pro',
     highlight: true,
   },
   {
@@ -61,7 +61,7 @@ const PRICING = [
     desc: 'For multi-team organizations',
     features: ['25 users', 'Gateway mode', 'HIPAA + SOC 2 coverage', 'Audit trail export', 'Priority support'],
     cta: 'Start Growth',
-    href: '/sign-up?plan=growth',
+    href: '/signup?plan=growth',
   },
   {
     name: 'Enterprise',
@@ -145,7 +145,7 @@ export default function HomePage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/sign-up" className="btn-primary text-sm">
+                <Link href="/signup" className="btn-primary text-sm">
                   Start free — no card required
                   <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -423,7 +423,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/sign-up"
+              href="/signup"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-[var(--hs-navy)] bg-white rounded-[var(--radius-md)] hover:bg-[var(--hs-cream)] transition-colors font-[var(--font-body)]"
             >
               Start free — deploy in 10 min

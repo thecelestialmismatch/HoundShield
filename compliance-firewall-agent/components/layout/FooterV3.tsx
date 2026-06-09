@@ -8,7 +8,6 @@ const FOOTER_LINKS = {
     { label: 'How it works',  href: '/how-it-works' },
     { label: 'Pricing',       href: '/pricing' },
     { label: 'Changelog',     href: '/changelog' },
-    { label: 'Roadmap',       href: '/roadmap' },
   ],
   Compliance: [
     { label: 'CMMC Level 2',  href: '/features' },

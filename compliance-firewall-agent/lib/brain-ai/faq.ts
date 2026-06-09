@@ -28,6 +28,25 @@ export interface FaqEntry {
 }
 
 const FAQ_DB: FaqEntry[] = [
+  // ── ASSISTANT IDENTITY & CONVERSATION ───────────────────────────────
+  // These ensure Brain AI answers basic "who are you" / greeting / "what can
+  // you do" questions instantly — even with no OPENROUTER_API_KEY configured.
+  {
+    keywords: ["who are you", "what are you", "who is this", "your name", "who am i talking", "are you a bot", "are you human", "are you ai", "are you real", "what is brain ai", "who are u", "introduce yourself", "tell me about yourself"],
+    answer:
+      "I'm **Brain AI** — the compliance assistant built into Hound Shield. I help defense contractors, healthcare teams, and regulated companies make sense of CMMC Level 2, NIST 800-171, SPRS scoring, HIPAA PHI, SOC 2, and CUI detection — and I show how Hound Shield stops your team from leaking sensitive data into ChatGPT, Copilot, or Claude.\n\nTry asking me:\n- \"How does CMMC Level 2 work?\"\n- \"What can Hound Shield detect?\"\n- \"How do I install it?\"",
+  },
+  {
+    keywords: ["what can you do", "how can you help", "what can you help", "what do you know", "what questions can", "where do i start", "what should i ask", "help me get started", "what are my options"],
+    answer:
+      "Here's what I can help with:\n- **CMMC Level 2** — the 110 NIST 800-171 controls, SPRS scoring, the Nov 2026 deadline, C3PAO assessments\n- **Detection** — what Hound Shield catches: CUI, PHI, PII, API keys, source code\n- **Install** — the one-line setup and Docker self-host\n- **Pricing** — plans from free to Agency/MSP\n- **HIPAA & SOC 2** — coverage for healthcare and tech teams\n\nAsk in plain English — for example, \"What is my SPRS score?\" or \"How fast is it?\"",
+  },
+  {
+    keywords: ["hello", "hey there", "good morning", "good afternoon", "good evening", "howdy", "greetings", "hi there"],
+    answer:
+      "Hi there — I'm **Brain AI**, your Hound Shield compliance assistant. I can answer questions about CMMC Level 2, CUI detection, SPRS scoring, HIPAA, SOC 2, and how to get Hound Shield running. What would you like to know?",
+  },
+
   // ── PRODUCT IDENTITY ────────────────────────────────────────────────
   {
     keywords: ["what is houndshield", "houndshield", "what does it do", "explain houndshield", "overview", "product", "firewall"],
