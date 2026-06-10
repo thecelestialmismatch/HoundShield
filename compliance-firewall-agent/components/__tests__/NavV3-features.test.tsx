@@ -27,9 +27,9 @@ describe('NavV3 demo-delight', () => {
     expect(screen.getByText('Technology')).toBeTruthy()
   })
 
-  it('renders the live intercepted counter', () => {
+  it('does not render a fabricated intercepted counter (Rule 7: real numbers only)', () => {
     render(<NavV3 />)
-    expect(screen.getByText(/intercepted/i)).toBeTruthy()
+    expect(screen.queryByText(/intercepted/i)).toBeNull()
   })
 
   it('still renders the Start free CTA and nav landmark', () => {

@@ -270,20 +270,16 @@ export default function HomePage() {
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
-            {/* Pull quote — 3/5 */}
+            {/* Design brief — 3/5 */}
             <div className="lg:col-span-3">
-              <blockquote>
-                <p
-                  className="text-2xl sm:text-3xl font-semibold text-[var(--hs-ink)] leading-snug mb-6"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                >
-                  &ldquo;I needed the PDF I could hand my C3PAO assessor. Not another dashboard that tells me I have problems.&rdquo;
-                </p>
-                <footer>
-                  <div className="text-sm font-semibold text-[var(--hs-ink)] font-[var(--font-body)]">Jordan M.</div>
-                  <div className="text-sm text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">IT Security Manager · 180-person DoD subcontractor</div>
-                </footer>
-              </blockquote>
+              <p
+                className="text-2xl sm:text-3xl font-semibold text-[var(--hs-ink)] leading-snug mb-6"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                The brief: the PDF Jordan can hand her C3PAO assessor — not another dashboard that says she has problems.
+              </p>
+              <div className="text-sm font-semibold text-[var(--hs-ink)] font-[var(--font-body)]">Jordan</div>
+              <div className="text-sm text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">The buyer persona every HoundShield feature is built for</div>
             </div>
 
             {/* Buyer profile card — 2/5 */}

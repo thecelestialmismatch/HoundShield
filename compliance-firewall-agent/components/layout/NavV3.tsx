@@ -22,22 +22,9 @@ const INDUSTRIES = [
   { icon: '🏛', label: 'Government',         frame: 'FedRAMP · FISMA',           body: 'Agencies adopting AI without a compliant data framework.',        href: '/features' },
 ]
 
-/** SSR-safe live counter: deterministic seed renders on server + first client
- *  paint (no hydration mismatch); ticking starts only after mount. */
-function useInterceptedCount() {
-  const [count, setCount] = useState(14363)
-  useEffect(() => {
-    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const id = setInterval(() => setCount((c) => c + Math.floor((c % 3) + 1)), 4200)
-    return () => clearInterval(id)
-  }, [])
-  return count
-}
-
 export function NavV3() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const count = useInterceptedCount()
 
   useEffect(() => {
     function onScroll() { setScrolled(window.scrollY > 12) }
@@ -128,15 +115,8 @@ export function NavV3() {
             ))}
           </div>
 
-          {/* Desktop CTA + live counter */}
+          {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-2">
-            <span
-              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-pill)] border border-[var(--hs-border-subtle)] text-[11px] font-semibold text-[var(--hs-ink-secondary)] tabular-nums font-[var(--font-mono)]"
-              title="Prompts intercepted across HoundShield deployments"
-            >
-              <span className="status-dot" aria-hidden />
-              {count.toLocaleString()} intercepted
-            </span>
             <Link
               href="/login"
               className="px-4 py-1.5 text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] rounded-[var(--radius-md)] hover:bg-[var(--hs-mist)] transition-colors font-[var(--font-body)]"

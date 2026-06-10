@@ -93,9 +93,11 @@ describe('HomePage', () => {
     expect(jordan.textContent).toMatch(/BUILT FOR JORDAN/i)
   })
 
-  it('Jordan pull quote is present', () => {
+  it('Jordan design brief is present and not framed as a customer testimonial', () => {
     render(<HomePage />)
-    expect(screen.getByText(/I needed the PDF I could hand my C3PAO assessor/i)).toBeTruthy()
+    expect(screen.getByText(/the PDF Jordan can hand her C3PAO assessor/i)).toBeTruthy()
+    // Rule 7 guard: the persona must never be attributed like a real customer quote
+    expect(screen.queryByText(/Jordan M\./)).toBeNull()
   })
 
   it('Jordan buyer profile card shows Role field', () => {
