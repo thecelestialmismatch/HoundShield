@@ -563,6 +563,60 @@ export default function PricingPage() {
         </div>
       </section>
 
+      {/* ===== ONE-TIME: CMMC AI GAP REPORT ===== */}
+      <section className="relative px-6 pb-24" data-testid="gap-report-offer">
+        <AnimatedSection>
+          <div className="max-w-3xl mx-auto">
+            <div className="glass-card p-8 md:p-10 border border-brand-500/20">
+              <div className="flex flex-col md:flex-row md:items-start gap-6">
+                <div className="flex-1">
+                  <div className="text-[11px] font-semibold tracking-[0.18em] uppercase text-brand-400 mb-2">
+                    One-time engagement · No subscription
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3">
+                    CMMC AI Gap Report
+                  </h3>
+                  <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                    Every AI tool your team touches — ChatGPT, Copilot, Claude, Cursor —
+                    mapped to the NIST 800-171 Rev 2 controls it puts at risk, with
+                    prioritized remediation steps. Delivered as a C3PAO-ready PDF for
+                    your pre-assessment evidence package within 5 business days.
+                  </p>
+                  <ul className="space-y-2 mb-6 md:mb-0">
+                    {[
+                      "AI usage mapped against all 110 NIST 800-171 controls",
+                      "Prioritized remediation steps for every finding",
+                      "C3PAO-ready PDF for pre-assessment evidence",
+                      "Analysis of configuration and policy only — your CUI never leaves your network",
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm">
+                        <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-brand-400" />
+                        <span className="text-slate-400">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="md:text-right flex md:flex-col items-center md:items-end gap-4 md:gap-2">
+                  <div>
+                    <div className="text-3xl font-bold text-white">$499</div>
+                    <div className="text-xs text-slate-500">one-time</div>
+                  </div>
+                  <a
+                    href="https://buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary text-sm whitespace-nowrap"
+                  >
+                    Get the report
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
+      </section>
+
       {/* ===== MONEY-BACK GUARANTEE ===== */}
       <section className="relative px-6 pb-24">
         <AnimatedSection>
