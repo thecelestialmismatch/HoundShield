@@ -1,5 +1,5 @@
 /**
- * Hound Shield — Slack Integration
+ * HoundShield — Slack Integration
  *
  * Full Slack integration using Incoming Webhooks and Block Kit.
  *

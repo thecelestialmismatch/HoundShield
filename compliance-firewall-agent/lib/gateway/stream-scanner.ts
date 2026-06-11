@@ -1,5 +1,5 @@
 /**
- * Hound Shield Streaming Gateway — Real-Time Output Stream Scanner
+ * HoundShield Streaming Gateway — Real-Time Output Stream Scanner
  *
  * This module scans LLM output tokens IN REAL-TIME as they stream through the
  * gateway, detecting sensitive data (PII, financial data, API keys, etc) that

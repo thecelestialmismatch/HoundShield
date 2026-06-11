@@ -1,5 +1,5 @@
 // ============================================================================
-// Hound Shield Agent Memory System
+// HoundShield Agent Memory System
 // Short-term (conversation), medium-term (session insights), long-term (knowledge)
 // ============================================================================
 

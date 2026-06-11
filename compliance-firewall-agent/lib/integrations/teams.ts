@@ -1,5 +1,5 @@
 /**
- * Hound Shield — Microsoft Teams Integration
+ * HoundShield — Microsoft Teams Integration
  *
  * Posts compliance alerts to Microsoft Teams via Incoming Webhooks
  * using Adaptive Cards v1.5 format.

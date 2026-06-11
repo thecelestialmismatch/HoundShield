@@ -35,7 +35,7 @@ export type KnowledgeDomain =
   | 'performance'   // latency, benchmarks, optimization techniques
   | 'scraping'      // web scraping, data extraction techniques
   | 'orchestration' // multi-agent coordination, workflow patterns
-  | 'product'       // Hound Shield product docs, internal knowledge
+  | 'product'       // HoundShield product docs, internal knowledge
   | 'general';      // everything else
 
 export interface IngestionSource {
@@ -126,7 +126,7 @@ async function fetchContent(url: string): Promise<string> {
     const res = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'Hound Shield-BrainAI-Ingestor/1.0',
+        'User-Agent': 'HoundShield-BrainAI-Ingestor/1.0',
         Accept: 'text/html,text/plain,text/markdown,application/json',
       },
     });

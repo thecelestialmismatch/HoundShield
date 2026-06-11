@@ -160,7 +160,7 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
           <Bell className="w-4 h-4" />
         </button>
         <Link
-          href="/partner/settings"
+          href="/partner/billing"
           className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
         >
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">

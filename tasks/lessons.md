@@ -141,3 +141,21 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 ### Architecture flag: two navs coexist (NavV3 vs Navbar)
 **What:** `NavV3` (light, 2 pages) and `Navbar` (rich: flyouts + mega-menu + counter + variants, 11 pages) both exist; Navbar is the richer one.
 **Rule:** Consolidating onto one nav is a design decision — surface to the founder, don't unilaterally migrate (NavV3 would downgrade 11 pages).
+
+## 2026-06-11
+
+### Design split-brain: v3 migration stopped at 3 pages
+
+**What:** Only home/pricing/how-it-works adopted the v3 light-steel design; 21 public pages (blog, login, docs, demo...) stayed on the old dark theme with the old cat-mask logo — users saw a different product on every click. Pricing had white-on-white invisible prices; homepage CTA linked to /sign-up (404).
+**Root cause:** Redesigns were shipped page-by-page with no migration checklist and no "every page uses NavV3/FooterV3" gate.
+**Rule:** Any design-system change lands with a grep gate in the same PR: `grep -rl "components/Navbar\|LandingFooter\|text-white" app/` must return only intentionally-dark routes (/command-center). A deterministic token-swap codemod (see /tmp pattern in PR #-this) converts a page in seconds — never migrate by hand, never migrate partially.
+
+### Brand renames need a single sweep, not vibes
+
+**What:** "Hound Shield" (two words) survived in 110+ files — including a broken `Hound ShieldClient` class name in customer-facing SDK snippets and an invalid `X-Hound Shield-Org` HTTP header.
+**Rule:** Brand strings live in copy, code identifiers, HTTP headers, emails, and tests. Rename = one `grep -rl | perl -pi -e` sweep + test-suite assertions on the new name.
+
+### Brain AI must answer identity questions offline
+
+**What:** "who are you" returned the generic fallback because the FAQ layer had no identity keywords and prod has no OPENROUTER_API_KEY.
+**Rule:** The deterministic FAQ layer owns: identity, greeting, pricing, install, contact. Any demo-critical answer must work with zero API keys. Test: `findFaqAnswer("who are you")` is part of the suite.

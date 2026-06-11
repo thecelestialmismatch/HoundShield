@@ -1,5 +1,5 @@
 /**
- * Hound Shield Streaming Gateway — Provider Registry
+ * HoundShield Streaming Gateway — Provider Registry
  *
  * Central registry that maps provider names to their adapters and configurations.
  * This module is the single entry point for the streaming proxy to resolve

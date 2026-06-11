@@ -66,6 +66,7 @@
 - [ ] ruflo — workflow automation for onboarding email sequences
 
 ## Done
+- [x] **Pre-launch polish sweep (2026-06-11)** — Doberman logo everywhere + favicons/OG; 21 public pages migrated to v3 light-steel (NavV3/FooterV3); pricing invisible-price fix + $/mo annual presentation; Brain AI identity FAQ (works keyless); /sign-up 404 CTA fix; /roadmap page; sitemap fixes; "Hound Shield"→"HoundShield" in 110+ files; 409/409 tests
 - [x] **OODA loop — full behavioral DLP engine** (`proxy/ooda/`) — commit `984c3b36`
   - 10 source files: types, db, rate-tracker, baseline, observe, orient, decide, act, loop, server migration
   - 49 vitest tests, real SQLite temp dirs, zero mocks — all green

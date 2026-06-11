@@ -2,7 +2,7 @@
  * Brain AI — Permissions
  *
  * Permission management for tools, commands, and data access.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export type PermissionLevel = "deny" | "ask" | "allow";

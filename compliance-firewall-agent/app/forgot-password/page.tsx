@@ -36,17 +36,17 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--hs-surface-0)] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <Logo className="w-9 h-9" />
-          <TextLogo variant="dark" />
+          <TextLogo />
         </div>
 
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-xs text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors mb-8"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to login
@@ -57,10 +57,10 @@ export default function ForgotPasswordPage() {
             <div className="w-12 h-12 rounded-full bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] flex items-center justify-center mx-auto">
               <CheckCircle className="w-6 h-6 text-[var(--hs-success)]" />
             </div>
-            <h1 className="text-xl font-bold text-white">Check your email</h1>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <h1 className="text-xl font-bold text-[var(--hs-ink)]">Check your email</h1>
+            <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
               We sent a password reset link to{" "}
-              <span className="text-slate-300 font-medium">{email}</span>.
+              <span className="text-[var(--hs-ink-secondary)] font-medium">{email}</span>.
               <br />
               Click the link in the email to reset your password.
             </p>
@@ -73,8 +73,8 @@ export default function ForgotPasswordPage() {
           </div>
         ) : (
           <>
-            <h1 className="text-xl font-bold text-white mb-1">Reset your password</h1>
-            <p className="text-sm text-slate-400 mb-6">
+            <h1 className="text-xl font-bold text-[var(--hs-ink)] mb-1">Reset your password</h1>
+            <p className="text-sm text-[var(--hs-ink-secondary)] mb-6">
               Enter your email and we&apos;ll send you a reset link.
             </p>
 
@@ -86,18 +86,18 @@ export default function ForgotPasswordPage() {
 
             <form onSubmit={handleReset} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-1.5">
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] text-sm placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
                   />
                 </div>
               </div>

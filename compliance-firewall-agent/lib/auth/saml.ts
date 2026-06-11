@@ -1,7 +1,7 @@
 /**
  * SAML/SSO Support — Okta, Azure AD, JumpCloud
  *
- * Hound Shield uses Supabase Auth as the identity backbone.
+ * HoundShield uses Supabase Auth as the identity backbone.
  * Supabase Enterprise exposes SAML 2.0 via supabase.auth.signInWithSSO().
  *
  * This module provides:
@@ -168,12 +168,12 @@ export function getProviderSetupUrl(provider: SamlProvider): string {
 }
 
 // ---------------------------------------------------------------------------
-// SP Metadata XML builder (used by IdP admin to configure Hound Shield as SP)
+// SP Metadata XML builder (used by IdP admin to configure HoundShield as SP)
 // ---------------------------------------------------------------------------
 
 /**
  * Generate a minimal SAML 2.0 Service Provider metadata XML.
- * The IdP admin uploads this XML when configuring the Hound Shield application.
+ * The IdP admin uploads this XML when configuring the HoundShield application.
  *
  * @param baseUrl  — e.g. "https://houndshield.com"
  * @param entityId — SP Entity ID (defaults to baseUrl)

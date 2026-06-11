@@ -1,9 +1,9 @@
 /**
- * Hound Shield CMMC — localStorage Persistence Layer
+ * HoundShield CMMC — localStorage Persistence Layer
  *
  * Zero-cost data storage using the browser's localStorage API.
  * All assessment data, org settings, and activity logs are persisted
- * locally so Hound Shield works fully offline with no backend needed.
+ * locally so HoundShield works fully offline with no backend needed.
  *
  * Storage keys:
  *   shieldready_org        — Organization profile from onboarding
@@ -89,7 +89,7 @@ function safeWrite(key: string, data: unknown): void {
   try {
     localStorage.setItem(key, JSON.stringify(data));
   } catch (e) {
-    console.warn(`[Hound Shield] Failed to write to localStorage key "${key}":`, e);
+    console.warn(`[HoundShield] Failed to write to localStorage key "${key}":`, e);
   }
 }
 

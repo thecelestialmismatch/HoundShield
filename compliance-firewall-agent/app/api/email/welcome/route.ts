@@ -9,7 +9,7 @@ function getResend(): Resend | null {
   return new Resend(key);
 }
 
-const FROM = "Hound Shield <noreply@houndshield.com>";
+const FROM = "HoundShield <noreply@houndshield.com>";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 /**
@@ -51,13 +51,13 @@ export async function POST(req: NextRequest) {
 
     <!-- Header -->
     <div style="background: #0f172a; padding: 32px 40px;">
-      <h1 style="color: #fff; margin: 0; font-size: 22px; font-weight: 700;">Hound Shield</h1>
+      <h1 style="color: #fff; margin: 0; font-size: 22px; font-weight: 700;">HoundShield</h1>
       <p style="color: #ea580c; margin: 6px 0 0; font-size: 13px;">AI Compliance Firewall for Defense Contractors</p>
     </div>
 
     <!-- Body -->
     <div style="padding: 40px;">
-      <h2 style="color: #1e293b; font-size: 20px; margin: 0 0 16px;">Welcome to Hound Shield, ${orgName} </h2>
+      <h2 style="color: #1e293b; font-size: 20px; margin: 0 0 16px;">Welcome to HoundShield, ${orgName} </h2>
 
       <p style="color: #475569; line-height: 1.6; margin: 0 0 20px;">
         You&apos;re set up. Now let&apos;s get your CMMC gap score — it takes about 15 minutes and tells you exactly where you stand before a C3PAO assessment.
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
         </div>
         <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
           <span style="background: #ea580c; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">2</span>
-          <span style="color: #334155; font-size: 14px;">Route your first AI query through the Hound Shield gateway</span>
+          <span style="color: #334155; font-size: 14px;">Route your first AI query through the HoundShield gateway</span>
         </div>
         <div style="display: flex; align-items: flex-start; gap: 12px;">
           <span style="background: #ea580c; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">3</span>
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
     <!-- Footer -->
     <div style="border-top: 1px solid #e2e8f0; padding: 24px 40px; text-align: center;">
       <p style="color: #94a3b8; font-size: 12px; margin: 0;">
-        Hound Shield &mdash; AI Compliance Firewall<br />
+        HoundShield &mdash; AI Compliance Firewall<br />
         <a href="${APP_URL}/command-center/settings" style="color: #94a3b8;">Manage notifications</a>
       </p>
     </div>
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
   const { data, error } = await resend.emails.send({
     from: FROM,
     to: user.email,
-    subject: `Welcome to Hound Shield — your CMMC assessment is ready`,
+    subject: `Welcome to HoundShield — your CMMC assessment is ready`,
     html,
   });
 

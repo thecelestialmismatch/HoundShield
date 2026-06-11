@@ -1,9 +1,9 @@
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
-const FROM = 'Hound Shield <noreply@houndshield.com>';
+const FROM = 'HoundShield <noreply@houndshield.com>';
 
 export const day3Email = {
   from: FROM,
-  subject: 'Did you route your first AI query through Hound Shield?',
+  subject: 'Did you route your first AI query through HoundShield?',
   html: (orgName: string) => `
 <!DOCTYPE html>
 <html>
@@ -12,7 +12,7 @@ export const day3Email = {
   <div style="max-width:580px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
 
     <div style="background:#0f172a;padding:32px 40px;">
-      <h1 style="color:#fff;margin:0;font-size:22px;font-weight:700;">Hound Shield</h1>
+      <h1 style="color:#fff;margin:0;font-size:22px;font-weight:700;">HoundShield</h1>
       <p style="color:#ea580c;margin:6px 0 0;font-size:13px;">AI Compliance Firewall for Defense Contractors</p>
     </div>
 
@@ -21,7 +21,7 @@ export const day3Email = {
 
       <p style="color:#475569;line-height:1.6;margin:0 0 20px;">
         It&apos;s been 3 days since you signed up. One question:
-        <strong>have you routed a single AI query through Hound Shield yet?</strong>
+        <strong>have you routed a single AI query through HoundShield yet?</strong>
       </p>
 
       <p style="color:#475569;line-height:1.6;margin:0 0 24px;">
@@ -58,7 +58,7 @@ export const day3Email = {
 
     <div style="border-top:1px solid #e2e8f0;padding:24px 40px;text-align:center;">
       <p style="color:#94a3b8;font-size:12px;margin:0;">
-        Hound Shield &mdash; AI Compliance Firewall<br />
+        HoundShield &mdash; AI Compliance Firewall<br />
         <a href="${APP_URL}/command-center/settings" style="color:#94a3b8;">Manage notifications</a>
       </p>
     </div>

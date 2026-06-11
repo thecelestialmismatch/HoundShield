@@ -49,7 +49,7 @@ const MODEL_MAP: Record<string, string> = {
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const FALLBACK_MESSAGE =
-  "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA PHI, SOC 2, or how to install Hound Shield — " +
+  "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA PHI, SOC 2, or how to install HoundShield — " +
   "I can answer those instantly. For open-ended AI questions, set OPENROUTER_API_KEY in your Vercel environment variables to enable full LLM responses.";
 
 // ---------------------------------------------------------------------------
@@ -95,7 +95,7 @@ async function callOpenRouter(
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
         "HTTP-Referer": "https://houndshield.com",
-        "X-Title": "Hound Shield Brain AI",
+        "X-Title": "HoundShield Brain AI",
       },
       body: JSON.stringify({
         model,
@@ -265,7 +265,7 @@ export async function POST(request: NextRequest) {
             message:
               `Compliance Alert: Your message was blocked — it contains ` +
               `${scanResult.classifications.join(", ")} data (Risk: ${scanResult.risk_level}). ` +
-              `Hound Shield protects sensitive data from reaching AI providers.`,
+              `HoundShield protects sensitive data from reaching AI providers.`,
             scan: {
               risk_level: scanResult.risk_level,
               classifications: scanResult.classifications,
@@ -320,7 +320,7 @@ export async function POST(request: NextRequest) {
       const resolvedModel = MODEL_MAP[model as string] ?? (model as string);
       const systemPrompt =
         system ||
-        "You are Brain AI, the intelligent compliance assistant embedded in Hound Shield. " +
+        "You are Brain AI, the intelligent compliance assistant embedded in HoundShield. " +
         "You are a concise expert in CMMC Level 2, NIST 800-171, SPRS scoring, HIPAA PHI, SOC 2, CUI detection, and AI security. " +
         "Keep answers under 150 words. Use bullet points for lists. Be warm and expert.";
 
@@ -353,7 +353,7 @@ export async function POST(request: NextRequest) {
     // ── 4. Final fallback — always return something useful ─────────────────
     const fallbackText = apiKey
       ? FALLBACK_MESSAGE
-      : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install Hound Shield — I can answer those instantly! For free-form AI questions, an OpenRouter API key is required (set OPENROUTER_API_KEY in Vercel).";
+      : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install HoundShield — I can answer those instantly! For free-form AI questions, an OpenRouter API key is required (set OPENROUTER_API_KEY in Vercel).";
 
     if (trace) {
       const fbSpan = openSpan(trace, "final_response", "fallback");

@@ -1,5 +1,5 @@
 /**
- * Elastic/ELK SIEM Connector — Hound Shield
+ * Elastic/ELK SIEM Connector — HoundShield
  *
  * Sends compliance events to Elasticsearch via the REST Bulk API.
  * Compatible with self-hosted Elasticsearch 8.x and Elastic Cloud.

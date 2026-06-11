@@ -79,7 +79,7 @@ export default function ShieldReadyDashboard() {
             <Shield size={20} className="text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">Hound Shield CMMC</h1>
+            <h1 className="text-3xl font-bold text-white">HoundShield CMMC</h1>
             <p className="text-slate-400 text-sm">
               CMMC Compliance Readiness • {org?.name ?? "Get started with onboarding"}
             </p>

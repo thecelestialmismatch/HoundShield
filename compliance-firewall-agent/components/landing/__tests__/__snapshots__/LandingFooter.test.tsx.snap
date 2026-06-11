@@ -201,7 +201,7 @@ exports[`LandingFooter > matches snapshot 1`] = `
       >
         © 
         2026
-         Hound Shield. Built for regulated industries.
+         HoundShield. Built for regulated industries.
       </p>
       <div
         class="flex gap-6"

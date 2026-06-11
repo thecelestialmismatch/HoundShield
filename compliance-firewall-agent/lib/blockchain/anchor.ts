@@ -1,5 +1,5 @@
 /**
- * Blockchain Anchor Service — Hound Shield
+ * Blockchain Anchor Service — HoundShield
  *
  * Anchors compliance event hashes to Base L2 (Coinbase's Ethereum L2)
  * for tamper-proof audit evidence. Cost: ~$0.001 per transaction.
