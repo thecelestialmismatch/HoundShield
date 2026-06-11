@@ -672,7 +672,7 @@ export default function AgentWorkspace({
             </div>
             <div>
               <h2 className="text-sm font-semibold text-white">
-                {agentName || 'Hound Shield Agent'}
+                {agentName || 'HoundShield Agent'}
               </h2>
               <div className="flex items-center gap-2 text-[10px] text-slate-400">
                 <span className="flex items-center gap-1">
@@ -775,7 +775,7 @@ export default function AgentWorkspace({
                 <Zap className="w-3.5 h-3.5 text-emerald-400 absolute" style={{ fill: 'currentColor' }} />
               </div>
               <h3 className="text-lg font-semibold text-white mb-1">
-                {agentName || 'Hound Shield Agent'}
+                {agentName || 'HoundShield Agent'}
               </h3>
               <p className="text-sm text-slate-400 text-center mb-6">
                 I&apos;m an agentic AI that can search the web, execute code, analyze data, generate charts, and more. Give me a complex task and I&apos;ll break it down step by step.

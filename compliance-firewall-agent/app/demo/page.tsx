@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { Navbar } from "@/components/Navbar";
+import { NavV3 } from "@/components/layout/NavV3";
 import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import {
     ShieldCheck, AlertTriangle, Lock, ArrowRight, CheckCircle2,
@@ -171,10 +171,10 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
                         <Building2 className="w-5 h-5 text-[var(--hs-success)]" />
                     </div>
                     <div>
-                        <p className="text-sm font-bold text-white">{companyName}</p>
+                        <p className="text-sm font-bold text-[var(--hs-ink)]">{companyName}</p>
                         <p className="text-xs text-[var(--hs-success)]">Connected — Scanning as {companyName}</p>
                     </div>
-                    <button onClick={() => { setConnected(false); setCompanyName(""); setCompanyDomain(""); }} className="ml-auto text-xs text-slate-400 hover:text-slate-300 transition-colors">
+                    <button onClick={() => { setConnected(false); setCompanyName(""); setCompanyDomain(""); }} className="ml-auto text-xs text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors">
                         Disconnect
                     </button>
                 </div>
@@ -186,25 +186,25 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
         <div className="glass-card p-5">
             <div className="flex items-center gap-3 mb-4">
                 <Building2 className="w-5 h-5 text-brand-400" />
-                <h3 className="text-sm font-bold text-slate-300">Connect Your Company</h3>
+                <h3 className="text-sm font-bold text-[var(--hs-ink-secondary)]">Connect Your Company</h3>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(5,150,105,0.2)] text-[var(--hs-success)] border border-[rgba(5,150,105,0.2)] font-semibold">OPTIONAL</span>
             </div>
-            <p className="text-xs text-slate-400 mb-4">Tag your scan results with your company name. No data leaves your browser.</p>
+            <p className="text-xs text-[var(--hs-ink-secondary)] mb-4">Tag your scan results with your company name. No data leaves your browser.</p>
             <div className="grid grid-cols-2 gap-3">
                 <input
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     placeholder="Company Name"
-                    className="bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-brand-500/40"
+                    className="bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/40"
                 />
                 <input
                     value={companyDomain}
                     onChange={(e) => setCompanyDomain(e.target.value)}
                     placeholder="Domain (optional)"
-                    className="bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-brand-500/40"
+                    className="bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/40"
                 />
             </div>
-            <button onClick={handleConnect} disabled={!companyName.trim()} className={`mt-3 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${companyName.trim() ? "bg-brand-500/20 text-brand-300 border border-brand-500/30 hover:bg-brand-500/30" : "bg-white/5 text-slate-400 border border-white/10 cursor-not-allowed"}`}>
+            <button onClick={handleConnect} disabled={!companyName.trim()} className={`mt-3 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${companyName.trim() ? "bg-brand-500/20 text-brand-300 border border-brand-500/30 hover:bg-brand-500/30" : "bg-white text-[var(--hs-ink-secondary)] border border-[var(--hs-border)] cursor-not-allowed"}`}>
                 <Building2 className="w-4 h-4" /> Connect
             </button>
         </div>
@@ -226,45 +226,45 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     <Icon className={`w-5 h-5 ${color.text}`} />
                     <span className={`text-sm font-bold ${color.text}`}>{result.label}</span>
                     <span className={`ml-auto text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${color.badge}`}>{result.severity}</span>
-                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`w-4 h-4 text-[var(--hs-ink-secondary)] transition-transform ${expanded ? "rotate-180" : ""}`} />
                 </div>
                 {result.matches.map((m, j) => (
-                    <div key={j} className="text-xs font-mono bg-black/30 rounded-lg px-3 py-2 mt-3 text-slate-500 break-all">
+                    <div key={j} className="text-xs font-mono bg-[var(--hs-mist)] rounded-lg px-3 py-2 mt-3 text-[var(--hs-ink-tertiary)] break-all">
                         {m.length > 80 ? m.slice(0, 80) + "…" : m}
                     </div>
                 ))}
             </button>
 
             {expanded && (
-                <div className="px-4 pb-4 space-y-3 border-t border-white/10 pt-3">
+                <div className="px-4 pb-4 space-y-3 border-t border-[var(--hs-border)] pt-3">
                     {/* Impact */}
                     <div className="flex gap-3">
                         <AlertTriangle className={`w-4 h-4 ${color.text} mt-0.5 shrink-0`} />
                         <div>
-                            <p className="text-xs font-bold text-slate-300 mb-1">Impact</p>
-                            <p className="text-xs text-slate-500 leading-relaxed">{result.impact}</p>
+                            <p className="text-xs font-bold text-[var(--hs-ink-secondary)] mb-1">Impact</p>
+                            <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.impact}</p>
                         </div>
                     </div>
                     {/* Quick Fix */}
                     <div className="flex gap-3">
                         <Lightbulb className="w-4 h-4 text-brand-400 mt-0.5 shrink-0" />
                         <div>
-                            <p className="text-xs font-bold text-slate-300 mb-1">Quick Fix</p>
-                            <p className="text-xs text-slate-500 leading-relaxed">{result.tip}</p>
+                            <p className="text-xs font-bold text-[var(--hs-ink-secondary)] mb-1">Quick Fix</p>
+                            <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.tip}</p>
                         </div>
                     </div>
                     {/* Recommended Action */}
                     <div className="flex gap-3">
                         <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] mt-0.5 shrink-0" />
                         <div>
-                            <p className="text-xs font-bold text-slate-300 mb-1">Permanent Fix</p>
-                            <p className="text-xs text-slate-500 leading-relaxed">{result.fix}</p>
+                            <p className="text-xs font-bold text-[var(--hs-ink-secondary)] mb-1">Permanent Fix</p>
+                            <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.fix}</p>
                         </div>
                     </div>
-                    {/* Hound Shield Pro upgrade prompt */}
+                    {/* HoundShield Pro upgrade prompt */}
                     <div className="bg-brand-500/10 border border-brand-500/20 rounded-lg p-3 mt-2">
                         <p className="text-[11px] text-brand-300 leading-relaxed">
-                            <strong>With Hound Shield Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
+                            <strong>With HoundShield Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
                         </p>
                     </div>
                 </div>
@@ -318,12 +318,12 @@ export default function FreeDemoPage() {
     const totalThreats = results.reduce((acc, r) => acc + r.matches.length, 0);
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden">
+        <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)] font-sans overflow-x-hidden">
             <ScrollProgressBar />
             <div className="fixed top-0 left-1/4 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
             <div className="fixed top-1/2 right-0 w-[600px] h-[600px] bg-[rgba(129,166,198,0.05)] rounded-full blur-[150px] pointer-events-none -z-10" />
 
-            <Navbar variant="dark" />
+            <NavV3 />
 
             <main className="pt-24 pb-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -333,9 +333,9 @@ export default function FreeDemoPage() {
                         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
                             Test Your AI Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)]">Right Now</span>
                         </h1>
-                        <p className="text-lg text-slate-500 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-lg text-[var(--hs-ink-tertiary)] max-w-3xl mx-auto leading-relaxed">
                             Paste any prompt, code, or message your team sends to AI tools like ChatGPT, Claude, or Copilot.
-                            Our scanner instantly checks for <strong className="text-slate-300">9 categories</strong> of sensitive data leaks — and tells you exactly how to fix them.
+                            Our scanner instantly checks for <strong className="text-[var(--hs-ink-secondary)]">9 categories</strong> of sensitive data leaks — and tells you exactly how to fix them.
                         </p>
                     </div>
 
@@ -352,8 +352,8 @@ export default function FreeDemoPage() {
                                 <div key={s.step} className="glass-card p-4 text-center group hover:border-brand-500/20 transition-all">
                                     <div className={`text-xs font-black ${s.color} mb-2`}>STEP {s.step}</div>
                                     <Icon className={`w-6 h-6 ${s.color} mx-auto mb-2 group-hover:scale-110 transition-transform`} />
-                                    <p className="text-sm font-bold text-white mb-1">{s.title}</p>
-                                    <p className="text-[11px] text-slate-400">{s.desc}</p>
+                                    <p className="text-sm font-bold text-[var(--hs-ink)] mb-1">{s.title}</p>
+                                    <p className="text-[11px] text-[var(--hs-ink-secondary)]">{s.desc}</p>
                                 </div>
                             );
                         })}
@@ -370,11 +370,11 @@ export default function FreeDemoPage() {
                         <div className="lg:col-span-3 space-y-4">
                             {/* Sample Buttons */}
                             <div className="flex flex-wrap gap-2 items-center">
-                                <span className="text-xs text-slate-400">Try a sample:</span>
+                                <span className="text-xs text-[var(--hs-ink-secondary)]">Try a sample:</span>
                                 {SAMPLE_PROMPTS.map((sample, i) => {
                                     const SIcon = sample.icon;
                                     return (
-                                        <button key={sample.name} onClick={() => loadSample(i)} className="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/[0.08] hover:border-white/15 transition-all flex items-center gap-1.5">
+                                        <button key={sample.name} onClick={() => loadSample(i)} className="text-xs px-3 py-1.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] hover:bg-[var(--hs-mist)] hover:border-[var(--hs-border)] transition-all flex items-center gap-1.5">
                                             <SIcon className="w-3 h-3" /> {sample.name}
                                         </button>
                                     );
@@ -389,10 +389,10 @@ export default function FreeDemoPage() {
                                     onChange={(e) => { setInputText(e.target.value); setScanComplete(false); }}
                                     placeholder="Paste your AI prompt, code, or message here to scan for sensitive data..."
                                     rows={12}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-5 text-sm font-mono text-slate-200 placeholder:text-white/20 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 resize-none transition-all"
+                                    className="w-full bg-white border border-[var(--hs-border)] rounded-xl p-5 text-sm font-mono text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 resize-none transition-all"
                                 />
                                 {inputText && (
-                                    <button onClick={clearAll} className="absolute top-3 right-3 p-1.5 rounded-lg bg-white/5 text-slate-400 hover:text-slate-300 hover:bg-white/[0.08] transition-all" title="Clear">
+                                    <button onClick={clearAll} className="absolute top-3 right-3 p-1.5 rounded-lg bg-white text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] hover:bg-[var(--hs-mist)] transition-all" title="Clear">
                                         <RotateCcw className="w-4 h-4" />
                                     </button>
                                 )}
@@ -402,7 +402,7 @@ export default function FreeDemoPage() {
                             <button
                                 onClick={runScan}
                                 disabled={!inputText.trim() || isScanning}
-                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary" : "bg-white/5 text-slate-400 cursor-not-allowed border border-white/10"}`}
+                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary" : "bg-white text-[var(--hs-ink-secondary)] cursor-not-allowed border border-[var(--hs-border)]"}`}
                             >
                                 {isScanning ? (
                                     <>
@@ -422,18 +422,18 @@ export default function FreeDemoPage() {
                         <div className="lg:col-span-2 space-y-4">
                             <div className="glass-card p-5 min-h-[400px] flex flex-col">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">
+                                    <h3 className="text-sm font-bold text-[var(--hs-ink-secondary)] uppercase tracking-wider">
                                         {companyName ? `${companyName} — Scan Results` : "Scan Results"}
                                     </h3>
-                                    {totalScans > 0 && <span className="text-xs text-slate-400">{totalScans} scan{totalScans !== 1 ? "s" : ""}</span>}
+                                    {totalScans > 0 && <span className="text-xs text-[var(--hs-ink-secondary)]">{totalScans} scan{totalScans !== 1 ? "s" : ""}</span>}
                                 </div>
 
                                 {/* Empty State */}
                                 {!scanComplete && !isScanning && (
-                                    <div className="flex-1 flex flex-col items-center justify-center text-slate-300 py-8">
+                                    <div className="flex-1 flex flex-col items-center justify-center text-[var(--hs-ink-secondary)] py-8">
                                         <Eye className="w-10 h-10 mb-3 opacity-30" />
                                         <p className="text-sm mb-1">Paste text and click Scan</p>
-                                        <p className="text-[11px] text-slate-300">Results will appear here with fix recommendations</p>
+                                        <p className="text-[11px] text-[var(--hs-ink-secondary)]">Results will appear here with fix recommendations</p>
                                     </div>
                                 )}
 
@@ -442,7 +442,7 @@ export default function FreeDemoPage() {
                                     <div className="flex-1 flex flex-col items-center justify-center py-8">
                                         <div className="w-12 h-12 border-2 border-brand-500/20 border-t-brand-500 rounded-full animate-spin mb-4" />
                                         <p className="text-sm text-brand-300 animate-pulse">Checking 9 categories...</p>
-                                        <p className="text-[11px] text-slate-300 mt-1">API Keys • SSN • Credit Cards • Passwords • IPs • DB Strings</p>
+                                        <p className="text-[11px] text-[var(--hs-ink-secondary)] mt-1">API Keys • SSN • Credit Cards • Passwords • IPs • DB Strings</p>
                                     </div>
                                 )}
 
@@ -453,7 +453,7 @@ export default function FreeDemoPage() {
                                             <ShieldCheck className="w-8 h-8 text-[var(--hs-success)]" />
                                         </div>
                                         <p className="text-[var(--hs-success)] font-bold text-lg mb-1">All Clear!</p>
-                                        <p className="text-slate-400 text-sm text-center">No sensitive data detected. This prompt is safe to send to AI.</p>
+                                        <p className="text-[var(--hs-ink-secondary)] text-sm text-center">No sensitive data detected. This prompt is safe to send to AI.</p>
                                     </div>
                                 )}
 
@@ -482,7 +482,7 @@ export default function FreeDemoPage() {
                                             )}
                                         </div>
 
-                                        <p className="text-xs text-slate-400 mb-2">Click each threat to see impact, fix tips, and why you need Hound Shield Pro ↓</p>
+                                        <p className="text-xs text-[var(--hs-ink-secondary)] mb-2">Click each threat to see impact, fix tips, and why you need HoundShield Pro ↓</p>
 
                                         {results.map((r, i) => (
                                             <ThreatCard key={i} result={r} companyName={companyName} />
@@ -492,10 +492,10 @@ export default function FreeDemoPage() {
                                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-[rgba(129,166,198,0.15)] border border-brand-500/25">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Package className="w-4 h-4 text-brand-400" />
-                                                <p className="text-sm font-bold text-white">Hound Shield Pro Package</p>
+                                                <p className="text-sm font-bold text-[var(--hs-ink)]">HoundShield Pro Package</p>
                                             </div>
-                                            <p className="text-xs text-slate-500 mb-3 leading-relaxed">
-                                                This free scanner shows you the problem. <strong className="text-slate-300">Hound Shield Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
+                                            <p className="text-xs text-[var(--hs-ink-tertiary)] mb-3 leading-relaxed">
+                                                This free scanner shows you the problem. <strong className="text-[var(--hs-ink-secondary)]">HoundShield Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
                                             </p>
                                             <Link href="/auth" className="btn-primary w-full text-center text-sm !py-3 mb-2">
                                                 Get Full Protection <ArrowRight className="w-4 h-4" />
@@ -514,7 +514,7 @@ export default function FreeDemoPage() {
                     <div className="mt-20">
                         <div className="text-center mb-10">
                             <h2 className="text-3xl font-bold tracking-tight mb-3">What Our AI Scans For</h2>
-                            <p className="text-sm text-slate-400 max-w-2xl mx-auto">Hound Shield uses 13 AI models to detect 9 categories of sensitive data. Here&apos;s every threat pattern we check — and what makes our detection smarter than regex-only tools.</p>
+                            <p className="text-sm text-[var(--hs-ink-secondary)] max-w-2xl mx-auto">HoundShield uses 13 AI models to detect 9 categories of sensitive data. Here&apos;s every threat pattern we check — and what makes our detection smarter than regex-only tools.</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
@@ -525,10 +525,10 @@ export default function FreeDemoPage() {
                                     <div key={tp.label} className="glass-card p-4 group hover:border-brand-500/20 transition-all">
                                         <div className="flex items-center gap-3 mb-2">
                                             <Icon className={`w-5 h-5 ${color.text}`} />
-                                            <span className="text-sm font-bold text-slate-300">{tp.label}</span>
+                                            <span className="text-sm font-bold text-[var(--hs-ink-secondary)]">{tp.label}</span>
                                             <span className={`ml-auto text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full border ${color.badge}`}>{tp.severity}</span>
                                         </div>
-                                        <p className="text-[11px] text-slate-400 leading-relaxed">{tp.tip.slice(0, 120)}{tp.tip.length > 120 ? "…" : ""}</p>
+                                        <p className="text-[11px] text-[var(--hs-ink-secondary)] leading-relaxed">{tp.tip.slice(0, 120)}{tp.tip.length > 120 ? "…" : ""}</p>
                                     </div>
                                 );
                             })}
@@ -546,29 +546,29 @@ export default function FreeDemoPage() {
                             <div className="space-y-5">
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">1. Connect Your Company (Optional)</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">Enter your company name to tag scan results. This is purely for your reference — no data leaves your browser. If you skip this, scans still work normally.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Enter your company name to tag scan results. This is purely for your reference — no data leaves your browser. If you skip this, scans still work normally.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">2. Paste Real Prompts</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">Copy any text your team typically sends to ChatGPT, Claude, Copilot, or other AI tools. This could be code snippets, Slack messages, emails, support tickets, or config files. The more realistic, the better.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Copy any text your team typically sends to ChatGPT, Claude, Copilot, or other AI tools. This could be code snippets, Slack messages, emails, support tickets, or config files. The more realistic, the better.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">3. Or Use Sample Scenarios</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">Not sure what to test? Click one of the 4 sample buttons (API Key Leak, Patient Record, AWS Config, Network Scan) to load a realistic scenario and see the scanner in action.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Not sure what to test? Click one of the 4 sample buttons (API Key Leak, Patient Record, AWS Config, Network Scan) to load a realistic scenario and see the scanner in action.</p>
                                 </div>
                             </div>
                             <div className="space-y-5">
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">4. Review the Threat Report</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">Each detected threat shows the exact match, severity level (Critical/High/Medium), impact assessment, and two levels of fix recommendations — a quick fix and a permanent solution.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Each detected threat shows the exact match, severity level (Critical/High/Medium), impact assessment, and two levels of fix recommendations — a quick fix and a permanent solution.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-300 mb-2">5. Understand What You Need</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">This free scanner uses regex patterns. <strong className="text-slate-300">Hound Shield Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">This free scanner uses regex patterns. <strong className="text-[var(--hs-ink-secondary)]">HoundShield Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-[var(--hs-success)] mb-2">6. Get the Full Package</h3>
-                                    <p className="text-xs text-slate-500 leading-relaxed">Ready to protect your company? Sign up for Hound Shield Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Ready to protect your company? Sign up for HoundShield Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
                                 </div>
                             </div>
                         </div>
@@ -577,7 +577,7 @@ export default function FreeDemoPage() {
                     {/* ═══ WHY FREE SCANNER ≠ FULL PROTECTION ═══ */}
                     <div className="mt-10 grid md:grid-cols-2 gap-6">
                         <div className="glass-card p-6">
-                            <h3 className="text-sm font-bold text-slate-500 mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-brand-400" /> This Free Demo</h3>
+                            <h3 className="text-sm font-bold text-[var(--hs-ink-tertiary)] mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-brand-400" /> This Free Demo</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "9 regex-based threat patterns",
@@ -587,15 +587,15 @@ export default function FreeDemoPage() {
                                     "No audit logs",
                                     "No compliance reports",
                                 ].map(item => (
-                                    <li key={item} className="flex items-start gap-2 text-xs text-slate-400">
-                                        <CheckCircle2 className="w-3.5 h-3.5 text-slate-300 mt-0.5 shrink-0" />
+                                    <li key={item} className="flex items-start gap-2 text-xs text-[var(--hs-ink-secondary)]">
+                                        <CheckCircle2 className="w-3.5 h-3.5 text-[var(--hs-ink-secondary)] mt-0.5 shrink-0" />
                                         <span>{item}</span>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <div className="glass-card-glow p-6 border-brand-500/20">
-                            <h3 className="text-sm font-bold text-brand-300 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-400" /> Hound Shield Pro Package</h3>
+                            <h3 className="text-sm font-bold text-brand-300 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-400" /> HoundShield Pro Package</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "13 AI models with context awareness",
@@ -605,7 +605,7 @@ export default function FreeDemoPage() {
                                     "1-click SOC 2, GDPR, HIPAA reports",
                                     "Slack/Teams alerts + HITL review queue",
                                 ].map(item => (
-                                    <li key={item} className="flex items-start gap-2 text-xs text-slate-300">
+                                    <li key={item} className="flex items-start gap-2 text-xs text-[var(--hs-ink-secondary)]">
                                         <CheckCircle2 className="w-3.5 h-3.5 text-brand-400 mt-0.5 shrink-0" />
                                         <span>{item}</span>
                                     </li>
@@ -619,7 +619,7 @@ export default function FreeDemoPage() {
 
                     {/* ═══ BOTTOM STATS ═══ */}
                     <div className="mt-14 text-center">
-                        <p className="text-sm text-slate-400 mb-6"> This demo runs 100% in your browser. No data is sent to any server.</p>
+                        <p className="text-sm text-[var(--hs-ink-secondary)] mb-6"> This demo runs 100% in your browser. No data is sent to any server.</p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
                             {[
                                 { label: "Patterns Checked", value: "9" },
@@ -628,8 +628,8 @@ export default function FreeDemoPage() {
                                 { label: "Cost", value: "$0" },
                             ].map((s) => (
                                 <div key={s.label} className="glass-card p-4 text-center">
-                                    <div className="text-xl font-bold text-white mb-1">{s.value}</div>
-                                    <div className="text-xs text-slate-400">{s.label}</div>
+                                    <div className="text-xl font-bold text-[var(--hs-ink)] mb-1">{s.value}</div>
+                                    <div className="text-xs text-[var(--hs-ink-secondary)]">{s.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -637,9 +637,9 @@ export default function FreeDemoPage() {
                 </div>
             </main>
 
-            <footer className="border-t border-white/10 bg-transparent py-8">
-                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-                    &copy; {new Date().getFullYear()} Hound Shield — All rights reserved.
+            <footer className="border-t border-[var(--hs-border)] bg-transparent py-8">
+                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-[var(--hs-ink-tertiary)]">
+                    &copy; {new Date().getFullYear()} HoundShield — All rights reserved.
                 </div>
             </footer>
         </div>

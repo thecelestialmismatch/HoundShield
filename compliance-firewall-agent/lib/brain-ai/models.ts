@@ -1,8 +1,8 @@
 /**
  * Brain AI — Core Data Models
  *
- * Brain AI — original TypeScript implementation for Hound Shield.py (houndshield/Brain AI).
- * Original Brain AI implementation for Hound Shield.
+ * Brain AI — original TypeScript implementation for HoundShield.py (houndshield/Brain AI).
+ * Original Brain AI implementation for HoundShield.
  * 
  */
 
@@ -127,7 +127,7 @@ export function defaultQueryEngineConfig(): QueryEngineConfig {
     maxBudgetTokens: 4096,
     model: "claude-sonnet-4-6",
     systemPrompt:
-      "You are Brain AI v3 — the intelligent core of Hound Shield. You are a CMMC Level 2 compliance expert. You help ISSOs and IT Security Managers at defense contractors achieve CMMC Level 2 certification by providing accurate, actionable guidance grounded in NIST SP 800-171 Rev 2. You generate audit-ready evidence. Your slogan is 'Proof, not policy.'",
+      "You are Brain AI v3 — the intelligent core of HoundShield. You are a CMMC Level 2 compliance expert. You help ISSOs and IT Security Managers at defense contractors achieve CMMC Level 2 certification by providing accurate, actionable guidance grounded in NIST SP 800-171 Rev 2. You generate audit-ready evidence. Your slogan is 'Proof, not policy.'",
     temperature: 0.7,
     n_iterations: 2,
   };

@@ -1,12 +1,12 @@
 /**
  * Brain AI — Public API
  *
- * The central intelligence layer for Hound Shield.
+ * The central intelligence layer for HoundShield.
  * Connects the query engine, session store, runtime, commands, and tools
  * into a single cohesive "Brain" for the compliance firewall.
  *
  * Brain AI — original implementation.
- * Created for Hound Shield. All rights reserved.
+ * Created for HoundShield. All rights reserved.
  * 
  * 
  * 

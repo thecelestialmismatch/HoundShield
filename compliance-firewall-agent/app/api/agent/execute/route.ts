@@ -1,5 +1,5 @@
 // ============================================================================
-// Hound Shield Agent Execute API — SSE Streaming Endpoint
+// HoundShield Agent Execute API — SSE Streaming Endpoint
 // Accepts task, runs agentic ReAct loop, streams results
 // ============================================================================
 
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
       })),
       {
         model: resolvedModel,
-        systemPrompt: systemPrompt || 'You are Hound Shield AI, a powerful enterprise agentic assistant. You help users solve complex business problems with thorough analysis, research, and data processing.',
+        systemPrompt: systemPrompt || 'You are HoundShield AI, a powerful enterprise agentic assistant. You help users solve complex business problems with thorough analysis, research, and data processing.',
         tools,
         maxIterations: Math.min(maxIterations, 15),
         temperature,

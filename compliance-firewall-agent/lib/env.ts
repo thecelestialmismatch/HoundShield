@@ -31,7 +31,7 @@ export function validateEnv(): EnvConfig {
 
   if (isDemo) {
     console.log(
-      "\n️  Hound Shield running in DEMO MODE — configure Supabase in .env.local for production\n"
+      "\n️  HoundShield running in DEMO MODE — configure Supabase in .env.local for production\n"
     );
   }
 

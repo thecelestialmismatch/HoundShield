@@ -2,9 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "houndshield-dev",
+      "name": "houndshield-app",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
+      "cwd": "compliance-firewall-agent",
       "port": 3000
     }
   ]

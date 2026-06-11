@@ -2,7 +2,7 @@
  * Brain AI — Utilities
  *
  * Shared helpers for formatting, ID generation, text processing, and REPL support.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 // ─── ID generation ─────────────────────────────────────────────────────────────

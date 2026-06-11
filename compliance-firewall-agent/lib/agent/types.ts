@@ -1,5 +1,5 @@
 // ============================================================================
-// Hound Shield Agentic AI — Type System v3.0
+// HoundShield Agentic AI — Type System v3.0
 // ============================================================================
 
 export type AgentEventType =

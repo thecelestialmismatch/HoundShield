@@ -1,5 +1,5 @@
 /**
- * WebSocket Connection Handler for the Hound Shield Gateway.
+ * WebSocket Connection Handler for the HoundShield Gateway.
  *
  * Manages the full lifecycle of a WebSocket connection:
  *   1. Authentication (first message must be `auth`)

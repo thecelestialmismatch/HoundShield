@@ -1,5 +1,5 @@
 // ============================================================================
-// Hound Shield Gateway — Performance Budget Enforcer v1.0
+// HoundShield Gateway — Performance Budget Enforcer v1.0
 //
 // Enforces hard latency budgets on every gateway operation:
 //

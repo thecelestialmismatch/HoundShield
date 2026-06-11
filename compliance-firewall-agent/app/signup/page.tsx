@@ -63,23 +63,23 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--hs-surface-0)] flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative z-10 w-full max-w-md bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center shadow-xl shadow-black/30"
+          className="relative z-10 w-full max-w-md bg-white backdrop-blur-sm border border-[var(--hs-border)] rounded-2xl p-8 text-center shadow-xl shadow-[var(--shadow-card)]"
         >
           <div className="w-16 h-16 rounded-full bg-[var(--hs-success-bg)] flex items-center justify-center mx-auto mb-4">
             <CheckCircle2 className="w-8 h-8 text-[var(--hs-success)]" />
           </div>
-          <h2 className="text-xl font-bold text-white mb-2">Check your email</h2>
-          <p className="text-slate-400 text-sm mb-6">
-            We sent a confirmation link to <span className="text-slate-300 font-medium">{email}</span>.
+          <h2 className="text-xl font-bold text-[var(--hs-ink)] mb-2">Check your email</h2>
+          <p className="text-[var(--hs-ink-secondary)] text-sm mb-6">
+            We sent a confirmation link to <span className="text-[var(--hs-ink-secondary)] font-medium">{email}</span>.
             Click it to activate your account.
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-all"
           >
             Go to Login <ArrowRight className="w-4 h-4" />
           </Link>
@@ -89,7 +89,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--hs-surface-0)] flex items-center justify-center px-4">
       <ScrollProgressBar />
       {/* Subtle background blurs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -105,13 +105,13 @@ export default function SignupPage() {
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-3 mb-8">
           <Logo className="w-10" />
-          <TextLogo variant="dark" />
+          <TextLogo />
         </Link>
 
         {/* Card */}
-        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-xl shadow-black/30">
-          <h1 className="text-xl font-bold text-white text-center mb-1">Create your account</h1>
-          <p className="text-slate-400 text-sm text-center mb-6">
+        <div className="bg-white backdrop-blur-sm border border-[var(--hs-border)] rounded-2xl p-8 shadow-xl shadow-[var(--shadow-card)]">
+          <h1 className="text-xl font-bold text-[var(--hs-ink)] text-center mb-1">Create your account</h1>
+          <p className="text-[var(--hs-ink-secondary)] text-sm text-center mb-6">
             Start protecting your AI traffic in minutes
           </p>
 
@@ -129,41 +129,41 @@ export default function SignupPage() {
           <form onSubmit={handleSignup} className="space-y-4">
             {/* Name */}
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">Full Name</label>
+              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="John Doe"
                   required
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] text-sm placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
                 />
               </div>
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">Work Email</label>
+              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Work Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
                   required
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] text-sm placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">Password</label>
+              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
@@ -171,12 +171,12 @@ export default function SignupPage() {
                   placeholder="At least 8 characters"
                   required
                   minLength={8}
-                  className="w-full pl-10 pr-12 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
+                  className="w-full pl-10 pr-12 py-3 rounded-xl bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] text-sm placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)]"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -187,7 +187,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-slate-900 text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -201,16 +201,16 @@ export default function SignupPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider">or</span>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-[var(--hs-mist)]" />
+            <span className="text-[10px] text-[var(--hs-ink-secondary)] uppercase tracking-wider">or</span>
+            <div className="flex-1 h-px bg-[var(--hs-mist)]" />
           </div>
 
           {/* OAuth Providers */}
           <div className="space-y-2.5">
             <button
               onClick={() => handleOAuthSignup('google')}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/5 hover:text-white transition-all"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-[var(--hs-border)] bg-white text-[var(--hs-ink-secondary)] text-sm font-medium hover:bg-[var(--hs-mist)] hover:text-[var(--hs-ink)] transition-all"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -223,7 +223,7 @@ export default function SignupPage() {
 
             <button
               onClick={() => handleOAuthSignup('github')}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-sm font-medium hover:bg-white/5 hover:text-white transition-all"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-[var(--hs-border)] bg-white text-[var(--hs-ink-secondary)] text-sm font-medium hover:bg-[var(--hs-mist)] hover:text-[var(--hs-ink)] transition-all"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -233,16 +233,16 @@ export default function SignupPage() {
 
           </div>
 
-          <p className="text-[10px] text-slate-400 text-center mt-4">
+          <p className="text-[10px] text-[var(--hs-ink-secondary)] text-center mt-4">
             By creating an account, you agree to our{' '}
-            <Link href="/terms" className="text-slate-400 hover:text-white underline">Terms</Link>
+            <Link href="/terms" className="text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] underline">Terms</Link>
             {' '}and{' '}
-            <Link href="/privacy" className="text-slate-400 hover:text-white underline">Privacy Policy</Link>
+            <Link href="/privacy" className="text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] underline">Privacy Policy</Link>
           </p>
         </div>
 
         {/* Login link */}
-        <p className="text-center text-sm text-slate-400 mt-6">
+        <p className="text-center text-sm text-[var(--hs-ink-secondary)] mt-6">
           Already have an account?{' '}
           <Link href="/login" className="text-brand-400 hover:text-brand-400 font-medium">
             Sign in

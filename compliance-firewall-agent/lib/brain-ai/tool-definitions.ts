@@ -2,7 +2,7 @@
  * Brain AI — Tool Definitions
  *
  * Formal tool definition schema compatible with OpenRouter / OpenAI function calling.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export interface ToolParameterSchema {

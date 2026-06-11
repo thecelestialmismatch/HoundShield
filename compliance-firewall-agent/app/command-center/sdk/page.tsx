@@ -39,10 +39,10 @@ print(response.choices[0].message.content)`;
 
 const NODE_INSTALL = `npm install @houndshield/sdk`;
 
-const NODE_SNIPPET = `import { Hound ShieldClient } from "@houndshield/sdk";
+const NODE_SNIPPET = `import { HoundShieldClient } from "@houndshield/sdk";
 
 // 1-line integration
-const houndshield = new Hound ShieldClient({
+const houndshield = new HoundShieldClient({
   gatewayUrl: "https://houndshield.com/api/gateway/intercept",
   apiKey: process.env.HOUNDSHIELD_API_KEY,
   userId: "user-123",
@@ -55,7 +55,7 @@ const response = await houndshield.chat.completions.create({
   messages: [{ role: "user", content: "Draft a contract" }],
 });
 
-// Throws Hound ShieldComplianceError if blocked
+// Throws HoundShieldComplianceError if blocked
 console.log(response.content[0].text);
 console.log(response.compliance_meta); // { risk_level, scan_ms, action }`;
 
@@ -152,7 +152,7 @@ export default function SDKPage() {
           </div>
           <div>
             <h1 className="text-xl font-semibold text-white">SDK Integration</h1>
-            <p className="text-sm text-white/40">Add Hound Shield compliance scanning in one line</p>
+            <p className="text-sm text-white/40">Add HoundShield compliance scanning in one line</p>
           </div>
         </div>
         <div className="mt-3 p-3.5 rounded-xl bg-brand-500/10 border border-brand-400/20">

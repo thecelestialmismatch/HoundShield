@@ -3,7 +3,7 @@
  *
  * Tracks the initialization state of Brain AI subsystems.
  * Subsystems are lazily initialized on first use to keep cold-start fast.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export interface DeferredInitResult {

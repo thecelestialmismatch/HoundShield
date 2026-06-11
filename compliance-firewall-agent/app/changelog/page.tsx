@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
+import { NavV3 } from "@/components/layout/NavV3";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   Shield, Cpu, CreditCard, LayoutDashboard, KeyRound, Blocks,
@@ -39,7 +39,7 @@ const releases: Release[] = [
       { tag: "Feature", text: "Complete 110-control CMMC Level 2 mapping with practice-level detail" },
       { tag: "Feature", text: "SPRS score calculator with real-time gap weighting" },
       { tag: "Feature", text: "C3PAO-ready report export (PDF + JSON)" },
-      { tag: "Improvement", text: "Hound Shield assessment engine refactored for sub-200ms scoring" },
+      { tag: "Improvement", text: "HoundShield assessment engine refactored for sub-200ms scoring" },
     ],
   },
   {
@@ -97,9 +97,9 @@ const roadmap = [
 
 export default function ChangelogPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)]">
       <ScrollProgressBar />
-      <Navbar variant="dark" />
+      <NavV3 />
 
       {/* Hero */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden">
@@ -108,9 +108,9 @@ export default function ChangelogPage() {
           <FadeIn>
             <p className="text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold mb-4">Changelog</p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
-              What&apos;s new in <span className="bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] bg-clip-text text-transparent">Hound Shield</span>
+              What&apos;s new in <span className="bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] bg-clip-text text-transparent">HoundShield</span>
             </h1>
-            <p className="text-lg text-slate-400 max-w-xl mx-auto">Every improvement, shipped fast.</p>
+            <p className="text-lg text-[var(--hs-ink-secondary)] max-w-xl mx-auto">Every improvement, shipped fast.</p>
           </FadeIn>
         </div>
       </section>
@@ -119,7 +119,7 @@ export default function ChangelogPage() {
       <section className="relative py-16 px-6">
         <div className="max-w-3xl mx-auto">
           {/* Vertical line */}
-          <div className="absolute left-[calc(50%-1.5rem)] sm:left-[2.35rem] md:left-[calc(50%-22.5rem)] top-0 bottom-0 w-px bg-white/[0.06] hidden sm:block" />
+          <div className="absolute left-[calc(50%-1.5rem)] sm:left-[2.35rem] md:left-[calc(50%-22.5rem)] top-0 bottom-0 w-px bg-white hidden sm:block" />
 
           <div className="space-y-10">
             {releases.map((r, i) => {
@@ -129,25 +129,25 @@ export default function ChangelogPage() {
                   <div className="relative flex items-start gap-6">
                     {/* Dot on line */}
                     <div className="hidden sm:flex flex-col items-center shrink-0">
-                      <div className={`w-10 h-10 rounded-full border flex items-center justify-center ${i === 0 ? "border-[rgba(5,150,105,0.4)] bg-[rgba(5,150,105,0.1)]" : "border-white/10 bg-white/[0.03]"}`}>
-                        <Icon className={`w-4 h-4 ${i === 0 ? "text-[var(--hs-success)]" : "text-slate-400"}`} />
+                      <div className={`w-10 h-10 rounded-full border flex items-center justify-center ${i === 0 ? "border-[rgba(5,150,105,0.4)] bg-[rgba(5,150,105,0.1)]" : "border-[var(--hs-border)] bg-white"}`}>
+                        <Icon className={`w-4 h-4 ${i === 0 ? "text-[var(--hs-success)]" : "text-[var(--hs-ink-secondary)]"}`} />
                       </div>
                     </div>
 
                     {/* Card */}
-                    <div className="flex-1 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8">
+                    <div className="flex-1 border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-6 sm:p-8">
                       <div className="flex flex-wrap items-center gap-3 mb-5">
-                        <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${i === 0 ? "bg-[rgba(5,150,105,0.15)] text-[var(--hs-success)] border-[rgba(5,150,105,0.25)]" : "bg-white/[0.05] text-slate-400 border-white/10"}`}>
+                        <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${i === 0 ? "bg-[rgba(5,150,105,0.15)] text-[var(--hs-success)] border-[rgba(5,150,105,0.25)]" : "bg-white text-[var(--hs-ink-secondary)] border-[var(--hs-border)]"}`}>
                           v{r.version}
                         </span>
-                        <span className="text-xs text-slate-400 flex items-center gap-1.5">
+                        <span className="text-xs text-[var(--hs-ink-secondary)] flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5" />{r.date}
                         </span>
                       </div>
                       <h3 className="text-xl font-bold mb-4">{r.title}</h3>
                       <ul className="space-y-2.5">
                         {r.items.map((item, j) => (
-                          <li key={j} className="flex items-start gap-3 text-sm text-slate-400">
+                          <li key={j} className="flex items-start gap-3 text-sm text-[var(--hs-ink-secondary)]">
                             <span className={`shrink-0 mt-0.5 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${badgeStyles[item.tag]}`}>
                               {item.tag}
                             </span>
@@ -179,13 +179,13 @@ export default function ChangelogPage() {
               const Icon = item.icon;
               return (
                 <FadeIn key={item.title} delay={i * 0.08}>
-                  <div className="group border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-6 h-full cursor-pointer hover:border-brand-500/20 hover:bg-brand-500/[0.03] transition-colors duration-300">
+                  <div className="group border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-6 h-full cursor-pointer hover:border-brand-500/20 hover:bg-brand-500/[0.03] transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-3">
                       <Icon className="w-5 h-5 text-brand-400" />
                       <span className="text-[10px] uppercase tracking-wider text-brand-400 font-bold">{item.q}</span>
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                    <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{item.desc}</p>
                   </div>
                 </FadeIn>
               );
@@ -197,10 +197,10 @@ export default function ChangelogPage() {
       {/* CTA */}
       <section className="pb-24 px-6">
         <FadeIn>
-          <div className="max-w-3xl mx-auto text-center border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl py-14 px-8">
+          <div className="max-w-3xl mx-auto text-center border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl py-14 px-8">
             <Sparkles className="w-6 h-6 text-[var(--hs-success)] mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-3">Ship with confidence</h3>
-            <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">Start protecting your AI pipeline today. Free tier available with no credit card required.</p>
+            <p className="text-sm text-[var(--hs-ink-secondary)] mb-6 max-w-md mx-auto">Start protecting your AI pipeline today. Free tier available with no credit card required.</p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-600 hover:bg-brand-500 text-sm font-semibold transition-colors cursor-pointer">
               Get started <ArrowRight className="w-4 h-4" />
             </Link>
@@ -209,10 +209,10 @@ export default function ChangelogPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-10 px-6">
+      <footer className="border-t border-[var(--hs-border)] py-10 px-6">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <Link href="/" className="text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer">Hound Shield</Link>
-          <p className="text-xs text-slate-500">&copy; 2026 Hound Shield. All rights reserved.</p>
+          <Link href="/" className="text-sm font-semibold text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">HoundShield</Link>
+          <p className="text-xs text-[var(--hs-ink-tertiary)]">&copy; 2026 HoundShield. All rights reserved.</p>
         </div>
       </footer>
     </div>

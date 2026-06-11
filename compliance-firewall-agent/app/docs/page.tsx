@@ -32,7 +32,7 @@ const QUICKSTART_STEPS = [
   },
   {
     step: "2",
-    title: "Point your AI SDK at Hound Shield",
+    title: "Point your AI SDK at HoundShield",
     body: "Replace the baseURL in any OpenAI-compatible client. Zero behavior change for your team.",
   },
   {
@@ -65,7 +65,7 @@ const API_SECTIONS = [
   {
     id: "quickstart",
     title: "Quickstart",
-    description: "Set up the Hound Shield CMMC gateway in under 60 seconds",
+    description: "Set up the HoundShield CMMC gateway in under 60 seconds",
     method: "GUIDE",
     path: "",
     auth: "",
@@ -279,7 +279,7 @@ const SDK_EXAMPLES = {
 client = openai.OpenAI(
     base_url="https://houndshield.com/api/gateway/intercept",
     api_key="your-openai-key",
-    default_headers={"X-Hound Shield-Org": "acme-defense"},
+    default_headers={"X-HoundShield-Org": "acme-defense"},
 )
 
 # Your existing code works unchanged
@@ -289,7 +289,7 @@ response = client.chat.completions.create(
         {"role": "user", "content": "Draft a proposal using contract W911NF-23-C-0001"}
     ],
 )
-# ↑ Hound Shield intercepts this, detects the contract number,
+# ↑ HoundShield intercepts this, detects the contract number,
 #   blocks or quarantines before it reaches OpenAI`,
   javascript: `import OpenAI from "openai";
 
@@ -297,7 +297,7 @@ response = client.chat.completions.create(
 const client = new OpenAI({
   baseURL: "https://houndshield.com/api/gateway/intercept",
   apiKey: process.env.OPENAI_API_KEY,
-  defaultHeaders: { "X-Hound Shield-Org": "acme-defense" },
+  defaultHeaders: { "X-HoundShield-Org": "acme-defense" },
 });
 
 // Your existing code works unchanged
@@ -307,13 +307,13 @@ const response = await client.chat.completions.create({
     { role: "user", content: "Summarize our CAGE code 1ABC2 contract" }
   ],
 });
-// ↑ Hound Shield intercepts this, detects the CAGE code,
+// ↑ HoundShield intercepts this, detects the CAGE code,
 //   blocks or quarantines before it reaches OpenAI`,
   curl: `# Using the gateway as an OpenAI-compatible proxy
 curl -X POST https://houndshield.com/api/gateway/intercept \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer $OPENAI_API_KEY" \\
-  -H "X-Hound Shield-Org: acme-defense" \\
+  -H "X-HoundShield-Org: acme-defense" \\
   -d '{
     "model": "gpt-4o",
     "messages": [{"role": "user", "content": "Hello"}]
@@ -345,7 +345,7 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-slate-300 transition-colors"
+      className="flex items-center gap-1 text-[10px] text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] transition-colors"
     >
       {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
       {copied ? "Copied" : "Copy"}
@@ -355,12 +355,12 @@ function CopyButton({ text }: { text: string }) {
 
 function CodeBlock({ code, language }: { code: string; language: string }) {
   return (
-    <div className="rounded-lg overflow-hidden border border-white/[0.06]">
-      <div className="flex items-center justify-between px-4 py-2 bg-white/[0.02] border-b border-white/[0.06]">
-        <span className="text-[10px] font-mono text-slate-600 uppercase">{language}</span>
+    <div className="rounded-lg overflow-hidden border border-[var(--hs-border-subtle)]">
+      <div className="flex items-center justify-between px-4 py-2 bg-[var(--hs-surface-1)] border-b border-[var(--hs-border-subtle)]">
+        <span className="text-[10px] font-mono text-[var(--hs-ink-tertiary)] uppercase">{language}</span>
         <CopyButton text={code} />
       </div>
-      <pre className="p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-400 bg-white/[0.03]">
+      <pre className="p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-[var(--hs-ink-secondary)] bg-white">
         <code>{code}</code>
       </pre>
     </div>
@@ -372,7 +372,7 @@ const METHOD_COLORS: Record<string, string> = {
   POST: "bg-brand-500/10 text-brand-400",
   "GET / POST": "bg-brand-500/10 text-brand-400",
   GUIDE: "bg-brand-500/10 text-brand-400",
-  REF: "bg-slate-500/10 text-slate-400",
+  REF: "bg-slate-500/10 text-[var(--hs-ink-secondary)]",
 };
 
 export default function DocsPage() {
@@ -382,21 +382,21 @@ export default function DocsPage() {
   const section = API_SECTIONS.find((s) => s.id === activeSection);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[var(--hs-surface-0)]">
       <ScrollProgressBar />
       {/* Nav */}
-      <nav className="sticky top-0 z-50 h-16 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-6">
+      <nav className="sticky top-0 z-50 h-16 bg-[var(--hs-surface-0)]/80 backdrop-blur-xl border-b border-[var(--hs-border-subtle)] flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
               <Logo />
             </div>
-            <TextLogo variant="dark" />
+            <TextLogo />
           </Link>
-          <ChevronRight className="w-4 h-4 text-slate-600" />
+          <ChevronRight className="w-4 h-4 text-[var(--hs-ink-tertiary)]" />
           <div className="flex items-center gap-1.5">
             <BookOpen className="w-4 h-4 text-brand-400" />
-            <span className="text-sm font-medium text-slate-300">API Documentation</span>
+            <span className="text-sm font-medium text-[var(--hs-ink-secondary)]">API Documentation</span>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -411,8 +411,8 @@ export default function DocsPage() {
 
       <div className="max-w-7xl mx-auto flex">
         {/* Sidebar */}
-        <aside className="w-56 flex-shrink-0 border-r border-white/[0.06] py-6 px-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto hidden lg:block">
-          <p className="text-[10px] font-medium text-slate-600 uppercase tracking-wider mb-3 px-2">Endpoints</p>
+        <aside className="w-56 flex-shrink-0 border-r border-[var(--hs-border-subtle)] py-6 px-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto hidden lg:block">
+          <p className="text-[10px] font-medium text-[var(--hs-ink-tertiary)] uppercase tracking-wider mb-3 px-2">Endpoints</p>
           <div className="space-y-0.5">
             {API_SECTIONS.map((s) => (
               <button
@@ -421,10 +421,10 @@ export default function DocsPage() {
                 className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-all ${
                   activeSection === s.id
                     ? "bg-brand-500/10 text-brand-300 font-medium"
-                    : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.03]"
+                    : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] hover:bg-white"
                 }`}
               >
-                <span className={`inline-block w-9 text-[9px] font-mono mr-1.5 ${activeSection === s.id ? "text-brand-400" : "text-slate-600"}`}>
+                <span className={`inline-block w-9 text-[9px] font-mono mr-1.5 ${activeSection === s.id ? "text-brand-400" : "text-[var(--hs-ink-tertiary)]"}`}>
                   {s.method.split(" ")[0]}
                 </span>
                 {s.title}
@@ -432,7 +432,7 @@ export default function DocsPage() {
             ))}
           </div>
 
-          <p className="text-[10px] font-medium text-slate-600 uppercase tracking-wider mt-6 mb-3 px-2">SDK Examples</p>
+          <p className="text-[10px] font-medium text-[var(--hs-ink-tertiary)] uppercase tracking-wider mt-6 mb-3 px-2">SDK Examples</p>
           <div className="space-y-0.5">
             {(["javascript", "python", "curl"] as const).map((lang) => (
               <button
@@ -444,7 +444,7 @@ export default function DocsPage() {
                 className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-all ${
                   activeSection === "sdk" && sdkLang === lang
                     ? "bg-brand-500/10 text-brand-300 font-medium"
-                    : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.03]"
+                    : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] hover:bg-white"
                 }`}
               >
                 <Code className="w-3 h-3 inline mr-1.5" />
@@ -462,11 +462,11 @@ export default function DocsPage() {
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] text-[var(--hs-success)] text-xs font-semibold uppercase tracking-widest mb-4">
                   <Zap className="w-3 h-3" /> Quickstart
                 </div>
-                <h1 className="text-2xl font-bold text-white mb-2">
+                <h1 className="text-2xl font-bold text-[var(--hs-ink)] mb-2">
                   CMMC gateway in 60 seconds
                 </h1>
-                <p className="text-sm text-slate-400 leading-relaxed">
-                  Hound Shield is an OpenAI-compatible proxy. Every AI query from your team passes through
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
+                  HoundShield is an OpenAI-compatible proxy. Every AI query from your team passes through
                   it first. CUI, CAGE codes, contract numbers, and clearance data are detected and
                   blocked before they reach any AI provider.
                 </p>
@@ -475,13 +475,13 @@ export default function DocsPage() {
               {/* Steps */}
               <div className="space-y-4">
                 {QUICKSTART_STEPS.map((s) => (
-                  <div key={s.step} className="flex gap-4 p-5 rounded-xl bg-white/[0.03] border border-white/10">
+                  <div key={s.step} className="flex gap-4 p-5 rounded-xl bg-white border border-[var(--hs-border)]">
                     <div className="w-8 h-8 rounded-full bg-brand-500/15 border border-brand-500/30 flex items-center justify-center text-brand-400 font-bold text-sm shrink-0">
                       {s.step}
                     </div>
                     <div>
-                      <p className="text-white font-semibold text-sm mb-1">{s.title}</p>
-                      <p className="text-slate-400 text-sm leading-relaxed">{s.body}</p>
+                      <p className="text-[var(--hs-ink)] font-semibold text-sm mb-1">{s.title}</p>
+                      <p className="text-[var(--hs-ink-secondary)] text-sm leading-relaxed">{s.body}</p>
                     </div>
                   </div>
                 ))}
@@ -489,9 +489,9 @@ export default function DocsPage() {
 
               {/* Gateway URL */}
               <div>
-                <h3 className="text-xs font-medium text-slate-400 uppercase tracking-widest mb-2">Your Gateway URL</h3>
-                <div className="flex items-center gap-2 bg-slate-900 border border-white/10 rounded-xl px-4 py-3">
-                  <Globe className="w-4 h-4 text-slate-600 shrink-0" />
+                <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] uppercase tracking-widest mb-2">Your Gateway URL</h3>
+                <div className="flex items-center gap-2 bg-slate-900 border border-[var(--hs-border)] rounded-xl px-4 py-3">
+                  <Globe className="w-4 h-4 text-[var(--hs-ink-tertiary)] shrink-0" />
                   <code className="flex-1 text-[var(--hs-success)] text-sm font-mono">{GATEWAY_BASE}</code>
                   <CopyButton text={GATEWAY_BASE} />
                 </div>
@@ -500,13 +500,13 @@ export default function DocsPage() {
               {/* Quick code example */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xs font-medium text-slate-400 uppercase tracking-widest">Python (OpenAI SDK)</h3>
+                  <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] uppercase tracking-widest">Python (OpenAI SDK)</h3>
                   <div className="flex gap-1">
                     {(["javascript", "python", "curl"] as const).map((lang) => (
                       <button
                         key={lang}
                         onClick={() => setSdkLang(lang)}
-                        className={`text-[10px] px-2 py-1 rounded transition-all ${sdkLang === lang ? "bg-brand-500/15 text-brand-300" : "text-slate-500 hover:text-slate-400"}`}
+                        className={`text-[10px] px-2 py-1 rounded transition-all ${sdkLang === lang ? "bg-brand-500/15 text-brand-300" : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)]"}`}
                       >
                         {lang}
                       </button>
@@ -517,37 +517,37 @@ export default function DocsPage() {
               </div>
 
               <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-brand-300">
-                <span className="font-semibold">No infrastructure change required.</span> Your employees keep using ChatGPT, Copilot, or Claude — Hound Shield sits in the middle transparently.
+                <span className="font-semibold">No infrastructure change required.</span> Your employees keep using ChatGPT, Copilot, or Claude — HoundShield sits in the middle transparently.
               </div>
             </div>
           ) : activeSection === "detected" ? (
             <div className="max-w-3xl space-y-6">
               <div>
-                <h1 className="text-2xl font-bold text-white mb-2">What Gets Detected</h1>
-                <p className="text-sm text-slate-400 leading-relaxed">
-                  Hound Shield runs 30+ pattern matchers against every message. CMMC-specific patterns target
+                <h1 className="text-2xl font-bold text-[var(--hs-ink)] mb-2">What Gets Detected</h1>
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
+                  HoundShield runs 30+ pattern matchers against every message. CMMC-specific patterns target
                   artifacts unique to defense contracting — CAGE codes, CUI markings, contract numbers,
                   and clearance data that generic DLP tools miss entirely.
                 </p>
               </div>
 
-              <div className="overflow-hidden rounded-xl border border-white/10">
+              <div className="overflow-hidden rounded-xl border border-[var(--hs-border)]">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-white/10 bg-white/[0.03]">
-                      <th className="text-left text-xs font-semibold text-slate-500 uppercase px-5 py-3">Category</th>
-                      <th className="text-left text-xs font-semibold text-slate-500 uppercase px-3 py-3">Example Triggers</th>
-                      <th className="text-center text-xs font-semibold text-slate-500 uppercase px-3 py-3">Risk</th>
+                    <tr className="border-b border-[var(--hs-border)] bg-white">
+                      <th className="text-left text-xs font-semibold text-[var(--hs-ink-tertiary)] uppercase px-5 py-3">Category</th>
+                      <th className="text-left text-xs font-semibold text-[var(--hs-ink-tertiary)] uppercase px-3 py-3">Example Triggers</th>
+                      <th className="text-center text-xs font-semibold text-[var(--hs-ink-tertiary)] uppercase px-3 py-3">Risk</th>
                     </tr>
                   </thead>
                   <tbody>
                     {DETECTED_PATTERNS.map((row, i) => (
-                      <tr key={row.category} className={`border-b border-white/[0.06] ${i % 2 === 0 ? "" : "bg-white/[0.02]"}`}>
-                        <td className="px-5 py-3 text-white font-medium whitespace-nowrap">{row.category}</td>
-                        <td className="px-3 py-3 text-slate-400 text-xs font-mono">
+                      <tr key={row.category} className={`border-b border-[var(--hs-border-subtle)] ${i % 2 === 0 ? "" : "bg-[var(--hs-surface-1)]"}`}>
+                        <td className="px-5 py-3 text-[var(--hs-ink)] font-medium whitespace-nowrap">{row.category}</td>
+                        <td className="px-3 py-3 text-[var(--hs-ink-secondary)] text-xs font-mono">
                           {row.examples.join(", ")}
                         </td>
-                        <td className={`px-3 py-3 text-center text-xs font-bold ${RISK_COLORS[row.risk] ?? "text-slate-400"}`}>
+                        <td className={`px-3 py-3 text-center text-xs font-bold ${RISK_COLORS[row.risk] ?? "text-[var(--hs-ink-secondary)]"}`}>
                           {row.risk}
                         </td>
                       </tr>
@@ -563,9 +563,9 @@ export default function DocsPage() {
           ) : activeSection === "sdk" ? (
             <div className="max-w-3xl space-y-6">
               <div>
-                <h1 className="text-2xl font-bold text-white mb-2">SDK Examples</h1>
-                <p className="text-sm text-slate-500">
-                  Integrate Hound Shield into your application with these code examples.
+                <h1 className="text-2xl font-bold text-[var(--hs-ink)] mb-2">SDK Examples</h1>
+                <p className="text-sm text-[var(--hs-ink-tertiary)]">
+                  Integrate HoundShield into your application with these code examples.
                 </p>
               </div>
 
@@ -577,7 +577,7 @@ export default function DocsPage() {
                     className={`text-xs px-3 py-1.5 rounded-lg transition-all ${
                       sdkLang === lang
                         ? "bg-brand-500/15 text-brand-300 border border-brand-500/30"
-                        : "text-slate-500 hover:text-slate-400 border border-transparent"
+                        : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)] border border-transparent"
                     }`}
                   >
                     {lang.charAt(0).toUpperCase() + lang.slice(1)}
@@ -595,24 +595,24 @@ export default function DocsPage() {
                   <span className={`text-[10px] font-mono font-medium px-2 py-0.5 rounded ${METHOD_COLORS[section.method] || ""}`}>
                     {section.method}
                   </span>
-                  <code className="text-sm font-mono text-slate-300">{section.path}</code>
+                  <code className="text-sm font-mono text-[var(--hs-ink-secondary)]">{section.path}</code>
                 </div>
-                <h1 className="text-2xl font-bold text-white mb-2">{section.title}</h1>
-                <p className="text-sm text-slate-500">{section.description}</p>
+                <h1 className="text-2xl font-bold text-[var(--hs-ink)] mb-2">{section.title}</h1>
+                <p className="text-sm text-[var(--hs-ink-tertiary)]">{section.description}</p>
               </div>
 
               {/* Auth */}
               <div>
-                <h3 className="text-xs font-medium text-slate-400 mb-2 flex items-center gap-1.5">
+                <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] mb-2 flex items-center gap-1.5">
                   <Lock className="w-3 h-3" /> Authentication
                 </h3>
-                <p className="text-sm text-slate-400">{section.auth}</p>
+                <p className="text-sm text-[var(--hs-ink-secondary)]">{section.auth}</p>
               </div>
 
               {/* Headers */}
               {section.headers && (
                 <div>
-                  <h3 className="text-xs font-medium text-slate-400 mb-2">Headers</h3>
+                  <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] mb-2">Headers</h3>
                   <CodeBlock code={section.headers} language="headers" />
                 </div>
               )}
@@ -622,7 +622,7 @@ export default function DocsPage() {
                 const qp = (section as { queryParams?: string }).queryParams;
                 return qp ? (
                   <div>
-                    <h3 className="text-xs font-medium text-slate-400 mb-2">Query Parameters</h3>
+                    <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] mb-2">Query Parameters</h3>
                     <CodeBlock code={qp} language="params" />
                   </div>
                 ) : null;
@@ -631,7 +631,7 @@ export default function DocsPage() {
               {/* Request Body */}
               {section.body && (
                 <div>
-                  <h3 className="text-xs font-medium text-slate-400 mb-2">Request Body</h3>
+                  <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] mb-2">Request Body</h3>
                   <CodeBlock code={section.body} language="json" />
                 </div>
               )}
@@ -639,7 +639,7 @@ export default function DocsPage() {
               {/* Response */}
               {section.response200 && (
                 <div>
-                  <h3 className="text-xs font-medium text-slate-400 mb-2 flex items-center gap-1.5">
+                  <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] mb-2 flex items-center gap-1.5">
                     <Check className="w-3 h-3 text-success" /> Success Response (200)
                   </h3>
                   <CodeBlock code={section.response200} language="json" />
@@ -651,7 +651,7 @@ export default function DocsPage() {
                 const r403 = (section as { response403?: string }).response403;
                 return r403 ? (
                   <div>
-                    <h3 className="text-xs font-medium text-slate-400 mb-2 flex items-center gap-1.5">
+                    <h3 className="text-xs font-medium text-[var(--hs-ink-secondary)] mb-2 flex items-center gap-1.5">
                       <AlertTriangle className="w-3 h-3 text-danger" /> Blocked Response (403)
                     </h3>
                     <CodeBlock code={r403} language="json" />

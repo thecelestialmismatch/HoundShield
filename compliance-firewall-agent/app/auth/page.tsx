@@ -87,7 +87,7 @@ function LiveScanner() {
   return (
     <div className="relative w-full mt-8">
       {/* Scanner box */}
-      <div className="relative rounded-xl border border-white/[0.06] bg-white/[0.02] overflow-hidden p-4">
+      <div className="relative rounded-xl border border-[var(--hs-border-subtle)] bg-[var(--hs-surface-1)] overflow-hidden p-4">
         {/* Scan line animation */}
         <div className="scan-line" />
 
@@ -134,17 +134,17 @@ function LiveScanner() {
         </div>
 
         {/* Stats row */}
-        <div className="flex items-center gap-6 mt-4 pt-3 border-t border-white/[0.04]">
+        <div className="flex items-center gap-6 mt-4 pt-3 border-t border-[var(--hs-border-subtle)]">
           <div>
-            <p className="text-[10px] text-slate-500 uppercase tracking-wider">Threats Blocked</p>
-            <p className="text-lg font-bold text-white tabular-nums">{threats.toLocaleString()}</p>
+            <p className="text-[10px] text-[var(--hs-ink-tertiary)] uppercase tracking-wider">Threats Blocked</p>
+            <p className="text-lg font-bold text-[var(--hs-ink)] tabular-nums">{threats.toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-[10px] text-slate-500 uppercase tracking-wider">Requests Scanned</p>
-            <p className="text-lg font-bold text-white tabular-nums">{requests.toLocaleString()}</p>
+            <p className="text-[10px] text-[var(--hs-ink-tertiary)] uppercase tracking-wider">Requests Scanned</p>
+            <p className="text-lg font-bold text-[var(--hs-ink)] tabular-nums">{requests.toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-[10px] text-slate-500 uppercase tracking-wider">Latency</p>
+            <p className="text-[10px] text-[var(--hs-ink-tertiary)] uppercase tracking-wider">Latency</p>
             <p className="text-lg font-bold text-[var(--hs-success)]">&lt;23ms</p>
           </div>
         </div>
@@ -266,7 +266,7 @@ export default function AuthPage() {
   );
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0a]">
+    <div className="flex min-h-screen bg-[var(--hs-surface-0)]">
       <ScrollProgressBar />
       {/* ─── LEFT BRANDING PANEL ─── */}
       <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-[#0a0a0a] items-center justify-center p-12 xl:p-16">
@@ -284,7 +284,7 @@ export default function AuthPage() {
           <Link href="/" className="flex items-center gap-3.5 mb-10 group hover:opacity-90 transition-opacity">
             <Logo className="w-14 h-14 rounded-2xl shadow-glow group-hover:border-brand-500/40 transition-colors [&>svg:first-child]:w-7 [&>svg:first-child]:h-7 [&>svg:last-child]:w-3.5 [&>svg:last-child]:h-3.5" />
             <div>
-              <TextLogo variant="dark" />
+              <TextLogo />
               <span className="text-[10px] text-brand-300/50 uppercase tracking-[0.2em]">
                 AI Compliance Firewall
               </span>
@@ -292,7 +292,7 @@ export default function AuthPage() {
           </Link>
 
           {/* Headline */}
-          <h1 className="text-display-sm font-bold text-white leading-[1.05] mb-4">
+          <h1 className="text-display-sm font-bold text-[var(--hs-ink)] leading-[1.05] mb-4">
             Secure Your{" "}
             <span className="text-gradient-brand">AI Pipeline</span>
           </h1>
@@ -311,10 +311,10 @@ export default function AuthPage() {
               const Icon = item.icon;
               return (
                 <div key={item.text} className="flex items-center gap-3 group">
-                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center border border-white/[0.08] group-hover:bg-white/[0.1] group-hover:border-brand-500/20 transition-all duration-300">
+                  <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-[var(--hs-border-subtle)] group-hover:bg-white/[0.1] group-hover:border-brand-500/20 transition-all duration-300">
                     <Icon className="w-4 h-4 text-brand-300" />
                   </div>
-                  <span className="text-slate-300 text-sm group-hover:text-slate-200 transition-colors">
+                  <span className="text-[var(--hs-ink-secondary)] text-sm group-hover:text-[var(--hs-ink)] transition-colors">
                     {item.text}
                   </span>
                   {item.highlight && (
@@ -343,16 +343,16 @@ export default function AuthPage() {
           <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden hover:opacity-80 transition-opacity">
             <Logo className="w-10 h-10" />
             <div>
-              <TextLogo variant="dark" />
+              <TextLogo />
             </div>
           </Link>
 
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-[1.7rem] font-bold text-white tracking-tight mb-1.5">
+            <h2 className="text-[1.7rem] font-bold text-[var(--hs-ink)] tracking-tight mb-1.5">
               {activeTab === "signin" ? "Welcome back" : "Get started"}
             </h2>
-            <p className="text-slate-400 text-sm">
+            <p className="text-[var(--hs-ink-secondary)] text-sm">
               {activeTab === "signin"
                 ? "Sign in to access your compliance dashboard."
                 : "Create your account and secure your AI pipeline."}
@@ -362,7 +362,7 @@ export default function AuthPage() {
           {/* ─── AUTH CARD ─── */}
           <div className="glass-card p-6 sm:p-7">
             {/* Tab Switcher */}
-            <div className="flex rounded-xl bg-white/[0.04] p-1 mb-6 border border-white/[0.04]">
+            <div className="flex rounded-xl bg-white p-1 mb-6 border border-[var(--hs-border-subtle)]">
               {(["signin", "signup"] as const).map((tab) => (
                 <button
                   key={tab}
@@ -373,7 +373,7 @@ export default function AuthPage() {
                   }}
                   className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === tab
                     ? "bg-brand-500 text-white"
-                    : "text-slate-400 hover:text-slate-300"
+                    : "text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)]"
                     }`}
                 >
                   {tab === "signin" ? "Sign In" : "Sign Up"}
@@ -398,18 +398,18 @@ export default function AuthPage() {
               <form onSubmit={handleSignIn} className="space-y-4">
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 ml-0.5">
                     Email address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-tertiary)]" />
                     <input
                       type="email"
                       required
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
                       placeholder="you@company.com"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-white border border-[var(--hs-border-subtle)] rounded-xl pl-10 pr-4 py-3 text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
@@ -417,7 +417,7 @@ export default function AuthPage() {
                 {/* Password */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5 ml-0.5">
-                    <label className="block text-xs font-medium text-slate-300">
+                    <label className="block text-xs font-medium text-[var(--hs-ink-secondary)]">
                       Password
                     </label>
                     <button
@@ -428,19 +428,19 @@ export default function AuthPage() {
                     </button>
                   </div>
                   <div className="relative">
-                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-tertiary)]" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
                       value={signInPassword}
                       onChange={(e) => setSignInPassword(e.target.value)}
                       placeholder="Enter your password"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-white border border-[var(--hs-border-subtle)] rounded-xl pl-10 pr-11 py-3 text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-400 transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)] transition-colors"
                     >
                       {showPassword ? (
                         <EyeOff className="w-4 h-4" />
@@ -479,47 +479,47 @@ export default function AuthPage() {
               <form onSubmit={handleSignUp} className="space-y-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 ml-0.5">
                     Full name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-tertiary)]" />
                     <input
                       type="text"
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="John Doe"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-white border border-[var(--hs-border-subtle)] rounded-xl pl-10 pr-4 py-3 text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 ml-0.5">
                     Email address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-tertiary)]" />
                     <input
                       type="email"
                       required
                       value={signUpEmail}
                       onChange={(e) => setSignUpEmail(e.target.value)}
                       placeholder="you@company.com"
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-white border border-[var(--hs-border-subtle)] rounded-xl pl-10 pr-4 py-3 text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Password */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 ml-0.5">
                     Password
                   </label>
                   <div className="relative">
-                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                    <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-tertiary)]" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
@@ -527,12 +527,12 @@ export default function AuthPage() {
                       onChange={(e) => setSignUpPassword(e.target.value)}
                       placeholder="Min. 8 characters"
                       minLength={8}
-                      className="w-full bg-[#0d0d12] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-white placeholder-white/20 focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white/[0.05] focus:outline-none transition-all duration-200 text-sm shadow-inner"
+                      className="w-full bg-white border border-[var(--hs-border-subtle)] rounded-xl pl-10 pr-11 py-3 text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/25 focus:bg-white focus:outline-none transition-all duration-200 text-sm shadow-inner"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-400 transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)] transition-colors"
                     >
                       {showPassword ? (
                         <EyeOff className="w-4 h-4" />
@@ -564,10 +564,10 @@ export default function AuthPage() {
             {/* Divider */}
             <div className="relative my-7">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/[0.06]" />
+                <div className="w-full border-t border-[var(--hs-border-subtle)]" />
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-[rgba(20,20,25,0.7)] px-4 text-xs font-medium text-slate-500">
+                <span className="bg-[rgba(20,20,25,0.7)] px-4 text-xs font-medium text-[var(--hs-ink-tertiary)]">
                   or
                 </span>
               </div>
@@ -578,7 +578,7 @@ export default function AuthPage() {
               <button
                 onClick={() => handleSocialAuth("google")}
                 disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-200 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-white border border-[var(--hs-border-subtle)] text-sm text-[var(--hs-ink)] font-medium hover:bg-white hover:border-[var(--hs-border)] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
               >
                 <GoogleLogo className="w-4 h-4" />
                 Continue with Google
@@ -586,7 +586,7 @@ export default function AuthPage() {
               <button
                 onClick={() => handleSocialAuth("github")}
                 disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-200 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-white border border-[var(--hs-border-subtle)] text-sm text-[var(--hs-ink)] font-medium hover:bg-white hover:border-[var(--hs-border)] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
               >
                 <GitHubLogo className="w-4 h-4" />
                 Continue with GitHub
@@ -594,7 +594,7 @@ export default function AuthPage() {
               <button
                 onClick={() => handleSocialAuth("sso")}
                 disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-[#0d0d12] border border-white/[0.08] text-sm text-slate-200 font-medium hover:bg-white/[0.05] hover:border-white/[0.12] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
+                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-white border border-[var(--hs-border-subtle)] text-sm text-[var(--hs-ink)] font-medium hover:bg-white hover:border-[var(--hs-border)] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
               >
                 <ShieldCheck className="w-4 h-4" />
                 Continue with SSO
@@ -603,13 +603,13 @@ export default function AuthPage() {
 
             {/* Terms (sign up only) */}
             {activeTab === "signup" && (
-              <p className="text-[11px] text-slate-600 text-center mt-6 leading-relaxed">
+              <p className="text-[11px] text-[var(--hs-ink-tertiary)] text-center mt-6 leading-relaxed">
                 By creating an account, you agree to our{" "}
-                <span className="text-slate-500 hover:text-slate-300 cursor-pointer transition-colors">
+                <span className="text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] cursor-pointer transition-colors">
                   Terms of Service
                 </span>{" "}
                 and{" "}
-                <span className="text-slate-500 hover:text-slate-300 cursor-pointer transition-colors">
+                <span className="text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] cursor-pointer transition-colors">
                   Privacy Policy
                 </span>
                 .
@@ -628,12 +628,12 @@ export default function AuthPage() {
               return (
                 <div
                   key={badge.label}
-                  className="flex items-center gap-1.5 text-slate-600 group"
+                  className="flex items-center gap-1.5 text-[var(--hs-ink-tertiary)] group"
                 >
-                  <div className="w-6 h-6 rounded-md bg-white/[0.04] flex items-center justify-center border border-white/[0.06] group-hover:border-brand-500/20 transition-colors">
-                    <Icon className="w-3 h-3 text-slate-500 group-hover:text-brand-400/60 transition-colors" />
+                  <div className="w-6 h-6 rounded-md bg-white flex items-center justify-center border border-[var(--hs-border-subtle)] group-hover:border-brand-500/20 transition-colors">
+                    <Icon className="w-3 h-3 text-[var(--hs-ink-tertiary)] group-hover:text-brand-400/60 transition-colors" />
                   </div>
-                  <span className="text-[10px] font-medium uppercase tracking-wider group-hover:text-slate-500 transition-colors">
+                  <span className="text-[10px] font-medium uppercase tracking-wider group-hover:text-[var(--hs-ink-tertiary)] transition-colors">
                     {badge.label}
                   </span>
                 </div>
@@ -644,7 +644,7 @@ export default function AuthPage() {
           {/* ─── BACK TO HOME ─── */}
           <Link
             href="/"
-            className="flex items-center justify-center gap-1.5 text-sm text-slate-500 hover:text-slate-300 mt-6 transition-colors duration-200 group"
+            className="flex items-center justify-center gap-1.5 text-sm text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] mt-6 transition-colors duration-200 group"
           >
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
             Back to home

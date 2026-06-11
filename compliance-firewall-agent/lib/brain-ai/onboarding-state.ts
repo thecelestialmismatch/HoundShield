@@ -2,14 +2,14 @@
  * Brain AI — Project Onboarding State
  *
  * Tracks and persists the user's CMMC onboarding progress.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export interface ProjectOnboardingState {
   hasReadme: boolean;
   hasTests: boolean;
   pythonFirst: boolean;
-  // Hound Shield-specific onboarding fields
+  // HoundShield-specific onboarding fields
   orgNameSet: boolean;
   assessmentStarted: boolean;
   assessmentCompleted: boolean;
@@ -58,7 +58,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: "gatewayConnected",
     label: "Connect AI gateway",
-    description: "Route your AI traffic through Hound Shield for real-time compliance scanning.",
+    description: "Route your AI traffic through HoundShield for real-time compliance scanning.",
     required: false,
     actionUrl: "/docs",
     actionLabel: "View Integration Docs",

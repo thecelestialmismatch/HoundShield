@@ -1,7 +1,7 @@
 /**
  * Brain AI — Tool Adapter
  *
- * wraps Hound Shield's existing ToolRegistry
+ * wraps HoundShield's existing ToolRegistry
  * with snapshot export, scoring, and permission filtering.
  */
 

@@ -12,7 +12,7 @@ exports[`TextLogo > applies dark variant correctly 1`] = `
   <span
     class="font-bold text-white/80"
   >
-     Shield
+    Shield
   </span>
 </span>
 `;
@@ -29,7 +29,7 @@ exports[`TextLogo > applies light variant correctly 1`] = `
   <span
     class="font-bold text-slate-600"
   >
-     Shield
+    Shield
   </span>
 </span>
 `;

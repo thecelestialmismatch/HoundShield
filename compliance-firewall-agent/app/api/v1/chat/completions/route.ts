@@ -5,10 +5,10 @@
  *
  * Drop-in replacement for the OpenAI Chat Completions API. Configure your
  * OpenAI client to point to this URL and all traffic is automatically
- * scanned by the Hound Shield compliance engine before reaching the upstream LLM.
+ * scanned by the HoundShield compliance engine before reaching the upstream LLM.
  *
  * Authentication:
- *   Authorization: Bearer <houndshield-api-key>   (Hound Shield gateway key)
+ *   Authorization: Bearer <houndshield-api-key>   (HoundShield gateway key)
  *   x-provider-api-key: <upstream-key>       (OpenAI/Anthropic/Gemini key)
  *   x-provider: openai | anthropic | google | openrouter  (default: openai)
  *   x-user-id: <user-identifier>             (optional, for audit trail)
@@ -20,10 +20,10 @@
  *   { error: { message, type, code } }
  *
  * Compliance scan results are appended as response headers:
- *   X-Hound Shield-Risk-Level   e.g. NONE | LOW | MEDIUM | HIGH | CRITICAL
- *   X-Hound Shield-Action       ALLOWED | BLOCKED | QUARANTINED
- *   X-Hound Shield-Scan-Ms      scan latency in milliseconds
- *   X-Hound Shield-Request-Id   opaque request identifier for audit lookup
+ *   X-HoundShield-Risk-Level   e.g. NONE | LOW | MEDIUM | HIGH | CRITICAL
+ *   X-HoundShield-Action       ALLOWED | BLOCKED | QUARANTINED
+ *   X-HoundShield-Scan-Ms      scan latency in milliseconds
+ *   X-HoundShield-Request-Id   opaque request identifier for audit lookup
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -101,7 +101,7 @@ function openAIError(
 }
 
 /**
- * Validates a Hound Shield gateway API key.
+ * Validates a HoundShield gateway API key.
  * Accepts any non-empty key in demo mode (Supabase not configured).
  */
 async function validateGatewayKey(key: string): Promise<boolean> {
@@ -582,10 +582,10 @@ export async function POST(req: NextRequest): Promise<Response> {
     classification.should_quarantine ? "QUARANTINED" : "ALLOWED";
 
   const complianceHeaders: Record<string, string> = {
-    "X-Hound Shield-Risk-Level": classification.risk_level,
-    "X-Hound Shield-Action": action,
-    "X-Hound Shield-Scan-Ms": String(scanMs),
-    "X-Hound Shield-Request-Id": requestId,
+    "X-HoundShield-Risk-Level": classification.risk_level,
+    "X-HoundShield-Action": action,
+    "X-HoundShield-Scan-Ms": String(scanMs),
+    "X-HoundShield-Request-Id": requestId,
   };
 
   // --- Block/quarantine response ----------------------------------------
@@ -594,7 +594,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       {
         error: {
           message:
-            "Request blocked by Hound Shield compliance firewall. " +
+            "Request blocked by HoundShield compliance firewall. " +
             `Risk level: ${classification.risk_level}. ` +
             `Detected: ${classification.entities.map((e) => e.type).join(", ") || "policy violation"}.`,
           type: "content_policy_violation",
@@ -616,7 +616,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       {
         error: {
           message:
-            "Request quarantined by Hound Shield compliance firewall pending review. " +
+            "Request quarantined by HoundShield compliance firewall pending review. " +
             `Risk level: ${classification.risk_level}.`,
           type: "content_policy_violation",
           code: "compliance_quarantined",

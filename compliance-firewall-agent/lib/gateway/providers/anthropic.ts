@@ -1,5 +1,5 @@
 /**
- * Hound Shield Streaming Gateway — Anthropic Provider Adapter
+ * HoundShield Streaming Gateway — Anthropic Provider Adapter
  *
  * Handles communication with the Anthropic Messages API in streaming mode.
  *
@@ -21,7 +21,7 @@
  *   event: message_stop
  *   data: {"type":"message_stop"}
  *
- * This adapter normalizes all of the above into Hound Shield `StreamToken` objects.
+ * This adapter normalizes all of the above into HoundShield `StreamToken` objects.
  *
  * Supported models:
  *   claude-sonnet-4-20250514, claude-3-5-haiku-20241022, claude-3-opus-20240229
@@ -110,7 +110,7 @@ type AnthropicEvent =
  * Anthropic provider adapter.
  *
  * Stateless and thread-safe. Handles the Anthropic Messages API streaming
- * protocol, converting typed SSE events into normalized Hound Shield tokens.
+ * protocol, converting typed SSE events into normalized HoundShield tokens.
  */
 export const anthropicAdapter: ProviderAdapter = {
   name: "anthropic" as ProviderName,
@@ -277,7 +277,7 @@ export const anthropicAdapter: ProviderAdapter = {
 /**
  * Separates the system message from conversation messages.
  *
- * OpenAI/Hound Shield format puts system as a message with role "system".
+ * OpenAI/HoundShield format puts system as a message with role "system".
  * Anthropic requires it as a separate top-level `system` parameter.
  * This function performs that conversion.
  */
