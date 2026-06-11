@@ -3,7 +3,7 @@
  *
  * Defines the 7-stage initialization graph for Brain AI startup.
  * Each stage has dependencies and a readiness check.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export type BootstrapStage =

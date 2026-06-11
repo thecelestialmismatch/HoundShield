@@ -2,7 +2,7 @@
  * Brain AI — Task Management
  *
  * Manages porting tasks, remediation tasks, and compliance work items.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export type TaskStatus = "pending" | "in_progress" | "complete" | "skipped" | "failed";

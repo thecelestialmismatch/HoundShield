@@ -645,6 +645,8 @@
 
 /* ── Logo rendering ─────────────────────────────────────────────── */
 .logo-img { mix-blend-mode: multiply; }
+/* Dark surfaces invert the mark to white — multiply would erase it there. */
+.dark .logo-img { mix-blend-mode: normal; }
 .logo-on-dark { filter: brightness(0) invert(1); mix-blend-mode: normal; }
 
 /* ── Feature card hover-expand ──────────────────────────────────── */

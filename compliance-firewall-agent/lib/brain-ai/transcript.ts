@@ -2,7 +2,7 @@
  * Brain AI — Transcript
  *
  * Exports conversation transcripts in multiple formats.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 import { StoredSession } from "./models";

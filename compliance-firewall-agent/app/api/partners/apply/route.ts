@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
-          from: "Hound Shield Partners <noreply@houndshield.com>",
+          from: "HoundShield Partners <noreply@houndshield.com>",
           to: process.env.FOUNDER_EMAIL || "info@houndshield.com",
           subject: `New Partner Application: ${company}`,
           html: `

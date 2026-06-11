@@ -1,5 +1,5 @@
 /**
- * Splunk HEC SIEM Connector — Hound Shield
+ * Splunk HEC SIEM Connector — HoundShield
  *
  * Sends compliance events via the Splunk HTTP Event Collector (HEC).
  *

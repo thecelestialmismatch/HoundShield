@@ -13,7 +13,7 @@ import {
   Zap,
   AlertTriangle,
 } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
+import { NavV3 } from "@/components/layout/NavV3";
 
 function CodeBlock({ code, language = "bash" }: { code: string; language?: string }) {
   const [copied, setCopied] = useState(false);
@@ -23,20 +23,20 @@ function CodeBlock({ code, language = "bash" }: { code: string; language?: strin
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <div className="relative group rounded-xl bg-[#0d0d14] border border-white/[0.08] overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06]">
-        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+    <div className="relative group rounded-xl bg-[var(--hs-surface-1)] border border-[var(--hs-border-subtle)] overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--hs-border-subtle)]">
+        <span className="text-[10px] font-mono text-[var(--hs-ink-tertiary)] uppercase tracking-widest">
           {language}
         </span>
         <button
           onClick={copy}
-          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] transition-colors"
         >
           {copied ? <Check className="w-3.5 h-3.5 text-brand-400" /> : <Copy className="w-3.5 h-3.5" />}
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="px-4 py-4 text-sm font-mono text-slate-300 overflow-x-auto leading-relaxed whitespace-pre">
+      <pre className="px-4 py-4 text-sm font-mono text-[var(--hs-ink-secondary)] overflow-x-auto leading-relaxed whitespace-pre">
         {code}
       </pre>
     </div>
@@ -108,8 +108,8 @@ const PROVIDERS: { name: string; envVar: string; note?: string }[] = [
 
 export default function QuickstartPage() {
   return (
-    <div className="min-h-screen bg-[#07070b] text-white">
-      <Navbar variant="dark" />
+    <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)]">
+      <NavV3 />
 
       <div className="max-w-3xl mx-auto px-6 py-24">
         {/* Header */}
@@ -121,22 +121,22 @@ export default function QuickstartPage() {
             </span>
           </div>
           <h1 className="text-4xl font-bold tracking-tight mb-4">
-            Deploy Hound Shield in 15 minutes.
+            Deploy HoundShield in 15 minutes.
           </h1>
-          <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
+          <p className="text-[var(--hs-ink-secondary)] text-lg leading-relaxed max-w-xl">
             By the end of this guide your team&apos;s AI usage will be intercepted,
             classified, and generating an audit trail your C3PAO assessor can verify.
           </p>
           <div className="flex items-center gap-6 mt-6 text-sm">
-            <span className="flex items-center gap-1.5 text-slate-500">
+            <span className="flex items-center gap-1.5 text-[var(--hs-ink-tertiary)]">
               <CheckCircle2 className="w-4 h-4 text-brand-400" />
               No firewall rules
             </span>
-            <span className="flex items-center gap-1.5 text-slate-500">
+            <span className="flex items-center gap-1.5 text-[var(--hs-ink-tertiary)]">
               <CheckCircle2 className="w-4 h-4 text-brand-400" />
               No network changes
             </span>
-            <span className="flex items-center gap-1.5 text-slate-500">
+            <span className="flex items-center gap-1.5 text-[var(--hs-ink-tertiary)]">
               <CheckCircle2 className="w-4 h-4 text-brand-400" />
               Works with any AI SDK
             </span>
@@ -144,14 +144,14 @@ export default function QuickstartPage() {
         </div>
 
         {/* Prerequisites */}
-        <div className="mb-12 p-5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
-          <h2 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+        <div className="mb-12 p-5 rounded-xl bg-white border border-[var(--hs-border-subtle)]">
+          <h2 className="text-sm font-semibold text-[var(--hs-ink)] mb-3 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-brand-400" />
             Prerequisites
           </h2>
-          <ul className="space-y-1.5 text-sm text-slate-400">
+          <ul className="space-y-1.5 text-sm text-[var(--hs-ink-secondary)]">
             <li>
-              <span className="text-white font-medium">Docker Desktop</span> installed and running —{" "}
+              <span className="text-[var(--hs-ink)] font-medium">Docker Desktop</span> installed and running —{" "}
               <a
                 href="https://docs.docker.com/get-docker/"
                 target="_blank"
@@ -162,13 +162,13 @@ export default function QuickstartPage() {
               </a>
             </li>
             <li>
-              <span className="text-white font-medium">Hound Shield license key</span> —{" "}
+              <span className="text-[var(--hs-ink)] font-medium">HoundShield license key</span> —{" "}
               <Link href="/signup" className="text-brand-400 hover:text-brand-300 underline underline-offset-2">
                 get one free
               </Link>
             </li>
             <li>
-              <span className="text-white font-medium">Your AI provider API key</span> (OpenAI, Anthropic, Google, or OpenRouter)
+              <span className="text-[var(--hs-ink)] font-medium">Your AI provider API key</span> (OpenAI, Anthropic, Google, or OpenRouter)
             </li>
           </ul>
         </div>
@@ -186,15 +186,15 @@ export default function QuickstartPage() {
                   <div className="w-7 h-7 rounded-lg bg-brand-400/10 border border-brand-400/20 flex items-center justify-center">
                     <Icon className="w-3.5 h-3.5 text-brand-400" />
                   </div>
-                  <h2 className="text-lg font-semibold text-white">{step.title}</h2>
-                  <span className="ml-auto text-xs font-mono text-slate-500 bg-white/[0.05] px-2 py-0.5 rounded">
+                  <h2 className="text-lg font-semibold text-[var(--hs-ink)]">{step.title}</h2>
+                  <span className="ml-auto text-xs font-mono text-[var(--hs-ink-tertiary)] bg-white px-2 py-0.5 rounded">
                     ~{step.time}
                   </span>
                 </div>
-                <p className="text-slate-400 text-sm mb-4 leading-relaxed">{step.description}</p>
+                <p className="text-[var(--hs-ink-secondary)] text-sm mb-4 leading-relaxed">{step.description}</p>
                 <CodeBlock code={step.code} language={(step as { language?: string }).language ?? "bash"} />
                 {step.note && (
-                  <p className="mt-3 text-xs text-slate-500 font-mono leading-relaxed">
+                  <p className="mt-3 text-xs text-[var(--hs-ink-tertiary)] font-mono leading-relaxed">
                     {step.note}
                   </p>
                 )}
@@ -205,17 +205,17 @@ export default function QuickstartPage() {
 
         {/* Provider compatibility */}
         <div className="mb-16">
-          <h2 className="text-lg font-semibold text-white mb-4">Works with every AI provider</h2>
+          <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-4">Works with every AI provider</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {PROVIDERS.map((p) => (
               <div
                 key={p.name}
-                className="rounded-xl bg-white/[0.03] border border-white/[0.08] p-4"
+                className="rounded-xl bg-white border border-[var(--hs-border-subtle)] p-4"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-white">{p.name}</span>
+                  <span className="text-sm font-medium text-[var(--hs-ink)]">{p.name}</span>
                   {p.note && (
-                    <span className="text-[10px] font-mono text-slate-500 bg-white/[0.06] px-1.5 py-0.5 rounded">
+                    <span className="text-[10px] font-mono text-[var(--hs-ink-tertiary)] bg-white px-1.5 py-0.5 rounded">
                       {p.note}
                     </span>
                   )}
@@ -229,7 +229,7 @@ export default function QuickstartPage() {
         {/* CTA */}
         <div className="rounded-2xl border border-brand-400/20 bg-brand-400/[0.04] p-8 text-center">
           <h2 className="text-2xl font-bold mb-2">You&apos;re protected.</h2>
-          <p className="text-slate-400 mb-6 max-w-sm mx-auto text-sm">
+          <p className="text-[var(--hs-ink-secondary)] mb-6 max-w-sm mx-auto text-sm">
             Your C3PAO assessment PDF is one click away in the dashboard.
             Every AI prompt your team sends is now scanned, logged, and audit-ready.
           </p>

@@ -18,8 +18,8 @@ import {
   Clock,
   Star,
 } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { LandingFooter } from "@/components/landing/LandingFooter";
+import { NavV3 } from "@/components/layout/NavV3";
+import { FooterV3 } from "@/components/layout/FooterV3";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 
 function FadeIn({
@@ -143,14 +143,14 @@ function CommissionCalculator() {
           <Calculator className="w-5 h-5 text-brand-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-white">Commission Calculator</h3>
-          <p className="text-xs text-slate-500">Referral partner — 20% recurring, paid monthly</p>
+          <h3 className="text-lg font-semibold text-[var(--hs-ink)]">Commission Calculator</h3>
+          <p className="text-xs text-[var(--hs-ink-tertiary)]">Referral partner — 20% recurring, paid monthly</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
         <div>
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+          <label className="block text-xs font-semibold text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-2">
             Clients referred
           </label>
           <div className="flex items-center gap-3">
@@ -162,11 +162,11 @@ function CommissionCalculator() {
               onChange={(e) => setClients(Number(e.target.value))}
               className="flex-1 accent-brand-500 cursor-pointer"
             />
-            <span className="w-8 text-right text-white font-mono font-bold">{clients}</span>
+            <span className="w-8 text-right text-[var(--hs-ink)] font-mono font-bold">{clients}</span>
           </div>
         </div>
         <div>
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+          <label className="block text-xs font-semibold text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-2">
             Average plan
           </label>
           <div className="flex gap-2">
@@ -177,7 +177,7 @@ function CommissionCalculator() {
                 className={`flex-1 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
                   avgTier === t
                     ? "bg-brand-500 text-white"
-                    : "bg-white/[0.05] text-slate-400 hover:bg-white/[0.08]"
+                    : "bg-white text-[var(--hs-ink-secondary)] hover:bg-[var(--hs-mist)]"
                 }`}
               >
                 {t === "pro" ? "Pro $199" : t === "growth" ? "Growth $499" : "Ent. $999"}
@@ -187,24 +187,24 @@ function CommissionCalculator() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 pt-5 border-t border-white/[0.08]">
+      <div className="grid grid-cols-3 gap-4 pt-5 border-t border-[var(--hs-border-subtle)]">
         <div className="text-center">
-          <div className="text-2xl font-extrabold text-white font-mono">
+          <div className="text-2xl font-extrabold text-[var(--hs-ink)] font-mono">
             ${monthlyRevenue.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500 mt-1">Client MRR</div>
+          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Client MRR</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-extrabold text-brand-400 font-mono">
             ${commission.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500 mt-1">Your monthly cut</div>
+          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Your monthly cut</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-extrabold text-[var(--hs-success)] font-mono">
             ${annualCommission.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500 mt-1">Annual passive</div>
+          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Annual passive</div>
         </div>
       </div>
     </div>
@@ -256,9 +256,9 @@ export default function PartnersPage() {
   }
 
   return (
-    <div className="bg-[#07070b] min-h-screen relative">
+    <div className="bg-[var(--hs-surface-0)] min-h-screen relative">
       <ScrollProgressBar />
-      <Navbar variant="dark" />
+      <NavV3 />
 
       {/* ── Hero ──────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-20">
@@ -285,7 +285,7 @@ export default function PartnersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-editorial text-[clamp(36px,6vw,72px)] font-bold leading-[1.05] tracking-[-1px] max-w-[900px] mx-auto mb-6 text-white"
+            className="font-editorial text-[clamp(36px,6vw,72px)] font-bold leading-[1.05] tracking-[-1px] max-w-[900px] mx-auto mb-6 text-[var(--hs-ink)]"
           >
             Every Client You Assess<br className="hidden sm:block" />
             Could Be Paying You{" "}
@@ -298,7 +298,7 @@ export default function PartnersPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-[clamp(16px,2vw,20px)] text-slate-400 max-w-[620px] mx-auto mb-4 leading-relaxed"
+            className="text-[clamp(16px,2vw,20px)] text-[var(--hs-ink-secondary)] max-w-[620px] mx-auto mb-4 leading-relaxed"
           >
             Refer your CMMC clients to HoundShield. Earn 20% of their subscription — every month — for as long as they stay. No cap. No expiry.
           </motion.p>
@@ -336,13 +336,13 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Why C3PAOs Partner ──────────────────── */}
-      <section className="py-24 md:py-32 border-t border-white/[0.06]">
+      <section className="py-24 md:py-32 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
             <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
               Built for C3PAOs First
             </div>
-            <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white max-w-2xl mx-auto">
+            <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)] max-w-2xl mx-auto">
               Make your assessments faster — and earn when they succeed
             </h2>
           </FadeIn>
@@ -354,8 +354,8 @@ export default function PartnersPage() {
                   <div className="w-10 h-10 rounded-xl bg-brand-400/10 flex items-center justify-center mb-4">
                     <prop.icon className="w-5 h-5 text-brand-400" />
                   </div>
-                  <h3 className="text-base font-semibold text-white mb-2">{prop.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{prop.body}</p>
+                  <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2">{prop.title}</h3>
+                  <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{prop.body}</p>
                 </div>
               </FadeIn>
             ))}
@@ -368,7 +368,7 @@ export default function PartnersPage() {
                 <div className="w-12 h-12 rounded-xl bg-brand-400/10 flex items-center justify-center mb-5">
                   <Building2 className="w-6 h-6 text-brand-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-4">For MSPs</h3>
+                <h3 className="text-xl font-semibold text-[var(--hs-ink)] mb-4">For MSPs</h3>
                 <ul className="flex flex-col gap-3">
                   {[
                     "Manage 10–100 clients from one dashboard",
@@ -378,7 +378,7 @@ export default function PartnersPage() {
                     "CMMC + HIPAA + SOC 2 in one platform",
                     "Automated evidence collection per client",
                   ].map((item) => (
-                    <li key={item} className="flex items-start gap-2.5 text-sm text-slate-300">
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--hs-ink-secondary)]">
                       <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
                       {item}
                     </li>
@@ -390,7 +390,7 @@ export default function PartnersPage() {
                 <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
                   <Award className="w-6 h-6 text-accent" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-4">For C3PAOs</h3>
+                <h3 className="text-xl font-semibold text-[var(--hs-ink)] mb-4">For C3PAOs</h3>
                 <ul className="flex flex-col gap-3">
                   {[
                     "Give clients a self-assessment head start before fieldwork",
@@ -400,7 +400,7 @@ export default function PartnersPage() {
                     "20% recurring on every client you refer — no limit",
                     "Early access to CMMC 2.0 Level 3 pattern updates",
                   ].map((item) => (
-                    <li key={item} className="flex items-start gap-2.5 text-sm text-slate-300">
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--hs-ink-secondary)]">
                       <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
                       {item}
                     </li>
@@ -413,13 +413,13 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Commission Calculator ─────────────── */}
-      <section id="calculator" className="py-24 border-t border-white/[0.06]">
+      <section id="calculator" className="py-24 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-3xl mx-auto px-6">
           <FadeIn className="text-center mb-10">
             <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
               See Your Numbers
             </div>
-            <h2 className="text-[clamp(28px,4vw,40px)] font-editorial font-bold tracking-tight leading-[1.1] text-white">
+            <h2 className="text-[clamp(28px,4vw,40px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)]">
               What&apos;s your practice worth?
             </h2>
           </FadeIn>
@@ -427,7 +427,7 @@ export default function PartnersPage() {
             <CommissionCalculator />
           </FadeIn>
           <FadeIn delay={0.2} className="mt-5 text-center">
-            <p className="text-xs text-slate-500 font-mono">
+            <p className="text-xs text-[var(--hs-ink-tertiary)] font-mono">
               Commissions paid on the 1st of each month · 60-day attribution window · no cap on earnings
             </p>
           </FadeIn>
@@ -435,13 +435,13 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Partner Tiers ─────────────────────── */}
-      <section id="reseller" className="py-24 md:py-32 border-t border-white/[0.06]">
+      <section id="reseller" className="py-24 md:py-32 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
             <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
               Partner Tiers
             </div>
-            <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-white">
+            <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)]">
               Choose your partnership level
             </h2>
           </FadeIn>
@@ -453,7 +453,7 @@ export default function PartnersPage() {
                   className={`relative p-7 rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 flex flex-col h-full ${
                     tier.highlight
                       ? "bg-brand-400/[0.06] border border-brand-400/40 hover:border-brand-400/60"
-                      : "bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.15]"
+                      : "bg-white border border-[var(--hs-border-subtle)] hover:border-[var(--hs-border)]"
                   }`}
                 >
                   {tier.highlight && (
@@ -462,24 +462,24 @@ export default function PartnersPage() {
                     </div>
                   )}
                   <tier.icon className="w-8 h-8 text-brand-400 mb-4" />
-                  <div className="text-[13px] font-bold text-slate-500 uppercase tracking-widest mb-1">
+                  <div className="text-[13px] font-bold text-[var(--hs-ink-tertiary)] uppercase tracking-widest mb-1">
                     {tier.name}
                   </div>
-                  <div className="text-3xl font-extrabold tracking-tight text-white mb-1">
+                  <div className="text-3xl font-extrabold tracking-tight text-[var(--hs-ink)] mb-1">
                     {tier.price}
                   </div>
                   <div className="text-xs font-mono text-brand-400/80 mb-5">{tier.commission}</div>
 
                   <ul className="flex flex-col gap-2 mb-5 flex-1">
                     {tier.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-[13px] text-slate-300">
+                      <li key={f} className="flex items-start gap-2 text-[13px] text-[var(--hs-ink-secondary)]">
                         <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
                         {f}
                       </li>
                     ))}
                   </ul>
 
-                  <div className="text-[11px] text-slate-500 font-mono mb-4 border-t border-white/[0.06] pt-4">
+                  <div className="text-[11px] text-[var(--hs-ink-tertiary)] font-mono mb-4 border-t border-[var(--hs-border-subtle)] pt-4">
                     Best for: {tier.bestFor}
                   </div>
 
@@ -489,7 +489,7 @@ export default function PartnersPage() {
                     className={`block w-full py-2.5 rounded-lg text-center text-sm font-semibold transition-all ${
                       tier.highlight
                         ? "bg-brand-600 hover:bg-brand-700 text-white"
-                        : "bg-white/[0.06] text-white border border-white/[0.12] hover:bg-white/[0.1]"
+                        : "bg-white text-[var(--hs-ink)] border border-[var(--hs-border)] hover:bg-white/[0.1]"
                     }`}
                   >
                     {tier.cta}
@@ -502,7 +502,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Social Proof ──────────────────────── */}
-      <section className="py-16 border-t border-white/[0.06]">
+      <section className="py-16 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-10">
             <div className="flex items-center justify-center gap-1 mb-2">
@@ -510,7 +510,7 @@ export default function PartnersPage() {
                 <Star key={i} className="w-4 h-4 fill-brand-400 text-brand-400" />
               ))}
             </div>
-            <p className="text-sm text-slate-500">Trusted by compliance consultants across the DIB</p>
+            <p className="text-sm text-[var(--hs-ink-tertiary)]">Trusted by compliance consultants across the DIB</p>
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
@@ -537,8 +537,8 @@ export default function PartnersPage() {
                       <Star key={j} className="w-3.5 h-3.5 fill-brand-400 text-brand-400" />
                     ))}
                   </div>
-                  <p className="text-sm text-slate-300 leading-relaxed italic">&ldquo;{t.quote}&rdquo;</p>
-                  <p className="text-xs text-slate-500 font-mono">{t.author}</p>
+                  <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed italic">&ldquo;{t.quote}&rdquo;</p>
+                  <p className="text-xs text-[var(--hs-ink-tertiary)] font-mono">{t.author}</p>
                 </div>
               </FadeIn>
             ))}
@@ -547,17 +547,17 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Application Form ──────────────────── */}
-      <section id="apply" className="py-24 md:py-32 border-t border-white/[0.06]">
+      <section id="apply" className="py-24 md:py-32 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-xl mx-auto px-6">
           <FadeIn className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-400/20 bg-brand-400/[0.08] text-brand-400 text-xs font-semibold uppercase tracking-widest mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
               48-hour response time
             </div>
-            <h2 className="text-[clamp(28px,4vw,40px)] font-editorial font-bold tracking-tight leading-[1.1] text-white mb-4">
+            <h2 className="text-[clamp(28px,4vw,40px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)] mb-4">
               Apply for Partner Program
             </h2>
-            <p className="text-slate-400">
+            <p className="text-[var(--hs-ink-secondary)]">
               Tell us about your practice. We respond within 48 hours with your referral link and onboarding materials.
             </p>
           </FadeIn>
@@ -568,14 +568,14 @@ export default function PartnersPage() {
                 <div className="w-14 h-14 rounded-full bg-[rgba(5,150,105,0.1)] flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-7 h-7 text-[var(--hs-success)]" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-[var(--hs-ink)] mb-2">
                   Application received
                 </h3>
-                <p className="text-slate-400 mb-5">
+                <p className="text-[var(--hs-ink-secondary)] mb-5">
                   We&apos;ll review your application and get back to you within 48 hours at{" "}
-                  <span className="text-white">{formState.email}</span>.
+                  <span className="text-[var(--hs-ink)]">{formState.email}</span>.
                 </p>
-                <p className="text-xs text-slate-500 font-mono">
+                <p className="text-xs text-[var(--hs-ink-tertiary)] font-mono">
                   While you wait — read{" "}
                   <Link href="/blog/why-cloud-ai-dlp-violates-dfars-7012" className="text-brand-400 hover:underline">
                     why cloud DLP violates DFARS 7012
@@ -589,7 +589,7 @@ export default function PartnersPage() {
               <form onSubmit={handleSubmit} className="glass-card rounded-xl p-8 flex flex-col gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                    <label className="block text-sm font-medium text-[var(--hs-ink-secondary)] mb-1.5">
                       Your Name *
                     </label>
                     <input
@@ -597,12 +597,12 @@ export default function PartnersPage() {
                       required
                       value={formState.name}
                       onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
-                      className="w-full px-4 py-2.5 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-slate-500 focus:outline-none focus:border-brand-400/50 transition"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400/50 transition"
                       placeholder="Jane Smith"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                    <label className="block text-sm font-medium text-[var(--hs-ink-secondary)] mb-1.5">
                       Company *
                     </label>
                     <input
@@ -610,14 +610,14 @@ export default function PartnersPage() {
                       required
                       value={formState.company}
                       onChange={(e) => setFormState((s) => ({ ...s, company: e.target.value }))}
-                      className="w-full px-4 py-2.5 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-slate-500 focus:outline-none focus:border-brand-400/50 transition"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400/50 transition"
                       placeholder="Acme Compliance LLC"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                  <label className="block text-sm font-medium text-[var(--hs-ink-secondary)] mb-1.5">
                     Email *
                   </label>
                   <input
@@ -625,14 +625,14 @@ export default function PartnersPage() {
                     required
                     value={formState.email}
                     onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
-                    className="w-full px-4 py-2.5 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-slate-500 focus:outline-none focus:border-brand-400/50 transition"
+                    className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400/50 transition"
                     placeholder="jane@acme.com"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                    <label className="block text-sm font-medium text-[var(--hs-ink-secondary)] mb-1.5">
                       DoD clients (approx.)
                     </label>
                     <input
@@ -640,18 +640,18 @@ export default function PartnersPage() {
                       min="0"
                       value={formState.clientCount}
                       onChange={(e) => setFormState((s) => ({ ...s, clientCount: e.target.value }))}
-                      className="w-full px-4 py-2.5 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-slate-500 focus:outline-none focus:border-brand-400/50 transition"
+                      className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400/50 transition"
                       placeholder="10"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                    <label className="block text-sm font-medium text-[var(--hs-ink-secondary)] mb-1.5">
                       Partner Type
                     </label>
                     <select
                       value={formState.partnerType}
                       onChange={(e) => setFormState((s) => ({ ...s, partnerType: e.target.value }))}
-                      className="w-full px-4 py-2.5 rounded-lg bg-[#0a0a0a] border border-white/[0.1] text-white focus:outline-none focus:border-brand-400/50 transition"
+                      className="w-full px-4 py-2.5 rounded-lg bg-[var(--hs-surface-0)] border border-[var(--hs-border)] text-[var(--hs-ink)] focus:outline-none focus:border-brand-400/50 transition"
                     >
                       <option value="referral">Referral Partner (free)</option>
                       <option value="reseller">Reseller Partner ($2,499/mo)</option>
@@ -661,14 +661,14 @@ export default function PartnersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                  <label className="block text-sm font-medium text-[var(--hs-ink-secondary)] mb-1.5">
                     Tell us about your practice
                   </label>
                   <textarea
                     rows={3}
                     value={formState.message}
                     onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
-                    className="w-full px-4 py-2.5 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-slate-500 focus:outline-none focus:border-brand-400/50 transition resize-none"
+                    className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400/50 transition resize-none"
                     placeholder="How many DoD contractors do you work with? Are you a C3PAO, MSP, or independent consultant?"
                   />
                 </div>
@@ -694,9 +694,9 @@ export default function PartnersPage() {
                   )}
                 </button>
 
-                <p className="text-xs text-center text-slate-600">
+                <p className="text-xs text-center text-[var(--hs-ink-tertiary)]">
                   By applying you agree to the{" "}
-                  <Link href="/terms" className="text-slate-500 hover:text-slate-400 underline">
+                  <Link href="/terms" className="text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)] underline">
                     partner terms
                   </Link>
                   . We respond within 48 hours.
@@ -708,15 +708,15 @@ export default function PartnersPage() {
       </section>
 
       {/* ── Bottom CTA ───────────────────────── */}
-      <section className="py-16 border-t border-white/[0.06]">
+      <section className="py-16 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <FadeIn>
             <DollarSign className="w-10 h-10 mx-auto text-brand-400 mb-4" />
-            <p className="text-2xl md:text-3xl font-bold text-white mb-2">
+            <p className="text-2xl md:text-3xl font-bold text-[var(--hs-ink)] mb-2">
               3 C3PAOs × 10 referrals × $499/mo ={" "}
               <span className="text-brand-400">$2,994/mo</span>
             </p>
-            <p className="text-sm text-slate-400 mb-6">
+            <p className="text-sm text-[var(--hs-ink-secondary)] mb-6">
               In passive commissions. Before a single direct sale.
             </p>
             <a
@@ -729,7 +729,7 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      <LandingFooter />
+      <FooterV3 />
     </div>
   );
 }

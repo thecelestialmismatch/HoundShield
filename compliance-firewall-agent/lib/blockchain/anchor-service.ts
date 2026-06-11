@@ -1,5 +1,5 @@
 /**
- * Blockchain Anchor Integration Service — Hound Shield
+ * Blockchain Anchor Integration Service — HoundShield
  *
  * Bridges the existing compliance audit trail (Supabase) with
  * Base L2 blockchain anchoring. This service:

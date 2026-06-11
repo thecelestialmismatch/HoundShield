@@ -1,5 +1,5 @@
 // ============================================================================
-// Hound Shield Agent Tool Registry
+// HoundShield Agent Tool Registry
 // Central registry for all agent tools — register, discover, execute
 // ============================================================================
 

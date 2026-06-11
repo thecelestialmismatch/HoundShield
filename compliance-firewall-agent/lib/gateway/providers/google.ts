@@ -1,5 +1,5 @@
 /**
- * Hound Shield Streaming Gateway — Google Gemini Provider Adapter
+ * HoundShield Streaming Gateway — Google Gemini Provider Adapter
  *
  * Handles communication with the Google Generative Language API (Gemini)
  * in streaming mode.
@@ -93,7 +93,7 @@ interface GeminiRequestBody {
  * Google Gemini provider adapter.
  *
  * Stateless and thread-safe. Converts between the OpenAI-style message
- * format used internally by Hound Shield and Gemini's native format.
+ * format used internally by HoundShield and Gemini's native format.
  */
 export const googleAdapter: ProviderAdapter = {
   name: "google" as ProviderName,

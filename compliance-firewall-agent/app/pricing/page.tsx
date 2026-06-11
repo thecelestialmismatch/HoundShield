@@ -36,7 +36,7 @@ const plans = [
     annualTotal: 0,
     description: "7-day free trial — no credit card required. Explore CMMC tools and see your SPRS score.",
     features: [
-      "Hound Shield CMMC assessment (read-only)",
+      "HoundShield CMMC assessment (read-only)",
       "110-control gap analysis",
       "Live SPRS score calculator",
       "Basic compliance dashboard",
@@ -60,7 +60,7 @@ const plans = [
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
-      "Hound Shield assessment (editable)",
+      "HoundShield assessment (editable)",
       "10 user seats",
       "Gap analysis + remediation roadmap",
       "JSON compliance reports",
@@ -282,14 +282,14 @@ function AnimatedSection({
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-white/[0.06] rounded-xl overflow-hidden hover:border-white/[0.1] transition-colors">
+    <div className="bg-white border border-[var(--hs-border-subtle)] rounded-xl overflow-hidden hover:border-[var(--hs-border)] transition-colors">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-5 text-left"
       >
-        <span className="text-sm font-medium text-slate-200 pr-4">{q}</span>
+        <span className="text-sm font-medium text-[var(--hs-ink)] pr-4">{q}</span>
         <ChevronDown
-          className={`w-4 h-4 text-slate-500 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
+          className={`w-4 h-4 text-[var(--hs-ink-tertiary)] flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
             }`}
         />
       </button>
@@ -298,7 +298,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
           }`}
       >
         <div className="px-5 pb-5 -mt-1">
-          <p className="text-sm text-slate-400 leading-relaxed">{a}</p>
+          <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{a}</p>
         </div>
       </div>
     </div>
@@ -352,7 +352,7 @@ export default function PricingPage() {
   const categories = [...new Set(comparisonFeatures.map((f) => f.category))];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--hs-surface-0)] relative overflow-hidden">
       <ScrollProgressBar />
       {/* ===== FLOATING ORBS ===== */}
       <div className="orb orb-1" />
@@ -385,7 +385,7 @@ export default function PricingPage() {
           </AnimatedSection>
 
           <AnimatedSection delay={200}>
-            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-[var(--hs-ink-secondary)] max-w-2xl mx-auto mb-10 leading-relaxed">
               Protect your enterprise from AI data leaks without the enterprise
               pricing headache. Start free, scale when you&apos;re ready.
             </p>
@@ -393,12 +393,12 @@ export default function PricingPage() {
 
           {/* ===== BILLING TOGGLE ===== */}
           <AnimatedSection delay={300}>
-            <div className="inline-flex items-center gap-4 p-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+            <div className="inline-flex items-center gap-4 p-1.5 rounded-full bg-white border border-[var(--hs-border)] shadow-[var(--shadow-sm)]">
               <button
                 onClick={() => setIsAnnual(false)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!isAnnual
                     ? "bg-brand-500 text-white "
-                    : "text-slate-400 hover:text-slate-300"
+                    : "text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)]"
                   }`}
               >
                 Monthly
@@ -407,7 +407,7 @@ export default function PricingPage() {
                 onClick={() => setIsAnnual(true)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${isAnnual
                     ? "bg-brand-500 text-white "
-                    : "text-slate-400 hover:text-slate-300"
+                    : "text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)]"
                   }`}
               >
                 Annual
@@ -425,12 +425,6 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6 pt-6">
             {plans.map((plan, i) => {
-              const price =
-                plan.monthlyPrice === -1
-                  ? null
-                  : isAnnual
-                    ? plan.annualPrice
-                    : plan.monthlyPrice;
               const Icon = plan.icon;
 
               return (
@@ -458,7 +452,7 @@ export default function PricingPage() {
 
                     <div
                       className={`relative h-full flex flex-col p-8 rounded-2xl ${plan.highlighted
-                          ? "bg-[#111111]"
+                          ? "bg-[#0F1E2E]"
                           : "glass-card-glow"
                         }`}
                     >
@@ -470,7 +464,7 @@ export default function PricingPage() {
                           <Icon className={`w-5 h-5 ${plan.iconColor}`} />
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-white">
+                          <h3 className={`text-lg font-semibold ${plan.highlighted ? "text-white" : "text-[var(--hs-ink)]"}`}>
                             {plan.name}
                           </h3>
                         </div>
@@ -480,29 +474,29 @@ export default function PricingPage() {
                       <div className="mb-4">
                         {plan.id === 'free' ? (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-white tracking-tight">Free</span>
-                            <span className="text-base font-normal text-slate-500 ml-1">7 days</span>
+                            <span className={`text-4xl font-bold tracking-tight ${plan.highlighted ? "text-white" : "text-[var(--hs-ink)]"}`}>Free</span>
+                            <span className={`text-base font-normal ml-1 ${plan.highlighted ? "text-slate-400" : "text-[var(--hs-ink-tertiary)]"}`}>7 days</span>
                           </div>
                         ) : (
                           <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold text-white tracking-tight">
-                              ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                            <span className={`text-4xl font-bold tracking-tight ${plan.highlighted ? "text-white" : "text-[var(--hs-ink)]"}`}>
+                              ${(isAnnual ? Math.round(plan.annualPrice / 12) : plan.monthlyPrice).toLocaleString()}
                             </span>
-                            <span className="text-base font-normal text-slate-500 ml-1">
-                              {isAnnual ? "/yr" : "/mo"}
+                            <span className={`text-base font-normal ml-1 ${plan.highlighted ? "text-slate-400" : "text-[var(--hs-ink-tertiary)]"}`}>
+                              /mo
                             </span>
                           </div>
                         )}
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className={`text-xs mt-1 ${plan.highlighted ? "text-slate-400" : "text-[var(--hs-ink-tertiary)]"}`}>
                           {plan.id === 'free'
                             ? 'No credit card required'
                             : isAnnual && plan.annualPrice
-                              ? `~$${Math.round(plan.annualPrice / 12)}/mo · billed annually`
+                              ? `$${plan.annualPrice.toLocaleString()}/yr billed annually · save 20%`
                               : 'Billed monthly'}
                         </p>
                       </div>
 
-                      <p className="text-sm text-slate-500 leading-relaxed mb-6">
+                      <p className={`text-sm leading-relaxed mb-6 ${plan.highlighted ? "text-slate-400" : "text-[var(--hs-ink-secondary)]"}`}>
                         {plan.description}
                       </p>
 
@@ -550,7 +544,7 @@ export default function PricingPage() {
                                   : "text-[rgba(5,150,105,0.7)]"
                                 }`}
                             />
-                            <span className="text-slate-400">{feature}</span>
+                            <span className={plan.highlighted ? "text-slate-400" : "text-[var(--hs-ink-secondary)]"}>{feature}</span>
                           </li>
                         ))}
                       </ul>
@@ -572,14 +566,14 @@ export default function PricingPage() {
                 <ShieldCheck className="w-8 h-8 text-[var(--hs-success)]" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <h3 className="text-lg font-semibold text-[var(--hs-ink)] mb-2">
                   30-Day Money-Back Guarantee
                 </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
                   Try any paid plan risk-free. If you&apos;re not completely satisfied
                   within the first 30 days, we&apos;ll refund every penny. No
                   questions asked, no hoops to jump through. We&apos;re that
-                  confident you&apos;ll love Hound Shield.
+                  confident you&apos;ll love HoundShield.
                 </p>
               </div>
             </div>
@@ -596,7 +590,7 @@ export default function PricingPage() {
                 Compare{" "}
                 <span className="text-gradient-brand">Every Feature</span>
               </h2>
-              <p className="text-slate-400 max-w-xl mx-auto">
+              <p className="text-[var(--hs-ink-secondary)] max-w-xl mx-auto">
                 A detailed breakdown of what&apos;s included in each plan so you
                 can make the right choice for your team.
               </p>
@@ -606,8 +600,8 @@ export default function PricingPage() {
           <AnimatedSection delay={150}>
             <div className="glass-card overflow-x-auto">
               {/* Table header */}
-              <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.06]">
-                <div className="p-5 text-sm font-medium text-slate-500">
+              <div className="grid grid-cols-6 min-w-[780px] border-b border-[var(--hs-border-subtle)]">
+                <div className="p-5 text-sm font-medium text-[var(--hs-ink-tertiary)]">
                   Feature
                 </div>
                 {([
@@ -620,8 +614,8 @@ export default function PricingPage() {
                   <div
                     key={tier.key}
                     className={`p-5 text-center text-sm font-semibold ${tier.key === "pro"
-                        ? "text-brand-400 bg-brand-500/[0.04]"
-                        : "text-slate-400"
+                        ? "text-[var(--hs-steel-dark)] bg-brand-500/[0.06]"
+                        : "text-[var(--hs-ink-secondary)]"
                       }`}
                   >
                     {tier.name}
@@ -638,9 +632,9 @@ export default function PricingPage() {
               {categories.map((category) => (
                 <div key={category}>
                   {/* Category header */}
-                  <div className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.04] bg-white/[0.015]">
+                  <div className="grid grid-cols-6 min-w-[780px] border-b border-[var(--hs-border-subtle)] bg-[var(--hs-surface-1)]">
                     <div className="col-span-6 p-4 px-5">
-                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
+                      <span className="text-xs uppercase tracking-wider text-[var(--hs-ink-tertiary)] font-semibold">
                         {category}
                       </span>
                     </div>
@@ -652,9 +646,9 @@ export default function PricingPage() {
                     .map((row, ri) => (
                       <div
                         key={ri}
-                        className="grid grid-cols-6 min-w-[780px] border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors"
+                        className="grid grid-cols-6 min-w-[780px] border-b border-[var(--hs-border-subtle)] hover:bg-[var(--hs-mist)] transition-colors"
                       >
-                        <div className="p-4 px-5 text-sm text-slate-400">
+                        <div className="p-4 px-5 text-sm text-[var(--hs-ink-secondary)]">
                           {row.feature}
                         </div>
                         {(
@@ -671,14 +665,14 @@ export default function PricingPage() {
                                 val ? (
                                   <Check className="w-4 h-4 text-[var(--hs-success)] mx-auto" />
                                 ) : (
-                                  <Minus className="w-4 h-4 text-slate-700 mx-auto" />
+                                  <Minus className="w-4 h-4 text-[var(--hs-border-strong)] mx-auto" />
                                 )
                               ) : (
                                 <span
                                   className={
                                     planKey === "pro"
-                                      ? "text-brand-300 font-medium"
-                                      : "text-slate-400"
+                                      ? "text-[var(--hs-steel-dark)] font-medium"
+                                      : "text-[var(--hs-ink-secondary)]"
                                   }
                                 >
                                   {val}
@@ -733,10 +727,10 @@ export default function PricingPage() {
                 <item.icon
                   className={`w-5 h-5 ${item.color} mx-auto mb-3`}
                 />
-                <p className="text-2xl font-bold text-white mb-1">
+                <p className="text-2xl font-bold text-[var(--hs-ink)] mb-1">
                   {item.stat}
                 </p>
-                <p className="text-xs text-slate-500">{item.label}</p>
+                <p className="text-xs text-[var(--hs-ink-tertiary)]">{item.label}</p>
               </div>
             ))}
           </div>
@@ -752,8 +746,8 @@ export default function PricingPage() {
                 Frequently Asked{" "}
                 <span className="text-gradient-brand">Questions</span>
               </h2>
-              <p className="text-slate-400">
-                Everything you need to know about Hound Shield pricing and plans.
+              <p className="text-[var(--hs-ink-secondary)]">
+                Everything you need to know about HoundShield pricing and plans.
               </p>
             </div>
           </AnimatedSection>
@@ -789,8 +783,8 @@ export default function PricingPage() {
                     Secure Your AI?
                   </span>
                 </h2>
-                <p className="text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ teams that trust Hound Shield to protect their most
+                <p className="text-[var(--hs-ink-secondary)] max-w-xl mx-auto mb-8 leading-relaxed">
+                  Join 500+ teams that trust HoundShield to protect their most
                   sensitive data from unauthorized AI exposure. Deploy in
                   under 15 minutes.
                 </p>
@@ -806,7 +800,7 @@ export default function PricingPage() {
                   </Link>
                 </div>
 
-                <p className="text-xs text-slate-600 mt-6">
+                <p className="text-xs text-[var(--hs-ink-tertiary)] mt-6">
                   No credit card required &middot; 14-day Pro trial &middot;
                   Cancel anytime
                 </p>
@@ -816,7 +810,7 @@ export default function PricingPage() {
         </AnimatedSection>
       </section>
 
-      <FooterV3 dark />
+      <FooterV3 />
     </div>
   );
 }

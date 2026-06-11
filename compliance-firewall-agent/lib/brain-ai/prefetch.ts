@@ -2,7 +2,7 @@
  * Brain AI — Prefetch & Project Scan
  *
  * Pre-loads compliance data, scans project structure, and warms caches
- * before the first user interaction. Brain AI original implementation for Hound Shield.
+ * before the first user interaction. Brain AI original implementation for HoundShield.
  */
 import fs from "fs";
 import path from "path";
