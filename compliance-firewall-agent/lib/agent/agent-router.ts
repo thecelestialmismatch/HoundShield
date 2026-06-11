@@ -1,5 +1,5 @@
 // ============================================================================
-// Hound Shield Multi-Agent Router — Task Classification + Agent Dispatch v1.0
+// HoundShield Multi-Agent Router — Task Classification + Agent Dispatch v1.0
 //
 // Responsibilities:
 //   1. Classify incoming tasks into an agent domain

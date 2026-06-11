@@ -2,7 +2,7 @@
  * Brain AI — Cost Tracker
  *
  * Tracks token usage and API costs per session and model.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export interface ModelPricing {

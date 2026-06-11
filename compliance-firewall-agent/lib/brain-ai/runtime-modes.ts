@@ -3,7 +3,7 @@
  *
  * Direct connection, deep-link, and remote execution modes.
  * Describes how Brain AI can be invoked from different contexts.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export type RuntimeMode =
@@ -65,7 +65,7 @@ const RUNTIME_MODES: DirectModeReport[] = [
     supportsTools: false,
     maxTokens: 16384,
     latencyClass: "standard",
-    notes: "Routes through Hound Shield compliance gateway with full scanning.",
+    notes: "Routes through HoundShield compliance gateway with full scanning.",
   },
   {
     mode: "embedded",

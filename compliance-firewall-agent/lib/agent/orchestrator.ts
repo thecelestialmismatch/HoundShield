@@ -1,5 +1,5 @@
 // ============================================================================
-// Hound Shield Agent Orchestrator — ReAct Loop v2
+// HoundShield Agent Orchestrator — ReAct Loop v2
 //
 // Evolution highlights:
 //
@@ -77,7 +77,7 @@ async function fetchOpenRouter(
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
       'HTTP-Referer': 'https://houndshield.com',
-      'X-Title': 'Hound Shield Agent',
+      'X-Title': 'HoundShield Agent',
     },
     body,
   };

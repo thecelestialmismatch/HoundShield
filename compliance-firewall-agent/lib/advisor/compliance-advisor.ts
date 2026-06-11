@@ -91,7 +91,7 @@ interface AnthropicResponse {
 // the text content block — no tool_use required for the output format.
 // ---------------------------------------------------------------------------
 
-const SYSTEM_PROMPT = `You are a compliance classification engine for Hound Shield AI Firewall.
+const SYSTEM_PROMPT = `You are a compliance classification engine for HoundShield AI Firewall.
 
 Your mission: determine the exact compliance risk of the given text across:
   - SOC 2: access control, credential exposure, audit log gaps

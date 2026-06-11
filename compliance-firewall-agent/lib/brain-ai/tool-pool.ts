@@ -3,7 +3,7 @@
  *
  * Assembles the active tool pool from available tool snapshots,
  * applying permission filters and capability gating.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 import { loadToolSnapshot, ToolSnapshot, filterToolsByPermission } from "./tools";

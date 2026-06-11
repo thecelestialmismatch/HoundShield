@@ -2,7 +2,7 @@
  * Brain AI — Hooks System
  *
  * Event-driven hooks that fire before/after tool calls, messages, and sessions.
- * Brain AI original implementation for Hound Shield.
+ * Brain AI original implementation for HoundShield.
  */
 
 export type HookEvent =

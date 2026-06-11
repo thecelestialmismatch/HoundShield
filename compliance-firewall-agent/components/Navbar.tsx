@@ -476,7 +476,7 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
               <FlyoutPanel
                 open={openPanel === "features"}
                 width={440}
-                header={{ eyebrow: "Core Capabilities", sub: "Everything inside the Hound Shield firewall engine" }}
+                header={{ eyebrow: "Core Capabilities", sub: "Everything inside the HoundShield firewall engine" }}
                 items={FEATURES_ITEMS}
                 footer={
                   <Link href="/features" className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">
@@ -498,7 +498,7 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
               <FlyoutPanel
                 open={openPanel === "partners"}
                 width={380}
-                header={{ eyebrow: "Partner Program", sub: "Build and grow with Hound Shield" }}
+                header={{ eyebrow: "Partner Program", sub: "Build and grow with HoundShield" }}
                 items={PARTNER_ITEMS}
                 footer={
                   <Link href="/partners" className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">

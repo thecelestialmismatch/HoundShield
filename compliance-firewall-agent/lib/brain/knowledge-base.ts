@@ -168,7 +168,7 @@ export const KNOWLEDGE_BASE: KnowledgeDomain[] = [
         tags: ["competitor", "differentiation", "local-only", "multi-framework", "deployment"],
       },
       {
-        claim: "The core sales sentence that closes against every competitor: 'Every cloud-based AI DLP tool sends your CUI to their servers to scan it. That is itself a potential CUI spill under DFARS 7012. Hound Shield scans everything locally. Nothing leaves your network.'",
+        claim: "The core sales sentence that closes against every competitor: 'Every cloud-based AI DLP tool sends your CUI to their servers to scan it. That is itself a potential CUI spill under DFARS 7012. HoundShield scans everything locally. Nothing leaves your network.'",
         evidence: "OODA competitive analysis, April 2026; DFARS 7012 CUI protection requirements",
         confidence: "high",
         source: "internal",

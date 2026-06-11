@@ -1,5 +1,5 @@
 /**
- * SPRS Scoring Engine — Hound Shield
+ * SPRS Scoring Engine — HoundShield
  *
  * Implements the DoD Supplier Performance Risk System (SPRS) scoring methodology
  * as defined in NIST SP 800-171 Rev 2 and the DFARS 252.204-7019/7020/7021 clause set.

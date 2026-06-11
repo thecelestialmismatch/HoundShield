@@ -1,5 +1,5 @@
 /**
- * Stream Proxy — Core streaming engine for the Hound Shield gateway.
+ * Stream Proxy — Core streaming engine for the HoundShield gateway.
  *
  * This module is the heart of the product. It:
  *   1. Runs an input compliance scan on the user's messages.
@@ -225,7 +225,7 @@ const PROVIDERS: Record<StreamProvider, ProviderConfig> = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
       "HTTP-Referer": "https://houndshield.com",
-      "X-Title": "Hound Shield AI Compliance Gateway",
+      "X-Title": "HoundShield AI Compliance Gateway",
     }),
     buildBody: (req) => ({
       model: req.model,

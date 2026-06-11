@@ -7,29 +7,29 @@ import { Logo } from "@/components/Logo";
 const QUICK_ACTIONS = [
   "How does CMMC Level 2 work?",
   "What can you detect?",
-  "How do I install Hound Shield?",
+  "How do I install HoundShield?",
 ];
 
 const HOUNDSHIELD_SYSTEM =
-  "You are Brain AI, the intelligent compliance assistant embedded in Hound Shield. " +
+  "You are Brain AI, the intelligent compliance assistant embedded in HoundShield. " +
   "You are a senior expert in CMMC Level 2, NIST 800-171 Rev 2, SPRS scoring, HIPAA PHI, SOC 2 Type II, CUI detection, and AI security. " +
   "Keep answers under 200 words. Use bullet points for lists. Be warm, precise, and focused on compliance value. " +
   "PRODUCT FACTS: " +
-  "Hound Shield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning for 16 risk categories in under 10ms. " +
+  "HoundShield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning for 16 risk categories in under 10ms. " +
   "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously. 800+ models via OpenRouter. " +
   "INSTALLATION: Change baseURL to gateway.houndshield.com/v1 — works with any OpenAI-compatible SDK. 15 minutes. No agents. No network changes. " +
   "PRICING: Starter FREE (1K scans/mo), Pro $199/mo (50K scans, SOC2+HIPAA), Growth $499/mo (CMMC+SIEM+PDF reports), Enterprise $999/mo (blockchain+SSO), Agency $2499/mo (multi-tenant). " +
   "CMMC FACTS: 110 NIST 800-171 controls, SPRS score -203 to +110, November 2026 enforcement, C3PAO costs $30K-$150K. " +
   "DETECTION: CUI (FOUO, CAGE codes, contract numbers), PHI (all 18 HIPAA identifiers), PII, API keys, source code, financial data, IP, ITAR/EAR. " +
-  "INTEGRATIONS: Slack, Microsoft Teams, Splunk HEC, Azure Sentinel (Hound ShieldCompliance_CL), Base L2 blockchain audit trail, MCP server (early access). " +
+  "INTEGRATIONS: Slack, Microsoft Teams, Splunk HEC, Azure Sentinel (HoundShieldCompliance_CL), Base L2 blockchain audit trail, MCP server (early access). " +
   "STACK: Next.js 15, React 19, Supabase, Stripe, Tailwind. Self-host via Docker. " +
   "If asked about defense contractors: emphasize November 2026 CMMC enforcement and that 80000+ contractors need this. " +
-  "If asked about AI agent frameworks (Goose, AgentScope, Claude Code, Cursor): explain Hound Shield works as a gateway for those too. " +
+  "If asked about AI agent frameworks (Goose, AgentScope, Claude Code, Cursor): explain HoundShield works as a gateway for those too. " +
   "If asked about model costs/optimization: recommend model routing (Haiku for simple tasks, Sonnet for daily work, Opus for complex decisions). " +
   "Contact: info@houndshield.com. Docs: houndshield.com/docs.";
 
 const GREETING =
-  "Hi! I'm Brain AI — powered by Hound Shield. I can help with CMMC Level 2 compliance, CUI detection, SPRS scoring, and anything about AI security for defense contractors. Ask me anything!";
+  "Hi! I'm Brain AI — powered by HoundShield. I can help with CMMC Level 2 compliance, CUI detection, SPRS scoring, and anything about AI security for defense contractors. Ask me anything!";
 
 type Message = { role: "user" | "bot"; text: string };
 
@@ -183,7 +183,7 @@ export function GlobalChat() {
           ...prev,
           {
             role: "bot",
-            text: "I didn't get a response. Try asking about CMMC Level 2, SPRS scoring, CUI detection, or how to install Hound Shield — I can answer those instantly!",
+            text: "I didn't get a response. Try asking about CMMC Level 2, SPRS scoring, CUI detection, or how to install HoundShield — I can answer those instantly!",
           },
         ]);
       }
@@ -210,8 +210,8 @@ export function GlobalChat() {
         onClick={handleOpen}
         className="fixed bottom-7 right-7 z-[200] w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
         style={{
-          background: "linear-gradient(135deg, #6366f1, #818cf8)",
-          boxShadow: "0 4px 24px rgba(99,102,241,0.45), 0 0 0 0 rgba(99,102,241,0.3)",
+          background: "linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))",
+          boxShadow: "0 4px 24px rgba(129,166,198,0.45), 0 0 0 0 rgba(129,166,198,0.3)",
           animation: isOpen ? "none" : "chatPulse 3s ease infinite",
         }}
         aria-label="Chat with Brain AI"
@@ -230,8 +230,8 @@ export function GlobalChat() {
           className="fixed bottom-24 right-7 z-[200] w-[340px] rounded-2xl overflow-hidden flex flex-col animate-chat-in"
           style={{
             background: "#0e0e18",
-            border: "1px solid rgba(99,102,241,0.25)",
-            boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1)",
+            border: "1px solid rgba(129,166,198,0.25)",
+            boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(129,166,198,0.1)",
           }}
         >
           {/* Header */}
@@ -241,8 +241,8 @@ export function GlobalChat() {
                 className="w-9 h-9 rounded-[10px] flex items-center justify-center"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2))",
-                  border: "1px solid rgba(99,102,241,0.3)",
+                    "linear-gradient(135deg, rgba(129,166,198,0.2), rgba(129,166,198,0.2))",
+                  border: "1px solid rgba(129,166,198,0.3)",
                 }}
               >
                 <Logo variant="dark" className="w-5" />
@@ -251,7 +251,7 @@ export function GlobalChat() {
                 <div className="text-sm font-bold text-white">Brain AI</div>
                 <div className="text-[11px] text-[var(--hs-success)] font-medium flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--hs-success)] animate-pulse" />
-                  Online · Hound Shield
+                  Online · HoundShield
                 </div>
               </div>
             </div>
@@ -293,8 +293,8 @@ export function GlobalChat() {
                   onClick={() => sendMessage(action)}
                   className="text-[11px] px-2.5 py-1.5 rounded-full cursor-pointer transition-all text-[var(--hs-steel-light)] hover:bg-[rgba(129,166,198,0.25)]"
                   style={{
-                    background: "rgba(99,102,241,0.1)",
-                    border: "1px solid rgba(99,102,241,0.25)",
+                    background: "rgba(129,166,198,0.1)",
+                    border: "1px solid rgba(129,166,198,0.25)",
                   }}
                 >
                   {action}
@@ -332,10 +332,10 @@ export function GlobalChat() {
       <style jsx global>{`
         @keyframes chatPulse {
           0%, 100% {
-            box-shadow: 0 4px 24px rgba(99,102,241,0.45), 0 0 0 0 rgba(99,102,241,0.3);
+            box-shadow: 0 4px 24px rgba(129,166,198,0.45), 0 0 0 0 rgba(129,166,198,0.3);
           }
           50% {
-            box-shadow: 0 4px 24px rgba(99,102,241,0.45), 0 0 0 12px rgba(99,102,241,0);
+            box-shadow: 0 4px 24px rgba(129,166,198,0.45), 0 0 0 12px rgba(129,166,198,0);
           }
         }
         @keyframes chatIn {

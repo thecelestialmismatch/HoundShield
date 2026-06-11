@@ -1,5 +1,5 @@
 /**
- * Hound Shield Secrets Manager
+ * HoundShield Secrets Manager
  *
  * Single source of truth for all runtime secrets.
  * Reads from environment variables today; interface is async so it can be

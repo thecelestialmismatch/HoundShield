@@ -2,7 +2,7 @@ import { day3Email } from '../day3';
 
 describe('day3Email', () => {
   it('has correct from and subject', () => {
-    expect(day3Email.from).toBe('Hound Shield <noreply@houndshield.com>');
+    expect(day3Email.from).toBe('HoundShield <noreply@houndshield.com>');
     expect(day3Email.subject).toContain('first AI query');
   });
 

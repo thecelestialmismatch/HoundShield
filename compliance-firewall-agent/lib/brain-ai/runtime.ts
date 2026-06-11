@@ -146,7 +146,7 @@ export class PortRuntime {
     return {
       sessionId,
       prompt: "",
-      setup: context ?? "Hound Shield Brain AI — CMMC Compliance Firewall",
+      setup: context ?? "HoundShield Brain AI — CMMC Compliance Firewall",
       history: [],
       totalUsage: createUsageSummary(),
       createdAt: storedSession.createdAt,

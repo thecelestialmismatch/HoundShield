@@ -37,7 +37,7 @@ const webSearchTool: ToolHandler = {
         `https://html.duckduckgo.com/html/?q=${encodedQuery}`,
         {
           headers: {
-            'User-Agent': 'Hound Shield-Agent/1.0 (Enterprise AI Platform)',
+            'User-Agent': 'HoundShield-Agent/1.0 (Enterprise AI Platform)',
           },
         }
       );
