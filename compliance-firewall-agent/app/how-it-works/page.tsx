@@ -2,6 +2,10 @@ import Link from 'next/link'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ShieldCheck, Plug, FileText } from 'lucide-react'
+import { FaqSection } from '@/components/seo/FaqSection'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { howItWorksFaqs, installSteps } from '@/lib/seo/faqs'
+import { howToSchema, breadcrumbSchema } from '@/lib/seo/structured-data'
 
 const STEPS = [
   {
@@ -92,6 +96,24 @@ export default function HowItWorksPage() {
           </Link>
         </div>
       </section>
+
+      <FaqSection items={howItWorksFaqs} title="How HoundShield works: frequently asked questions" />
+
+      <JsonLd
+        schema={[
+          howToSchema({
+            name: 'How to deploy HoundShield',
+            description:
+              'Deploy the local-only AI compliance firewall and start scanning AI prompts for CUI, PHI, and PII in under 15 minutes.',
+            steps: installSteps,
+            totalTime: 'PT15M',
+          }),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'How it works', path: '/how-it-works' },
+          ]),
+        ]}
+      />
 
       <FooterV3 />
     </div>

@@ -6,6 +6,8 @@ import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import { useRouter } from "next/navigation";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { pricingFaqs } from "@/lib/seo/faqs";
 import {
   Shield,
   ArrowRight,
@@ -809,6 +811,8 @@ export default function PricingPage() {
           </div>
         </AnimatedSection>
       </section>
+
+      <FaqSection items={pricingFaqs} title="Pricing & plans: frequently asked questions" />
 
       <FooterV3 />
     </div>
