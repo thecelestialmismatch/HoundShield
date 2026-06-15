@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { hipaaFaqs } from "@/lib/seo/faqs";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 
 function FadeIn({
@@ -310,6 +312,8 @@ export default function HIPAAPage() {
           </FadeIn>
         </div>
       </section>
+
+      <FaqSection items={hipaaFaqs} title="HIPAA & AI: frequently asked questions" />
 
       <FooterV3 />
     </div>

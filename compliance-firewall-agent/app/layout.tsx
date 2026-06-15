@@ -3,6 +3,11 @@ import "./globals.css";
 import { displayFont, bodyFont } from "./fonts";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  softwareApplicationSchema,
+  organizationSchema,
+} from "@/lib/seo/structured-data";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
@@ -89,124 +94,10 @@ export const metadata: Metadata = {
   },
 };
 
-// ── Global JSON-LD (SoftwareApplication + Organization + FAQPage) ─────────────
-const globalJsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "HoundShield",
-    applicationCategory: "SecurityApplication",
-    operatingSystem: "Docker, Linux, macOS, Windows Server",
-    description:
-      "Local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. Intercepts AI prompts before they leave your network, scans for CUI/PHI/PII, generates tamper-proof audit logs, and produces C3PAO-ready PDF compliance reports.",
-    url: BASE_URL,
-    offers: [
-      {
-        "@type": "Offer",
-        name: "Free",
-        price: "0",
-        priceCurrency: "USD",
-        description: "Free tier — AI prompt scanning, basic compliance reports",
-      },
-      {
-        "@type": "Offer",
-        name: "Pro",
-        price: "199",
-        priceCurrency: "USD",
-        description: "Pro — advanced scanning, PDF evidence export, CMMC controls",
-      },
-      {
-        "@type": "Offer",
-        name: "Growth",
-        price: "499",
-        priceCurrency: "USD",
-        description: "Growth — multi-user, gateway mode, SPRS score tracking",
-      },
-      {
-        "@type": "Offer",
-        name: "Enterprise",
-        price: "999",
-        priceCurrency: "USD",
-        description: "Enterprise — C3PAO-ready reports, dedicated support",
-      },
-      {
-        "@type": "Offer",
-        name: "Federal",
-        price: "2499",
-        priceCurrency: "USD",
-        description: "Federal — multi-tenant agency deployments, SLA, custom integrations",
-      },
-    ],
-    featureList: [
-      "Sub-10ms AI prompt scanning",
-      "CUI detection and blocking",
-      "PHI and PII detection",
-      "CMMC Level 2 control mapping",
-      "HIPAA-compliant audit trails",
-      "SOC 2 compliance monitoring",
-      "Tamper-evident audit logs",
-      "C3PAO-ready PDF evidence",
-      "Local-only deployment (data never leaves your network)",
-      "NIST 800-171 assessment support",
-    ],
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "HoundShield",
-    url: BASE_URL,
-    logo: {
-      "@type": "ImageObject",
-      url: `${BASE_URL}/logo.png`,
-    },
-    description:
-      "AI compliance security company building local-only AI firewalls for defense contractors and regulated industries.",
-    contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "Sales",
-      url: `${BASE_URL}/contact`,
-    },
-    sameAs: [],
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Is HoundShield CMMC Level 2 compliant?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. HoundShield is local-only — all AI prompt scanning happens on your infrastructure. No CUI ever leaves your control boundary, which satisfies NIST 800-171 control 3.13.1 and supports CMMC Level 2 certification. We generate PDF evidence reports that C3PAO assessors can review on-site.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Can my employees still use ChatGPT with HoundShield?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. HoundShield works as a transparent proxy. Employees point their AI tools at your HoundShield endpoint instead of directly at the AI API. Prompts that don't contain CUI/PHI/PII pass through normally. Flagged content is blocked and logged with a tamper-evident record.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How long does HoundShield take to set up?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Under 10 minutes for most organizations. It's a single URL change — point your AI tools at your HoundShield endpoint instead of the cloud AI API. Docker deployment takes 3 commands. No agent installation on individual machines required.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Does HoundShield work with ChatGPT, Claude, and other AI tools?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. HoundShield works with any AI tool that uses an OpenAI-compatible API — including ChatGPT, Claude, Gemini, Copilot, and open-source models. It acts as a drop-in proxy at the network level.",
-        },
-      },
-    ],
-  },
-];
+// ── Global JSON-LD: site-wide product + organization entities ─────────────────
+// FAQPage schema is intentionally page-scoped (rendered per page via
+// <FaqSection>), so the visible Q&A always matches the structured data.
+const globalJsonLd = [softwareApplicationSchema(), organizationSchema()];
 
 export default function RootLayout({
   children,
@@ -224,14 +115,8 @@ export default function RootLayout({
         {/* JetBrains Mono preconnect — loaded via CSS @import */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Global JSON-LD: SoftwareApplication + Organization + FAQPage */}
-        {globalJsonLd.map((schema, i) => (
-          <script
-            key={i}
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
-        ))}
+        {/* Global JSON-LD: product + organization (FAQ schema is page-scoped) */}
+        <JsonLd schema={globalJsonLd} />
       </head>
       <body className="min-h-screen font-sans antialiased relative">
         <ClientShell>
