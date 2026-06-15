@@ -1,0 +1,14 @@
+{
+  "$comment": "Template for personal, machine-local settings. Copy to settings.local.json (gitignored): cp .claude/settings.local.json.example .claude/settings.local.json — it merges over .claude/settings.json and never gets committed. Put personal permission allowances, your preferred model, or a custom statusline here.",
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev)",
+      "Bash(npm test *)"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": ".claude/statusline.sh",
+    "padding": 0
+  }
+}

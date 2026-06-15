@@ -1,0 +1,17 @@
+{
+  "$comment": "Template. Copy to .mcp.json (gitignored-safe to keep local, or commit if your team wants shared servers): cp .mcp.json.example .mcp.json — then Claude Code loads these project MCP servers on next start. Secrets come from the environment, never hard-coded.",
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {}
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--read-only"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}"
+      }
+    }
+  }
+}

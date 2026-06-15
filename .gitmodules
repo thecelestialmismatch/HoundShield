@@ -1,0 +1,3 @@
+[submodule "tools/agent-harness"]
+	path = tools/agent-harness
+	url = https://github.com/ApodexAI/AgentHarness.git

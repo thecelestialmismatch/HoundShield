@@ -14,12 +14,12 @@ const NAV_LINKS = [
 
 // Demo mega-menu "Products by industry" — one firewall, every framework.
 const INDUSTRIES = [
-  { icon: '🔒', label: 'Technology',        frame: 'SOC 2 · AI Governance',     body: 'Engineers pasting API keys and source into Copilot and ChatGPT.', href: '/features' },
-  { icon: '❤',  label: 'Healthcare',        frame: 'HIPAA · 45 CFR 164',        body: 'Clinicians pasting patient records into AI for documentation.',   href: '/hipaa' },
-  { icon: '⛨',  label: 'Defense',           frame: 'CMMC L2 · NIST 800-171',    body: 'DoD contractors leaking CUI into AI proposal tools.',             href: '/features' },
-  { icon: '💼', label: 'Legal & Finance',   frame: 'SOC 2 · PCI DSS',           body: 'Lawyers and analysts sharing privileged data with AI.',           href: '/features' },
-  { icon: '🌐', label: 'Five Eyes / Global', frame: 'DISP · ASD Essential 8',    body: 'International suppliers navigating AUKUS and allied frameworks.',  href: '/features' },
-  { icon: '🏛', label: 'Government',         frame: 'FedRAMP · FISMA',           body: 'Agencies adopting AI without a compliant data framework.',        href: '/features' },
+  { icon: '🔒', label: 'Technology',        frame: 'SOC 2 · AI Governance',     body: 'Engineers pasting API keys and source into Copilot and ChatGPT.', href: '/products/technology' },
+  { icon: '❤',  label: 'Healthcare',        frame: 'HIPAA · 45 CFR 164',        body: 'Clinicians pasting patient records into AI for documentation.',   href: '/products/healthcare' },
+  { icon: '⛨',  label: 'Defense',           frame: 'CMMC L2 · NIST 800-171',    body: 'DoD contractors leaking CUI into AI proposal tools.',             href: '/products/defense' },
+  { icon: '💼', label: 'Legal & Finance',   frame: 'SOC 2 · PCI DSS',           body: 'Lawyers and analysts sharing privileged data with AI.',           href: '/products/legal' },
+  { icon: '🌐', label: 'Five Eyes / Global', frame: 'DISP · ASD Essential 8',    body: 'International suppliers navigating AUKUS and allied frameworks.',  href: '/products/global' },
+  { icon: '🏛', label: 'Government',         frame: 'FedRAMP · FISMA',           body: 'Agencies adopting AI without a compliant data framework.',        href: '/products/government' },
 ]
 
 /** SSR-safe live counter: deterministic seed renders on server + first client
