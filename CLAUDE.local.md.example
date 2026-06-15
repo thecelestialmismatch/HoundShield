@@ -1,0 +1,23 @@
+# CLAUDE.local.md — personal overrides (gitignored)
+
+Copy this to `CLAUDE.local.md` for machine-local instructions that should NOT be
+committed: `cp CLAUDE.local.md.example CLAUDE.local.md`
+
+Claude Code loads `CLAUDE.local.md` in addition to the committed `CLAUDE.md`, and it
+takes precedence for your personal preferences. It is gitignored, so it never reaches
+the repo or your teammates.
+
+Use it for things like:
+
+```md
+## My setup
+- Production branch is `main`; Vercel auto-deploys from it.
+- My local Supabase project ref: <ref>
+- Skip the long preamble; I read code fast.
+
+## Local-only reminders
+- Rotate OPENROUTER_API_KEY before setting it in Vercel.
+- Never run `vercel --prod` — I deploy via merge to main.
+```
+
+Keep it short. Anything the whole team needs belongs in the committed `CLAUDE.md`.
