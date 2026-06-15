@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog/posts";
+import { INDUSTRY_SLUGS } from "./products/_industries";
+import { ANSWER_SLUGS } from "./answers/_answers";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
@@ -116,6 +118,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  // Industry product pages (/products/[industry])
+  const productPages: MetadataRoute.Sitemap = INDUSTRY_SLUGS.map((slug) => ({
+    url: `${baseUrl}/products/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
+  }));
+
+  // AEO answer pages (/answers/[slug]) — built to win featured snippets + AI citations
+  const answerPages: MetadataRoute.Sitemap = ANSWER_SLUGS.map((slug) => ({
+    url: `${baseUrl}/answers/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
   // Dynamic blog posts
   const blogPosts: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
@@ -126,5 +144,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // NOTE: /login /signup /forgot-password /command-center excluded —
   // auth-gated routes waste crawl budget and are blocked in robots.ts
-  return [...staticPages, ...blogPosts];
+  return [...staticPages, ...productPages, ...answerPages, ...blogPosts];
 }
