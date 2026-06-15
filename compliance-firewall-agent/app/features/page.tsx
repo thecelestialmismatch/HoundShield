@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { featuresFaqs } from "@/lib/seo/faqs";
 
 /* ── Fade-in wrapper ─────────────────────────────────────────────── */
 function FadeIn({
@@ -322,6 +324,8 @@ export default function FeaturesPage() {
           </div>
         </FadeIn>
       </section>
+
+      <FaqSection items={featuresFaqs} title="Features & capabilities: frequently asked questions" />
 
       <FooterV3 />
     </div>

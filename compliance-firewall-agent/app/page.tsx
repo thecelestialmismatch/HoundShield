@@ -6,6 +6,8 @@ import { CountdownTimer } from '@/components/ui/CountdownTimer'
 import { HeroScanLog } from '@/components/landing/HeroScanLog'
 import { ComparisonFlow } from '@/components/ui/ComparisonFlow'
 import { FaqAccordion, type FaqItem } from '@/components/ui/FaqAccordion'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { faqPageSchema } from '@/lib/seo/structured-data'
 import { CodeBlock } from '@/components/ui/CodeBlock'
 import { FeaturesGrid } from '@/components/landing/FeaturesGrid'
 
@@ -394,6 +396,7 @@ export default function HomePage() {
             Frequently asked
           </h2>
           <FaqAccordion items={FAQ_ITEMS} />
+          <JsonLd schema={faqPageSchema(FAQ_ITEMS)} />
         </div>
       </section>
 
