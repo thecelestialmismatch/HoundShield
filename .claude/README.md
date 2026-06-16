@@ -60,7 +60,8 @@ HoundShield/                          Project root Claude Code reads
     │   ├── frontend.md               Loads for UI work  (NOTE: marked STALE in primer)
     │   └── stack.md                  Stack conventions
     │
-    ├── workflows/                    Multi-agent JS workflow scripts
+    ├── workflows/                    Multi-agent (dynamic) JS workflow scripts
+    │   ├── _template.dynamic-workflow.js  Copy-me starting point (discover→produce→verify→build-gate)
     │   ├── houndshield-aeo-pages.js  Generates AEO/FAQ pages
     │   └── houndshield-port.js       Direction-A page porting
     │
