@@ -9,6 +9,7 @@ codebase-wide builds, and content generation that are too big for one pass.
 
 | File | What it does |
 |------|--------------|
+| `_template.dynamic-workflow.js` | **Copy-me starting point.** The canonical shape — *discover → pipeline(produce → verify) → build-gate + fix loop* — with inline docs on `agent()` / `parallel()` / `pipeline()`. `cp` it, edit the work-list + prompts + gate, run it. |
 | `houndshield-port.js` | Re-ports / extends the Direction-A marketing surface (industry product pages + AEO answer pages), wires the NavV3 mega-menu + sitemap, then build-gates to green with a self-healing fix loop. |
 | `houndshield-aeo-pages.js` | AEO engine: turns a list of buyer questions into sourced, schema-marked `/answers/[slug]` entries (draft → adversarial fact-check → build-gate). This is how you run the "1 answer page / week" plan. |
 
@@ -48,3 +49,32 @@ A workflow is a plain-JS script that starts with a `meta` literal, then uses
 `agent()`, `parallel()`, `pipeline()`, `phase()`, and `log()`. See Anthropic's
 [dynamic workflows docs](https://code.claude.com/docs/en/workflows). Keep the
 build-gate + fix-loop pattern at the end so every run lands green.
+
+**Don't start from a blank file — copy the template:**
+
+```bash
+cp .claude/workflows/_template.dynamic-workflow.js .claude/workflows/my-thing.js
+# edit meta.name, the WORK list, the produce/verify prompts, and the gate command
+```
+
+The template encodes the proven shape:
+
+```
+discover work-list  →  pipeline(item → produce → adversarially verify)  →  build-gate + self-healing fix loop
+```
+
+Rules of thumb baked into it:
+
+- **`pipeline()` is the default**, not `parallel()`. Item A verifies while item B is
+  still producing — no wasted wall-clock barrier. Only use `parallel()` when a stage
+  genuinely needs *all* prior results at once (dedup, early-exit on zero).
+- **Verify every produced item adversarially** (skeptic prompt, `schema` with
+  `isReal`) so plausible-but-wrong output can't survive.
+- **End on a build-gate fix loop** so every run lands green.
+
+## Integrations
+
+- **AgentHarness (deep research):** `tools/agent-harness/` (git submodule) ships a
+  ReAct deep-research agent; the bridges in `agents/agentharness/` expose it. A
+  workflow can fan research out to it and verify each finding. See
+  `agents/agentharness/README.md`.

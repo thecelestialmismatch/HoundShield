@@ -1,4 +1,10 @@
 {
+  "name": "houndshield-workspace",
+  "private": true,
+  "description": "Repo-root control/meta layer. The shipping app lives in compliance-firewall-agent/ (Vercel builds that). See PROJECT-STRUCTURE.md.",
+  "scripts": {
+    "verify:structure": "node scripts/verify-structure.mjs"
+  },
   "dependencies": {
     "@vercel/analytics": "^2.0.1"
   }
