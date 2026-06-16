@@ -154,7 +154,7 @@ Free → **Pro** → **Growth** → **Enterprise** → **Agency**. Current tiers
 
 ## License
 
-[MIT](LICENSE) © Kaelus.Online
+[MIT](LICENSE) © HoundShield.com
 
 <div align="center">
 <br/>
