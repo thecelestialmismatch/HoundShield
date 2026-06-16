@@ -40,6 +40,15 @@ const nextConfig = {
   // Kill the "N" dev indicator
   devIndicators: false,
 
+  // HERMES design demo — byte-for-byte static port of HERMES-REDESIGN/houndshield-demo.html
+  // Served verbatim from public/hermes-demo.html; these give it clean URLs.
+  async rewrites() {
+    return [
+      { source: '/hermes', destination: '/hermes-demo.html' },
+      { source: '/hermes-redesign', destination: '/hermes-demo.html' },
+    ];
+  },
+
   // Redirect old routes + HTTP → HTTPS
   async redirects() {
     return [
