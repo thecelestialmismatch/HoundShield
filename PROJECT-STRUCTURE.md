@@ -53,7 +53,7 @@ but are a valuable grab-bag you can pull from later. Labeled so you know what's 
 
 | Path | What it is |
 |------|-----------|
-| `README.md` · `README.zh-CN.md` | Project readme (EN + 中文) |
+| `README.md` | Project readme |
 | `CLAUDE.md` · `AGENTS.md` · `GEMINI.md` | AI-tool project rules (Claude / generic / Gemini) |
 | `CLAUDE.local.md.example` | Template → copy to `CLAUDE.local.md` (personal, gitignored) |
 | `.cursorrules` · `.windsurfrules` | IDE-specific rule files |
