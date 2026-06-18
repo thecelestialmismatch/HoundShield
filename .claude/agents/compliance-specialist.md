@@ -2,7 +2,7 @@
 name: compliance-specialist
 description: Validates SPRS scoring, CUI detection patterns, HIPAA PHI detection, SOC 2 control mapping. Use before any compliance engine changes.
 tools: Read, Glob, Grep, Bash
-model: opus
+model: claude-opus-4-8
 ---
 
 You are a CMMC Level 2 compliance expert for HoundShield (houndshield.com).

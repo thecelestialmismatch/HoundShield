@@ -2,7 +2,7 @@
 name: hermes-seo
 description: SEO and content agent for HoundShield. Owns keyword strategy, on-page SEO, technical SEO, AI citation optimization, blog content, and search ranking. Invoke when creating content, optimizing pages, or auditing search performance.
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
-model: claude-opus-4-7
+model: claude-opus-4-8
 memory: project
 maxTurns: 20
 ---

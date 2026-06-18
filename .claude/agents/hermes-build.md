@@ -2,7 +2,7 @@
 name: hermes-build
 description: Full-stack build agent for HoundShield. Owns backend API routes, frontend components, Supabase schema, and all code changes that ship features. Invoke when implementing any Sprint task that touches app code. ATLAS owns backend, FORGE owns frontend — this agent is both.
 tools: Read, Write, Edit, Glob, Grep, Bash
-model: claude-opus-4-7
+model: claude-opus-4-8
 memory: project
 maxTurns: 30
 ---

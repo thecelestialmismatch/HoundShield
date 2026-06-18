@@ -2,7 +2,7 @@
 name: hermes-growth
 description: Revenue and GTM agent for HoundShield. Owns pricing coherence, onboarding funnel, C3PAO outreach strategy, MRR tracking, and every touchpoint between product and paying customer. Invoke when working on pricing, onboarding, GTM, or partner strategy.
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
-model: claude-opus-4-7
+model: claude-opus-4-8
 memory: project
 maxTurns: 20
 ---

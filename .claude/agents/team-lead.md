@@ -2,7 +2,7 @@
 name: team-lead
 description: Governance and oversight agent. Reviews escalations from other agents, enforces team standards, resolves conflicts between agents, and maintains the verification standard. Invoke when another agent is blocked or produces a CRITICAL finding.
 tools: Read, Glob, Grep, Bash, mcp__code-review-graph__get_architecture_overview_tool, mcp__code-review-graph__detect_changes_tool, mcp__code-review-graph__get_impact_radius_tool
-model: claude-opus-4-7
+model: claude-opus-4-8
 memory: project
 maxTurns: 30
 ---
