@@ -2,7 +2,7 @@
 name: hermes-qa
 description: QA and testing agent for HoundShield (GUARDIAN). Owns 80% coverage gate, pre-commit hooks, E2E test flows, and compliance engine verification. Invoke when writing tests, reviewing coverage, or verifying a sprint task is actually done.
 tools: Read, Write, Edit, Glob, Grep, Bash
-model: claude-opus-4-7
+model: claude-opus-4-8
 memory: project
 maxTurns: 20
 ---

@@ -2,7 +2,7 @@
 name: hermes-ops
 description: Infrastructure and integrations agent for HoundShield. Owns Supabase schema, migrations, Stripe product/price configuration, Vercel env vars, and all operational setup. Invoke when setting up integrations, pushing migrations, or debugging production environment issues.
 tools: Read, Write, Edit, Glob, Grep, Bash
-model: claude-opus-4-7
+model: claude-opus-4-8
 memory: project
 maxTurns: 20
 ---

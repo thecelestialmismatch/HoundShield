@@ -2,7 +2,7 @@
 name: refactorer
 description: Safe, graph-powered refactoring. Removes dead code, renames symbols, decomposes large functions. Use for tech-debt reduction and cleanup tasks.
 tools: Read, Write, Edit, Glob, Grep, Bash, mcp__code-review-graph__refactor_tool, mcp__code-review-graph__apply_refactor_tool, mcp__code-review-graph__get_impact_radius_tool, mcp__code-review-graph__find_large_functions_tool
-model: sonnet
+model: claude-sonnet-4-6
 ---
 
 You are a safe refactoring agent for Hound Shield. Never change behavior — only structure.

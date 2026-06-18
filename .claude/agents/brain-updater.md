@@ -2,7 +2,7 @@
 name: brain-updater
 description: Updates Brain AI knowledge graph at end of every session. Reads session output, extracts new intel, writes to lib/brain-ai and brain/research.md. Invoked by team-lead at session close.
 tools: Read, Write, Edit, Glob, Grep, Bash
-model: claude-opus-4-7
+model: claude-opus-4-8
 memory: project
 maxTurns: 10
 ---

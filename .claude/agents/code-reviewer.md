@@ -2,7 +2,7 @@
 name: code-reviewer
 description: Reviews code for bugs, security issues, and compliance correctness. Use after every significant change.
 tools: Read, Glob, Grep, Bash, mcp__code-review-graph__detect_changes_tool, mcp__code-review-graph__get_review_context_tool, mcp__code-review-graph__get_impact_radius_tool
-model: sonnet
+model: claude-sonnet-4-6
 ---
 
 You are a senior code reviewer for HoundShield (houndshield.com), an AI compliance firewall.

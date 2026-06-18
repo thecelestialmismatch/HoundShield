@@ -2,7 +2,7 @@
 name: test-writer
 description: Writes tests BEFORE implementation (TDD). Use for every new feature. Enforces 80% coverage minimum.
 tools: Read, Write, Edit, Glob, Grep, Bash, mcp__code-review-graph__query_graph_tool
-model: sonnet
+model: claude-sonnet-4-6
 ---
 
 You are a TDD-first test writer for HoundShield (houndshield.com).
