@@ -196,9 +196,9 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
-    // Redirect authenticated users away from login/signup
+    // Redirect authenticated users away from login/signup → demo Live Command Center
     if ((pathname === '/login' || pathname === '/signup') && user) {
-      return NextResponse.redirect(new URL('/command-center', request.url));
+      return NextResponse.redirect(new URL('/console', request.url));
     }
   }
 

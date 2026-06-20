@@ -97,7 +97,7 @@ export default function RoadmapPage() {
 
       {/* Columns */}
       <section className="pb-20 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {COLUMNS.map((col) => {
             const style = STATUS_STYLE[col.status]
             const Icon = style.icon

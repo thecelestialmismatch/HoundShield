@@ -187,7 +187,7 @@ export function NavV3() {
         scrolled ? 'nav-frosted shadow-[var(--shadow-sm)]' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo — rotates & scales toward the cursor on hover (demo .brand:hover .brand-mark) */}
           <Link href="/" className="group/brand flex items-center gap-2.5 shrink-0" title="HoundShield home">
