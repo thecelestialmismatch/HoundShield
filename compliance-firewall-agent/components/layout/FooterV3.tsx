@@ -51,7 +51,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
                   alt="HoundShield"
                   width={48}
                   height={48}
-                  className="logo-on-dark opacity-90 transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none"
+                  className="logo-on-dark opacity-90 transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]"
                 />
                 <span className="font-semibold text-white text-sm font-[var(--font-body)]">
                   HoundShield
@@ -129,7 +129,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
                 alt="HoundShield"
                 width={48}
                 height={48}
-                className="logo-img transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none"
+                className="logo-img transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]"
               />
               <span className="font-semibold text-[var(--hs-ink)] text-sm font-[var(--font-body)]">
                 HoundShield
