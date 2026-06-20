@@ -32,7 +32,10 @@ the dashboard brand mark. Honors `prefers-reduced-motion`.
 
 ### 3. Live Command Center — exact-copy after-login dashboard
 - `components/dashboard/LiveCommandCenter.tsx` + `lccStyles.ts` — a
-  self-contained dark console ported 1:1 from the dashboard spec: sidebar tabs
+  self-contained console ported 1:1 from the dashboard spec, themed in the
+  **same light Steel & Cream palette as the marketing site** (its scoped vars
+  map onto the site's `--hs-*` tokens — white cards, ink text, steel accents,
+  site status colors). Sidebar tabs
   (Overview / Live Threat Feed / CMMC Assessment / Reports / Brain AI /
   Settings), ticking clock, jittering gateway p50, ops strip, four live KPIs,
   scrolling throughput canvas chart, detection-mix donut, streaming threat feed,
