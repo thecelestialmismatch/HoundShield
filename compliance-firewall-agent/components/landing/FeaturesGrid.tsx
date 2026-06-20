@@ -57,7 +57,7 @@ export function FeaturesGrid() {
       id="features"
       className="py-24 bg-[var(--hs-surface-1)]"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-14">
           <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3 font-[var(--font-body)]">

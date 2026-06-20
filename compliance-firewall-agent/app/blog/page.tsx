@@ -125,7 +125,7 @@ export default function BlogPage() {
       <main className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)]">
         <NavV3 />
 
-        <div className="max-w-6xl mx-auto px-6 pt-32 pb-16">
+        <div className="max-w-[1200px] mx-auto px-6 pt-32 pb-16">
           {/* Hero */}
           <div className="mb-16 max-w-3xl">
             <p className="text-xs font-mono text-[var(--hs-steel-dark)] uppercase tracking-widest mb-4">

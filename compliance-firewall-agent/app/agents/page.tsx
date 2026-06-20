@@ -434,7 +434,7 @@ export default function AgentsPage() {
       {/* ===== ReAct LOOP EXPLAINED ===== */}
       <section className="py-20 md:py-28 relative">
         <div className="bg-dot-grid absolute inset-0" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center mb-16">
             <span className="text-xs font-medium tracking-widest uppercase text-brand-400 mb-4 block">Core Architecture</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
@@ -493,7 +493,7 @@ export default function AgentsPage() {
       {/* ===== 8 TOOLS ===== */}
       <section className="py-20 md:py-28 relative">
         <div className="bg-aurora absolute inset-0" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center mb-12">
             <span className="text-xs font-medium tracking-widest uppercase text-brand-400 mb-4 block">Toolbox</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
@@ -529,7 +529,7 @@ export default function AgentsPage() {
       {/* ===== 13 AI MODELS ===== */}
       <section className="py-20 md:py-28 relative">
         <div className="bg-dot-grid absolute inset-0" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center mb-12">
             <span className="text-xs font-medium tracking-widest uppercase text-[var(--hs-success)] mb-4 block">Model Router</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
@@ -578,7 +578,7 @@ export default function AgentsPage() {
       {/* ===== AGENT TEMPLATES ===== */}
       <section className="py-20 md:py-28 relative">
         <div className="bg-aurora absolute inset-0" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection className="text-center mb-12">
             <span className="text-xs font-medium tracking-widest uppercase text-rose-400 mb-4 block">Templates</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
