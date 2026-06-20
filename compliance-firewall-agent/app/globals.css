@@ -649,6 +649,25 @@
 .dark .logo-img { mix-blend-mode: normal; }
 .logo-on-dark { filter: brightness(0) invert(1); mix-blend-mode: normal; }
 
+/* ── Cursor-reactive logo (demo .brand:hover .brand-mark) ───────────
+   The Doberman mark tilts & scales toward the cursor anywhere it appears.
+   Fires on direct hover AND when a brand link/group is hovered, so the
+   wordmark next to the mark triggers it too. Respects reduced-motion. */
+.logo-img,
+.logo-on-dark { transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1); transform-origin: center; }
+.logo-img:hover,
+.logo-on-dark:hover,
+a:hover > .logo-img,
+button:hover > .logo-img,
+.group\/brand:hover .logo-img,
+.group\/brand:hover .logo-on-dark { transform: rotate(-4deg) scale(1.06); }
+@media (prefers-reduced-motion: reduce) {
+  .logo-img, .logo-on-dark { transition: none; }
+  .logo-img:hover, .logo-on-dark:hover,
+  a:hover > .logo-img, button:hover > .logo-img,
+  .group\/brand:hover .logo-img, .group\/brand:hover .logo-on-dark { transform: none; }
+}
+
 /* ── Feature card hover-expand ──────────────────────────────────── */
 .feature-card {
   background: white;

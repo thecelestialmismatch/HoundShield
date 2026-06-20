@@ -50,7 +50,7 @@ export function Sidebar() {
             alt="HoundShield"
             width={28}
             height={28}
-            className="w-full h-full object-cover"
+            className="logo-img w-full h-full object-cover"
           />
         </div>
         <span className="font-semibold text-[var(--hs-ink)] text-sm font-[var(--font-body)]">
