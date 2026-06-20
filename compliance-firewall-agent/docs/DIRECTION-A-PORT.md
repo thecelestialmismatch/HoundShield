@@ -45,11 +45,12 @@ the dashboard brand mark. Honors `prefers-reduced-motion`.
   teardown; SSR-safe; operator chat input is HTML-escaped (no XSS).
 - Mounted at **`/console`** (`app/console/page.tsx`, `noindex`).
 
-### 4. Post-login destination → `/console`
-`login`, `signup`, `auth` callback/page, and `middleware` now default the
-post-auth redirect to `/console` (the demo dashboard). The full product surface
-remains intact and directly reachable at `/command-center`; the dashboard's
-"Back to site" link returns to `/`.
+### 4. Login lands on the real product console (`/command-center`)
+`login`, `signup`, `auth` callback/page, and `middleware` default the post-auth
+redirect to **`/command-center`** (the full product surface). The exact demo
+dashboard at **`/console`** stays reachable as a public showcase — linked from
+the nav's "Live Threat Dashboard" item — and its "Back to site" link returns
+to `/`.
 
 ### 5. Homepage fidelity fixes (`app/page.tsx`)
 - Stat band third tile: `Nov 2026 deadline` → **`110 / NIST 800-171 controls`**
