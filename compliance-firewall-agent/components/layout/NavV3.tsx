@@ -194,12 +194,12 @@ export function NavV3() {
             <Image
               src="/houndshield-logo.png"
               alt="HoundShield"
-              width={40}
-              height={40}
+              width={44}
+              height={44}
               className="logo-img object-contain transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)]"
               priority
             />
-            <span className="font-bold text-[var(--hs-ink)] text-base tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
+            <span className="font-bold text-[var(--hs-ink)] text-xl sm:text-2xl tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
               <span style={{
                 background: 'linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))',
                 WebkitBackgroundClip: 'text',
