@@ -198,7 +198,7 @@ export async function middleware(request: NextRequest) {
 
     // Redirect authenticated users away from login/signup
     if ((pathname === '/login' || pathname === '/signup') && user) {
-      return NextResponse.redirect(new URL('/command-center', request.url));
+      return NextResponse.redirect(new URL('/console', request.url));
     }
   }
 
