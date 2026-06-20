@@ -7,10 +7,17 @@ import { cookies } from 'next/headers';
  * Supabase redirects here after Google/GitHub login.
  * Exchanges the auth code for a session, then redirects to the app.
  */
+/** Only allow same-origin, single-slash relative paths — blocks open-redirect
+ *  (e.g. `//evil.com` or `https://evil.com`, which `new URL()` would honour). */
+function safeRedirect(raw: string | null): string {
+  if (raw && raw.startsWith('/') && !raw.startsWith('//')) return raw;
+  return '/console';
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const redirect = searchParams.get('redirect') || '/command-center';
+  const redirect = safeRedirect(searchParams.get('redirect'));
 
   if (code) {
     const cookieStore = await cookies();
