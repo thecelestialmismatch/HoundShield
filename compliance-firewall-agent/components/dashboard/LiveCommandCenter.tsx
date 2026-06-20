@@ -142,7 +142,7 @@ export function LiveCommandCenter() {
     const fillRing = (sel: string) => {
       const r = $(sel); if (!r) return
       const pct = ((78 / 110) * 100).toFixed(0)
-      r.style.background = `conic-gradient(var(--brand) ${pct}%, rgba(255,255,255,.07) 0)`
+      r.style.background = `conic-gradient(var(--brand) ${pct}%, rgba(15,30,46,.08) 0)`
     }
     root.querySelectorAll<HTMLElement>('.ringn').forEach((e) => countUp(e, 78, 1200))
     countUp($('#lcc-kSprs'), 78, 1200)
@@ -160,7 +160,7 @@ export function LiveCommandCenter() {
       cv.width = w * dpr; cv.height = h * dpr
       const x = cv.getContext('2d'); if (!x) return
       x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h)
-      x.strokeStyle = 'rgba(255,255,255,.05)'; x.lineWidth = 1
+      x.strokeStyle = 'rgba(15,30,46,.06)'; x.lineWidth = 1
       for (let g = 1; g < 4; g++) { const gy = (h / 4) * g; x.beginPath(); x.moveTo(0, gy); x.lineTo(w, gy); x.stroke() }
       const c = brandc(), max = 80, n = series.length, step = w / (n - 1)
       x.beginPath(); x.moveTo(0, h)
@@ -184,7 +184,7 @@ export function LiveCommandCenter() {
       const p = mix.map((v) => (v / t) * 100)
       const a = p[0], b = a + p[1], c2 = b + p[2]
       const donut = $('#lcc-donut')
-      if (donut) donut.style.background = `conic-gradient(#81A6C6 0 ${a}%,#F87171 ${a}% ${b}%,#FBBF24 ${b}% ${c2}%,#34D399 ${c2}% 100%)`
+      if (donut) donut.style.background = `conic-gradient(#81A6C6 0 ${a}%,#E5484D ${a}% ${b}%,#D9870B ${b}% ${c2}%,#0E9F6E ${c2}% 100%)`
       const set = (sel: string, val: string) => { const el = $(sel); if (el) el.textContent = val }
       set('#lcc-lgCui', Math.round(p[0]) + '%'); set('#lcc-lgSec', Math.round(p[1]) + '%')
       set('#lcc-lgPii', Math.round(p[2]) + '%'); set('#lcc-lgPhi', Math.round(p[3]) + '%')
@@ -348,9 +348,9 @@ export function LiveCommandCenter() {
                     <div className="donut" id="lcc-donut"><div className="c"><b id="lcc-donutTot">2,233</b><span>blocked</span></div></div>
                     <div className="legend">
                       <div><i style={{ background: '#81A6C6' }} /> CUI <span className="v" id="lcc-lgCui">39%</span></div>
-                      <div><i style={{ background: '#F87171' }} /> Secrets <span className="v" id="lcc-lgSec">25%</span></div>
-                      <div><i style={{ background: '#FBBF24' }} /> PII <span className="v" id="lcc-lgPii">25%</span></div>
-                      <div><i style={{ background: '#34D399' }} /> PHI <span className="v" id="lcc-lgPhi">12%</span></div>
+                      <div><i style={{ background: '#E5484D' }} /> Secrets <span className="v" id="lcc-lgSec">25%</span></div>
+                      <div><i style={{ background: '#D9870B' }} /> PII <span className="v" id="lcc-lgPii">25%</span></div>
+                      <div><i style={{ background: '#0E9F6E' }} /> PHI <span className="v" id="lcc-lgPhi">12%</span></div>
                     </div>
                   </div>
                 </div>
