@@ -51,7 +51,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
                   alt="HoundShield"
                   width={48}
                   height={48}
-                  className="opacity-90"
+                  className="logo-on-dark opacity-90"
                 />
                 <span className="font-semibold text-white text-sm font-[var(--font-body)]">
                   HoundShield

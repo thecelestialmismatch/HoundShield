@@ -112,7 +112,7 @@ describe('HomePage', () => {
     render(<HomePage />)
     expect(screen.getByText('16')).toBeTruthy()
     expect(screen.getByText('~80,000')).toBeTruthy()
-    expect(screen.getByText('Nov 2026')).toBeTruthy()
+    expect(screen.getByText('110')).toBeTruthy()
     expect(screen.getByText('<10ms')).toBeTruthy()
   })
 
