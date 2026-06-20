@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const redirect = searchParams.get('redirect') || '/console';
+  const redirect = searchParams.get('redirect') || '/command-center';
 
   if (code) {
     const cookieStore = await cookies();
