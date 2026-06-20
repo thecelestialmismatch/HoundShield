@@ -276,11 +276,11 @@ describe('NavV3', () => {
     expect(parent?.className ?? '').not.toContain('bg-white')
   })
 
-  it('logo image renders at 40x40', () => {
+  it('logo image renders at 44x44', () => {
     render(<NavV3 />)
     const logoImg = document.querySelector('img[alt="HoundShield"]') as HTMLImageElement
-    expect(logoImg?.width).toBe(40)
-    expect(logoImg?.height).toBe(40)
+    expect(logoImg?.width).toBe(44)
+    expect(logoImg?.height).toBe(44)
   })
 })
 
