@@ -217,7 +217,7 @@ export default function AboutPage() {
 
             {/* Footer */}
             <footer className="border-t border-[var(--hs-border)] py-12 px-6">
-                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <Link href="/" className="flex items-center gap-2 cursor-pointer">
                         <TextLogo />
                     </Link>

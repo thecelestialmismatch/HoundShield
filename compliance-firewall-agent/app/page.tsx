@@ -121,7 +121,7 @@ export default function HomePage() {
           style={{ background: 'radial-gradient(ellipse, rgba(129,166,198,0.15), transparent 70%)' }}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto">
+        <div className="relative z-10 max-w-[1200px] mx-auto">
           <div className="flex justify-center mb-6">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--hs-border)] bg-white text-xs font-medium text-[var(--hs-ink-secondary)] font-[var(--font-body)] shadow-[var(--shadow-sm)]">
               <span className="relative flex h-1.5 w-1.5">
@@ -173,7 +173,7 @@ export default function HomePage() {
 
       {/* ── 2. STATS STRIP ──────────────────────────────────────── */}
       <section className="py-14 border-y border-[var(--hs-border-subtle)] bg-[var(--hs-surface-2)]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {STATS.map((s) => (
               <div key={s.label} className="text-center">
@@ -223,7 +223,7 @@ export default function HomePage() {
 
       {/* ── 5. HOW IT WORKS ─────────────────────────────────────── */}
       <section className="spotlight py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]">
-        <div className="relative z-10 max-w-6xl mx-auto">
+        <div className="relative z-10 max-w-[1200px] mx-auto">
           <div className="text-center mb-14">
             <h2
               className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4"
@@ -315,7 +315,7 @@ export default function HomePage() {
 
       {/* ── 7. PRICING ──────────────────────────────────────────── */}
       <section className="spotlight py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]" id="pricing">
-        <div className="relative z-10 max-w-6xl mx-auto">
+        <div className="relative z-10 max-w-[1200px] mx-auto">
           <div className="text-center mb-14">
             <h2
               className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4"
