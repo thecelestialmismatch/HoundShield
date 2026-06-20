@@ -424,7 +424,7 @@ export default function PricingPage() {
 
       {/* ===== PRICING CARDS ===== */}
       <section className="relative px-6 pb-24">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6 pt-6">
             {plans.map((plan, i) => {
               const Icon = plan.icon;
@@ -585,7 +585,7 @@ export default function PricingPage() {
 
       {/* ===== FEATURE COMPARISON TABLE ===== */}
       <section className="relative px-6 pb-24">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <AnimatedSection>
             <div className="text-center mb-16">
               <h2 className="text-display-sm md:text-display mb-4">

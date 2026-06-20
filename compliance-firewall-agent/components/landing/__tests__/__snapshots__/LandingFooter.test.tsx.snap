@@ -5,7 +5,7 @@ exports[`LandingFooter > matches snapshot 1`] = `
   class="border-t border-white/[0.06]"
 >
   <div
-    class="max-w-6xl mx-auto px-6 py-16"
+    class="max-w-[1200px] mx-auto px-6 py-16"
   >
     <div
       class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12"
