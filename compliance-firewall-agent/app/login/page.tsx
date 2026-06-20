@@ -13,7 +13,7 @@ import { TextLogo } from '@/components/TextLogo';
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') || '/command-center';
+  const redirect = searchParams.get('redirect') || '/console';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

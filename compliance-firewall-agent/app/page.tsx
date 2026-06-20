@@ -16,7 +16,7 @@ import { FeaturesGrid } from '@/components/landing/FeaturesGrid'
 const STATS = [
   { value: '16',          label: 'Detection engines',   sub: 'CUI · PHI · PII · IP' },
   { value: '~80,000',     label: 'contractors at risk',  sub: 'Need CMMC Level 2' },
-  { value: 'Nov 2026',    label: 'CMMC deadline',        sub: 'For DoD prime contractors' },
+  { value: '110',         label: 'NIST 800-171 controls',sub: 'Mapped for CMMC Level 2' },
   { value: '<10ms',       label: 'Scan latency',         sub: 'Median, fully local' },
 ]
 
@@ -46,7 +46,7 @@ const PRICING = [
     desc: 'Try HoundShield risk-free',
     features: ['1 user', '1,000 scans/mo', 'Basic compliance reports', 'CMMC pattern detection'],
     cta: 'Start free',
-    href: '/sign-up',
+    href: '/signup',
   },
   {
     name: 'Pro',
@@ -54,7 +54,7 @@ const PRICING = [
     desc: 'For compliance-conscious teams',
     features: ['5 users', 'Unlimited scans', 'PDF evidence export', 'SPRS score tracking', 'Webhook alerts'],
     cta: 'Start Pro',
-    href: '/sign-up?plan=pro',
+    href: '/signup?plan=pro',
     highlight: true,
   },
   {
@@ -63,7 +63,7 @@ const PRICING = [
     desc: 'For multi-team organizations',
     features: ['25 users', 'Gateway mode', 'HIPAA + SOC 2 coverage', 'Audit trail export', 'Priority support'],
     cta: 'Start Growth',
-    href: '/sign-up?plan=growth',
+    href: '/signup?plan=growth',
   },
   {
     name: 'Enterprise',
@@ -128,7 +128,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--hs-success)] opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--hs-success)]" />
               </span>
-              CMMC Level 2 deadline: November 2026
+              Local-only · CMMC Level 2 · HIPAA · SOC 2
             </div>
           </div>
 

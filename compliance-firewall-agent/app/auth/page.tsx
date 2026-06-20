@@ -189,7 +189,7 @@ export default function AuthPage() {
           setLoading(false);
           return;
         }
-        router.push("/command-center");
+        router.push("/console");
         router.refresh();
       } catch {
         setError("Invalid credentials. Please try again.");

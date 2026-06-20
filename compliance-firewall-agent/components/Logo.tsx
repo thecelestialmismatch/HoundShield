@@ -12,7 +12,7 @@ interface LogoProps {
 }
 
 export function Logo({ className = "", size = 38, variant }: LogoProps) {
-  const toneClass = variant === "dark" ? "invert" : "logo-img dark:invert";
+  const toneClass = variant === "dark" ? "logo-on-dark" : "logo-img dark:invert";
   return (
     <Image
       src="/houndshield-logo.png"
