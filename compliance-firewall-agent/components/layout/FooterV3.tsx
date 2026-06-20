@@ -53,7 +53,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
                   height={48}
                   className="logo-on-dark opacity-90"
                 />
-                <span className="font-semibold text-white text-sm font-[var(--font-body)]">
+                <span className="font-bold text-white text-lg font-[var(--font-body)]">
                   HoundShield
                 </span>
               </Link>
@@ -131,7 +131,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
                 height={48}
                 className="logo-img"
               />
-              <span className="font-semibold text-[var(--hs-ink)] text-sm font-[var(--font-body)]">
+              <span className="font-bold text-[var(--hs-ink)] text-lg font-[var(--font-body)]">
                 HoundShield
               </span>
             </Link>
