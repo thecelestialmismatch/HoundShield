@@ -23,7 +23,8 @@ const HOVER_MOTION =
   "transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] " +
   "hover:[transform:rotate(-4deg)_scale(1.06)] " +
   "group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] " +
-  "motion-reduce:transition-none";
+  "motion-reduce:transition-none motion-reduce:hover:[transform:none] " +
+  "motion-reduce:group-hover/brand:[transform:none]";
 
 export function Logo({ className = "", size = 38, variant }: LogoProps) {
   const toneClass = variant === "dark" ? "logo-on-dark" : "logo-img dark:invert";
