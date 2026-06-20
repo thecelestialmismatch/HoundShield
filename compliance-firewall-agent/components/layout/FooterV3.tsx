@@ -45,13 +45,13 @@ export function FooterV3({ dark = false }: FooterV3Props) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             {/* Brand column */}
             <div className="md:col-span-1">
-              <Link href="/" className="flex items-center gap-2.5 mb-4">
+              <Link href="/" className="group/brand flex items-center gap-2.5 mb-4">
                 <Image
                   src="/houndshield-logo.png"
                   alt="HoundShield"
                   width={48}
                   height={48}
-                  className="logo-on-dark opacity-90"
+                  className="logo-on-dark opacity-90 transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none"
                 />
                 <span className="font-semibold text-white text-sm font-[var(--font-body)]">
                   HoundShield
@@ -123,13 +123,13 @@ export function FooterV3({ dark = false }: FooterV3Props) {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand column */}
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5 mb-4">
+            <Link href="/" className="group/brand flex items-center gap-2.5 mb-4">
               <Image
                 src="/houndshield-logo.png"
                 alt="HoundShield"
                 width={48}
                 height={48}
-                className="logo-img"
+                className="logo-img transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none"
               />
               <span className="font-semibold text-[var(--hs-ink)] text-sm font-[var(--font-body)]">
                 HoundShield
