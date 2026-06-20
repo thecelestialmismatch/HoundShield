@@ -6,13 +6,24 @@
  */
 export const LCC_CSS = `
 .hs-lcc{
-  --bg:#080B11; --panel:#111824; --panel2:#0D131C; --hover:#16202E;
-  --line:rgba(255,255,255,.07); --line2:rgba(129,166,198,.22);
-  --text:#EAF1F8; --mut:#93A4B8; --mut2:#62748A;
-  --brand:#81A6C6; --bright:#AACDDC; --cream:#F3E3D0;
-  --ok:#34D399; --okbg:rgba(52,211,153,.12);
-  --bad:#F87171; --badbg:rgba(248,113,113,.12);
-  --warn:#FBBF24; --warnbg:rgba(251,191,36,.12);
+  /* Same light Steel & Cream palette as the marketing site (mapped onto the
+     site's --hs-* tokens, with fallbacks so the console is self-sufficient). */
+  --bg: var(--hs-surface-1, #F5F8FB);
+  --panel: var(--hs-surface-0, #FFFFFF);
+  --panel2: var(--hs-surface-1, #F5F8FB);
+  --hover: var(--hs-mist-md, rgba(129,166,198,.10));
+  --line: var(--hs-border-ink, rgba(15,30,46,.10));
+  --line2: var(--hs-border, rgba(129,166,198,.30));
+  --text: var(--hs-ink, #0F1E2E);
+  --mut: var(--hs-ink-secondary, #3D5166);
+  --mut2: var(--hs-ink-tertiary, #6B8299);
+  --brand: var(--hs-steel-dark, #5A86A8);
+  --bright: var(--hs-steel, #81A6C6);
+  --cream: var(--hs-cream, #F3E3D0);
+  --track: rgba(15,30,46,.07);
+  --ok:#0E9F6E; --okbg:rgba(14,159,110,.12);
+  --bad:#E5484D; --badbg:rgba(229,72,77,.12);
+  --warn:#D9870B; --warnbg:rgba(217,135,11,.12);
   --f-disp:'Fraunces',serif; --f:'DM Sans',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
   --r:14px; --r-sm:10px;
   font-family:var(--f);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
@@ -23,7 +34,7 @@ export const LCC_CSS = `
 
 .hs-lcc .side{background:var(--panel2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh;overflow:auto}
 .hs-lcc .brand{display:flex;align-items:center;gap:.55rem;padding:.4rem .5rem 1.1rem}
-.hs-lcc .brand img{height:30px;width:auto;filter:brightness(0) invert(1);transition:transform .3s cubic-bezier(.22,.61,.36,1);transform-origin:center}
+.hs-lcc .brand img{height:30px;width:auto;mix-blend-mode:multiply;transition:transform .3s cubic-bezier(.22,.61,.36,1);transform-origin:center}
 .hs-lcc .brand:hover img,.hs-lcc .brand img:hover{transform:rotate(-4deg) scale(1.06)}
 .hs-lcc .brand span{font-family:var(--f-disp);font-weight:600;font-size:1.18rem}
 .hs-lcc .brand span b{color:var(--brand)}
@@ -31,18 +42,18 @@ export const LCC_CSS = `
 .hs-lcc .slink{display:flex;align-items:center;gap:.65rem;padding:.6rem .7rem;border-radius:var(--r-sm);font-size:.88rem;font-weight:500;color:var(--mut);cursor:pointer;transition:all .15s;position:relative;width:100%;text-align:left;background:none;border:none;font-family:var(--f)}
 .hs-lcc .slink svg{width:17px;height:17px}
 .hs-lcc .slink:hover{background:var(--hover);color:var(--text)}
-.hs-lcc .slink.on{background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--bright);font-weight:600}
+.hs-lcc .slink.on{background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand);font-weight:600}
 .hs-lcc .slink.on::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--brand)}
 .hs-lcc .slink .pp{margin-left:auto;font-family:var(--f-mono);font-size:.62rem;font-weight:700;background:var(--badbg);color:var(--bad);padding:.05rem .35rem;border-radius:5px}
 .hs-lcc .side-foot{margin-top:auto;padding:.7rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:.6rem}
-.hs-lcc .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--bright));color:#06101A;display:grid;place-items:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+.hs-lcc .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--bright));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.82rem;flex-shrink:0}
 .hs-lcc .side-foot .nm{font-size:.84rem;font-weight:600}.hs-lcc .side-foot .sub{font-size:.72rem;color:var(--mut2)}
 .hs-lcc .side-link{display:flex;align-items:center;gap:.65rem;padding:.6rem .7rem;border-radius:var(--r-sm);font-size:.84rem;font-weight:500;color:var(--mut);text-decoration:none;transition:all .15s}
 .hs-lcc .side-link:hover{background:var(--hover);color:var(--bright)}
 .hs-lcc .side-link svg{width:16px;height:16px}
 
 .hs-lcc .main{overflow:auto;height:100vh}
-.hs-lcc .top{position:sticky;top:0;z-index:20;background:rgba(8,11,17,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.hs-lcc .top{position:sticky;top:0;z-index:20;background:rgba(250,252,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .hs-lcc .top h1{font-family:var(--f-disp);font-size:1.4rem;font-weight:600}
 .hs-lcc .top .crumb{font-size:.74rem;color:var(--mut2)}
 .hs-lcc .top-right{display:flex;align-items:center;gap:.8rem}
@@ -104,7 +115,7 @@ export const LCC_CSS = `
 @keyframes lccFresh{0%{background:color-mix(in srgb,var(--brand) 16%,transparent)}100%{background:transparent}}
 
 .hs-lcc .eng{display:grid;grid-template-columns:92px 1fr 40px;align-items:center;gap:12px;padding:.4rem 0;font-size:.82rem;color:var(--mut)}
-.hs-lcc .bar{height:8px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.hs-lcc .bar{height:8px;border-radius:99px;background:var(--track);overflow:hidden}
 .hs-lcc .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--bright));border-radius:99px;transition:width .8s ease}
 .hs-lcc .eng b{text-align:right;font-family:var(--f-mono);color:var(--text);font-weight:600}
 
@@ -122,7 +133,7 @@ export const LCC_CSS = `
 
 .hs-lcc .btn{display:inline-flex;align-items:center;gap:.45rem;font-weight:600;font-size:.85rem;padding:.6rem 1rem;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;transition:all .18s;font-family:var(--f)}
 .hs-lcc .btn svg{width:15px;height:15px}
-.hs-lcc .btn-p{background:var(--brand);color:#06101A}.hs-lcc .btn-p:hover{background:var(--bright)}
+.hs-lcc .btn-p{background:var(--brand);color:#fff}.hs-lcc .btn-p:hover{background:var(--bright)}
 .hs-lcc .btn-g{background:transparent;border-color:var(--line);color:var(--text)}.hs-lcc .btn-g:hover{border-color:var(--brand);color:var(--bright)}
 .hs-lcc .btn-sm{padding:.4rem .7rem;font-size:.78rem}
 
@@ -134,14 +145,14 @@ export const LCC_CSS = `
 .hs-lcc .card h4{font-size:1rem;font-weight:600;margin-bottom:.3rem}.hs-lcc .card p{font-size:.84rem;color:var(--mut)}
 
 .hs-lcc .gw{display:flex;align-items:center;justify-content:space-between;gap:.6rem;background:var(--panel2);border:1px dashed var(--line2);border-radius:10px;padding:.65rem .85rem;font-family:var(--f-mono);font-size:.8rem}
-.hs-lcc .gw button{border:none;background:var(--brand);color:#06101A;border-radius:7px;padding:.32rem .6rem;font-size:.7rem;font-weight:700;cursor:pointer}
-.hs-lcc .usebar{height:8px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:.35rem}
+.hs-lcc .gw button{border:none;background:var(--brand);color:#fff;border-radius:7px;padding:.32rem .6rem;font-size:.7rem;font-weight:700;cursor:pointer}
+.hs-lcc .usebar{height:8px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:.35rem}
 .hs-lcc .usebar i{display:block;height:100%;background:var(--brand);border-radius:99px}
 
 .hs-lcc .brain{display:flex;flex-direction:column;height:460px}
 .hs-lcc .blog{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
 .hs-lcc .bub{max-width:80%;padding:.65rem .9rem;border-radius:13px;font-size:.86rem;line-height:1.5}
-.hs-lcc .bub.u{align-self:flex-end;background:var(--brand);color:#06101A;border-bottom-right-radius:4px}
+.hs-lcc .bub.u{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:4px}
 .hs-lcc .bub.b{align-self:flex-start;background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:4px}
 .hs-lcc .bub.b .src{display:block;margin-top:.4rem;font-family:var(--f-mono);font-size:.64rem;color:var(--mut2)}
 .hs-lcc .chips{display:flex;gap:.4rem;flex-wrap:wrap;padding:0 14px 12px}
