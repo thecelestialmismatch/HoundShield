@@ -119,7 +119,7 @@ function Sidebar({
     >
       {/* Brand */}
       <div className="flex h-16 items-center gap-2.5 border-b border-white/[0.06] px-4">
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href="/" className="flex items-center gap-2.5 group group/brand">
           <Logo className="w-9 h-9" />
           {!collapsed && (
             <motion.div

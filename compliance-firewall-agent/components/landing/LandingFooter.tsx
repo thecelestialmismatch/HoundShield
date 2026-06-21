@@ -49,7 +49,7 @@ export function LandingFooter() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4 w-fit">
+            <Link href="/" className="group/brand flex items-center gap-2 mb-4 w-fit">
               <Logo />
               <TextLogo className="text-lg" variant="dark" />
             </Link>
