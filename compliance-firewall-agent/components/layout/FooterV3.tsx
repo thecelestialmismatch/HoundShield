@@ -24,6 +24,14 @@ const FOOTER_LINKS = {
     { label: 'Contact',       href: '/contact' },
     { label: 'About',         href: '/about' },
   ],
+  Legal: [
+    { label: 'Security',        href: '/security' },
+    { label: 'Status',          href: '/status' },
+    { label: 'Privacy',         href: '/privacy' },
+    { label: 'Terms',           href: '/terms' },
+    { label: 'DPA',             href: '/dpa' },
+    { label: 'Acceptable Use',  href: '/acceptable-use' },
+  ],
 }
 
 const BADGES = [
@@ -42,7 +50,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
     return (
       <footer className="border-t border-white/[0.06] bg-[#0a0a0a]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
             {/* Brand column */}
             <div className="md:col-span-1">
               <Link href="/" className="group/brand flex items-center gap-2.5 mb-4">
@@ -120,7 +128,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
   return (
     <footer className="border-t border-[var(--hs-border-subtle)] bg-[var(--hs-surface-1)]">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
           {/* Brand column */}
           <div className="md:col-span-1">
             <Link href="/" className="group/brand flex items-center gap-2.5 mb-4">

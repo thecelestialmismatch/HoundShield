@@ -3,7 +3,8 @@
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider, usePostHog } from "posthog-js/react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { hasAnalyticsConsent, CONSENT_EVENT } from "@/lib/consent";
 
 function PostHogPageView() {
   const pathname = usePathname();
@@ -26,17 +27,27 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   const host = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com";
 
+  // GDPR: analytics stays off until the visitor opts in via the consent banner.
+  const [consented, setConsented] = useState(false);
+
   useEffect(() => {
-    if (!key) return;
+    const sync = () => setConsented(hasAnalyticsConsent());
+    sync();
+    window.addEventListener(CONSENT_EVENT, sync);
+    return () => window.removeEventListener(CONSENT_EVENT, sync);
+  }, []);
+
+  useEffect(() => {
+    if (!key || !consented) return;
     posthog.init(key, {
       api_host: host,
       capture_pageview: false, // manual pageview via PostHogPageView
       capture_pageleave: true,
       person_profiles: "identified_only",
     });
-  }, [key, host]);
+  }, [key, host, consented]);
 
-  if (!key) return <>{children}</>;
+  if (!key || !consented) return <>{children}</>;
 
   return (
     <PHProvider client={posthog}>

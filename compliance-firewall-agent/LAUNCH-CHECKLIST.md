@@ -1,7 +1,20 @@
 # Hound Shield — SaaS Launch Checklist
 
-**68 items · 10 categories · Updated: 2026-03-28**
+**68 items · 10 categories · Updated: 2026-06-21**
 Status key:  Done ·  Needed · ️ Partial ·  Needs key/config
+
+> **2026-06-21 pre-launch hardening (PR `claude/pre-launch-audit-6iieir`)** — shipped, code-only,
+> build green + 503/503 tests:
+> - ✅ Cookie consent banner (GDPR) — `components/CookieConsent.tsx`; PostHog now gated on opt-in
+> - ✅ `security.txt` (RFC 9116) — `app/.well-known/security.txt/route.ts`
+> - ✅ Security & Trust page — `/security`
+> - ✅ Data Processing Agreement — `/dpa` (GDPR Art. 28 / HIPAA BAA / DFARS 7012)
+> - ✅ Acceptable Use Policy — `/acceptable-use`
+> - ✅ Public status page — `/status` (live `/api/health` poll)
+> - ✅ Footer Legal column + sitemap entries for all of the above
+> - ✅ Custom 404 already present (`app/not-found.tsx`); `images.unoptimized` already removed
+>
+> Remaining blockers are **config/keys only** — see `PRE-LAUNCH-AUDIT-2026-06-21.md` §4.
 
 ---
 
