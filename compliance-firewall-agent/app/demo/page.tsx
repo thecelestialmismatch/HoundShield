@@ -145,8 +145,8 @@ function scanText(text: string): ScanResult[] {
 
 const severityColor = {
     critical: { bg: "bg-rose-500/10", border: "border-rose-500/30", text: "text-rose-400", dot: "bg-rose-500", badge: "bg-rose-500/20 text-rose-300 border-rose-500/30" },
-    high: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-400", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-300 border-brand-500/30" },
-    medium: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-400", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-300 border-brand-500/30" },
+    high: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-700", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-700 border-brand-500/30" },
+    medium: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-700", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-700 border-brand-500/30" },
 };
 
 /* ═══════════════════════════════════════════════════════
@@ -185,7 +185,7 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
     return (
         <div className="glass-card p-5">
             <div className="flex items-center gap-3 mb-4">
-                <Building2 className="w-5 h-5 text-brand-400" />
+                <Building2 className="w-5 h-5 text-brand-700" />
                 <h3 className="text-sm font-bold text-[var(--hs-ink-secondary)]">Connect Your Company</h3>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(5,150,105,0.2)] text-[var(--hs-success)] border border-[rgba(5,150,105,0.2)] font-semibold">OPTIONAL</span>
             </div>
@@ -204,7 +204,7 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
                     className="bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/40"
                 />
             </div>
-            <button onClick={handleConnect} disabled={!companyName.trim()} className={`mt-3 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${companyName.trim() ? "bg-brand-500/20 text-brand-300 border border-brand-500/30 hover:bg-brand-500/30" : "bg-white text-[var(--hs-ink-secondary)] border border-[var(--hs-border)] cursor-not-allowed"}`}>
+            <button onClick={handleConnect} disabled={!companyName.trim()} className={`mt-3 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${companyName.trim() ? "bg-brand-500/20 text-brand-700 border border-brand-500/30 hover:bg-brand-500/30" : "bg-white text-[var(--hs-ink-secondary)] border border-[var(--hs-border)] cursor-not-allowed"}`}>
                 <Building2 className="w-4 h-4" /> Connect
             </button>
         </div>
@@ -247,7 +247,7 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     </div>
                     {/* Quick Fix */}
                     <div className="flex gap-3">
-                        <Lightbulb className="w-4 h-4 text-brand-400 mt-0.5 shrink-0" />
+                        <Lightbulb className="w-4 h-4 text-brand-700 mt-0.5 shrink-0" />
                         <div>
                             <p className="text-xs font-bold text-[var(--hs-ink-secondary)] mb-1">Quick Fix</p>
                             <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.tip}</p>
@@ -263,7 +263,7 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                     </div>
                     {/* HoundShield Pro upgrade prompt */}
                     <div className="bg-brand-500/10 border border-brand-500/20 rounded-lg p-3 mt-2">
-                        <p className="text-[11px] text-brand-300 leading-relaxed">
+                        <p className="text-[11px] text-brand-700 leading-relaxed">
                             <strong>With HoundShield Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
                         </p>
                     </div>
@@ -342,9 +342,9 @@ export default function FreeDemoPage() {
                     {/* ═══ HOW TO USE (Step-by-step) ═══ */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
                         {[
-                            { step: "1", title: "Connect (optional)", desc: "Tag scans with your company name", icon: Building2, color: "text-brand-400" },
+                            { step: "1", title: "Connect (optional)", desc: "Tag scans with your company name", icon: Building2, color: "text-brand-700" },
                             { step: "2", title: "Paste Your Prompt", desc: "Or pick from our sample scenarios", icon: FileText, color: "text-[var(--hs-steel)]" },
-                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-brand-400" },
+                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-brand-700" },
                             { step: "4", title: "Get Fix Reports", desc: "Detailed impact + remediation tips", icon: Lightbulb, color: "text-[var(--hs-success)]" },
                         ].map((s) => {
                             const Icon = s.icon;
@@ -402,7 +402,7 @@ export default function FreeDemoPage() {
                             <button
                                 onClick={runScan}
                                 disabled={!inputText.trim() || isScanning}
-                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-300 cursor-wait" : inputText.trim() ? "btn-primary" : "bg-white text-[var(--hs-ink-secondary)] cursor-not-allowed border border-[var(--hs-border)]"}`}
+                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-700 cursor-wait" : inputText.trim() ? "btn-primary" : "bg-white text-[var(--hs-ink-secondary)] cursor-not-allowed border border-[var(--hs-border)]"}`}
                             >
                                 {isScanning ? (
                                     <>
@@ -441,7 +441,7 @@ export default function FreeDemoPage() {
                                 {isScanning && (
                                     <div className="flex-1 flex flex-col items-center justify-center py-8">
                                         <div className="w-12 h-12 border-2 border-brand-500/20 border-t-brand-500 rounded-full animate-spin mb-4" />
-                                        <p className="text-sm text-brand-300 animate-pulse">Checking 9 categories...</p>
+                                        <p className="text-sm text-brand-700 animate-pulse">Checking 9 categories...</p>
                                         <p className="text-[11px] text-[var(--hs-ink-secondary)] mt-1">API Keys • SSN • Credit Cards • Passwords • IPs • DB Strings</p>
                                     </div>
                                 )}
@@ -471,13 +471,13 @@ export default function FreeDemoPage() {
                                             {highCount > 0 && (
                                                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20">
                                                     <div className="w-2 h-2 rounded-full bg-brand-500" />
-                                                    <span className="text-[11px] font-bold text-brand-400">{highCount} High</span>
+                                                    <span className="text-[11px] font-bold text-brand-700">{highCount} High</span>
                                                 </div>
                                             )}
                                             {mediumCount > 0 && (
                                                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20">
                                                     <div className="w-2 h-2 rounded-full bg-brand-500" />
-                                                    <span className="text-[11px] font-bold text-brand-400">{mediumCount} Medium</span>
+                                                    <span className="text-[11px] font-bold text-brand-700">{mediumCount} Medium</span>
                                                 </div>
                                             )}
                                         </div>
@@ -491,7 +491,7 @@ export default function FreeDemoPage() {
                                         {/* CTA */}
                                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-[rgba(129,166,198,0.15)] border border-brand-500/25">
                                             <div className="flex items-center gap-2 mb-2">
-                                                <Package className="w-4 h-4 text-brand-400" />
+                                                <Package className="w-4 h-4 text-brand-700" />
                                                 <p className="text-sm font-bold text-[var(--hs-ink)]">HoundShield Pro Package</p>
                                             </div>
                                             <p className="text-xs text-[var(--hs-ink-tertiary)] mb-3 leading-relaxed">
@@ -538,32 +538,32 @@ export default function FreeDemoPage() {
                     {/* ═══ HOW TO TAKE THE TEST (DETAILED GUIDE) ═══ */}
                     <div className="mt-16 glass-card p-8 md:p-10">
                         <div className="flex items-center gap-3 mb-6">
-                            <BookOpen className="w-6 h-6 text-brand-400" />
+                            <BookOpen className="w-6 h-6 text-brand-700" />
                             <h2 className="text-2xl font-bold">How to Take the Test — Step by Step</h2>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8">
                             <div className="space-y-5">
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-300 mb-2">1. Connect Your Company (Optional)</h3>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">1. Connect Your Company (Optional)</h3>
                                     <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Enter your company name to tag scan results. This is purely for your reference — no data leaves your browser. If you skip this, scans still work normally.</p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-300 mb-2">2. Paste Real Prompts</h3>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">2. Paste Real Prompts</h3>
                                     <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Copy any text your team typically sends to ChatGPT, Claude, Copilot, or other AI tools. This could be code snippets, Slack messages, emails, support tickets, or config files. The more realistic, the better.</p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-300 mb-2">3. Or Use Sample Scenarios</h3>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">3. Or Use Sample Scenarios</h3>
                                     <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Not sure what to test? Click one of the 4 sample buttons (API Key Leak, Patient Record, AWS Config, Network Scan) to load a realistic scenario and see the scanner in action.</p>
                                 </div>
                             </div>
                             <div className="space-y-5">
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-300 mb-2">4. Review the Threat Report</h3>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">4. Review the Threat Report</h3>
                                     <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Each detected threat shows the exact match, severity level (Critical/High/Medium), impact assessment, and two levels of fix recommendations — a quick fix and a permanent solution.</p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-300 mb-2">5. Understand What You Need</h3>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">5. Understand What You Need</h3>
                                     <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">This free scanner uses regex patterns. <strong className="text-[var(--hs-ink-secondary)]">HoundShield Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
                                 </div>
                                 <div>
@@ -577,7 +577,7 @@ export default function FreeDemoPage() {
                     {/* ═══ WHY FREE SCANNER ≠ FULL PROTECTION ═══ */}
                     <div className="mt-10 grid md:grid-cols-2 gap-6">
                         <div className="glass-card p-6">
-                            <h3 className="text-sm font-bold text-[var(--hs-ink-tertiary)] mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-brand-400" /> This Free Demo</h3>
+                            <h3 className="text-sm font-bold text-[var(--hs-ink-tertiary)] mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-brand-700" /> This Free Demo</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "9 regex-based threat patterns",
@@ -595,7 +595,7 @@ export default function FreeDemoPage() {
                             </ul>
                         </div>
                         <div className="glass-card-glow p-6 border-brand-500/20">
-                            <h3 className="text-sm font-bold text-brand-300 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-400" /> HoundShield Pro Package</h3>
+                            <h3 className="text-sm font-bold text-brand-700 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-700" /> HoundShield Pro Package</h3>
                             <ul className="space-y-2.5">
                                 {[
                                     "13 AI models with context awareness",
@@ -606,7 +606,7 @@ export default function FreeDemoPage() {
                                     "Slack/Teams alerts + HITL review queue",
                                 ].map(item => (
                                     <li key={item} className="flex items-start gap-2 text-xs text-[var(--hs-ink-secondary)]">
-                                        <CheckCircle2 className="w-3.5 h-3.5 text-brand-400 mt-0.5 shrink-0" />
+                                        <CheckCircle2 className="w-3.5 h-3.5 text-brand-700 mt-0.5 shrink-0" />
                                         <span>{item}</span>
                                     </li>
                                 ))}

@@ -84,7 +84,7 @@ const bentoFeatures = [
     title: "Real-Time Compliance Scanning",
     desc: "An API firewall that intercepts every LLM call, classifies risk in under 50ms, and blocks non-compliant data flows.",
     icon: Radar,
-    color: "text-brand-400",
+    color: "text-brand-700",
     bg: "bg-brand-500/10 border-brand-500/20",
     stat: "<50ms",
     wide: false,
@@ -93,7 +93,7 @@ const bentoFeatures = [
     title: "Encrypted Audit Trail",
     desc: "Every action is logged in a tamper-proof SHA-256 hash chain. One-click integrity verification for auditors.",
     icon: Lock,
-    color: "text-brand-400",
+    color: "text-brand-700",
     bg: "bg-brand-500/10 border-brand-500/20",
     stat: "SHA-256",
     wide: false,
@@ -188,7 +188,7 @@ export default function FeaturesPage() {
                       {f.stat}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-[var(--hs-ink)] mb-2 group-hover:text-brand-400 transition-colors duration-200">
+                  <h3 className="text-lg font-semibold text-[var(--hs-ink)] mb-2 group-hover:text-brand-700 transition-colors duration-200">
                     {f.title}
                   </h3>
                   <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{f.desc}</p>
@@ -262,7 +262,7 @@ export default function FeaturesPage() {
           <FadeIn delay={0.15} className="text-center mt-8">
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-2 text-sm text-brand-500 hover:text-brand-400 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 text-sm text-brand-500 hover:text-brand-700 transition-colors cursor-pointer"
             >
               View full pricing details <ArrowRight className="w-4 h-4" />
             </Link>

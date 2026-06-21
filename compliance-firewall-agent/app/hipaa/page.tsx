@@ -226,7 +226,7 @@ export default function HIPAAPage() {
       <section className="py-24 md:py-32 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-16">
-            <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
+            <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-700 mb-4">
               How It Works
             </div>
             <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)] mb-4">
@@ -242,7 +242,7 @@ export default function HIPAAPage() {
               <FadeIn key={f.title} delay={i * 0.08}>
                 <div className="glass-card rounded-xl p-7 flex gap-5">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-400/10 flex items-center justify-center">
-                    <f.icon className="w-6 h-6 text-brand-400" />
+                    <f.icon className="w-6 h-6 text-brand-700" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-[var(--hs-ink)] mb-2">{f.title}</h3>

@@ -23,9 +23,9 @@ const values = [
     { icon: Lock, title: "Security First", desc: "Zero-trust architecture from day one. Every layer encrypted, every access logged, every action auditable.", color: "text-brand-500", bg: "bg-brand-50 border-brand-200" },
     { icon: Shield, title: "Defense-Grade", desc: "Purpose-built for CMMC Level 2. We map all 110 controls so you don't have to decode 800-171 yourself.", color: "text-[var(--hs-success)]", bg: "bg-[rgba(5,150,105,0.1)] border-[rgba(5,150,105,0.2)]" },
     { icon: Bot, title: "AI-Powered", desc: "Automated gap analysis identifies exactly where you fall short and generates remediation plans in minutes.", color: "text-sky-400", bg: "bg-sky-500/10 border-sky-500/20" },
-    { icon: Eye, title: "Transparent", desc: "Open audit trails with SHA-256 integrity. Assessors see the evidence they need, nothing hidden.", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
+    { icon: Eye, title: "Transparent", desc: "Open audit trails with SHA-256 integrity. Assessors see the evidence they need, nothing hidden.", color: "text-brand-700", bg: "bg-brand-500/10 border-brand-500/20" },
     { icon: DollarSign, title: "Affordable", desc: "$0 to start. Enterprise-grade compliance shouldn't bankrupt a small defense subcontractor.", color: "text-pink-400", bg: "bg-pink-500/10 border-pink-500/20" },
-    { icon: CheckCircle, title: "Compliant", desc: "SOC 2 and GDPR ready out of the box. We practice the compliance we preach.", color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
+    { icon: CheckCircle, title: "Compliant", desc: "SOC 2 and GDPR ready out of the box. We practice the compliance we preach.", color: "text-brand-700", bg: "bg-brand-500/10 border-brand-500/20" },
 ];
 
 const testimonials = [
