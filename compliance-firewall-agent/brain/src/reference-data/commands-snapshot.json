@@ -1,0 +1,112 @@
+{
+  "version": "2.0.0",
+  "generatedAt": "2026-04-01T00:00:00.000Z",
+  "description": "Brain AI command catalogue for Kaelus.online",
+  "commands": [
+    {
+      "name": "assess",
+      "description": "Run a CMMC Level 2 compliance assessment for your organization",
+      "sourceHint": "/command-center/shield/assessment",
+      "category": "compliance",
+      "requiresAuth": true
+    },
+    {
+      "name": "scan",
+      "description": "Scan text or a document for CUI, PII, and compliance violations",
+      "sourceHint": "/api/scan",
+      "category": "compliance",
+      "requiresAuth": false
+    },
+    {
+      "name": "report",
+      "description": "Generate a PDF compliance report with SPRS score and gap analysis",
+      "sourceHint": "/api/reports/generate",
+      "category": "reports",
+      "requiresAuth": true
+    },
+    {
+      "name": "gaps",
+      "description": "Identify and prioritize compliance gaps mapped to CMMC domains",
+      "sourceHint": "/command-center/shield/gaps",
+      "category": "compliance",
+      "requiresAuth": true
+    },
+    {
+      "name": "sprs",
+      "description": "Calculate your SPRS (Supplier Performance Risk System) score",
+      "sourceHint": "/command-center/shield/assessment",
+      "category": "compliance",
+      "requiresAuth": true
+    },
+    {
+      "name": "onboard",
+      "description": "Start the CMMC onboarding wizard",
+      "sourceHint": "/command-center/shield/onboarding",
+      "category": "navigation",
+      "requiresAuth": true
+    },
+    {
+      "name": "quarantine",
+      "description": "Review quarantined AI requests flagged by the compliance firewall",
+      "sourceHint": "/command-center/quarantine",
+      "category": "compliance",
+      "requiresAuth": true
+    },
+    {
+      "name": "timeline",
+      "description": "View your CMMC compliance readiness timeline",
+      "sourceHint": "/command-center/timeline",
+      "category": "compliance",
+      "requiresAuth": true
+    },
+    {
+      "name": "pricing",
+      "description": "View Kaelus subscription plans and upgrade options",
+      "sourceHint": "/pricing",
+      "category": "utility",
+      "requiresAuth": false
+    },
+    {
+      "name": "help",
+      "description": "Get help and documentation for Brain AI capabilities",
+      "sourceHint": "/docs",
+      "category": "utility",
+      "requiresAuth": false
+    },
+    {
+      "name": "demo",
+      "description": "Run the Kaelus compliance firewall demo",
+      "sourceHint": "/demo",
+      "category": "utility",
+      "requiresAuth": false
+    },
+    {
+      "name": "settings",
+      "description": "Manage your account settings and API keys",
+      "sourceHint": "/command-center/settings",
+      "category": "admin",
+      "requiresAuth": true
+    },
+    {
+      "name": "team",
+      "description": "Manage team members and access controls",
+      "sourceHint": "/command-center/team",
+      "category": "admin",
+      "requiresAuth": true
+    },
+    {
+      "name": "tasks",
+      "description": "View and manage your compliance remediation tasks",
+      "sourceHint": "/command-center/tasks",
+      "category": "compliance",
+      "requiresAuth": true
+    },
+    {
+      "name": "resources",
+      "description": "Access CMMC Level 2 training resources and documentation",
+      "sourceHint": "/command-center/shield/resources",
+      "category": "compliance",
+      "requiresAuth": false
+    }
+  ]
+}
