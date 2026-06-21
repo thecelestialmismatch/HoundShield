@@ -774,7 +774,7 @@ export default function PricingPage() {
               <div className="absolute inset-0 bg-dot-grid opacity-30" />
 
               <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-medium mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-700 text-xs font-medium mb-6">
                   <BadgeCheck className="w-3.5 h-3.5" />
                   SOC 2 &middot; GDPR &middot; HIPAA &middot; EU AI Act
                 </div>

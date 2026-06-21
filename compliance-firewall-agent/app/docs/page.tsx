@@ -57,8 +57,8 @@ const DETECTED_PATTERNS = [
 
 const RISK_COLORS: Record<string, string> = {
   CRITICAL: "text-red-400",
-  HIGH: "text-brand-400",
-  MEDIUM: "text-brand-400",
+  HIGH: "text-brand-700",
+  MEDIUM: "text-brand-700",
 };
 
 const API_SECTIONS = [
@@ -369,9 +369,9 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
 
 const METHOD_COLORS: Record<string, string> = {
   GET: "bg-[rgba(5,150,105,0.1)] text-[var(--hs-success)]",
-  POST: "bg-brand-500/10 text-brand-400",
-  "GET / POST": "bg-brand-500/10 text-brand-400",
-  GUIDE: "bg-brand-500/10 text-brand-400",
+  POST: "bg-brand-500/10 text-brand-700",
+  "GET / POST": "bg-brand-500/10 text-brand-700",
+  GUIDE: "bg-brand-500/10 text-brand-700",
   REF: "bg-slate-500/10 text-[var(--hs-ink-secondary)]",
 };
 
@@ -387,7 +387,7 @@ export default function DocsPage() {
       {/* Nav */}
       <nav className="sticky top-0 z-50 h-16 bg-[var(--hs-surface-0)]/80 backdrop-blur-xl border-b border-[var(--hs-border-subtle)] flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="group/brand flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
               <Logo />
             </div>
@@ -395,7 +395,7 @@ export default function DocsPage() {
           </Link>
           <ChevronRight className="w-4 h-4 text-[var(--hs-ink-tertiary)]" />
           <div className="flex items-center gap-1.5">
-            <BookOpen className="w-4 h-4 text-brand-400" />
+            <BookOpen className="w-4 h-4 text-brand-700" />
             <span className="text-sm font-medium text-[var(--hs-ink-secondary)]">API Documentation</span>
           </div>
         </div>
@@ -420,11 +420,11 @@ export default function DocsPage() {
                 onClick={() => setActiveSection(s.id)}
                 className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-all ${
                   activeSection === s.id
-                    ? "bg-brand-500/10 text-brand-300 font-medium"
+                    ? "bg-brand-500/10 text-brand-700 font-medium"
                     : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] hover:bg-white"
                 }`}
               >
-                <span className={`inline-block w-9 text-[9px] font-mono mr-1.5 ${activeSection === s.id ? "text-brand-400" : "text-[var(--hs-ink-tertiary)]"}`}>
+                <span className={`inline-block w-9 text-[9px] font-mono mr-1.5 ${activeSection === s.id ? "text-brand-700" : "text-[var(--hs-ink-tertiary)]"}`}>
                   {s.method.split(" ")[0]}
                 </span>
                 {s.title}
@@ -443,7 +443,7 @@ export default function DocsPage() {
                 }}
                 className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-all ${
                   activeSection === "sdk" && sdkLang === lang
-                    ? "bg-brand-500/10 text-brand-300 font-medium"
+                    ? "bg-brand-500/10 text-brand-700 font-medium"
                     : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] hover:bg-white"
                 }`}
               >
@@ -476,7 +476,7 @@ export default function DocsPage() {
               <div className="space-y-4">
                 {QUICKSTART_STEPS.map((s) => (
                   <div key={s.step} className="flex gap-4 p-5 rounded-xl bg-white border border-[var(--hs-border)]">
-                    <div className="w-8 h-8 rounded-full bg-brand-500/15 border border-brand-500/30 flex items-center justify-center text-brand-400 font-bold text-sm shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-brand-500/15 border border-brand-500/30 flex items-center justify-center text-brand-700 font-bold text-sm shrink-0">
                       {s.step}
                     </div>
                     <div>
@@ -506,7 +506,7 @@ export default function DocsPage() {
                       <button
                         key={lang}
                         onClick={() => setSdkLang(lang)}
-                        className={`text-[10px] px-2 py-1 rounded transition-all ${sdkLang === lang ? "bg-brand-500/15 text-brand-300" : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)]"}`}
+                        className={`text-[10px] px-2 py-1 rounded transition-all ${sdkLang === lang ? "bg-brand-500/15 text-brand-700" : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)]"}`}
                       >
                         {lang}
                       </button>
@@ -516,7 +516,7 @@ export default function DocsPage() {
                 <CodeBlock code={SDK_EXAMPLES[sdkLang]} language={sdkLang} />
               </div>
 
-              <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-brand-300">
+              <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-[var(--hs-ink-secondary)]">
                 <span className="font-semibold">No infrastructure change required.</span> Your employees keep using ChatGPT, Copilot, or Claude — HoundShield sits in the middle transparently.
               </div>
             </div>
@@ -556,7 +556,7 @@ export default function DocsPage() {
                 </table>
               </div>
 
-              <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-brand-300">
+              <div className="bg-brand-500/10 border border-brand-500/20 rounded-xl p-4 text-sm text-[var(--hs-ink-secondary)]">
                 <span className="font-semibold">Conservative by design.</span> False negatives are worse than false positives for a compliance tool. Quarantined items go to human review — false positives are released, never silently passed.
               </div>
             </div>
@@ -576,7 +576,7 @@ export default function DocsPage() {
                     onClick={() => setSdkLang(lang)}
                     className={`text-xs px-3 py-1.5 rounded-lg transition-all ${
                       sdkLang === lang
-                        ? "bg-brand-500/15 text-brand-300 border border-brand-500/30"
+                        ? "bg-brand-500/15 text-brand-700 border border-brand-500/30"
                         : "text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-secondary)] border border-transparent"
                     }`}
                   >

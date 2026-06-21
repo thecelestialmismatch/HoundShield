@@ -25,8 +25,8 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
 
 const badgeStyles = {
   Feature: "bg-[rgba(5,150,105,0.15)] text-[var(--hs-success)] border-[rgba(5,150,105,0.25)]",
-  Improvement: "bg-brand-500/15 text-brand-400 border-brand-500/25",
-  Fix: "bg-brand-500/15 text-brand-400 border-brand-500/25",
+  Improvement: "bg-brand-500/15 text-brand-700 border-brand-500/25",
+  Fix: "bg-brand-500/15 text-brand-700 border-brand-500/25",
 };
 
 type Item = { tag: keyof typeof badgeStyles; text: string };
@@ -106,7 +106,7 @@ export default function ChangelogPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-brand-500/[0.07] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
-            <p className="text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold mb-4">Changelog</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-brand-700 font-semibold mb-4">Changelog</p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
               What&apos;s new in <span className="bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] bg-clip-text text-transparent">HoundShield</span>
             </h1>
@@ -169,8 +169,8 @@ export default function ChangelogPage() {
         <div className="max-w-3xl mx-auto">
           <FadeIn className="text-center mb-14">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-500/20 bg-brand-500/10 mb-4">
-              <Rocket className="w-4 h-4 text-brand-400" />
-              <span className="text-xs font-semibold text-brand-300 uppercase tracking-wider">Roadmap</span>
+              <Rocket className="w-4 h-4 text-brand-700" />
+              <span className="text-xs font-semibold text-brand-700 uppercase tracking-wider">Roadmap</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Coming next</h2>
           </FadeIn>
@@ -181,8 +181,8 @@ export default function ChangelogPage() {
                 <FadeIn key={item.title} delay={i * 0.08}>
                   <div className="group border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-6 h-full cursor-pointer hover:border-brand-500/20 hover:bg-brand-500/[0.03] transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-3">
-                      <Icon className="w-5 h-5 text-brand-400" />
-                      <span className="text-[10px] uppercase tracking-wider text-brand-400 font-bold">{item.q}</span>
+                      <Icon className="w-5 h-5 text-brand-700" />
+                      <span className="text-[10px] uppercase tracking-wider text-brand-700 font-bold">{item.q}</span>
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
                     <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{item.desc}</p>

@@ -785,7 +785,7 @@ export default function AgentsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="flex items-center gap-2 mb-4">
+              <Link href="/" className="group/brand flex items-center gap-2 mb-4">
                 <Logo className="w-7 h-7" />
                 <TextLogo />
               </Link>

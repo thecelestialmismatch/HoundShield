@@ -85,12 +85,12 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">8. Contact</h2>
-            <p>For privacy-related inquiries, contact us at <a href="mailto:admin@houndshield.com" className="text-brand-400 hover:text-brand-300">admin@houndshield.com</a>.</p>
+            <p>For privacy-related inquiries, contact us at <a href="mailto:admin@houndshield.com" className="text-brand-700 hover:text-brand-700">admin@houndshield.com</a>.</p>
           </section>
         </div>
 
         <div className="mt-12 pt-8 border-t border-[var(--hs-border-subtle)]">
-          <Link href="/terms" className="text-sm text-brand-400 hover:text-brand-300">
+          <Link href="/terms" className="text-sm text-brand-700 hover:text-brand-700">
             Read our Terms of Service &rarr;
           </Link>
         </div>
