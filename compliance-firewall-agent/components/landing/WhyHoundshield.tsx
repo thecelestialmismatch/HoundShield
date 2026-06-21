@@ -95,11 +95,11 @@ export function WhyHoundshield() {
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-5 border ${iconBg}`}>
                   <Icon className={`w-5 h-5 ${iconColor}`} />
                 </div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">{eyebrow}</p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-3">{eyebrow}</p>
                 <h3 className="text-[17px] font-bold text-slate-900 leading-snug mb-3">{title}</h3>
                 <p className="text-sm text-slate-600 leading-[1.6] flex-1">{body}</p>
                 <div className="mt-6 pt-5 border-t border-slate-100 flex items-end justify-between">
-                  <span className="text-xs text-slate-500 max-w-[100px] leading-tight">{stat.label}</span>
+                  <span className="text-xs text-slate-700 max-w-[100px] leading-tight">{stat.label}</span>
                   <span className={`text-xl font-black font-mono ${accentColor}`}>
                     <AnimatedCount to={stat.value} suffix={stat.suffix} />
                   </span>

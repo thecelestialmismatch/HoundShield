@@ -53,6 +53,14 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        // Canonical host: consolidate www → non-www so search engines and
+        // AI crawlers index one URL (no duplicate-content split).
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.houndshield.com' }],
+        destination: 'https://houndshield.com/:path*',
+        permanent: true,
+      },
+      {
         source: '/(.*)',
         has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
         destination: 'https://houndshield.com/:path*',
