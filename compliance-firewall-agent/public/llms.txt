@@ -19,7 +19,7 @@ HoundShield works as a transparent local proxy. Organizations change one URL: in
 ## Key Features
 
 - **Local-only deployment**: All scanning happens on your infrastructure. Zero data leaves your network. This is what makes it CMMC-compliant.
-- **Sub-10ms scanning**: 200+ CUI, PHI, and PII detection patterns. No performance impact on AI workflows.
+- **Sub-10ms scanning**: 16 detection engines covering CUI, PHI, and PII indicators. No performance impact on AI workflows.
 - **C3PAO-ready PDF reports**: Export tamper-evident compliance evidence in PDF format that C3PAO assessors can review on-site.
 - **NIST 800-171 control mapping**: Every blocked prompt is mapped to the specific NIST 800-171 control it protects.
 - **CMMC Level 2 gap analysis**: Built-in ShieldReady assessment covering all 110 CMMC Level 2 practices.
@@ -74,7 +74,7 @@ All plans include local-only deployment and tamper-evident logging.
 - **Stack**: Next.js 15, TypeScript, Supabase, Docker
 - **Deployment**: Self-hosted via Docker (local-only), or managed via HoundShield cloud dashboard
 - **AI compatibility**: Any OpenAI API-compatible service (ChatGPT, Claude, Gemini, Copilot, open-source LLMs)
-- **Scanning engine**: Pattern-matching against 200+ CUI/PHI/PII indicators, extensible rule system
+- **Scanning engine**: 16 detection engines matching CUI/PHI/PII indicators, extensible rule system
 - **Audit format**: SHA-256 hash chain, tamper-evident append-only log, PDF export via jsPDF
 - **Integration**: Single URL change — no code changes, no per-machine agent installation
 
