@@ -3,6 +3,13 @@
 ## Active
 <!-- Move items here when starting work -->
 
+## Done — 2026-06-21
+- [x] **Pre-launch hardening sweep** (PR `claude/pre-launch-audit-6iieir`) — GDPR cookie consent
+  (PostHog gated on opt-in), `security.txt` (RFC 9116), `/security` Trust page, `/dpa` Data
+  Processing Agreement, `/acceptable-use` AUP, `/status` live health page, footer Legal column,
+  sitemap entries. Build green, 503/503 tests (+11). Remaining launch blockers are config/keys
+  only — see `PRE-LAUNCH-AUDIT-2026-06-21.md`.
+
 ## Sprint 1 (Week of 2026-04-28) — Jordan deploys in 10 minutes, exports a PDF ✅ MERGED PR #62
 
 **Sprint goal:** One customer deploys HoundShield and exports a PDF audit report for her C3PAO.
