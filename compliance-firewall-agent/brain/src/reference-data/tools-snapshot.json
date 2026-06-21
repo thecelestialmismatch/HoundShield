@@ -1,0 +1,95 @@
+{
+  "version": "2.0.0",
+  "generatedAt": "2026-04-01T00:00:00.000Z",
+  "description": "Brain AI tool definitions for Kaelus.online agent",
+  "tools": [
+    {
+      "name": "web-search",
+      "description": "Search the web using DuckDuckGo — returns titles, URLs, and snippets",
+      "category": "research",
+      "requiresPermission": false,
+      "sourceHint": "lib/agent/tools/web-search.ts",
+      "parameters": {
+        "query": { "type": "string", "description": "Search query" },
+        "maxResults": { "type": "number", "description": "Max results (default 5)" }
+      }
+    },
+    {
+      "name": "web-browse",
+      "description": "Fetch and extract content from a URL — returns markdown text",
+      "category": "research",
+      "requiresPermission": false,
+      "sourceHint": "lib/agent/tools/web-browse.ts",
+      "parameters": {
+        "url": { "type": "string", "description": "URL to fetch" }
+      }
+    },
+    {
+      "name": "compliance-scan",
+      "description": "Scan text for CUI, PII, and CMMC/HIPAA compliance violations",
+      "category": "compliance",
+      "requiresPermission": false,
+      "sourceHint": "lib/classifier/risk-engine.ts",
+      "parameters": {
+        "text": { "type": "string", "description": "Text to scan" },
+        "framework": { "type": "string", "description": "cmmc | hipaa | soc2 | all (default: all)" }
+      }
+    },
+    {
+      "name": "code-execute",
+      "description": "Execute JavaScript code in a sandboxed environment",
+      "category": "coding",
+      "requiresPermission": true,
+      "sourceHint": "lib/agent/tools/code-execute.ts",
+      "parameters": {
+        "code": { "type": "string", "description": "JavaScript code to execute" }
+      }
+    },
+    {
+      "name": "file-analyze",
+      "description": "Parse and analyze JSON, CSV, or Markdown files",
+      "category": "analysis",
+      "requiresPermission": false,
+      "sourceHint": "lib/agent/tools/file-analyze.ts",
+      "parameters": {
+        "content": { "type": "string", "description": "File content to analyze" },
+        "fileType": { "type": "string", "description": "json | csv | markdown" }
+      }
+    },
+    {
+      "name": "data-query",
+      "description": "Run SQL-like queries on local JSON data",
+      "category": "analysis",
+      "requiresPermission": false,
+      "sourceHint": "lib/agent/tools/data-query.ts",
+      "parameters": {
+        "data": { "type": "array", "description": "Array of objects to query" },
+        "query": { "type": "string", "description": "SQL-like query string" }
+      }
+    },
+    {
+      "name": "generate-chart",
+      "description": "Create Chart.js-compatible visualization data",
+      "category": "visualization",
+      "requiresPermission": false,
+      "sourceHint": "lib/agent/tools/generate-chart.ts",
+      "parameters": {
+        "type": { "type": "string", "description": "bar | line | pie | doughnut | area | table" },
+        "data": { "type": "object", "description": "Chart data" },
+        "title": { "type": "string", "description": "Chart title" }
+      }
+    },
+    {
+      "name": "knowledge-base",
+      "description": "Store, retrieve, and search RAG-style documents for compliance guidance",
+      "category": "knowledge",
+      "requiresPermission": false,
+      "sourceHint": "lib/agent/tools/knowledge-base.ts",
+      "parameters": {
+        "action": { "type": "string", "description": "store | retrieve | search" },
+        "content": { "type": "string", "description": "Content to store or search query" },
+        "id": { "type": "string", "description": "Document ID (for retrieve)" }
+      }
+    }
+  ]
+}
