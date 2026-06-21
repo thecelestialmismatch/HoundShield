@@ -460,7 +460,7 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
+          <Link href="/" className="flex items-center gap-3 group group/brand flex-shrink-0">
             <Logo size={40} variant={variant} />
             <TextLogo className="text-xl" variant={variant} />
           </Link>

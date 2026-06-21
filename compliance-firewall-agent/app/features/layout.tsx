@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "HoundShield Features | AI Compliance Firewall",
     description:
-      "Sub-10ms scanning. 200+ CUI/PHI/PII patterns. CMMC Level 2 control mapping. Tamper-proof PDF evidence for C3PAO assessors. Local-only — data never leaves your network.",
+      "Sub-10ms scanning. 16 CUI/PHI/PII detection engines. CMMC Level 2 control mapping. Tamper-proof PDF evidence for C3PAO assessors. Local-only — data never leaves your network.",
     url: `${BASE_URL}/features`,
     type: "website",
   },
