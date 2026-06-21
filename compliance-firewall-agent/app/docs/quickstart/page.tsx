@@ -32,7 +32,7 @@ function CodeBlock({ code, language = "bash" }: { code: string; language?: strin
           onClick={copy}
           className="flex items-center gap-1.5 text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] transition-colors"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-brand-400" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? <Check className="w-3.5 h-3.5 text-brand-700" /> : <Copy className="w-3.5 h-3.5" />}
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
@@ -115,8 +115,8 @@ export default function QuickstartPage() {
         {/* Header */}
         <div className="mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-brand-400/30 bg-brand-400/5 mb-6">
-            <Shield className="w-3.5 h-3.5 text-brand-400" />
-            <span className="text-xs font-mono font-semibold text-brand-400 uppercase tracking-wider">
+            <Shield className="w-3.5 h-3.5 text-brand-700" />
+            <span className="text-xs font-mono font-semibold text-brand-700 uppercase tracking-wider">
               Quickstart — 15 minutes to C3PAO-ready
             </span>
           </div>
@@ -129,15 +129,15 @@ export default function QuickstartPage() {
           </p>
           <div className="flex items-center gap-6 mt-6 text-sm">
             <span className="flex items-center gap-1.5 text-[var(--hs-ink-tertiary)]">
-              <CheckCircle2 className="w-4 h-4 text-brand-400" />
+              <CheckCircle2 className="w-4 h-4 text-brand-700" />
               No firewall rules
             </span>
             <span className="flex items-center gap-1.5 text-[var(--hs-ink-tertiary)]">
-              <CheckCircle2 className="w-4 h-4 text-brand-400" />
+              <CheckCircle2 className="w-4 h-4 text-brand-700" />
               No network changes
             </span>
             <span className="flex items-center gap-1.5 text-[var(--hs-ink-tertiary)]">
-              <CheckCircle2 className="w-4 h-4 text-brand-400" />
+              <CheckCircle2 className="w-4 h-4 text-brand-700" />
               Works with any AI SDK
             </span>
           </div>
@@ -146,7 +146,7 @@ export default function QuickstartPage() {
         {/* Prerequisites */}
         <div className="mb-12 p-5 rounded-xl bg-white border border-[var(--hs-border-subtle)]">
           <h2 className="text-sm font-semibold text-[var(--hs-ink)] mb-3 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-brand-400" />
+            <CheckCircle2 className="w-4 h-4 text-brand-700" />
             Prerequisites
           </h2>
           <ul className="space-y-1.5 text-sm text-[var(--hs-ink-secondary)]">
@@ -156,14 +156,14 @@ export default function QuickstartPage() {
                 href="https://docs.docker.com/get-docker/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-brand-400 hover:text-brand-300 underline underline-offset-2"
+                className="text-brand-700 hover:text-brand-700 underline underline-offset-2"
               >
                 download here
               </a>
             </li>
             <li>
               <span className="text-[var(--hs-ink)] font-medium">HoundShield license key</span> —{" "}
-              <Link href="/signup" className="text-brand-400 hover:text-brand-300 underline underline-offset-2">
+              <Link href="/signup" className="text-brand-700 hover:text-brand-700 underline underline-offset-2">
                 get one free
               </Link>
             </li>
@@ -180,11 +180,11 @@ export default function QuickstartPage() {
             return (
               <div key={step.number}>
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-xs font-mono font-bold text-brand-400 bg-brand-400/10 px-2 py-0.5 rounded">
+                  <span className="text-xs font-mono font-bold text-brand-700 bg-brand-400/10 px-2 py-0.5 rounded">
                     {step.number}
                   </span>
                   <div className="w-7 h-7 rounded-lg bg-brand-400/10 border border-brand-400/20 flex items-center justify-center">
-                    <Icon className="w-3.5 h-3.5 text-brand-400" />
+                    <Icon className="w-3.5 h-3.5 text-brand-700" />
                   </div>
                   <h2 className="text-lg font-semibold text-[var(--hs-ink)]">{step.title}</h2>
                   <span className="ml-auto text-xs font-mono text-[var(--hs-ink-tertiary)] bg-white px-2 py-0.5 rounded">
@@ -220,7 +220,7 @@ export default function QuickstartPage() {
                     </span>
                   )}
                 </div>
-                <code className="text-xs font-mono text-brand-400 break-all">{p.envVar}</code>
+                <code className="text-xs font-mono text-brand-700 break-all">{p.envVar}</code>
               </div>
             ))}
           </div>
@@ -242,7 +242,7 @@ export default function QuickstartPage() {
             </Link>
             <Link
               href="/command-center/shield/reports"
-              className="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-medium text-sm transition-colors"
+              className="inline-flex items-center gap-2 text-brand-700 hover:text-brand-700 font-medium text-sm transition-colors"
             >
               Download C3PAO PDF <ArrowRight className="w-3.5 h-3.5" />
             </Link>

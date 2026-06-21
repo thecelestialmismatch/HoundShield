@@ -103,7 +103,7 @@ export default function SignupPage() {
         className="relative z-10 w-full max-w-md"
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center justify-center gap-3 mb-8">
+        <Link href="/" className="group/brand flex items-center justify-center gap-3 mb-8">
           <Logo className="w-10" />
           <TextLogo />
         </Link>

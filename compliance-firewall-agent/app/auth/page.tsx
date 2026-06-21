@@ -281,7 +281,7 @@ export default function AuthPage() {
 
         <div className="relative z-10 max-w-lg w-full">
           {/* Logo / Brand */}
-          <Link href="/" className="flex items-center gap-3.5 mb-10 group hover:opacity-90 transition-opacity">
+          <Link href="/" className="flex items-center gap-3.5 mb-10 group group/brand hover:opacity-90 transition-opacity">
             <Logo className="w-14 h-14 rounded-2xl shadow-glow group-hover:border-brand-500/40 transition-colors [&>svg:first-child]:w-7 [&>svg:first-child]:h-7 [&>svg:last-child]:w-3.5 [&>svg:last-child]:h-3.5" />
             <div>
               <TextLogo />
@@ -340,7 +340,7 @@ export default function AuthPage() {
 
         <div className="relative z-10 w-full max-w-[420px]">
           {/* Mobile logo */}
-          <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden hover:opacity-80 transition-opacity">
+          <Link href="/" className="group/brand flex items-center gap-2.5 mb-10 lg:hidden hover:opacity-80 transition-opacity">
             <Logo className="w-10 h-10" />
             <div>
               <TextLogo />

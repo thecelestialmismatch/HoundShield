@@ -189,7 +189,7 @@ export default function ContactPage() {
         <div className="max-w-[1200px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <div className="group/brand flex items-center gap-2 mb-4">
                 <Logo className="w-8 h-8" />
                 <TextLogo />
               </div>

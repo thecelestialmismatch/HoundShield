@@ -21,10 +21,16 @@ interface LogoProps {
  */
 const HOVER_MOTION =
   "transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] " +
+  // Pointer hover (desktop) on the mark itself or a parent `group/brand` link.
   "hover:[transform:rotate(-4deg)_scale(1.06)] " +
   "group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] " +
-  "motion-reduce:transition-none motion-reduce:hover:[transform:none] " +
-  "motion-reduce:group-hover/brand:[transform:none]";
+  // Touch/tap (mobile): :active fires while a finger is down, so the mark
+  // still animates where :hover never triggers.
+  "active:[transform:rotate(-4deg)_scale(1.06)] " +
+  "group-active/brand:[transform:rotate(-4deg)_scale(1.06)] " +
+  "motion-reduce:transition-none " +
+  "motion-reduce:hover:[transform:none] motion-reduce:active:[transform:none] " +
+  "motion-reduce:group-hover/brand:[transform:none] motion-reduce:group-active/brand:[transform:none]";
 
 export function Logo({ className = "", size = 38, variant }: LogoProps) {
   const toneClass = variant === "dark" ? "logo-on-dark" : "logo-img dark:invert";

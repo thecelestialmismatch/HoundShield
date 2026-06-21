@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 text-sm text-brand-400 hover:text-brand-400 transition-colors mt-4"
+              className="inline-flex items-center gap-1.5 text-sm text-brand-700 hover:text-brand-700 transition-colors mt-4"
             >
               Return to login
             </Link>
