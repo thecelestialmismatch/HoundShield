@@ -83,12 +83,12 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">11. Contact</h2>
-            <p>Questions about these terms? Contact us at <a href="mailto:info@houndshield.com" className="text-brand-400 hover:text-brand-300">info@houndshield.com</a>. For enterprise legal inquiries, reach our team at <a href="mailto:admin@houndshield.com" className="text-brand-400 hover:text-brand-300">admin@houndshield.com</a>.</p>
+            <p>Questions about these terms? Contact us at <a href="mailto:info@houndshield.com" className="text-brand-700 hover:text-brand-700">info@houndshield.com</a>. For enterprise legal inquiries, reach our team at <a href="mailto:admin@houndshield.com" className="text-brand-700 hover:text-brand-700">admin@houndshield.com</a>.</p>
           </section>
         </div>
 
         <div className="mt-12 pt-8 border-t border-[var(--hs-border-subtle)]">
-          <Link href="/privacy" className="text-sm text-brand-400 hover:text-brand-300">
+          <Link href="/privacy" className="text-sm text-brand-700 hover:text-brand-700">
             Read our Privacy Policy &rarr;
           </Link>
         </div>
