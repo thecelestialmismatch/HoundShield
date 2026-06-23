@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 import { createServiceClient } from '@/lib/supabase/client';
 import { day3Email } from '@/lib/email/templates/day3';
 import { day7Email } from '@/lib/email/templates/day7';
+import { day14Email } from '@/lib/email/templates/day14';
 
 function getResend(): Resend | null {
   const key = process.env.RESEND_API_KEY;
@@ -36,14 +37,16 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceClient();
 
-  const [day3Result, day7Result] = await Promise.allSettled([
+  const [day3Result, day7Result, day14Result] = await Promise.allSettled([
     processDayN(supabase, resend, 3),
     processDayN(supabase, resend, 7),
+    processDayN(supabase, resend, 14),
   ]);
 
   const results = {
     day3: day3Result.status === 'fulfilled' ? day3Result.value : { error: String((day3Result as PromiseRejectedResult).reason) },
     day7: day7Result.status === 'fulfilled' ? day7Result.value : { error: String((day7Result as PromiseRejectedResult).reason) },
+    day14: day14Result.status === 'fulfilled' ? day14Result.value : { error: String((day14Result as PromiseRejectedResult).reason) },
   };
 
   console.log('[email-drip] Run complete', results);
@@ -55,9 +58,9 @@ type SupabaseClient = ReturnType<typeof createServiceClient>;
 async function processDayN(
   supabase: SupabaseClient,
   resend: Resend,
-  day: 3 | 7,
+  day: 3 | 7 | 14,
 ): Promise<{ sent: number; skipped: number }> {
-  const sentAtCol = day === 3 ? 'day3_sent_at' : 'day7_sent_at';
+  const sentAtCol = day === 3 ? 'day3_sent_at' : day === 7 ? 'day7_sent_at' : 'day14_sent_at';
   const intervalDays = day;
 
   // Fetch users whose day-N window has passed and email hasn't been sent yet.
@@ -103,7 +106,9 @@ async function processDayN(
 
     const emailConfig = day === 3
       ? { from: day3Email.from, subject: day3Email.subject, html: day3Email.html(orgName) }
-      : { from: day7Email.from, subject: day7Email.subject, html: day7Email.html(orgName, tier) };
+      : day === 7
+        ? { from: day7Email.from, subject: day7Email.subject, html: day7Email.html(orgName, tier) }
+        : { from: day14Email.from, subject: day14Email.subject, html: day14Email.html(orgName) };
 
     const { error: sendErr } = await resend.emails.send({
       from: emailConfig.from,
