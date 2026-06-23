@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { FaqSection } from "@/components/seo/FaqSection";
+import { ModeBNotice } from "@/components/ModeBNotice";
 import { pricingFaqs } from "@/lib/seo/faqs";
 import {
-  Shield,
   ArrowRight,
   Check,
   ChevronDown,
@@ -18,9 +18,9 @@ import {
   Building2,
   ShieldCheck,
   BadgeCheck,
-  Clock,
+  FileText,
+  Fingerprint,
   Users,
-  Lock,
   Star,
   Minus,
 } from "lucide-react";
@@ -314,6 +314,28 @@ export default function PricingPage() {
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const router = useRouter();
 
+  async function handleReportCheckout() {
+    setCheckoutError(null);
+    try {
+      setLoading("report");
+      const res = await fetch("/api/stripe/report-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setCheckoutError(data.error || "Checkout failed. Please try again.");
+      }
+    } catch {
+      setCheckoutError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(null);
+    }
+  }
+
   async function handleCheckout(tier: string, billing: "monthly" | "annual") {
     if (tier === "free") {
       router.push("/signup");
@@ -388,13 +410,68 @@ export default function PricingPage() {
 
           <AnimatedSection delay={200}>
             <p className="text-lg md:text-xl text-[var(--hs-ink-secondary)] max-w-2xl mx-auto mb-10 leading-relaxed">
-              Protect your enterprise from AI data leaks without the enterprise
-              pricing headache. Start free, scale when you&apos;re ready.
+              Start with the <strong>$499 CMMC AI Risk Assessment Report</strong> — a one-time PDF
+              that proves the problem and the fix. Add continuous monitoring when you&apos;re ready.
             </p>
           </AnimatedSection>
 
-          {/* ===== BILLING TOGGLE ===== */}
+          {/* ===== $499 REPORT HERO ===== */}
+          <AnimatedSection delay={250}>
+            <div className="max-w-2xl mx-auto text-left mb-12">
+              <div className="relative rounded-2xl border-2 border-brand-500/40 bg-white p-8 shadow-[var(--shadow-md)] overflow-hidden">
+                <div className="absolute -top-3 left-8">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-600 text-white text-[11px] font-bold uppercase tracking-widest">
+                    <Star className="w-3 h-3" /> Start here
+                  </span>
+                </div>
+                <div className="flex items-start gap-4 mb-5 mt-2">
+                  <div className="w-11 h-11 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-5.5 h-5.5 text-brand-500" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-[var(--hs-ink)]">CMMC AI Risk Assessment Report</h2>
+                    <p className="text-sm text-[var(--hs-ink-secondary)] mt-0.5">
+                      One-time. No subscription. No MSA. A $499 PO bypasses procurement.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-1 mb-5">
+                  <span className="text-5xl font-bold tracking-tight text-[var(--hs-ink)]">$499</span>
+                  <span className="text-base text-[var(--hs-ink-tertiary)] ml-1">one-time</span>
+                </div>
+                <ul className="space-y-2.5 mb-6">
+                  {[
+                    "Run the proxy 14 days in your own environment (Mode B / Docker)",
+                    "Every AI prompt event risk-scored against NIST 800-171 Rev 2",
+                    "SHA-256-signed PDF — the evidence format a C3PAO assessor expects",
+                    "Nothing leaves your network — scanned locally in <10ms",
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-3 text-sm text-[var(--hs-ink-secondary)]">
+                      <Fingerprint className="w-4 h-4 flex-shrink-0 mt-0.5 text-brand-500" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={handleReportCheckout}
+                  disabled={loading === "report"}
+                  className={`btn-primary w-full justify-center py-3.5 text-base ${loading === "report" ? "opacity-60 pointer-events-none" : ""}`}
+                >
+                  {loading === "report" ? "Redirecting to checkout…" : "Get your $499 report"}
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <p className="text-xs text-[var(--hs-ink-tertiary)] mt-3 text-center">
+                  30-day money-back guarantee · RPO/MSP co-brand available at wholesale
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* ===== MONITORING PLANS LABEL + BILLING TOGGLE ===== */}
           <AnimatedSection delay={300}>
+            <p className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--hs-ink-tertiary)] mb-5">
+              Or add continuous monitoring
+            </p>
             <div className="inline-flex items-center gap-4 p-1.5 rounded-full bg-white border border-[var(--hs-border)] shadow-[var(--shadow-sm)]">
               <button
                 onClick={() => setIsAnnual(false)}
@@ -692,49 +769,11 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* ===== TRUSTED LOGOS / STATS BAR ===== */}
+      {/* ===== DEPLOYMENT MODES (architecture honesty) ===== */}
       <section className="relative px-6 pb-24">
         <AnimatedSection>
-          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Shield,
-                stat: "2M+",
-                label: "Scans processed",
-                color: "text-brand-400",
-              },
-              {
-                icon: Clock,
-                stat: "<50ms",
-                label: "Average latency",
-                color: "text-[var(--hs-success)]",
-              },
-              {
-                icon: Lock,
-                stat: "99.99%",
-                label: "Uptime SLA",
-                color: "text-brand-400",
-              },
-              {
-                icon: Users,
-                stat: "500+",
-                label: "Teams protected",
-                color: "text-[var(--hs-steel)]",
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="glass-card p-6 text-center"
-              >
-                <item.icon
-                  className={`w-5 h-5 ${item.color} mx-auto mb-3`}
-                />
-                <p className="text-2xl font-bold text-[var(--hs-ink)] mb-1">
-                  {item.stat}
-                </p>
-                <p className="text-xs text-[var(--hs-ink-tertiary)]">{item.label}</p>
-              </div>
-            ))}
+          <div className="max-w-5xl mx-auto">
+            <ModeBNotice variant="full" />
           </div>
         </AnimatedSection>
       </section>
@@ -786,25 +825,23 @@ export default function PricingPage() {
                   </span>
                 </h2>
                 <p className="text-[var(--hs-ink-secondary)] max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ teams that trust HoundShield to protect their most
-                  sensitive data from unauthorized AI exposure. Deploy in
-                  under 15 minutes.
+                  Turn an AI policy violation into C3PAO-ready evidence in under 10 minutes.
+                  Start with the $499 report; deploy the proxy in under 15 minutes.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Link href="/signup" className="btn-primary px-8 py-3">
-                    Start Free Trial
+                  <button onClick={handleReportCheckout} className="btn-primary px-8 py-3">
+                    Get your $499 report
                     <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <Link href="#contact" className="btn-ghost px-8 py-3">
-                    Talk to Sales
+                  </button>
+                  <Link href="/partners" className="btn-ghost px-8 py-3">
+                    RPO / MSP partners
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
 
                 <p className="text-xs text-[var(--hs-ink-tertiary)] mt-6">
-                  No credit card required &middot; 14-day Pro trial &middot;
-                  Cancel anytime
+                  One-time &middot; no subscription required &middot; 30-day money-back guarantee
                 </p>
               </div>
             </div>
