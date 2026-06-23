@@ -18,7 +18,9 @@ const HOUNDSHIELD_SYSTEM =
   "HoundShield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning for 16 risk categories in under 10ms. " +
   "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously. 800+ models via OpenRouter. " +
   "INSTALLATION: Change baseURL to gateway.houndshield.com/v1 — works with any OpenAI-compatible SDK. 15 minutes. No agents. No network changes. " +
-  "PRICING: Starter FREE (1K scans/mo), Pro $199/mo (50K scans, SOC2+HIPAA), Growth $499/mo (CMMC+SIEM+PDF reports), Enterprise $999/mo (blockchain+SSO), Agency $2499/mo (multi-tenant). " +
+  "LEAD PRODUCT: The $499 one-time CMMC AI Risk Assessment Report — run the proxy 14 days in the customer's own environment, get a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription needed. This is what to recommend first. " +
+  "DEPLOYMENT MODES: (A) Hosted trial on Vercel — NOT FedRAMP-authorized, non-CUI evaluation only; (B) Self-hosted Docker on customer infra — CUI-safe, data never leaves their boundary; (C) Air-gapped. For any CUI workload, recommend Mode B. Never claim the hosted endpoint is CUI-safe. " +
+  "MONITORING SUBSCRIPTIONS (after the report): Starter $299/mo, Pro $799/mo (continuous detection + alerts + C3PAO PDF), Enterprise $1499/mo (on-prem Docker, air-gapped). " +
   "CMMC FACTS: 110 NIST 800-171 controls, SPRS score -203 to +110, November 2026 enforcement, C3PAO costs $30K-$150K. " +
   "DETECTION: CUI (FOUO, CAGE codes, contract numbers), PHI (all 18 HIPAA identifiers), PII, API keys, source code, financial data, IP, ITAR/EAR. " +
   "INTEGRATIONS: Slack, Microsoft Teams, Splunk HEC, Azure Sentinel (HoundShieldCompliance_CL), Base L2 blockchain audit trail, MCP server (early access). " +
@@ -302,6 +304,18 @@ export function GlobalChat() {
               ))}
             </div>
           )}
+
+          {/* CUI warning — Brain AI routes to a commercial cloud endpoint
+              (OpenRouter), which is NOT FedRAMP-authorized. Inputting CUI here
+              is a spillage event. This disclosure is mandatory and must stay
+              visible above the input. */}
+          <div className="flex items-start gap-2 px-3.5 pt-2.5 border-t border-white/[0.05]">
+            <span className="mt-0.5 text-[11px]" aria-hidden>⚠️</span>
+            <p className="text-[10px] leading-snug text-amber-300/80">
+              Do not input CUI, PHI, or PII. Brain AI routes to a commercial cloud endpoint
+              (not FedRAMP-authorized).
+            </p>
+          </div>
 
           {/* Input */}
           <form

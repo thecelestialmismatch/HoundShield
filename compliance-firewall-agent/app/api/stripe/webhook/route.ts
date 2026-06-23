@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { createServiceClient } from '@/lib/supabase/client';
 import { upgradeEmail } from '@/lib/email/templates/upgrade';
 import { canceledEmail } from '@/lib/email/templates/canceled';
+import { reportOrderEmail } from '@/lib/email/templates/report-order';
 
 type ServiceClient = ReturnType<typeof createServiceClient>;
 
@@ -31,6 +32,69 @@ async function sendTransactional(
   } catch (err) {
     console.error('[Stripe Webhook] transactional email failed (non-fatal):', err);
   }
+}
+
+/**
+ * Send a transactional email to a raw address (no account required). Used for
+ * the one-time $499 report buyer, who purchases without signing up. Best-effort:
+ * never throws, never blocks the webhook's core job.
+ */
+async function sendTransactionalToEmail(
+  to: string,
+  build: { from: string; subject: string; html: string },
+): Promise<void> {
+  try {
+    if (!process.env.RESEND_API_KEY || !to) return;
+    const { Resend } = await import('resend');
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    await resend.emails.send({ from: build.from, to, subject: build.subject, html: build.html });
+  } catch (err) {
+    console.error('[Stripe Webhook] report email failed (non-fatal):', err);
+  }
+}
+
+/**
+ * Record + fulfill a one-time $499 CMMC AI Risk Assessment Report purchase.
+ * Best-effort fulfillment email; the order row is the source of truth. Never
+ * throws — billing has already succeeded by the time Stripe calls us.
+ */
+async function handleReportOrder(
+  supabase: ServiceClient,
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const email =
+    session.customer_details?.email ?? session.customer_email ?? '';
+  const fullName = session.customer_details?.name ?? '';
+  const meta = session.metadata ?? {};
+  const isWholesale = meta.wholesale === 'true';
+
+  const { error } = await supabase.from('report_orders').upsert(
+    {
+      email,
+      full_name: fullName || null,
+      vertical: meta.vertical || null,
+      stripe_session_id: session.id,
+      stripe_payment_intent_id: (session.payment_intent as string) ?? null,
+      stripe_customer_id: (session.customer as string) ?? null,
+      amount_cents: session.amount_total ?? (isWholesale ? 29900 : 49900),
+      currency: session.currency ?? 'usd',
+      partner_ref: meta.partner_ref || null,
+      is_wholesale: isWholesale,
+      status: 'paid',
+    },
+    { onConflict: 'stripe_session_id' },
+  );
+
+  if (error) {
+    console.error('[Stripe Webhook] report_orders upsert failed:', error);
+  }
+  console.log(`[Stripe Webhook] report order recorded: ${session.id} email=${email} wholesale=${isWholesale}`);
+
+  await sendTransactionalToEmail(email, {
+    from: reportOrderEmail.from,
+    subject: reportOrderEmail.subject,
+    html: reportOrderEmail.html(fullName),
+  });
 }
 
 function getStripe() {
@@ -83,6 +147,14 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
+
+        // One-time $499 report (mode: 'payment') — Stage 1 primary product.
+        // No subscription, and the buyer may not have an account. Handle and stop.
+        if (session.mode === 'payment' || session.metadata?.product === 'cmmc_ai_risk_report') {
+          await handleReportOrder(supabase, session);
+          break;
+        }
+
         const subscriptionId = session.subscription as string;
         const userId = session.metadata?.supabase_user_id
           || (await getCustomerUserId(supabase, session.customer as string));

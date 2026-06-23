@@ -221,6 +221,85 @@ describe("POST /api/stripe/webhook — checkout.session.completed", () => {
   });
 });
 
+// ── checkout.session.completed (one-time $499 report) ─────────────────────
+
+describe("POST /api/stripe/webhook — report order (mode: payment)", () => {
+  beforeEach(() => {
+    process.env.STRIPE_SECRET_KEY = "sk_test";
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    delete process.env.RESEND_API_KEY; // keep email path a no-op in tests
+    setupSupabase();
+  });
+
+  afterEach(() => {
+    delete process.env.STRIPE_SECRET_KEY;
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    vi.clearAllMocks();
+  });
+
+  it("records a report_orders row and does NOT retrieve a subscription", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report",
+      data: {
+        object: {
+          id: "cs_report_1",
+          mode: "payment",
+          payment_intent: "pi_1",
+          customer: "cus_report",
+          customer_details: { email: "jordan@dib.com", name: "Jordan M" },
+          amount_total: 49900,
+          currency: "usd",
+          metadata: { product: "cmmc_ai_risk_report", vertical: "defense", wholesale: "false" },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    // Subscription retrieval must never run for a one-time report.
+    expect(mockSubscriptionsRetrieve).not.toHaveBeenCalled();
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        stripe_session_id: "cs_report_1",
+        email: "jordan@dib.com",
+        amount_cents: 49900,
+        is_wholesale: false,
+        status: "paid",
+      }),
+      expect.any(Object)
+    );
+  });
+
+  it("flags wholesale ($299 co-brand) orders", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report_ws",
+      data: {
+        object: {
+          id: "cs_report_ws",
+          mode: "payment",
+          customer_details: { email: "rpo@summit7.com", name: "" },
+          amount_total: 29900,
+          currency: "usd",
+          metadata: { product: "cmmc_ai_risk_report", partner_ref: "summit7", wholesale: "true" },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        is_wholesale: true,
+        partner_ref: "summit7",
+        amount_cents: 29900,
+      }),
+      expect.any(Object)
+    );
+  });
+});
+
 // ── customer.subscription.updated ─────────────────────────────────────────
 
 describe("POST /api/stripe/webhook — customer.subscription.updated", () => {
