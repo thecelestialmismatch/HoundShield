@@ -1,7 +1,27 @@
 # Hound Shield — Task Queue
 
+> **Compass-corrected 2026-06-23.** Mission = FIRST REVENUE. Stage 1 milestone by **June 25**:
+> ≥3 paid **$499 CMMC AI Risk Assessment Reports** + ≥1 **RPO/MSP signed referral agreement**.
+> Lead with the $499 one-time PDF, NOT a subscription. RPOs/MSPs are the channel — NOT C3PAOs.
+> Sprints below (Sprint 1–4, C3PAO-channel framing) predate this correction — kept for history only.
+
+## Stage 1 — by 2026-06-25 (THE milestone)
+
+**Gate:** ≥3 paid $499 reports · ≥1 RPO agreement · Docker image published · Brain AI CUI warning live · one pricing page · `/security` live.
+
+- [ ] **$499 "CMMC AI Risk Assessment Report" Stripe SKU** — one-time price, checkout + webhook fulfillment (primary product; bypasses procurement)
+- [ ] **Pricing page = one grid, $499 report as the hero** — kill the old 5-tier framing; Stage 2 subscriptions shown as "coming after launch"
+- [ ] **Mode-B / Vercel boundary disclosure everywhere** — "Docker (Mode B) required for CUI workloads; hosted trial is non-CUI eval only" on homepage, /security, /pricing, /partner
+- [ ] **Brain AI CUI warning live** — "Do not input CUI. This feature routes to a commercial cloud endpoint." (or pull Brain AI from homepage until live)
+- [ ] **Publish Docker image** `houndshield/proxy:latest` + 60-second deploy video
+- [ ] **/partner page → RPO/MSP referral** (40–50% rev-share on co-branded $499 report); remove any C3PAO-endorsement framing
+- [ ] **RPO outreach list** — 50 RPOs from Cyber AB Marketplace; top targets: Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics
+- [ ] **HIPAA-first direct outreach** (Rachel) — parallel track, fastest validation, no FedRAMP blocker
+
 ## Active
-<!-- Move items here when starting work -->
+<!-- Move a Stage 1 item here when starting work -->
+
+## Superseded by compass correction (history)
 
 ## Done — 2026-06-21
 - [x] **Pre-launch hardening sweep** (PR `claude/pre-launch-audit-6iieir`) — GDPR cookie consent
