@@ -1,12 +1,23 @@
-# C3PAO Outreach Sequence — HoundShield
+# C3PAO Outreach Sequence — HoundShield  · ⚠️ SECONDARY / ARMS-LENGTH ONLY
 
-**Goal (Sprint 2):** sign the first C3PAO referral partner. One C3PAO has 20–100 defense-contractor
-clients actively shopping for CMMC tooling, so the channel beats cold contractor outreach ~10:1.
+> **DOCTRINE ALIGNMENT (read first).** The Stage-1 mission makes **RPO/MSP the primary channel**
+> (`rpo-msp-outreach-sequence.md`). A **C3PAO is legally barred from endorsing or reselling tools it
+> assesses** — assessor independence (CMMC AB Code of Professional Conduct; cf. NIST SP 800-171A
+> independence expectations). So this sequence is **secondary and strictly arms-length**:
+> - ✅ A C3PAO may **refer** a contractor it is *not* engaged to assess to HoundShield, or share
+>   educational material, or use HoundShield's evidence output *that the client independently chose*.
+> - ❌ Never position HoundShield as something a C3PAO recommends to a client whose assessment that same
+>   C3PAO will perform. That compromises their independence and our credibility.
+>
+> If you only have time for one channel, run RPO/MSP, not this. Use this only where the independence
+> boundary is unambiguous.
 
-**Owner:** STRIKER (Revenue/Growth) · **Status:** ready to send · **Last updated:** 2026-06-21
+**Goal:** awareness + arms-length referrals into the **$499 CMMC AI Risk Assessment Report**.
 
-> Pair this with the now-live trust assets — `/security`, `/dpa`, `/partners` — which make the
-> pitch procurement-credible. Link them; don't re-explain them.
+**Owner:** STRIKER (Revenue/Growth) · **Status:** secondary asset · **Last updated:** 2026-06-23
+
+> Pair with the live trust assets — `/security`, `/dpa`, `/partners` — which make the pitch
+> procurement-credible. Link them; don't re-explain them.
 
 ---
 
@@ -86,16 +97,17 @@ No pitch in the request. If accepted, do **not** dump a sales message; let the e
 
 > Hi {{first_name}},
 >
-> Following up with the part most C3PAOs care about: the economics.
+> Quick follow-up — and I want to be precise about independence: I'm **not** asking you to endorse a
+> tool to a client you're assessing. That's your independence and I won't touch it.
 >
-> HoundShield pays a recurring referral commission on every client you send, and clients land on a
-> tool that strengthens — never compromises — the assessment you'll run. You look good twice: better
-> evidence, and a recommendation that holds up under your own scrutiny.
+> Where it works is arms-length: a contractor you're *not* engaged to assess, or simply pointing
+> clients who ask "what about ChatGPT?" to our $499 AI Risk Assessment Report so they arrive at their
+> own decision. If a referral relationship ever fits within your independence rules, we have one.
 >
-> Could I grab 10 minutes this week or next? I'll walk through the local-only architecture and the
-> evidence report, and you can judge whether it's something to put in front of clients.
+> Could I grab 10 minutes to show the report and the local-only architecture, so you know what clients
+> are choosing on their own?
 >
-> Partner overview: houndshield.com/partners
+> Partner overview: houndshield.com/partners · The offer: houndshield.com/assessment
 >
 > — {{sender_name}}
 
@@ -150,12 +162,13 @@ No pitch in the request. If accepted, do **not** dump a sales message; let the e
 
 ## What "yes" looks like → handoff
 
-1. 10-minute call booked → demo the local-only flow + the C3PAO PDF report.
-2. Partner application via `/partners` → triggers the applicant confirmation email + founder alert.
-3. Referral terms agreed → first client referral.
-4. Log the win in `tasks/todo.md`; record the pattern in `tasks/lessons.md`.
+1. 10-minute call booked → demo the local-only (Mode B) flow + the PDF report.
+2. Arms-length awareness/referral set up (never for a client they're assessing).
+3. Contractors arrive at the **$499 AI Risk Assessment Report** on their own decision.
+4. Log the outcome in `tasks/todo.md`; record the pattern in `tasks/lessons.md`.
 
-**Metric that matters:** signed C3PAO partners (not contractors emailed). Target: **1** to clear the Sprint 2 gate.
+**Metric that matters (Stage 1):** this is a *secondary* awareness channel. The hard targets —
+≥3 paid $499 reports and ≥1 signed referral agreement — are owned by the **RPO/MSP** sequence.
 
 ---
 

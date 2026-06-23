@@ -221,6 +221,64 @@ describe("POST /api/stripe/webhook — checkout.session.completed", () => {
   });
 });
 
+// ── checkout.session.completed (one-time $499 report) ─────────────────────
+
+describe("POST /api/stripe/webhook — report purchase (payment mode)", () => {
+  beforeEach(() => {
+    process.env.STRIPE_SECRET_KEY = "sk_test";
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    setupSupabase();
+  });
+
+  afterEach(() => {
+    delete process.env.STRIPE_SECRET_KEY;
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    delete process.env.RESEND_API_KEY;
+    vi.clearAllMocks();
+  });
+
+  it("handles a one-time report purchase without retrieving a subscription", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report",
+      data: {
+        object: {
+          id: "cs_report_1",
+          mode: "payment",
+          subscription: null,
+          customer: "cus_123",
+          metadata: { supabase_user_id: "user-abc", product: "cmmc_ai_risk_report" },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    // The subscription-only path must NOT run for a one-time payment.
+    expect(mockSubscriptionsRetrieve).not.toHaveBeenCalled();
+    expect(mockUpsert).not.toHaveBeenCalled();
+  });
+
+  it("returns 200 for a report purchase even with no user ID", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report_noid",
+      data: {
+        object: {
+          id: "cs_report_2",
+          mode: "payment",
+          subscription: null,
+          customer: "cus_unknown",
+          metadata: { product: "cmmc_ai_risk_report" },
+        },
+      },
+    });
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockSubscriptionsRetrieve).not.toHaveBeenCalled();
+  });
+});
+
 // ── customer.subscription.updated ─────────────────────────────────────────
 
 describe("POST /api/stripe/webhook — customer.subscription.updated", () => {
