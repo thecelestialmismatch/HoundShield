@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { createServiceClient } from '@/lib/supabase/client';
 import { upgradeEmail } from '@/lib/email/templates/upgrade';
 import { canceledEmail } from '@/lib/email/templates/canceled';
+import { reportPurchaseEmail } from '@/lib/email/templates/report-purchase';
 
 type ServiceClient = ReturnType<typeof createServiceClient>;
 
@@ -83,10 +84,27 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        const subscriptionId = session.subscription as string;
         const userId = session.metadata?.supabase_user_id
           || (await getCustomerUserId(supabase, session.customer as string));
 
+        // One-time $499 report purchase (mode: payment) — no subscription to
+        // retrieve. Send the order confirmation and stop before the
+        // subscription-only logic below (which would throw on a null sub).
+        if (session.mode === 'payment' || session.metadata?.product === 'cmmc_ai_risk_report') {
+          if (userId) {
+            await sendTransactional(supabase, userId, (orgName) => ({
+              from: reportPurchaseEmail.from,
+              subject: reportPurchaseEmail.subject,
+              html: reportPurchaseEmail.html(orgName),
+            }));
+            console.log(`[Stripe Webhook] checkout.session.completed: report purchase for user=${userId}`);
+          } else {
+            console.warn('[Stripe Webhook] report purchase: no user ID found', { session: session.id });
+          }
+          break;
+        }
+
+        const subscriptionId = session.subscription as string;
         if (!userId) {
           console.warn('[Stripe Webhook] checkout.session.completed: no user ID found', { subscriptionId });
           break;
