@@ -64,6 +64,15 @@ export async function POST(request: NextRequest) {
             <p><strong>Message:</strong> ${message || "None"}</p>
           `,
         });
+
+        // Applicant-facing confirmation — keeps the C3PAO channel warm.
+        const { partnerWelcomeEmail } = await import("@/lib/email/templates/partner-welcome");
+        await resend.emails.send({
+          from: partnerWelcomeEmail.from,
+          to: email,
+          subject: partnerWelcomeEmail.subject,
+          html: partnerWelcomeEmail.html(name, company),
+        });
       }
     } catch (emailErr) {
       // Email failure should never block the application

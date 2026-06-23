@@ -1,6 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createServiceClient } from '@/lib/supabase/client';
+import { upgradeEmail } from '@/lib/email/templates/upgrade';
+import { canceledEmail } from '@/lib/email/templates/canceled';
+
+type ServiceClient = ReturnType<typeof createServiceClient>;
+
+/**
+ * Best-effort transactional email. NEVER throws and NEVER blocks the webhook's
+ * core job (DB writes) — billing state must persist even if email fails.
+ */
+async function sendTransactional(
+  supabase: ServiceClient,
+  userId: string,
+  build: (orgName: string) => { from: string; subject: string; html: string },
+): Promise<void> {
+  try {
+    if (!process.env.RESEND_API_KEY) return;
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('email, full_name')
+      .eq('id', userId)
+      .single();
+    if (!profile?.email) return;
+
+    const { from, subject, html } = build(profile.full_name ?? 'there');
+    const { Resend } = await import('resend');
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    await resend.emails.send({ from, to: profile.email, subject, html });
+  } catch (err) {
+    console.error('[Stripe Webhook] transactional email failed (non-fatal):', err);
+  }
+}
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -77,6 +108,13 @@ export async function POST(request: NextRequest) {
 
         await supabase.from('profiles').update({ tier }).eq('id', userId);
         console.log(`[Stripe Webhook] checkout.session.completed: user=${userId} tier=${tier} status=${subscription.status}`);
+
+        // Payment confirmation receipt (best-effort).
+        await sendTransactional(supabase, userId, (orgName) => ({
+          from: upgradeEmail.from,
+          subject: upgradeEmail.subject(tier),
+          html: upgradeEmail.html(orgName, tier),
+        }));
         break;
       }
 
@@ -127,6 +165,13 @@ export async function POST(request: NextRequest) {
 
         await supabase.from('profiles').update({ tier: 'free' }).eq('id', userId);
         console.log(`[Stripe Webhook] customer.subscription.deleted: user=${userId} → downgraded to free`);
+
+        // Cancellation confirmation + soft win-back (best-effort).
+        await sendTransactional(supabase, userId, (orgName) => ({
+          from: canceledEmail.from,
+          subject: canceledEmail.subject,
+          html: canceledEmail.html(orgName),
+        }));
         break;
       }
 
