@@ -9,8 +9,8 @@
 
 **Gate:** ≥3 paid $499 reports · ≥1 RPO agreement · Docker image published · Brain AI CUI warning live · one pricing page · `/security` live.
 
-- [ ] **$499 "CMMC AI Risk Assessment Report" Stripe SKU** — one-time price, checkout + webhook fulfillment (primary product; bypasses procurement)
-- [ ] **Pricing page = one grid, $499 report as the hero** — kill the old 5-tier framing; Stage 2 subscriptions shown as "coming after launch"
+- [x] **$499 "CMMC AI Risk Assessment Report" Stripe SKU** — one-time `tier: "report"` checkout (`mode: payment`), `/assessment` offer page, webhook fulfillment + confirmation email, tests. ⏳ founder: set `STRIPE_REPORT_PRICE_ID` (one-time $499 price) in Vercel.
+- [ ] **Pricing page = one grid, $499 report as the hero** — kill the old 5-tier framing; Stage 2 subscriptions shown as "coming after launch" (next: link `/pricing` hero → `/assessment`)
 - [ ] **Mode-B / Vercel boundary disclosure everywhere** — "Docker (Mode B) required for CUI workloads; hosted trial is non-CUI eval only" on homepage, /security, /pricing, /partner
 - [ ] **Brain AI CUI warning live** — "Do not input CUI. This feature routes to a commercial cloud endpoint." (or pull Brain AI from homepage until live)
 - [ ] **Publish Docker image** `houndshield/proxy:latest` + 60-second deploy video
