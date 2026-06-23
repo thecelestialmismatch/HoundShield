@@ -24,6 +24,11 @@
 ## Superseded by compass correction (history)
 
 ## Done — 2026-06-21
+- [x] **Lifecycle email system + C3PAO outreach** — Day 14 onboarding finale (PDF report = purchase
+  unlock) wired into the drip cron (migration 013 adds `day14_sent_at`); transactional payment-receipt
+  + cancellation/win-back emails wired into the Stripe webhook (best-effort, never blocks billing);
+  C3PAO partner applicant-confirmation wired into `/api/partners/apply`; full 5-touch C3PAO cold
+  outreach sequence in `docs/gtm/c3pao-outreach-sequence.md`. +16 tests, 519/519, build green.
 - [x] **Pre-launch hardening sweep** (PR `claude/pre-launch-audit-6iieir`) — GDPR cookie consent
   (PostHog gated on opt-in), `security.txt` (RFC 9116), `/security` Trust page, `/dpa` Data
   Processing Agreement, `/acceptable-use` AUP, `/status` live health page, footer Legal column,

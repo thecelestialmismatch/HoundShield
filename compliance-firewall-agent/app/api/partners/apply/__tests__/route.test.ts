@@ -191,12 +191,19 @@ describe("POST /api/partners/apply — Resend notification", () => {
     expect(mockResendSend).not.toHaveBeenCalled();
   });
 
-  it("sends notification email when RESEND_API_KEY is set", async () => {
+  it("sends founder notification + applicant confirmation when RESEND_API_KEY is set", async () => {
     process.env.RESEND_API_KEY = "re_test_key";
     await POST(makeRequest(VALID_BODY));
-    expect(mockResendSend).toHaveBeenCalledTimes(1);
-    const [emailArg] = mockResendSend.mock.calls[0];
-    expect(emailArg.subject).toContain("Acme Compliance LLC");
+    expect(mockResendSend).toHaveBeenCalledTimes(2);
+
+    // 1st send: internal founder notification (subject names the company).
+    const [founderEmail] = mockResendSend.mock.calls[0];
+    expect(founderEmail.subject).toContain("Acme Compliance LLC");
+
+    // 2nd send: applicant-facing confirmation to their address.
+    const [applicantEmail] = mockResendSend.mock.calls[1];
+    expect(applicantEmail.to).toBe("jane@acme.com");
+    expect(applicantEmail.subject.toLowerCase()).toContain("partner application");
     delete process.env.RESEND_API_KEY;
   });
 
