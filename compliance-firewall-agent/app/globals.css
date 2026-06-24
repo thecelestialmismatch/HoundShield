@@ -649,23 +649,46 @@
 .dark .logo-img { mix-blend-mode: normal; }
 .logo-on-dark { filter: brightness(0) invert(1); mix-blend-mode: normal; }
 
-/* ── Cursor-reactive logo (demo .brand:hover .brand-mark) ───────────
-   The Doberman mark tilts & scales toward the cursor anywhere it appears.
-   Fires on direct hover AND when a brand link/group is hovered, so the
-   wordmark next to the mark triggers it too. Respects reduced-motion. */
+/* ── Brand-mark motion: idle breathe + cursor-reactive hover ─────────
+   The Doberman mark is ALWAYS gently alive — a subtle centered scale/rotate
+   breathe — so it reads as "moving" on every surface and every device,
+   including touch where :hover never fires. On pointer hover (or a brand
+   link/group hover) the idle pauses and the mark strikes the Direction-A
+   cursor pose (a stronger tilt). The transform is centered and lightly
+   scaled so it stays clip-safe inside framed / overflow-hidden logo chips.
+   Fully disabled under prefers-reduced-motion. */
+@keyframes hs-logo-idle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50%      { transform: rotate(-1.8deg) scale(1.045); }
+}
 .logo-img,
-.logo-on-dark { transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1); transform-origin: center; }
+.logo-on-dark {
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform-origin: center;
+  animation: hs-logo-idle 4.5s ease-in-out infinite;
+}
 .logo-img:hover,
 .logo-on-dark:hover,
 a:hover > .logo-img,
 button:hover > .logo-img,
 .group\/brand:hover .logo-img,
-.group\/brand:hover .logo-on-dark { transform: rotate(-4deg) scale(1.06); }
+.group\/brand:hover .logo-on-dark,
+.logo-img:active,
+.logo-on-dark:active,
+a:active > .logo-img,
+button:active > .logo-img,
+.group\/brand:active .logo-img,
+.group\/brand:active .logo-on-dark {
+  animation: none;
+  transform: rotate(-4deg) scale(1.06);
+}
 @media (prefers-reduced-motion: reduce) {
-  .logo-img, .logo-on-dark { transition: none; }
+  .logo-img, .logo-on-dark { transition: none; animation: none; }
   .logo-img:hover, .logo-on-dark:hover,
   a:hover > .logo-img, button:hover > .logo-img,
-  .group\/brand:hover .logo-img, .group\/brand:hover .logo-on-dark { transform: none; }
+  .group\/brand:hover .logo-img, .group\/brand:hover .logo-on-dark,
+  .logo-img:active, .logo-on-dark:active,
+  .group\/brand:active .logo-img, .group\/brand:active .logo-on-dark { transform: none; }
 }
 
 /* ── Feature card hover-expand ──────────────────────────────────── */
