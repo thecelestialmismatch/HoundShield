@@ -1,0 +1,63 @@
+name: Publish Proxy Image
+
+# Stage 1 deliverable: publish houndshield/proxy:latest so CUI-handling
+# contractors can run Mode B (Docker on their own infrastructure) — the only
+# CUI-safe deployment. Triggers on a version tag or manual dispatch.
+#
+# Requires repo secrets DOCKERHUB_USERNAME and DOCKERHUB_TOKEN. Until those are
+# set, the publish job is skipped but the image still builds on every PR that
+# touches the proxy, so the Dockerfile can never silently break.
+
+on:
+  push:
+    tags:
+      - "proxy-v*"
+  pull_request:
+    paths:
+      - "proxy/**"
+  workflow_dispatch:
+
+jobs:
+  docker:
+    name: Build & Publish proxy image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Build on every trigger so a broken Dockerfile fails CI immediately.
+      - name: Build image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./proxy
+          file: ./proxy/Dockerfile
+          push: false
+          tags: houndshield/proxy:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request' && env.DOCKERHUB_USERNAME != ''
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push houndshield/proxy:latest
+        if: github.event_name != 'pull_request' && env.DOCKERHUB_USERNAME != ''
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ./proxy
+          file: ./proxy/Dockerfile
+          push: true
+          tags: |
+            houndshield/proxy:latest
+            houndshield/proxy:${{ github.ref_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

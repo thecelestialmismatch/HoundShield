@@ -6,16 +6,19 @@ import { ArrowRight, Loader2 } from "lucide-react";
 
 /**
  * Initiates Stripe checkout for the one-time $499 CMMC AI Risk Assessment
- * Report (tier: "report"). Handles the three real responses: a checkout URL
- * (redirect), 401 (send to login, then back here), and 503 (not yet
- * configured — route to contact so the lead isn't lost).
+ * Report via the canonical no-auth rail (`/api/stripe/report-checkout`).
+ * A $499 PO is an impulse buy — no signup gate. Handles the two real
+ * responses: a checkout URL (redirect) and 503 (not yet configured →
+ * route to contact so the lead isn't lost).
  */
 export function ReportCheckoutButton({
   className,
   label = "Get your $499 report",
+  vertical,
 }: {
   className?: string;
   label?: string;
+  vertical?: "defense" | "healthcare" | "legal";
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -25,16 +28,11 @@ export function ReportCheckoutButton({
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/stripe/checkout", {
+      const res = await fetch("/api/stripe/report-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier: "report" }),
+        body: JSON.stringify(vertical ? { vertical } : {}),
       });
-
-      if (res.status === 401) {
-        router.push("/login?redirect=/assessment");
-        return;
-      }
 
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.url) {
@@ -42,7 +40,7 @@ export function ReportCheckoutButton({
         return;
       }
 
-      // 503 (not configured) or other — keep the lead, send to contact.
+      // 503 (Stripe not configured) or other — keep the lead, route to contact.
       if (res.status === 503) {
         router.push("/contact?topic=assessment-report");
         return;

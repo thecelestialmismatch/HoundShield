@@ -60,9 +60,9 @@ const PRICES: PriceRow[] = [
 
 // Partners — partner program.
 const PARTNERS: MenuItem[] = [
-  { icon: Shield, label: 'C3PAO Referral', body: '30% recurring. 80 authorized assessors.', href: '/partners#c3pao' },
-  { icon: Users,  label: 'MSP / Agency',   body: '20% revenue share · white-label option.', href: '/partners#msp' },
-  { icon: Plug,   label: 'Integrations',   body: 'Drop-in proxy for ChatGPT, Copilot, Claude.', href: '/docs#integrations' },
+  { icon: Shield, label: 'RPO / MSP Referral', body: 'Co-brand the $499 report · keep the margin.', href: '/partners#reseller' },
+  { icon: Users,  label: 'MSP / Agency',       body: '40% per report · 20% recurring · white-label.', href: '/partners#reseller' },
+  { icon: Plug,   label: 'Integrations',       body: 'Drop-in proxy for ChatGPT, Copilot, Claude.', href: '/docs#integrations' },
 ]
 
 // Docs — documentation.
