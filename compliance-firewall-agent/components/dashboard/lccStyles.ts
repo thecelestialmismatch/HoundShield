@@ -34,8 +34,9 @@ export const LCC_CSS = `
 
 .hs-lcc .side{background:var(--panel2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh;overflow:auto}
 .hs-lcc .brand{display:flex;align-items:center;gap:.55rem;padding:.4rem .5rem 1.1rem}
-.hs-lcc .brand img{height:30px;width:auto;mix-blend-mode:multiply;transition:transform .3s cubic-bezier(.22,.61,.36,1);transform-origin:center}
-.hs-lcc .brand:hover img,.hs-lcc .brand img:hover{transform:rotate(-4deg) scale(1.06)}
+.hs-lcc .brand img{height:30px;width:auto;mix-blend-mode:multiply;transition:transform .3s cubic-bezier(.22,.61,.36,1);transform-origin:center;animation:hs-logo-idle 4.5s ease-in-out infinite}
+.hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brand:active img,.hs-lcc .brand img:active{animation:none;transform:rotate(-4deg) scale(1.06)}
+@media (prefers-reduced-motion: reduce){.hs-lcc .brand img{animation:none;transition:none}.hs-lcc .brand:hover img,.hs-lcc .brand img:hover{transform:none}}
 .hs-lcc .brand span{font-family:var(--f-disp);font-weight:600;font-size:1.18rem}
 .hs-lcc .brand span b{color:var(--brand)}
 .hs-lcc .gh{font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2);margin:1rem .6rem .35rem}
