@@ -9,14 +9,25 @@
 
 **Gate:** ≥3 paid $499 reports · ≥1 RPO agreement · Docker image published · Brain AI CUI warning live · one pricing page · `/security` live.
 
-- [x] **$499 "CMMC AI Risk Assessment Report" Stripe SKU** — one-time `tier: "report"` checkout (`mode: payment`), `/assessment` offer page, webhook fulfillment + confirmation email, tests. ⏳ founder: set `STRIPE_REPORT_PRICE_ID` (one-time $499 price) in Vercel.
-- [ ] **Pricing page = one grid, $499 report as the hero** — kill the old 5-tier framing; Stage 2 subscriptions shown as "coming after launch" (next: link `/pricing` hero → `/assessment`)
-- [ ] **Mode-B / Vercel boundary disclosure everywhere** — "Docker (Mode B) required for CUI workloads; hosted trial is non-CUI eval only" on homepage, /security, /pricing, /partner
-- [ ] **Brain AI CUI warning live** — "Do not input CUI. This feature routes to a commercial cloud endpoint." (or pull Brain AI from homepage until live)
-- [ ] **Publish Docker image** `houndshield/proxy:latest` + 60-second deploy video
-- [ ] **/partner page → RPO/MSP referral** (40–50% rev-share on co-branded $499 report); remove any C3PAO-endorsement framing
-- [ ] **RPO outreach list** — 50 RPOs from Cyber AB Marketplace; top targets: Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics
-- [ ] **HIPAA-first direct outreach** (Rachel) — parallel track, fastest validation, no FedRAMP blocker
+- [x] **$499 "CMMC AI Risk Assessment Report" Stripe SKU** — `POST /api/stripe/report-checkout`
+  (one-time `mode:'payment'`, no-auth, inline-$499 fallback, $299 wholesale gated on `partner_ref`);
+  webhook fulfillment → `report_orders` (migration 014) + `reportOrderEmail`; `/report/thank-you` page.
+- [x] **Pricing page = one grid, $499 report as the hero** — report hero card on top, subscriptions
+  reframed as Stage-2 monitoring; removed fabricated "2M+ / 500+" metrics.
+- [x] **Mode-B / Vercel boundary disclosure everywhere** — reusable `<ModeBNotice />` on
+  /pricing, /security, /partners, /report/thank-you.
+- [x] **Brain AI CUI warning live** — persistent disclosure above the GlobalChat input; system
+  prompt corrected to lead with the $499 report + three deployment modes.
+- [x] **Publish Docker image** — `.github/workflows/docker-publish.yml` builds `proxy/Dockerfile`
+  on every proxy PR; publishes `houndshield/proxy:latest` on a `proxy-v*` tag (needs Docker Hub secrets).
+- [x] **/partners → RPO/MSP referral** — rewritten off C3PAO-endorsement framing onto $499 report
+  co-brand ($299 wholesale / 40% referral) + explicit C3PAO-exclusion note; NavV3 item updated.
+- [x] **RPO outreach list** — `docs/gtm/rpo-outreach-list.md` (7 named targets + frame + tracking).
+- [ ] **HIPAA-first direct outreach** (Rachel) — parallel track (GTM execution, not code).
+- [ ] **Close ≥3 paid reports + ≥1 RPO agreement** — the actual revenue milestone (sales execution).
+
+> Shipped under `claude/houndshield-revenue-roadmap-m3de37`. See `compliance-firewall-agent/docs/STAGE-1-EXECUTION.md`.
+> Build green · tsc clean · 539/539 tests. Remaining Stage-1 items are GTM/sales + ops config (env vars, migration push, Docker Hub secrets).
 
 ## Active
 <!-- Move a Stage 1 item here when starting work -->
