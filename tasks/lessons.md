@@ -155,6 +155,38 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 **What:** "Hound Shield" (two words) survived in 110+ files — including a broken `Hound ShieldClient` class name in customer-facing SDK snippets and an invalid `X-Hound Shield-Org` HTTP header.
 **Rule:** Brand strings live in copy, code identifiers, HTTP headers, emails, and tests. Rename = one `grep -rl | perl -pi -e` sweep + test-suite assertions on the new name.
 
+## 2026-06-23
+
+### `/partner` (dashboard) vs `/partners` (marketing) — don't confuse them
+**What:** The brain's file map says `app/partner/page.tsx` is the "RPO/MSP referral page." It is
+actually the authenticated C3PAO multi-tenant **dashboard**. The public marketing referral page is
+`app/partners/page.tsx` (plural). Reframing the wrong one would have left the legally-prohibited
+C3PAO-endorsement copy live on the page buyers actually see.
+**Rule:** Verify route purpose by reading the file, not the file-map label. `/partner*` = authed
+dashboard; `/partners` = public marketing. Channel/copy reframes land on `/partners`.
+
+### C3PAO-endorsement framing is a legal violation, not just off-message
+**What:** `/partners` led with "Every Client You Assess Could Be Paying You Forever" and "Built for
+C3PAOs First" — pitching assessors to refer a tool to clients they assess. That's barred by 32 CFR
+Part 170 / ISO 17020 cooling-off.
+**Rule:** The partner channel is RPOs/MSPs. Any "assess + refer" framing is prohibited. When a page
+is saturated with the wrong framing, rewrite it wholesale (a partial sweep leaves stray violations —
+same failure mode as the v3 design split-brain) and add an explicit C3PAO-exclusion note.
+
+### Fictional metrics hide in stats bars and CTA copy
+**What:** `/pricing` shipped "2M+ scans," "500+ teams." Buyers verify everything; these are on the
+NEVER-DO list. They lived in a decorative "stats bar" + the bottom-CTA paragraph.
+**Rule:** Replace fabricated counts with verifiable claims (deployment modes, NIST mapping, the
+demo's <10-minute path). Grep `2M+|500+|Teams protected|Scans processed` before shipping any
+marketing page.
+
+### One-time products need their own checkout path
+**What:** The existing `/api/stripe/checkout` is subscription-only (`mode:'subscription'`, requires
+auth). The $499 report is one-time and must not force signup before payment.
+**Rule:** One-time = a separate `mode:'payment'` endpoint, no-auth, email collected by Stripe, fulfilled
+via webhook branch on `session.mode === 'payment'` into a dedicated table. Keep the subscription path
+untouched and assert in tests that subscription retrieval never runs for a report order.
+
 ### Brain AI must answer identity questions offline
 
 **What:** "who are you" returned the generic fallback because the FAQ layer had no identity keywords and prod has no OPENROUTER_API_KEY.

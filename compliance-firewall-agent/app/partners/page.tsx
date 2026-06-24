@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { ModeBNotice } from "@/components/ModeBNotice";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 
 function FadeIn({
@@ -48,40 +49,39 @@ function FadeIn({
 
 const PARTNER_TIERS = [
   {
+    icon: FileText,
+    name: "Report Co-Brand",
+    price: "$299 wholesale",
+    commission: "Sell at $499–$999",
+    highlight: "RECOMMENDED",
+    features: [
+      "Co-branded $499 CMMC AI Risk Assessment Report",
+      "You pay $299 wholesale, charge your client $499–$999",
+      "Your logo on the SHA-256-signed PDF",
+      "Bundle into your existing CMMC readiness package",
+      "No subscription, no MSA — a $499 PO bypasses procurement",
+      "48-hour partner onboarding call",
+    ],
+    cta: "Apply to Co-Brand",
+    type: "reseller",
+    bestFor: "RPOs, CMMC-focused MSPs, compliance consultants",
+  },
+  {
     icon: Users,
     name: "Referral Partner",
     price: "Free",
-    commission: "20% recurring",
+    commission: "40% of the report",
     highlight: null,
     features: [
-      "20% recurring commission — forever",
+      "40% commission on every $499 report you refer",
       "Unique referral link + tracking dashboard",
       "Co-branded one-pager for client conversations",
       "HoundShield demo sandbox access",
-      "48-hour partner onboarding call",
+      "20% recurring on any monitoring subscription that follows",
     ],
     cta: "Apply Now",
     type: "referral",
-    bestFor: "C3PAOs, compliance consultants, security advisors",
-  },
-  {
-    icon: Building2,
-    name: "Reseller Partner",
-    price: "$2,499/mo",
-    commission: "Full margin control",
-    highlight: "RECOMMENDED",
-    features: [
-      "White-label platform — your logo, your domain",
-      "Unlimited client accounts at one flat rate",
-      "Custom branding + color scheme",
-      "Bulk PDF compliance reports",
-      "Priority API access + SLA guarantee",
-      "Dedicated onboarding + account manager",
-      "Early access to new CMMC detection patterns",
-    ],
-    cta: "Apply for Reseller",
-    type: "reseller",
-    bestFor: "MSPs, IT security firms with 10+ DoD clients",
+    bestFor: "Consultants and advisors who refer, not resell",
   },
   {
     icon: Zap,
@@ -94,7 +94,7 @@ const PARTNER_TIERS = [
       "Custom SIEM / GRC integrations",
       "SDK + OpenAPI documentation",
       "Joint go-to-market planning",
-      "Co-sell with HoundShield sales team",
+      "Co-sell with the HoundShield team",
       "Revenue share model — negotiated",
     ],
     cta: "Apply for Tech Partner",
@@ -103,38 +103,38 @@ const PARTNER_TIERS = [
   },
 ];
 
-const C3PAO_VALUE_PROPS = [
+const PARTNER_VALUE_PROPS = [
   {
     icon: FileText,
-    title: "Pre-collect client evidence",
-    body: "HoundShield gives assessors 90 days of AI prompt audit logs before the assessment starts. Shorter fieldwork. Faster certification.",
-  },
-  {
-    icon: Clock,
-    title: "Reduce assessment time by 30%",
-    body: "Practice 3.13.1, 3.13.2, and 3.13.8 documentation is auto-generated. Your assessors spend time on gaps, not on chasing logs.",
-  },
-  {
-    icon: Shield,
-    title: "Blockchain-verified audit trail",
-    body: "Merkle-root sealed event logs. Tamper-proof evidence your clients can hand directly to DCSA or assessors.",
+    title: "A $499 product that sells itself",
+    body: "RPOs charge $5K–$15K for a gap assessment. A $499 AI-risk report is an impulse add-on your client approves without a procurement review — and it's evidence of both the problem and the fix.",
   },
   {
     icon: TrendingUp,
-    title: "Turn findings into revenue",
-    body: "Every SPRS deficiency you find is a HoundShield upsell. Refer clients, earn 20% recurring. Average referral = $50–$100/mo passive for years.",
+    title: "Keep the margin",
+    body: "Co-brand at $299 wholesale, charge your client $499–$999. Or refer and earn 40% of the report plus 20% recurring on any monitoring that follows. No cap.",
+  },
+  {
+    icon: Clock,
+    title: "Delivers in 14 days",
+    body: "Deploy the proxy in the client's own environment (Mode B / Docker), let it observe AI prompt traffic, hand them a signed PDF mapped to NIST 800-171. Fast enough to fit inside an active engagement.",
+  },
+  {
+    icon: Shield,
+    title: "Tamper-evident evidence",
+    body: "Every event is written to a SHA-256 hash-chained log. Your client gets assessment-grade evidence; you get a repeatable, branded deliverable.",
   },
 ];
 
 function CommissionCalculator() {
-  const [clients, setClients] = useState(10);
-  const [avgTier, setAvgTier] = useState<"pro" | "growth" | "enterprise">("growth");
+  const [reports, setReports] = useState(10);
+  const [model, setModel] = useState<"cobrand" | "refer">("cobrand");
 
-  const tierPrices = { pro: 199, growth: 499, enterprise: 999 };
-  const price = tierPrices[avgTier];
-  const monthlyRevenue = clients * price;
-  const commission = Math.round(monthlyRevenue * 0.2);
-  const annualCommission = commission * 12;
+  // Co-brand: buy at $299, sell at $499 → $200 margin/report.
+  // Refer: 40% of the $499 report → ~$200/report.
+  const perReport = model === "cobrand" ? 200 : Math.round(499 * 0.4);
+  const total = reports * perReport;
+  const annualized = total * 4; // ~quarterly cadence across a client book
 
   return (
     <div className="glass-card-glow rounded-2xl p-8">
@@ -143,44 +143,47 @@ function CommissionCalculator() {
           <Calculator className="w-5 h-5 text-brand-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-[var(--hs-ink)]">Commission Calculator</h3>
-          <p className="text-xs text-[var(--hs-ink-tertiary)]">Referral partner — 20% recurring, paid monthly</p>
+          <h3 className="text-lg font-semibold text-[var(--hs-ink)]">Partner Earnings</h3>
+          <p className="text-xs text-[var(--hs-ink-tertiary)]">$499 report · co-brand wholesale or 40% referral</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
         <div>
           <label className="block text-xs font-semibold text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-2">
-            Clients referred
+            Reports placed
           </label>
           <div className="flex items-center gap-3">
             <input
               type="range"
               min={1}
               max={50}
-              value={clients}
-              onChange={(e) => setClients(Number(e.target.value))}
+              value={reports}
+              onChange={(e) => setReports(Number(e.target.value))}
               className="flex-1 accent-brand-500 cursor-pointer"
             />
-            <span className="w-8 text-right text-[var(--hs-ink)] font-mono font-bold">{clients}</span>
+            <span className="w-8 text-right text-[var(--hs-ink)] font-mono font-bold">{reports}</span>
           </div>
         </div>
         <div>
           <label className="block text-xs font-semibold text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-2">
-            Average plan
+            Model
           </label>
           <div className="flex gap-2">
-            {(["pro", "growth", "enterprise"] as const).map((t) => (
+            {([
+              { k: "cobrand", label: "Co-brand $299" },
+              { k: "refer", label: "Refer 40%" },
+            ] as const).map((m) => (
               <button
-                key={t}
-                onClick={() => setAvgTier(t)}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
-                  avgTier === t
+                key={m.k}
+                onClick={() => setModel(m.k)}
+                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  model === m.k
                     ? "bg-brand-500 text-white"
                     : "bg-white text-[var(--hs-ink-secondary)] hover:bg-[var(--hs-mist)]"
                 }`}
               >
-                {t === "pro" ? "Pro $199" : t === "growth" ? "Growth $499" : "Ent. $999"}
+                {m.label}
               </button>
             ))}
           </div>
@@ -190,21 +193,21 @@ function CommissionCalculator() {
       <div className="grid grid-cols-3 gap-4 pt-5 border-t border-[var(--hs-border-subtle)]">
         <div className="text-center">
           <div className="text-2xl font-extrabold text-[var(--hs-ink)] font-mono">
-            ${monthlyRevenue.toLocaleString()}
+            ${perReport}
           </div>
-          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Client MRR</div>
+          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Per report</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-extrabold text-brand-400 font-mono">
-            ${commission.toLocaleString()}
+            ${total.toLocaleString()}
           </div>
-          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Your monthly cut</div>
+          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">This batch</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-extrabold text-[var(--hs-success)] font-mono">
-            ${annualCommission.toLocaleString()}
+            ${annualized.toLocaleString()}
           </div>
-          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Annual passive</div>
+          <div className="text-xs text-[var(--hs-ink-tertiary)] mt-1">Annualized</div>
         </div>
       </div>
     </div>
@@ -217,7 +220,7 @@ export default function PartnersPage() {
     company: "",
     email: "",
     clientCount: "",
-    partnerType: "referral",
+    partnerType: "reseller",
     message: "",
   });
   const [submitting, setSubmitting] = useState(false);
@@ -277,7 +280,7 @@ export default function PartnersPage() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-400/20 bg-brand-400/[0.08] text-brand-400 text-xs font-semibold uppercase tracking-widest mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
-              Partner Program · C3PAOs · MSPs · Compliance Consultants
+              Partner Program · RPOs · MSPs · Compliance Consultants
             </div>
           </motion.div>
 
@@ -287,10 +290,10 @@ export default function PartnersPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="font-editorial text-[clamp(36px,6vw,72px)] font-bold leading-[1.05] tracking-[-1px] max-w-[900px] mx-auto mb-6 text-[var(--hs-ink)]"
           >
-            Every Client You Assess<br className="hidden sm:block" />
-            Could Be Paying You{" "}
+            Add a $499 AI Risk Report<br className="hidden sm:block" />
+            to Every Client You{" "}
             <span className="italic bg-gradient-to-r from-brand-400 via-accent to-brand-400 bg-clip-text text-transparent">
-              Forever
+              Advise
             </span>
           </motion.h1>
 
@@ -300,7 +303,8 @@ export default function PartnersPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-[clamp(16px,2vw,20px)] text-[var(--hs-ink-secondary)] max-w-[620px] mx-auto mb-4 leading-relaxed"
           >
-            Refer your CMMC clients to HoundShield. Earn 20% of their subscription — every month — for as long as they stay. No cap. No expiry.
+            Co-brand the CMMC AI Risk Assessment Report at $299 wholesale and charge your clients
+            $499–$999. Or refer and earn 40% per report. It drops straight into your CMMC readiness package.
           </motion.p>
 
           <motion.p
@@ -309,7 +313,7 @@ export default function PartnersPage() {
             transition={{ duration: 0.6, delay: 0.25 }}
             className="text-sm font-mono text-brand-400/80 mb-10"
           >
-            10 referrals × $499/mo Growth plan = <span className="text-brand-400 font-bold">$998/mo passive</span>
+            10 co-branded reports × $200 margin = <span className="text-brand-400 font-bold">$2,000</span> per client batch
           </motion.p>
 
           <motion.div
@@ -329,26 +333,38 @@ export default function PartnersPage() {
               href="#calculator"
               className="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-medium text-sm transition-colors"
             >
-              Calculate my commission <ArrowRight className="w-3.5 h-3.5" />
+              Calculate my earnings <ArrowRight className="w-3.5 h-3.5" />
             </a>
           </motion.div>
+
+          {/* C3PAO exclusion — legal honesty up front */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-xs text-[var(--hs-ink-tertiary)] max-w-[560px] mx-auto mt-8 leading-relaxed"
+          >
+            A note on C3PAOs: a C3PAO cannot recommend a product to a client it assesses
+            (32 CFR Part 170 · ISO 17020 cooling-off). This program is for RPOs, MSPs, and
+            consultants — not assessors.
+          </motion.p>
         </div>
       </section>
 
-      {/* ── Why C3PAOs Partner ──────────────────── */}
+      {/* ── Why partners win ──────────────────── */}
       <section className="py-24 md:py-32 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-5xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
             <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-brand-400 mb-4">
-              Built for C3PAOs First
+              Built for RPOs &amp; MSPs
             </div>
             <h2 className="text-[clamp(28px,4vw,48px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)] max-w-2xl mx-auto">
-              Make your assessments faster — and earn when they succeed
+              A branded deliverable that pays — on every client engagement
             </h2>
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-14">
-            {C3PAO_VALUE_PROPS.map((prop, i) => (
+            {PARTNER_VALUE_PROPS.map((prop, i) => (
               <FadeIn key={prop.title} delay={i * 0.08}>
                 <div className="glass-card rounded-xl p-7 h-full">
                   <div className="w-10 h-10 rounded-xl bg-brand-400/10 flex items-center justify-center mb-4">
@@ -361,22 +377,21 @@ export default function PartnersPage() {
             ))}
           </div>
 
-          {/* MSP math */}
+          {/* RPO / MSP math */}
           <FadeIn delay={0.2}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="glass-card rounded-xl p-8">
                 <div className="w-12 h-12 rounded-xl bg-brand-400/10 flex items-center justify-center mb-5">
                   <Building2 className="w-6 h-6 text-brand-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-[var(--hs-ink)] mb-4">For MSPs</h3>
+                <h3 className="text-xl font-semibold text-[var(--hs-ink)] mb-4">For RPOs</h3>
                 <ul className="flex flex-col gap-3">
                   {[
-                    "Manage 10–100 clients from one dashboard",
-                    "Your logo. Your pricing. Your relationships.",
-                    "20% recurring commission on every referral",
-                    "Or white-label at $2,499/mo flat — keep 100% of margin",
-                    "CMMC + HIPAA + SOC 2 in one platform",
-                    "Automated evidence collection per client",
+                    "Bundle the $499 report into your readiness packages",
+                    "Co-brand at $299 wholesale — keep the $200+ margin",
+                    "Give clients NIST 800-171 AI evidence in 14 days",
+                    "A low-friction upsell on every engagement",
+                    "Tamper-evident SHA-256 logs your clients can hand to an assessor",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--hs-ink-secondary)]">
                       <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
@@ -390,15 +405,15 @@ export default function PartnersPage() {
                 <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
                   <Award className="w-6 h-6 text-accent" />
                 </div>
-                <h3 className="text-xl font-semibold text-[var(--hs-ink)] mb-4">For C3PAOs</h3>
+                <h3 className="text-xl font-semibold text-[var(--hs-ink)] mb-4">For MSPs</h3>
                 <ul className="flex flex-col gap-3">
                   {[
-                    "Give clients a self-assessment head start before fieldwork",
-                    "Pre-populated SPRS estimates reduce scoping friction",
-                    "Practice 3.13.1/3.13.2/3.13.8 auto-documented",
-                    "Blockchain-verified audit trail for DCSA submissions",
-                    "20% recurring on every client you refer — no limit",
-                    "Early access to CMMC 2.0 Level 3 pattern updates",
+                    "Manage 10–100 clients from one dashboard",
+                    "Your logo. Your pricing. Your relationships.",
+                    "Co-brand reports or white-label the platform",
+                    "20% recurring on any monitoring subscription that follows",
+                    "CMMC + HIPAA + SOC 2 detection in one proxy",
+                    "Mode B (Docker) keeps client CUI inside their boundary",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--hs-ink-secondary)]">
                       <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] flex-shrink-0 mt-0.5" />
@@ -409,10 +424,14 @@ export default function PartnersPage() {
               </div>
             </div>
           </FadeIn>
+
+          <FadeIn delay={0.3} className="mt-10">
+            <ModeBNotice variant="inline" />
+          </FadeIn>
         </div>
       </section>
 
-      {/* ── Commission Calculator ─────────────── */}
+      {/* ── Earnings Calculator ─────────────── */}
       <section id="calculator" className="py-24 border-t border-[var(--hs-border-subtle)]">
         <div className="max-w-3xl mx-auto px-6">
           <FadeIn className="text-center mb-10">
@@ -420,7 +439,7 @@ export default function PartnersPage() {
               See Your Numbers
             </div>
             <h2 className="text-[clamp(28px,4vw,40px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)]">
-              What&apos;s your practice worth?
+              What&apos;s your client book worth?
             </h2>
           </FadeIn>
           <FadeIn delay={0.1}>
@@ -428,7 +447,7 @@ export default function PartnersPage() {
           </FadeIn>
           <FadeIn delay={0.2} className="mt-5 text-center">
             <p className="text-xs text-[var(--hs-ink-tertiary)] font-mono">
-              Commissions paid on the 1st of each month · 60-day attribution window · no cap on earnings
+              Co-brand payouts net of wholesale · referral commissions paid on the 1st · 60-day attribution
             </p>
           </FadeIn>
         </div>
@@ -510,23 +529,23 @@ export default function PartnersPage() {
                 <Star key={i} className="w-4 h-4 fill-brand-400 text-brand-400" />
               ))}
             </div>
-            <p className="text-sm text-[var(--hs-ink-tertiary)]">Trusted by compliance consultants across the DIB</p>
+            <p className="text-sm text-[var(--hs-ink-tertiary)]">For compliance consultants across the DIB</p>
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                quote: "I referred 6 clients in my first month. The referral dashboard is clean and payouts hit on the 1st without chasing anyone.",
-                author: "C3PAO assessor, mid-Atlantic",
+                quote: "A $499 add-on my clients approve without a procurement cycle. It pays for itself the first time it catches CUI in a prompt log.",
+                author: "RPO consultant, mid-Atlantic",
                 stars: 5,
               },
               {
-                quote: "The pre-collected evidence cut my assessment fieldwork by a full day on my last Level 2 engagement. That's real money.",
-                author: "Independent CMMC consultant",
-                stars: 5,
-              },
-              {
-                quote: "White-label was live in 2 hours. My clients see my brand; I keep the margin. This is the model MSPs have been waiting for.",
+                quote: "Co-brand wholesale plus the recurring monitoring share is the model we've wanted. Our logo, our margin, their CUI never leaves their network.",
                 author: "MSP, 40+ DoD clients",
+                stars: 5,
+              },
+              {
+                quote: "Deploy in Docker, 14 days later there's a signed PDF mapped to 800-171. It slots into our readiness engagements cleanly.",
+                author: "Independent CMMC consultant",
                 stars: 5,
               },
             ].map((t, i) => (
@@ -543,6 +562,11 @@ export default function PartnersPage() {
               </FadeIn>
             ))}
           </div>
+          <FadeIn delay={0.2} className="mt-6 text-center">
+            <p className="text-[11px] text-[var(--hs-ink-tertiary)]">
+              Illustrative of the partner model. We do not publish client names or fabricated counts.
+            </p>
+          </FadeIn>
         </div>
       </section>
 
@@ -558,7 +582,7 @@ export default function PartnersPage() {
               Apply for Partner Program
             </h2>
             <p className="text-[var(--hs-ink-secondary)]">
-              Tell us about your practice. We respond within 48 hours with your referral link and onboarding materials.
+              Tell us about your practice. We respond within 48 hours with your co-brand or referral materials.
             </p>
           </FadeIn>
 
@@ -653,8 +677,8 @@ export default function PartnersPage() {
                       onChange={(e) => setFormState((s) => ({ ...s, partnerType: e.target.value }))}
                       className="w-full px-4 py-2.5 rounded-lg bg-[var(--hs-surface-0)] border border-[var(--hs-border)] text-[var(--hs-ink)] focus:outline-none focus:border-brand-400/50 transition"
                     >
-                      <option value="referral">Referral Partner (free)</option>
-                      <option value="reseller">Reseller Partner ($2,499/mo)</option>
+                      <option value="reseller">Report Co-Brand ($299 wholesale)</option>
+                      <option value="referral">Referral Partner (40% per report)</option>
                       <option value="technology">Technology Partner (custom)</option>
                     </select>
                   </div>
@@ -669,7 +693,7 @@ export default function PartnersPage() {
                     value={formState.message}
                     onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
                     className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400/50 transition resize-none"
-                    placeholder="How many DoD contractors do you work with? Are you a C3PAO, MSP, or independent consultant?"
+                    placeholder="How many DoD contractors do you work with? Are you an RPO, MSP, or independent consultant?"
                   />
                 </div>
 
@@ -713,11 +737,11 @@ export default function PartnersPage() {
           <FadeIn>
             <DollarSign className="w-10 h-10 mx-auto text-brand-400 mb-4" />
             <p className="text-2xl md:text-3xl font-bold text-[var(--hs-ink)] mb-2">
-              3 C3PAOs × 10 referrals × $499/mo ={" "}
-              <span className="text-brand-400">$2,994/mo</span>
+              3 RPOs × 10 co-branded reports × $200 ={" "}
+              <span className="text-brand-400">$6,000</span>
             </p>
             <p className="text-sm text-[var(--hs-ink-secondary)] mb-6">
-              In passive commissions. Before a single direct sale.
+              In margin. Before a single monitoring subscription.
             </p>
             <a
               href="#apply"

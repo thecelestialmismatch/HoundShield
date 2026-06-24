@@ -69,27 +69,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { tier, billing = 'monthly' } = body as { tier: string; billing?: 'monthly' | 'annual' };
 
-    // `report` is the Stage-1 lead product: a one-time $499 CMMC AI Risk
-    // Assessment Report (mode: payment), not a recurring subscription tier.
-    const isReport = tier === 'report';
-
-    if (!isReport && !PRICE_MAP[tier]) {
+    // The one-time $499 report is sold via /api/stripe/report-checkout
+    // (no-auth, mode: payment). This route handles recurring subscription tiers only.
+    if (!PRICE_MAP[tier]) {
       return NextResponse.json(
-        { error: `Invalid tier: ${tier}. Valid tiers: pro, growth, enterprise, agency, report` },
+        { error: `Invalid tier: ${tier}. Valid tiers: pro, growth, enterprise, agency` },
         { status: 400 }
       );
     }
 
-    const priceId = isReport
-      ? (process.env.STRIPE_REPORT_PRICE_ID || '')
-      : PRICE_MAP[tier][billing];
+    const priceId = PRICE_MAP[tier][billing];
     if (!priceId) {
       return NextResponse.json(
-        {
-          error: isReport
-            ? 'Report product not configured. Set STRIPE_REPORT_PRICE_ID in environment.'
-            : `Price not configured for ${tier} (${billing}). Set STRIPE_${tier.toUpperCase()}_${billing.toUpperCase()}_PRICE_ID in environment.`,
-        },
+        { error: `Price not configured for ${tier} (${billing}). Set STRIPE_${tier.toUpperCase()}_${billing.toUpperCase()}_PRICE_ID in environment.` },
         { status: 503 }
       );
     }
@@ -121,31 +113,18 @@ export async function POST(request: NextRequest) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://houndshield.com';
 
-    const session = isReport
-      ? await stripe.checkout.sessions.create({
-          customer: customerId,
-          mode: 'payment',
-          line_items: [{ price: priceId, quantity: 1 }],
-          success_url: `${appUrl}/command-center/shield/reports?purchase=success&product=report`,
-          cancel_url: `${appUrl}/assessment?canceled=true`,
-          payment_intent_data: {
-            metadata: { supabase_user_id: user.id, product: 'cmmc_ai_risk_report' },
-          },
-          metadata: { supabase_user_id: user.id, product: 'cmmc_ai_risk_report' },
-          allow_promotion_codes: true,
-        })
-      : await stripe.checkout.sessions.create({
-          customer: customerId,
-          mode: 'subscription',
-          line_items: [{ price: priceId, quantity: 1 }],
-          success_url: `${appUrl}/command-center?upgrade=success&tier=${tier}`,
-          cancel_url: `${appUrl}/pricing?canceled=true`,
-          subscription_data: {
-            metadata: { supabase_user_id: user.id, tier },
-            trial_period_days: 14,
-          },
-          allow_promotion_codes: true,
-        });
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      mode: 'subscription',
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${appUrl}/command-center?upgrade=success&tier=${tier}`,
+      cancel_url: `${appUrl}/pricing?canceled=true`,
+      subscription_data: {
+        metadata: { supabase_user_id: user.id, tier },
+        trial_period_days: 14,
+      },
+      allow_promotion_codes: true,
+    });
 
     return NextResponse.json({ url: session.url });
   } catch (err) {

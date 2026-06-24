@@ -3,6 +3,7 @@ import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
+import { ModeBNotice } from "@/components/ModeBNotice";
 import { Lock, ShieldCheck, FileLock2, Network, KeyRound, Bug } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -76,6 +77,17 @@ export default function SecurityPage() {
             </div>
           ))}
         </div>
+
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-[var(--hs-ink)] mb-4">Where the scanner runs matters</h2>
+          <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed mb-5 max-w-2xl">
+            The local-only guarantee is a property of <em>deployment</em>, not just code. Our marketing
+            and dashboard plane runs on Vercel, which is not FedRAMP-authorized — so the hosted trial
+            is for non-CUI evaluation only. For any CUI workload, run Mode B: the proxy in your own
+            infrastructure, where prompt content never crosses your boundary.
+          </p>
+          <ModeBNotice variant="full" />
+        </section>
 
         <section className="mt-16">
           <h2 className="text-2xl font-bold text-[var(--hs-ink)] mb-4">Compliance alignment</h2>
