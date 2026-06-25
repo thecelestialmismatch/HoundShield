@@ -37,11 +37,14 @@ logo-motion-everywhere (#124), and the fabricated-stats-bar removal. Kept only t
 - [x] **Mode-B disclosure on the homepage** — `ModeBNotice variant="inline"` after the stats strip (CLAUDE.md gate; main covered pricing/security/partners but not home)
 - [x] **Mode-B disclosure + CUI-claim honesty on `/brain-ai`** — added `ModeBNotice`; softened metadata "safe for CUI" + card "Local-only, CUI-safe" → Mode-B/C qualifier + hosted-trial caveat
 - [x] **Public forbidden colors → tokens** — `partner/layout` avatar `to-purple-500` → steel; `/status` (3) + `/assessment` (1) emerald/amber → `--hs-success`/`--hs-warn`. Public pages now zero forbidden classes.
+- [x] **/hipaa PHI over-claim** (advisor catch — Rachel's lead page) — "HIPAA-compliant AI monitoring starting free" softened to "start free; run Mode B for live PHI" + added an inline PHI/BAA boundary note (hosted = non-PHI eval, no BAA).
 
 ### Review
-Minimal additive PR on top of current main. Build green, tests green, live-verified. Mode-B disclosure now on homepage + /brain-ai + (existing) pricing/security/partners/thank-you.
+Minimal additive PR on top of current main. Build green, tests green (539), live-verified. Regulated-data disclosure now on homepage + /brain-ai + /hipaa + (existing) pricing/security/partners/thank-you. Swept all public `page.tsx` for "never leaves your network"/CUI/PHI claims — remaining hits are Mode-B-framed inline or on pages that already carry the notice.
 
-**Founder-verify before public launch (untouched — unverifiable):** `app/about` testimonial "Maria Chen / Vanguard Aero" + history timeline + future "1,000+ Users"; homepage testimonial; per-tier SLA commitments.
+**Founder-verify before public launch (untouched — unverifiable / product decision):**
+- `app/about` testimonial "Maria Chen / Vanguard Aero" + history timeline + future "1,000+ Users"; homepage testimonial; per-tier SLA commitments.
+- `partner/layout` is branded "C3PAO Partner Portal / Authorized C3PAO" — but the mission channel is RPO/MSP, and C3PAOs are a documented NEVER-DO referral channel (32 CFR Part 170). Reframe the portal to RPO/MSP, or confirm intent.
 
 **Env-only (founder, per LAUNCH-CHECKLIST):** `database:demo_mode` + `payments:missing_key` — Supabase prod keys, Stripe price IDs + webhook secret, OPENROUTER key (rotate first).
 
