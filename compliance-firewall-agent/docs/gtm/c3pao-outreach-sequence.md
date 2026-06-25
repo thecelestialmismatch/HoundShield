@@ -123,7 +123,7 @@ No pitch in the request. If accepted, do **not** dump a sales message; let the e
 > exposure and what to look for instead. Several C3PAOs are sharing it with clients who ask about
 > ChatGPT/Copilot usage:
 >
-> → houndshield.com/answers/cloud-ai-dlp-dfars-7012  *(confirm/seed this answer page before sending)*
+> → houndshield.com/answers/dfars-7012-ai-tools
 >
 > If it's helpful to your clients, use it freely. And if you'd ever like the 10-minute walkthrough,
 > the door's open.
