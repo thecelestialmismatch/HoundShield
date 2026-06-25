@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, CheckCircle } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
+import { ModeBNotice } from '@/components/ModeBNotice'
 import { CountdownTimer } from '@/components/ui/CountdownTimer'
 import { HeroScanLog } from '@/components/landing/HeroScanLog'
 import { ComparisonFlow } from '@/components/ui/ComparisonFlow'
@@ -190,6 +191,13 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Deployment boundary: Mode A vs Mode B (CUI honesty) ───── */}
+      <section className="px-4 sm:px-6 lg:px-8 pt-10">
+        <div className="max-w-[1200px] mx-auto">
+          <ModeBNotice variant="inline" />
         </div>
       </section>
 
