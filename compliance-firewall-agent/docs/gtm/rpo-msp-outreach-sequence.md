@@ -129,7 +129,7 @@ No pitch in the request; let the email thread carry it.
 > why cloud AI-DLP creates a HIPAA/DFARS exposure that a local scan doesn't:
 >
 > → houndshield.com/assessment
-> → houndshield.com/answers/cloud-ai-dlp-dfars-7012  *(confirm/seed this answer page first)*
+> → houndshield.com/answers/dfars-7012-ai-tools
 >
 > Useful for clients asking about ChatGPT/Copilot. And if you ever want the 15-minute partner walkthrough,
 > the door's open.
