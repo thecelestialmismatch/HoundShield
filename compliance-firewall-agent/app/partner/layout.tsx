@@ -163,7 +163,7 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
           href="/partner/billing"
           className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
         >
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-[var(--hs-steel)] flex items-center justify-center text-white text-xs font-bold shadow-sm">
             {userInitial}
           </div>
           <ChevronDown className="w-3 h-3 text-slate-500" />
