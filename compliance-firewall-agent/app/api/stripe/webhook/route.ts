@@ -147,18 +147,18 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-
         // One-time $499 report (mode: 'payment') — Stage 1 primary product.
-        // No subscription, and the buyer may not have an account. Handle and stop.
+        // No subscription, and the buyer may not have an account. Record the
+        // order + email the buyer, then stop before the subscription-only logic.
         if (session.mode === 'payment' || session.metadata?.product === 'cmmc_ai_risk_report') {
           await handleReportOrder(supabase, session);
           break;
         }
 
-        const subscriptionId = session.subscription as string;
         const userId = session.metadata?.supabase_user_id
           || (await getCustomerUserId(supabase, session.customer as string));
 
+        const subscriptionId = session.subscription as string;
         if (!userId) {
           console.warn('[Stripe Webhook] checkout.session.completed: no user ID found', { subscriptionId });
           break;

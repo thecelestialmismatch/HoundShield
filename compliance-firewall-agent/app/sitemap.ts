@@ -27,6 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.95,
     },
     {
+      url: `${baseUrl}/assessment`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.97,
+    },
+    {
       url: `${baseUrl}/hipaa`,
       lastModified: new Date(),
       changeFrequency: "weekly",
