@@ -1,17 +1,21 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Logo > matches snapshot 1`] = `
-<img
-  alt=""
-  aria-hidden="true"
-  class="logo-img dark:invert transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] hover:[transform:rotate(-4deg)_scale(1.06)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] active:[transform:rotate(-4deg)_scale(1.06)] group-active/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:hover:[transform:none] motion-reduce:active:[transform:none] motion-reduce:group-hover/brand:[transform:none] motion-reduce:group-active/brand:[transform:none] flex-shrink-0 object-contain "
-  data-nimg="1"
-  decoding="async"
-  height="38"
-  loading="lazy"
-  src="/_next/image?url=%2Fhoundshield-logo.png&w=64&q=75"
-  srcset="/_next/image?url=%2Fhoundshield-logo.png&w=32&q=75 1x, /_next/image?url=%2Fhoundshield-logo.png&w=64&q=75 2x"
-  style="color: transparent;"
-  width="29"
-/>
+<span
+  class="inline-flex flex-shrink-0 transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] hover:[transform:rotate(-4deg)_scale(1.06)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] active:[transform:rotate(-4deg)_scale(1.06)] group-active/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:hover:[transform:none] motion-reduce:active:[transform:none] motion-reduce:group-hover/brand:[transform:none] motion-reduce:group-active/brand:[transform:none] "
+>
+  <img
+    alt=""
+    aria-hidden="true"
+    class="logo-img dark:invert logo-breathe object-contain"
+    data-nimg="1"
+    decoding="async"
+    height="38"
+    loading="lazy"
+    src="/_next/image?url=%2Fhoundshield-logo.png&w=64&q=75"
+    srcset="/_next/image?url=%2Fhoundshield-logo.png&w=32&q=75 1x, /_next/image?url=%2Fhoundshield-logo.png&w=64&q=75 2x"
+    style="color: transparent;"
+    width="29"
+  />
+</span>
 `;

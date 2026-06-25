@@ -7,11 +7,12 @@ import { FaqSection } from '@/components/seo/FaqSection'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { brainAiFaqs } from '@/lib/seo/faqs'
 import { breadcrumbSchema } from '@/lib/seo/structured-data'
+import { DeploymentBoundaryNote } from '@/components/ui/DeploymentBoundaryNote'
 
 export const metadata: Metadata = {
   title: 'Brain AI — Autonomous Compliance Copilot',
   description:
-    'Brain AI is HoundShield’s built-in compliance copilot. It scores all 110 NIST 800-171 controls, explains your SPRS score, drafts remediation, and assembles C3PAO-ready evidence — all inside your local-only boundary, safe for CUI.',
+    'Brain AI is HoundShield’s built-in compliance copilot. It scores all 110 NIST 800-171 controls, explains your SPRS score, drafts remediation, and assembles C3PAO-ready evidence — built for the CUI workloads cloud assistants legally cannot touch in self-hosted and air-gapped deployments.',
   alternates: { canonical: '/brain-ai' },
 }
 
@@ -28,8 +29,8 @@ const CAPABILITIES = [
   },
   {
     icon: ShieldCheck,
-    title: 'Local-only, CUI-safe',
-    body: 'Brain AI reasons inside HoundShield’s control boundary. In self-hosted and air-gapped modes nothing leaves your network — so it stays usable for the CUI workloads that cloud assistants legally cannot touch.',
+    title: 'CUI-safe in self-hosted mode',
+    body: 'Brain AI reasons inside HoundShield’s control boundary. In self-hosted (Docker) and air-gapped modes nothing leaves your network — so it stays usable for the CUI workloads that cloud assistants legally cannot touch. The hosted trial routes to a commercial model and is for non-CUI evaluation only.',
   },
 ]
 
@@ -122,6 +123,13 @@ export default function BrainAiPage() {
             configured or reachable. Add a provider key for deeper reasoning &mdash; the
             essentials never depend on the cloud being up.
           </p>
+        </div>
+      </section>
+
+      {/* Deployment boundary disclosure */}
+      <section className="px-6 pb-8">
+        <div className="max-w-3xl mx-auto">
+          <DeploymentBoundaryNote />
         </div>
       </section>
 

@@ -18,8 +18,30 @@
 - [ ] **RPO outreach list** — 50 RPOs from Cyber AB Marketplace; top targets: Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics
 - [ ] **HIPAA-first direct outreach** (Rachel) — parallel track, fastest validation, no FedRAMP blocker
 
-## Active
-<!-- Move a Stage 1 item here when starting work -->
+## Active — Launch-readiness sweep (2026-06-24, branch dreamy-mcclintock-fc9d8b)
+
+Baseline before work: build green, **526 tests / 37 files** pass, home 200, palette already on `--hs-*`.
+Scope = close genuine launch gaps; do NOT rebuild, do NOT touch dark-dashboard semantic status colors.
+
+- [x] **Remove fictional metrics** — pricing stat bar "2M+ scans"/"500+ teams"/"99.99% SLA" → verifiable product facts (16 engines, <10ms, SHA-256, 110 controls); "500+ teams" CTA line → honest copy
+- [x] **Mode-A/Mode-B boundary disclosure site-wide** — new `components/ui/DeploymentBoundaryNote.tsx`; one-line disclosure in `FooterV3` (both variants → every public page); inline note on `/security` + `/brain-ai`
+- [x] **Brain AI honesty** — softened "CUI-safe / safe for CUI" on `/brain-ai` (metadata + card) to Mode-B/Mode-C qualifier + hosted-trial caveat
+- [x] **Public forbidden colors** — `partner/layout.tsx` `to-purple-500` → steel; emerald/amber on `/status` + `/assessment` → `--hs-success`/`--hs-warn`. Public pages now zero forbidden classes.
+- [x] **Logo idle-breathe motion** — wrapper(hover)+img(`logo-breathe`) on Logo/NavV3/FooterV3 + keyframe in globals.css, `motion-reduce`-guarded; Logo snapshot updated. Verified live (structure + reduced-motion guard).
+- [x] **Gates** — build green · 526 tests green · live-verified pricing/security/logo via preview · no console errors → PR opened.
+
+### Review
+
+**Shipped (12 files + 1 new component):** removed all fabricated stat counters, site-wide deployment-boundary disclosure, Brain AI CUI-claim qualification, public-page color cleanup, permanent logo idle-breathe. Build green, **526/526 tests**, live-verified in browser (no white-on-white, boundary note readable, logo wrapper+breathe correct, zero console errors).
+
+**Founder-verify before public launch (did NOT touch — can't verify, won't fabricate):**
+- `app/about/page.tsx` — testimonial "Maria Chen / Vanguard Aero Engineering" + company-history timeline + future "1,000+ Users" milestone. Confirm real or remove; pre-revenue site should not imply existing customers.
+- Homepage testimonial ("I needed the PDF I could hand my C3PAO assessor" / "IT Security Manager") — same: confirm or mark illustrative.
+- Pricing per-tier SLA features (99.9%/99.99%) — commitments, not metrics; confirm they're offerable.
+
+**Still env-only (founder, per LAUNCH-CHECKLIST):** `database:demo_mode` + `payments:missing_key` — Supabase prod keys, Stripe price IDs + webhook secret, OPENROUTER key (rotate first).
+
+**Redeploy:** PR opened against `main`; Vercel auto-deploys on merge. Not force-deploying prod (per rules).
 
 ## Superseded by compass correction (history)
 

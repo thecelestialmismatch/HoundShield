@@ -699,26 +699,26 @@ export default function PricingPage() {
             {[
               {
                 icon: Shield,
-                stat: "2M+",
-                label: "Scans processed",
+                stat: "16",
+                label: "Detection engines",
                 color: "text-brand-400",
               },
               {
                 icon: Clock,
-                stat: "<50ms",
-                label: "Average latency",
+                stat: "<10ms",
+                label: "Local scan latency",
                 color: "text-[var(--hs-success)]",
               },
               {
                 icon: Lock,
-                stat: "99.99%",
-                label: "Uptime SLA",
+                stat: "SHA-256",
+                label: "Hash-chained audit",
                 color: "text-brand-400",
               },
               {
-                icon: Users,
-                stat: "500+",
-                label: "Teams protected",
+                icon: BadgeCheck,
+                stat: "110",
+                label: "NIST 800-171 controls",
                 color: "text-[var(--hs-steel)]",
               },
             ].map((item, i) => (
@@ -786,9 +786,9 @@ export default function PricingPage() {
                   </span>
                 </h2>
                 <p className="text-[var(--hs-ink-secondary)] max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ teams that trust HoundShield to protect their most
-                  sensitive data from unauthorized AI exposure. Deploy in
-                  under 15 minutes.
+                  Stop sensitive data from reaching ChatGPT, Copilot, and Claude
+                  before it leaves your network — and generate the C3PAO-ready
+                  evidence to prove it. Deploy in under 15 minutes.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

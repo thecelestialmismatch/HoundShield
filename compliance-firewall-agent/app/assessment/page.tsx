@@ -72,7 +72,7 @@ export default function AssessmentPage() {
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {INCLUDES.map((item) => (
               <li key={item} className="flex items-start gap-3">
-                <Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" aria-hidden />
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-[var(--hs-success)]" aria-hidden />
                 <span className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{item}</span>
               </li>
             ))}

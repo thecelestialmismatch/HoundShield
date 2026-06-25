@@ -191,14 +191,16 @@ export function NavV3() {
         <div className="flex items-center justify-between h-16">
           {/* Logo — rotates & scales toward the cursor on hover (demo .brand:hover .brand-mark) */}
           <Link href="/" className="group/brand flex items-center gap-2.5 shrink-0" title="HoundShield home">
-            <Image
-              src="/houndshield-logo.png"
-              alt="HoundShield"
-              width={44}
-              height={44}
-              className="logo-img object-contain transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)]"
-              priority
-            />
+            <span className="inline-flex transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]">
+              <Image
+                src="/houndshield-logo.png"
+                alt="HoundShield"
+                width={44}
+                height={44}
+                className="logo-img object-contain logo-breathe"
+                priority
+              />
+            </span>
             <span className="font-bold text-[var(--hs-ink)] text-xl sm:text-2xl tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
               <span style={{
                 background: 'linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))',
