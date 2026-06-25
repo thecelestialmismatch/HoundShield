@@ -127,7 +127,7 @@ export default function HIPAAPage() {
             className="text-[clamp(16px,2vw,20px)] text-[var(--hs-ink-secondary)] max-w-[640px] mx-auto mb-10 leading-relaxed"
           >
             Stop PHI from leaking into ChatGPT, Microsoft Copilot, and Claude.
-            HIPAA-compliant AI monitoring starting free.
+            Start free — and run self-hosted (Mode&nbsp;B) for live PHI.
           </motion.p>
 
           <motion.div
@@ -150,6 +150,17 @@ export default function HIPAAPage() {
               See a Live Demo
             </Link>
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="text-sm text-[var(--hs-ink-tertiary)] max-w-[640px] mx-auto mb-12 leading-relaxed"
+          >
+            <strong className="text-[var(--hs-ink-secondary)]">PHI boundary:</strong> the hosted trial runs on
+            Vercel and is for non-PHI evaluation only — it is not covered by a BAA. For live PHI, run HoundShield
+            self-hosted (Mode&nbsp;B, Docker), where prompt content never leaves your network.
+          </motion.p>
 
           <motion.div
             initial={{ opacity: 0 }}

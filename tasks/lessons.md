@@ -191,3 +191,20 @@ untouched and assert in tests that subscription retrieval never runs for a repor
 
 **What:** "who are you" returned the generic fallback because the FAQ layer had no identity keywords and prod has no OPENROUTER_API_KEY.
 **Rule:** The deterministic FAQ layer owns: identity, greeting, pricing, install, contact. Any demo-critical answer must work with zero API keys. Test: `findFaqAnswer("who are you")` is part of the suite.
+
+---
+
+## 2026-06-24 — launch-readiness sweep (branch dreamy-mcclintock-fc9d8b)
+
+### `git fetch` and diff against origin/main BEFORE building, not at PR time
+**What:** Worked a whole launch sweep on a worktree cut at #123. Built a `DeploymentBoundaryNote` component, re-added logo idle-breathe, removed a fabricated "2M+/500+" pricing stat bar — then the PR came back `CONFLICTING` because origin/main had already shipped all three: `ModeBNotice` (#122/#123), logo-motion-on-every-surface (#124), and the stats-bar removal. Half the work was redundant; had to reset to `origin/main` and re-apply only the genuinely-missing fixes.
+**Root cause:** Trusting the session-start branch snapshot + memory ("logo fixed in #124") without `git fetch origin main` and diffing the actual files first. ~30 stale branches make any local base suspect.
+**Rule:** First action on any worktree task: `git fetch origin main && git log --oneline HEAD..origin/main`. If main is ahead, rebase/reset onto it before writing code, and grep main for an existing component before creating a new one (`ModeBNotice` already existed — don't ship `DeploymentBoundaryNote`). A "fixed in PR #N" memory means nothing until you confirm #N is in *this* HEAD.
+
+### Idle animation and hover transform must live on different elements
+**What:** A CSS `animation` on `transform` (idle breathe) overrides a `:hover` `transform` on the same element — the animation wins, so hover silently dies. (Mooted here by adopting #124's logo, but the technique stands.)
+**Rule:** Compose two transforms by nesting: wrapper owns hover, inner element owns the idle animation; guard both with `motion-reduce`.
+
+### Fabricated social proof hides in `.map()`-ed marketing data
+**What:** Pre-revenue, marketing arrays still carried "500+ teams" / "2M+ scans" / a named testimonial. Easy to miss in a visual skim.
+**Rule:** Pre-launch, `grep -rEin "[0-9][KM]?\+ (teams|customers|scans|users)|trusted by [0-9]|99\.9" app components`. Replace usage metrics with verifiable product facts; testimonials + history timelines are founder-verify — flag, never fabricate or silently delete.
