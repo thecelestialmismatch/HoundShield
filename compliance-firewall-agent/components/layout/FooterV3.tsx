@@ -54,13 +54,15 @@ export function FooterV3({ dark = false }: FooterV3Props) {
             {/* Brand column */}
             <div className="md:col-span-1">
               <Link href="/" className="group/brand flex items-center gap-2.5 mb-4">
-                <Image
-                  src="/houndshield-logo.png"
-                  alt="HoundShield"
-                  width={48}
-                  height={48}
-                  className="logo-on-dark opacity-90 transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]"
-                />
+                <span className="inline-flex transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]">
+                  <Image
+                    src="/houndshield-logo.png"
+                    alt="HoundShield"
+                    width={48}
+                    height={48}
+                    className="logo-on-dark opacity-90 logo-breathe"
+                  />
+                </span>
                 <span className="font-bold text-white text-lg font-[var(--font-body)]">
                   HoundShield
                 </span>
@@ -106,8 +108,13 @@ export function FooterV3({ dark = false }: FooterV3Props) {
             ))}
           </div>
 
+          {/* Deployment-boundary disclosure (site-wide compliance statement) */}
+          <p className="mt-12 pt-6 border-t border-white/[0.04] text-[11px] leading-relaxed text-slate-600 font-[var(--font-body)] max-w-3xl">
+            This hosted site is for demos and non-CUI evaluation only — it runs on Vercel, which is not FedRAMP-authorized. CUI-safe operation requires self-hosted Docker (Mode B) or air-gapped (Mode C), where prompt content never leaves your network.
+          </p>
+
           {/* Bottom bar */}
-          <div className="mt-12 pt-6 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-slate-600 font-[var(--font-body)]">
               © {new Date().getFullYear()} HoundShield. All rights reserved.
             </p>
@@ -132,13 +139,15 @@ export function FooterV3({ dark = false }: FooterV3Props) {
           {/* Brand column */}
           <div className="md:col-span-1">
             <Link href="/" className="group/brand flex items-center gap-2.5 mb-4">
-              <Image
-                src="/houndshield-logo.png"
-                alt="HoundShield"
-                width={48}
-                height={48}
-                className="logo-img transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]"
-              />
+              <span className="inline-flex transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]">
+                <Image
+                  src="/houndshield-logo.png"
+                  alt="HoundShield"
+                  width={48}
+                  height={48}
+                  className="logo-img logo-breathe"
+                />
+              </span>
               <span className="font-bold text-[var(--hs-ink)] text-lg font-[var(--font-body)]">
                 HoundShield
               </span>
@@ -184,8 +193,13 @@ export function FooterV3({ dark = false }: FooterV3Props) {
           ))}
         </div>
 
+        {/* Deployment-boundary disclosure (site-wide compliance statement) */}
+        <p className="mt-12 pt-6 border-t border-[var(--hs-border-subtle)] text-[11px] leading-relaxed text-[var(--hs-ink-tertiary)] font-[var(--font-body)] max-w-3xl">
+          This hosted site is for demos and non-CUI evaluation only — it runs on Vercel, which is not FedRAMP-authorized. CUI-safe operation requires self-hosted Docker (Mode B) or air-gapped (Mode C), where prompt content never leaves your network.
+        </p>
+
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-[var(--hs-border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">
             © {new Date().getFullYear()} HoundShield. All rights reserved.
           </p>

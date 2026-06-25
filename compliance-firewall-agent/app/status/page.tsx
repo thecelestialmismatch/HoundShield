@@ -30,9 +30,9 @@ const LABELS: Record<string, string> = {
 
 function StatusDot({ ok }: { ok: boolean }) {
   return ok ? (
-    <CheckCircle2 className="h-5 w-5 text-emerald-600" aria-hidden />
+    <CheckCircle2 className="h-5 w-5 text-[var(--hs-success)]" aria-hidden />
   ) : (
-    <AlertTriangle className="h-5 w-5 text-amber-500" aria-hidden />
+    <AlertTriangle className="h-5 w-5 text-[var(--hs-warn)]" aria-hidden />
   );
 }
 
@@ -96,7 +96,7 @@ export default function StatusPage() {
               <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> Checking services…
             </p>
           ) : error ? (
-            <p className="flex items-center gap-2 text-amber-600 font-medium">
+            <p className="flex items-center gap-2 text-[var(--hs-warn)] font-medium">
               <AlertTriangle className="h-5 w-5" aria-hidden /> Status endpoint unreachable.
             </p>
           ) : (

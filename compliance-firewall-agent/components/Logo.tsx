@@ -34,14 +34,19 @@ const HOVER_MOTION =
 
 export function Logo({ className = "", size = 38, variant }: LogoProps) {
   const toneClass = variant === "dark" ? "logo-on-dark" : "logo-img dark:invert";
+  // Wrapper carries the hover rotate/scale; the inner image carries the idle
+  // breathe. Nesting composes the two transforms instead of letting the running
+  // animation override the hover state.
   return (
-    <Image
-      src="/houndshield-logo.png"
-      alt=""
-      aria-hidden="true"
-      width={Math.round(size * WIDTH_RATIO)}
-      height={size}
-      className={`${toneClass} ${HOVER_MOTION} flex-shrink-0 object-contain ${className}`}
-    />
+    <span className={`inline-flex flex-shrink-0 ${HOVER_MOTION} ${className}`}>
+      <Image
+        src="/houndshield-logo.png"
+        alt=""
+        aria-hidden="true"
+        width={Math.round(size * WIDTH_RATIO)}
+        height={size}
+        className={`${toneClass} logo-breathe object-contain`}
+      />
+    </span>
   );
 }

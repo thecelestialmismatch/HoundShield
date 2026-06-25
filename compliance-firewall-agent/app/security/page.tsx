@@ -3,6 +3,7 @@ import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
+import { DeploymentBoundaryNote } from "@/components/ui/DeploymentBoundaryNote";
 import { Lock, ShieldCheck, FileLock2, Network, KeyRound, Bug } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -63,6 +64,8 @@ export default function SecurityPage() {
           Nothing leaves your network. That is the foundation of our security posture, and the one
           property a cloud competitor structurally cannot copy.
         </p>
+
+        <DeploymentBoundaryNote className="mt-8" />
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-5">
           {PILLARS.map(({ icon: Icon, title, body }) => (

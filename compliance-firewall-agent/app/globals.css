@@ -571,6 +571,13 @@
 @keyframes badge-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 @keyframes border-glow { 0%, 100% { border-color: var(--hs-border-subtle); } 50% { border-color: var(--hs-border-strong); } }
 
+/* Brand-mark idle "breathe" — keeps the logo visibly alive without a hover or tap.
+   Applied to the inner <img>; the hover rotate/scale lives on the wrapping span,
+   so the two transforms compose (parent × child) instead of overriding each other. */
+@keyframes logo-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.logo-breathe { animation: logo-breathe 3.6s ease-in-out infinite; transform-origin: center; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .logo-breathe { animation: none; } }
+
 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 @keyframes marquee-reverse { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
 

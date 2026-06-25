@@ -142,6 +142,27 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 **What:** `NavV3` (light, 2 pages) and `Navbar` (rich: flyouts + mega-menu + counter + variants, 11 pages) both exist; Navbar is the richer one.
 **Rule:** Consolidating onto one nav is a design decision — surface to the founder, don't unilaterally migrate (NavV3 would downgrade 11 pages).
 
+---
+
+## 2026-06-24 — launch-readiness sweep (branch dreamy-mcclintock-fc9d8b)
+
+### A "fixed in PR #N" memory is not the branch you're on
+**What:** Memory said the logo idle-breathe shipped in PR #124, but this worktree branched off `main` at #123 — the logo was still hover-only (the recurring "logo not moving" complaint). Re-adding it was correct.
+**Rule:** When memory says "X was fixed in PR #N", verify in *this* branch's live code before assuming it's done. Memory reflects what was true when written, not your current HEAD.
+
+### Idle animation and hover transform must live on different elements
+**What:** A CSS `animation` on `transform` (idle breathe) overrides a `:hover` `transform` on the *same* element — the running animation wins, so hover silently dies.
+**Root cause:** Both target `transform`; CSS animations beat normal author rules during playback.
+**Rule:** Compose two transforms by nesting — wrapper owns the hover transform, inner element owns the idle animation; guard both with `motion-reduce`. (`Logo.tsx` + nav/footer logo wrappers + `.logo-breathe` in globals.css.)
+
+### Fabricated social proof hides in marketing data arrays
+**What:** Pre-revenue (0 paid customers), the site still showed "500+ teams", "2M+ scans", a "99.99% Uptime SLA" stat bar, a future-dated "1,000+ Users" milestone, and a named testimonial (Maria Chen, Vanguard Aero) — all in `.map()`-ed data arrays, invisible in a quick skim.
+**Rule:** Pre-launch, sweep `grep -rEin "[0-9][KM]?\+ (teams|customers|scans|users)|trusted by [0-9]|99\.9" app components`. Replace usage metrics with verifiable product facts (16 engines, 110 controls, <10ms, SHA-256). Testimonials + company-history timelines are founder-verify items — flag, never fabricate or silently delete.
+
+### CUI-safety is a Mode-B claim — one shared disclosure component, used everywhere
+**What:** `/brain-ai` + `/security` asserted "CUI-safe" / "the entire architecture" without distinguishing the hosted Vercel plane (Mode A, not FedRAMP-authorized) from self-hosted Docker (Mode B). The exact NEVER-DO.
+**Rule:** `DeploymentBoundaryNote` carries the wording; render it on every CUI-claim-adjacent page + keep a condensed line in the global footer (covers all pages). One source of truth for compliance copy, not pasted strings.
+
 ## 2026-06-11
 
 ### Design split-brain: v3 migration stopped at 3 pages
