@@ -388,9 +388,7 @@ export default function DocsPage() {
       <nav className="sticky top-0 z-50 h-16 bg-[var(--hs-surface-0)]/80 backdrop-blur-xl border-b border-[var(--hs-border-subtle)] flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="group/brand flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
-              <Logo />
-            </div>
+            <Logo size={32} />
             <TextLogo />
           </Link>
           <ChevronRight className="w-4 h-4 text-[var(--hs-ink-tertiary)]" />
