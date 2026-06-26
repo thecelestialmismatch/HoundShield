@@ -39,6 +39,18 @@ const FAQ_DB: FaqEntry[] = [
     answer:
       "Hello! 👋 I'm **Brain AI**, HoundShield's compliance assistant.\n\nI can help you with:\n- **CMMC Level 2** readiness & your SPRS score\n- **CUI / PHI / PII detection** — what we catch and how\n- **Installation** — one URL change, under 15 minutes\n- **Pricing & plans** — from free to enterprise\n\nWhat would you like to know?",
   },
+  // ── CONVERSATIONAL CHECK-IN (warm reply with no LLM key needed) ──────
+  {
+    keywords: ["how are you", "how're you", "how am i", "hows it going", "how's it going", "what's up", "whats up", "you doing", "you there", "how do you do"],
+    answer:
+      "I'm doing great — thanks for asking! I'm Brain AI, HoundShield's compliance assistant, and I'm ready whenever you are.\n\nI'm at my best on **CMMC Level 2** and your SPRS score, **CUI and PHI detection**, **HIPAA**, **SOC 2**, and getting HoundShield installed (it's one URL change). What can I help you with today?",
+  },
+  // ── COURTESY (thanks / sign-off — answer like a person, not a form) ──
+  {
+    keywords: ["thank you", "thanks", "thx", "appreciate it", "thanks brain", "much appreciated", "cheers", "you rock", "you're great", "youre great"],
+    answer:
+      "You're very welcome! I'm here whenever you need me — whether it's your SPRS score, a CUI or PHI question, or getting HoundShield set up. Take care.",
+  },
 
   // ── PRODUCT IDENTITY ────────────────────────────────────────────────
   {
