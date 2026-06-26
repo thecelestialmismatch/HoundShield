@@ -85,7 +85,7 @@ export default function PartnerBillingPage() {
       <div>
         <h1 className="text-2xl font-display font-bold text-white">Partner Billing</h1>
         <p className="text-sm text-slate-400 mt-1">
-          C3PAO partner tier — $75/client/month, invoiced monthly via Stripe
+          RPO / MSP partner tier — $75/client/month, invoiced monthly via Stripe
         </p>
       </div>
 

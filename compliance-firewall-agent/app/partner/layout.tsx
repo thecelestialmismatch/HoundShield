@@ -6,10 +6,8 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
-  Users,
   Rocket,
   CreditCard,
-  Settings,
   Menu,
   Bell,
   ChevronDown,
@@ -25,8 +23,6 @@ const NAV_ITEMS = [
   { id: "clients", label: "Client Organizations", icon: Building2, href: "/partner/clients" },
   { id: "deploy", label: "Deploy Keys", icon: Box, href: "/partner/deploy" },
   { id: "billing", label: "Partner Billing", icon: CreditCard, href: "/partner/billing" },
-  { id: "team", label: "Partner Team", icon: Users, href: "/partner/team" },
-  { id: "settings", label: "Settings", icon: Settings, href: "/partner/settings" },
 ];
 
 function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
@@ -50,19 +46,19 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
             >
               <TextLogo className="text-lg" variant="dark" />
               <span className="text-[10px] text-slate-500 -mt-0.5 tracking-wider uppercase">
-                C3PAO Portal
+                RPO / MSP Portal
               </span>
             </motion.div>
           )}
         </Link>
       </div>
 
-      {/* C3PAO badge */}
+      {/* Partner channel badge — RPO / MSP only, never the assessor channel (32 CFR Part 170) */}
       {!collapsed && (
         <div className="px-3 py-3">
           <div className="flex items-center gap-2 rounded-xl bg-brand-500/10 border border-brand-500/20 px-3 py-2">
             <Rocket className="w-3.5 h-3.5 text-brand-400" />
-            <span className="text-xs text-brand-300 font-medium">Authorized C3PAO</span>
+            <span className="text-xs text-brand-300 font-medium">RPO / MSP Partner</span>
           </div>
         </div>
       )}
@@ -149,8 +145,8 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
       }`}
     >
       <div className="flex items-center gap-3">
-        <span className="text-xs text-slate-500 font-medium tracking-wide">C3PAO Partner Portal</span>
-        <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 text-[10px] font-bold ring-1 ring-emerald-500/20">
+        <span className="text-xs text-slate-500 font-medium tracking-wide">RPO / MSP Partner Portal</span>
+        <span className="px-1.5 py-0.5 rounded-md bg-[rgba(5,150,105,0.1)] text-[var(--hs-success)] text-[10px] font-bold ring-1 ring-[rgba(5,150,105,0.2)]">
           AUTHORIZED
         </span>
       </div>
