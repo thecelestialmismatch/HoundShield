@@ -18,6 +18,9 @@ import { findFaqAnswer } from "@/lib/brain-ai/faq";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { sanitizeChatInput } from "@/lib/brain-ai/sanitize-input";
 import { resolveLlmProvider, type LlmProvider } from "@/lib/agent/provider";
+import { buildUserContextPrompt } from "@/lib/brain-ai/user-context";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import {
   captureRequest,
   openSpan,
@@ -80,6 +83,34 @@ function streamTextAsSSE(text: string): ReadableStream {
       await new Promise((r) => setTimeout(r, 5));
     },
   });
+}
+
+/**
+ * Best-effort personalization block from the Supabase SESSION (never a
+ * client-sent id). Returns "" for anonymous visitors, demo mode, or any error —
+ * personalization is a bonus, never a blocker.
+ */
+async function getSessionUserContext(): Promise<string> {
+  try {
+    if (!isSupabaseConfigured()) return "";
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return "";
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name, company, role, tier")
+      .eq("id", user.id)
+      .single();
+    if (!profile) return "";
+    return buildUserContextPrompt({
+      name: profile.full_name,
+      company: profile.company,
+      role: profile.role,
+      tier: profile.tier,
+    });
+  } catch {
+    return "";
+  }
 }
 
 /** Call the resolved LLM provider (OpenRouter → NVIDIA) and return its streaming body, or null. */
@@ -325,8 +356,12 @@ export async function POST(request: NextRequest) {
         "(healthcare/PHI, defense/CUI/CMMC, or legal/privilege). Keep answers under 150 words, lead with the answer, and " +
         "never refuse something you can actually help with.";
 
+      // Personalize from the signed-in user's profile (best-effort, session-derived).
+      const userContext = await getSessionUserContext();
+      const personalizedPrompt = systemPrompt + userContext;
+
       const fullMessages: Array<{ role: string; content: string }> = [
-        { role: "system", content: systemPrompt },
+        { role: "system", content: personalizedPrompt },
         ...(messages as Array<{ role: string; content: string }>).map((m) =>
           m.role === "user" ? { ...m, content: sanitizeChatInput(m.content) } : m,
         ),
