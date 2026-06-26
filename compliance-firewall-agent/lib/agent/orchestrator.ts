@@ -28,6 +28,7 @@ import {
 } from './types';
 import { toolRegistry } from './tools/index';
 import { agentMemory } from './memory';
+import { resolveLlmProvider, type LlmProvider } from './provider';
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -65,19 +66,18 @@ interface PartialToolCall {
 // Provider fetch with retry
 // ---------------------------------------------------------------------------
 
-async function fetchOpenRouter(
+async function fetchProvider(
   body: string,
-  apiKey: string,
+  provider: LlmProvider,
   maxRetries = 3
 ): Promise<Response> {
-  const url = 'https://openrouter.ai/api/v1/chat/completions';
+  const url = provider.url;
   const init: RequestInit = {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      'Authorization': `Bearer ${provider.apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://houndshield.com',
-      'X-Title': 'HoundShield Agent',
+      ...(provider.headers ?? {}),
     },
     body,
   };
@@ -190,6 +190,11 @@ export async function executeAgentLoop(
     onEvent,
   } = config;
 
+  // Resolve OpenRouter → NVIDIA NIM fallback. The model slug is overridden when
+  // a fallback provider with a different catalog is selected.
+  const provider = resolveLlmProvider(apiKey);
+  const effectiveModel = provider.modelOverride ?? model;
+
   const toolDefinitions = toolRegistry.getDefinitions(tools);
   const hasTools = toolDefinitions.length > 0;
 
@@ -215,7 +220,7 @@ export async function executeAgentLoop(
 
       // ── Call OpenRouter (with retry) ──────────────────────────────────────
       const requestBody = JSON.stringify({
-        model,
+        model: effectiveModel,
         messages: conversationMessages,
         temperature,
         stream: true,
@@ -229,7 +234,7 @@ export async function executeAgentLoop(
           : {}),
       });
 
-      const response = await fetchOpenRouter(requestBody, apiKey);
+      const response = await fetchProvider(requestBody, provider);
 
       if (!response.ok) {
         const errorText = await response.text().catch(() => '');
