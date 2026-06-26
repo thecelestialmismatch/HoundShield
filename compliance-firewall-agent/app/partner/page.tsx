@@ -97,7 +97,7 @@ export default function PartnerDashboard() {
         <div>
           <h1 className="text-2xl font-display font-bold text-white">Partner Dashboard</h1>
           <p className="text-sm text-slate-400 mt-1">
-            C3PAO multi-tenant management — all client organizations in one view
+            RPO / MSP multi-tenant management — all client organizations in one view
           </p>
         </div>
         <Link

@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
           `,
         });
 
-        // Applicant-facing confirmation — keeps the C3PAO channel warm.
+        // Applicant-facing confirmation — keeps the RPO / MSP partner channel warm.
         const { partnerWelcomeEmail } = await import("@/lib/email/templates/partner-welcome");
         await resend.emails.send({
           from: partnerWelcomeEmail.from,
