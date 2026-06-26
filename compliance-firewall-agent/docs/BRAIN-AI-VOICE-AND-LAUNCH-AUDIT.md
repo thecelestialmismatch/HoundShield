@@ -26,8 +26,17 @@ Three layers, enforced at the boundary so the result is guaranteed regardless of
 Provider: `lib/agent/provider.ts` runs the chat on **OpenRouter or NVIDIA NIM** (whichever key is set).
 Brain AI keeps its "do not input CUI" warning — both are commercial cloud endpoints.
 
+5. **Leak-free, human fallback (NEW)** — when no LLM key is set (or the provider returns an
+   empty stream), Brain no longer dumps internal config at the user. The old keyless reply
+   read *"set OPENROUTER_API_KEY in your Vercel environment variables…"* — it exposed env-var
+   names and the hosting provider, and felt robotic. It now answers warmly and points to what
+   it can actually help with; the operator hint (set a provider key) goes to **server logs only**
+   (`console.warn` in `app/api/chat/route.ts`). Casual check-ins ("how are you?", "how am i?",
+   "what's up", "thanks") also match new conversational FAQ entries, so they get a human reply
+   even with no key — instead of dropping to the fallback. (`lib/brain-ai/faq.ts`)
+
 Tests: `format-answer.test.ts` (11), `sanitize-input.test.ts` (6), `provider.test.ts` (8),
-`user-context.test.ts` (7).
+`user-context.test.ts` (7), `faq.test.ts` (8 — conversational match + asserts no env-var/Vercel leak).
 
 ## 2. The PART-2 template vs. what is actually live
 
