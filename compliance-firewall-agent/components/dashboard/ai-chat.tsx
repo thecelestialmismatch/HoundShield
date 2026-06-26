@@ -91,7 +91,11 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
   );
 }
 
-function renderContent(content: string) {
+function renderContent(rawContent: string) {
+  // Normalize markdown bullets to a real bullet so no literal "-"/"*" leaks
+  // into the rendered answer. (Bold/code are rendered below; this only touches
+  // a "-" or "*" + space at line start, never hyphens like "800-171".)
+  const content = rawContent.replace(/^(\s*)[-*]\s+/gm, "$1• ");
   const parts = content.split(/(```[\s\S]*?```)/g);
   return parts.map((part, i) => {
     const codeMatch = part.match(/```(\w+)?\n?([\s\S]*?)```/);

@@ -208,3 +208,13 @@ untouched and assert in tests that subscription retrieval never runs for a repor
 ### Fabricated social proof hides in `.map()`-ed marketing data
 **What:** Pre-revenue, marketing arrays still carried "500+ teams" / "2M+ scans" / a named testimonial. Easy to miss in a visual skim.
 **Rule:** Pre-launch, `grep -rEin "[0-9][KM]?\+ (teams|customers|scans|users)|trusted by [0-9]|99\.9" app components`. Replace usage metrics with verifiable product facts; testimonials + history timelines are founder-verify — flag, never fabricate or silently delete.
+
+## 2026-06-26
+
+### `next build` ignores ESLint — `next lint` is a SEPARATE CI gate
+**What:** A green local `npm run build` + `npm test` still failed CI's "Build & Test" job, which runs `next lint`. `next.config.js` has `eslint.ignoreDuringBuilds: true`, so build never lints. The failure was a `react/no-unescaped-entities` ERROR (a raw apostrophe `buyer's` in JSX on a new page) — an error-level rule that exits 1.
+**Rule:** Before pushing any JSX/TSX, run `npm run lint` (not just build). Escape apostrophes/quotes in JSX text (`&rsquo;`, `&ldquo;`). Local `build` is necessary but NOT sufficient to predict CI.
+
+### Brain AI answers must be sanitized at the output boundary, not trusted to the model
+**What:** GlobalChat renders with `whitespace-pre-wrap` (no markdown), and the system prompt literally said "use bullet points" — so answers showed literal `*` and `-`. The FAQ strings are also full of `**`/`- `.
+**Rule:** Clean prose is enforced by a deterministic sanitizer (`lib/brain-ai/format-answer.ts` → `cleanAnswer`) applied at the boundary (server FAQ stream + client assembled text), PLUS a "no markdown" system-prompt instruction. The sanitizer converts `-`/`*` bullets to `•` and strips emphasis but PRESERVES real hyphens (`800-171`) — only a `-`/`*` followed by a space at line start is a bullet. Never hand-edit every FAQ string; sanitize once at the boundary.
