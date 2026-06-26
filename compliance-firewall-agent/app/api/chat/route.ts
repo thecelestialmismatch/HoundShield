@@ -15,6 +15,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { findFaqAnswer } from "@/lib/brain-ai/faq";
+import { cleanAnswer } from "@/lib/brain-ai/format-answer";
+import { resolveLlmProvider, type LlmProvider } from "@/lib/agent/provider";
 import {
   captureRequest,
   openSpan,
@@ -45,8 +47,6 @@ const MODEL_MAP: Record<string, string> = {
   "claude-sonnet": "anthropic/claude-3.5-sonnet",
   "claude-haiku":  "anthropic/claude-3.5-haiku",
 };
-
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const FALLBACK_MESSAGE =
   "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA PHI, SOC 2, or how to install HoundShield — " +
@@ -81,24 +81,23 @@ function streamTextAsSSE(text: string): ReadableStream {
   });
 }
 
-/** Call OpenRouter and return its streaming body, or null on failure. */
-async function callOpenRouter(
-  apiKey: string,
+/** Call the resolved LLM provider (OpenRouter → NVIDIA) and return its streaming body, or null. */
+async function callProvider(
+  provider: LlmProvider,
   model: string,
   messages: Array<{ role: string; content: string }>,
   temperature: number
 ): Promise<ReadableStream | null> {
   try {
-    const response = await fetch(OPENROUTER_URL, {
+    const response = await fetch(provider.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-        "HTTP-Referer": "https://houndshield.com",
-        "X-Title": "HoundShield Brain AI",
+        Authorization: `Bearer ${provider.apiKey}`,
+        ...(provider.headers ?? {}),
       },
       body: JSON.stringify({
-        model,
+        model: provider.modelOverride ?? model,
         messages,
         temperature,
         stream: true,
@@ -108,13 +107,13 @@ async function callOpenRouter(
 
     if (!response.ok || !response.body) {
       const errText = await response.text().catch(() => "");
-      console.error(`[chat] OpenRouter ${response.status}:`, errText.slice(0, 200));
+      console.error(`[chat] ${provider.name} ${response.status}:`, errText.slice(0, 200));
       return null;
     }
 
     return response.body;
   } catch (err) {
-    console.error("[chat] OpenRouter fetch failed:", err);
+    console.error(`[chat] ${provider.name} fetch failed:`, err);
     return null;
   }
 }
@@ -306,31 +305,29 @@ export async function POST(request: NextRequest) {
           closeSpan(responseSpan, faqAnswer);
           finalizeTrace(trace, { userQuestion, finalAnswer: faqAnswer, ragContext: null }).catch(() => undefined);
         }
-        return new Response(streamTextAsSSE(faqAnswer), { headers: sseHeaders });
+        return new Response(streamTextAsSSE(cleanAnswer(faqAnswer)), { headers: sseHeaders });
       }
     }
 
-    // ── 3. OpenRouter LLM (requires API key) ──────────────────────────────
-    const apiKey =
-      process.env.OPENROUTER_API_KEY ||
-      request.headers.get("x-openrouter-key") ||
-      "";
+    // ── 3. LLM (OpenRouter → NVIDIA fallback; requires a key) ──────────────
+    const provider = resolveLlmProvider(request.headers.get("x-openrouter-key") || undefined);
 
-    if (apiKey) {
+    if (provider.apiKey) {
       const resolvedModel = MODEL_MAP[model as string] ?? (model as string);
       const systemPrompt =
         system ||
         "You are Brain AI, the intelligent compliance assistant embedded in HoundShield. " +
-        "You are a concise expert in CMMC Level 2, NIST 800-171, SPRS scoring, HIPAA PHI, SOC 2, CUI detection, and AI security. " +
-        "Keep answers under 150 words. Use bullet points for lists. Be warm and expert.";
+        "You are a senior expert in CMMC Level 2, NIST 800-171, SPRS scoring, HIPAA PHI, SOC 2, CUI detection, and AI security. " +
+        "Keep answers under 150 words. Write in clean, confident prose. Never use markdown: no asterisks for emphasis, " +
+        "no '-' or '*' bullet lists, no '#' headings. For a short list, use the '•' character or separate sentences.";
 
       const fullMessages: Array<{ role: string; content: string }> = [
         { role: "system", content: systemPrompt },
         ...messages,
       ];
 
-      const llmSpan = trace ? openSpan(trace, "llm_call", "openrouter_call", { model: resolvedModel }) : null;
-      const orBody = await callOpenRouter(apiKey, resolvedModel, fullMessages, temperature as number);
+      const llmSpan = trace ? openSpan(trace, "llm_call", `${provider.name}_call`, { model: resolvedModel }) : null;
+      const orBody = await callProvider(provider, resolvedModel, fullMessages, temperature as number);
       if (llmSpan) closeSpan(llmSpan, { success: !!orBody });
 
       if (orBody) {
@@ -351,9 +348,9 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 4. Final fallback — always return something useful ─────────────────
-    const fallbackText = apiKey
+    const fallbackText = provider.apiKey
       ? FALLBACK_MESSAGE
-      : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install HoundShield — I can answer those instantly! For free-form AI questions, an OpenRouter API key is required (set OPENROUTER_API_KEY in Vercel).";
+      : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install HoundShield — I can answer those instantly! For free-form AI questions, set an OPENROUTER_API_KEY (or NVIDIA_API_KEY) in Vercel.";
 
     if (trace) {
       const fbSpan = openSpan(trace, "final_response", "fallback");

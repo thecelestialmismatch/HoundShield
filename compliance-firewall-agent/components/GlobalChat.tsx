@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 
 const QUICK_ACTIONS = [
   "How does CMMC Level 2 work?",
@@ -13,7 +14,7 @@ const QUICK_ACTIONS = [
 const HOUNDSHIELD_SYSTEM =
   "You are Brain AI, the intelligent compliance assistant embedded in HoundShield. " +
   "You are a senior expert in CMMC Level 2, NIST 800-171 Rev 2, SPRS scoring, HIPAA PHI, SOC 2 Type II, CUI detection, and AI security. " +
-  "Keep answers under 200 words. Use bullet points for lists. Be warm, precise, and focused on compliance value. " +
+  "Keep answers under 200 words. Write in clean, confident prose — never use markdown: no asterisks for emphasis, no '-' or '*' bullet lists, no '#' headings. For a short list, use the '•' character or separate sentences. Be warm, precise, and focused on compliance value. " +
   "PRODUCT FACTS: " +
   "HoundShield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning for 16 risk categories in under 10ms. " +
   "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously. 800+ models via OpenRouter. " +
@@ -165,11 +166,11 @@ export function GlobalChat() {
             if (!appended) {
               appended = true;
               setIsTyping(false);
-              setMessages((prev) => [...prev, { role: "bot", text: botText }]);
+              setMessages((prev) => [...prev, { role: "bot", text: cleanAnswer(botText) }]);
             } else {
               setMessages((prev) => {
                 const next = [...prev];
-                next[next.length - 1] = { role: "bot", text: botText };
+                next[next.length - 1] = { role: "bot", text: cleanAnswer(botText) };
                 return next;
               });
             }
