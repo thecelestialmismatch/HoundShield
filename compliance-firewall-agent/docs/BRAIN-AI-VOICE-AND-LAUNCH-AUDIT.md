@@ -16,10 +16,18 @@ Three layers, enforced at the boundary so the result is guaranteed regardless of
 3. **Input sanitizer** — `lib/brain-ai/sanitize-input.ts → sanitizeChatInput()` caps length (4000),
    strips script/HTML, neutralizes markup before the message reaches the LLM/FAQ matcher.
 
+4. **User-awareness (NEW)** — `lib/brain-ai/user-context.ts → buildUserContextPrompt()` turns a
+   signed-in user's profile (first name, company, role, tier) into a personalization block appended
+   to the LLM system prompt, so Brain addresses them by name and tailors depth. The profile is
+   derived from the **Supabase session server-side** (never a client-sent id, per `api.md`),
+   best-effort and LLM-path-only — anonymous public-widget visitors are unchanged, and any
+   error/demo-mode yields no personalization.
+
 Provider: `lib/agent/provider.ts` runs the chat on **OpenRouter or NVIDIA NIM** (whichever key is set).
 Brain AI keeps its "do not input CUI" warning — both are commercial cloud endpoints.
 
-Tests: `format-answer.test.ts` (11), `sanitize-input.test.ts` (6), `provider.test.ts` (8).
+Tests: `format-answer.test.ts` (11), `sanitize-input.test.ts` (6), `provider.test.ts` (8),
+`user-context.test.ts` (7).
 
 ## 2. The PART-2 template vs. what is actually live
 
@@ -35,7 +43,7 @@ snippets would have *regressed* shipped work).
 | B2 Contrast | ✅ Tokens darkened for AA in prior sweeps | `globals.css` |
 | C1 No markdown artifacts | ✅ Live (sanitizer + prompt, this PR adds `---` rule + human voice) | §1 |
 | C2 OpenRouter + NVIDIA | ✅ Live | `lib/agent/provider.ts` |
-| C3 User-aware answers | ◑ Vertical-adaptive prompt live; per-account name injection is a dashboard-only follow-up (public widget is anonymous) | prompts |
+| C3 User-aware answers | ✅ Live — vertical-adaptive prompt + **session-derived** name/company/role/tier injected into the system prompt for signed-in users (anonymous widget unchanged) | `lib/brain-ai/user-context.ts`, `app/api/chat` |
 | D1 Broken links | ✅ Footer/nav audited; sitemap-driven | — |
 | D2 Signup flow | ✅ `/signup` (email + OAuth) exists | `app/signup` |
 | E1 Rate limiting | ✅ Live (sliding-window middleware, per-route caps) — Upstash is a different infra choice, not adopted | `middleware.ts` |
