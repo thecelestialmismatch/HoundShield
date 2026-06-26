@@ -39,6 +39,14 @@ describe("cleanAnswer", () => {
     expect(cleanAnswer("> quoted line")).toBe("quoted line");
   });
 
+  it("strips horizontal rules (--- *** ___) without harming real hyphens", () => {
+    expect(cleanAnswer("Before\n---\nAfter")).toBe("Before\n\nAfter");
+    expect(cleanAnswer("A\n***\nB")).toBe("A\n\nB");
+    expect(cleanAnswer("Section\n- - -\nNext")).toBe("Section\n\nNext");
+    // a real hyphenated token on its own is NOT a rule
+    expect(cleanAnswer("800-171")).toBe("800-171");
+  });
+
   it("collapses excessive blank lines and trims", () => {
     expect(cleanAnswer("\n\nA\n\n\n\nB\n\n")).toBe("A\n\nB");
   });

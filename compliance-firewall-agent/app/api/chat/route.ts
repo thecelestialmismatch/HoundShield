@@ -16,6 +16,7 @@ import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { findFaqAnswer } from "@/lib/brain-ai/faq";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
+import { sanitizeChatInput } from "@/lib/brain-ai/sanitize-input";
 import { resolveLlmProvider, type LlmProvider } from "@/lib/agent/provider";
 import {
   captureRequest,
@@ -296,7 +297,7 @@ export async function POST(request: NextRequest) {
     // ── 2. Local FAQ match (always works, no API key needed) ───────────────
     if (lastUserMsg?.content) {
       const faqSpan = trace ? openSpan(trace, "retriever", "faq_lookup") : null;
-      const faqAnswer = findFaqAnswer(lastUserMsg.content);
+      const faqAnswer = findFaqAnswer(sanitizeChatInput(lastUserMsg.content));
       if (faqSpan) closeSpan(faqSpan, { hit: !!faqAnswer });
       if (faqAnswer) {
         // Fire-and-forget trace finalization (FAQ path — no LLM involved)
@@ -316,14 +317,19 @@ export async function POST(request: NextRequest) {
       const resolvedModel = MODEL_MAP[model as string] ?? (model as string);
       const systemPrompt =
         system ||
-        "You are Brain AI, the intelligent compliance assistant embedded in HoundShield. " +
-        "You are a senior expert in CMMC Level 2, NIST 800-171, SPRS scoring, HIPAA PHI, SOC 2, CUI detection, and AI security. " +
-        "Keep answers under 150 words. Write in clean, confident prose. Never use markdown: no asterisks for emphasis, " +
-        "no '-' or '*' bullet lists, no '#' headings. For a short list, use the '•' character or separate sentences.";
+        "You are Brain AI, the compliance assistant embedded in HoundShield, and a senior expert in CMMC Level 2, " +
+        "NIST 800-171 Rev 2, SPRS scoring, HIPAA PHI, SOC 2, CUI detection, and AI security. " +
+        "Answer like a thoughtful human expert: warm, direct, precise. Never open with 'Certainly!', 'Of course!', or " +
+        "'Great question!' — just answer. Write flowing, complete sentences; when listing, say it in prose ('First… " +
+        "Second… And third…'), never a dash, star, or bullet. Use no markdown of any kind. Adapt to the asker's vertical " +
+        "(healthcare/PHI, defense/CUI/CMMC, or legal/privilege). Keep answers under 150 words, lead with the answer, and " +
+        "never refuse something you can actually help with.";
 
       const fullMessages: Array<{ role: string; content: string }> = [
         { role: "system", content: systemPrompt },
-        ...messages,
+        ...(messages as Array<{ role: string; content: string }>).map((m) =>
+          m.role === "user" ? { ...m, content: sanitizeChatInput(m.content) } : m,
+        ),
       ];
 
       const llmSpan = trace ? openSpan(trace, "llm_call", `${provider.name}_call`, { model: resolvedModel }) : null;
