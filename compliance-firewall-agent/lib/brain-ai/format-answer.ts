@@ -40,6 +40,8 @@ export function cleanAnswer(input: string): string {
   text = text
     .split("\n")
     .map((line) => {
+      // Horizontal rules (---, ***, ___, possibly spaced) → drop the line entirely.
+      if (/^\s*([-*_])(?:\s*\1){2,}\s*$/.test(line)) return "";
       let l = line;
       // Headings: drop leading # markers, keep the heading text.
       l = l.replace(/^\s{0,3}#{1,6}\s+/, "");
