@@ -61,7 +61,7 @@ export default function ClientsPage() {
         <div>
           <h1 className="text-2xl font-display font-bold text-white">Client Organizations</h1>
           <p className="text-sm text-slate-400 mt-1">
-            All defense contractors you manage as their C3PAO partner
+            All defense contractors you manage as their RPO / MSP partner
           </p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-300 text-sm font-medium hover:bg-brand-500/20 transition-colors">
