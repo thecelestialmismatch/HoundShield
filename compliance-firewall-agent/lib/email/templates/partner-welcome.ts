@@ -2,10 +2,12 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
 const FROM = 'HoundShield Partners <noreply@houndshield.com>';
 
 /**
- * Transactional confirmation sent to a C3PAO / partner applicant the moment
+ * Transactional confirmation sent to an RPO / MSP partner applicant the moment
  * they apply (from /api/partners/apply). The founder already gets an internal
  * notification; this is the applicant-facing acknowledgement that sets
  * expectations and keeps the channel — the prime-objective wedge — warm.
+ * Channel is RPOs/MSPs/consultants, never C3PAOs (32 CFR Part 170 bars an
+ * assessor from referring tools to clients it assesses).
  */
 export const partnerWelcomeEmail = {
   from: FROM,

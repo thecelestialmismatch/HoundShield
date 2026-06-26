@@ -39,12 +39,27 @@ logo-motion-everywhere (#124), and the fabricated-stats-bar removal. Kept only t
 - [x] **Public forbidden colors → tokens** — `partner/layout` avatar `to-purple-500` → steel; `/status` (3) + `/assessment` (1) emerald/amber → `--hs-success`/`--hs-warn`. Public pages now zero forbidden classes.
 - [x] **/hipaa PHI over-claim** (advisor catch — Rachel's lead page) — "HIPAA-compliant AI monitoring starting free" softened to "start free; run Mode B for live PHI" + added an inline PHI/BAA boundary note (hosted = non-PHI eval, no BAA).
 
+## Active — Partner-portal channel reframe (2026-06-26, branch HoundShield/frosty-rhodes-841deb)
+
+Resolves the founder-verify flag below. The authed `/partner` portal is a multi-tenant
+**reseller/management** surface — that model is exactly what 32 CFR Part 170 / ISO 17020 bar a
+C3PAO from doing (refer/resell to a client it assesses). Doctrine channel = RPO/MSP, so the portal
+is reframed, not the functionality.
+
+- [x] **Authed `/partner` portal C3PAO → RPO/MSP** — `layout.tsx` (sidebar "RPO / MSP Portal", badge "RPO / MSP Partner", topbar "RPO / MSP Partner Portal" + tokenized the forbidden `emerald-*` badge → `--hs-success`), `page.tsx`, `clients/page.tsx`, `billing/page.tsx`. Product-feature "C3PAO-ready PDF/evidence" mentions left intact (they live outside the authed portal).
+- [x] **`/partners` SEO metadata** — title/description/keywords/OG were still pitching "C3PAO partner" / "AI compliance reseller", contradicting the page body's own exclusion note; reframed to RPO/MSP + kept an honest one-line C3PAO-exclusion in the meta description.
+- [x] **Dead nav links removed** — sidebar linked to `/partner/team` + `/partner/settings`, which 404 (pages never built). Removed both items (+ now-unused `Users`/`Settings` imports). Building those pages is net-new feature work — flag to founder if wanted, not in this PR.
+- [x] **Stale code comments** — `partner-welcome.ts` + `apply/route.ts` called C3PAO "the channel"; corrected to RPO/MSP partner channel.
+- [x] **Regression guard** — `app/partner/__tests__/channel-framing.test.ts`: fails the build if any `/c3pao/i` returns to the authed `/partner` tree, asserts RPO/MSP framing present, and asserts the `/partners` metadata never re-pitches a "C3PAO partner" keyword. (This is the in-PR grep gate the lessons file prescribes.)
+
+> tsc clean · vitest 548/548 (+9) · build green · public `/partners` live-verified (title now "RPO & MSP…", exclusion note renders). Authed `/partner` shell unrenderable in dev (pre-existing `supabaseUrl is required`, env-only) — covered by the guard test + prerendered build.
+
 ### Review
 Minimal additive PR on top of current main. Build green, tests green (539), live-verified. Regulated-data disclosure now on homepage + /brain-ai + /hipaa + (existing) pricing/security/partners/thank-you. Swept all public `page.tsx` for "never leaves your network"/CUI/PHI claims — remaining hits are Mode-B-framed inline or on pages that already carry the notice.
 
 **Founder-verify before public launch (untouched — unverifiable / product decision):**
 - `app/about` testimonial "Maria Chen / Vanguard Aero" + history timeline + future "1,000+ Users"; homepage testimonial; per-tier SLA commitments.
-- `partner/layout` is branded "C3PAO Partner Portal / Authorized C3PAO" — but the mission channel is RPO/MSP, and C3PAOs are a documented NEVER-DO referral channel (32 CFR Part 170). Reframe the portal to RPO/MSP, or confirm intent.
+- ~~`partner/layout` is branded "C3PAO Partner Portal / Authorized C3PAO"~~ — ✅ **RESOLVED 2026-06-26** (branch `HoundShield/frosty-rhodes-841deb`): authed portal reframed to RPO/MSP; guard test added. Intent did not need confirming — C3PAO referral framing is already on the CLAUDE.md NEVER-DO list (32 CFR Part 170).
 
 **Env-only (founder, per LAUNCH-CHECKLIST):** `database:demo_mode` + `payments:missing_key` — Supabase prod keys, Stripe price IDs + webhook secret, OPENROUTER key (rotate first).
 

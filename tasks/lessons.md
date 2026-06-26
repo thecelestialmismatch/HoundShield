@@ -218,3 +218,46 @@ untouched and assert in tests that subscription retrieval never runs for a repor
 ### Brain AI answers must be sanitized at the output boundary, not trusted to the model
 **What:** GlobalChat renders with `whitespace-pre-wrap` (no markdown), and the system prompt literally said "use bullet points" — so answers showed literal `*` and `-`. The FAQ strings are also full of `**`/`- `.
 **Rule:** Clean prose is enforced by a deterministic sanitizer (`lib/brain-ai/format-answer.ts` → `cleanAnswer`) applied at the boundary (server FAQ stream + client assembled text), PLUS a "no markdown" system-prompt instruction. The sanitizer converts `-`/`*` bullets to `•` and strips emphasis but PRESERVES real hyphens (`800-171`) — only a `-`/`*` followed by a space at line start is a bullet. Never hand-edit every FAQ string; sanitize once at the boundary.
+
+---
+
+## 2026-06-26 — partner-portal channel reframe (branch HoundShield/frosty-rhodes-841deb)
+
+### The legal line is "refer/resell", not the word "C3PAO" — classify before you sweep
+**What:** The authed `/partner` portal self-identified as a "C3PAO Partner Portal / Authorized C3PAO"
+running a multi-tenant client roster at $75/client/mo. That reseller/management model is precisely
+what 32 CFR Part 170 / ISO 17020 bar a C3PAO from doing. But the same codebase has ~70 files
+mentioning "C3PAO" — most are legitimate **product-feature** copy ("C3PAO-ready PDF", "hand to your
+C3PAO assessor"), which is correct and must stay.
+**Root cause:** Treating "C3PAO" as a blanket find-and-replace target would have wrecked accurate
+product copy; treating it as untouchable would have left the legal violation live.
+**Rule:** Split C3PAO mentions into two buckets before editing: **channel-identity** (portal brand,
+"authorized C3PAO", "refer/resell", "as their C3PAO partner") = FIX → RPO/MSP; **product-feature**
+(the PDF artifact's audience is a C3PAO assessor) = KEEP. The fix is scoped to the authed `/partner`
+tree + the `/partners` SEO metadata, not the whole app.
+
+### Encode the legal rule as a test, not a memory — and scope the guard precisely
+**What:** Added `app/partner/__tests__/channel-framing.test.ts` asserting zero `/c3pao/i` in the authed
+`/partner` tree. It immediately caught a 4th occurrence I'd missed — a `{/* C3PAO badge */}` comment
+(`grep` of the source had said "4 mentions", I'd only fixed the 3 visible strings).
+**Root cause:** Source greps count comments too; a human edit pass skims past them.
+**Rule:** For a doctrine/legal constraint, ship a deterministic guard in the *same PR* (the in-PR grep
+gate from the 2026-06-11 design-split-brain lesson). Scope it to the surface the rule actually governs
+(authed `/partner`, where zero C3PAO is correct) — never the whole app, where feature mentions are
+valid. Keep the guard strict (zero token, no allow-list) and word your own explanatory comments to
+avoid the banned token so they don't trip it.
+
+### `git fetch` + `npm ci` the worktree before trusting any gate
+**What:** First `tsc`/`vitest` run exploded with ~28 "Cannot find module" errors (resend, jspdf,
+@vitejs/plugin-react, stripe apiVersion mismatch) — the worktree had **no `node_modules`**, so
+resolution fell back to the repo-root `node_modules` with the wrong versions.
+**Rule:** A fresh worktree starts with no app `node_modules`. First action before any build/type/test
+gate: `cd compliance-firewall-agent && npm ci` (lockfile present). A module-not-found wall is an env
+state, not a code bug — repair it before reading the gate (continues the 2026-06-06 lesson).
+
+### Dead nav links are a dangling thread — cut them, don't build the pages
+**What:** The portal sidebar linked `/partner/team` + `/partner/settings`, neither of which exists →
+two 404s in a portal being presented as polished.
+**Rule:** When a nav points at routes that were never built, remove the links (and now-unused imports)
+as part of the surrounding fix. Building the missing pages is net-new feature work — flag to the
+founder, keep it out of a copy/legal PR (No-feature-creep still holds).
