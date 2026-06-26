@@ -46,7 +46,7 @@ export default function TrustPage() {
           Trust Center
         </p>
         <h1 className="text-4xl font-bold text-[var(--hs-ink)] mb-4">
-          Everything an assessor — or a buyer's security team — asks for, in one place.
+          Everything an assessor — or a buyer&rsquo;s security team — asks for, in one place.
         </h1>
         <p className="max-w-2xl text-base text-[var(--hs-ink-secondary)] leading-relaxed">
           We are deliberate about the difference between what HoundShield is <em>built for</em> and what
