@@ -128,8 +128,9 @@ No pitch in the request; let the email thread carry it.
 > No ask — just the goods. Here's a sample of the $499 AI Risk Assessment Report and a one-pager on
 > why cloud AI-DLP creates a HIPAA/DFARS exposure that a local scan doesn't:
 >
-> → houndshield.com/assessment
-> → houndshield.com/answers/dfars-7012-ai-tools
+> → Sample report (PDF): houndshield.com/api/reports/sample
+> → The offer: houndshield.com/assessment
+> → The 1-pager: houndshield.com/answers/dfars-7012-ai-tools
 >
 > Useful for clients asking about ChatGPT/Copilot. And if you ever want the 15-minute partner walkthrough,
 > the door's open.

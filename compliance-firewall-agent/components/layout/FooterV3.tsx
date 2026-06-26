@@ -25,6 +25,7 @@ const FOOTER_LINKS = {
     { label: 'About',         href: '/about' },
   ],
   Legal: [
+    { label: 'Trust Center',    href: '/trust' },
     { label: 'Security',        href: '/security' },
     { label: 'Status',          href: '/status' },
     { label: 'Privacy',         href: '/privacy' },
