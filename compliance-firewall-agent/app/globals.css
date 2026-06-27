@@ -99,6 +99,20 @@
   --my: -500px;
 }
 
+/* ── Auto-striped sections ────────────────────────────────────────────
+   Add `section-stripe` to a page wrapper whose plain <section> children all
+   default to white, and they pick up the hero cadence automatically — every
+   2nd section a steel wash, every 4th a cream wash — without hand-tinting each
+   one. `nth-of-type` counts only <section> children, so non-section siblings
+   (nav, footer, scroll bar) are ignored. The first/hero section stays white.
+   Sections that set their own bg-* class are left alone (see the :not guard). */
+.section-stripe > section:nth-of-type(4n + 2):not([class*="bg-"]) {
+  background: var(--hs-surface-1);
+}
+.section-stripe > section:nth-of-type(4n + 4):not([class*="bg-"]) {
+  background: var(--hs-surface-2);
+}
+
 /* ── Section spotlight ────────────────────────────────────────── */
 .spotlight { position: relative; }
 .spotlight::before {
