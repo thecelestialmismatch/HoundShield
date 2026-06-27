@@ -7,7 +7,16 @@ interface LogoProps {
   className?: string;
   /** Rendered height in px; width derives from the mark's aspect ratio. */
   size?: number;
-  /** "dark" forces the light (inverted) treatment for dark surfaces. */
+  /**
+   * Tone of the mark, chosen explicitly per surface — never inferred from the
+   * ambient theme. `"dark"` paints the mark white (for dark surfaces);
+   * anything else renders the native dark mark (for light surfaces).
+   *
+   * This is deterministic on purpose. The old `dark:invert` utility keyed off
+   * the `.dark` class, which `theme-provider` toggles from the visitor's *system*
+   * theme — so a dark-OS visitor on a light marketing page got a white mark on a
+   * white background (invisible). Tone is now a property of the surface, not the OS.
+   */
   variant?: "light" | "dark";
 }
 
@@ -33,7 +42,7 @@ const HOVER_MOTION =
   "motion-reduce:group-hover/brand:[transform:none] motion-reduce:group-active/brand:[transform:none]";
 
 export function Logo({ className = "", size = 38, variant }: LogoProps) {
-  const toneClass = variant === "dark" ? "logo-on-dark" : "logo-img dark:invert";
+  const toneClass = variant === "dark" ? "logo-on-dark" : "logo-img";
   return (
     <Image
       src="/houndshield-logo.png"

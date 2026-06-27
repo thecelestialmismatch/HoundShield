@@ -643,29 +643,38 @@
   .chat-window { right: 0.75rem; left: 0.75rem; width: auto; bottom: 5rem; max-height: 70vh; }
 }
 
-/* ── Logo rendering ─────────────────────────────────────────────── */
-.logo-img { mix-blend-mode: multiply; }
-/* Dark surfaces invert the mark to white — multiply would erase it there. */
-.dark .logo-img { mix-blend-mode: normal; }
+/* ── Logo rendering ───────────────────────────────────────────────
+   Tone is deterministic per surface (via the <Logo variant> prop / the class
+   chosen), NEVER inferred from the ambient `.dark` theme. The mark PNG is
+   transparent, so light surfaces need no blend trickery; dark surfaces paint
+   it white. (The old `mix-blend-mode: multiply` + `dark:invert` whitened the
+   mark for dark-OS visitors on light marketing pages → invisible. Both gone.) */
+.logo-img { mix-blend-mode: normal; }
 .logo-on-dark { filter: brightness(0) invert(1); mix-blend-mode: normal; }
 
-/* ── Brand-mark motion: idle breathe + cursor-reactive hover ─────────
-   The Doberman mark is ALWAYS gently alive — a subtle centered scale/rotate
-   breathe — so it reads as "moving" on every surface and every device,
-   including touch where :hover never fires. On pointer hover (or a brand
-   link/group hover) the idle pauses and the mark strikes the Direction-A
-   cursor pose (a stronger tilt). The transform is centered and lightly
-   scaled so it stays clip-safe inside framed / overflow-hidden logo chips.
-   Fully disabled under prefers-reduced-motion. */
+/* ── Brand-mark motion: always-alive idle breathe + cursor-reactive hover ──
+   The Doberman mark is ALWAYS visibly alive — a centered scale/rotate breathe
+   with a periodic "alert" tilt — so it reads as moving on every surface and
+   device, including touch (where :hover never fires). Under
+   prefers-reduced-motion it does NOT freeze: it falls back to a minimal
+   scale-only pulse (the gentlest spatial motion) so the mark still breathes
+   for everyone. On pointer / brand-link hover the idle pauses and the mark
+   strikes the stronger Direction-A pose. Centered + lightly scaled to stay
+   clip-safe inside framed / overflow-hidden logo chips. */
 @keyframes hs-logo-idle {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  50%      { transform: rotate(-1.8deg) scale(1.045); }
+  0%, 58%, 100% { transform: rotate(0deg) scale(1); }
+  72%           { transform: rotate(-3deg) scale(1.06); }
+  85%           { transform: rotate(1.4deg) scale(1.03); }
+}
+@keyframes hs-logo-idle-soft {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
 }
 .logo-img,
 .logo-on-dark {
   transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
   transform-origin: center;
-  animation: hs-logo-idle 4.5s ease-in-out infinite;
+  animation: hs-logo-idle 4s ease-in-out infinite;
 }
 .logo-img:hover,
 .logo-on-dark:hover,
@@ -683,12 +692,19 @@ button:active > .logo-img,
   transform: rotate(-4deg) scale(1.06);
 }
 @media (prefers-reduced-motion: reduce) {
-  .logo-img, .logo-on-dark { transition: none; animation: none; }
-  .logo-img:hover, .logo-on-dark:hover,
-  a:hover > .logo-img, button:hover > .logo-img,
-  .group\/brand:hover .logo-img, .group\/brand:hover .logo-on-dark,
-  .logo-img:active, .logo-on-dark:active,
-  .group\/brand:active .logo-img, .group\/brand:active .logo-on-dark { transform: none; }
+  /* The brand mark is the single, deliberate exception we keep gently alive
+     under reduced-motion (a standing product requirement): a scale-only pulse —
+     no rotation or translation, well below any vestibular-trigger threshold.
+     The universal reset above zeroes EVERY animation-duration with !important,
+     so the logo must re-assert its own longhands with !important to survive;
+     that universal reset is exactly why the mark read as frozen before. */
+  .logo-img, .logo-on-dark {
+    transition: none;
+    animation-name: hs-logo-idle-soft !important;
+    animation-duration: 5s !important;
+    animation-timing-function: ease-in-out !important;
+    animation-iteration-count: infinite !important;
+  }
 }
 
 /* ── Feature card hover-expand ──────────────────────────────────── */
