@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { LiveCommandCenter } from '@/components/dashboard/LiveCommandCenter'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
+import { createClient } from '@/lib/supabase/server'
+import { isSupabaseConfigured } from '@/lib/supabase/client'
+import { buildDashboardViewer } from '@/lib/auth/dashboard-viewer'
 
 export const metadata: Metadata = {
   title: 'Live Command Center — HoundShield',
@@ -8,13 +11,42 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function ConsolePage() {
+// Personalized per signed-in user (reads the session cookie), so it must render
+// per request — not be prerendered static at build time when no session exists.
+export const dynamic = 'force-dynamic'
+
+/**
+ * Resolve the signed-in user into the dashboard identity. Best-effort: any
+ * failure (anonymous visitor, demo mode, missing profile) falls back to the
+ * public sample org. Never blocks the page.
+ */
+async function getViewer() {
+  try {
+    if (!isSupabaseConfigured()) return undefined
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return undefined
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('company, full_name, tier')
+      .eq('id', user.id)
+      .single()
+    return buildDashboardViewer(profile) ?? undefined
+  } catch {
+    return undefined
+  }
+}
+
+export default async function ConsolePage() {
+  const viewer = await getViewer()
   return (
     <>
       <div className="px-4 pt-4 sm:px-6 lg:px-8">
         <WelcomeBanner />
       </div>
-      <LiveCommandCenter />
+      <LiveCommandCenter viewer={viewer} />
     </>
   )
 }
