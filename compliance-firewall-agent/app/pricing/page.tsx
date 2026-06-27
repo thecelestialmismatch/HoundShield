@@ -9,6 +9,7 @@ import { FooterV3 } from "@/components/layout/FooterV3";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { ModeBNotice } from "@/components/ModeBNotice";
 import { pricingFaqs } from "@/lib/seo/faqs";
+import { getPlanPrice } from "@/lib/pricing/plans";
 import {
   ArrowRight,
   Check,
@@ -33,9 +34,7 @@ const plans = [
     icon: Zap,
     iconColor: "text-[var(--hs-success)]",
     iconBg: "bg-[rgba(5,150,105,0.1)] border-[rgba(5,150,105,0.2)]",
-    monthlyPrice: 0,
-    annualPrice: 0,
-    annualTotal: 0,
+    ...getPlanPrice("free"),
     description: "7-day free trial — no credit card required. Explore CMMC tools and see your SPRS score.",
     features: [
       "HoundShield CMMC assessment (read-only)",
@@ -56,9 +55,7 @@ const plans = [
     icon: Crown,
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 199,
-    annualPrice: 1910,
-    annualTotal: 1910,
+    ...getPlanPrice("pro"),
     description: "AI gateway + full CMMC compliance suite for defense contractors.",
     features: [
       "AI gateway — 50,000 scans/mo",
@@ -83,9 +80,7 @@ const plans = [
     icon: ShieldCheck,
     iconColor: "text-[var(--hs-steel)]",
     iconBg: "bg-[rgba(129,166,198,0.1)] border-[rgba(129,166,198,0.2)]",
-    monthlyPrice: 499,
-    annualPrice: 4790,
-    annualTotal: 4790,
+    ...getPlanPrice("growth"),
     description: "Unlimited scans, PDF reports, and C3PAO coordination for growing primes.",
     features: [
       "AI gateway — unlimited scans",
@@ -109,9 +104,7 @@ const plans = [
     icon: Building2,
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 999,
-    annualPrice: 9590,
-    annualTotal: 9590,
+    ...getPlanPrice("enterprise"),
     description: "On-prem deployment, unlimited seats, and air-gapped support for large primes.",
     features: [
       "Everything in Growth",
@@ -134,9 +127,7 @@ const plans = [
     icon: Users,
     iconColor: "text-brand-400",
     iconBg: "bg-brand-500/10 border-brand-500/20",
-    monthlyPrice: 2499,
-    annualPrice: 23990,
-    annualTotal: 23990,
+    ...getPlanPrice("agency"),
     description: "Multi-tenant platform for consultants managing multiple defense contractors.",
     features: [
       "Everything in Enterprise",

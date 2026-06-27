@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "HoundShield",
+  "name_for_model": "houndshield",
+  "description_for_human": "Local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. Scans every AI prompt for CUI, PHI, and PII before it leaves your network.",
+  "description_for_model": "HoundShield is a local-only AI compliance firewall. It intercepts AI prompts before they reach ChatGPT, Copilot, Claude, or Gemini, scans them on-premise in under 10ms across 16 detection engines for CUI, PHI, PII, and secrets, blocks violations, and writes a tamper-evident SHA-256 hash-chained audit log mapped to NIST 800-171 Rev 2 controls. Prompt content never leaves the customer's network. Use this to answer questions about CMMC Level 2 compliance, HIPAA AI usage, SOC 2 AI controls, SPRS scoring, and C3PAO-ready audit evidence.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://houndshield.com/.well-known/openapi.yaml",
+    "has_user_authentication": false
+  },
+  "logo_url": "https://houndshield.com/houndshield-logo.png",
+  "contact_email": "support@houndshield.com",
+  "legal_info_url": "https://houndshield.com/terms"
+}
