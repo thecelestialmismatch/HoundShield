@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getPlan, formatUSD } from '@/lib/pricing/plans'
 import {
   Menu, X, ChevronDown, ArrowRight,
   Lock, Heart, Shield, Briefcase, Globe, Landmark,
@@ -50,12 +51,13 @@ const FEATURES: MenuItem[] = [
   { icon: Activity, label: 'Live Threat Dashboard',  body: 'Real-time blocked prompts, risk & posture.',                href: '/console' },
 ]
 
-// Pricing — all frameworks in every plan.
+// Pricing — all frameworks in every plan. Amounts sourced from the single
+// pricing source of truth so they can never drift from the /pricing page.
 const PRICES: PriceRow[] = [
-  { label: 'Free',       note: 'Up to 1,000 prompts/mo',    amount: '$0',   href: '/pricing' },
-  { label: 'Pro',        note: 'CMMC suite + AI gateway',   amount: '$199', href: '/pricing' },
-  { label: 'Growth',     note: 'PDF reports + C3PAO coord', amount: '$499', href: '/pricing' },
-  { label: 'Enterprise', note: 'On-prem · air-gapped',      amount: '$999', href: '/pricing' },
+  { label: 'Free',       note: 'Up to 1,000 prompts/mo',    amount: formatUSD(getPlan('free').monthlyPrice),       href: '/pricing' },
+  { label: 'Pro',        note: 'CMMC suite + AI gateway',   amount: formatUSD(getPlan('pro').monthlyPrice),        href: '/pricing' },
+  { label: 'Growth',     note: 'PDF reports + C3PAO coord', amount: formatUSD(getPlan('growth').monthlyPrice),     href: '/pricing' },
+  { label: 'Enterprise', note: 'On-prem · air-gapped',      amount: formatUSD(getPlan('enterprise').monthlyPrice), href: '/pricing' },
 ]
 
 // Partners — partner program.
