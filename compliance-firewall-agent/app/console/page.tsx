@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LiveCommandCenter } from '@/components/dashboard/LiveCommandCenter'
+import { WelcomeBanner } from '@/components/WelcomeBanner'
 
 export const metadata: Metadata = {
   title: 'Live Command Center — HoundShield',
@@ -8,5 +9,12 @@ export const metadata: Metadata = {
 }
 
 export default function ConsolePage() {
-  return <LiveCommandCenter />
+  return (
+    <>
+      <div className="px-4 pt-4 sm:px-6 lg:px-8">
+        <WelcomeBanner />
+      </div>
+      <LiveCommandCenter />
+    </>
+  )
 }

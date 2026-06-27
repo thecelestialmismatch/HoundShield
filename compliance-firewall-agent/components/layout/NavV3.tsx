@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getPlan, formatUSD } from '@/lib/pricing/plans'
+import { NAV_TRUST_BADGE } from '@/lib/site/metrics'
 import {
   Menu, X, ChevronDown, ArrowRight,
   Lock, Heart, Shield, Briefcase, Globe, Landmark,
@@ -157,22 +158,9 @@ function DdFoot({ children }: { children: React.ReactNode }) {
   )
 }
 
-/* ── SSR-safe live counter ────────────────────────────────────────── */
-
-function useInterceptedCount() {
-  const [count, setCount] = useState(14672)
-  useEffect(() => {
-    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const id = setInterval(() => setCount((c) => c + Math.floor((c % 3) + 1)), 4200)
-    return () => clearInterval(id)
-  }, [])
-  return count
-}
-
 export function NavV3() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const count = useInterceptedCount()
   const close = () => setMobileOpen(false)
 
   useEffect(() => {
@@ -261,11 +249,11 @@ export function NavV3() {
           {/* Desktop CTA + live badge */}
           <div className="hidden md:flex items-center gap-2">
             <span
-              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-pill)] bg-[var(--hs-ok-bg,rgba(14,159,110,0.12))] border border-[rgba(14,159,110,0.28)] text-[11px] font-bold tabular-nums font-[var(--font-mono)] text-[#0E9F6E]"
-              title="Prompts intercepted across HoundShield deployments"
+              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--radius-pill)] bg-[var(--hs-ok-bg,rgba(14,159,110,0.12))] border border-[rgba(14,159,110,0.28)] text-[11px] font-bold font-[var(--font-mono)] text-[#0E9F6E]"
+              title="16 local detection engines, sub-10ms median scan"
             >
               <span className="w-[7px] h-[7px] rounded-full bg-[#0E9F6E] animate-pulse" aria-hidden />
-              {count.toLocaleString()} intercepted
+              {NAV_TRUST_BADGE}
             </span>
             <Link
               href="/login"

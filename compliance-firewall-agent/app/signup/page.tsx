@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
+import { interpretSignUp, validateSignUpInput } from '@/lib/auth/signup-result';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
 
@@ -23,32 +24,54 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Client-side validation before we hit the network.
+    const validationError = validateSignUpInput(email, password);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setLoading(true);
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters');
+    let data, authError;
+    try {
+      const supabase = createClient();
+      ({ data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name },
+          emailRedirectTo: `${window.location.origin}/auth/callback?redirect=/console`,
+        },
+      }));
+    } catch {
+      // Network/config failure (e.g. Supabase env not set) — never leave the
+      // user staring at a spinner.
+      setError("We couldn't reach the sign-up service. Please try again in a moment.");
       setLoading(false);
       return;
     }
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: name },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return;
+    const outcome = interpretSignUp(data ?? null, authError ?? null);
+    switch (outcome.kind) {
+      case 'redirect':
+        // Auto-confirm: the account is live, drop them into the product.
+        router.push(outcome.to);
+        return;
+      case 'already-registered':
+        setError('That email is already registered. Try signing in instead.');
+        setLoading(false);
+        return;
+      case 'error':
+        setError(outcome.message);
+        setLoading(false);
+        return;
+      case 'check-email':
+        setSuccess(true);
+        setLoading(false);
+        return;
     }
-
-    setSuccess(true);
-    setLoading(false);
   };
 
   const handleOAuthSignup = async (provider: 'google' | 'github') => {
