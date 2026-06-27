@@ -43,11 +43,17 @@ HoundShield works as a transparent local proxy. Organizations change one URL: in
 
 All plans include local-only deployment and tamper-evident logging.
 
-- **Starter** — Free. Basic scanning, 10K requests/month.
-- **Pro** — $69/month. Advanced scanning, PDF evidence export, CMMC controls, 100K requests/month.
-- **Growth** — $199/month. Multi-user, gateway mode, SPRS score tracking, 1M requests/month.
-- **Enterprise** — $499/month. C3PAO-ready reports, dedicated support, unlimited requests.
-- **Agency** — Custom. Multi-tenant dashboard for MSPs managing multiple clients.
+The lead product is a one-time CMMC AI Risk Assessment Report:
+
+- **CMMC AI Risk Assessment Report** — $499 one-time. Run the proxy 14 days in your own environment; receive a SHA-256-signed PDF that risk-scores every AI prompt event against NIST 800-171. No subscription, no MSA. RPO/MSP partners co-brand it at $299 wholesale.
+
+Subscription tiers (secondary):
+
+- **Free** — $0. CMMC self-assessment, SPRS score calculator, 110-control gap analysis. Up to 1,000 prompts/month.
+- **Pro** — $199/month. AI gateway (50,000 scans/mo), editable assessment, SSP & POA&M generation, PDF reports, email & Slack alerts. 10 seats.
+- **Growth** — $499/month. Unlimited scans, C3PAO assessment coordination, audit-trail export, SSO & RBAC, 99.9% SLA. 25 seats.
+- **Enterprise** — $999/month. On-prem / air-gapped deployment, white-label reports, dedicated account manager, 99.99% SLA. Unlimited seats.
+- **Agency / MSP** — $2,499/month. Multi-tenant dashboard, white-label with custom domain, unlimited client accounts, revenue-share program.
 
 ## Important Pages
 

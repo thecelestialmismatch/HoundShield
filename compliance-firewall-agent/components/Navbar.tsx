@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { getPlan, formatUSD } from "@/lib/pricing/plans";
 import {
   Menu, X, ChevronRight, ChevronDown, Sun, Moon,
   Lock, HeartPulse, Shield, Briefcase, Globe, Landmark,
@@ -81,12 +82,14 @@ const FEATURES_ITEMS = [
   { icon: Activity,  color: "text-brand-800",   bg: "bg-[rgba(129,166,198,0.16)]",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },
 ];
 
+// Prices sourced from the single pricing source of truth (lib/pricing/plans)
+// so this dropdown can never drift from the /pricing page.
 const PRICING_TIERS = [
-  { label: "Free",       price: "$0",    note: "Up to 1,000 prompts/mo", color: "text-slate-400",   href: "/signup" },
-  { label: "Pro",        price: "$199",  note: "SOC 2 + HIPAA coverage",  color: "text-brand-400",  href: "/signup?plan=pro" },
-  { label: "Growth",     price: "$499",  note: "PDF compliance reports",  color: "text-brand-500", href: "/signup?plan=growth" },
-  { label: "Enterprise", price: "$999",  note: "Unlimited orgs + CMMC",   color: "text-brand-600",   href: "/contact" },
-  { label: "Agency",     price: "$2,499",note: "White-label for MSPs",    color: "text-brand-700",  href: "/contact" },
+  { label: "Free",       price: formatUSD(getPlan("free").monthlyPrice),       note: "Up to 1,000 prompts/mo", color: "text-slate-400",   href: "/signup" },
+  { label: "Pro",        price: formatUSD(getPlan("pro").monthlyPrice),        note: "SOC 2 + HIPAA coverage",  color: "text-brand-400",  href: "/signup?plan=pro" },
+  { label: "Growth",     price: formatUSD(getPlan("growth").monthlyPrice),     note: "PDF compliance reports",  color: "text-brand-500", href: "/signup?plan=growth" },
+  { label: "Enterprise", price: formatUSD(getPlan("enterprise").monthlyPrice), note: "Unlimited orgs + CMMC",   color: "text-brand-600",   href: "/contact" },
+  { label: "Agency",     price: formatUSD(getPlan("agency").monthlyPrice),     note: "White-label for MSPs",    color: "text-brand-700",  href: "/contact" },
 ];
 
 const PARTNER_ITEMS = [
