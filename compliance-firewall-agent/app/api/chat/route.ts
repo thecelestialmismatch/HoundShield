@@ -52,12 +52,13 @@ const MODEL_MAP: Record<string, string> = {
   "claude-haiku":  "anthropic/claude-3.5-haiku",
 };
 
-// Customer-facing fallback. NEVER reference API keys, env vars, Vercel, or any
-// internal configuration here — this string can render in the public widget.
+// User-facing fallback — warm and human, and NEVER exposes internal config
+// (env-var names, hosting provider). Operator guidance goes to server logs only.
 const FALLBACK_MESSAGE =
-  "I can take you through CMMC Level 2, SPRS scoring, CUI and PHI detection, SOC 2, NIST 800-171, " +
-  "or installing HoundShield right now — just ask. For broader, open-ended questions my full advisor " +
-  "is reconnecting; point me at a specific control or requirement in the meantime and I'll help.";
+  "I'm right here and happy to help. I'm strongest on the topics HoundShield was built for: CMMC Level 2 and your " +
+  "SPRS score, the NIST 800-171 controls, CUI and PHI detection, HIPAA, SOC 2, and getting HoundShield installed " +
+  "(it's a single URL change). Ask me any of those and I'll give you a straight, practical answer. " +
+  "What would you like to dig into?";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -404,9 +405,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // ── 4. Final fallback — always return something useful ─────────────────
-    // One customer-safe message for both the no-key and empty-stream paths;
-    // never leak provider/env-var details to the widget.
+    // ── 4. Final fallback — always a warm, human message (never internal config) ──
+    // One customer-safe message for both the no-key and empty-stream paths.
+    if (!provider.apiKey) {
+      // Operator hint to server logs ONLY — never leak env-var names to end users.
+      console.warn(
+        "[chat] No LLM provider key set (OPENROUTER_API_KEY / NVIDIA_API_KEY). " +
+          "Serving FAQ + fallback; set a key to enable open-ended answers.",
+      );
+    }
     const fallbackText = FALLBACK_MESSAGE;
 
     if (trace) {
