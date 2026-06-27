@@ -6,6 +6,14 @@ import { FaqSection } from '@/components/seo/FaqSection'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { howItWorksFaqs, installSteps } from '@/lib/seo/faqs'
 import { howToSchema, breadcrumbSchema } from '@/lib/seo/structured-data'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'How It Works — AI Compliance Firewall in 3 Steps',
+  description:
+    'Point your AI tool at the HoundShield proxy, scan every prompt locally in under 10ms across 16 detection engines, and export C3PAO-ready audit evidence. No agents, no installs.',
+  alternates: { canonical: 'https://houndshield.com/how-it-works' },
+}
 
 const STEPS = [
   {
