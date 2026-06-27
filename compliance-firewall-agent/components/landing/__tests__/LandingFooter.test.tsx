@@ -10,7 +10,7 @@ vi.mock("@/components/Logo", () => ({
   Logo: () => <div data-testid="logo-mock" />,
 }));
 vi.mock("@/components/TextLogo", () => ({
-  TextLogo: () => <span data-testid="text-logo-mock">Hound Shield</span>,
+  TextLogo: () => <span data-testid="text-logo-mock">HoundShield</span>,
 }));
 
 import { LandingFooter } from "../LandingFooter";
