@@ -52,9 +52,13 @@ const MODEL_MAP: Record<string, string> = {
   "claude-haiku":  "anthropic/claude-3.5-haiku",
 };
 
+// User-facing fallback — warm and human, and NEVER exposes internal config
+// (env-var names, hosting provider). Operator guidance goes to server logs only.
 const FALLBACK_MESSAGE =
-  "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA PHI, SOC 2, or how to install HoundShield — " +
-  "I can answer those instantly. For open-ended AI questions, set OPENROUTER_API_KEY in your Vercel environment variables to enable full LLM responses.";
+  "I'm right here and happy to help. I'm strongest on the topics HoundShield was built for: CMMC Level 2 and your " +
+  "SPRS score, the NIST 800-171 controls, CUI and PHI detection, HIPAA, SOC 2, and getting HoundShield installed " +
+  "(it's a single URL change). Ask me any of those and I'll give you a straight, practical answer. " +
+  "What would you like to dig into?";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -388,10 +392,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // ── 4. Final fallback — always return something useful ─────────────────
-    const fallbackText = provider.apiKey
-      ? FALLBACK_MESSAGE
-      : "Ask me about CMMC Level 2, SPRS scoring, CUI detection, HIPAA, or how to install HoundShield — I can answer those instantly! For free-form AI questions, set an OPENROUTER_API_KEY (or NVIDIA_API_KEY) in Vercel.";
+    // ── 4. Final fallback — always a warm, human message (never internal config) ──
+    if (!provider.apiKey) {
+      // Operator hint to server logs ONLY — never leak env-var names to end users.
+      console.warn(
+        "[chat] No LLM provider key set (OPENROUTER_API_KEY / NVIDIA_API_KEY). " +
+          "Serving FAQ + fallback; set a key to enable open-ended answers.",
+      );
+    }
+    const fallbackText = FALLBACK_MESSAGE;
 
     if (trace) {
       const fbSpan = openSpan(trace, "final_response", "fallback");
