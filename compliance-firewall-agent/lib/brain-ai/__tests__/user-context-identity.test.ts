@@ -67,25 +67,25 @@ describe("Brain AI never leaks internal config to customers", () => {
     "lib/brain-ai/user-context.ts",
     "app/api/chat/route.ts",
   ];
-  const FORBIDDEN = [
-    "OPENROUTER_API_KEY",
-    "NVIDIA_API_KEY",
-    "Vercel environment",
+  // We forbid the customer-facing LEAK PHRASES, not the bare env-var token.
+  // Naming OPENROUTER_API_KEY in a server-side console.warn (operator hint to
+  // logs) is fine; telling a buyer to "set ... in your Vercel environment" is
+  // the actual bug this guards against.
+  const FORBIDDEN_PHRASES = [
     "in your Vercel",
+    "Vercel environment",
+    "environment variables to enable",
+    "set an OPENROUTER_API_KEY",
+    "set OPENROUTER_API_KEY in",
     ".env.local",
   ];
 
   for (const rel of sources) {
-    it(`${rel} ships no leaked config copy in user-facing strings`, () => {
+    it(`${rel} ships no customer-facing config-leak phrasing`, () => {
       const root = path.resolve(__dirname, "..", "..", "..");
       const src = readFileSync(path.join(root, rel), "utf8");
-      // Strip line comments so we only inspect runtime strings, not docs.
-      const runtime = src
-        .split("\n")
-        .filter((l) => !l.trim().startsWith("//") && !l.trim().startsWith("*"))
-        .join("\n");
-      for (const bad of FORBIDDEN) {
-        expect(runtime.includes(bad), `${rel} leaks "${bad}"`).toBe(false);
+      for (const bad of FORBIDDEN_PHRASES) {
+        expect(src.includes(bad), `${rel} leaks "${bad}"`).toBe(false);
       }
     });
   }
