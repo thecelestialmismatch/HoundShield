@@ -22,7 +22,7 @@ exports[`LandingFooter > matches snapshot 1`] = `
           <span
             data-testid="text-logo-mock"
           >
-            Hound Shield
+            HoundShield
           </span>
         </a>
         <p

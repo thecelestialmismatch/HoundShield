@@ -18,7 +18,7 @@ import { findFaqAnswer } from "@/lib/brain-ai/faq";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { sanitizeChatInput } from "@/lib/brain-ai/sanitize-input";
 import { resolveLlmProvider, type LlmProvider } from "@/lib/agent/provider";
-import { buildUserContextPrompt } from "@/lib/brain-ai/user-context";
+import { buildUserContextPrompt, buildIdentityAnswer, isIdentityQuestion, type BrainUserContext } from "@/lib/brain-ai/user-context";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import {
@@ -90,30 +90,30 @@ function streamTextAsSSE(text: string): ReadableStream {
 }
 
 /**
- * Best-effort personalization block from the Supabase SESSION (never a
- * client-sent id). Returns "" for anonymous visitors, demo mode, or any error —
+ * Best-effort profile from the Supabase SESSION (never a client-sent id).
+ * Returns null for anonymous visitors, demo mode, or any error —
  * personalization is a bonus, never a blocker.
  */
-async function getSessionUserContext(): Promise<string> {
+async function getSessionProfile(): Promise<BrainUserContext | null> {
   try {
-    if (!isSupabaseConfigured()) return "";
+    if (!isSupabaseConfigured()) return null;
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return "";
+    if (!user) return null;
     const { data: profile } = await supabase
       .from("profiles")
       .select("full_name, company, role, tier")
       .eq("id", user.id)
       .single();
-    if (!profile) return "";
-    return buildUserContextPrompt({
+    if (!profile) return null;
+    return {
       name: profile.full_name,
       company: profile.company,
       role: profile.role,
       tier: profile.tier,
-    });
+    };
   } catch {
-    return "";
+    return null;
   }
 }
 
@@ -329,6 +329,19 @@ export async function POST(request: NextRequest) {
       Connection: "keep-alive",
     };
 
+    // ── 1b. Identity questions — session-aware, no API key required ────────
+    if (lastUserMsg?.content && isIdentityQuestion(lastUserMsg.content)) {
+      const idSpan = trace ? openSpan(trace, "retriever", "identity_lookup") : null;
+      const identityAnswer = buildIdentityAnswer(await getSessionProfile());
+      if (idSpan) closeSpan(idSpan, { answered: true });
+      if (trace) {
+        const respSpan = openSpan(trace, "final_response", "identity_response");
+        closeSpan(respSpan, identityAnswer);
+        finalizeTrace(trace, { userQuestion, finalAnswer: identityAnswer, ragContext: null }).catch(() => undefined);
+      }
+      return new Response(streamTextAsSSE(identityAnswer), { headers: sseHeaders });
+    }
+
     // ── 2. Local FAQ match (always works, no API key needed) ───────────────
     if (lastUserMsg?.content) {
       const faqSpan = trace ? openSpan(trace, "retriever", "faq_lookup") : null;
@@ -361,7 +374,7 @@ export async function POST(request: NextRequest) {
         "never refuse something you can actually help with.";
 
       // Personalize from the signed-in user's profile (best-effort, session-derived).
-      const userContext = await getSessionUserContext();
+      const userContext = buildUserContextPrompt(await getSessionProfile());
       const personalizedPrompt = systemPrompt + userContext;
 
       const fullMessages: Array<{ role: string; content: string }> = [
@@ -393,6 +406,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 4. Final fallback — always a warm, human message (never internal config) ──
+    // One customer-safe message for both the no-key and empty-stream paths.
     if (!provider.apiKey) {
       // Operator hint to server logs ONLY — never leak env-var names to end users.
       console.warn(
