@@ -31,8 +31,15 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    let authError;
+    try {
+      const supabase = createClient();
+      ({ error: authError } = await supabase.auth.signInWithPassword({ email, password }));
+    } catch {
+      setError("We couldn't reach the sign-in service. Please try again in a moment.");
+      setLoading(false);
+      return;
+    }
 
     if (authError) {
       const msg = authError.message === 'Invalid login credentials'
