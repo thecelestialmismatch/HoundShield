@@ -259,7 +259,7 @@ export default function PartnersPage() {
   }
 
   return (
-    <div className="bg-[var(--hs-surface-0)] min-h-screen relative">
+    <div className="bg-[var(--hs-surface-0)] min-h-screen relative section-stripe">
       <ScrollProgressBar />
       <NavV3 />
 

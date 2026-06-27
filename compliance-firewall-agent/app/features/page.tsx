@@ -167,7 +167,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* ── Bento Grid ────────────────────────────────────────── */}
-      <section id="interception" className="py-16 px-6">
+      <section id="interception" className="py-16 px-6 bg-[var(--hs-surface-1)]">
         <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {bentoFeatures.map((f, i) => {
             const Icon = f.icon;
@@ -271,7 +271,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* ── Integrations ──────────────────────────────────────── */}
-      <section id="integrations" className="py-20 px-6">
+      <section id="integrations" className="py-20 px-6 bg-[var(--hs-surface-2)]">
         <div className="max-w-4xl mx-auto">
           <FadeIn className="text-center mb-12">
             <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-3">
@@ -305,7 +305,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* ── CTA ───────────────────────────────────────────────── */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-[var(--hs-surface-1)]">
         <FadeIn>
           <div className="max-w-3xl mx-auto text-center border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-10 md:p-14">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
