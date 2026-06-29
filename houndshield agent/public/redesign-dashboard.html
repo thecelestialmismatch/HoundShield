@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>HoundShield — Live Command Center (After-Login Dashboard)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080B11; --panel:#111824; --panel2:#0D131C; --hover:#16202E;
+  --line:rgba(255,255,255,.07); --line2:rgba(129,166,198,.22);
+  --text:#EAF1F8; --mut:#93A4B8; --mut2:#62748A;
+  --brand:#81A6C6; --bright:#AACDDC; --cream:#F3E3D0;
+  --ok:#34D399; --okbg:rgba(52,211,153,.12);
+  --bad:#F87171; --badbg:rgba(248,113,113,.12);
+  --warn:#FBBF24; --warnbg:rgba(251,191,36,.12);
+  --f-disp:'Fraunces',serif; --f:'DM Sans',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
+  --r:14px; --r-sm:10px;
+}
+body{font-family:var(--f);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.mono{font-family:var(--f-mono)}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:9px}
+
+.shell{display:grid;grid-template-columns:244px 1fr;min-height:100vh}
+
+/* sidebar */
+.side{background:var(--panel2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:.55rem;padding:.4rem .5rem 1.1rem}
+.brand img{height:30px;width:auto;filter:brightness(0) invert(1)}
+.brand span{font-family:var(--f-disp);font-weight:600;font-size:1.18rem}
+.brand span b{color:var(--brand)}
+.gh{font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2);margin:1rem .6rem .35rem}
+.slink{display:flex;align-items:center;gap:.65rem;padding:.6rem .7rem;border-radius:var(--r-sm);font-size:.88rem;font-weight:500;color:var(--mut);cursor:pointer;transition:all .15s;position:relative}
+.slink svg{width:17px;height:17px}
+.slink:hover{background:var(--hover);color:var(--text)}
+.slink.on{background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--bright);font-weight:600}
+.slink.on::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--brand)}
+.slink .pp{margin-left:auto;font-family:var(--f-mono);font-size:.62rem;font-weight:700;background:var(--badbg);color:var(--bad);padding:.05rem .35rem;border-radius:5px}
+.side-foot{margin-top:auto;padding:.7rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:.6rem}
+.av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--bright));color:#06101A;display:grid;place-items:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+.side-foot .nm{font-size:.84rem;font-weight:600}.side-foot .sub{font-size:.72rem;color:var(--mut2)}
+
+/* main */
+.main{overflow:auto;height:100vh}
+.top{position:sticky;top:0;z-index:20;background:rgba(8,11,17,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.top h1{font-family:var(--f-disp);font-size:1.4rem;font-weight:600}
+.top .crumb{font-size:.74rem;color:var(--mut2)}
+.top-right{display:flex;align-items:center;gap:.8rem}
+.clock{font-family:var(--f-mono);font-size:.82rem;color:var(--mut);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.4rem .7rem}
+.statpill{display:inline-flex;align-items:center;gap:.45rem;font-size:.76rem;font-weight:600;color:var(--ok);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 28%,transparent);border-radius:999px;padding:.35rem .7rem}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pulse 1.8s infinite}
+.dot.b{background:var(--brand)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+.body{padding:24px 26px 60px}
+.atab{display:none}.atab.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ops strip */
+.ops{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.7rem 16px;font-size:.84rem;color:var(--mut);margin-bottom:18px}
+.ops b{color:var(--text);font-family:var(--f-mono);font-weight:600}
+.ops .sep{color:var(--mut2)}
+
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:border-color .2s}
+.kpi:hover{border-color:var(--line2)}
+.kpi .l{font-size:.76rem;color:var(--mut2);display:flex;align-items:center;gap:.4rem}
+.kpi .l svg{width:13px;height:13px}
+.kpi .n{font-family:var(--f-disp);font-size:1.9rem;font-weight:600;margin-top:.3rem;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:.73rem;margin-top:.15rem;color:var(--mut)}
+.kpi .d.up{color:var(--ok)}.kpi .d.dn{color:var(--bad)}
+.bump{animation:bump .45s ease}@keyframes bump{0%{transform:translateY(2px);opacity:.55}100%{transform:none;opacity:1}}
+
+/* grid + panels */
+.row{display:grid;gap:16px;margin-bottom:16px}
+.r-2-1{grid-template-columns:1.55fr 1fr}
+.r-3-2{grid-template-columns:1.45fr 1fr}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ph{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.ph h3{font-size:.98rem;font-weight:600}
+.ph .mono{font-size:.7rem;color:var(--mut2)}
+.live-tag{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-mono);font-size:.66rem;font-weight:700;color:var(--ok);text-transform:uppercase;letter-spacing:.08em}
+.pad{padding:16px 18px}
+
+/* chart */
+#thru{width:100%;height:170px;display:block}
+
+/* donut */
+.donut-wrap{display:flex;align-items:center;gap:18px;padding:18px}
+.donut{width:130px;height:130px;border-radius:50%;position:relative;flex-shrink:0;transition:background .8s ease}
+.donut::after{content:"";position:absolute;inset:18px;border-radius:50%;background:var(--panel)}
+.donut .c{position:absolute;inset:0;display:grid;place-content:center;text-align:center;z-index:2}
+.donut .c b{font-family:var(--f-disp);font-size:1.5rem;font-weight:600}
+.donut .c span{font-size:.66rem;color:var(--mut2)}
+.legend{display:flex;flex-direction:column;gap:.5rem;font-size:.82rem;flex:1}
+.legend div{display:flex;align-items:center;gap:.5rem}
+.legend i{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.legend .v{margin-left:auto;font-family:var(--f-mono);color:var(--text)}
+
+/* feed */
+.feed-row{display:flex;align-items:center;gap:.7rem;padding:.6rem 18px;border-bottom:1px solid var(--line);font-size:.83rem}
+.feed-row:last-child{border:none}
+.tag{font-family:var(--f-mono);font-size:.64rem;font-weight:700;padding:.18rem .45rem;border-radius:5px;width:66px;text-align:center;flex-shrink:0}
+.tag.block{background:var(--badbg);color:var(--bad)}.tag.pass{background:var(--okbg);color:var(--ok)}.tag.quar{background:var(--warnbg);color:var(--warn)}
+.feed-row .what{flex:1;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.feed-row .eng{font-family:var(--f-mono);font-size:.68rem;color:var(--mut2)}
+.feed-row .lat{font-family:var(--f-mono);font-size:.7rem;color:var(--mut2);width:42px;text-align:right}
+.feed-row.fresh{animation:fresh 1.4s ease}
+@keyframes fresh{0%{background:color-mix(in srgb,var(--brand) 16%,transparent)}100%{background:transparent}}
+
+/* engine bars */
+.eng{display:grid;grid-template-columns:92px 1fr 40px;align-items:center;gap:12px;padding:.4rem 0;font-size:.82rem;color:var(--mut)}
+.bar{height:8px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--bright));border-radius:99px;transition:width .8s ease}
+.eng b{text-align:right;font-family:var(--f-mono);color:var(--text);font-weight:600}
+
+/* sprs ring */
+.sprs{display:flex;flex-direction:column;align-items:center;padding:18px}
+.ring{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;position:relative;transition:background .8s ease}
+.ring::before{content:"";position:absolute;inset:13px;border-radius:50%;background:var(--panel)}
+.ring b{position:relative;font-family:var(--f-disp);font-size:2.3rem;font-weight:600}
+.ring small{position:relative;display:block;text-align:center;font-size:.64rem;color:var(--mut2);margin-top:-4px}
+.cap{font-size:.8rem;color:var(--mut);text-align:center;margin-top:.7rem;line-height:1.5}
+
+/* control rows */
+.crow{display:flex;align-items:center;justify-content:space-between;padding:.6rem 18px;border-bottom:1px solid var(--line);font-size:.84rem}
+.crow:last-child{border:none}
+.st{font-family:var(--f-mono);font-size:.66rem;font-weight:700;padding:.15rem .45rem;border-radius:5px}
+.st.met{background:var(--okbg);color:var(--ok)}.st.part{background:var(--warnbg);color:var(--warn)}.st.gap{background:var(--badbg);color:var(--bad)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.45rem;font-weight:600;font-size:.85rem;padding:.6rem 1rem;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;transition:all .18s;font-family:var(--f)}
+.btn svg{width:15px;height:15px}
+.btn-p{background:var(--brand);color:#06101A}.btn-p:hover{background:var(--bright)}
+.btn-g{background:transparent;border-color:var(--line);color:var(--text)}.btn-g:hover{border-color:var(--brand);color:var(--bright)}
+.btn-sm{padding:.4rem .7rem;font-size:.78rem}
+
+/* cards grid */
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:all .2s}
+.card:hover{border-color:var(--line2);transform:translateY(-3px)}
+.card .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--bright);margin-bottom:.8rem}
+.card .ic svg{width:19px;height:19px}
+.card h4{font-size:1rem;font-weight:600;margin-bottom:.3rem}.card p{font-size:.84rem;color:var(--mut)}
+
+/* gateway box */
+.gw{display:flex;align-items:center;justify-content:space-between;gap:.6rem;background:var(--panel2);border:1px dashed var(--line2);border-radius:10px;padding:.65rem .85rem;font-family:var(--f-mono);font-size:.8rem}
+.gw button{border:none;background:var(--brand);color:#06101A;border-radius:7px;padding:.32rem .6rem;font-size:.7rem;font-weight:700;cursor:pointer}
+.usebar{height:8px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:.35rem}
+.usebar i{display:block;height:100%;background:var(--brand);border-radius:99px}
+
+/* brain */
+.brain{display:flex;flex-direction:column;height:460px}
+.blog{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
+.bub{max-width:80%;padding:.65rem .9rem;border-radius:13px;font-size:.86rem;line-height:1.5}
+.bub.u{align-self:flex-end;background:var(--brand);color:#06101A;border-bottom-right-radius:4px}
+.bub.b{align-self:flex-start;background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.bub.b .src{display:block;margin-top:.4rem;font-family:var(--f-mono);font-size:.64rem;color:var(--mut2)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;padding:0 14px 12px}
+.chips button{font-size:.74rem;border:1px solid var(--line);background:var(--panel2);color:var(--mut);border-radius:99px;padding:.3rem .6rem;cursor:pointer}
+.chips button:hover{border-color:var(--brand);color:var(--bright)}
+.bin{display:flex;gap:.5rem;padding:14px;border-top:1px solid var(--line)}
+.bin input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.6rem .8rem;color:var(--text);font-family:var(--f);font-size:.88rem;outline:none}
+.bin input:focus{border-color:var(--brand)}
+
+.note{font-size:.78rem;color:var(--mut2);margin-top:14px}
+@media(max-width:1000px){.shell{grid-template-columns:1fr}.side{display:none}.kpis{grid-template-columns:1fr 1fr}.r-2-1,.r-3-2{grid-template-columns:1fr}.cards3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<svg style="display:none">
+<symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+<symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V5Z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a3 3 0 0 0-3 3 3 3 0 0 0-1 5 3 3 0 0 0 2 5 3 3 0 0 0 6 .5V4.5A3 3 0 0 0 9 3ZM15 3a3 3 0 0 1 3 3 3 3 0 0 1 1 5 3 3 0 0 1-2 5 3 3 0 0 1-4 .5"/></symbol>
+<symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H7a1.6 1.6 0 0 0 1-1.5V1a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V7a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14 16 9M5 19a9 9 0 1 1 14 0Z"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4h13l-2 4 2 4H4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+</svg>
+
+<div class="shell">
+ <aside class="side">
+  <div class="brand"><img src="houndshield-logo.png" alt="HoundShield"/><span>Hound<b>Shield</b></span></div>
+  <div class="gh">Command Center</div>
+  <div class="slink on" data-tab="overview"><svg><use href="#i-grid"/></svg> Overview</div>
+  <div class="slink" data-tab="feed"><svg><use href="#i-activity"/></svg> Live Threat Feed <span class="pp" id="feedBadge">3</span></div>
+  <div class="slink" data-tab="assess"><svg><use href="#i-shield"/></svg> CMMC Assessment</div>
+  <div class="slink" data-tab="reports"><svg><use href="#i-file"/></svg> Reports</div>
+  <div class="slink" data-tab="brain"><svg><use href="#i-brain"/></svg> Brain AI</div>
+  <div class="gh">Account</div>
+  <div class="slink" data-tab="settings"><svg><use href="#i-cog"/></svg> Settings</div>
+  <div class="side-foot"><div class="av">AD</div><div><div class="nm">Acme Defense</div><div class="sub">Pro · 10 seats</div></div></div>
+ </aside>
+
+ <div class="main">
+  <div class="top">
+   <div><div class="crumb">HoundShield · Command Center</div><h1 id="ttl">Live Operations</h1></div>
+   <div class="top-right">
+    <span class="clock" id="clock">--:--:--</span>
+    <span class="statpill"><span class="dot"></span> gateway live · p50 <b id="p50" style="color:var(--ok)">7ms</b></span>
+    <div class="av">AD</div>
+   </div>
+  </div>
+
+  <div class="body">
+
+   <!-- OVERVIEW -->
+   <div class="atab on" data-tab="overview">
+    <div class="ops"><span class="dot"></span> <b>All systems operational</b> <span class="sep">—</span> 16/16 detection engines online <span class="sep">·</span> 4 regions <span class="sep">·</span> 0 incidents <span class="sep">·</span> last block <b id="lastBlock">2s</b> ago</div>
+
+    <div class="kpis">
+     <div class="kpi"><div class="l"><svg><use href="#i-eye"/></svg> Prompts scanned (24h)</div><div class="n" id="kScan">142,690</div><div class="d up" id="kScanD">▲ live · ~46/min</div></div>
+     <div class="kpi"><div class="l"><svg><use href="#i-shield"/></svg> Blocked today</div><div class="n" id="kBlock" style="color:var(--bad)">2,218</div><div class="d">CUI · secrets · PII · PHI</div></div>
+     <div class="kpi"><div class="l"><svg><use href="#i-gauge"/></svg> SPRS score</div><div class="n" id="kSprs" style="color:var(--bright)">0</div><div class="d up">▲ 12 since onboarding</div></div>
+     <div class="kpi"><div class="l"><svg><use href="#i-flag"/></svg> Quarantine queue</div><div class="n" id="kQuar" style="color:var(--warn)">6</div><div class="d">awaiting human review</div></div>
+    </div>
+
+    <div class="row r-3-2">
+     <div class="panel">
+      <div class="ph"><h3>Gateway throughput</h3><span class="live-tag"><span class="dot"></span> live · prompts/sec</span></div>
+      <div class="pad"><canvas id="thru" height="170"></canvas></div>
+     </div>
+     <div class="panel">
+      <div class="ph"><h3>Detection mix · today</h3><span class="mono">live</span></div>
+      <div class="donut-wrap">
+       <div class="donut" id="donut"><div class="c"><b id="donutTot">2218</b><span>blocked</span></div></div>
+       <div class="legend">
+        <div><i style="background:#81A6C6"></i> CUI <span class="v" id="lgCui">31%</span></div>
+        <div><i style="background:#F87171"></i> Secrets <span class="v" id="lgSec">26%</span></div>
+        <div><i style="background:#FBBF24"></i> PII <span class="v" id="lgPii">28%</span></div>
+        <div><i style="background:#34D399"></i> PHI <span class="v" id="lgPhi">15%</span></div>
+       </div>
+      </div>
+     </div>
+    </div>
+
+    <div class="row r-2-1">
+     <div class="panel">
+      <div class="ph"><h3>Live threat feed</h3><span class="live-tag"><span class="dot"></span> streaming · on-device</span></div>
+      <div id="feed"></div>
+     </div>
+     <div class="panel">
+      <div class="ph"><h3>SPRS posture</h3><span class="mono">NIST 800-171</span></div>
+      <div class="sprs">
+       <div class="ring" id="ring"><b class="ringn">0</b><small>of 110</small></div>
+       <div class="cap"><b>78 / 110</b> implemented · target 88 for conditional CMMC L2. 14 open · 8 in progress.</div>
+       <button class="btn btn-p btn-sm" data-tab="assess" style="margin-top:14px">Open assessment <svg><use href="#i-arrow"/></svg></button>
+      </div>
+     </div>
+    </div>
+
+    <div class="panel">
+     <div class="ph"><h3>Detections by engine · last hour</h3><span class="live-tag"><span class="dot"></span> live</span></div>
+     <div class="pad">
+      <div class="eng" data-base="61"><span>CUI</span><div class="bar"><i style="width:61%"></i></div><b>61</b></div>
+      <div class="eng" data-base="48"><span>Secrets</span><div class="bar"><i style="width:48%"></i></div><b>48</b></div>
+      <div class="eng" data-base="83"><span>PII</span><div class="bar"><i style="width:83%"></i></div><b>83</b></div>
+      <div class="eng" data-base="27"><span>PHI</span><div class="bar"><i style="width:27%"></i></div><b>27</b></div>
+      <div class="eng" data-base="35"><span>Source / IP</span><div class="bar"><i style="width:35%"></i></div><b>35</b></div>
+      <div class="eng" data-base="19"><span>CAGE / contract</span><div class="bar"><i style="width:19%"></i></div><b>19</b></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- LIVE FEED -->
+   <div class="atab" data-tab="feed">
+    <div class="ops"><span class="dot"></span> <b>Streaming</b> <span class="sep">—</span> every AI prompt inspected on your hardware before it leaves the network</div>
+    <div class="panel">
+     <div class="ph"><h3>Intercepted prompts</h3><span class="live-tag"><span class="dot"></span> live · last 60</span></div>
+     <div id="feedFull"></div>
+    </div>
+   </div>
+
+   <!-- ASSESSMENT -->
+   <div class="atab" data-tab="assess">
+    <div class="row r-2-1">
+     <div class="panel">
+      <div class="ph"><h3>SPRS score</h3><span class="mono">live</span></div>
+      <div class="sprs"><div class="ring" id="ring2"><b class="ringn">0</b><small>of 110</small></div><div class="cap">DoD self-assessment range −203 to +110. You're at <b>+78</b>.</div></div>
+     </div>
+     <div class="panel">
+      <div class="ph"><h3>Fastest wins</h3><span class="mono">AI-ranked</span></div>
+      <div class="crow"><span>3.8.3 — Media sanitization</span><span class="st gap">+3 SPRS</span></div>
+      <div class="crow"><span>3.13.11 — FIPS crypto</span><span class="st gap">+3 SPRS</span></div>
+      <div class="crow"><span>3.4.2 — Config baselines</span><span class="st part">+2 SPRS</span></div>
+      <div class="crow"><span>3.1.12 — Remote access</span><span class="st part">+1 SPRS</span></div>
+     </div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+     <div class="ph"><h3>Control families · NIST 800-171</h3><span class="mono">14 domains · 110 controls</span></div>
+     <div class="crow"><span>3.1 Access Control (22)</span><span class="st met">19 met</span></div>
+     <div class="crow"><span>3.3 Audit &amp; Accountability (9)</span><span class="st met">9 met</span></div>
+     <div class="crow"><span>3.4 Configuration Management (9)</span><span class="st part">6 partial</span></div>
+     <div class="crow"><span>3.5 Identification &amp; Auth (11)</span><span class="st met">10 met</span></div>
+     <div class="crow"><span>3.8 Media Protection (9)</span><span class="st gap">3 gaps</span></div>
+     <div class="crow"><span>3.13 System &amp; Comms Protection (16)</span><span class="st part">11 partial</span></div>
+     <div class="crow"><span>3.14 System &amp; Info Integrity (7)</span><span class="st met">7 met</span></div>
+    </div>
+   </div>
+
+   <!-- REPORTS -->
+   <div class="atab" data-tab="reports">
+    <div class="cards3">
+     <div class="card"><div class="ic"><svg><use href="#i-file"/></svg></div><h4>System Security Plan</h4><p>Auto-generated SSP across all 110 controls. SHA-256 signed.</p><button class="btn btn-p btn-sm" style="margin-top:14px" onclick="this.textContent='✓ SSP_AcmeDefense.pdf'">Generate PDF</button></div>
+     <div class="card"><div class="ic"><svg><use href="#i-flag"/></svg></div><h4>POA&amp;M</h4><p>Plan of Action &amp; Milestones for your 14 open controls.</p><button class="btn btn-p btn-sm" style="margin-top:14px" onclick="this.textContent='✓ POAM_AcmeDefense.pdf'">Generate PDF</button></div>
+     <div class="card"><div class="ic"><svg><use href="#i-shield"/></svg></div><h4>C3PAO Evidence Pack</h4><p>Tamper-evident audit log mapped to NIST controls.</p><button class="btn btn-p btn-sm" style="margin-top:14px" onclick="this.textContent='✓ Evidence_2026.pdf'">Export</button></div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+     <div class="ph"><h3>Recent exports</h3><span class="mono">signed · timestamped</span></div>
+     <div class="crow"><span>SSP_AcmeDefense_2026-06.pdf</span><span class="mono" style="color:var(--mut2)">sha256:9f3a… · 2d ago</span></div>
+     <div class="crow"><span>SPRS_attestation_Q2.pdf</span><span class="mono" style="color:var(--mut2)">sha256:1c08… · 5d ago</span></div>
+     <div class="crow"><span>Audit_trail_May.json</span><span class="mono" style="color:var(--mut2)">sha256:7be2… · 12d ago</span></div>
+    </div>
+   </div>
+
+   <!-- BRAIN -->
+   <div class="atab" data-tab="brain">
+    <div class="panel">
+     <div class="ph"><h3><svg style="width:15px;height:15px;vertical-align:-2px"><use href="#i-brain"/></svg> Brain AI — on-device CMMC analyst</h3><span class="mono">your key · nothing sent to HoundShield</span></div>
+     <div class="brain">
+      <div class="blog" id="blog"><div class="bub b">I'm <b>Brain AI</b> — HoundShield's on-device compliance analyst. Ask me about your CMMC posture, a NIST control, or what HoundShield does.<span class="src">running locally · your OpenRouter key</span></div></div>
+      <div class="chips"><button>Who are you?</button><button>What's my SPRS score?</button><button>Am I CMMC ready?</button><button>What is a DFARS 7012 spill?</button></div>
+      <div class="bin"><input id="bi" placeholder="Ask Brain AI…" autocomplete="off"/><button class="btn btn-p btn-sm" id="bsend">Send</button></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- SETTINGS -->
+   <div class="atab" data-tab="settings">
+    <div class="row r-2-1">
+     <div class="panel">
+      <div class="ph"><h3>Gateway</h3><span class="mono">OpenAI-compatible</span></div>
+      <div class="pad">
+       <div class="mono" style="font-size:.7rem;color:var(--mut2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem">Proxy URL</div>
+       <div class="gw"><span>https://proxy.houndshield.com/v1</span><button onclick="this.textContent='Copied'">Copy</button></div>
+       <div class="mono" style="font-size:.7rem;color:var(--mut2);text-transform:uppercase;letter-spacing:.1em;margin:1rem 0 .4rem">API key</div>
+       <div class="gw"><span>hs_live_••••••••2f9a</span><button onclick="this.textContent='Revealed'">Reveal</button></div>
+       <div class="mono" style="font-size:.7rem;color:var(--mut2);text-transform:uppercase;letter-spacing:.1em;margin:1rem 0 .4rem">OpenRouter key · Brain AI</div>
+       <div class="gw"><span>sk-or-••••••••a17c</span><button onclick="this.textContent='Saved'">Edit</button></div>
+      </div>
+     </div>
+     <div class="panel">
+      <div class="ph"><h3>Plan &amp; usage</h3><span class="mono">Pro</span></div>
+      <div class="pad">
+       <div style="display:flex;justify-content:space-between;font-size:.86rem"><span style="color:var(--mut)">AI gateway scans</span><b id="useScan">142,690 / 250,000</b></div>
+       <div class="usebar"><i id="useBar" style="width:57%"></i></div>
+       <div style="display:flex;justify-content:space-between;font-size:.86rem;margin-top:1rem"><span style="color:var(--mut)">Seats used</span><b>7 / 10</b></div>
+       <div class="usebar"><i style="width:70%"></i></div>
+       <div style="display:flex;justify-content:space-between;font-size:.86rem;margin-top:1rem"><span style="color:var(--mut)">Log retention</span><b>90 days</b></div>
+       <button class="btn btn-p btn-sm" style="margin-top:18px">Upgrade to Growth <svg><use href="#i-arrow"/></svg></button>
+      </div>
+     </div>
+    </div>
+   </div>
+
+  </div>
+ </div>
+</div>
+
+<script>
+(function(){
+  var body=document.body;
+
+  /* ---- tab switching ---- */
+  var titles={overview:'Live Operations',feed:'Live Threat Feed',assess:'CMMC Assessment',reports:'Reports',brain:'Brain AI',settings:'Settings'};
+  function tab(t){
+    document.querySelectorAll('.atab').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-tab')===t);});
+    document.querySelectorAll('.slink[data-tab]').forEach(function(s){s.classList.toggle('on',s.getAttribute('data-tab')===t);});
+    document.getElementById('ttl').textContent=titles[t]||t;
+    document.querySelector('.main').scrollTo({top:0});
+    if(t==='feed'){newBlocks=0;updBadge();}
+  }
+  document.addEventListener('click',function(e){var s=e.target.closest('[data-tab]');if(s){tab(s.getAttribute('data-tab'));}});
+
+  /* ---- live clock ---- */
+  setInterval(function(){var d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString('en-US',{hour12:false});},1000);
+
+  /* ---- gateway p50 jitter ---- */
+  var p50=document.getElementById('p50');
+  setInterval(function(){p50.textContent=(5+Math.floor(Math.random()*5))+'ms';},1100);
+
+  /* ---- ticking counters ---- */
+  function bump(el){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}
+  var scan=142690,kScan=document.getElementById('kScan');
+  setInterval(function(){scan+=3+Math.floor(Math.random()*11);kScan.textContent=scan.toLocaleString();bump(kScan);var u=document.getElementById('useScan');if(u)u.textContent=scan.toLocaleString()+' / 250,000';var ub=document.getElementById('useBar');if(ub)ub.style.width=Math.min(99,(scan/250000*100)).toFixed(0)+'%';},1200);
+  var blocked=2218,kBlock=document.getElementById('kBlock'),donutTot=document.getElementById('donutTot');
+  var quar=6,kQuar=document.getElementById('kQuar');
+  // last-block-ago + feed badge
+  var sinceBlock=2,lastBlock=document.getElementById('lastBlock'),newBlocks=3,feedBadge=document.getElementById('feedBadge');
+  function updBadge(){feedBadge.textContent=newBlocks;feedBadge.style.display=newBlocks>0?'inline-block':'none';}
+  setInterval(function(){sinceBlock++;lastBlock.textContent=sinceBlock+'s';},1000);
+
+  /* ---- SPRS count-up + ring fill ---- */
+  function countUp(el,to,dur){var t0=performance.now();function f(t){var p=Math.min(1,(t-t0)/dur);var e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;el.textContent=Math.round(to*e);if(p<1)requestAnimationFrame(f);}requestAnimationFrame(f);}
+  function fillRing(id){var r=document.getElementById(id);if(!r)return;var pct=(78/110*100).toFixed(0);r.style.background='conic-gradient(var(--brand) '+pct+'%, rgba(255,255,255,.07) 0)';}
+  function runSprs(){document.querySelectorAll('.ringn').forEach(function(e){countUp(e,78,1200);});countUp(document.getElementById('kSprs'),78,1200);fillRing('ring');fillRing('ring2');}
+
+  /* ---- throughput chart (scrolling) ---- */
+  var cv=document.getElementById('thru'),series=[];
+  for(var i=0;i<60;i++)series.push(34+Math.round(Math.random()*30));
+  function brandc(){return getComputedStyle(body).getPropertyValue('--brand').trim()||'#81A6C6';}
+  function drawChart(){
+    if(!cv)return;var w=cv.clientWidth;if(w<10)return;var h=170,dpr=window.devicePixelRatio||1;
+    cv.width=w*dpr;cv.height=h*dpr;var x=cv.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);
+    // grid
+    x.strokeStyle='rgba(255,255,255,.05)';x.lineWidth=1;
+    for(var g=1;g<4;g++){var gy=h/4*g;x.beginPath();x.moveTo(0,gy);x.lineTo(w,gy);x.stroke();}
+    var c=brandc(),max=80,n=series.length,step=w/(n-1);
+    x.beginPath();x.moveTo(0,h);
+    for(var i2=0;i2<n;i2++)x.lineTo(i2*step,h-(series[i2]/max)*(h-18)-8);
+    x.lineTo(w,h);x.closePath();x.globalAlpha=.15;x.fillStyle=c;x.fill();x.globalAlpha=1;
+    x.beginPath();for(var j=0;j<n;j++){var lx=j*step,ly=h-(series[j]/max)*(h-18)-8;j?x.lineTo(lx,ly):x.moveTo(lx,ly);}
+    x.strokeStyle=c;x.lineWidth=2;x.lineJoin='round';x.stroke();
+    var ex=(n-1)*step,ey=h-(series[n-1]/max)*(h-18)-8;x.beginPath();x.arc(ex,ey,3.5,0,7);x.fillStyle=c;x.fill();
+  }
+  setInterval(function(){series.push(30+Math.round(Math.random()*36));series.shift();drawChart();},1000);
+  window.addEventListener('resize',drawChart);
+
+  /* ---- detection mix donut ---- */
+  var mix=[31,26,28,15];
+  function drawDonut(){
+    var t=mix[0]+mix[1]+mix[2]+mix[3];var p=mix.map(function(v){return v/t*100;});
+    var a=p[0],b=a+p[1],c2=b+p[2];
+    document.getElementById('donut').style.background='conic-gradient(#81A6C6 0 '+a+'%,#F87171 '+a+'% '+b+'%,#FBBF24 '+b+'% '+c2+'%,#34D399 '+c2+'% 100%)';
+    document.getElementById('lgCui').textContent=Math.round(p[0])+'%';
+    document.getElementById('lgSec').textContent=Math.round(p[1])+'%';
+    document.getElementById('lgPii').textContent=Math.round(p[2])+'%';
+    document.getElementById('lgPhi').textContent=Math.round(p[3])+'%';
+    donutTot.textContent=blocked.toLocaleString();
+  }
+  setInterval(function(){for(var i=0;i<4;i++)mix[i]=Math.max(8,mix[i]+Math.round((Math.random()-.5)*4));drawDonut();},3000);
+
+  /* ---- engine bars ---- */
+  setInterval(function(){document.querySelectorAll('.eng').forEach(function(row){var base=+row.dataset.base,v=Math.max(6,Math.min(100,base+Math.round((Math.random()-.5)*12)));row.querySelector('i').style.width=v+'%';row.querySelector('b').textContent=v;});},1500);
+
+  /* ---- live threat feed ---- */
+  var events=[
+    ['block','CUI marking "//SP-PROPIN" in prompt','CUI','7ms'],
+    ['pass','Draft weekly status email','clean','11ms'],
+    ['block','CAGE code 1ABC2 + contract #','CMMC','6ms'],
+    ['block','sk-proj-… OpenAI secret key','Secrets','5ms'],
+    ['quar','Patient MRN + diagnosis text','PHI','8ms'],
+    ['pass','Summarize public RFP language','clean','12ms'],
+    ['block','SSN 412-••-9930 in ticket','PII','6ms'],
+    ['pass','Refactor this Python function','clean','9ms'],
+    ['block','ITAR-controlled component specs','Export','7ms'],
+    ['quar','AWS AKIA… access key','Cloud','6ms'],
+    ['pass','Brainstorm blog titles','clean','10ms'],
+    ['block','Clearance "TS/SCI" + name','Clearance','5ms'],
+    ['pass','Translate marketing copy','clean','13ms'],
+    ['block','Source w/ internal hostnames','IP','8ms'],
+    ['quar','Credit card 4111 1111 …','PCI','6ms'],
+    ['pass','Explain NIST 800-171 3.1.1','clean','9ms']
+  ];
+  function row(ev){var lbl=ev[0]==='block'?'BLOCKED':ev[0]==='quar'?'QUAR':'PASSED';return '<div class="feed-row fresh"><span class="tag '+ev[0]+'">'+lbl+'</span><span class="what">'+ev[1]+'</span><span class="eng">'+ev[2]+'</span><span class="lat">'+ev[3]+'</span></div>';}
+  var feed=document.getElementById('feed'),feedFull=document.getElementById('feedFull');
+  function seed(el,k){var h='';for(var i=0;i<k;i++)h+=row(events[Math.floor(Math.random()*events.length)]).replace(' fresh','');el.innerHTML=h;}
+  seed(feed,7);seed(feedFull,18);
+  setInterval(function(){
+    var ev=events[Math.floor(Math.random()*events.length)];
+    if(feed){feed.insertAdjacentHTML('afterbegin',row(ev));if(feed.children.length>7)feed.removeChild(feed.lastChild);}
+    if(feedFull){feedFull.insertAdjacentHTML('afterbegin',row(ev));if(feedFull.children.length>18)feedFull.removeChild(feedFull.lastChild);}
+    if(ev[0]==='block'){blocked++;kBlock.textContent=blocked.toLocaleString();bump(kBlock);donutTot.textContent=blocked.toLocaleString();sinceBlock=0;lastBlock.textContent='0s';if(!document.querySelector('.slink[data-tab="feed"]').classList.contains('on')){newBlocks++;updBadge();}}
+    if(ev[0]==='quar'){quar++;kQuar.textContent=quar;bump(kQuar);}
+  },2100);
+
+  /* ---- Brain AI ---- */
+  var blog=document.getElementById('blog'),bi=document.getElementById('bi'),bsend=document.getElementById('bsend');
+  function answer(q){q=q.toLowerCase();
+    if(/who are you|what are you|your name/.test(q))return ['I\'m <b>Brain AI</b>, HoundShield\'s on-device compliance analyst. I read your assessment, audit logs and the NIST 800-171 knowledge base — running on your hardware with your own key, so nothing I see is sent to HoundShield.','identity · brain-core'];
+    if(/what is houndshield|houndshield|what do you do/.test(q))return ['<b>HoundShield</b> is a local-only AI compliance firewall. It intercepts every prompt your team sends to ChatGPT, Copilot or Claude and blocks CUI, PII, PHI, secrets and CAGE codes in under 10ms — before they leave your network.','product · brain-core'];
+    if(/sprs|score/.test(q))return ['Your current SPRS score is <b>+78</b> of +110. 78 controls implemented, 8 partial, 14 open. Closing the three 3.8 Media Protection gaps moves you to +84 — the fastest path to conditional CMMC L2.','sprs · live assessment'];
+    if(/ready|certif|pass/.test(q))return ['Almost. A C3PAO needs a POA&M with no open high-weight controls. You have 2 (3.8.3 media sanitization, 3.13.11 FIPS crypto). Fix those, export the SSP + POA&M, and you\'re assessment-ready.','readiness · brain-core'];
+    if(/dfars|7012|spill|leak/.test(q))return ['A <b>DFARS 252.204-7012</b> spill is CUI reaching a system not authorized to hold it. Pasting CUI into ChatGPT transmits it to OpenAI — a reportable spill. Cloud DLP causes the same spill by sending data to their cloud. HoundShield scans locally, so CUI never leaves.','dfars · knowledge-base'];
+    return ['I can help with your CMMC posture, SPRS score, a NIST 800-171 control, HIPAA/PHI, DFARS 7012, or what HoundShield does. Everything I answer is grounded in your own assessment and audit data, on-device.','brain-core'];
+  }
+  function add(role,html,src){var b=document.createElement('div');b.className='bub '+role;b.innerHTML=html+(src?'<span class="src">source: '+src+'</span>':'');blog.appendChild(b);blog.scrollTop=blog.scrollHeight;}
+  function ask(q){if(!q.trim())return;add('u',q);bi.value='';setTimeout(function(){var a=answer(q);add('b',a[0],a[1]);},420);}
+  bsend.addEventListener('click',function(){ask(bi.value);});
+  bi.addEventListener('keydown',function(e){if(e.key==='Enter')ask(bi.value);});
+  document.querySelectorAll('.chips button').forEach(function(c){c.addEventListener('click',function(){ask(c.textContent);});});
+
+  /* ---- kick everything off ---- */
+  updBadge();drawChart();drawDonut();runSprs();
+})();
+</script>
+</body>
+</html>

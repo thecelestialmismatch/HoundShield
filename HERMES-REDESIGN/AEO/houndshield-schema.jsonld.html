@@ -1,0 +1,114 @@
+<!--
+  HoundShield — JSON-LD structured data (AEO/GEO)
+  HOW TO DEPLOY (Next.js App Router):
+  Put each block in app/layout.tsx (site-wide: Organization + SoftwareApplication + WebSite)
+  and per-page (Product on /pricing, FAQPage on each product/answer page) using:
+
+    export default function Layout({ children }) {
+      return (<>
+        <script type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSONLD) }} />
+        {children}
+      </>);
+    }
+
+  Validate every page with Google Rich Results Test before shipping:
+  https://search.google.com/test/rich-results
+-->
+
+<!-- 1) ORGANIZATION — site-wide (powers Knowledge Panel eligibility) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "HoundShield",
+  "url": "https://houndshield.com",
+  "logo": "https://houndshield.com/houndshield-logo.png",
+  "description": "Local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2.",
+  "sameAs": ["https://github.com/thecelestialmismatch/HoundShield"]
+}
+</script>
+
+<!-- 2) SOFTWARE APPLICATION — site-wide (eligibility for AI Overviews + rich results) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "HoundShield",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Web, Docker, Linux, macOS, Windows",
+  "description": "Local-only AI compliance firewall. Intercepts AI prompts (ChatGPT, Copilot, Claude, Cursor) and blocks CUI, PII, PHI, secrets, and CAGE codes in under 10ms on your own hardware. Built for CMMC Level 2, HIPAA, and SOC 2.",
+  "featureList": [
+    "16 detection engines (CUI, PII, IP, PHI, secrets, CAGE codes, clearances)",
+    "Sub-10ms local scan latency",
+    "110 NIST 800-171 controls with live SPRS scoring",
+    "SHA-256 tamper-evident audit logs",
+    "C3PAO-ready SSP and POA&M PDF export",
+    "One-URL OpenAI-compatible proxy deployment"
+  ],
+  "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": "0",
+    "highPrice": "2499",
+    "priceCurrency": "USD",
+    "offerCount": "5"
+  }
+}
+</script>
+
+<!-- 3) PRODUCT + OFFERS — put on /pricing (answers "how much does X cost") -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "HoundShield AI Compliance Firewall",
+  "description": "Local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2.",
+  "brand": { "@type": "Brand", "name": "HoundShield" },
+  "offers": [
+    { "@type": "Offer", "name": "Free",       "price": "0",    "priceCurrency": "USD", "description": "CMMC self-assessment + SPRS calculator, up to 1,000 prompts/mo." },
+    { "@type": "Offer", "name": "Pro",        "price": "199",  "priceCurrency": "USD", "description": "AI gateway + full CMMC suite, 10 seats." },
+    { "@type": "Offer", "name": "Growth",     "price": "499",  "priceCurrency": "USD", "description": "Unlimited scans, PDF reports, C3PAO coordination, 25 seats." },
+    { "@type": "Offer", "name": "Enterprise", "price": "999",  "priceCurrency": "USD", "description": "On-prem / air-gapped, unlimited seats, custom SLA." },
+    { "@type": "Offer", "name": "Agency",     "price": "2499", "priceCurrency": "USD", "description": "Multi-tenant for MSPs, white-label reports, 30% partner revenue share." }
+  ]
+}
+</script>
+
+<!-- 4) FAQPAGE — put on each answer/product page (each Q/A becomes snippet-eligible) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can defense contractors use ChatGPT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, defense contractors can use ChatGPT, but only if prompts are scanned locally so Controlled Unclassified Information (CUI) never leaves the network. Pasting CUI directly into ChatGPT transmits it to OpenAI, which is a reportable DFARS 252.204-7012 spill. A local-only AI firewall like HoundShield blocks CUI before it leaves, enabling compliant use."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is HoundShield itself a DFARS 7012 risk?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. HoundShield runs detection on your own hardware, so CUI never transits to HoundShield's servers. Cloud-based DLP tools must receive your data to scan it, which is the exact exposure DFARS 7012 forbids."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- 5) SPEAKABLE — add to answer pages for voice assistants -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["h1", ".answer-lead"]
+  },
+  "url": "https://houndshield.com/answers/can-defense-contractors-use-chatgpt"
+}
+</script>
