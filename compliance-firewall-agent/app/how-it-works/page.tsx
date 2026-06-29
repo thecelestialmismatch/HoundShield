@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
-import { ShieldCheck, Plug, FileText } from 'lucide-react'
+import { Shield, Plug, FileText, Eye, ArrowRight } from 'lucide-react'
 import { FaqSection } from '@/components/seo/FaqSection'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { howItWorksFaqs, installSteps } from '@/lib/seo/faqs'
@@ -19,20 +19,26 @@ const STEPS = [
   {
     number: '01',
     icon: Plug,
-    title: 'Change One URL',
-    body: 'Point your AI tool (ChatGPT, Copilot, Claude, any OpenAI-compatible client) at your HoundShield proxy URL. No agents. No software installs. Live in under five minutes.',
+    title: 'Change one URL',
+    body: 'Point any OpenAI-compatible client (ChatGPT, Copilot, Claude, Cursor) at your HoundShield proxy URL. No agents. No installs. Live in under five minutes.',
   },
   {
     number: '02',
-    icon: ShieldCheck,
-    title: 'Every Prompt Scanned Locally',
-    body: 'HoundShield intercepts each request on your own hardware. Sixteen CUI/PII/PHI detection patterns run in under 10ms before the prompt reaches any AI provider. Your data never touches our servers.',
+    icon: Shield,
+    title: 'Every prompt scanned locally',
+    body: 'HoundShield intercepts each request on your own hardware. Sixteen CUI/PII/PHI engines run in under 10ms before the prompt reaches any AI provider. Your data never touches our servers.',
   },
   {
     number: '03',
+    icon: Eye,
+    title: 'Block, quarantine or pass',
+    body: 'Clean prompts pass through untouched. Risky prompts are blocked or held for human-in-the-loop review — with the exact match (CAGE code, MRN, secret) highlighted.',
+  },
+  {
+    number: '04',
     icon: FileText,
-    title: 'Audit-Ready in One Click',
-    body: 'Every decision is logged in a tamper-proof hash chain. Generate your C3PAO-ready PDF report at any time — formatted for DIBCAC review, covering all 110 NIST SP 800-171 Rev 2 controls.',
+    title: 'Sign the evidence',
+    body: 'Every decision is written to a SHA-256 tamper-evident audit log. Export a C3PAO-ready PDF mapped to all 110 NIST 800-171 controls whenever your assessor asks.',
   },
 ]
 
@@ -44,8 +50,8 @@ export default function HowItWorksPage() {
       {/* Hero */}
       <section className="pt-32 pb-16 px-6 text-center">
         <div className="max-w-3xl mx-auto">
-          <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3">
-            HOW IT WORKS
+          <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3 font-[var(--font-mono)]">
+            How it works
           </p>
           <h1 className="text-4xl sm:text-5xl font-bold text-[var(--hs-ink)] tracking-tight mb-5">
             Local-first compliance.<br />Zero data exposure.
@@ -101,6 +107,7 @@ export default function HowItWorksPage() {
           </p>
           <Link href="/signup" className="btn-primary">
             Get started free
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
