@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<!-- saved from url=(0116)file:///Users/yantr/Desktop/Skills/HoundShield%20%E2%80%94%20HERMES%20Redesign%20Demo%20(Direction%20A%20&%20B).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HoundShield — HERMES Redesign Demo (Direction A &amp; B)</title>
+<meta name="description" content="HoundShield — local-only AI compliance firewall for CMMC Level 2, HIPAA, SOC 2. Intercepts AI prompts before they leave your network. 16 detection engines. Sub-10ms. C3PAO-ready.">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   HOUNDSHIELD — HERMES UNIFIED DESIGN SYSTEM
+   Two directions, one token system. Toggle: body[data-dir="A"|"B"]
+   A = Steel & Cream (your exact palette, editorial light marketing)
+   B = Midnight Command (tactical dark-first SOC aesthetic)
+   ============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --steel:#81A6C6; --sky:#AACDDC; --cream:#F3E3D0; --sand:#D2C4B4;
+  --ink:#0F1E2E; --ink2:#3D5166; --ink3:#6B8299;
+  --ok:#0E9F6E; --ok-bg:rgba(14,159,110,.12);
+  --bad:#E5484D; --bad-bg:rgba(229,72,77,.12);
+  --warn:#D9870B; --warn-bg:rgba(217,135,11,.12);
+  --r-sm:10px; --r:16px; --r-lg:24px;
+  --f-disp:'Fraunces',Georgia,serif; --f-body:'DM Sans',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
+  --maxw:1200px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+/* ---------- DIRECTION A : STEEL & CREAM (light marketing) ---------- */
+body[data-dir="A"]{
+  --page:#FAFCFF; --page-2:#F4F8FC; --warm-band:#F7ECDD;
+  --surface:#FFFFFF; --surface-2:#F5F8FB;
+  --text:#0F1E2E; --text-2:#42566B; --text-3:#7089A0;
+  --line:rgba(15,30,46,.10); --line-2:rgba(129,166,198,.30);
+  --brand:#5A86A8; --brand-bright:#81A6C6; --brand-2:#AACDDC;
+  --cta:#5A86A8; --cta-text:#FFFFFF; --cta-hover:#456C8C;
+  --accent-warm:#F3E3D0; --halo:rgba(129,166,198,.22);
+  --hero-from:#F4F8FC; --hero-to:#FFFFFF;
+  --nav-bg:rgba(250,252,255,.82); --nav-line:rgba(15,30,46,.08);
+  --logo-ink:#0F1E2E;
+  --pop:#0E1622; --pop-text:#E8F0F8; --pop-line:rgba(255,255,255,.08); --pop-mut:#90A6BC;
+  --shadow:0 18px 50px rgba(20,44,70,.12); --shadow-sm:0 6px 20px rgba(20,44,70,.08);
+}
+/* ---------- DIRECTION B : MIDNIGHT COMMAND (dark-first) ---------- */
+body[data-dir="B"]{
+  --page:#070B11; --page-2:#0B121B; --warm-band:#0E1622;
+  --surface:#0E1620; --surface-2:#121C28;
+  --text:#EAF2FB; --text-2:#9FB4C9; --text-3:#6A8099;
+  --line:rgba(255,255,255,.09); --line-2:rgba(127,177,212,.28);
+  --brand:#7FB1D4; --brand-bright:#9CCBE6; --brand-2:#AACDDC;
+  --cta:#7FB1D4; --cta-text:#06101A; --cta-hover:#9CCBE6;
+  --accent-warm:#E7CFAE; --halo:rgba(127,177,212,.30);
+  --hero-from:#070B11; --hero-to:#0C141E;
+  --nav-bg:rgba(7,11,17,.72); --nav-line:rgba(127,177,212,.16);
+  --logo-ink:#EAF2FB;
+  --pop:#0B131C; --pop-text:#EAF2FB; --pop-line:rgba(255,255,255,.08); --pop-mut:#8AA2B8;
+  --shadow:0 24px 60px rgba(0,0,0,.55); --shadow-sm:0 10px 28px rgba(0,0,0,.45);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--f-body);background:var(--page);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .4s var(--ease),color .4s var(--ease)}
+a{color:inherit;text-decoration:none}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.mono{font-family:var(--f-mono)}
+.display{font-family:var(--f-disp);font-weight:600;letter-spacing:-.02em;line-height:1.04}
+h1.display{font-size:clamp(2.6rem,5.4vw,4.4rem)}
+h2.display{font-size:clamp(1.9rem,3.4vw,2.9rem)}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brand)}
+.muted{color:var(--text-2)}
+.center{text-align:center}
+
+/* ---------- BUTTONS ---------- */
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;font-size:.93rem;padding:.8rem 1.25rem;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;transition:all .2s var(--ease);white-space:nowrap}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--cta);color:var(--cta-text);box-shadow:0 8px 22px var(--halo)}
+.btn-primary:hover{background:var(--cta-hover);transform:translateY(-2px);box-shadow:0 14px 30px var(--halo)}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-2px)}
+.btn-sm{padding:.55rem .9rem;font-size:.84rem}
+
+/* ---------- NAV ---------- */
+.nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:var(--nav-bg);border-bottom:1px solid var(--nav-line);transition:background .4s var(--ease)}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:66px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.6rem;cursor:pointer}
+.brand-mark{width:auto;height:36px;object-fit:contain;display:block;transition:transform .3s var(--ease)}
+.brand:hover .brand-mark{transform:rotate(-4deg) scale(1.06)}
+body[data-dir="B"] .brand-mark{filter:brightness(0) invert(1)}
+.app-side .brand-mark{height:32px}
+.brand-text{font-family:var(--f-disp);font-weight:700;font-size:1.2rem;letter-spacing:-.01em;color:var(--text)}
+.brand-text b{color:var(--brand)}
+.nav-links{display:flex;align-items:center;gap:.15rem}
+.nav-item{position:relative}
+.nav-link{display:inline-flex;align-items:center;gap:.3rem;padding:.5rem .75rem;font-size:.9rem;font-weight:500;color:var(--text-2);border-radius:var(--r-sm);cursor:pointer;transition:all .18s var(--ease)}
+.nav-link:hover,.nav-item:hover .nav-link{color:var(--text);background:var(--surface-2)}
+.nav-link .chev{width:13px;height:13px;transition:transform .2s var(--ease)}
+.nav-item:hover .nav-link .chev{transform:rotate(180deg)}
+.nav-link.active{color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent)}
+.nav-cta{display:flex;align-items:center;gap:.6rem}
+.live-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .65rem;border-radius:999px;background:var(--ok-bg);border:1px solid color-mix(in srgb,var(--ok) 28%,transparent)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:ping 2.4s infinite}
+.live-badge span{font-family:var(--f-mono);font-size:.7rem;font-weight:700;color:var(--ok)}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+/* ---------- DROPDOWNS (pure CSS hover) ---------- */
+.dropdown{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(8px) scale(.98);opacity:0;visibility:hidden;pointer-events:none;background:var(--pop);border:1px solid var(--pop-line);border-radius:var(--r);box-shadow:var(--shadow);padding:.5rem;transition:all .2s var(--ease);z-index:70}
+.dropdown::before{content:"";position:absolute;top:-16px;left:0;right:0;height:18px}
+.nav-item:hover .dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0) scale(1)}
+.nav-item:hover{z-index:71}
+.dropdown.wide{width:720px}
+.dd-head{padding:.65rem .8rem .55rem;border-bottom:1px solid var(--pop-line);margin-bottom:.4rem}
+.dd-head .eyebrow{color:var(--brand-2)}
+.dd-head p{font-size:.74rem;color:var(--pop-mut);margin-top:.15rem}
+.dd-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.2rem}
+.dd-item{display:flex;gap:.7rem;padding:.6rem .7rem;border-radius:var(--r-sm);cursor:pointer;transition:background .15s var(--ease)}
+.dd-item:hover{background:rgba(255,255,255,.05)}
+.dd-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--brand-2)}
+.dd-ic svg{width:15px;height:15px}
+.dd-item h5{font-size:.86rem;font-weight:600;color:var(--pop-text);display:flex;align-items:center;gap:.3rem}
+.dd-item p{font-size:.72rem;color:var(--pop-mut);line-height:1.4;margin-top:.1rem}
+.dd-tag{font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.06em;color:var(--brand-2);text-transform:uppercase}
+.dd-foot{margin-top:.4rem;padding:.6rem .8rem;border-top:1px solid var(--pop-line);display:flex;justify-content:space-between;align-items:center}
+.dd-foot a{font-size:.78rem;font-weight:600;color:var(--brand-2);display:inline-flex;gap:.3rem;align-items:center}
+.dd-foot .mono{font-size:.66rem;color:var(--pop-mut)}
+.dd-narrow{width:340px}
+.dd-narrow .dd-grid{grid-template-columns:1fr}
+.dd-soon{font-family:var(--f-mono);font-size:.56rem;font-weight:700;padding:.05rem .3rem;border-radius:5px;background:rgba(255,255,255,.08);color:var(--pop-mut);text-transform:uppercase;letter-spacing:.05em}
+
+/* price mini rows in dropdown */
+.dd-price{display:flex;justify-content:space-between;align-items:center;padding:.55rem .7rem;border-radius:var(--r-sm);cursor:pointer;transition:background .15s}
+.dd-price:hover{background:rgba(255,255,255,.05)}
+.dd-price h5{font-size:.85rem;font-weight:700;color:var(--pop-text)}
+.dd-price p{font-size:.7rem;color:var(--pop-mut)}
+.dd-price .amt{font-family:var(--f-mono);font-weight:700;color:var(--pop-text);font-size:.85rem}
+.dd-price .amt small{color:var(--pop-mut);font-weight:400;font-size:.62rem}
+
+/* ---------- VIEWS ---------- */
+.view{display:none;animation:fade .45s var(--ease)}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section{padding:84px 0}
+.section.tight{padding:56px 0}
+.section-head{max-width:680px;margin:0 auto 52px;text-align:center}
+.section-head h2{margin:.5rem 0 .7rem}
+.section-head p{font-size:1.05rem;color:var(--text-2)}
+.prod-head{display:flex;gap:.7rem;align-items:center;margin-bottom:1.1rem}
+.prod-head .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand)}
+.prod-head .ic svg{width:21px;height:21px}
+.prod-h1{font-size:clamp(2rem,4vw,3.1rem);max-width:820px;margin-bottom:1rem}
+.prod-sub{font-size:1.12rem;color:var(--text-2);max-width:680px;margin-bottom:1.5rem}
+.chip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:760px){.chip-grid{grid-template-columns:1fr 1fr}}
+.map-sub{color:var(--text-3);font-size:.8rem;font-weight:400}
+.faq-q{font-size:1.02rem;margin-bottom:.4rem;font-weight:700}
+.ctrl-row span b{font-weight:700}
+.opsbar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.75rem 18px;margin-bottom:18px;font-size:.85rem;color:var(--text-2)}
+.opsbar b{color:var(--text);font-family:var(--f-mono);font-weight:600}
+.engrow{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:12px;font-size:.85rem;color:var(--text-2)}
+.engrow .bar{margin:0}
+.engrow b{text-align:right;font-family:var(--f-mono);color:var(--text);font-weight:600}
+.bar i{transition:width .8s var(--ease)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--hero-from),var(--hero-to))}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 78% 18%,var(--halo),transparent 70%);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:72px 0 84px}
+.hero .pill{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);font-size:.78rem;font-weight:600;color:var(--text-2);margin-bottom:1.4rem}
+.hero .pill .live-dot{width:6px;height:6px}
+.hero h1{margin-bottom:1.2rem}
+.hero h1 .accent{color:var(--brand)}
+.hero .sub{font-size:1.16rem;color:var(--text-2);max-width:540px;margin-bottom:1.8rem}
+.hero-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.hero-trust{display:flex;gap:1.3rem;flex-wrap:wrap}
+.hero-trust span{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--text-3)}
+.hero-trust svg{width:15px;height:15px;color:var(--ok)}
+/* terminal card */
+.term{background:#0C141E;border:1px solid rgba(127,177,212,.22);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden}
+.term-bar{display:flex;align-items:center;gap:.5rem;padding:.7rem .9rem;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02)}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:block}
+.term-bar .u{flex:1;text-align:center;font-family:var(--f-mono);font-size:.72rem;color:#7B93A8}
+.term-body{padding:1.1rem 1.2rem;font-family:var(--f-mono);font-size:.82rem;line-height:1.85}
+.cmt{color:#5E7488}.var{color:#9CCBE6}.str{color:#9DD0A8}
+.term-row{display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.06);padding:.35rem 0}
+.tag-block{color:#E5484D;font-weight:700}
+.tag-pass{color:#5FCF8F;font-weight:700}
+.lat{color:#7B93A8}
+/* stat row */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden;margin-top:8px}
+.stat{background:var(--warm-band);padding:30px 22px;text-align:center}
+.stat .n{font-family:var(--f-disp);font-weight:700;font-size:2.1rem;color:var(--text)}
+.stat .l{font-size:.84rem;font-weight:600;color:var(--text-2);margin-top:.2rem}
+.stat .s{font-size:.72rem;color:var(--text-3)}
+
+/* ---------- CARDS / GRIDS ---------- */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease)}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:var(--line-2)}
+.card .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand);margin-bottom:1rem}
+.card .ic svg{width:21px;height:21px}
+.card h3{font-size:1.12rem;font-weight:700;margin-bottom:.45rem}
+.card p{font-size:.92rem;color:var(--text-2)}
+.card .chip{position:absolute;top:18px;right:18px;font-family:var(--f-mono);font-size:.66rem;font-weight:700;color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);padding:.2rem .5rem;border-radius:6px}
+.card{position:relative}
+
+/* ---------- STEPS ---------- */
+.steps{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.step{display:flex;gap:22px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px 28px;transition:all .25s var(--ease)}
+.step:hover{border-color:var(--line-2);transform:translateX(4px);box-shadow:var(--shadow-sm)}
+.step .num{font-family:var(--f-mono);font-size:1.4rem;font-weight:700;color:var(--brand);flex-shrink:0;width:38px}
+.step h3{font-size:1.18rem;font-weight:700;margin-bottom:.35rem}
+.step p{color:var(--text-2);font-size:.95rem}
+.step .ic{margin-left:auto;width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand);flex-shrink:0}
+.step .ic svg{width:20px;height:20px}
+
+/* ---------- PRICING ---------- */
+.bill-toggle{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:.3rem;margin:0 auto 40px;position:relative}
+.bill-toggle button{border:none;background:transparent;font-family:var(--f-body);font-weight:600;font-size:.86rem;color:var(--text-2);padding:.5rem 1.1rem;border-radius:999px;cursor:pointer;transition:all .2s}
+.bill-toggle button.on{background:var(--cta);color:var(--cta-text)}
+.bill-toggle .save{font-family:var(--f-mono);font-size:.66rem;color:var(--ok);font-weight:700}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
+.price-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;display:flex;flex-direction:column;transition:all .25s var(--ease);position:relative}
+.price-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:var(--line-2)}
+.price-card.featured{border-color:var(--brand);box-shadow:0 20px 50px var(--halo)}
+.price-card.featured::before{content:"Most popular";position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cta-text);background:var(--cta);padding:.25rem .7rem;border-radius:999px}
+.price-card .tier{font-weight:700;font-size:1.05rem}
+.price-card .who{font-size:.78rem;color:var(--text-3);min-height:34px;margin-top:.2rem}
+.price-card .price{font-family:var(--f-disp);font-weight:700;font-size:2.3rem;margin:.5rem 0 .1rem}
+.price-card .price small{font-size:.85rem;font-weight:500;color:var(--text-3);font-family:var(--f-body)}
+.price-card .annual{font-size:.72rem;color:var(--text-3);min-height:16px}
+.price-card .btn{width:100%;justify-content:center;margin:18px 0}
+.feat{list-style:none;display:flex;flex-direction:column;gap:.55rem;font-size:.85rem;color:var(--text-2)}
+.feat li{display:flex;gap:.5rem;align-items:flex-start}
+.feat li svg{width:15px;height:15px;color:var(--ok);flex-shrink:0;margin-top:2px}
+
+/* compare strip */
+.compare{margin-top:30px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.compare table{width:100%;border-collapse:collapse;font-size:.86rem}
+.compare th,.compare td{padding:.75rem 1rem;text-align:center;border-bottom:1px solid var(--line)}
+.compare th:first-child,.compare td:first-child{text-align:left;color:var(--text-2)}
+.compare thead th{font-weight:700;color:var(--text)}
+.compare td svg{width:15px;height:15px;color:var(--ok)}
+.compare .dash{color:var(--text-3)}
+
+/* ---------- DOCS ---------- */
+.docs-wrap{display:grid;grid-template-columns:230px 1fr;gap:36px;align-items:start}
+.docs-side{position:sticky;top:90px;display:flex;flex-direction:column;gap:.2rem}
+.docs-side .gh{font-family:var(--f-mono);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin:1rem 0 .3rem}
+.docs-side a{padding:.45rem .7rem;border-radius:8px;font-size:.88rem;color:var(--text-2);cursor:pointer}
+.docs-side a:hover,.docs-side a.on{background:var(--surface-2);color:var(--brand)}
+.code{background:#0C141E;border:1px solid rgba(127,177,212,.2);border-radius:var(--r);overflow:hidden;margin:18px 0}
+.code-top{display:flex;justify-content:space-between;align-items:center;padding:.55rem .9rem;border-bottom:1px solid rgba(255,255,255,.07);font-family:var(--f-mono);font-size:.7rem;color:#7B93A8}
+.code pre{padding:1rem 1.1rem;overflow:auto;font-family:var(--f-mono);font-size:.8rem;line-height:1.7;color:#C7D6E5}
+.code .k{color:#9CCBE6}.code .s{color:#9DD0A8}.code .c{color:#5E7488}
+.callout{display:flex;gap:.7rem;padding:1rem 1.1rem;border-radius:var(--r);background:var(--ok-bg);border:1px solid color-mix(in srgb,var(--ok) 25%,transparent);font-size:.9rem;color:var(--text-2)}
+
+/* ---------- CTA BAND ---------- */
+.cta-band{background:linear-gradient(120deg,var(--brand),var(--brand-2));border-radius:var(--r-lg);padding:56px;text-align:center;color:#fff;position:relative;overflow:hidden}
+body[data-dir="B"] .cta-band{background:linear-gradient(120deg,#15263a,#1d3147);border:1px solid var(--line-2)}
+.cta-band h2{color:#fff;margin-bottom:.6rem}
+.cta-band p{color:rgba(255,255,255,.86);max-width:520px;margin:0 auto 1.5rem}
+.cta-band .btn-primary{background:#fff;color:var(--brand)}
+.cta-band .btn-primary:hover{background:var(--cream);color:var(--brand)}
+
+/* ---------- FOOTER ---------- */
+.footer{background:var(--warm-band);border-top:1px solid var(--line);padding:56px 0 28px;margin-top:0}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px;margin-bottom:36px}
+.foot-brand p{font-size:.86rem;color:var(--text-2);max-width:280px;margin:.8rem 0}
+.foot-badges{display:flex;flex-wrap:wrap;gap:.4rem}
+.foot-badges span{font-family:var(--f-mono);font-size:.66rem;font-weight:600;color:var(--text-2);border:1px solid var(--line);border-radius:6px;padding:.25rem .5rem}
+.foot-col h6{font-family:var(--f-mono);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:.9rem}
+.foot-col a{display:block;font-size:.88rem;color:var(--text-2);padding:.25rem 0;cursor:pointer}
+.foot-col a:hover{color:var(--brand)}
+.foot-bottom{border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-3);flex-wrap:wrap;gap:.5rem}
+
+/* ---------- DIRECTION SWITCHER (floating) ---------- */
+.dir-switch{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:90;display:flex;align-items:center;gap:.5rem;background:var(--pop);color:var(--pop-text);border:1px solid var(--pop-line);border-radius:999px;padding:.5rem .55rem;box-shadow:var(--shadow)}
+.dir-switch .lab{font-family:var(--f-mono);font-size:.66rem;color:var(--pop-mut);padding-left:.5rem;letter-spacing:.06em}
+.dir-switch button{border:none;font-family:var(--f-body);font-weight:700;font-size:.78rem;padding:.45rem .85rem;border-radius:999px;cursor:pointer;background:transparent;color:var(--pop-mut);transition:all .2s}
+.dir-switch button.on{background:var(--brand);color:#06101A}
+
+/* ---------- DASHBOARD ---------- */
+.app{display:none;min-height:100vh;background:var(--page)}
+body[data-view="app"] .app{display:grid;grid-template-columns:248px 1fr}
+body[data-view="app"] .site{display:none}
+.app-side{background:var(--surface);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column;gap:.2rem;position:sticky;top:0;height:100vh;overflow:auto}
+.app-side .brand{padding:.4rem .6rem 1rem}
+.app-side .gh{font-family:var(--f-mono);font-size:.64rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin:1rem .6rem .3rem}
+.side-link{display:flex;align-items:center;gap:.65rem;padding:.6rem .7rem;border-radius:9px;font-size:.88rem;font-weight:500;color:var(--text-2);cursor:pointer;transition:all .15s}
+.side-link svg{width:17px;height:17px;flex-shrink:0}
+.side-link:hover{background:var(--surface-2);color:var(--text)}
+.side-link.on{background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand);font-weight:600}
+.side-foot{margin-top:auto;padding:.6rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--text-2)}
+.side-foot .av{width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.8rem}
+.app-main{overflow:auto;height:100vh}
+.app-top{position:sticky;top:0;z-index:20;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.app-top h1{font-family:var(--f-disp);font-size:1.35rem;font-weight:700}
+.app-top .crumbs{font-size:.78rem;color:var(--text-3)}
+.app-body{padding:28px}
+.atab{display:none}.atab.on{display:block;animation:fade .35s var(--ease)}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:all .2s var(--ease)}
+.kpi:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.kpi .kl{font-size:.78rem;color:var(--text-3);display:flex;align-items:center;gap:.4rem}
+.kpi .kn{font-family:var(--f-disp);font-weight:700;font-size:2rem;margin-top:.3rem}
+.kpi .kd{font-size:.74rem;margin-top:.2rem}
+.kpi .kd.up{color:var(--ok)}.kpi .kd.down{color:var(--bad)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.panel-h{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.panel-h h3{font-size:1rem;font-weight:700}
+.panel-h .mono{font-size:.72rem;color:var(--text-3)}
+.two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+.feed-row{display:flex;align-items:center;gap:.8rem;padding:.7rem 20px;border-bottom:1px solid var(--line);font-size:.84rem}
+.feed-row:last-child{border:none}
+.feed-tag{font-family:var(--f-mono);font-size:.66rem;font-weight:700;padding:.18rem .45rem;border-radius:5px;flex-shrink:0;width:64px;text-align:center}
+.feed-tag.block{background:var(--bad-bg);color:var(--bad)}
+.feed-tag.pass{background:var(--ok-bg);color:var(--ok)}
+.feed-tag.quar{background:var(--warn-bg);color:var(--warn)}
+.feed-row .what{flex:1;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.feed-row .eng{font-family:var(--f-mono);font-size:.7rem;color:var(--text-3)}
+.feed-row .lat{font-family:var(--f-mono);font-size:.72rem;color:var(--text-3);width:42px;text-align:right}
+.feed-row.new{animation:flashRow 1.4s var(--ease)}
+@keyframes flashRow{0%{background:color-mix(in srgb,var(--brand) 18%,transparent)}100%{background:transparent}}
+#liveChart{width:100%;height:120px;display:block}
+.live-up{display:inline-block;animation:upPulse .5s var(--ease)}
+@keyframes upPulse{0%{transform:translateY(2px);opacity:.5}100%{transform:none;opacity:1}}
+/* SPRS ring */
+.sprs{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px}
+.ring{--p:78;width:150px;height:150px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--brand) calc(var(--p)*1%),var(--surface-2) 0)}
+.ring::before{content:"";position:absolute;width:118px;height:118px;border-radius:50%;background:var(--surface)}
+.ring b{position:relative;font-family:var(--f-disp);font-size:2.2rem;font-weight:700;color:var(--text)}
+.ring .ringpos{position:relative}
+.sprs .cap{font-size:.82rem;color:var(--text-2);margin-top:.8rem;text-align:center}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:.4rem}
+.bar i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.ctrl-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem 20px;border-bottom:1px solid var(--line);font-size:.85rem}
+.ctrl-row:last-child{border:none}
+.ctrl-row .st{font-family:var(--f-mono);font-size:.68rem;font-weight:700;padding:.15rem .45rem;border-radius:5px}
+.st.met{background:var(--ok-bg);color:var(--ok)}.st.gap{background:var(--bad-bg);color:var(--bad)}.st.part{background:var(--warn-bg);color:var(--warn)}
+/* brain chat */
+.brain{display:flex;flex-direction:column;height:440px}
+.brain-log{flex:1;overflow:auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.bubble{max-width:80%;padding:.7rem .95rem;border-radius:14px;font-size:.88rem;line-height:1.5}
+.bubble.u{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:4px}
+.bubble.b{align-self:flex-start;background:var(--surface-2);color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--line)}
+.bubble.b .src{display:block;margin-top:.5rem;font-family:var(--f-mono);font-size:.66rem;color:var(--text-3)}
+.brain-in{display:flex;gap:.5rem;padding:14px;border-top:1px solid var(--line)}
+.brain-in input{flex:1;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:.65rem .8rem;font-family:var(--f-body);font-size:.9rem;color:var(--text);outline:none}
+.brain-in input:focus{border-color:var(--brand)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;padding:0 14px 12px}
+.chips button{font-size:.74rem;border:1px solid var(--line);background:var(--surface-2);color:var(--text-2);border-radius:99px;padding:.3rem .6rem;cursor:pointer;transition:all .15s}
+.chips button:hover{border-color:var(--brand);color:var(--brand)}
+.gateway-box{display:flex;align-items:center;gap:.6rem;background:var(--surface-2);border:1px dashed var(--line-2);border-radius:10px;padding:.7rem .9rem;font-family:var(--f-mono);font-size:.82rem;color:var(--text);justify-content:space-between}
+.gateway-box button{border:none;background:var(--brand);color:#fff;border-radius:7px;padding:.35rem .7rem;font-size:.72rem;font-weight:700;cursor:pointer}
+
+/* mobile */
+.burger{display:none}
+@media(max-width:900px){
+  .nav-links,.nav-cta .live-badge,.nav-cta .btn-ghost{display:none}
+  .burger{display:grid}
+  .hero-grid{grid-template-columns:1fr;gap:30px;padding:48px 0 56px}
+  .grid-3,.grid-2,.pricing-grid,.kpi-grid,.foot-grid,.stat-row{grid-template-columns:1fr 1fr}
+  .two-col,.docs-wrap{grid-template-columns:1fr}
+  body[data-view="app"] .app{grid-template-columns:1fr}
+  .app-side{display:none}
+  .dir-switch{bottom:14px}
+}
+@media(max-width:560px){.grid-3,.grid-2,.pricing-grid,.kpi-grid,.foot-grid,.stat-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-dir="A" data-view="home">
+
+<!-- ICON SPRITE -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg"><defs></defs>
+<symbol id="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
+<symbol id="ic-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"></path></symbol>
+<symbol id="ic-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></symbol>
+<symbol id="ic-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"></path><path d="M14 3v6h6M9 13h6M9 17h6"></path></symbol>
+<symbol id="ic-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z"></path><path d="m3 13 9 5 9-5"></path></symbol>
+<symbol id="ic-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"></path></symbol>
+<symbol id="ic-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></symbol>
+<symbol id="ic-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A3.5 3.5 0 0 0 12 6 3.5 3.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7 7-7Z"></path></symbol>
+<symbol id="ic-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V5Z"></path><path d="m9 12 2 2 4-4"></path></symbol>
+<symbol id="ic-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></symbol>
+<symbol id="ic-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"></path></symbol>
+<symbol id="ic-landmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10M19 21V10M9 21V10M15 21V10M12 3 3 8h18Z"></path></symbol>
+<symbol id="ic-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20a6 6 0 0 1 12 0M16 5a3 3 0 0 1 0 6M21 20a6 6 0 0 0-4-5.6"></path></symbol>
+<symbol id="ic-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6M15 2v6M7 8h10v3a5 5 0 0 1-10 0Z M12 16v6"></path></symbol>
+<symbol id="ic-dollar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6.5C17 4.6 14.8 3.5 12 3.5S7 4.8 7 7s2.2 3 5 3.5 5 1.5 5 3.5-2.2 3.5-5 3.5-5-1.1-5-3"></path></symbol>
+<symbol id="ic-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2Z M4 19a2 2 0 0 0 2 2h14"></path></symbol>
+<symbol id="ic-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 4 4-4 4M12 16h7"></path><rect x="2" y="3" width="20" height="18" rx="2"></rect></symbol>
+<symbol id="ic-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 9h18M8 2v4M16 2v4"></path></symbol>
+<symbol id="ic-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></symbol>
+<symbol id="ic-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></symbol>
+<symbol id="ic-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></symbol>
+<symbol id="ic-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14 16 9M5 19a9 9 0 1 1 14 0Z"></path></symbol>
+<symbol id="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 7H3s3 0 3-7M10 21a2 2 0 0 0 4 0"></path></symbol>
+<symbol id="ic-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1l-.4-2.6h-4l-.4 2.6a7 7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5a7 7 0 0 0 .1-1Z"></path></symbol>
+<symbol id="ic-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a3 3 0 0 0-3 3 3 3 0 0 0-1 5 3 3 0 0 0 2 5 3 3 0 0 0 6 .5V4.5A3 3 0 0 0 9 3ZM15 3a3 3 0 0 1 3 3 3 3 0 0 1 1 5 3 3 0 0 1-2 5 3 3 0 0 1-4 .5"></path></symbol>
+<symbol id="ic-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"></path></symbol>
+<symbol id="ic-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4h13l-2 4 2 4H4"></path></symbol>
+</svg>
+
+<div class="site">
+<!-- ======================= NAV ======================= -->
+<nav class="nav">
+ <div class="nav-inner">
+  <div class="brand" data-go="home" title="HoundShield home">
+   <img class="brand-mark" src="assets/houndshield-logo.png" alt="HoundShield" width="28" height="36">
+   <span class="brand-text">Hound<b>Shield</b></span>
+  </div>
+
+  <div class="nav-links">
+   <!-- Products mega -->
+   <div class="nav-item">
+    <span class="nav-link" data-go="features">Products <svg class="chev"><use href="#ic-chev"></use></svg></span>
+    <div class="dropdown wide">
+     <div class="dd-head"><div class="eyebrow">Products by Industry</div><p>One firewall · every compliance framework · one deployment</p></div>
+     <div class="dd-grid">
+      <div class="dd-item" data-go="prod-technology"><div class="dd-ic"><svg><use href="#ic-lock"></use></svg></div><div><h5>Technology <span class="dd-tag">SOC 2</span></h5><p>Engineers pasting API keys &amp; source into Copilot.</p></div></div>
+      <div class="dd-item" data-go="prod-healthcare"><div class="dd-ic"><svg><use href="#ic-heart"></use></svg></div><div><h5>Healthcare <span class="dd-tag">HIPAA</span></h5><p>Clinicians pasting PHI into AI for documentation.</p></div></div>
+      <div class="dd-item" data-go="prod-defense"><div class="dd-ic"><svg><use href="#ic-shield"></use></svg></div><div><h5>Defense <span class="dd-tag">CMMC L2</span></h5><p>DoD contractors leaking CUI into proposal tools.</p></div></div>
+      <div class="dd-item" data-go="prod-legal"><div class="dd-ic"><svg><use href="#ic-briefcase"></use></svg></div><div><h5>Legal &amp; Finance <span class="dd-tag">PCI</span></h5><p>Privileged client data shared with AI assistants.</p></div></div>
+      <div class="dd-item" data-go="prod-global"><div class="dd-ic"><svg><use href="#ic-globe"></use></svg></div><div><h5>Five Eyes <span class="dd-tag">AUKUS</span></h5><p>Allied suppliers navigating DISP &amp; Essential 8.</p></div></div>
+      <div class="dd-item" data-go="prod-government"><div class="dd-ic"><svg><use href="#ic-landmark"></use></svg></div><div><h5>Government <span class="dd-soon">Soon</span></h5><p>FedRAMP / FISMA — agency AI governance.</p></div></div>
+     </div>
+     <div class="dd-foot"><span class="mono">SOC 2 · HIPAA · CMMC L2 · 16 engines · &lt;10ms</span><a data-go="features">All capabilities <svg style="width:13px;height:13px"><use href="#ic-arrow"></use></svg></a></div>
+    </div>
+   </div>
+   <!-- Features -->
+   <div class="nav-item">
+    <span class="nav-link" data-go="features">Features <svg class="chev"><use href="#ic-chev"></use></svg></span>
+    <div class="dropdown dd-narrow">
+     <div class="dd-head"><div class="eyebrow">Core Capabilities</div><p>Inside the HoundShield firewall engine</p></div>
+     <div class="dd-grid">
+      <div class="dd-item" data-go="features"><div class="dd-ic"><svg><use href="#ic-eye"></use></svg></div><div><h5>AI Prompt Interception</h5><p>Every LLM request inspected before it leaves the network.</p></div></div>
+      <div class="dd-item" data-go="features"><div class="dd-ic"><svg><use href="#ic-zap"></use></svg></div><div><h5>16 Detection Engines</h5><p>CUI, PII, IP, PHI, secrets, CAGE codes, clearances.</p></div></div>
+      <div class="dd-item" data-go="features"><div class="dd-ic"><svg><use href="#ic-file"></use></svg></div><div><h5>Immutable Audit Trail</h5><p>SHA-256 tamper-evident logs. C3PAO-ready.</p></div></div>
+      <div class="dd-item" data-go="app"><div class="dd-ic"><svg><use href="#ic-activity"></use></svg></div><div><h5>Live Threat Dashboard</h5><p>Real-time blocked prompts, risk &amp; posture.</p></div></div>
+     </div>
+    </div>
+   </div>
+   <!-- Pricing -->
+   <div class="nav-item">
+    <span class="nav-link" data-go="pricing">Pricing <svg class="chev"><use href="#ic-chev"></use></svg></span>
+    <div class="dropdown dd-narrow">
+     <div class="dd-head"><div class="eyebrow">Pricing</div><p>All frameworks included in every plan</p></div>
+     <div class="dd-price" data-go="pricing"><div><h5>Free</h5><p>Up to 1,000 prompts/mo</p></div><span class="amt">$0<small>/mo</small></span></div>
+     <div class="dd-price" data-go="pricing"><div><h5>Pro</h5><p>CMMC suite + AI gateway</p></div><span class="amt">$199<small>/mo</small></span></div>
+     <div class="dd-price" data-go="pricing"><div><h5>Growth</h5><p>PDF reports + C3PAO coord</p></div><span class="amt">$499<small>/mo</small></span></div>
+     <div class="dd-price" data-go="pricing"><div><h5>Enterprise</h5><p>On-prem · air-gapped</p></div><span class="amt">$999<small>/mo</small></span></div>
+     <div class="dd-foot"><a data-go="pricing">Compare all plans <svg style="width:13px;height:13px"><use href="#ic-arrow"></use></svg></a></div>
+    </div>
+   </div>
+   <!-- Partners -->
+   <div class="nav-item">
+    <span class="nav-link" data-go="partners">Partners <svg class="chev"><use href="#ic-chev"></use></svg></span>
+    <div class="dropdown dd-narrow">
+     <div class="dd-head"><div class="eyebrow">Partner Program</div><p>Build &amp; grow with HoundShield</p></div>
+     <div class="dd-grid">
+      <div class="dd-item" data-go="partners"><div class="dd-ic"><svg><use href="#ic-shield"></use></svg></div><div><h5>C3PAO Referral</h5><p>30% recurring. 80 authorized assessors.</p></div></div>
+      <div class="dd-item" data-go="partners"><div class="dd-ic"><svg><use href="#ic-users"></use></svg></div><div><h5>MSP / Agency</h5><p>20% revenue share · white-label option.</p></div></div>
+      <div class="dd-item" data-go="partners"><div class="dd-ic"><svg><use href="#ic-plug"></use></svg></div><div><h5>Integrations</h5><p>Drop-in proxy for ChatGPT, Copilot, Claude.</p></div></div>
+     </div>
+    </div>
+   </div>
+   <!-- Docs -->
+   <div class="nav-item">
+    <span class="nav-link" data-go="docs">Docs <svg class="chev"><use href="#ic-chev"></use></svg></span>
+    <div class="dropdown dd-narrow">
+     <div class="dd-head"><div class="eyebrow">Documentation</div><p>Live in under 5 minutes · no code changes</p></div>
+     <div class="dd-grid">
+      <div class="dd-item" data-go="docs"><div class="dd-ic"><svg><use href="#ic-zap"></use></svg></div><div><h5>Quickstart</h5><p>One URL change → full compliance.</p></div></div>
+      <div class="dd-item" data-go="docs"><div class="dd-ic"><svg><use href="#ic-terminal"></use></svg></div><div><h5>API Reference</h5><p>Gateway, classifier &amp; audit endpoints.</p></div></div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="nav-cta">
+   <div class="live-badge"><i class="live-dot"></i><span id="liveCount">14,372 intercepted</span></div>
+   <a class="btn btn-ghost btn-sm" data-go="app">Sign in</a>
+   <a class="btn btn-primary btn-sm" data-go="app">Start free <svg><use href="#ic-arrow"></use></svg></a>
+   <button class="btn btn-ghost btn-sm burger" id="burger"><svg style="width:18px;height:18px"><use href="#ic-menu"></use></svg></button>
+  </div>
+ </div>
+</nav>
+
+<!-- ============ HOME ============ -->
+<section class="view active" data-view="home">
+ <div class="hero">
+  <div class="container hero-grid">
+   <div>
+    <div class="pill"><i class="live-dot"></i> Local-only · CMMC Level 2 · HIPAA · SOC 2</div>
+    <h1 class="display">Stop your team from leaking <span class="accent">CUI to ChatGPT.</span></h1>
+    <p class="sub">HoundShield intercepts every AI prompt before it leaves your network. 16 detection engines. Sub-10ms latency. CMMC Level 2, HIPAA &amp; SOC 2 — enforced simultaneously, scanned <b>on your hardware</b>.</p>
+    <div class="hero-actions">
+     <a class="btn btn-primary" data-go="app">Start free — no card required <svg><use href="#ic-arrow"></use></svg></a>
+     <a class="btn btn-ghost" data-go="how">See how it works</a>
+    </div>
+    <div class="hero-trust">
+     <span><svg><use href="#ic-check"></use></svg> One URL change</span>
+     <span><svg><use href="#ic-check"></use></svg> Local-only</span>
+     <span><svg><use href="#ic-check"></use></svg> Free to start</span>
+     <span><svg><use href="#ic-check"></use></svg> C3PAO-ready</span>
+    </div>
+   </div>
+   <div class="term">
+    <div class="term-bar"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i><span class="u">proxy-config.env</span></div>
+    <div class="term-body">
+     <div class="cmt"># Before — sent straight to OpenAI</div>
+     <div><span class="var">OPENAI_BASE_URL</span>=https://api.openai.com/v1</div>
+     <div style="height:.6rem"></div>
+     <div class="cmt"># After — routed through HoundShield</div>
+     <div><span class="var">OPENAI_BASE_URL</span>=<span class="str">https://proxy.houndshield.com/v1</span></div>
+     <div style="height:.9rem"></div>
+     <div class="term-row"><span class="tag-block">● BLOCKED</span><span class="lat">CUI · CAGE 1ABC2 · 7ms</span></div>
+     <div class="term-row"><span class="tag-pass">● PASSED</span><span class="lat">clean · 11ms</span></div>
+     <div class="term-row"><span class="tag-block">● BLOCKED</span><span class="lat">PHI · MRN · 6ms</span></div>
+     <div class="term-row"><span class="tag-block">● BLOCKED</span><span class="lat">secret · sk-… · 5ms</span></div>
+     <div class="term-row"><span class="tag-pass">● PASSED</span><span class="lat">clean · 13ms</span></div>
+    </div>
+   </div>
+  </div>
+ </div>
+ <div class="container" style="padding-top:34px;padding-bottom:34px">
+  <div class="stat-row">
+   <div class="stat"><div class="n">16</div><div class="l">Detection engines</div><div class="s">CUI · PHI · PII · IP</div></div>
+   <div class="stat"><div class="n">~80,000</div><div class="l">Contractors at risk</div><div class="s">Need CMMC Level 2</div></div>
+   <div class="stat"><div class="n">110</div><div class="l">NIST 800-171 controls</div><div class="s">Mapped &amp; SPRS-scored</div></div>
+   <div class="stat"><div class="n">&lt;10ms</div><div class="l">Scan latency</div><div class="s">Median, fully local</div></div>
+  </div>
+ </div>
+
+ <div class="section tight">
+  <div class="container">
+   <div class="section-head"><div class="eyebrow">The asymmetric advantage</div><h2 class="display">Cloud DLP scans your CUI in their cloud. That's the spill.</h2><p>Every cloud-based AI DLP tool has to receive your data to inspect it. For a DoD contractor, that transmission is itself a DFARS 7012 CUI exposure. HoundShield is the only one that never sees your data.</p></div>
+   <div class="grid-3">
+    <div class="card"><div class="ic"><svg><use href="#ic-globe"></use></svg></div><h3>Nightfall &amp; Strac</h3><p>Cloud DLP. To scan a prompt they must transmit your CUI to their servers — the exact exposure CMMC L2 forbids. Architecturally disqualified for the DIB.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-briefcase"></use></svg></div><h3>Microsoft Purview</h3><p>M365-only. No API proxy. Your team's ChatGPT, Claude, Cursor and Copilot traffic outside Microsoft's walls goes completely unmonitored.</p></div>
+    <div class="card" style="border-color:var(--brand)"><div class="ic"><svg><use href="#ic-shield"></use></svg></div><h3>HoundShield</h3><p>Local-only. Detection runs on <b>your</b> hardware. Nothing reaches our servers — ever. The moat cloud vendors can't match without a full rebuild.</p></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="section tight" style="background:var(--page-2)">
+  <div class="container">
+   <div class="section-head"><div class="eyebrow">One platform</div><h2 class="display">Everything you need for CMMC Level 2</h2><p>Map, assess and close gaps across all 110 NIST 800-171 controls — with AI-driven remediation and C3PAO-ready evidence.</p></div>
+   <div class="grid-3">
+    <div class="card"><span class="chip">110 controls</span><div class="ic"><svg><use href="#ic-shield"></use></svg></div><h3>CMMC Self-Assessment</h3><p>Guided questionnaires across all 110 NIST SP 800-171 controls. Your SPRS score updates live as you complete each practice.</p></div>
+    <div class="card"><span class="chip">Prioritized</span><div class="ic"><svg><use href="#ic-brain"></use></svg></div><h3>AI-Powered Gap Analysis</h3><p>Brain AI flags unmet controls and generates a remediation roadmap ranked by risk severity and cost — on-device, your key.</p></div>
+    <div class="card"><span class="chip">1-click</span><div class="ic"><svg><use href="#ic-file"></use></svg></div><h3>SSP &amp; POA&amp;M Export</h3><p>Auto-generate your System Security Plan and Plan of Action &amp; Milestones as C3PAO-ready PDFs with SHA-256 signed evidence.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>AI Prompt Interception</h3><p>Every LLM request inspected before it leaves the perimeter. Works with ChatGPT, Copilot, Claude, Gemini — all at once.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-zap"></use></svg></div><h3>16 Detection Engines</h3><p>CUI, PII, IP, PHI, secrets, CAGE codes, contract numbers and clearance markers — flagged, blocked or quarantined.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-activity"></use></svg></div><h3>Live Threat Dashboard</h3><p>Real-time blocked prompts, risk scores and compliance posture for every employee, in one command center.</p></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="section tight"><div class="container"><div class="cta-band">
+  <h2 class="display">Ready to protect your CUI?</h2>
+  <p>No credit card required. Assess all 110 controls and see your SPRS score in under 30 minutes.</p>
+  <a class="btn btn-primary" data-go="app">Get started free <svg><use href="#ic-arrow"></use></svg></a>
+ </div></div></div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="view" data-view="how">
+ <div class="section">
+  <div class="container">
+   <div class="section-head"><div class="eyebrow">How it works</div><h2 class="display">Local-first compliance. Zero data exposure.</h2><p>HoundShield sits between your team and every AI provider. Everything is scanned on your hardware — not ours. That's the only way to guarantee your CUI never becomes a DFARS 7012 spill.</p></div>
+   <div class="steps">
+    <div class="step"><div class="num">01</div><div><h3>Change one URL</h3><p>Point any OpenAI-compatible client (ChatGPT, Copilot, Claude, Cursor) at your HoundShield proxy URL. No agents. No installs. Live in under five minutes.</p></div><div class="ic"><svg><use href="#ic-plug"></use></svg></div></div>
+    <div class="step"><div class="num">02</div><div><h3>Every prompt scanned locally</h3><p>HoundShield intercepts each request on your own hardware. Sixteen CUI/PII/PHI engines run in under 10ms before the prompt reaches any AI provider. Your data never touches our servers.</p></div><div class="ic"><svg><use href="#ic-shield"></use></svg></div></div>
+    <div class="step"><div class="num">03</div><div><h3>Block, quarantine or pass</h3><p>Clean prompts pass through untouched. Risky prompts are blocked or held for human-in-the-loop review — with the exact match (CAGE code, MRN, secret) highlighted.</p></div><div class="ic"><svg><use href="#ic-eye"></use></svg></div></div>
+    <div class="step"><div class="num">04</div><div><h3>Sign the evidence</h3><p>Every decision is written to a SHA-256 tamper-evident audit log. Export a C3PAO-ready PDF mapped to all 110 NIST 800-171 controls whenever your assessor asks.</p></div><div class="ic"><svg><use href="#ic-file"></use></svg></div></div>
+   </div>
+   <div style="text-align:center;margin-top:40px"><a class="btn btn-primary" data-go="app">Get started free <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+<!-- ============ FEATURES ============ -->
+<section class="view" data-view="features">
+ <div class="section">
+  <div class="container">
+   <div class="section-head"><div class="eyebrow">Capabilities</div><h2 class="display">Everything inside the firewall engine</h2><p>Sixteen detection engines, 110 mapped controls and tamper-evident evidence — all running on your hardware in under 10ms.</p></div>
+
+   <div class="grid-3" style="margin-bottom:22px">
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>AI Prompt Interception</h3><p>An OpenAI-compatible proxy in front of every model. Inspects each request before a single byte leaves your perimeter.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-clock"></use></svg></div><h3>&lt;10ms Latency</h3><p>Median scan time is sub-10ms. Transparent to every employee — they never know it's there until it stops a spill.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-file"></use></svg></div><h3>Immutable Audit Trail</h3><p>Every decision is hashed into a SHA-256 tamper-evident log. Export as C3PAO-ready evidence on demand.</p></div>
+   </div>
+
+   <div class="panel" style="margin-bottom:40px">
+    <div class="panel-h"><h3>The 16 detection engines</h3><span class="mono">CUI · PII · IP · PHI</span></div>
+    <div style="padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+     <div class="gateway-box" style="border-style:solid">CUI markings</div>
+     <div class="gateway-box" style="border-style:solid">CAGE codes</div>
+     <div class="gateway-box" style="border-style:solid">Contract / DoDAAC #</div>
+     <div class="gateway-box" style="border-style:solid">Clearance levels</div>
+     <div class="gateway-box" style="border-style:solid">ITAR / EAR terms</div>
+     <div class="gateway-box" style="border-style:solid">Export-control</div>
+     <div class="gateway-box" style="border-style:solid">SSN / PII</div>
+     <div class="gateway-box" style="border-style:solid">PHI · MRN</div>
+     <div class="gateway-box" style="border-style:solid">ICD / diagnosis</div>
+     <div class="gateway-box" style="border-style:solid">API keys / secrets</div>
+     <div class="gateway-box" style="border-style:solid">AWS / cloud keys</div>
+     <div class="gateway-box" style="border-style:solid">JWT / tokens</div>
+     <div class="gateway-box" style="border-style:solid">PCI / card data</div>
+     <div class="gateway-box" style="border-style:solid">Source code</div>
+     <div class="gateway-box" style="border-style:solid">Trade-secret IP</div>
+     <div class="gateway-box" style="border-style:solid">IP / network data</div>
+    </div>
+   </div>
+
+   <div class="grid-3">
+    <div class="card"><span class="chip">110 controls</span><div class="ic"><svg><use href="#ic-shield"></use></svg></div><h3>CMMC Self-Assessment</h3><p>Walk all 110 NIST 800-171 practices with guided questions. Live SPRS scoring.</p></div>
+    <div class="card"><span class="chip">AI</span><div class="ic"><svg><use href="#ic-brain"></use></svg></div><h3>Gap Analysis</h3><p>Brain AI ranks unmet controls by risk and cost and drafts your remediation roadmap.</p></div>
+    <div class="card"><span class="chip">Export</span><div class="ic"><svg><use href="#ic-file"></use></svg></div><h3>SSP &amp; POA&amp;M</h3><p>Auto-generate the documents your C3PAO asks for, signed and timestamped.</p></div>
+   </div>
+   <div style="text-align:center;margin-top:40px"><a class="btn btn-primary" data-go="pricing">See pricing <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="view" data-view="pricing">
+ <div class="section">
+  <div class="container">
+   <div class="section-head"><div class="eyebrow">Pricing</div><h2 class="display">Simple, transparent pricing</h2><p>Every framework — CMMC, HIPAA, SOC 2 — included in every paid plan. Start free, scale when you're ready.</p></div>
+   <div style="text-align:center"><div class="bill-toggle"><button id="billM" class="on">Monthly</button><button id="billA">Annual <span class="save">save 20%</span></button></div></div>
+
+   <div class="pricing-grid">
+    <div class="price-card">
+     <div class="tier">Free</div><div class="who">Self-assessment for a single team</div>
+     <div class="price" data-m="$0" data-a="$0">$0<small>/mo</small></div><div class="annual" data-m="No card required" data-a="No card required">No card required</div>
+     <a class="btn btn-ghost" data-go="app">Start free</a>
+     <ul class="feat">
+      <li><svg><use href="#ic-check"></use></svg> CMMC assessment (read-only)</li>
+      <li><svg><use href="#ic-check"></use></svg> 110-control gap analysis</li>
+      <li><svg><use href="#ic-check"></use></svg> Live SPRS calculator</li>
+      <li><svg><use href="#ic-check"></use></svg> Up to 1,000 prompts/mo</li>
+      <li><svg><use href="#ic-check"></use></svg> Community support</li>
+     </ul>
+    </div>
+    <div class="price-card featured">
+     <div class="tier">Pro</div><div class="who">AI gateway + full CMMC suite for defense contractors</div>
+     <div class="price" data-m="$199" data-a="$159">$199<small>/mo</small></div><div class="annual" data-m="billed monthly" data-a="$1,910 billed annually">billed monthly</div>
+     <a class="btn btn-primary" data-go="app">Start 7-day trial</a>
+     <ul class="feat">
+      <li><svg><use href="#ic-check"></use></svg> AI gateway — 50,000 scans/mo</li>
+      <li><svg><use href="#ic-check"></use></svg> Editable assessment + roadmap</li>
+      <li><svg><use href="#ic-check"></use></svg> SSP &amp; POA&amp;M generation</li>
+      <li><svg><use href="#ic-check"></use></svg> JSON compliance reports</li>
+      <li><svg><use href="#ic-check"></use></svg> 10 seats · email &amp; Slack alerts</li>
+     </ul>
+    </div>
+    <div class="price-card">
+     <div class="tier">Growth</div><div class="who">PDF reports + C3PAO coordination for growing primes</div>
+     <div class="price" data-m="$499" data-a="$399">$499<small>/mo</small></div><div class="annual" data-m="billed monthly" data-a="$4,790 billed annually">billed monthly</div>
+     <a class="btn btn-ghost" data-go="app">Start 7-day trial</a>
+     <ul class="feat">
+      <li><svg><use href="#ic-check"></use></svg> Everything in Pro</li>
+      <li><svg><use href="#ic-check"></use></svg> Unlimited scans · 25 seats</li>
+      <li><svg><use href="#ic-check"></use></svg> PDF compliance reports</li>
+      <li><svg><use href="#ic-check"></use></svg> C3PAO assessment coordination</li>
+      <li><svg><use href="#ic-check"></use></svg> Audit-trail export · SSO &amp; RBAC</li>
+     </ul>
+    </div>
+    <div class="price-card">
+     <div class="tier">Enterprise</div><div class="who">On-prem &amp; air-gapped for large primes</div>
+     <div class="price" data-m="$999" data-a="$799">$999<small>/mo</small></div><div class="annual" data-m="billed monthly" data-a="$9,590 billed annually">billed monthly</div>
+     <a class="btn btn-ghost" data-go="pricing">Contact sales</a>
+     <ul class="feat">
+      <li><svg><use href="#ic-check"></use></svg> Everything in Growth</li>
+      <li><svg><use href="#ic-check"></use></svg> On-prem / air-gapped deploy</li>
+      <li><svg><use href="#ic-check"></use></svg> Unlimited seats · white-label PDF</li>
+      <li><svg><use href="#ic-check"></use></svg> HITL quarantine review</li>
+      <li><svg><use href="#ic-check"></use></svg> Custom SLA 99.99% · CSM</li>
+     </ul>
+    </div>
+   </div>
+   <p class="center muted" style="margin-top:18px;font-size:.86rem">Managing multiple contractors? The <b>Agency</b> plan ($2,499/mo) adds a multi-tenant dashboard, unlimited client accounts and a 30% partner revenue share. <a data-go="partners" style="color:var(--brand);font-weight:600;cursor:pointer">See partner program →</a></p>
+
+   <div class="compare">
+    <table>
+     <thead><tr><th>Compliance</th><th>Free</th><th>Pro</th><th>Growth</th><th>Enterprise</th></tr></thead>
+     <tbody>
+      <tr><td>CMMC self-assessment</td><td>Read-only</td><td><svg><use href="#ic-check"></use></svg></td><td><svg><use href="#ic-check"></use></svg></td><td><svg><use href="#ic-check"></use></svg></td></tr>
+      <tr><td>SPRS score calculator</td><td><svg><use href="#ic-check"></use></svg></td><td><svg><use href="#ic-check"></use></svg></td><td><svg><use href="#ic-check"></use></svg></td><td><svg><use href="#ic-check"></use></svg></td></tr>
+      <tr><td>AI gateway scans</td><td class="dash">—</td><td>50k/mo</td><td>Unlimited</td><td>Unlimited</td></tr>
+      <tr><td>PDF compliance reports</td><td class="dash">—</td><td class="dash">—</td><td><svg><use href="#ic-check"></use></svg></td><td>White-label</td></tr>
+      <tr><td>C3PAO coordination</td><td class="dash">—</td><td class="dash">—</td><td><svg><use href="#ic-check"></use></svg></td><td><svg><use href="#ic-check"></use></svg></td></tr>
+      <tr><td>On-prem / air-gapped</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td><svg><use href="#ic-check"></use></svg></td></tr>
+      <tr><td>Team seats</td><td>1</td><td>10</td><td>25</td><td>Unlimited</td></tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+ </div>
+</section>
+<!-- ============ DOCS ============ -->
+<section class="view" data-view="docs">
+ <div class="section">
+  <div class="container docs-wrap">
+   <aside class="docs-side">
+    <div class="gh">Guide</div>
+    <a class="on">Quickstart</a><a>What gets detected</a>
+    <div class="gh">Endpoints</div>
+    <a>Gateway Intercept</a><a>Scan Text</a><a>Compliance Events</a><a>Quarantine Review</a><a>Generate Reports</a><a>Health Check</a>
+    <div class="gh">SDK examples</div>
+    <a>JavaScript</a><a>Python</a><a>cURL</a>
+   </aside>
+   <div>
+    <div class="eyebrow" style="color:var(--ok)">⚡ Quickstart</div>
+    <h2 class="display" style="margin:.4rem 0 1rem">CMMC gateway in 60 seconds</h2>
+    <p class="muted" style="max-width:640px">HoundShield is an OpenAI-compatible proxy. Every AI query from your team passes through it first. CUI, CAGE codes, contract numbers and clearance data are detected and blocked before they reach any provider.</p>
+    <div class="steps" style="margin:24px 0">
+     <div class="step"><div class="num">1</div><div><h3>Get your API key</h3><p>Sign up and copy your key from Dashboard → Settings → API Keys.</p></div></div>
+     <div class="step"><div class="num">2</div><div><h3>Point your SDK at HoundShield</h3><p>Replace the baseURL in any OpenAI-compatible client. Zero behavior change for your team.</p></div></div>
+     <div class="step"><div class="num">3</div><div><h3>Every query is now CMMC-monitored</h3><p>CUI, CAGE codes and clearance data are flagged before leaving your perimeter.</p></div></div>
+    </div>
+    <div class="mono" style="font-size:.72rem;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase">Your gateway URL</div>
+    <div class="gateway-box" style="margin:.5rem 0 1.2rem"><span>https://proxy.houndshield.com/v1</span><button onclick="this.textContent=&#39;Copied&#39;">Copy</button></div>
+    <div class="code">
+     <div class="code-top"><span>JavaScript · OpenAI SDK</span><span>copy</span></div>
+     <pre><span class="k">import</span> OpenAI <span class="k">from</span> <span class="s">"openai"</span>;
+
+<span class="c">// Drop-in replacement — just change baseURL</span>
+<span class="k">const</span> client = <span class="k">new</span> OpenAI({
+  baseURL: <span class="s">"https://proxy.houndshield.com/v1"</span>,
+  apiKey: process.env.OPENAI_API_KEY,
+  defaultHeaders: { <span class="s">"X-HoundShield-Org"</span>: <span class="s">"acme-defense"</span> },
+});
+
+<span class="c">// Your existing code works unchanged</span>
+<span class="k">const</span> res = <span class="k">await</span> client.chat.completions.create({
+  model: <span class="s">"gpt-4o"</span>,
+  messages: [{ role: <span class="s">"user"</span>, content: <span class="s">"Summarize our CAGE 1ABC2 contract"</span> }],
+});
+<span class="c">// ↑ HoundShield detects the CAGE code and blocks it locally</span>
+<span class="c">//   before the request ever reaches OpenAI.</span></pre>
+    </div>
+    <div class="callout"><svg style="width:18px;height:18px;color:var(--ok);flex-shrink:0"><use href="#ic-check"></use></svg><div><b>No infrastructure change required.</b> Your employees keep using ChatGPT, Copilot or Claude — HoundShield sits in the middle, transparently, on your hardware.</div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PARTNERS ============ -->
+<section class="view" data-view="partners">
+ <div class="section">
+  <div class="container">
+   <div class="section-head"><div class="eyebrow">Partner program</div><h2 class="display">Build &amp; grow with HoundShield</h2><p>The fastest path to CMMC compliance for 80,000 contractors runs through the people they already trust — their assessors and MSPs.</p></div>
+
+   <div class="card" style="border-color:var(--brand);margin-bottom:22px;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center">
+    <div class="ic" style="margin:0;width:54px;height:54px"><svg style="width:26px;height:26px"><use href="#ic-shield"></use></svg></div>
+    <div><span class="chip" style="position:static;display:inline-block;margin-bottom:.4rem">Highest leverage</span><h3 style="font-size:1.3rem">C3PAO Referral Partner — 30% recurring</h3><p>80 authorized C3PAOs each serve dozens of clients who all need this. One partner is worth fifty cold emails. Co-branded compliance reports, margin-first pricing, dedicated enablement.</p></div>
+    <a class="btn btn-primary" data-go="pricing">Become a partner <svg><use href="#ic-arrow"></use></svg></a>
+   </div>
+
+   <div class="grid-3">
+    <div class="card"><div class="ic"><svg><use href="#ic-users"></use></svg></div><h3>MSP / Agency</h3><p>20% revenue share · white-label option · $599/mo base. Manage every client's CMMC posture from one multi-tenant dashboard.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-plug"></use></svg></div><h3>Integrations</h3><p>Drop-in proxy for ChatGPT, Copilot, Claude, Gemini and Llama. Ship a compliant AI gateway inside your own product.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-dollar"></use></svg></div><h3>Reseller</h3><p>Margin-first pricing and co-branded C3PAO-ready reports. Sell HoundShield as part of your compliance practice.</p></div>
+   </div>
+   <div style="text-align:center;margin-top:40px"><a class="btn btn-primary" data-go="pricing">Apply to partner program <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+<!-- ============ PRODUCT · TECHNOLOGY ============ -->
+<section class="view" data-view="prod-technology">
+ <div class="section">
+  <div class="container">
+   <div class="prod-head"><div class="ic" style="margin:0"><svg><use href="#ic-lock"></use></svg></div><div class="eyebrow">Technology · SOC 2 · AI Governance</div></div>
+   <h1 class="display prod-h1">Your engineers paste secrets into Copilot. HoundShield catches them.</h1>
+   <p class="prod-sub">Every developer using ChatGPT, Copilot or Cursor is one paste away from leaking an API key, a credential, or proprietary source. HoundShield inspects each prompt on your hardware and blocks the leak before it reaches the model — no behavior change for your team.</p>
+   <div class="hero-actions"><a class="btn btn-primary" data-go="app">Start free <svg><use href="#ic-arrow"></use></svg></a><a class="btn btn-ghost" data-go="pricing">See pricing</a></div>
+   <div class="grid-3" style="margin-top:48px">
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>What it is</h3><p>An OpenAI-compatible proxy that sits in front of every AI tool your engineers use and scans prompts for secrets and source before they leave the network.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-users"></use></svg></div><h3>Who it's for</h3><p>CTOs, platform &amp; security engineers, and anyone preparing for SOC 2 who can't see what their team is pasting into AI.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-zap"></use></svg></div><h3>How you use it</h3><p>Change one base URL in your AI SDK or IDE. Secrets are blocked in &lt;10ms, logged as SOC 2 evidence, and your devs never notice.</p></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 24px"><h2 class="display">What it detects for you</h2></div>
+   <div class="chip-grid">
+    <div class="gateway-box" style="border-style:solid">API keys &amp; tokens</div><div class="gateway-box" style="border-style:solid">AWS / cloud keys</div><div class="gateway-box" style="border-style:solid">JWT / OAuth secrets</div><div class="gateway-box" style="border-style:solid">Source code</div>
+    <div class="gateway-box" style="border-style:solid">Internal hostnames</div><div class="gateway-box" style="border-style:solid">Customer PII</div><div class="gateway-box" style="border-style:solid">DB connection strings</div><div class="gateway-box" style="border-style:solid">Private IP ranges</div>
+   </div>
+   <div class="steps" style="margin-top:48px">
+    <div class="step"><div class="num">01</div><div><h3>Point your tools at HoundShield</h3><p>Set the base URL in Copilot, Cursor or your OpenAI SDK. No installs, no agents.</p></div><div class="ic"><svg><use href="#ic-plug"></use></svg></div></div>
+    <div class="step"><div class="num">02</div><div><h3>Secrets get blocked locally</h3><p>A pasted key or proprietary file is caught on your hardware and never reaches the provider.</p></div><div class="ic"><svg><use href="#ic-shield"></use></svg></div></div>
+    <div class="step"><div class="num">03</div><div><h3>SOC 2 evidence writes itself</h3><p>Every decision lands in a SHA-256 audit log your auditor can export.</p></div><div class="ic"><svg><use href="#ic-file"></use></svg></div></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 22px"><h2 class="display">How HoundShield supports SOC 2</h2></div>
+   <div class="panel">
+    <div class="ctrl-row"><span><b>CC6.1 — Logical access</b><br><span class="map-sub">API keys and credentials blocked before they leave the network</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>CC6.7 — Data in transit</b><br><span class="map-sub">Every AI prompt inspected at the egress boundary</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>CC7.2 — System monitoring</b><br><span class="map-sub">SHA-256 tamper-evident log of every request</span></span><span class="st met">Logged</span></div>
+    <div class="ctrl-row"><span><b>CC7.3 — Incident detection</b><br><span class="map-sub">Real-time alerts on blocked prompts</span></span><span class="st met">Alerted</span></div>
+   </div>
+   <div class="section-head" style="margin:48px auto 20px"><h2 class="display">Common questions</h2></div>
+   <div class="grid-2">
+    <div class="card"><h3 class="faq-q">Does it slow my engineers down?</h3><p>No. Median scan time is under 10ms and it's a drop-in base-URL change — your team won't notice it until it stops a leak.</p></div>
+    <div class="card"><h3 class="faq-q">Can HoundShield see our source code?</h3><p>No. Detection runs entirely on your hardware. Prompts, keys and code are never sent to HoundShield servers.</p></div>
+   </div>
+   <div class="cta-band" style="margin-top:48px"><h2 class="display">The average data breach costs $4.45M</h2><p>That figure is from IBM's 2023 Cost of a Data Breach report. HoundShield costs less than one engineer-hour a month. Start free, no card.</p><a class="btn btn-primary" data-go="app">Protect your team <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PRODUCT · HEALTHCARE ============ -->
+<section class="view" data-view="prod-healthcare">
+ <div class="section">
+  <div class="container">
+   <div class="prod-head"><div class="ic" style="margin:0"><svg><use href="#ic-heart"></use></svg></div><div class="eyebrow">Healthcare · HIPAA · 45 CFR Part 164</div></div>
+   <h1 class="display prod-h1">Clinicians paste PHI into AI every day. Make it a non-event.</h1>
+   <p class="prod-sub">Documentation, billing and summarization tools are too useful to ban — but every patient record pasted into them is a HIPAA disclosure. HoundShield detects PHI on your hardware and blocks or quarantines it before it reaches any model, satisfying minimum-necessary and audit requirements.</p>
+   <div class="hero-actions"><a class="btn btn-primary" data-go="app">Start free <svg><use href="#ic-arrow"></use></svg></a><a class="btn btn-ghost" data-go="pricing">See pricing</a></div>
+   <div class="grid-3" style="margin-top:48px">
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>What it is</h3><p>A local proxy that scans every AI prompt for protected health information before it leaves your facility's network.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-users"></use></svg></div><h3>Who it's for</h3><p>CISOs, compliance officers and privacy leads at hospitals, clinics, payers and digital-health companies.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-zap"></use></svg></div><h3>How you use it</h3><p>Route your documentation AI through HoundShield. PHI is held for human review or stripped — clinicians keep working.</p></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 24px"><h2 class="display">What it detects for you</h2></div>
+   <div class="chip-grid">
+    <div class="gateway-box" style="border-style:solid">MRN / patient ID</div><div class="gateway-box" style="border-style:solid">ICD / diagnosis codes</div><div class="gateway-box" style="border-style:solid">Patient names + DOB</div><div class="gateway-box" style="border-style:solid">SSN</div>
+    <div class="gateway-box" style="border-style:solid">Insurance / member IDs</div><div class="gateway-box" style="border-style:solid">Lab &amp; imaging results</div><div class="gateway-box" style="border-style:solid">Prescriptions</div><div class="gateway-box" style="border-style:solid">Provider NPI</div>
+   </div>
+   <div class="steps" style="margin-top:48px">
+    <div class="step"><div class="num">01</div><div><h3>Route documentation AI through HoundShield</h3><p>One URL change for your scribe, coding or summarization tool.</p></div><div class="ic"><svg><use href="#ic-plug"></use></svg></div></div>
+    <div class="step"><div class="num">02</div><div><h3>PHI is blocked or quarantined</h3><p>The exact identifier is flagged on-device; nothing reaches the model unreviewed.</p></div><div class="ic"><svg><use href="#ic-shield"></use></svg></div></div>
+    <div class="step"><div class="num">03</div><div><h3>Audit-ready for OCR</h3><p>Tamper-evident logs map to 45 CFR 164 access &amp; disclosure requirements.</p></div><div class="ic"><svg><use href="#ic-file"></use></svg></div></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 22px"><h2 class="display">How HoundShield supports HIPAA (45 CFR 164)</h2></div>
+   <div class="panel">
+    <div class="ctrl-row"><span><b>164.312(a)(1) — Access control</b><br><span class="map-sub">PHI blocked before it can be disclosed to a model</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>164.312(b) — Audit controls</b><br><span class="map-sub">Tamper-evident log of every prompt decision</span></span><span class="st met">Logged</span></div>
+    <div class="ctrl-row"><span><b>164.502(b) — Minimum necessary</b><br><span class="map-sub">PHI stripped or held for review before the model sees it</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>164.308(a)(6) — Incident response</b><br><span class="map-sub">Real-time alerts when PHI is caught in a prompt</span></span><span class="st met">Alerted</span></div>
+   </div>
+   <div class="section-head" style="margin:48px auto 20px"><h2 class="display">Common questions</h2></div>
+   <div class="grid-2">
+    <div class="card"><h3 class="faq-q">Do you receive our PHI? Is a BAA needed?</h3><p>Detection runs on your hardware and we never receive PHI, so HoundShield isn't a typical cloud BAA exposure — and we still sign a BAA on paid plans.</p></div>
+    <div class="card"><h3 class="faq-q">Will it block clinicians from working?</h3><p>No. Clean prompts pass through; only PHI is held for review or stripped, so documentation keeps flowing.</p></div>
+   </div>
+   <div class="cta-band" style="margin-top:48px"><h2 class="display">HIPAA settlements have reached $16M</h2><p>HHS OCR penalties run from tens of thousands into eight figures (Anthem settled for $16M). Let your team use AI without becoming the next enforcement headline.</p><a class="btn btn-primary" data-go="app">Protect PHI <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PRODUCT · DEFENSE ============ -->
+<section class="view" data-view="prod-defense">
+ <div class="section">
+  <div class="container">
+   <div class="prod-head"><div class="ic" style="margin:0"><svg><use href="#ic-shield"></use></svg></div><div class="eyebrow">Defense · CMMC Level 2 · NIST 800-171</div></div>
+   <h1 class="display prod-h1">Leak CUI into ChatGPT and you've failed your C3PAO assessment.</h1>
+   <p class="prod-sub">Roughly 80,000 DoD contractors must reach CMMC Level 2 to keep their contracts, and AI prompt leakage is the #1 unaddressed gap in the defense industrial base. HoundShield blocks CUI, CAGE codes and contract data locally — the only architecture that doesn't itself create a DFARS 7012 spill — and generates the SSP, POA&amp;M and SPRS evidence your assessor needs.</p>
+   <div class="hero-actions"><a class="btn btn-primary" data-go="app">Start free <svg><use href="#ic-arrow"></use></svg></a><a class="btn btn-ghost" data-go="how">How it works</a></div>
+   <div class="grid-3" style="margin-top:48px">
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>What it is</h3><p>A local-only AI firewall plus a full CMMC suite: 110-control assessment, live SPRS scoring and C3PAO-ready document export.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-users"></use></svg></div><h3>Who it's for</h3><p>ISSOs and IT security managers at 50–500 person defense contractors preparing for a C3PAO assessment.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-zap"></use></svg></div><h3>How you use it</h3><p>One URL change routes your team's AI through the gateway; the dashboard tracks your SPRS score and open controls in real time.</p></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 24px"><h2 class="display">What it detects for you</h2></div>
+   <div class="chip-grid">
+    <div class="gateway-box" style="border-style:solid">CUI markings</div><div class="gateway-box" style="border-style:solid">CAGE codes</div><div class="gateway-box" style="border-style:solid">Contract / DoDAAC #</div><div class="gateway-box" style="border-style:solid">Clearance levels</div>
+    <div class="gateway-box" style="border-style:solid">ITAR / EAR terms</div><div class="gateway-box" style="border-style:solid">Export-control data</div><div class="gateway-box" style="border-style:solid">Personnel PII</div><div class="gateway-box" style="border-style:solid">Technical drawings</div>
+   </div>
+   <div class="steps" style="margin-top:48px">
+    <div class="step"><div class="num">01</div><div><h3>Change one URL</h3><p>Point ChatGPT, Copilot or Claude at your HoundShield proxy. Live in 10 minutes.</p></div><div class="ic"><svg><use href="#ic-plug"></use></svg></div></div>
+    <div class="step"><div class="num">02</div><div><h3>CUI is blocked locally</h3><p>Nothing leaves your network — so HoundShield itself can never cause a DFARS 7012 spill.</p></div><div class="ic"><svg><use href="#ic-shield"></use></svg></div></div>
+    <div class="step"><div class="num">03</div><div><h3>Export C3PAO evidence</h3><p>Generate your SSP, POA&amp;M and SPRS attestation as SHA-256 signed PDFs on demand.</p></div><div class="ic"><svg><use href="#ic-file"></use></svg></div></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 22px"><h2 class="display">How HoundShield supports CMMC L2 / NIST 800-171</h2></div>
+   <div class="panel">
+    <div class="ctrl-row"><span><b>3.1 — Access Control</b><br><span class="map-sub">CUI blocked at the AI egress point</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>3.3 — Audit &amp; Accountability</b><br><span class="map-sub">SHA-256 signed log of every prompt</span></span><span class="st met">Logged</span></div>
+    <div class="ctrl-row"><span><b>3.13 — System &amp; Comms Protection</b><br><span class="map-sub">Prompt content never leaves your boundary</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>3.14 — System &amp; Info Integrity</b><br><span class="map-sub">Real-time CUI-leak detection &amp; quarantine</span></span><span class="st met">Alerted</span></div>
+   </div>
+   <div class="section-head" style="margin:48px auto 20px"><h2 class="display">Common questions</h2></div>
+   <div class="grid-2">
+    <div class="card"><h3 class="faq-q">Does HoundShield itself cause a DFARS 7012 spill?</h3><p>No — and that's the entire point. Detection is local; CUI never transits to us. Cloud DLP tools that scan in their own cloud can't make that claim.</p></div>
+    <div class="card"><h3 class="faq-q">Does it generate C3PAO evidence?</h3><p>Yes. Your SSP, POA&amp;M and SPRS attestation export as SHA-256-signed PDFs, mapped to all 110 controls.</p></div>
+   </div>
+   <div class="cta-band" style="margin-top:48px"><h2 class="display">A C3PAO assessment is estimated at $31k–$150k</h2><p>Industry estimates put a Level 2 assessment in the tens to low hundreds of thousands. Don't fail it on an AI leak. One URL change. 10 minutes. C3PAO-ready.</p><a class="btn btn-primary" data-go="app">Protect your CUI <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PRODUCT · LEGAL & FINANCE ============ -->
+<section class="view" data-view="prod-legal">
+ <div class="section">
+  <div class="container">
+   <div class="prod-head"><div class="ic" style="margin:0"><svg><use href="#ic-briefcase"></use></svg></div><div class="eyebrow">Legal &amp; Finance · SOC 2 · PCI DSS</div></div>
+   <h1 class="display prod-h1">Privileged and cardholder data shouldn't train someone else's model.</h1>
+   <p class="prod-sub">Lawyers and analysts paste privileged matters, deal terms and account data into AI to move faster. HoundShield scans every prompt locally and blocks privileged, PII and PCI data before it leaves — protecting attorney-client privilege and your PCI scope at the same time.</p>
+   <div class="hero-actions"><a class="btn btn-primary" data-go="app">Start free <svg><use href="#ic-arrow"></use></svg></a><a class="btn btn-ghost" data-go="pricing">See pricing</a></div>
+   <div class="grid-3" style="margin-top:48px">
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>What it is</h3><p>A local AI gateway that keeps privileged and regulated financial data out of public models.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-users"></use></svg></div><h3>Who it's for</h3><p>GCs, compliance and infosec leads at law firms, banks, funds and fintechs.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-zap"></use></svg></div><h3>How you use it</h3><p>Route your AI tools through HoundShield; privileged and PCI content is blocked and logged for audit.</p></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 24px"><h2 class="display">What it detects for you</h2></div>
+   <div class="chip-grid">
+    <div class="gateway-box" style="border-style:solid">Privilege markings</div><div class="gateway-box" style="border-style:solid">Matter / case numbers</div><div class="gateway-box" style="border-style:solid">PCI card data</div><div class="gateway-box" style="border-style:solid">Bank account #</div>
+    <div class="gateway-box" style="border-style:solid">SSN / TIN</div><div class="gateway-box" style="border-style:solid">MNPI / deal terms</div><div class="gateway-box" style="border-style:solid">Client PII</div><div class="gateway-box" style="border-style:solid">Routing numbers</div>
+   </div>
+   <div class="steps" style="margin-top:48px">
+    <div class="step"><div class="num">01</div><div><h3>Route your AI through the gateway</h3><p>One URL change for your research and drafting tools.</p></div><div class="ic"><svg><use href="#ic-plug"></use></svg></div></div>
+    <div class="step"><div class="num">02</div><div><h3>Privileged &amp; PCI data blocked</h3><p>Caught locally, so privilege is preserved and your PCI scope stays small.</p></div><div class="ic"><svg><use href="#ic-shield"></use></svg></div></div>
+    <div class="step"><div class="num">03</div><div><h3>Defensible audit trail</h3><p>Signed logs for SOC 2, PCI DSS and bar-association reviews.</p></div><div class="ic"><svg><use href="#ic-file"></use></svg></div></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 22px"><h2 class="display">How HoundShield supports PCI DSS &amp; privilege</h2></div>
+   <div class="panel">
+    <div class="ctrl-row"><span><b>PCI DSS Req. 3 — Protect stored data</b><br><span class="map-sub">Cardholder data blocked before it reaches a model</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>PCI DSS Req. 4 — Protect transmission</b><br><span class="map-sub">AI egress inspected on-device</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>Attorney-client privilege</b><br><span class="map-sub">Privileged markings detected and held locally</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>SOC 2 CC7 — Monitoring</b><br><span class="map-sub">Full audit trail for review</span></span><span class="st met">Logged</span></div>
+   </div>
+   <div class="section-head" style="margin:48px auto 20px"><h2 class="display">Common questions</h2></div>
+   <div class="grid-2">
+    <div class="card"><h3 class="faq-q">Does this shrink our PCI scope?</h3><p>It stops cardholder data reaching external models, reducing your AI tools' exposure. It's a strong control, not a scope guarantee — confirm treatment with your QSA.</p></div>
+    <div class="card"><h3 class="faq-q">How does it protect privilege?</h3><p>Privileged content is caught locally and never disclosed to a third-party model, avoiding an inadvertent waiver.</p></div>
+   </div>
+   <div class="cta-band" style="margin-top:48px"><h2 class="display">One privileged leak can sink a case</h2><p>Give your team AI speed without the malpractice or PCI risk. Start free, no card.</p><a class="btn btn-primary" data-go="app">Protect privilege <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PRODUCT · FIVE EYES / GLOBAL ============ -->
+<section class="view" data-view="prod-global">
+ <div class="section">
+  <div class="container">
+   <div class="prod-head"><div class="ic" style="margin:0"><svg><use href="#ic-globe"></use></svg></div><div class="eyebrow">Five Eyes / Global · DISP · ASD Essential Eight</div></div>
+   <h1 class="display prod-h1">Allied data should never leave allied soil. Keep it local.</h1>
+   <p class="prod-sub">International defence and government suppliers navigating AUKUS, DISP and allied frameworks can't route classified-adjacent data through a US cloud. HoundShield runs entirely on your own infrastructure, in your own country, so caveated and export-controlled data is detected and contained on-prem.</p>
+   <div class="hero-actions"><a class="btn btn-primary" data-go="app">Start free <svg><use href="#ic-arrow"></use></svg></a><a class="btn btn-ghost" data-go="partners">Talk to us</a></div>
+   <div class="grid-3" style="margin-top:48px">
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>What it is</h3><p>A sovereign, local-only AI firewall you host yourself — no data crosses a border or hits a vendor cloud.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-users"></use></svg></div><h3>Who it's for</h3><p>Defence primes and suppliers across AU, UK, CA and NZ working to DISP and Essential Eight.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-zap"></use></svg></div><h3>How you use it</h3><p>Deploy on-prem or air-gapped; caveated markings and export-control terms are caught before AI use.</p></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 24px"><h2 class="display">What it detects for you</h2></div>
+   <div class="chip-grid">
+    <div class="gateway-box" style="border-style:solid">AUSTEO / REL caveats</div><div class="gateway-box" style="border-style:solid">Protective markings</div><div class="gateway-box" style="border-style:solid">ITAR / export-control</div><div class="gateway-box" style="border-style:solid">National security data</div>
+    <div class="gateway-box" style="border-style:solid">Personnel PII</div><div class="gateway-box" style="border-style:solid">Programme codewords</div><div class="gateway-box" style="border-style:solid">Technical data</div><div class="gateway-box" style="border-style:solid">Supplier IP</div>
+   </div>
+   <div class="section-head" style="margin:56px auto 22px"><h2 class="display">How HoundShield supports allied frameworks</h2></div>
+   <div class="panel">
+    <div class="ctrl-row"><span><b>DISP — Data security</b><br><span class="map-sub">Data stays on your sovereign infrastructure</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>ASD Essential Eight</b><br><span class="map-sub">Egress control on every AI interaction</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>Export control (ITAR / EAR)</b><br><span class="map-sub">Controlled terms &amp; caveats detected pre-model</span></span><span class="st met">Enforced</span></div>
+    <div class="ctrl-row"><span><b>Accreditation audit</b><br><span class="map-sub">Signed logs for your authority to operate</span></span><span class="st met">Logged</span></div>
+   </div>
+   <div class="section-head" style="margin:48px auto 20px"><h2 class="display">Common questions</h2></div>
+   <div class="grid-2">
+    <div class="card"><h3 class="faq-q">Where does our data physically go?</h3><p>Nowhere outside your environment. Deploy on-prem or air-gapped; HoundShield never phones home — to us or anyone.</p></div>
+    <div class="card"><h3 class="faq-q">Does it work offline / air-gapped?</h3><p>Yes. Detection is fully local; only the AI provider you choose needs outbound connectivity.</p></div>
+   </div>
+   <div class="cta-band" style="margin-top:48px"><h2 class="display">Sovereign by architecture</h2><p>The only AI compliance firewall that never phones home — to anyone.</p><a class="btn btn-primary" data-go="partners">Book a sovereign deployment <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PRODUCT · GOVERNMENT ============ -->
+<section class="view" data-view="prod-government">
+ <div class="section">
+  <div class="container">
+   <div class="prod-head"><div class="ic" style="margin:0"><svg><use href="#ic-landmark"></use></svg></div><div class="eyebrow">Government · FedRAMP · FISMA <span class="dd-soon" style="margin-left:.4rem">Coming soon</span></div></div>
+   <h1 class="display prod-h1">Agencies are adopting AI faster than they can govern it.</h1>
+   <p class="prod-sub">Public-sector teams want AI productivity without a compliant data-handling framework. HoundShield gives agencies an on-prem AI firewall that keeps CUI and citizen PII inside the boundary — FedRAMP and FISMA alignment is on the roadmap.</p>
+   <div class="hero-actions"><a class="btn btn-primary" data-go="partners">Join the waitlist <svg><use href="#ic-arrow"></use></svg></a><a class="btn btn-ghost" data-go="how">How it works</a></div>
+   <div class="grid-3" style="margin-top:48px">
+    <div class="card"><div class="ic"><svg><use href="#ic-eye"></use></svg></div><h3>What it is</h3><p>An on-prem AI gateway that enforces data-handling policy on every prompt inside an agency boundary.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-users"></use></svg></div><h3>Who it's for</h3><p>Agency CIOs/CISOs and program offices piloting generative AI under FISMA.</p></div>
+    <div class="card"><div class="ic"><svg><use href="#ic-zap"></use></svg></div><h3>How you use it</h3><p>Deploy inside your ATO boundary; CUI and PII are detected and contained before any model call.</p></div>
+   </div>
+   <div class="section-head" style="margin:56px auto 24px"><h2 class="display">What it detects for you</h2></div>
+   <div class="chip-grid">
+    <div class="gateway-box" style="border-style:solid">CUI / FOUO</div><div class="gateway-box" style="border-style:solid">Citizen PII</div><div class="gateway-box" style="border-style:solid">SSN / records</div><div class="gateway-box" style="border-style:solid">Law-enforcement data</div>
+    <div class="gateway-box" style="border-style:solid">Procurement-sensitive</div><div class="gateway-box" style="border-style:solid">Geospatial / infra</div><div class="gateway-box" style="border-style:solid">Health (CMS)</div><div class="gateway-box" style="border-style:solid">Tax data</div>
+   </div>
+   <div class="section-head" style="margin:56px auto 22px"><h2 class="display">Where the public-sector edition stands today</h2></div>
+   <div class="panel">
+    <div class="ctrl-row"><span><b>CUI / FOUO handling</b><br><span class="map-sub">Detected before the model — on-prem, available today</span></span><span class="st met">Live</span></div>
+    <div class="ctrl-row"><span><b>Audit &amp; accountability</b><br><span class="map-sub">Signed logs of every prompt</span></span><span class="st met">Live</span></div>
+    <div class="ctrl-row"><span><b>FISMA control alignment</b><br><span class="map-sub">Mapping in progress</span></span><span class="st part">Roadmap</span></div>
+    <div class="ctrl-row"><span><b>FedRAMP authorization</b><br><span class="map-sub">Planned — not yet authorized</span></span><span class="st part">Roadmap</span></div>
+   </div>
+   <div class="section-head" style="margin:48px auto 20px"><h2 class="display">Common questions</h2></div>
+   <div class="grid-2">
+    <div class="card"><h3 class="faq-q">Can we deploy today?</h3><p>Yes — on-prem inside your existing boundary. FedRAMP authorization is on the roadmap and not yet complete, so we're upfront about that.</p></div>
+    <div class="card"><h3 class="faq-q">Does anything leave our ATO boundary?</h3><p>No. HoundShield runs inside your boundary and never sends data out.</p></div>
+   </div>
+   <div class="cta-band" style="margin-top:48px"><h2 class="display">Be first in line for the public-sector edition</h2><p>Join the waitlist and we'll bring you in as FISMA mapping and FedRAMP authorization land.</p><a class="btn btn-primary" data-go="partners">Join the waitlist <svg><use href="#ic-arrow"></use></svg></a></div>
+  </div>
+ </div>
+</section>
+<!-- END VIEWS -->
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="footer">
+ <div class="container">
+  <div class="foot-grid">
+   <div class="foot-brand">
+    <div class="brand" data-go="home"><img class="brand-mark" src="assets/houndshield-logo.png" alt="HoundShield" width="28" height="36"><span class="brand-text">Hound<b>Shield</b></span></div>
+    <p>Local-only AI compliance firewall for CMMC Level 2, HIPAA &amp; SOC 2. Prompt content never leaves your network.</p>
+    <div class="foot-badges"><span>CMMC LVL 2</span><span>HIPAA</span><span>SOC 2</span><span>NIST 800-171</span><span>DFARS 7012</span></div>
+   </div>
+   <div class="foot-col"><h6>Product</h6><a data-go="features">Features</a><a data-go="how">How it works</a><a data-go="pricing">Pricing</a><a data-go="app">Dashboard</a><a data-go="docs">Changelog</a></div>
+   <div class="foot-col"><h6>Compliance</h6><a data-go="features">CMMC Level 2</a><a data-go="features">HIPAA</a><a data-go="features">SOC 2</a><a data-go="features">NIST 800-171</a><a data-go="features">DFARS 7012</a></div>
+   <div class="foot-col"><h6>Company</h6><a data-go="partners">Partners</a><a data-go="docs">Documentation</a><a data-go="pricing">Contact sales</a><a data-go="home">About</a><a data-go="home">Security</a></div>
+  </div>
+  <div class="foot-bottom"><span>© 2026 HoundShield. All rights reserved.</span><span class="mono">houndshield.com · local-only · zero data exfiltration</span></div>
+ </div>
+</footer>
+</div><!--/site-->
+
+<!-- ======================= DASHBOARD (after login) ======================= -->
+<section class="app">
+ <aside class="app-side">
+  <div class="brand" data-go="home"><img class="brand-mark" src="assets/houndshield-logo.png" alt="HoundShield" width="28" height="36"><span class="brand-text">Hound<b>Shield</b></span></div>
+  <div class="gh">Command Center</div>
+  <div class="side-link" data-tab="overview"><svg><use href="#ic-grid"></use></svg> Overview</div>
+  <div class="side-link" data-tab="feed"><svg><use href="#ic-activity"></use></svg> Live Threat Feed</div>
+  <div class="side-link" data-tab="assess"><svg><use href="#ic-shield"></use></svg> CMMC Assessment</div>
+  <div class="side-link" data-tab="reports"><svg><use href="#ic-file"></use></svg> Reports</div>
+  <div class="side-link" data-tab="brain"><svg><use href="#ic-brain"></use></svg> Brain AI</div>
+  <div class="gh">Account</div>
+  <div class="side-link on" data-tab="settings"><svg><use href="#ic-cog"></use></svg> Settings</div>
+  <div class="side-link" data-go="home"><svg><use href="#ic-arrow"></use></svg> Back to site</div>
+  <div class="side-foot"><div class="av">AD</div><div><div style="font-weight:600;color:var(--text)">Acme Defense</div><div style="font-size:.72rem">Pro · 10 seats</div></div></div>
+ </aside>
+
+ <div class="app-main">
+  <div class="app-top">
+   <div><div class="crumbs">Command Center</div><h1 id="tabTitle">Settings</h1></div>
+   <div style="display:flex;align-items:center;gap:.7rem">
+    <div class="live-badge"><i class="live-dot"></i><span>gateway live</span></div>
+    <a class="btn btn-ghost btn-sm" data-go="home">View site</a>
+    <div class="av" style="width:34px;height:34px;border-radius:9px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700">AD</div>
+   </div>
+  </div>
+
+  <div class="app-body">
+   <!-- OVERVIEW -->
+   <div class="atab" data-tab="overview">
+    <div class="opsbar"><span class="live-dot"></span> <b>All systems operational</b> <span style="color:var(--text-3)">—</span> gateway p50 <b id="p50">7ms</b> · 0 incidents · 16/16 engines online · 4 regions</div>
+    <div class="kpi-grid">
+     <div class="kpi"><div class="kl"><svg style="width:14px;height:14px"><use href="#ic-eye"></use></svg> Prompts scanned (24h)</div><div class="kn" id="kScan">14,372</div><div class="kd up">▲ 8.2% vs yesterday</div></div>
+     <div class="kpi"><div class="kl"><svg style="width:14px;height:14px"><use href="#ic-shield"></use></svg> Blocked today</div><div class="kn live-up" id="kBlocked" style="color:var(--bad)">220</div><div class="kd up">31 CUI · 64 secrets · 123 PII</div></div>
+     <div class="kpi"><div class="kl"><svg style="width:14px;height:14px"><use href="#ic-gauge"></use></svg> SPRS score</div><div class="kn" id="kSprs" style="color:var(--brand)">78</div><div class="kd up">▲ 12 since onboarding</div></div>
+     <div class="kpi"><div class="kl"><svg style="width:14px;height:14px"><use href="#ic-flag"></use></svg> Open POA&amp;M items</div><div class="kn">14</div><div class="kd down">of 110 controls</div></div>
+    </div>
+    <div class="panel" style="margin-bottom:20px">
+     <div class="panel-h"><h3>Live gateway throughput</h3><span class="mono"><span id="rate">65</span> prompts/min · on-device</span></div>
+     <div style="padding:16px 20px"><canvas id="liveChart" height="240" width="2190"></canvas></div>
+    </div>
+    <div class="two-col">
+     <div class="panel">
+      <div class="panel-h"><h3>Live threat feed</h3><span class="mono">streaming · local</span></div>
+      <div id="feedMini"><div class="feed-row new"><span class="feed-tag pass">PASSED</span><span class="what">Brainstorm blog post titles</span><span class="eng">clean</span><span class="lat">10ms</span></div><div class="feed-row new"><span class="feed-tag block">BLOCKED</span><span class="what">Clearance level "TS/SCI" + name</span><span class="eng">Clearance</span><span class="lat">5ms</span></div><div class="feed-row new"><span class="feed-tag block">BLOCKED</span><span class="what">CUI marking "//SP-PROPIN" in prompt</span><span class="eng">CUI engine</span><span class="lat">7ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">CUI marking "//SP-PROPIN" in prompt</span><span class="eng">CUI engine</span><span class="lat">7ms</span></div><div class="feed-row"><span class="feed-tag pass">PASSED</span><span class="what">Draft weekly status email</span><span class="eng">clean</span><span class="lat">11ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">CAGE code 1ABC2 + contract #</span><span class="eng">CMMC engine</span><span class="lat">6ms</span></div></div>
+     </div>
+     <div class="panel">
+      <div class="panel-h"><h3>SPRS posture</h3><span class="mono">NIST 800-171</span></div>
+      <div class="sprs">
+       <div class="ring" style="--p:78;position:relative"><b class="ringpos">78</b></div>
+       <div class="cap"><b>78 / 110</b> implemented · target 88 for conditional CMMC L2. 14 controls open, 8 in progress.</div>
+       <a class="btn btn-primary btn-sm" data-tab="assess" style="margin-top:14px">Open assessment <svg><use href="#ic-arrow"></use></svg></a>
+      </div>
+     </div>
+    </div>
+    <div class="panel" style="margin-top:20px">
+     <div class="panel-h"><h3>Detections by engine · last hour</h3><span class="mono">live</span></div>
+     <div style="padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+      <div class="engrow" data-base="61"><span>CUI</span><div class="bar"><i style="width: 62%;"></i></div><b>62</b></div>
+      <div class="engrow" data-base="48"><span>Secrets</span><div class="bar"><i style="width: 51%;"></i></div><b>51</b></div>
+      <div class="engrow" data-base="83"><span>PII</span><div class="bar"><i style="width: 82%;"></i></div><b>82</b></div>
+      <div class="engrow" data-base="27"><span>PHI</span><div class="bar"><i style="width: 23%;"></i></div><b>23</b></div>
+      <div class="engrow" data-base="35"><span>Source / IP</span><div class="bar"><i style="width: 32%;"></i></div><b>32</b></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- LIVE FEED -->
+   <div class="atab" data-tab="feed">
+    <div class="panel">
+     <div class="panel-h"><h3>Intercepted prompts</h3><span class="mono">last 50 · on-device</span></div>
+     <div id="feedFull"><div class="feed-row new"><span class="feed-tag pass">PASSED</span><span class="what">Brainstorm blog post titles</span><span class="eng">clean</span><span class="lat">10ms</span></div><div class="feed-row new"><span class="feed-tag block">BLOCKED</span><span class="what">Clearance level "TS/SCI" + name</span><span class="eng">Clearance</span><span class="lat">5ms</span></div><div class="feed-row new"><span class="feed-tag block">BLOCKED</span><span class="what">CUI marking "//SP-PROPIN" in prompt</span><span class="eng">CUI engine</span><span class="lat">7ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">CUI marking "//SP-PROPIN" in prompt</span><span class="eng">CUI engine</span><span class="lat">7ms</span></div><div class="feed-row"><span class="feed-tag pass">PASSED</span><span class="what">Draft weekly status email</span><span class="eng">clean</span><span class="lat">11ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">CAGE code 1ABC2 + contract #</span><span class="eng">CMMC engine</span><span class="lat">6ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">sk-proj-… OpenAI secret key</span><span class="eng">Secrets</span><span class="lat">5ms</span></div><div class="feed-row"><span class="feed-tag quar">QUAR</span><span class="what">Patient MRN + diagnosis text</span><span class="eng">PHI engine</span><span class="lat">8ms</span></div><div class="feed-row"><span class="feed-tag pass">PASSED</span><span class="what">Summarize public RFP language</span><span class="eng">clean</span><span class="lat">12ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">SSN 412-••-9930 in support ticket</span><span class="eng">PII engine</span><span class="lat">6ms</span></div><div class="feed-row"><span class="feed-tag pass">PASSED</span><span class="what">Refactor this Python function</span><span class="eng">clean</span><span class="lat">9ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">ITAR-controlled component specs</span><span class="eng">Export-control</span><span class="lat">7ms</span></div><div class="feed-row"><span class="feed-tag quar">QUAR</span><span class="what">AWS AKIA… access key</span><span class="eng">Cloud keys</span><span class="lat">6ms</span></div><div class="feed-row"><span class="feed-tag pass">PASSED</span><span class="what">Brainstorm blog post titles</span><span class="eng">clean</span><span class="lat">10ms</span></div><div class="feed-row"><span class="feed-tag block">BLOCKED</span><span class="what">Clearance level "TS/SCI" + name</span><span class="eng">Clearance</span><span class="lat">5ms</span></div><div class="feed-row"><span class="feed-tag pass">PASSED</span><span class="what">Translate marketing copy</span><span class="eng">clean</span><span class="lat">13ms</span></div></div>
+    </div>
+   </div>
+
+   <!-- ASSESSMENT -->
+   <div class="atab" data-tab="assess">
+    <div class="two-col" style="grid-template-columns:.8fr 1.4fr">
+     <div class="panel">
+      <div class="panel-h"><h3>SPRS score</h3><span class="mono">live</span></div>
+      <div class="sprs"><div class="ring" style="--p:71;position:relative"><b class="ringpos">78</b></div><div class="cap">DoD self-assessment range −203 to +110. You're at <b>+78</b>.</div></div>
+     </div>
+     <div class="panel">
+      <div class="panel-h"><h3>Control families · NIST 800-171</h3><span class="mono">14 domains</span></div>
+      <div class="ctrl-row"><span>3.1 Access Control (22)</span><span class="st met">19 met</span></div>
+      <div class="ctrl-row"><span>3.3 Audit &amp; Accountability (9)</span><span class="st met">9 met</span></div>
+      <div class="ctrl-row"><span>3.4 Configuration Mgmt (9)</span><span class="st part">6 partial</span></div>
+      <div class="ctrl-row"><span>3.5 Identification &amp; Auth (11)</span><span class="st met">10 met</span></div>
+      <div class="ctrl-row"><span>3.8 Media Protection (9)</span><span class="st gap">3 gaps</span></div>
+      <div class="ctrl-row"><span>3.13 System &amp; Comms (16)</span><span class="st part">11 partial</span></div>
+      <div class="ctrl-row"><span>3.14 System Integrity (7)</span><span class="st met">7 met</span></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- REPORTS -->
+   <div class="atab" data-tab="reports">
+    <div class="grid-3">
+     <div class="card"><div class="ic"><svg><use href="#ic-file"></use></svg></div><h3>System Security Plan</h3><p>Auto-generated SSP across all 110 controls. SHA-256 signed.</p><a class="btn btn-primary btn-sm" style="margin-top:14px" onclick="this.textContent=&#39;Generating… ✓ SSP_AcmeDefense.pdf&#39;">Generate PDF</a></div>
+     <div class="card"><div class="ic"><svg><use href="#ic-flag"></use></svg></div><h3>POA&amp;M</h3><p>Plan of Action &amp; Milestones for your 14 open controls.</p><a class="btn btn-primary btn-sm" style="margin-top:14px" onclick="this.textContent=&#39;Generating… ✓ POAM_AcmeDefense.pdf&#39;">Generate PDF</a></div>
+     <div class="card"><div class="ic"><svg><use href="#ic-shield"></use></svg></div><h3>C3PAO Evidence Pack</h3><p>Tamper-evident audit log mapped to NIST controls.</p><a class="btn btn-primary btn-sm" style="margin-top:14px" onclick="this.textContent=&#39;Generating… ✓ Evidence_2026.pdf&#39;">Export</a></div>
+    </div>
+    <div class="panel" style="margin-top:22px">
+     <div class="panel-h"><h3>Recent exports</h3><span class="mono">signed · timestamped</span></div>
+     <div class="ctrl-row"><span>SSP_AcmeDefense_2026-06.pdf</span><span class="mono" style="color:var(--text-3)">sha256:9f3a… · 2d ago</span></div>
+     <div class="ctrl-row"><span>SPRS_attestation_Q2.pdf</span><span class="mono" style="color:var(--text-3)">sha256:1c08… · 5d ago</span></div>
+     <div class="ctrl-row"><span>Audit_trail_May.json</span><span class="mono" style="color:var(--text-3)">sha256:7be2… · 12d ago</span></div>
+    </div>
+   </div>
+
+   <!-- BRAIN AI -->
+   <div class="atab" data-tab="brain">
+    <div class="panel">
+     <div class="panel-h"><h3><svg style="width:16px;height:16px;vertical-align:-3px"><use href="#ic-brain"></use></svg> Brain AI — on-device CMMC analyst</h3><span class="mono">your key · nothing sent to HoundShield</span></div>
+     <div class="brain">
+      <div class="brain-log" id="brainLog">
+       <div class="bubble b">I'm <b>Brain AI</b> — HoundShield's on-device compliance analyst. Ask me about your CMMC posture, a NIST control, or what HoundShield does. <span class="src">Running locally · OpenRouter key stays on your machine</span></div>
+      <div class="bubble u">why are you here?</div><div class="bubble b">I can help with your CMMC posture, SPRS score, a specific NIST 800-171 control, HIPAA/PHI, DFARS 7012, or what HoundShield does. Try one of the suggestions above — everything I answer is grounded in your own assessment and audit data, on-device.<span class="src">source: brain-core</span></div></div>
+      <div class="chips">
+       <button>Who are you?</button>
+       <button>What is HoundShield?</button>
+       <button>What's my SPRS score?</button>
+       <button>Am I CMMC ready?</button>
+       <button>What's a DFARS 7012 spill?</button>
+      </div>
+      <div class="brain-in"><input id="brainInput" placeholder="Ask Brain AI…" autocomplete="off"><button class="btn btn-primary btn-sm" id="brainSend">Send</button></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- SETTINGS -->
+   <div class="atab on" data-tab="settings">
+    <div class="grid-2">
+     <div class="panel">
+      <div class="panel-h"><h3>Gateway</h3><span class="mono">OpenAI-compatible</span></div>
+      <div style="padding:20px">
+       <div class="mono" style="font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem">Proxy URL</div>
+       <div class="gateway-box"><span>https://proxy.houndshield.com/v1</span><button onclick="this.textContent=&#39;Copied&#39;">Copy</button></div>
+       <div class="mono" style="font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em;margin:1rem 0 .4rem">API key</div>
+       <div class="gateway-box"><span>hs_live_••••••••••••2f9a</span><button onclick="this.textContent=&#39;Revealed&#39;">Revealed</button></div>
+       <div class="mono" style="font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em;margin:1rem 0 .4rem">OpenRouter key (Brain AI · your key)</div>
+       <div class="gateway-box"><span>sk-or-••••••••••••a17c</span><button onclick="this.textContent=&#39;Saved&#39;">Edit</button></div>
+      </div>
+     </div>
+     <div class="panel">
+      <div class="panel-h"><h3>Plan &amp; usage</h3><span class="mono">Pro</span></div>
+      <div style="padding:20px">
+       <div style="display:flex;justify-content:space-between;font-size:.9rem"><span class="muted">AI gateway scans</span><b>14,363 / 50,000</b></div>
+       <div class="bar"><i style="width:29%"></i></div>
+       <div style="display:flex;justify-content:space-between;font-size:.9rem;margin-top:1rem"><span class="muted">Seats used</span><b>7 / 10</b></div>
+       <div class="bar"><i style="width:70%"></i></div>
+       <div style="display:flex;justify-content:space-between;font-size:.9rem;margin-top:1rem"><span class="muted">Log retention</span><b>90 days</b></div>
+       <a class="btn btn-primary btn-sm" data-go="pricing" style="margin-top:18px">Upgrade to Growth <svg><use href="#ic-arrow"></use></svg></a>
+      </div>
+     </div>
+    </div>
+   </div>
+
+  </div>
+ </div>
+</section>
+
+
+<!-- DIRECTION SWITCHER -->
+
+<script>
+(function(){
+  var body=document.body;
+
+  /* ---------- ROUTING ---------- */
+  function go(view){
+    body.setAttribute('data-view',view);
+    document.querySelectorAll('.site .view').forEach(function(v){
+      v.classList.toggle('active', v.getAttribute('data-view')===view);
+    });
+    document.querySelectorAll('.nav-link[data-go]').forEach(function(l){
+      l.classList.toggle('active', l.getAttribute('data-go')===view);
+    });
+    window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
+    closeMobile();
+  }
+  function tab(t){
+    document.querySelectorAll('.atab').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-tab')===t)});
+    document.querySelectorAll('.side-link[data-tab]').forEach(function(s){s.classList.toggle('on',s.getAttribute('data-tab')===t)});
+    var titles={overview:'Overview',feed:'Live Threat Feed',assess:'CMMC Assessment',reports:'Reports',brain:'Brain AI',settings:'Settings'};
+    var tt=document.getElementById('tabTitle'); if(tt)tt.textContent=titles[t]||t;
+    var m=document.querySelector('.app-main'); if(m)m.scrollTo({top:0});
+  }
+  document.addEventListener('click',function(e){
+    var g=e.target.closest('[data-go]'); if(g){e.preventDefault();go(g.getAttribute('data-go'));return;}
+    var t=e.target.closest('[data-tab]'); if(t){e.preventDefault();tab(t.getAttribute('data-tab'));return;}
+  });
+
+  /* ---------- BILLING TOGGLE ---------- */
+  var billM=document.getElementById('billM'),billA=document.getElementById('billA');
+  function bill(mode){
+    billM.classList.toggle('on',mode==='m');
+    billA.classList.toggle('on',mode==='a');
+    document.querySelectorAll('.price-card .price').forEach(function(p){
+      var v=mode==='a'?p.dataset.a:p.dataset.m;
+      p.innerHTML=v+'<small>/mo</small>';
+    });
+    document.querySelectorAll('.price-card .annual').forEach(function(n){
+      n.textContent=mode==='a'?n.dataset.a:n.dataset.m;
+    });
+  }
+  billM.addEventListener('click',function(){bill('m')});
+  billA.addEventListener('click',function(){bill('a')});
+
+  /* ---------- MOBILE NAV ---------- */
+  var burger=document.getElementById('burger'),links=document.querySelector('.nav-links'),mob=false;
+  function closeMobile(){mob=false;applyMobile()}
+  function applyMobile(){
+    if(window.innerWidth>900){links.removeAttribute('style');return;}
+    links.style.cssText=mob?'display:flex;flex-direction:column;position:absolute;top:66px;left:0;right:0;background:var(--nav-bg);backdrop-filter:blur(18px);border-bottom:1px solid var(--nav-line);padding:12px;gap:.2rem;align-items:stretch':'display:none';
+  }
+  burger.addEventListener('click',function(){mob=!mob;applyMobile()});
+  window.addEventListener('resize',applyMobile);
+
+  /* ---------- LIVE COUNTER ---------- */
+  var lc=document.getElementById('liveCount'),n=14363;
+  setInterval(function(){n+=Math.floor(Math.random()*4)+1;if(lc)lc.textContent=n.toLocaleString()+' intercepted';var k=document.getElementById('kScan');if(k)k.textContent=n.toLocaleString();},3500);
+
+  /* ---------- THREAT FEED ---------- */
+  var events=[
+    ['block','CUI marking "//SP-PROPIN" in prompt','CUI engine','7ms'],
+    ['pass','Draft weekly status email','clean','11ms'],
+    ['block','CAGE code 1ABC2 + contract #','CMMC engine','6ms'],
+    ['block','sk-proj-… OpenAI secret key','Secrets','5ms'],
+    ['quar','Patient MRN + diagnosis text','PHI engine','8ms'],
+    ['pass','Summarize public RFP language','clean','12ms'],
+    ['block','SSN 412-••-9930 in support ticket','PII engine','6ms'],
+    ['pass','Refactor this Python function','clean','9ms'],
+    ['block','ITAR-controlled component specs','Export-control','7ms'],
+    ['quar','AWS AKIA… access key','Cloud keys','6ms'],
+    ['pass','Brainstorm blog post titles','clean','10ms'],
+    ['block','Clearance level "TS/SCI" + name','Clearance','5ms'],
+    ['pass','Translate marketing copy','clean','13ms'],
+    ['block','Source code w/ internal hostnames','IP engine','8ms'],
+    ['quar','Credit card 4111 1111 …','PCI engine','6ms'],
+    ['pass','Explain NIST 800-171 3.1.1','clean','9ms']
+  ];
+  function rowHTML(ev){
+    var label=ev[0]==='block'?'BLOCKED':ev[0]==='quar'?'QUAR':'PASSED';
+    return '<div class="feed-row"><span class="feed-tag '+ev[0]+'">'+label+'</span><span class="what">'+ev[1]+'</span><span class="eng">'+ev[2]+'</span><span class="lat">'+ev[3]+'</span></div>';
+  }
+  var mini=document.getElementById('feedMini'),full=document.getElementById('feedFull');
+  if(mini)mini.innerHTML=events.slice(0,6).map(rowHTML).join('');
+  if(full)full.innerHTML=events.map(rowHTML).join('');
+  // prepend a new event every few seconds (live feel)
+  setInterval(function(){
+    var ev=events[Math.floor(Math.random()*events.length)];
+    if(mini){mini.insertAdjacentHTML('afterbegin',rowHTML(ev));mini.firstElementChild.classList.add('new');if(mini.children.length>6)mini.removeChild(mini.lastChild);}
+    if(full){full.insertAdjacentHTML('afterbegin',rowHTML(ev));full.firstElementChild.classList.add('new');if(full.children.length>16)full.removeChild(full.lastChild);}
+  },4200);
+
+  /* ---------- BRAIN AI ---------- */
+  var log=document.getElementById('brainLog'),input=document.getElementById('brainInput'),send=document.getElementById('brainSend');
+  function answer(q){
+    q=q.toLowerCase();
+    if(/who are you|who r u|what are you|your name/.test(q))
+      return ['I\'m <b>Brain AI</b>, HoundShield\'s on-device compliance analyst. I read your assessment, audit logs and the NIST 800-171 knowledge base to answer CMMC questions — and I run on your hardware with your own API key, so nothing I see is sent to HoundShield.','identity · brain-core'];
+    if(/what is houndshield|what.s houndshield|about houndshield|what do you do/.test(q))
+      return ['<b>HoundShield</b> is a local-only AI compliance firewall. It intercepts every AI prompt your team sends to ChatGPT, Copilot, Claude or Cursor and scans it for CUI, PII, PHI, secrets and CAGE codes in under 10ms — blocking spills <i>before</i> they leave your network. Built for CMMC Level 2, HIPAA and SOC 2.','product · brain-core'];
+    if(/sprs|my score|score/.test(q))
+      return ['Your current SPRS score is <b>+78</b> out of a possible +110. You have 78 of 110 controls fully implemented, 8 partial and 14 open. Closing the 3 Media Protection (3.8) gaps would move you to +84 — the fastest path to a conditional CMMC L2.','sprs · live assessment'];
+    if(/cmmc ready|am i ready|certified|certif|pass.*assessment|ready for/.test(q))
+      return ['Not yet — but close. A C3PAO needs a POA&M with no open <i>high-weight</i> controls. You have 2 high-weight gaps (3.8.3 media sanitization, 3.13.11 FIPS crypto). Remediate those two and generate the SSP + POA&M from the Reports tab, and you\'re assessment-ready.','readiness · brain-core'];
+    if(/dfars|7012|spill|leak/.test(q))
+      return ['A <b>DFARS 252.204-7012</b> spill is when Controlled Unclassified Information (CUI) reaches a system that isn\'t authorized to hold it. Pasting CUI into ChatGPT transmits it to OpenAI — that\'s a reportable spill. Ironically, cloud DLP tools cause the same spill by sending your data to <i>their</i> cloud to scan it. HoundShield scans locally, so the CUI never leaves.','dfars · knowledge-base'];
+    if(/hipaa|phi|patient/.test(q))
+      return ['For HIPAA, HoundShield\'s PHI engine flags MRNs, ICD codes, patient names and diagnoses before a clinician\'s prompt reaches any AI model — satisfying 45 CFR 164 minimum-necessary and audit-log requirements. Same proxy, same local-only guarantee.','hipaa · knowledge-base'];
+    if(/price|cost|how much|plan/.test(q))
+      return ['Plans: Free ($0, assessment only), <b>Pro $199/mo</b> (AI gateway + full CMMC suite, 10 seats), Growth $499/mo (PDF reports + C3PAO coordination), Enterprise $999/mo (on-prem / air-gapped). Annual billing saves 20%.','pricing · brain-core'];
+    if(/nist|800-171|control|3\.\d/.test(q))
+      return ['NIST SP 800-171 Rev 2 defines 110 controls across 14 families that protect CUI in non-federal systems. HoundShield maps each one to live evidence from your gateway and assessment, so your SPRS score reflects reality — not a spreadsheet from six months ago.','nist · knowledge-base'];
+    return ['I can help with your CMMC posture, SPRS score, a specific NIST 800-171 control, HIPAA/PHI, DFARS 7012, or what HoundShield does. Try one of the suggestions above — everything I answer is grounded in your own assessment and audit data, on-device.','brain-core'];
+  }
+  function add(role,html,src){
+    var b=document.createElement('div');
+    b.className='bubble '+role;
+    b.innerHTML=html+(src?'<span class="src">source: '+src+'</span>':'');
+    log.appendChild(b);log.scrollTop=log.scrollHeight;
+  }
+  function ask(q){
+    if(!q.trim())return;
+    add('u',q);
+    input.value='';
+    setTimeout(function(){var a=answer(q);add('b',a[0],a[1]);},420);
+  }
+  if(send){
+    send.addEventListener('click',function(){ask(input.value)});
+    input.addEventListener('keydown',function(e){if(e.key==='Enter')ask(input.value)});
+    document.querySelectorAll('.chips button').forEach(function(c){c.addEventListener('click',function(){ask(c.textContent)})});
+  }
+
+  /* ---------- LIVE DASHBOARD ---------- */
+  function appVisible(){return body.getAttribute('data-view')==='app';}
+  // ticking blocked counter
+  var kb=document.getElementById('kBlocked'),blocked=218;
+  setInterval(function(){blocked+=Math.floor(Math.random()*3);if(kb){kb.textContent=blocked;kb.classList.remove('live-up');void kb.offsetWidth;kb.classList.add('live-up');}},5200);
+  // ease count-up
+  function countUp(el,to,dur){if(!el)return;var t0=performance.now();function f(t){var p=Math.min(1,(t-t0)/dur);var e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;el.textContent=Math.round(to*e);if(p<1)requestAnimationFrame(f);}requestAnimationFrame(f);}
+  var sprsDone=false;
+  function runSprs(){document.querySelectorAll('.ringpos').forEach(function(e){countUp(e,parseInt(e.textContent,10)||78,1100)});countUp(document.getElementById('kSprs'),78,1100);}
+  // live throughput chart
+  var cv=document.getElementById('liveChart'),data=[];
+  for(var i=0;i<32;i++)data.push(30+Math.round(Math.random()*30));
+  function brandColor(){var c=getComputedStyle(body).getPropertyValue('--brand').trim();return c||'#5A86A8';}
+  function draw(){
+    if(!cv)return;var w=cv.clientWidth;if(w<10)return;var h=120,dpr=window.devicePixelRatio||1;
+    cv.width=w*dpr;cv.height=h*dpr;var x=cv.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);
+    var c=brandColor(),max=70,n=data.length,step=w/(n-1);
+    x.beginPath();x.moveTo(0,h);
+    for(var i2=0;i2<n;i2++)x.lineTo(i2*step,h-(data[i2]/max)*(h-14)-6);
+    x.lineTo(w,h);x.closePath();x.globalAlpha=.14;x.fillStyle=c;x.fill();x.globalAlpha=1;
+    x.beginPath();for(var j=0;j<n;j++){var lx=j*step,ly=h-(data[j]/max)*(h-14)-6;j?x.lineTo(lx,ly):x.moveTo(lx,ly);}
+    x.strokeStyle=c;x.lineWidth=2;x.lineJoin='round';x.stroke();
+    var ex=(n-1)*step,ey=h-(data[n-1]/max)*(h-14)-6;x.beginPath();x.arc(ex,ey,3.5,0,7);x.fillStyle=c;x.fill();
+  }
+  setInterval(function(){
+    data.push(28+Math.round(Math.random()*34));data.shift();
+    if(appVisible()){
+      if(!sprsDone){runSprs();sprsDone=true;}
+      var r=document.getElementById('rate');if(r)r.textContent=data[data.length-1]+10;
+      document.querySelectorAll('.engrow').forEach(function(row){var base=+row.dataset.base,v=Math.max(8,Math.min(100,base+Math.round((Math.random()-.5)*10)));row.querySelector('i').style.width=v+'%';row.querySelector('b').textContent=v;});
+      var p=document.getElementById('p50');if(p)p.textContent=(5+Math.floor(Math.random()*5))+'ms';
+      draw();
+    }
+  },1500);
+  window.addEventListener('resize',draw);
+  // redraw + count-up the moment the dashboard opens
+  document.addEventListener('click',function(e){if(e.target.closest('[data-go="app"],[data-tab="overview"]'))setTimeout(function(){draw();if(!sprsDone){runSprs();sprsDone=true;}},120);});
+})();
+</script>
+
+
+</body></html>

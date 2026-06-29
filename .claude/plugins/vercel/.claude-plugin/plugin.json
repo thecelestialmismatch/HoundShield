@@ -1,0 +1,10 @@
+{
+  "name": "vercel",
+  "version": "1.0.0",
+  "description": "Vercel deploy + inspect helpers for HoundShield (preview deploys only by default; prod requires explicit approval).",
+  "author": { "name": "HERMES" },
+  "commands": "./commands",
+  "mcpServers": {
+    "vercel": { "type": "http", "url": "https://mcp.vercel.com" }
+  }
+}

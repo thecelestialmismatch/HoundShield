@@ -1,0 +1,31 @@
+# HoundShield
+
+> HoundShield is a local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. It sits in front of AI tools (ChatGPT, Microsoft Copilot, Claude, Cursor) as an OpenAI-compatible proxy and blocks CUI, PII, PHI, secrets, and CAGE codes in under 10ms — on the customer's own hardware, before any prompt leaves their network.
+
+## What makes HoundShield different
+- Local-only architecture: detection runs on the customer's hardware. Prompt content never reaches HoundShield's servers. This is the key differentiator versus cloud DLP tools (Nightfall, Strac, Microsoft Purview), which must transmit data to their cloud to scan it — itself a DFARS 252.204-7012 exposure for defense contractors.
+- 16 detection engines covering CUI markings, CAGE codes, contract/DoDAAC numbers, clearance levels, ITAR/EAR terms, PII (SSN), PHI (MRN/ICD), API keys and secrets, PCI card data, and source code.
+- Sub-10ms median scan latency; transparent to end users.
+- SHA-256 tamper-evident audit logs; C3PAO-ready SSP, POA&M, and SPRS evidence export.
+- One-URL deployment: change the base URL in any OpenAI-compatible client. No agents, no installs, live in minutes.
+
+## Product
+- [How it works](https://houndshield.com/how-it-works): Change one URL → every prompt scanned locally → block, quarantine, or pass → signed audit log.
+- [Features](https://houndshield.com/features): 16 detection engines, 110 NIST 800-171 controls, live SPRS scoring, C3PAO-ready PDF export.
+- [Pricing](https://houndshield.com/pricing): Free ($0, assessment) · Pro ($199/mo) · Growth ($499/mo) · Enterprise ($999/mo) · Agency ($2,499/mo). Every framework included in every paid plan.
+- [Partners](https://houndshield.com/partners): C3PAO referral program (30% recurring), MSP/agency, reseller.
+
+## Industries
+- Defense (CMMC Level 2 · NIST 800-171): DoD contractors who must stop CUI reaching AI tools.
+- Healthcare (HIPAA · 45 CFR 164): clinicians using AI for documentation with PHI exposure.
+- Technology (SOC 2): engineers pasting API keys and source into Copilot/ChatGPT.
+- Legal & Finance (PCI DSS · privilege): privileged and cardholder data in AI prompts.
+
+## Answers
+- Can defense contractors use ChatGPT? Yes — but only if prompts are scanned locally so CUI never leaves the network. Sending CUI to ChatGPT directly is a reportable DFARS 7012 spill. HoundShield enables compliant AI use.
+- Is HoundShield itself a DFARS 7012 risk? No. Detection runs on the customer's hardware; CUI never transits to HoundShield. Cloud DLP tools cannot make this claim.
+- Does HoundShield work with CMMC Level 2? Yes — it blocks CUI in AI prompts and generates C3PAO-ready SSP/POA&M/SPRS evidence mapped to all 110 NIST 800-171 controls.
+
+## Contact
+- Site: https://houndshield.com
+- GitHub: https://github.com/thecelestialmismatch/HoundShield

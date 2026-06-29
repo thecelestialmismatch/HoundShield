@@ -141,3 +141,24 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 ### Architecture flag: two navs coexist (NavV3 vs Navbar)
 **What:** `NavV3` (light, 2 pages) and `Navbar` (rich: flyouts + mega-menu + counter + variants, 11 pages) both exist; Navbar is the richer one.
 **Rule:** Consolidating onto one nav is a design decision — surface to the founder, don't unilaterally migrate (NavV3 would downgrade 11 pages).
+
+---
+
+## 2026-06-10
+
+### Done means PUSHED — the buy button 404'd in prod while the fix sat local
+**What:** `1db6ac6` (fixes hero + 3 pricing + final CTAs linking to dead `/sign-up`) was committed Jun 9 02:18 and never pushed. Stripe shows zero charges ever; every primary-CTA click since the v3 launch hit a 404. The committing session crashed mid-commit, leaving stale `.git/HEAD.lock` + `.git/index.lock` that silently blocked all later git writes.
+**Root cause:** Session ended at "committed" not "deployed"; no end-of-session `git status -sb` check; stale locks unnoticed.
+**Rule:** A session that touches the repo ends with `git status -sb` showing `[ahead 0]` or an explicit FOUNDER-must-push handoff line. On any `index.lock`/`HEAD.lock` error, check `ls -la .git/*.lock` — if older than the running session, delete and continue.
+
+### Dirty tree: never `git add <file>` blind — stage hunks
+**What:** Working tree carried ~124 uncommitted WIP files (site-config nav refactor, STEPS removal, etc.). New surgical fixes shared files with that WIP; `app/page.tsx` and `NavV3.tsx` both contained foreign hunks (one depending on then-untracked `lib/site-config.ts` — committing it blind would have broken the Vercel build).
+**Rule:** On a dirty tree, review `git diff HEAD -- <file>` per file; stage only your hunks (`git apply --cached` a filtered patch). Verify the commit, not the tree: `git stash push` → run tests at the commit → `git stash pop`. The "Federal pricing tier" test failure was WIP-only — the commit passes 37/37.
+
+### Rule 7 needs tests, not intentions: fakes shipped because nothing guarded absence
+**What:** Live homepage carried a fabricated customer quote ("Jordan M." — our own fictional persona, attributed like a real buyer) and a hardcoded self-incrementing "14,363 intercepted" counter. For a defense-compliance product this is existential trust risk.
+**Rule:** Removing a fake isn't done until a test asserts its absence (`queryByText(...)` → `toBeNull()`). Any number shown publicly must trace to a real data source or not exist. Personas are always labeled as personas.
+
+### Advertised assets must exist — meta pointed at a 404 og-image for months
+**What:** `app/layout.tsx` has advertised `https://houndshield.com/og-image.png` in OpenGraph/Twitter meta since the v3 redesign; the file never existed. Every LinkedIn/Slack/iMessage share of any page previewed blank — invisible conversion damage on the exact channels used for outreach. Favicon was a generic coral placeholder (`app/icon.svg`) from a retired palette.
+**Rule:** Any URL referenced in metadata, config, or copy must be backed by a real file and guarded by a test (`app/__tests__/public-assets.test.ts` now asserts existence + dimensions). When a brand asset changes, regenerate the full derived set (og, favicon, apple-icon) in the same commit.

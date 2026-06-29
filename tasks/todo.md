@@ -3,6 +3,17 @@
 ## Active
 <!-- Move items here when starting work -->
 
+### 2026-06-10 — Revenue unblock (see tasks/2026-06-10-reality-audit.md)
+- [ ] **FOUNDER, 1 command** (or run /mcp → authenticate github and HERMES pushes): `cd compliance-firewall-agent && git push origin feature/beast-ui-v3` — ships 4 commits, all tested (41/41) and secrets-clean:
+  - `1db6ac6` un-404s ALL buy CTAs (hero + pricing + final)
+  - `b1596e7` removes fake "Jordan M." testimonial + hardcoded 14,363 counter
+  - `942fcea` $499 Gap Report SKU live on /pricing (Stripe payment link wired)
+  - `19b7ebd` real-logo favicon/app icons + og-image (was 404 since v3 — every shared link previewed blank); coral placeholder icon.svg deleted
+- [ ] **FOUNDER, 5 min:** Vercel env vars — `STRIPE_SECRET_KEY` (health shows `payments: missing_key`), `STRIPE_WEBHOOK_SECRET` (after pointing webhook at houndshield.com/api/stripe/webhook), 8 price IDs, Supabase keys (`database: demo_mode`). Then verify `/api/health`.
+- [ ] **FOUNDER, ~20 min:** send the 10 C3PAO partner emails sitting in Gmail drafts — 4 are one-click (Redspin, Kieri, CyberNINES, Sentinel Blue — real addresses in To:), 6 are paste-into-form (URL + phone in each draft's ACTION header). Replace {YOUR NAME} before sending.
+- [x] Gap Report $499 payment link LIVE → https://buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00 (`prod_Ug034JhG2q2AA7`) — now also on /pricing (commit `942fcea`)
+- [x] 10 C3PAOs researched from Cyber AB marketplace + personalized drafts created (2026-06-10)
+
 ## Sprint 1 (Week of 2026-04-28) — Jordan deploys in 10 minutes, exports a PDF ✅ MERGED PR #62
 
 **Sprint goal:** One customer deploys HoundShield and exports a PDF audit report for her C3PAO.

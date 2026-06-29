@@ -1,0 +1,9 @@
+{
+  "name": "houndshield-desktop",
+  "version": "0.0.0-parked",
+  "private": true,
+  "description": "PARKED. Tauri desktop wrapper for HoundShield. Activate after 10 paying customers.",
+  "scripts": {
+    "_note": "echo 'Parked until revenue gate — see FutureApp/README.md'"
+  }
+}

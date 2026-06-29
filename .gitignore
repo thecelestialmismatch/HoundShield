@@ -101,3 +101,8 @@ compliance-firewall-agent/supabase/.temp/
 
 # Compass/artifact analysis files (sensitive competitive content)
 compass_artifact_*.md
+
+# Personal Claude Code overrides (snapshot convention: *.local.* gitignored)
+CLAUDE.local.md
+.claude/settings.local.json
+*.local.md
