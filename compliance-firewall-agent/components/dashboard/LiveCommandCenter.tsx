@@ -73,7 +73,15 @@ export function brainAnswer(qRaw: string): [string, string] {
   return ['I can help with your CMMC posture, SPRS score, a NIST 800-171 control, HIPAA/PHI, DFARS 7012, or what HoundShield does. Everything I answer is grounded in your own assessment and audit data, on-device.', 'brain-core']
 }
 
-export function LiveCommandCenter() {
+/** Identity shown in the sidebar footer. Omitted for the public demo, in which
+ *  case the sample "Acme Defense" org is shown. */
+export interface DashboardViewer {
+  company: string
+  plan: string
+  initials: string
+}
+
+export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {}) {
   const [tab, setTab] = useState<TabId>('overview')
   const [sideOpen, setSideOpen] = useState(false)
   const [feedBadge, setFeedBadge] = useState(3)
@@ -305,8 +313,8 @@ export function LiveCommandCenter() {
             <ExternalLink /> Back to site
           </Link>
           <div className="side-foot">
-            <div className="av">AD</div>
-            <div><div className="nm">Acme Defense</div><div className="sub">Pro · 10 seats</div></div>
+            <div className="av">{viewer?.initials ?? 'AD'}</div>
+            <div><div className="nm">{viewer?.company ?? 'Acme Defense'}</div><div className="sub">{viewer?.plan ?? 'Pro · 10 seats'}</div></div>
           </div>
         </aside>
 

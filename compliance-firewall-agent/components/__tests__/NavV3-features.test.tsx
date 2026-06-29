@@ -48,9 +48,12 @@ describe('NavV3 — exact-copy of the Direction-A demo nav', () => {
     expect(screen.getByText('$999')).toBeTruthy()
   })
 
-  it('renders the live intercepted counter', () => {
+  it('renders the truthful product trust badge (not a fabricated counter)', () => {
     render(<NavV3 />)
-    expect(screen.getByText(/intercepted/i)).toBeTruthy()
+    // The old client-incrementing "14,672 intercepted" counter was a fictional
+    // metric; it is replaced by a verifiable product fact.
+    expect(screen.getByText(/engines · <10ms scan/i)).toBeTruthy()
+    expect(screen.queryByText(/intercepted/i)).toBeNull()
   })
 
   it('renders the logo with the cursor-reactive transform hook', () => {
