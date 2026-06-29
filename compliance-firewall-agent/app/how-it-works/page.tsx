@@ -38,7 +38,7 @@ const STEPS = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-[var(--hs-surface-0)]">
+    <div className="min-h-screen bg-[var(--hs-surface-0)] section-stripe">
       <NavV3 />
 
       {/* Hero */}

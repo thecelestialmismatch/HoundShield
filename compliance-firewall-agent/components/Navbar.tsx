@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { getPlan, formatUSD } from "@/lib/pricing/plans";
+import { NAV_TRUST_BADGE } from "@/lib/site/metrics";
 import {
   Menu, X, ChevronRight, ChevronDown, Sun, Moon,
   Lock, HeartPulse, Shield, Briefcase, Globe, Landmark,
@@ -37,27 +38,17 @@ function ThemeToggle() {
   );
 }
 
-/* ── Live Shield Badge ───────────────────────────────────── */
+/* ── Trust Badge — truthful product facts, not a fabricated counter ─────── */
 function LiveShieldBadge() {
-  const [count, setCount] = useState(14_312);
-  useEffect(() => {
-    const t = setInterval(() => setCount((n) => n + Math.floor(Math.random() * 3) + 1), 6000);
-    return () => clearInterval(t);
-  }, []);
   return (
     <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)]">
       <span className="relative flex h-1.5 w-1.5">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--hs-success)] opacity-75" />
         <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--hs-success)]" />
       </span>
-      <motion.span
-        key={count}
-        initial={{ opacity: 0.5 }}
-        animate={{ opacity: 1 }}
-        className="text-[10px] font-mono font-bold text-[var(--hs-success)] tabular-nums"
-      >
-        {count.toLocaleString()} blocked
-      </motion.span>
+      <span className="text-[10px] font-mono font-bold text-[var(--hs-success)]">
+        {NAV_TRUST_BADGE}
+      </span>
     </div>
   );
 }

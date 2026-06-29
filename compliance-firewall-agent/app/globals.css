@@ -29,9 +29,18 @@
   --hs-cream-deep:      #EDD5BC;
   --hs-sand-light:      #E8DDD1;
 
-  /* ── Surfaces ─────────────────────────────────────── */
+  /* ── Surfaces ─────────────────────────────────────────────────────────
+     A four-step section rhythm drawn from the hero palette. Each step is
+     VISIBLY distinct from its neighbours (the old surface-0/1 differed by ~2%
+     lightness and read as one flat colour), while staying light and harmonious:
+       0  near-white   (hero / default)
+       1  steel wash   (alternate cool sections)
+       2  cream        (warm accent sections)
+       3  deep cream   (warm accent / footers)
+     Plus --hs-navy for the dark feature bands. Alternate sections
+     0 → 1 → 2 → navy so the page reads with a clear cadence on every page. */
   --hs-surface-0:       #FAFCFF;
-  --hs-surface-1:       #F5F8FB;
+  --hs-surface-1:       #E9F0F7;
   --hs-surface-2:       #F3E3D0;
   --hs-surface-3:       #EDD5BC;
 
@@ -88,6 +97,20 @@
   /* Cursor position for section spotlights */
   --mx: -500px;
   --my: -500px;
+}
+
+/* ── Auto-striped sections ────────────────────────────────────────────
+   Add `section-stripe` to a page wrapper whose plain <section> children all
+   default to white, and they pick up the hero cadence automatically — every
+   2nd section a steel wash, every 4th a cream wash — without hand-tinting each
+   one. `nth-of-type` counts only <section> children, so non-section siblings
+   (nav, footer, scroll bar) are ignored. The first/hero section stays white.
+   Sections that set their own bg-* class are left alone (see the :not guard). */
+.section-stripe > section:nth-of-type(4n + 2):not([class*="bg-"]) {
+  background: var(--hs-surface-1);
+}
+.section-stripe > section:nth-of-type(4n + 4):not([class*="bg-"]) {
+  background: var(--hs-surface-2);
 }
 
 /* ── Section spotlight ────────────────────────────────────────── */
