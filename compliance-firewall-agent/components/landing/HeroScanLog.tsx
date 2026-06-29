@@ -13,21 +13,20 @@ import { useEffect, useState } from 'react'
  * Uses existing globals.css primitives (--hs-* tokens, fadeSlideIn keyframe).
  */
 
-type Row = { verdict: 'Blocked' | 'Passed'; label: string; ms: string; kind: 'block' | 'pass' }
+type Row = { verdict: 'BLOCKED' | 'PASSED'; label: string; ms: string; kind: 'block' | 'pass' }
 
+// Demo Direction-A scan-log rows — exact label · ms format, UPPERCASE verdicts.
 const ROWS: readonly Row[] = [
-  { verdict: 'Blocked', label: 'ITAR Export Control',      ms: '7ms',  kind: 'block' },
-  { verdict: 'Passed',  label: 'Quarterly metrics request', ms: '11ms', kind: 'pass'  },
-  { verdict: 'Blocked', label: 'Contract Number CUI',       ms: '6ms',  kind: 'block' },
-  { verdict: 'Blocked', label: 'CAGE Code 1H4N7',           ms: '5ms',  kind: 'block' },
-  { verdict: 'Passed',  label: 'Code review snippet',       ms: '13ms', kind: 'pass'  },
-  { verdict: 'Blocked', label: 'SSN pattern',               ms: '4ms',  kind: 'block' },
-  { verdict: 'Passed',  label: 'General brainstorm',        ms: '8ms',  kind: 'pass'  },
-  { verdict: 'Blocked', label: 'Drawing reference',         ms: '9ms',  kind: 'block' },
+  { verdict: 'BLOCKED', label: 'CUI · CAGE 1ABC2', ms: '7ms',  kind: 'block' },
+  { verdict: 'PASSED',  label: 'clean',            ms: '11ms', kind: 'pass'  },
+  { verdict: 'BLOCKED', label: 'PHI · MRN',        ms: '6ms',  kind: 'block' },
+  { verdict: 'BLOCKED', label: 'secret · sk-…',    ms: '5ms',  kind: 'block' },
+  { verdict: 'PASSED',  label: 'clean',            ms: '13ms', kind: 'pass'  },
 ]
 
 const VISIBLE = 5
-const INITIAL = ROWS.slice(0, 3)
+// First render shows the full demo set (deterministic, SSR-safe).
+const INITIAL = ROWS.slice(0, VISIBLE)
 
 export function HeroScanLog() {
   const [rows, setRows] = useState<readonly Row[]>(INITIAL)
