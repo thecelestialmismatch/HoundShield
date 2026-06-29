@@ -14,10 +14,10 @@ describe('HeroScanLog', () => {
     expect(screen.getByText('https://proxy.houndshield.com/v1')).toBeTruthy()
   })
 
-  it('renders initial scan-log rows with Blocked + Passed verdicts', () => {
+  it('renders initial scan-log rows with BLOCKED + PASSED verdicts (demo casing)', () => {
     render(<HeroScanLog />)
-    expect(screen.getAllByText('Blocked').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getAllByText('Passed').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('BLOCKED').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('PASSED').length).toBeGreaterThanOrEqual(1)
   })
 
   it('exposes an accessible label', () => {
