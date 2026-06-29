@@ -148,19 +148,15 @@ export default function FeaturesPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-brand-400/[0.06] to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
-            <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4">
-              Platform Features
+            <p className="text-xs uppercase tracking-[0.2em] text-brand-500 font-semibold mb-4 font-[var(--font-mono)]">
+              Capabilities
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-[1.1]">
-              Everything you need for{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)]">
-                CMMC Level 2
-              </span>
+              Everything inside the firewall engine
             </h1>
             <p className="text-lg text-[var(--hs-ink-secondary)] max-w-2xl mx-auto leading-relaxed">
-              Map, assess, and close gaps across all 110 NIST SP 800-171 controls.
-              AI-driven remediation, auto-generated documentation, and a real-time
-              SPRS score — in one platform built for defense contractors.
+              Sixteen detection engines, 110 mapped controls and tamper-evident evidence —
+              all running on your hardware in under 10ms.
             </p>
           </FadeIn>
         </div>
@@ -196,6 +192,31 @@ export default function FeaturesPage() {
               </FadeIn>
             );
           })}
+        </div>
+      </section>
+
+      {/* ── The 16 detection engines (demo panel) ──────────────── */}
+      <section className="py-8 px-6">
+        <div className="max-w-5xl mx-auto rounded-2xl border border-[var(--hs-border)] bg-white overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--hs-border)]">
+            <h3 className="text-base font-semibold text-[var(--hs-ink)]">The 16 detection engines</h3>
+            <span className="text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-mono)]">CUI · PII · IP · PHI</span>
+          </div>
+          <div className="p-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
+            {[
+              'CUI markings', 'CAGE codes', 'Contract / DoDAAC #', 'Clearance levels',
+              'ITAR / EAR terms', 'Export-control', 'SSN / PII', 'PHI · MRN',
+              'ICD / diagnosis', 'API keys / secrets', 'AWS / cloud keys', 'JWT / tokens',
+              'PCI / card data', 'Source code', 'Trade-secret IP', 'IP / network data',
+            ].map((engine) => (
+              <div
+                key={engine}
+                className="flex items-center gap-2 rounded-[10px] border border-[var(--hs-border)] bg-[var(--hs-surface-1)] px-3 py-2.5 text-sm text-[var(--hs-ink)] font-[var(--font-mono)]"
+              >
+                {engine}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -67,9 +67,11 @@ describe('HomePage', () => {
     expect(screen.getByText('proxy-config.env')).toBeTruthy()
   })
 
-  it('renders FeaturesGrid section', () => {
+  it('renders the demo features section "Everything you need for CMMC Level 2"', () => {
     render(<HomePage />)
-    expect(screen.getByTestId('features-grid-mock')).toBeTruthy()
+    expect(screen.getByText('Everything you need for CMMC Level 2')).toBeTruthy()
+    expect(screen.getByText('CMMC Self-Assessment')).toBeTruthy()
+    expect(screen.getByText('Live Threat Dashboard')).toBeTruthy()
   })
 
   it('renders CountdownTimer in CTA', () => {
@@ -116,14 +118,16 @@ describe('HomePage', () => {
     expect(screen.getByText('<10ms')).toBeTruthy()
   })
 
-  it('renders Asymmetric Advantage section headline', () => {
+  it('renders Asymmetric Advantage section headline (demo copy)', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Every other tool makes/i)).toBeTruthy()
+    expect(screen.getByText(/Cloud DLP scans your CUI in their cloud/i)).toBeTruthy()
   })
 
-  it('ComparisonFlow is rendered', () => {
+  it('renders the demo 3-card comparison (Nightfall & Strac / Purview / HoundShield)', () => {
     render(<HomePage />)
-    expect(screen.getByTestId('comparison-flow-mock')).toBeTruthy()
+    expect(screen.getByText(/Nightfall & Strac/i)).toBeTruthy()
+    expect(screen.getByText('Microsoft Purview')).toBeTruthy()
+    expect(screen.getByText('HoundShield')).toBeTruthy()
   })
 
   it('How It Works heading updated copy', () => {
@@ -167,9 +171,9 @@ describe('HomePage', () => {
     expect(screen.getByText('Most popular')).toBeTruthy()
   })
 
-  it('CTA final section contains audit copy', () => {
+  it('final CTA band uses the demo copy "Ready to protect your CUI?"', () => {
     render(<HomePage />)
-    expect(screen.getByText(/The audit doesn/i)).toBeTruthy()
+    expect(screen.getByText(/Ready to protect your CUI\?/i)).toBeTruthy()
   })
 
   it('primary CTA has Start free link', () => {
