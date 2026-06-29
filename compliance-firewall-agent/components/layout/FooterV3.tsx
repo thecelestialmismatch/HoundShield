@@ -7,8 +7,8 @@ const FOOTER_LINKS = {
     { label: 'Features',      href: '/features' },
     { label: 'How it works',  href: '/how-it-works' },
     { label: 'Pricing',       href: '/pricing' },
+    { label: 'Dashboard',     href: '/command-center' },
     { label: 'Changelog',     href: '/changelog' },
-    { label: 'Roadmap',       href: '/roadmap' },
   ],
   Compliance: [
     { label: 'CMMC Level 2',  href: '/features' },
@@ -17,21 +17,12 @@ const FOOTER_LINKS = {
     { label: 'NIST 800-171',  href: '/features' },
     { label: 'DFARS 7012',    href: '/features' },
   ],
-  Resources: [
-    { label: 'Documentation', href: '/docs' },
-    { label: 'Blog',          href: '/blog' },
+  Company: [
     { label: 'Partners',      href: '/partners' },
-    { label: 'Contact',       href: '/contact' },
+    { label: 'Documentation', href: '/docs' },
+    { label: 'Contact sales', href: '/contact' },
     { label: 'About',         href: '/about' },
-  ],
-  Legal: [
-    { label: 'Trust Center',    href: '/trust' },
-    { label: 'Security',        href: '/security' },
-    { label: 'Status',          href: '/status' },
-    { label: 'Privacy',         href: '/privacy' },
-    { label: 'Terms',           href: '/terms' },
-    { label: 'DPA',             href: '/dpa' },
-    { label: 'Acceptable Use',  href: '/acceptable-use' },
+    { label: 'Security',      href: '/security' },
   ],
 }
 
@@ -40,6 +31,7 @@ const BADGES = [
   'HIPAA',
   'SOC 2',
   'NIST 800-171',
+  'DFARS 7012',
 ]
 
 interface FooterV3Props {
