@@ -25,6 +25,12 @@
 export interface FaqEntry {
   keywords: string[];
   answer: string;
+  /**
+   * "fallback" entries only match when no primary entry does. Safety net for
+   * vague asks ("help me…", "build a bot") that must never hijack specific
+   * product questions — and must never be answered with the contact dump.
+   */
+  tier?: "primary" | "fallback";
 }
 
 const FAQ_DB: FaqEntry[] = [
@@ -233,10 +239,34 @@ const FAQ_DB: FaqEntry[] = [
   },
 
   // ── SUPPORT / CONTACT ────────────────────────────────────────────────
+  // NOTE: deliberately NO bare "help" or "team" keywords here — "can you help
+  // me fix this issue?" must route to the troubleshooting entry below, never
+  // to a contact-info dump.
   {
-    keywords: ["contact", "support", "email", "help", "talk to", "sales", "demo", "team"],
+    keywords: ["contact", "support email", "your email", "email you", "talk to", "sales", "book a demo", "get in touch", "reach you", "talk to a human", "speak to someone", "contact sales"],
     answer:
       "**Get in touch:**\n- Website: [houndshield.com](https://houndshield.com)\n- Email: info@houndshield.com\n- Docs: houndshield.com/docs\n- Pricing: houndshield.com/pricing\n\nFor enterprise demos, MSP partnerships, or C3PAO coordination, email directly — we typically respond same day.",
+  },
+
+  // ── HELP / TROUBLESHOOTING TRIAGE (fallback tier) ────────────────────
+  // Catches "help me…", "fix this issue", "I have a problem" when nothing
+  // more specific matched. Asks for the actual problem instead of dumping
+  // contact info.
+  {
+    tier: "fallback",
+    keywords: ["help me", "can you help", "could you help", "i need help", "need some help", "please help", "fix this", "fix my", "fix it", "an issue", "this issue", "my issue", "what issue", "a problem", "my problem", "have a problem", "having trouble", "not working", "doesnt work", "doesn't work", "broken", "an error", "getting an error"],
+    answer:
+      "Happy to help — tell me what's going wrong and I'll get specific.\n\nA few things I can troubleshoot right now:\n- **Setup / gateway** — proxy not intercepting? Check your base URL is `https://proxy.houndshield.com/v1`\n- **Dashboard or SPRS score** — tell me what you're seeing vs. what you expected\n- **Detections** — a false positive, or something we missed? Paste a redacted example\n- **Billing or account** — email info@houndshield.com and a human will sort it same day\n\nDescribe the issue in a sentence or two and I'll take it from there.",
+  },
+
+  // ── BUILD-A-BOT / CODING ASKS (fallback tier) ────────────────────────
+  // "help me build the ai bot", "coading?" — honest scope + the useful
+  // pivot: make whatever they're building compliant in one line.
+  {
+    tier: "fallback",
+    keywords: ["coding", "coading", "write code", "write me code", "build a bot", "build the bot", "build an ai", "build the ai", "build a chatbot", "make a bot", "make a chatbot", "chatbot", "ai bot", "build an app", "build a system", "build the system", "the abs system", "programming", "how to code", "write a program"],
+    answer:
+      "I'm a compliance specialist rather than a general coding assistant — but if you're building something with AI in it, here's the part I'm genuinely great at: making it compliant from day one.\n\nPoint your app's LLM calls at the HoundShield gateway:\n\n```typescript\nconst openai = new OpenAI({\n  baseURL: 'https://proxy.houndshield.com/v1',\n  apiKey: process.env.OPENAI_API_KEY,\n});\n```\n\nEvery prompt your app sends is scanned in under 10ms for CUI, PHI, PII and secrets — before it ever reaches the model. Works with any OpenAI-compatible SDK, LangChain, or agent framework.\n\nWhat are you building? If it touches regulated data (defense, healthcare, legal), I can map exactly which controls it needs.",
   },
 
   // ── ROADMAP ──────────────────────────────────────────────────────────
@@ -260,7 +290,24 @@ const FAQ_DB: FaqEntry[] = [
 ];
 
 /**
- * Score a query against a FAQ entry using keyword overlap.
+ * Word-boundary keyword patterns, compiled once per keyword.
+ * Substring matching caused real production misfires: "vs" fired inside
+ * "canvas", "pro" inside "problem", and — worst — "help" (then a contact
+ * keyword) turned "can you help me fix this issue?" into a contact-info dump.
+ */
+const KW_PATTERNS = new Map<string, RegExp>();
+function kwPattern(kw: string): RegExp {
+  let re = KW_PATTERNS.get(kw);
+  if (!re) {
+    const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
+    re = new RegExp(`(?:^|[^\\p{L}\\p{N}])${escaped}(?=$|[^\\p{L}\\p{N}])`, "iu");
+    KW_PATTERNS.set(kw, re);
+  }
+  return re;
+}
+
+/**
+ * Score a query against a FAQ entry using whole-word keyword overlap.
  * Returns 0–1 (higher = better match).
  *
  * Normalization: divide by 40% of keyword count (rounded up), not 100%.
@@ -272,27 +319,40 @@ function scoreEntry(query: string, entry: FaqEntry): number {
   const q = query.toLowerCase();
   let hits = 0;
   for (const kw of entry.keywords) {
-    if (q.includes(kw)) hits++;
+    if (kwPattern(kw).test(q)) hits++;
   }
   if (hits === 0) return 0;
   const divisor = Math.max(1, Math.ceil(entry.keywords.length * 0.4));
   return Math.min(1, hits / divisor);
 }
 
-/**
- * Find the best FAQ answer for a given query.
- * Returns null if no entry scores above the confidence threshold.
- */
-export function findFaqAnswer(query: string, threshold = 0.15): string | null {
+function bestMatch(query: string, entries: FaqEntry[]): { score: number; answer: string } | null {
   let best: { score: number; answer: string } | null = null;
-
-  for (const entry of FAQ_DB) {
+  for (const entry of entries) {
     const score = scoreEntry(query, entry);
     if (score > (best?.score ?? 0)) {
       best = { score, answer: entry.answer };
     }
   }
+  return best;
+}
 
-  if (!best || best.score < threshold) return null;
-  return best.answer;
+/**
+ * Find the best FAQ answer for a given query.
+ * Two-tier resolution: primary (specific product/compliance) entries win
+ * outright; fallback entries (help triage, coding asks) are consulted only
+ * when nothing specific matched. Returns null below the confidence threshold.
+ */
+export function findFaqAnswer(query: string, threshold = 0.15): string | null {
+  const primary = bestMatch(query, FAQ_DB.filter((e) => e.tier !== "fallback"));
+  if (primary && primary.score >= threshold) return primary.answer;
+
+  // Fallback tier: any whole-word hit qualifies. These entries carry many
+  // synonyms (so a single hit under-scores the shared threshold), and by this
+  // point the only alternative is the generic "what would you like to dig
+  // into?" message — a targeted triage answer is strictly better.
+  const fallback = bestMatch(query, FAQ_DB.filter((e) => e.tier === "fallback"));
+  if (fallback && fallback.score > 0) return fallback.answer;
+
+  return null;
 }
