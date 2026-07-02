@@ -359,7 +359,7 @@ export default function AgentsPage() {
       <NavV3 />
 
       {/* ===== HERO ===== */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28">
+      <section className="relative pt-16 pb-20 md:pt-24 md:pb-28">
         <div className="bg-dot-grid absolute inset-0" />
         <div className="bg-hero-glow absolute inset-0" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

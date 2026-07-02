@@ -70,7 +70,7 @@ export default function StatusPage() {
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
       <ScrollProgressBar />
       <NavV3 />
-      <main className="max-w-2xl mx-auto px-6 pt-32 pb-24">
+      <main className="max-w-2xl mx-auto px-6 pt-16 pb-24">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-[var(--hs-ink)]">System Status</h1>
           <button
