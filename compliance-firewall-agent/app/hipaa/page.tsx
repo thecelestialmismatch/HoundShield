@@ -94,7 +94,7 @@ export default function HIPAAPage() {
       <NavV3 />
 
       {/* ── Hero ──────────────────────────────────── */}
-      <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center overflow-hidden pt-24 pb-20">
+      <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center overflow-hidden pt-8 pb-20">
         <div className="absolute inset-0 bg-dot-grid opacity-[0.15] pointer-events-none" />
         <div className="relative z-10 max-w-5xl mx-auto px-6">
           <motion.div

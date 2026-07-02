@@ -1,0 +1,305 @@
+/* ============================================================
+   HOUNDSHIELD — HERMES UNIFIED DESIGN SYSTEM (Direction A only)
+   Verbatim port of the approved "HERMES Redesign Demo" stylesheet,
+   Steel & Cream direction. Every declaration matches the demo
+   1:1; the only transforms applied are:
+     1. All selectors scoped under `.hermes` so the demo system
+        can't leak into the dashboard or legacy surfaces.
+     2. Direction-B (Midnight Command) tokens and the floating
+        direction switcher removed — Direction A is the product.
+     3. Keyframes prefixed `hs-` (Tailwind also defines `ping`).
+     4. Font stacks read the next/font variables loaded in
+        app/fonts.ts (same families: Fraunces / DM Sans / JBM).
+     5. `:focus-within` added beside `:hover` on dropdowns for
+        keyboard accessibility (zero visual change).
+   Source of truth: HoundShield — HERMES Redesign Demo (Direction A & B).html
+   ============================================================ */
+
+.hermes {
+  /* ---------- GLOBAL TOKENS ---------- */
+  --steel: #81A6C6; --sky: #AACDDC; --cream: #F3E3D0; --sand: #D2C4B4;
+  --ink: #0F1E2E; --ink2: #3D5166; --ink3: #6B8299;
+  --ok: #0E9F6E; --ok-bg: rgba(14, 159, 110, .12);
+  --bad: #E5484D; --bad-bg: rgba(229, 72, 77, .12);
+  --warn: #D9870B; --warn-bg: rgba(217, 135, 11, .12);
+  --r-sm: 10px; --r: 16px; --r-lg: 24px;
+  --f-disp: var(--font-display), 'Fraunces', Georgia, serif;
+  --f-body: var(--font-body), 'DM Sans', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', monospace;
+  --maxw: 1200px;
+  --ease: cubic-bezier(.22, .61, .36, 1);
+
+  /* ---------- DIRECTION A : STEEL & CREAM ---------- */
+  --page: #FAFCFF; --page-2: #F4F8FC; --warm-band: #F7ECDD;
+  --surface: #FFFFFF; --surface-2: #F5F8FB;
+  --text: #0F1E2E; --text-2: #42566B; --text-3: #7089A0;
+  --line: rgba(15, 30, 46, .10); --line-2: rgba(129, 166, 198, .30);
+  --brand: #5A86A8; --brand-bright: #81A6C6; --brand-2: #AACDDC;
+  --cta: #5A86A8; --cta-text: #FFFFFF; --cta-hover: #456C8C;
+  --accent-warm: #F3E3D0; --halo: rgba(129, 166, 198, .22);
+  --hero-from: #F4F8FC; --hero-to: #FFFFFF;
+  --nav-bg: rgba(250, 252, 255, .82); --nav-line: rgba(15, 30, 46, .08);
+  --logo-ink: #0F1E2E;
+  --pop: #0E1622; --pop-text: #E8F0F8; --pop-line: rgba(255, 255, 255, .08); --pop-mut: #90A6BC;
+  --shadow: 0 18px 50px rgba(20, 44, 70, .12); --shadow-sm: 0 6px 20px rgba(20, 44, 70, .08);
+
+  /* demo body{} */
+  font-family: var(--f-body);
+  background: var(--page);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.hermes *, .hermes *::before, .hermes *::after { margin: 0; padding: 0; box-sizing: border-box; }
+.hermes a { color: inherit; text-decoration: none; }
+.hermes .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+.hermes .mono { font-family: var(--f-mono); }
+.hermes .display { font-family: var(--f-disp); font-weight: 600; letter-spacing: -.02em; line-height: 1.04; }
+.hermes h1.display { font-size: clamp(2.6rem, 5.4vw, 4.4rem); }
+.hermes h2.display { font-size: clamp(1.9rem, 3.4vw, 2.9rem); }
+.hermes .eyebrow { font-family: var(--f-mono); font-size: .72rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--brand); }
+.hermes .muted { color: var(--text-2); }
+.hermes .center { text-align: center; }
+
+/* ---------- BUTTONS ---------- */
+.hermes .btn { display: inline-flex; align-items: center; gap: .5rem; font-weight: 600; font-size: .93rem; padding: .8rem 1.25rem; border-radius: var(--r-sm); border: 1px solid transparent; cursor: pointer; transition: all .2s var(--ease); white-space: nowrap; font-family: var(--f-body); }
+.hermes .btn svg { width: 16px; height: 16px; }
+.hermes .btn-primary { background: var(--cta); color: var(--cta-text); box-shadow: 0 8px 22px var(--halo); }
+.hermes .btn-primary:hover { background: var(--cta-hover); transform: translateY(-2px); box-shadow: 0 14px 30px var(--halo); }
+.hermes .btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+.hermes .btn-ghost:hover { border-color: var(--brand); color: var(--brand); transform: translateY(-2px); }
+.hermes .btn-sm { padding: .55rem .9rem; font-size: .84rem; }
+
+/* ---------- NAV ---------- */
+.hermes .nav { position: sticky; top: 0; z-index: 60; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); background: var(--nav-bg); border-bottom: 1px solid var(--nav-line); transition: background .4s var(--ease); }
+.hermes .nav-inner { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.hermes .brand { display: flex; align-items: center; gap: .6rem; cursor: pointer; }
+.hermes .brand-mark { width: auto; height: 36px; object-fit: contain; display: block; transition: transform .3s var(--ease); }
+.hermes .brand:hover .brand-mark { transform: rotate(-4deg) scale(1.06); }
+.hermes .app-side .brand-mark { height: 32px; }
+.hermes .brand-text { font-family: var(--f-disp); font-weight: 700; font-size: 1.2rem; letter-spacing: -.01em; color: var(--text); }
+.hermes .brand-text b { color: var(--brand); }
+.hermes .nav-links { display: flex; align-items: center; gap: .15rem; }
+.hermes .nav-item { position: relative; }
+.hermes .nav-link { display: inline-flex; align-items: center; gap: .3rem; padding: .5rem .75rem; font-size: .9rem; font-weight: 500; color: var(--text-2); border-radius: var(--r-sm); cursor: pointer; transition: all .18s var(--ease); }
+.hermes .nav-link:hover, .hermes .nav-item:hover .nav-link, .hermes .nav-item:focus-within .nav-link { color: var(--text); background: var(--surface-2); }
+.hermes .nav-link .chev { width: 13px; height: 13px; transition: transform .2s var(--ease); }
+.hermes .nav-item:hover .nav-link .chev, .hermes .nav-item:focus-within .nav-link .chev { transform: rotate(180deg); }
+.hermes .nav-link.active { color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent); }
+.hermes .nav-cta { display: flex; align-items: center; gap: .6rem; }
+.hermes .live-badge { display: inline-flex; align-items: center; gap: .45rem; padding: .35rem .65rem; border-radius: 999px; background: var(--ok-bg); border: 1px solid color-mix(in srgb, var(--ok) 28%, transparent); }
+.hermes .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 var(--ok); animation: hs-ping 2.4s infinite; }
+.hermes .live-badge span { font-family: var(--f-mono); font-size: .7rem; font-weight: 700; color: var(--ok); }
+@keyframes hs-ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent); } 70% { box-shadow: 0 0 0 7px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* ---------- DROPDOWNS (pure CSS hover) ---------- */
+.hermes .dropdown { position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(8px) scale(.98); opacity: 0; visibility: hidden; pointer-events: none; background: var(--pop); border: 1px solid var(--pop-line); border-radius: var(--r); box-shadow: var(--shadow); padding: .5rem; transition: all .2s var(--ease); z-index: 70; }
+.hermes .dropdown::before { content: ""; position: absolute; top: -16px; left: 0; right: 0; height: 18px; }
+.hermes .nav-item:hover .dropdown, .hermes .nav-item:focus-within .dropdown { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
+.hermes .nav-item:hover, .hermes .nav-item:focus-within { z-index: 71; }
+.hermes .dropdown.wide { width: 720px; }
+.hermes .dd-head { padding: .65rem .8rem .55rem; border-bottom: 1px solid var(--pop-line); margin-bottom: .4rem; }
+.hermes .dd-head .eyebrow { color: var(--brand-2); }
+.hermes .dd-head p { font-size: .74rem; color: var(--pop-mut); margin-top: .15rem; }
+.hermes .dd-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .2rem; }
+.hermes .dd-item { display: flex; gap: .7rem; padding: .6rem .7rem; border-radius: var(--r-sm); cursor: pointer; transition: background .15s var(--ease); }
+.hermes .dd-item:hover { background: rgba(255, 255, 255, .05); }
+.hermes .dd-ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; flex-shrink: 0; background: color-mix(in srgb, var(--brand) 16%, transparent); color: var(--brand-2); }
+.hermes .dd-ic svg { width: 15px; height: 15px; }
+.hermes .dd-item h5 { font-size: .86rem; font-weight: 600; color: var(--pop-text); display: flex; align-items: center; gap: .3rem; }
+.hermes .dd-item p { font-size: .72rem; color: var(--pop-mut); line-height: 1.4; margin-top: .1rem; }
+.hermes .dd-tag { font-family: var(--f-mono); font-size: .62rem; font-weight: 700; letter-spacing: .06em; color: var(--brand-2); text-transform: uppercase; }
+.hermes .dd-foot { margin-top: .4rem; padding: .6rem .8rem; border-top: 1px solid var(--pop-line); display: flex; justify-content: space-between; align-items: center; }
+.hermes .dd-foot a { font-size: .78rem; font-weight: 600; color: var(--brand-2); display: inline-flex; gap: .3rem; align-items: center; }
+.hermes .dd-foot .mono { font-size: .66rem; color: var(--pop-mut); }
+.hermes .dd-narrow { width: 340px; }
+.hermes .dd-narrow .dd-grid { grid-template-columns: 1fr; }
+.hermes .dd-soon { font-family: var(--f-mono); font-size: .56rem; font-weight: 700; padding: .05rem .3rem; border-radius: 5px; background: rgba(255, 255, 255, .08); color: var(--pop-mut); text-transform: uppercase; letter-spacing: .05em; }
+
+/* price mini rows in dropdown */
+.hermes .dd-price { display: flex; justify-content: space-between; align-items: center; padding: .55rem .7rem; border-radius: var(--r-sm); cursor: pointer; transition: background .15s; }
+.hermes .dd-price:hover { background: rgba(255, 255, 255, .05); }
+.hermes .dd-price h5 { font-size: .85rem; font-weight: 700; color: var(--pop-text); }
+.hermes .dd-price p { font-size: .7rem; color: var(--pop-mut); }
+.hermes .dd-price .amt { font-family: var(--f-mono); font-weight: 700; color: var(--pop-text); font-size: .85rem; }
+.hermes .dd-price .amt small { color: var(--pop-mut); font-weight: 400; font-size: .62rem; }
+
+/* ---------- PAGE / SECTIONS ---------- */
+.hermes .page { animation: hs-fade .45s var(--ease); }
+@keyframes hs-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.hermes .section { padding: 84px 0; }
+.hermes .section.tight { padding: 56px 0; }
+.hermes .section-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
+.hermes .section-head h2 { margin: .5rem 0 .7rem; }
+.hermes .section-head p { font-size: 1.05rem; color: var(--text-2); }
+.hermes .prod-head { display: flex; gap: .7rem; align-items: center; margin-bottom: 1.1rem; }
+.hermes .prod-head .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--brand); }
+.hermes .prod-head .ic svg { width: 21px; height: 21px; }
+.hermes .prod-h1 { font-size: clamp(2rem, 4vw, 3.1rem); max-width: 820px; margin-bottom: 1rem; }
+.hermes .prod-sub { font-size: 1.12rem; color: var(--text-2); max-width: 680px; margin-bottom: 1.5rem; }
+.hermes .chip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 760px) { .hermes .chip-grid { grid-template-columns: 1fr 1fr; } }
+.hermes .map-sub { color: var(--text-3); font-size: .8rem; font-weight: 400; }
+.hermes .faq-q { font-size: 1.02rem; margin-bottom: .4rem; font-weight: 700; }
+.hermes .ctrl-row span b { font-weight: 700; }
+.hermes .opsbar { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: .75rem 18px; margin-bottom: 18px; font-size: .85rem; color: var(--text-2); }
+.hermes .opsbar b { color: var(--text); font-family: var(--f-mono); font-weight: 600; }
+.hermes .engrow { display: grid; grid-template-columns: 96px 1fr 44px; align-items: center; gap: 12px; font-size: .85rem; color: var(--text-2); }
+.hermes .engrow .bar { margin: 0; }
+.hermes .engrow b { text-align: right; font-family: var(--f-mono); color: var(--text); font-weight: 600; }
+.hermes .bar i { transition: width .8s var(--ease); }
+
+/* ---------- HERO ---------- */
+.hermes .hero { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--hero-from), var(--hero-to)); }
+.hermes .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 60% at 78% 18%, var(--halo), transparent 70%); pointer-events: none; }
+.hermes .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding: 72px 0 84px; }
+.hermes .hero .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .4rem .8rem; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); font-size: .78rem; font-weight: 600; color: var(--text-2); margin-bottom: 1.4rem; }
+.hermes .hero .pill .live-dot { width: 6px; height: 6px; }
+.hermes .hero h1 { margin-bottom: 1.2rem; }
+.hermes .hero h1 .accent { color: var(--brand); }
+.hermes .hero .sub { font-size: 1.16rem; color: var(--text-2); max-width: 540px; margin-bottom: 1.8rem; }
+.hermes .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.hermes .hero-trust { display: flex; gap: 1.3rem; flex-wrap: wrap; }
+.hermes .hero-trust span { display: inline-flex; align-items: center; gap: .4rem; font-size: .82rem; color: var(--text-3); }
+.hermes .hero-trust svg { width: 15px; height: 15px; color: var(--ok); }
+
+/* terminal card */
+.hermes .term { background: #0C141E; border: 1px solid rgba(127, 177, 212, .22); border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden; }
+.hermes .term-bar { display: flex; align-items: center; gap: .5rem; padding: .7rem .9rem; border-bottom: 1px solid rgba(255, 255, 255, .07); background: rgba(255, 255, 255, .02); }
+.hermes .term-bar i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+.hermes .term-bar .u { flex: 1; text-align: center; font-family: var(--f-mono); font-size: .72rem; color: #7B93A8; }
+.hermes .term-body { padding: 1.1rem 1.2rem; font-family: var(--f-mono); font-size: .82rem; line-height: 1.85; color: #C7D6E5; }
+.hermes .cmt { color: #5E7488; }
+.hermes .var { color: #9CCBE6; }
+.hermes .str { color: #9DD0A8; }
+.hermes .term-row { display: flex; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, .06); padding: .35rem 0; }
+.hermes .tag-block { color: #E5484D; font-weight: 700; }
+.hermes .tag-pass { color: #5FCF8F; font-weight: 700; }
+.hermes .lat { color: #7B93A8; }
+
+/* stat row */
+.hermes .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border-radius: var(--r); overflow: hidden; margin-top: 8px; }
+.hermes .stat { background: var(--warm-band); padding: 30px 22px; text-align: center; }
+.hermes .stat .n { font-family: var(--f-disp); font-weight: 700; font-size: 2.1rem; color: var(--text); }
+.hermes .stat .l { font-size: .84rem; font-weight: 600; color: var(--text-2); margin-top: .2rem; }
+.hermes .stat .s { font-size: .72rem; color: var(--text-3); }
+
+/* ---------- CARDS / GRIDS ---------- */
+.hermes .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.hermes .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+.hermes .card { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 26px; transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease); }
+.hermes .card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--line-2); }
+.hermes .card .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--brand); margin-bottom: 1rem; }
+.hermes .card .ic svg { width: 21px; height: 21px; }
+.hermes .card h3 { font-size: 1.12rem; font-weight: 700; margin-bottom: .45rem; }
+.hermes .card p { font-size: .92rem; color: var(--text-2); }
+.hermes .card .chip { position: absolute; top: 18px; right: 18px; font-family: var(--f-mono); font-size: .66rem; font-weight: 700; color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent); padding: .2rem .5rem; border-radius: 6px; }
+
+/* ---------- STEPS ---------- */
+.hermes .steps { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.hermes .step { display: flex; gap: 22px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 26px 28px; transition: all .25s var(--ease); }
+.hermes .step:hover { border-color: var(--line-2); transform: translateX(4px); box-shadow: var(--shadow-sm); }
+.hermes .step .num { font-family: var(--f-mono); font-size: 1.4rem; font-weight: 700; color: var(--brand); flex-shrink: 0; width: 38px; }
+.hermes .step h3 { font-size: 1.18rem; font-weight: 700; margin-bottom: .35rem; }
+.hermes .step p { color: var(--text-2); font-size: .95rem; }
+.hermes .step .ic { margin-left: auto; width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand); flex-shrink: 0; }
+.hermes .step .ic svg { width: 20px; height: 20px; }
+
+/* ---------- PRICING ---------- */
+.hermes .bill-toggle { display: inline-flex; align-items: center; gap: .4rem; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: .3rem; margin: 0 auto 40px; position: relative; }
+.hermes .bill-toggle button { border: none; background: transparent; font-family: var(--f-body); font-weight: 600; font-size: .86rem; color: var(--text-2); padding: .5rem 1.1rem; border-radius: 999px; cursor: pointer; transition: all .2s; }
+.hermes .bill-toggle button.on { background: var(--cta); color: var(--cta-text); }
+.hermes .bill-toggle .save { font-family: var(--f-mono); font-size: .66rem; color: var(--ok); font-weight: 700; }
+.hermes .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; align-items: stretch; }
+.hermes .price-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 26px 22px; display: flex; flex-direction: column; transition: all .25s var(--ease); position: relative; }
+.hermes .price-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--line-2); }
+.hermes .price-card.featured { border-color: var(--brand); box-shadow: 0 20px 50px var(--halo); }
+.hermes .price-card.featured::before { content: "Most popular"; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--f-mono); font-size: .64rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cta-text); background: var(--cta); padding: .25rem .7rem; border-radius: 999px; }
+.hermes .price-card .tier { font-weight: 700; font-size: 1.05rem; }
+.hermes .price-card .who { font-size: .78rem; color: var(--text-3); min-height: 34px; margin-top: .2rem; }
+.hermes .price-card .price { font-family: var(--f-disp); font-weight: 700; font-size: 2.3rem; margin: .5rem 0 .1rem; }
+.hermes .price-card .price small { font-size: .85rem; font-weight: 500; color: var(--text-3); font-family: var(--f-body); }
+.hermes .price-card .annual { font-size: .72rem; color: var(--text-3); min-height: 16px; }
+.hermes .price-card .btn { width: 100%; justify-content: center; margin: 18px 0; }
+.hermes .feat { list-style: none; display: flex; flex-direction: column; gap: .55rem; font-size: .85rem; color: var(--text-2); }
+.hermes .feat li { display: flex; gap: .5rem; align-items: flex-start; }
+.hermes .feat li svg { width: 15px; height: 15px; color: var(--ok); flex-shrink: 0; margin-top: 2px; }
+
+/* compare strip */
+.hermes .compare { margin-top: 30px; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); }
+.hermes .compare table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.hermes .compare th, .hermes .compare td { padding: .75rem 1rem; text-align: center; border-bottom: 1px solid var(--line); }
+.hermes .compare th:first-child, .hermes .compare td:first-child { text-align: left; color: var(--text-2); }
+.hermes .compare thead th { font-weight: 700; color: var(--text); }
+.hermes .compare td svg { width: 15px; height: 15px; color: var(--ok); }
+.hermes .compare .dash { color: var(--text-3); }
+
+/* ---------- DOCS ---------- */
+.hermes .docs-wrap { display: grid; grid-template-columns: 230px 1fr; gap: 36px; align-items: start; }
+.hermes .docs-side { position: sticky; top: 90px; display: flex; flex-direction: column; gap: .2rem; }
+.hermes .docs-side .gh { font-family: var(--f-mono); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); margin: 1rem 0 .3rem; }
+.hermes .docs-side a { padding: .45rem .7rem; border-radius: 8px; font-size: .88rem; color: var(--text-2); cursor: pointer; }
+.hermes .docs-side a:hover, .hermes .docs-side a.on { background: var(--surface-2); color: var(--brand); }
+.hermes .code { background: #0C141E; border: 1px solid rgba(127, 177, 212, .2); border-radius: var(--r); overflow: hidden; margin: 18px 0; }
+.hermes .code-top { display: flex; justify-content: space-between; align-items: center; padding: .55rem .9rem; border-bottom: 1px solid rgba(255, 255, 255, .07); font-family: var(--f-mono); font-size: .7rem; color: #7B93A8; }
+.hermes .code pre { padding: 1rem 1.1rem; overflow: auto; font-family: var(--f-mono); font-size: .8rem; line-height: 1.7; color: #C7D6E5; }
+.hermes .code .k { color: #9CCBE6; }
+.hermes .code .s { color: #9DD0A8; }
+.hermes .code .c { color: #5E7488; }
+.hermes .callout { display: flex; gap: .7rem; padding: 1rem 1.1rem; border-radius: var(--r); background: var(--ok-bg); border: 1px solid color-mix(in srgb, var(--ok) 25%, transparent); font-size: .9rem; color: var(--text-2); }
+
+/* ---------- CTA BAND ---------- */
+.hermes .cta-band { background: linear-gradient(120deg, var(--brand), var(--brand-2)); border-radius: var(--r-lg); padding: 56px; text-align: center; color: #fff; position: relative; overflow: hidden; }
+.hermes .cta-band h2 { color: #fff; margin-bottom: .6rem; }
+.hermes .cta-band p { color: rgba(255, 255, 255, .86); max-width: 520px; margin: 0 auto 1.5rem; }
+.hermes .cta-band .btn-primary { background: #fff; color: var(--brand); }
+.hermes .cta-band .btn-primary:hover { background: var(--cream); color: var(--brand); }
+
+/* ---------- FOOTER ---------- */
+.hermes .footer { background: var(--warm-band); border-top: 1px solid var(--line); padding: 56px 0 28px; margin-top: 0; }
+.hermes .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 36px; }
+.hermes .foot-brand p { font-size: .86rem; color: var(--text-2); max-width: 280px; margin: .8rem 0; }
+.hermes .foot-badges { display: flex; flex-wrap: wrap; gap: .4rem; }
+.hermes .foot-badges span { font-family: var(--f-mono); font-size: .66rem; font-weight: 600; color: var(--text-2); border: 1px solid var(--line); border-radius: 6px; padding: .25rem .5rem; }
+.hermes .foot-col h6 { font-family: var(--f-mono); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); margin-bottom: .9rem; }
+.hermes .foot-col a { display: block; font-size: .88rem; color: var(--text-2); padding: .25rem 0; cursor: pointer; }
+.hermes .foot-col a:hover { color: var(--brand); }
+.hermes .foot-bottom { border-top: 1px solid var(--line); padding-top: 20px; display: flex; justify-content: space-between; font-size: .8rem; color: var(--text-3); flex-wrap: wrap; gap: .5rem; }
+
+/* ---------- PANELS (features / product pages) ---------- */
+.hermes .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.hermes .panel-h { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.hermes .panel-h h3 { font-size: 1rem; font-weight: 700; }
+.hermes .panel-h .mono { font-size: .72rem; color: var(--text-3); }
+.hermes .ctrl-row { display: flex; align-items: center; justify-content: space-between; padding: .65rem 20px; border-bottom: 1px solid var(--line); font-size: .85rem; }
+.hermes .ctrl-row:last-child { border: none; }
+.hermes .ctrl-row .st { font-family: var(--f-mono); font-size: .68rem; font-weight: 700; padding: .15rem .45rem; border-radius: 5px; }
+.hermes .st.met { background: var(--ok-bg); color: var(--ok); }
+.hermes .st.gap { background: var(--bad-bg); color: var(--bad); }
+.hermes .st.part { background: var(--warn-bg); color: var(--warn); }
+.hermes .bar { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; margin-top: .4rem; }
+.hermes .bar i { display: block; height: 100%; background: var(--brand); border-radius: 99px; }
+.hermes .gateway-box { display: flex; align-items: center; gap: .6rem; background: var(--surface-2); border: 1px dashed var(--line-2); border-radius: 10px; padding: .7rem .9rem; font-family: var(--f-mono); font-size: .82rem; color: var(--text); justify-content: space-between; }
+.hermes .gateway-box button { border: none; background: var(--brand); color: #fff; border-radius: 7px; padding: .35rem .7rem; font-size: .72rem; font-weight: 700; cursor: pointer; }
+
+/* ---------- MOBILE ---------- */
+.hermes .burger { display: none; }
+@media (max-width: 900px) {
+  .hermes .nav-links, .hermes .nav-cta .live-badge, .hermes .nav-cta .btn-ghost:not(.burger) { display: none; }
+  .hermes .burger { display: grid; }
+  /* burger-open state — mirrors the demo's JS-injected cssText verbatim */
+  .hermes .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 66px; left: 0; right: 0; background: var(--nav-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--nav-line); padding: 12px; gap: .2rem; align-items: stretch; }
+  .hermes .hero-grid { grid-template-columns: 1fr; gap: 30px; padding: 48px 0 56px; }
+  .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr 1fr; }
+  .hermes .docs-wrap { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr; }
+}
+
+/* Reduced motion: park the entrance fade + live-dot ping (never breaks layout) */
+@media (prefers-reduced-motion: reduce) {
+  .hermes .page { animation: none; }
+  .hermes .live-dot { animation: none; }
+  .hermes .brand-mark, .hermes .btn, .hermes .card, .hermes .step { transition: none; }
+}

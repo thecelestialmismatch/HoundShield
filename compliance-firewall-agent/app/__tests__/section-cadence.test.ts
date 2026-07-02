@@ -24,14 +24,16 @@ const MARKETING_PAGES = [
 ];
 
 function tones(src: string): Set<string> {
-  return new Set(src.match(/hs-surface-[0-3]|hs-navy/g) ?? []);
+  return new Set(src.match(/hs-surface-[0-3]|hs-navy|page-2|warm-band|cta-band/g) ?? []);
 }
 
 describe("marketing pages have visible section cadence", () => {
   for (const rel of MARKETING_PAGES) {
     it(`${rel} is not a single flat background`, () => {
       const src = readFileSync(path.join(ROOT, rel), "utf8");
-      const striped = src.includes("section-stripe");
+      // The HERMES Direction-A system (className="hermes") carries its own
+      // section cadence (hero gradient, warm-band, page-2 tints) in hermes.css.
+      const striped = src.includes("section-stripe") || src.includes('className="hermes"');
       const distinctTones = tones(src).size;
       expect(
         striped || distinctTones >= 2,

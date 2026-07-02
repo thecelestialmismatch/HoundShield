@@ -66,7 +66,7 @@ export default function ContactPage() {
       <NavV3 />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-16 md:pt-44 md:pb-20 overflow-hidden">
+      <section className="relative pt-20 pb-16 md:pt-28 md:pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-brand-600/[0.06] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <FadeIn>

@@ -16,7 +16,7 @@ export default function AcceptableUsePage() {
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
       <ScrollProgressBar />
       <NavV3 />
-      <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+      <main className="max-w-3xl mx-auto px-6 pt-16 pb-24">
         <h1 className="text-3xl font-bold text-[var(--hs-ink)] mb-2">Acceptable Use Policy</h1>
         <p className="text-sm text-[var(--hs-ink-tertiary)] mb-10">Last updated: June 21, 2026</p>
 

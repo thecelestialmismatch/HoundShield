@@ -18,107 +18,81 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }))
 
-// Stub all complex client components
-vi.mock('@/components/ui/CountdownTimer',() => ({ CountdownTimer:() => <div data-testid="countdown-mock">days</div> }))
-vi.mock('@/components/ui/ComparisonFlow',() => ({ ComparisonFlow:() => <div data-testid="comparison-flow-mock" /> }))
-vi.mock('@/components/ui/FaqAccordion',  () => ({
-  FaqAccordion: ({ items }: { items: { question: string; answer: string }[] }) => (
-    <dl>{items.map(i => <div key={i.question}><dt>{i.question}</dt><dd>{i.answer}</dd></div>)}</dl>
-  ),
-}))
-vi.mock('@/components/ui/CodeBlock',     () => ({ CodeBlock: ({ code }: { code: string }) => <pre>{code}</pre> }))
-vi.mock('@/components/landing/FeaturesGrid', () => ({
-  FeaturesGrid: () => <section data-testid="features-grid-mock">Features Grid</section>,
-}))
 vi.mock('@/components/layout/NavV3',    () => ({ NavV3:    () => <nav>Nav</nav> }))
 vi.mock('@/components/layout/FooterV3', () => ({ FooterV3: () => <footer>Footer</footer> }))
+vi.mock('@/components/ModeBNotice',     () => ({
+  ModeBNotice: () => <aside data-testid="mode-b-notice">Mode B notice</aside>,
+}))
 
 import HomePage from '../page'
 
-// ── Tests ─────────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────────
+ * Homepage contract — HERMES demo parity (Direction A · Steel & Cream).
+ * Demo home structure, in order:
+ *   hero → stat row → asymmetric advantage → one platform → CTA band
+ * plus the Mode-B deployment-boundary notice (compliance gate).
+ * ────────────────────────────────────────────────────────────────── */
 
-describe('HomePage', () => {
+describe('HomePage — HERMES demo parity', () => {
   it('renders without crashing', () => {
     const { container } = render(<HomePage />)
     expect(container.firstChild).toBeTruthy()
   })
 
-  it('H1 contains "CUI"', () => {
-    render(<HomePage />)
-    const h1 = screen.getByRole('heading', { level: 1 })
-    expect(h1.textContent).toContain('CUI')
+  it('mounts the Direction-A design system (.hermes scope)', () => {
+    const { container } = render(<HomePage />)
+    expect((container.firstChild as HTMLElement).className).toContain('hermes')
   })
 
-  it('H1 contains "ChatGPT"', () => {
-    render(<HomePage />)
-    const h1 = screen.getByRole('heading', { level: 1 })
-    expect(h1.textContent).toContain('ChatGPT')
-  })
-
-  it('H1 updated copy: Stop your team from leaking', () => {
+  // ── Hero ─────────────────────────────────────────────────────────
+  it('H1 uses the demo copy: Stop your team from leaking CUI to ChatGPT', () => {
     render(<HomePage />)
     const h1 = screen.getByRole('heading', { level: 1 })
     expect(h1.textContent).toMatch(/Stop your team from leaking/i)
+    expect(h1.textContent).toContain('CUI')
+    expect(h1.textContent).toContain('ChatGPT')
   })
 
-  it('renders the live scan-log card in hero', () => {
+  it('hero pill carries the demo framework line', () => {
     render(<HomePage />)
-    // Hero now shows the brand-demo scan-log terminal (HeroScanLog), not the dashboard
+    expect(screen.getByText(/Local-only · CMMC Level 2 · HIPAA · SOC 2/i)).toBeTruthy()
+  })
+
+  it('hero sub ends on the demo emphasis "on your hardware"', () => {
+    const { container } = render(<HomePage />)
+    expect(container.textContent).toMatch(/scanned on your hardware/i)
+  })
+
+  it('renders the demo proxy-config terminal in the hero', () => {
+    render(<HomePage />)
     expect(screen.getByText('proxy-config.env')).toBeTruthy()
   })
 
-  it('renders the demo features section "Everything you need for CMMC Level 2"', () => {
-    render(<HomePage />)
-    expect(screen.getByText('Everything you need for CMMC Level 2')).toBeTruthy()
-    expect(screen.getByText('CMMC Self-Assessment')).toBeTruthy()
-    expect(screen.getByText('Live Threat Dashboard')).toBeTruthy()
+  it('hero trust row lists the four demo checks', () => {
+    const { container } = render(<HomePage />)
+    for (const t of ['One URL change', 'Local-only', 'Free to start', 'C3PAO-ready']) {
+      expect(container.textContent).toContain(t)
+    }
   })
 
-  it('renders CountdownTimer in CTA', () => {
-    render(<HomePage />)
-    expect(screen.getByTestId('countdown-mock')).toBeTruthy()
-  })
-
-  it('renders "days" label in countdown area', () => {
-    render(<HomePage />)
-    expect(screen.getByTestId('countdown-mock').textContent).toContain('days')
-  })
-
-  it('Jordan section is present', () => {
-    render(<HomePage />)
-    expect(screen.getByTestId('jordan-section')).toBeTruthy()
-  })
-
-  it('Jordan section contains "BUILT FOR JORDAN"', () => {
-    render(<HomePage />)
-    const jordan = screen.getByTestId('jordan-section')
-    expect(jordan.textContent).toMatch(/BUILT FOR JORDAN/i)
-  })
-
-  it('Jordan pull quote is present', () => {
-    render(<HomePage />)
-    expect(screen.getByText(/I needed the PDF I could hand my C3PAO assessor/i)).toBeTruthy()
-  })
-
-  it('Jordan buyer profile card shows Role field', () => {
-    render(<HomePage />)
-    expect(screen.getByText('IT Security Manager')).toBeTruthy()
-  })
-
-  it('Jordan buyer profile card shows Deadline field', () => {
-    render(<HomePage />)
-    expect(screen.getByText('November 10, 2026')).toBeTruthy()
-  })
-
-  it('stats strip renders 4 stat values', () => {
+  // ── Stat row ─────────────────────────────────────────────────────
+  it('stat row renders the four demo stats', () => {
     render(<HomePage />)
     expect(screen.getByText('16')).toBeTruthy()
     expect(screen.getByText('~80,000')).toBeTruthy()
     expect(screen.getByText('110')).toBeTruthy()
     expect(screen.getByText('<10ms')).toBeTruthy()
+    expect(screen.getByText('NIST 800-171 controls')).toBeTruthy()
   })
 
-  it('renders Asymmetric Advantage section headline (demo copy)', () => {
+  // ── Compliance gate (deliberate addition to the demo) ────────────
+  it('keeps the Mode-B deployment-boundary notice (hosted plane is never CUI-safe)', () => {
+    render(<HomePage />)
+    expect(screen.getByTestId('mode-b-notice')).toBeTruthy()
+  })
+
+  // ── Asymmetric advantage ─────────────────────────────────────────
+  it('renders the asymmetric-advantage headline (demo copy)', () => {
     render(<HomePage />)
     expect(screen.getByText(/Cloud DLP scans your CUI in their cloud/i)).toBeTruthy()
   })
@@ -130,67 +104,70 @@ describe('HomePage', () => {
     expect(screen.getByText('HoundShield')).toBeTruthy()
   })
 
-  it('How It Works heading updated copy', () => {
+  // ── One platform ─────────────────────────────────────────────────
+  it('renders the demo features section "Everything you need for CMMC Level 2"', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Live in ten minutes/i)).toBeTruthy()
+    expect(screen.getByText('Everything you need for CMMC Level 2')).toBeTruthy()
   })
 
-  it('How It Works subheading: Audited in ten seconds', () => {
+  it('renders all six demo platform cards', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Audited in ten seconds/i)).toBeTruthy()
+    for (const title of [
+      'CMMC Self-Assessment',
+      'AI-Powered Gap Analysis',
+      'SSP & POA&M Export',
+      'AI Prompt Interception',
+      '16 Detection Engines',
+      'Live Threat Dashboard',
+    ]) {
+      expect(screen.getByText(title)).toBeTruthy()
+    }
   })
 
-  it('renders 3 How It Works steps', () => {
+  it('renders the demo card chips (110 controls / Prioritized / 1-click)', () => {
     render(<HomePage />)
-    expect(screen.getByText('01')).toBeTruthy()
-    expect(screen.getByText('02')).toBeTruthy()
-    expect(screen.getByText('03')).toBeTruthy()
+    expect(screen.getByText('110 controls')).toBeTruthy()
+    expect(screen.getByText('Prioritized')).toBeTruthy()
+    expect(screen.getByText('1-click')).toBeTruthy()
   })
 
-  it('env var code block present in step 01', () => {
-    render(<HomePage />)
-    expect(screen.getByText('OPENAI_BASE_URL=https://proxy.houndshield.com')).toBeTruthy()
-  })
-
-  it('pricing section is present', () => {
-    render(<HomePage />)
-    expect(screen.getByText('Pricing that scales with your team')).toBeTruthy()
-  })
-
-  it('renders 5 pricing tiers', () => {
-    render(<HomePage />)
-    expect(screen.getByText('Free')).toBeTruthy()
-    expect(screen.getByText('Pro')).toBeTruthy()
-    expect(screen.getByText('Growth')).toBeTruthy()
-    expect(screen.getByText('Enterprise')).toBeTruthy()
-    expect(screen.getByText('Federal')).toBeTruthy()
-  })
-
-  it('Pro plan marked as most popular', () => {
-    render(<HomePage />)
-    expect(screen.getByText('Most popular')).toBeTruthy()
-  })
-
+  // ── CTA band ─────────────────────────────────────────────────────
   it('final CTA band uses the demo copy "Ready to protect your CUI?"', () => {
     render(<HomePage />)
     expect(screen.getByText(/Ready to protect your CUI\?/i)).toBeTruthy()
+    expect(screen.getByText(/see your SPRS score in under 30 minutes/i)).toBeTruthy()
   })
 
-  it('primary CTA has Start free link', () => {
+  it('primary CTAs link to /signup', () => {
     render(<HomePage />)
-    const links = screen.getAllByText(/Start free/i)
-    expect(links.length).toBeGreaterThanOrEqual(1)
+    const signupLinks = Array.from(document.querySelectorAll('a[href="/signup"]'))
+    expect(signupLinks.length).toBeGreaterThanOrEqual(2) // hero + CTA band
   })
 
-  it('CMMC deadline badge visible in hero', () => {
+  // ── Guardrails (NEVER-DO list) ───────────────────────────────────
+  it('does not render a second pricing grid on the homepage (one-grid rule)', () => {
     render(<HomePage />)
-    // Appears in hero badge and final CTA — both are correct
-    const els = screen.getAllByText(/CMMC Level 2 deadline/i)
-    expect(els.length).toBeGreaterThanOrEqual(1)
+    expect(screen.queryByText(/Pricing that scales with your team/i)).toBeNull()
+    expect(screen.queryByText('Most popular')).toBeNull()
   })
 
-  it('FAQ section renders first question', () => {
-    render(<HomePage />)
-    expect(screen.getByText(/Does prompt content ever leave my network/i)).toBeTruthy()
+  it('does not render fabricated metrics (Rule: real numbers only)', () => {
+    const { container } = render(<HomePage />)
+    expect(container.textContent).not.toMatch(/14,?\d{3}\s*intercepted/i)
+    expect(container.textContent).not.toMatch(/500\+\s*teams|2M\+\s*scans/i)
+  })
+
+  it('matches the demo section order: hero → stats → asymmetric → platform → CTA', () => {
+    const { container } = render(<HomePage />)
+    const text = container.textContent ?? ''
+    const order = [
+      'Stop your team from leaking',
+      'Detection engines',
+      'Cloud DLP scans your CUI in their cloud',
+      'Everything you need for CMMC Level 2',
+      'Ready to protect your CUI?',
+    ].map((s) => text.indexOf(s))
+    expect(order.every((i) => i >= 0)).toBe(true)
+    expect([...order].sort((a, b) => a - b)).toEqual(order)
   })
 })

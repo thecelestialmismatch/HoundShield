@@ -54,7 +54,7 @@ export default function AboutPage() {
             <NavV3 />
 
             {/* Hero */}
-            <section className="relative pt-32 pb-16 md:pt-40 md:pb-20">
+            <section className="relative pt-16 pb-16 md:pt-24 md:pb-20">
                 <div className="absolute inset-0 bg-hero-glow" />
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
                     <AnimatedSection>
