@@ -80,7 +80,7 @@ export default function RoadmapPage() {
       <NavV3 />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 px-6 text-center">
+      <section className="pt-16 pb-16 px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3">
             ROADMAP

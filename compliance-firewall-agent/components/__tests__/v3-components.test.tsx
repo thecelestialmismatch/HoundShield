@@ -261,11 +261,12 @@ describe('NavV3', () => {
     expect(links.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('logo image has logo-img class (no bg-white wrapper)', () => {
+  it('logo image uses the demo brand-mark class (no logo-img idle/filter treatment)', () => {
     render(<NavV3 />)
     const logoImg = document.querySelector('img[alt="HoundShield"]')
     expect(logoImg).toBeTruthy()
-    expect(logoImg!.className).toContain('logo-img')
+    expect(logoImg!.className).toContain('brand-mark')
+    expect(logoImg!.className).not.toContain('logo-img')
   })
 
   it('logo image is NOT wrapped in a bg-white div', () => {
@@ -276,11 +277,11 @@ describe('NavV3', () => {
     expect(parent?.className ?? '').not.toContain('bg-white')
   })
 
-  it('logo image renders at 44x44', () => {
+  it('logo image renders at the demo 28x36 (36px-high mark)', () => {
     render(<NavV3 />)
     const logoImg = document.querySelector('img[alt="HoundShield"]') as HTMLImageElement
-    expect(logoImg?.width).toBe(44)
-    expect(logoImg?.height).toBe(44)
+    expect(logoImg?.width).toBe(28)
+    expect(logoImg?.height).toBe(36)
   })
 })
 
@@ -293,11 +294,12 @@ describe('FooterV3', () => {
     expect(document.querySelector('footer')).toBeTruthy()
   })
 
-  it('logo image has logo-img class (no bg-white wrapper)', () => {
+  it('logo image uses the demo brand-mark class (no logo-img idle/filter treatment)', () => {
     render(<FooterV3 />)
     const logoImg = document.querySelector('img[alt="HoundShield"]')
     expect(logoImg).toBeTruthy()
-    expect(logoImg!.className).toContain('logo-img')
+    expect(logoImg!.className).toContain('brand-mark')
+    expect(logoImg!.className).not.toContain('logo-img')
   })
 
   it('logo image is NOT wrapped in a bg-white div', () => {
@@ -307,11 +309,11 @@ describe('FooterV3', () => {
     expect(parent?.className ?? '').not.toContain('bg-white')
   })
 
-  it('logo image renders at 48x48', () => {
+  it('logo image renders at the demo 28x36 (36px-high mark)', () => {
     render(<FooterV3 />)
     const logoImg = document.querySelector('img[alt="HoundShield"]') as HTMLImageElement
-    expect(logoImg?.width).toBe(48)
-    expect(logoImg?.height).toBe(48)
+    expect(logoImg?.width).toBe(28)
+    expect(logoImg?.height).toBe(36)
   })
 
   it('renders compliance badges', () => {

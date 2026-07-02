@@ -2,18 +2,19 @@ import Link from 'next/link'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { Shield, Plug, FileText, Eye, ArrowRight } from 'lucide-react'
-import { FaqSection } from '@/components/seo/FaqSection'
 import { JsonLd } from '@/components/seo/JsonLd'
-import { howItWorksFaqs, installSteps } from '@/lib/seo/faqs'
+import { installSteps } from '@/lib/seo/faqs'
 import { howToSchema, breadcrumbSchema } from '@/lib/seo/structured-data'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'How It Works — AI Compliance Firewall in 3 Steps',
+  title: 'How It Works — AI Compliance Firewall in 4 Steps',
   description:
     'Point your AI tool at the HoundShield proxy, scan every prompt locally in under 10ms across 16 detection engines, and export C3PAO-ready audit evidence. No agents, no installs.',
   alternates: { canonical: 'https://houndshield.com/how-it-works' },
 }
+
+/* Verbatim port of the HERMES demo "how" view (Direction A). */
 
 const STEPS = [
   {
@@ -44,75 +45,46 @@ const STEPS = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-[var(--hs-surface-0)] section-stripe">
+    <div className="hermes" style={{ minHeight: '100vh' }}>
       <NavV3 />
 
-      {/* Hero */}
-      <section className="pt-32 pb-16 px-6 text-center">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3 font-[var(--font-mono)]">
-            How it works
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-[var(--hs-ink)] tracking-tight mb-5">
-            Local-first compliance.<br />Zero data exposure.
-          </h1>
-          <p className="text-lg text-[var(--hs-ink-secondary)] max-w-2xl mx-auto leading-relaxed">
-            HoundShield sits between your team and every AI provider. Everything is
-            scanned on your hardware — not ours. That&apos;s the only way to guarantee
-            your CUI never becomes a DFARS 7012 spill.
-          </p>
-        </div>
-      </section>
+      <main className="page">
+        <div className="section">
+          <div className="container">
+            <div className="section-head">
+              <div className="eyebrow">How it works</div>
+              <h2 className="display">Local-first compliance. Zero data exposure.</h2>
+              <p>
+                HoundShield sits between your team and every AI provider. Everything is scanned on
+                your hardware — not ours. That&apos;s the only way to guarantee your CUI never
+                becomes a DFARS 7012 spill.
+              </p>
+            </div>
 
-      {/* Steps */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto space-y-10">
-          {STEPS.map((step) => {
-            const Icon = step.icon
-            return (
-              <div
-                key={step.number}
-                className="flex gap-8 items-start border border-[var(--hs-border-subtle)] rounded-2xl p-8 bg-[var(--hs-surface-1)]"
-              >
-                <div className="flex-shrink-0 flex flex-col items-center gap-3">
-                  <span className="text-4xl font-black text-[var(--hs-sand)] font-mono leading-none">
-                    {step.number}
-                  </span>
-                  <div className="w-12 h-12 rounded-xl bg-[var(--hs-mist)] border border-[var(--hs-border)] flex items-center justify-center text-[var(--hs-steel-dark)]">
-                    <Icon className="w-5 h-5" />
+            <div className="steps">
+              {STEPS.map((step) => {
+                const Icon = step.icon
+                return (
+                  <div className="step" key={step.number}>
+                    <div className="num">{step.number}</div>
+                    <div>
+                      <h3>{step.title}</h3>
+                      <p>{step.body}</p>
+                    </div>
+                    <div className="ic"><Icon /></div>
                   </div>
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-[var(--hs-ink)] mb-2">
-                    {step.title}
-                  </h2>
-                  <p className="text-[var(--hs-ink-secondary)] leading-relaxed">
-                    {step.body}
-                  </p>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </section>
+                )
+              })}
+            </div>
 
-      {/* CTA */}
-      <section className="py-20 px-6 text-center">
-        <div className="max-w-xl mx-auto border border-[var(--hs-border)] bg-[var(--hs-surface-1)] rounded-2xl p-10">
-          <h2 className="text-2xl font-bold text-[var(--hs-ink)] mb-4">
-            Ready to protect your CUI?
-          </h2>
-          <p className="text-[var(--hs-ink-secondary)] mb-8">
-            No credit card required. Assess all 110 controls and see your SPRS score in under 30 minutes.
-          </p>
-          <Link href="/signup" className="btn-primary">
-            Get started free
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+            <div style={{ textAlign: 'center', marginTop: 40 }}>
+              <Link className="btn btn-primary" href="/signup">
+                Get started free <ArrowRight />
+              </Link>
+            </div>
+          </div>
         </div>
-      </section>
-
-      <FaqSection items={howItWorksFaqs} title="How HoundShield works: frequently asked questions" />
+      </main>
 
       <JsonLd
         schema={[
