@@ -46,7 +46,7 @@ export default function BrainAiPage() {
       <NavV3 />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 px-6 text-center">
+      <section className="pt-16 pb-16 px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--hs-border)] bg-[var(--hs-mist)] text-[var(--hs-steel-dark)] mb-5">
             <Brain className="w-4 h-4" />

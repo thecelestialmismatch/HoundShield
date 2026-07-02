@@ -1,526 +1,172 @@
 import Link from 'next/link'
-import { ArrowRight, CheckCircle, Globe, Briefcase, Shield, Brain, FileText, Eye, Zap, Activity } from 'lucide-react'
+import { ArrowRight, Check, Globe, Briefcase, Shield, Brain, FileText, Eye, Zap, Activity } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ModeBNotice } from '@/components/ModeBNotice'
-import { CountdownTimer } from '@/components/ui/CountdownTimer'
 import { HeroScanLog } from '@/components/landing/HeroScanLog'
-import { FaqAccordion, type FaqItem } from '@/components/ui/FaqAccordion'
-import { JsonLd } from '@/components/seo/JsonLd'
-import { faqPageSchema } from '@/lib/seo/structured-data'
-import { CodeBlock } from '@/components/ui/CodeBlock'
 
-/* ─── Static data ──────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────
+ * Homepage — verbatim port of the HERMES demo's home view
+ * (Direction A · Steel & Cream). Section order matches the demo
+ * exactly: hero → stat-row → asymmetric advantage → one platform →
+ * CTA band. All styling lives in app/hermes.css.
+ *
+ * One deliberate addition (compliance gate, not design): the Mode-B
+ * deployment-boundary notice after the stat row — the hosted plane
+ * is never presented as CUI-safe (CLAUDE.md NEVER-DO list).
+ * ───────────────────────────────────────────────────────────────── */
 
 const STATS = [
-  { value: '16',          label: 'Detection engines',   sub: 'CUI · PHI · PII · IP' },
-  { value: '~80,000',     label: 'Contractors at risk',  sub: 'Need CMMC Level 2' },
-  { value: '110',         label: 'NIST 800-171 controls',sub: 'Mapped & SPRS-scored' },
-  { value: '<10ms',       label: 'Scan latency',         sub: 'Median, fully local' },
+  { n: '16',      l: 'Detection engines',    s: 'CUI · PHI · PII · IP' },
+  { n: '~80,000', l: 'Contractors at risk',  s: 'Need CMMC Level 2' },
+  { n: '110',     l: 'NIST 800-171 controls', s: 'Mapped & SPRS-scored' },
+  { n: '<10ms',   l: 'Scan latency',         s: 'Median, fully local' },
 ]
 
-const STEPS = [
-  {
-    n: '01',
-    title: 'Change one URL',
-    body: 'Replace api.openai.com with your HoundShield endpoint. No agents, no code changes, no firewall rules.',
-    code: 'OPENAI_BASE_URL=https://proxy.houndshield.com',
-  },
-  {
-    n: '02',
-    title: 'Every prompt scanned locally',
-    body: '16 detection engines check each request in under 10ms on your infrastructure. The AI never knows.',
-  },
-  {
-    n: '03',
-    title: 'You get a compliance record',
-    body: 'Tamper-proof SHA-256 signed logs. Exportable PDF evidence for your C3PAO or auditor on demand.',
-  },
+const PLATFORM_CARDS = [
+  { Icon: Shield,   chip: '110 controls', title: 'CMMC Self-Assessment',    body: 'Guided questionnaires across all 110 NIST SP 800-171 controls. Your SPRS score updates live as you complete each practice.' },
+  { Icon: Brain,    chip: 'Prioritized',  title: 'AI-Powered Gap Analysis', body: 'Brain AI flags unmet controls and generates a remediation roadmap ranked by risk severity and cost — on-device, your key.' },
+  { Icon: FileText, chip: '1-click',      title: 'SSP & POA&M Export',      body: 'Auto-generate your System Security Plan and Plan of Action & Milestones as C3PAO-ready PDFs with SHA-256 signed evidence.' },
+  { Icon: Eye,      chip: null,           title: 'AI Prompt Interception',  body: 'Every LLM request inspected before it leaves the perimeter. Works with ChatGPT, Copilot, Claude, Gemini — all at once.' },
+  { Icon: Zap,      chip: null,           title: '16 Detection Engines',    body: 'CUI, PII, IP, PHI, secrets, CAGE codes, contract numbers and clearance markers — flagged, blocked or quarantined.' },
+  { Icon: Activity, chip: null,           title: 'Live Threat Dashboard',   body: 'Real-time blocked prompts, risk scores and compliance posture for every employee, in one command center.' },
 ]
-
-const PRICING = [
-  {
-    name: 'Free',
-    monthly: 0,
-    desc: 'Try HoundShield risk-free',
-    features: ['1 user', '1,000 scans/mo', 'Basic compliance reports', 'CMMC pattern detection'],
-    cta: 'Start free',
-    href: '/signup',
-  },
-  {
-    name: 'Pro',
-    monthly: 199,
-    desc: 'For compliance-conscious teams',
-    features: ['5 users', 'Unlimited scans', 'PDF evidence export', 'SPRS score tracking', 'Webhook alerts'],
-    cta: 'Start Pro',
-    href: '/signup?plan=pro',
-    highlight: true,
-  },
-  {
-    name: 'Growth',
-    monthly: 499,
-    desc: 'For multi-team organizations',
-    features: ['25 users', 'Gateway mode', 'HIPAA + SOC 2 coverage', 'Audit trail export', 'Priority support'],
-    cta: 'Start Growth',
-    href: '/signup?plan=growth',
-  },
-  {
-    name: 'Enterprise',
-    monthly: 999,
-    desc: 'C3PAO assessment ready',
-    features: ['Unlimited users', 'C3PAO-ready reports', 'On-prem deployment', 'SLA guarantee', 'Dedicated CSM'],
-    cta: 'Contact sales',
-    href: '/contact',
-  },
-  {
-    name: 'Federal',
-    monthly: 2499,
-    desc: 'Multi-agency deployments',
-    features: ['Multi-tenant', 'FedRAMP alignment', 'Custom integrations', 'CMMC advisory', 'SLA + NDA'],
-    cta: 'Contact sales',
-    href: '/contact',
-  },
-]
-
-const FAQ_ITEMS: FaqItem[] = [
-  {
-    question: 'Does prompt content ever leave my network?',
-    answer: 'No. HoundShield runs entirely on your infrastructure. The scanning engine, detection patterns, and audit logs all stay local. Only a license key hash and prompt count (no content) go external for billing.',
-  },
-  {
-    question: 'How long does setup take?',
-    answer: 'Under 10 minutes for most organizations. Change one environment variable to point AI tools at your HoundShield endpoint. Docker deployment is 3 commands. No agents, no firewall rules, no code changes.',
-  },
-  {
-    question: 'Which AI tools does HoundShield support?',
-    answer: "Any tool using an OpenAI-compatible API: ChatGPT, Copilot, Claude, Gemini, Cursor, Codeium, and open-source models. It operates at the network layer, so it's model-agnostic.",
-  },
-  {
-    question: 'Is HoundShield CMMC Level 2 compliant?',
-    answer: "HoundShield maps all 110 NIST 800-171 Rev 2 controls and generates C3PAO-ready PDF evidence. Because it's local-only, CUI never crosses your control boundary — satisfying NIST 3.13.1 and supporting CMMC Level 2 certification.",
-  },
-  {
-    question: 'What happens when a violation is detected?',
-    answer: 'The prompt is blocked and the user receives a policy violation message. A tamper-proof, SHA-256 signed log entry is created with the timestamp, matched pattern, and affected framework. Webhook notifications are available on Pro and above.',
-  },
-]
-
-/* ─── Page ─────────────────────────────────────────────────────── */
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[var(--hs-surface-0)]">
+    <div className="hermes" style={{ minHeight: '100vh' }}>
       <NavV3 />
 
-      {/* ── 1. HERO ─────────────────────────────────────────────── */}
-      <section className="spotlight relative pt-28 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-mesh-gradient pointer-events-none" />
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-30 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse, rgba(129,166,198,0.15), transparent 70%)' }}
-        />
-
-        <div className="relative z-10 max-w-[1200px] mx-auto">
-          <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--hs-border)] bg-white text-xs font-medium text-[var(--hs-ink-secondary)] font-[var(--font-body)] shadow-[var(--shadow-sm)]">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--hs-success)] opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--hs-success)]" />
-              </span>
-              Local-only · CMMC Level 2 · HIPAA · SOC 2
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <main className="page">
+        {/* ── HERO ─────────────────────────────────────────────── */}
+        <div className="hero">
+          <div className="container hero-grid">
             <div>
-              <h1
-                className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[var(--hs-ink)] leading-tight tracking-tight mb-6"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Stop your team from leaking CUI to{' '}
-                <span className="text-gradient-brand">ChatGPT.</span>
+              <div className="pill"><i className="live-dot" /> Local-only · CMMC Level 2 · HIPAA · SOC 2</div>
+              <h1 className="display">
+                Stop your team from leaking <span className="accent">CUI to ChatGPT.</span>
               </h1>
-
-              <p className="text-lg text-[var(--hs-ink-secondary)] leading-relaxed mb-8 max-w-lg font-[var(--font-body)]">
-                HoundShield intercepts every AI prompt before it leaves your network. 16 detection engines. Sub-10ms latency. CMMC Level 2, HIPAA &amp; SOC 2 — enforced simultaneously, scanned on your hardware.
+              <p className="sub">
+                HoundShield intercepts every AI prompt before it leaves your network. 16 detection
+                engines. Sub-10ms latency. CMMC Level 2, HIPAA &amp; SOC 2 — enforced simultaneously,
+                scanned <b>on your hardware</b>.
               </p>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/signup" className="btn-primary text-sm">
-                  Start free — no card required
-                  <ArrowRight className="w-4 h-4" />
+              <div className="hero-actions">
+                <Link className="btn btn-primary" href="/signup">
+                  Start free — no card required <ArrowRight />
                 </Link>
-                <Link href="/how-it-works" className="btn-ghost text-sm">
-                  See how it works
-                </Link>
+                <Link className="btn btn-ghost" href="/how-it-works">See how it works</Link>
               </div>
-
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
-                {['One URL change', 'Local-only', 'Free to start', 'C3PAO-ready'].map((t) => (
-                  <span key={t} className="flex items-center gap-1.5 text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">
-                    <CheckCircle className="w-3.5 h-3.5 text-[var(--hs-steel)]" />
-                    {t}
-                  </span>
-                ))}
+              <div className="hero-trust">
+                <span><Check /> One URL change</span>
+                <span><Check /> Local-only</span>
+                <span><Check /> Free to start</span>
+                <span><Check /> C3PAO-ready</span>
               </div>
             </div>
-
             <HeroScanLog />
           </div>
         </div>
-      </section>
 
-      {/* ── 2. STATS STRIP ──────────────────────────────────────── */}
-      <section className="py-14 border-y border-[var(--hs-border-subtle)] bg-[var(--hs-surface-2)]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* ── STAT ROW ─────────────────────────────────────────── */}
+        <div className="container" style={{ paddingTop: 34, paddingBottom: 34 }}>
+          <div className="stat-row">
             {STATS.map((s) => (
-              <div key={s.label} className="text-center">
-                <div
-                  className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-1 tabular-nums"
-                  style={{ fontFamily: 'var(--font-mono)' }}
-                >
-                  {s.value}
-                </div>
-                <div className="text-sm font-semibold text-[var(--hs-ink-secondary)] mb-0.5 font-[var(--font-body)]">
-                  {s.label}
-                </div>
-                <div className="text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">{s.sub}</div>
+              <div className="stat" key={s.l}>
+                <div className="n">{s.n}</div>
+                <div className="l">{s.l}</div>
+                <div className="s">{s.s}</div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* ── Deployment boundary: Mode A vs Mode B (CUI honesty) ───── */}
-      <section className="px-4 sm:px-6 lg:px-8 pt-10">
-        <div className="max-w-[1200px] mx-auto">
+        {/* ── Deployment boundary: Mode A vs Mode B (CUI honesty) ── */}
+        <div className="container" style={{ paddingBottom: 10 }}>
           <ModeBNotice variant="inline" />
         </div>
-      </section>
 
-      {/* ── 3. ASYMMETRIC ADVANTAGE ─────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-0)]">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-12 max-w-2xl mx-auto">
-            <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3 font-[var(--font-mono)]">
-              The asymmetric advantage
-            </p>
-            <h2
-              className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4 leading-tight"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Cloud DLP scans your CUI in their cloud. That&apos;s the spill.
-            </h2>
-            <p className="text-base text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
-              Every cloud-based AI DLP tool has to receive your data to inspect it. For a DoD contractor,
-              that transmission is itself a DFARS 7012 CUI exposure. HoundShield is the only one that
-              never sees your data.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-[var(--radius-xl)] bg-white border border-[var(--hs-border)] p-6 shadow-[var(--shadow-card)]">
-              <div className="w-11 h-11 rounded-xl grid place-items-center mb-4 bg-[var(--hs-mist)] text-[var(--hs-steel-dark)]">
-                <Globe className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2 font-[var(--font-body)]">Nightfall &amp; Strac</h3>
-              <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed font-[var(--font-body)]">
-                Cloud DLP. To scan a prompt they must transmit your CUI to their servers — the exact
-                exposure CMMC L2 forbids. Architecturally disqualified for the DIB.
+        {/* ── ASYMMETRIC ADVANTAGE ─────────────────────────────── */}
+        <div className="section tight">
+          <div className="container">
+            <div className="section-head">
+              <div className="eyebrow">The asymmetric advantage</div>
+              <h2 className="display">Cloud DLP scans your CUI in their cloud. That&apos;s the spill.</h2>
+              <p>
+                Every cloud-based AI DLP tool has to receive your data to inspect it. For a DoD
+                contractor, that transmission is itself a DFARS 7012 CUI exposure. HoundShield is
+                the only one that never sees your data.
               </p>
             </div>
-            <div className="rounded-[var(--radius-xl)] bg-white border border-[var(--hs-border)] p-6 shadow-[var(--shadow-card)]">
-              <div className="w-11 h-11 rounded-xl grid place-items-center mb-4 bg-[var(--hs-mist)] text-[var(--hs-steel-dark)]">
-                <Briefcase className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2 font-[var(--font-body)]">Microsoft Purview</h3>
-              <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed font-[var(--font-body)]">
-                M365-only. No API proxy. Your team&apos;s ChatGPT, Claude, Cursor and Copilot traffic
-                outside Microsoft&apos;s walls goes completely unmonitored.
-              </p>
-            </div>
-            <div className="rounded-[var(--radius-xl)] bg-white border-2 border-[var(--hs-steel)] p-6 shadow-[var(--shadow-xl)]">
-              <div className="w-11 h-11 rounded-xl grid place-items-center mb-4 bg-[var(--hs-mist)] text-[var(--hs-steel-dark)]">
-                <Shield className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2 font-[var(--font-body)]">HoundShield</h3>
-              <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed font-[var(--font-body)]">
-                Local-only. Detection runs on <b>your</b> hardware. Nothing reaches our servers — ever.
-                The moat cloud vendors can&apos;t match without a full rebuild.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. FEATURES GRID ────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-12 max-w-2xl mx-auto">
-            <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-3 font-[var(--font-mono)]">
-              One platform
-            </p>
-            <h2
-              className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4 leading-tight"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Everything you need for CMMC Level 2
-            </h2>
-            <p className="text-base text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
-              Map, assess and close gaps across all 110 NIST 800-171 controls — with AI-driven
-              remediation and C3PAO-ready evidence.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { Icon: Shield, chip: '110 controls', title: 'CMMC Self-Assessment', body: 'Guided questionnaires across all 110 NIST SP 800-171 controls. Your SPRS score updates live as you complete each practice.' },
-              { Icon: Brain, chip: 'Prioritized', title: 'AI-Powered Gap Analysis', body: 'Brain AI flags unmet controls and generates a remediation roadmap ranked by risk severity and cost — on-device, your key.' },
-              { Icon: FileText, chip: '1-click', title: 'SSP & POA&M Export', body: 'Auto-generate your System Security Plan and Plan of Action & Milestones as C3PAO-ready PDFs with SHA-256 signed evidence.' },
-              { Icon: Eye, chip: null, title: 'AI Prompt Interception', body: 'Every LLM request inspected before it leaves the perimeter. Works with ChatGPT, Copilot, Claude, Gemini — all at once.' },
-              { Icon: Zap, chip: null, title: '16 Detection Engines', body: 'CUI, PII, IP, PHI, secrets, CAGE codes, contract numbers and clearance markers — flagged, blocked or quarantined.' },
-              { Icon: Activity, chip: null, title: 'Live Threat Dashboard', body: 'Real-time blocked prompts, risk scores and compliance posture for every employee, in one command center.' },
-            ].map((f) => (
-              <div key={f.title} className="relative rounded-[var(--radius-xl)] bg-white border border-[var(--hs-border)] p-6 shadow-[var(--shadow-card)]">
-                {f.chip && (
-                  <span className="absolute top-4 right-4 text-[10px] font-semibold text-[var(--hs-steel-dark)] bg-[var(--hs-mist)] px-2 py-0.5 rounded font-[var(--font-mono)]">
-                    {f.chip}
-                  </span>
-                )}
-                <div className="w-11 h-11 rounded-xl grid place-items-center mb-4 bg-[var(--hs-mist)] text-[var(--hs-steel-dark)]">
-                  <f.Icon className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2 font-[var(--font-body)]">{f.title}</h3>
-                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed font-[var(--font-body)]">{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5. HOW IT WORKS ─────────────────────────────────────── */}
-      <section className="spotlight py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]">
-        <div className="relative z-10 max-w-[1200px] mx-auto">
-          <div className="text-center mb-14">
-            <h2
-              className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Live in ten minutes.
-              <br />
-              Audited in ten seconds.
-            </h2>
-            <p className="text-base text-[var(--hs-ink-secondary)] max-w-xl mx-auto font-[var(--font-body)]">
-              No agents. No code changes. One environment variable.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {STEPS.map((step) => (
-              <div key={step.n} className="glass-card p-6">
-                <div
-                  className="text-xs font-semibold tracking-widest mb-3 font-[var(--font-mono)]"
-                  style={{ color: 'var(--hs-steel)' }}
-                >
-                  {step.n}
-                </div>
-                <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2 font-[var(--font-body)]">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed mb-4 font-[var(--font-body)]">
-                  {step.body}
+            <div className="grid-3">
+              <div className="card">
+                <div className="ic"><Globe /></div>
+                <h3>Nightfall &amp; Strac</h3>
+                <p>
+                  Cloud DLP. To scan a prompt they must transmit your CUI to their servers — the
+                  exact exposure CMMC L2 forbids. Architecturally disqualified for the DIB.
                 </p>
-                {step.code && <CodeBlock code={step.code} language="env" />}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 6. JORDAN SECTION ───────────────────────────────────── */}
-      <section
-        className="py-20 px-4 sm:px-6 lg:px-8 border-y border-[var(--hs-border-subtle)]"
-        style={{ background: 'var(--hs-surface-2)' }}
-        data-testid="jordan-section"
-      >
-        <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold tracking-widest text-[var(--hs-steel-dark)] uppercase mb-8 text-center font-[var(--font-body)]">
-            BUILT FOR JORDAN
-          </p>
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
-            {/* Pull quote — 3/5 */}
-            <div className="lg:col-span-3">
-              <blockquote>
-                <p
-                  className="text-2xl sm:text-3xl font-semibold text-[var(--hs-ink)] leading-snug mb-6"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                >
-                  &ldquo;I needed the PDF I could hand my C3PAO assessor. Not another dashboard that tells me I have problems.&rdquo;
+              <div className="card">
+                <div className="ic"><Briefcase /></div>
+                <h3>Microsoft Purview</h3>
+                <p>
+                  M365-only. No API proxy. Your team&apos;s ChatGPT, Claude, Cursor and Copilot
+                  traffic outside Microsoft&apos;s walls goes completely unmonitored.
                 </p>
-                <footer>
-                  <div className="text-sm font-semibold text-[var(--hs-ink)] font-[var(--font-body)]">Jordan M.</div>
-                  <div className="text-sm text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">IT Security Manager · 180-person DoD subcontractor</div>
-                </footer>
-              </blockquote>
-            </div>
-
-            {/* Buyer profile card — 2/5 */}
-            <div className="lg:col-span-2">
-              <div className="glass-card p-5 space-y-3">
-                <div className="text-xs font-semibold text-[var(--hs-ink-tertiary)] uppercase tracking-wider mb-1 font-[var(--font-body)]">
-                  Buyer Profile
-                </div>
-                {[
-                  { label: 'Role',     value: 'IT Security Manager' },
-                  { label: 'Company',  value: '180-person DoD subcontractor' },
-                  { label: 'Fear',     value: 'CUI spill triggering DFARS audit' },
-                  { label: 'Goal',     value: 'CMMC Level 2 certification by Nov 2026' },
-                  { label: 'Budget',   value: '$500–$1,500/mo' },
-                  { label: 'Deadline', value: 'November 10, 2026' },
-                ].map(({ label, value }) => (
-                  <div key={label} className="flex gap-3">
-                    <span className="text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)] w-16 shrink-0 pt-px">{label}</span>
-                    <span className="text-xs text-[var(--hs-ink)] font-[var(--font-body)] font-medium">{value}</span>
-                  </div>
-                ))}
+              </div>
+              <div className="card" style={{ borderColor: 'var(--brand)' }}>
+                <div className="ic"><Shield /></div>
+                <h3>HoundShield</h3>
+                <p>
+                  Local-only. Detection runs on <b>your</b> hardware. Nothing reaches our servers —
+                  ever. The moat cloud vendors can&apos;t match without a full rebuild.
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* ── 7. PRICING ──────────────────────────────────────────── */}
-      <section className="spotlight py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hs-surface-1)]" id="pricing">
-        <div className="relative z-10 max-w-[1200px] mx-auto">
-          <div className="text-center mb-14">
-            <h2
-              className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] mb-4"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Pricing that scales with your team
-            </h2>
-            <p className="text-base text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
-              Start free. Upgrade when you need PDF evidence, gateway mode, or dedicated support.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {PRICING.map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-[var(--radius-xl)] p-5 flex flex-col bg-white ${
-                  plan.highlight ? 'border-2 shadow-[var(--shadow-xl)]' : 'border shadow-[var(--shadow-card)]'
-                }`}
-                style={{ borderColor: plan.highlight ? 'var(--hs-steel)' : 'var(--hs-border)' }}
-              >
-                {plan.highlight && (
-                  <div className="text-[10px] font-semibold text-[var(--hs-steel-dark)] uppercase tracking-widest mb-3 font-[var(--font-body)]">
-                    Most popular
-                  </div>
-                )}
-                <div className="text-sm font-semibold text-[var(--hs-ink)] mb-1 font-[var(--font-body)]">{plan.name}</div>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span
-                    className="text-2xl font-semibold text-[var(--hs-ink)]"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                  >
-                    ${plan.monthly}
-                  </span>
-                  {plan.monthly > 0 && (
-                    <span className="text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">/mo</span>
-                  )}
-                </div>
-                <p className="text-xs text-[var(--hs-ink-tertiary)] mb-4 font-[var(--font-body)]">{plan.desc}</p>
-                <ul className="space-y-1.5 mb-6 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-1.5 text-xs text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
-                      <CheckCircle className="w-3 h-3 text-[var(--hs-steel)] shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={plan.href}
-                  className={`block text-center py-2 text-xs font-semibold rounded-[var(--radius-md)] transition-all font-[var(--font-body)] ${
-                    plan.highlight
-                      ? 'text-white hover:opacity-90'
-                      : 'text-[var(--hs-ink)] border border-[var(--hs-border)] hover:bg-[var(--hs-mist)]'
-                  }`}
-                  style={plan.highlight ? {
-                    background: 'linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))',
-                  } : undefined}
-                >
-                  {plan.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-6 text-center text-xs text-[var(--hs-ink-tertiary)] font-[var(--font-body)]">
-            Annual plans save 20% · All plans include 30-day money-back guarantee
-          </p>
-        </div>
-      </section>
-
-      {/* ── 8. FAQ ──────────────────────────────────────────────── */}
-      <section className="spotlight py-20 px-4 sm:px-6 lg:px-8">
-        <div className="relative z-10 max-w-2xl mx-auto">
-          <h2
-            className="text-3xl sm:text-4xl font-semibold text-[var(--hs-ink)] text-center mb-12"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            Frequently asked
-          </h2>
-          <FaqAccordion items={FAQ_ITEMS} />
-          <JsonLd schema={faqPageSchema(FAQ_ITEMS)} />
-        </div>
-      </section>
-
-      {/* ── 9. FINAL CTA — demo cta-band (steel → sky gradient) ──── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-[1200px] mx-auto">
-          <div
-            className="relative overflow-hidden rounded-[var(--radius-xl)] px-6 py-14 sm:px-14 text-center"
-            style={{ background: 'linear-gradient(120deg, var(--hs-steel-dark), var(--hs-sky))' }}
-          >
-            <div className="relative max-w-2xl mx-auto">
-              <div className="text-xs text-white/80 uppercase tracking-widest mb-4 font-semibold font-[var(--font-mono)]">
-                CMMC Level 2 deadline
-              </div>
-
-              <div className="flex justify-center mb-6">
-                <CountdownTimer />
-              </div>
-
-              <h2
-                className="text-3xl sm:text-4xl font-semibold text-white mb-3 leading-tight"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Ready to protect your CUI?
-              </h2>
-              <p className="text-base text-white/90 mb-8 max-w-lg mx-auto font-[var(--font-body)]">
-                No credit card required. Assess all 110 controls and see your SPRS score in under 30 minutes.
+        {/* ── ONE PLATFORM ─────────────────────────────────────── */}
+        <div className="section tight" style={{ background: 'var(--page-2)' }}>
+          <div className="container">
+            <div className="section-head">
+              <div className="eyebrow">One platform</div>
+              <h2 className="display">Everything you need for CMMC Level 2</h2>
+              <p>
+                Map, assess and close gaps across all 110 NIST 800-171 controls — with AI-driven
+                remediation and C3PAO-ready evidence.
               </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-[var(--hs-steel-dark)] bg-white rounded-[var(--radius-md)] hover:bg-[var(--hs-cream)] transition-colors font-[var(--font-body)]"
-                >
-                  Get started free
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-white border border-white/30 rounded-[var(--radius-md)] hover:bg-white/10 transition-colors font-[var(--font-body)]"
-                >
-                  Talk to a compliance expert
-                </Link>
-              </div>
+            </div>
+            <div className="grid-3">
+              {PLATFORM_CARDS.map((c) => (
+                <div className="card" key={c.title}>
+                  {c.chip && <span className="chip">{c.chip}</span>}
+                  <div className="ic"><c.Icon /></div>
+                  <h3>{c.title}</h3>
+                  <p>{c.body}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </section>
+
+        {/* ── CTA BAND ─────────────────────────────────────────── */}
+        <div className="section tight">
+          <div className="container">
+            <div className="cta-band">
+              <h2 className="display">Ready to protect your CUI?</h2>
+              <p>
+                No credit card required. Assess all 110 controls and see your SPRS score in under
+                30 minutes.
+              </p>
+              <Link className="btn btn-primary" href="/signup">
+                Get started free <ArrowRight />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
 
       <FooterV3 />
     </div>

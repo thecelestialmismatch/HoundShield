@@ -35,7 +35,7 @@ export default function ReportThankYouPage() {
   return (
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
       <NavV3 />
-      <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+      <main className="max-w-3xl mx-auto px-6 pt-16 pb-24">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-11 h-11 rounded-xl bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] flex items-center justify-center">
             <CheckCircle2 className="w-6 h-6 text-[var(--hs-success)]" />

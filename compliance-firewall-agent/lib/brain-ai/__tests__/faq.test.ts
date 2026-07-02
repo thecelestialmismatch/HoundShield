@@ -66,6 +66,62 @@ describe("findFaqAnswer — never leaks internal config", () => {
   });
 });
 
+describe("findFaqAnswer — 'help me…' asks NEVER get the contact-info dump (prod regression)", () => {
+  // Exact queries from the 2026-07 live transcript that misfired to "Get in touch:".
+  const misfires = [
+    "can you help me to fix this issue?",
+    "help me to build the ai bot",
+    "help me to build the abs system",
+  ];
+
+  it("never answers a help/build ask with the contact dump", () => {
+    for (const q of misfires) {
+      const answer = findFaqAnswer(q);
+      expect(answer, q).not.toBeNull();
+      expect(answer!, q).not.toContain("Get in touch");
+      expect(answer!, q).not.toContain("typically respond same day");
+    }
+  });
+
+  it("'can you help me to fix this issue?' triages the problem", () => {
+    const answer = findFaqAnswer("can you help me to fix this issue?")!;
+    expect(answer.toLowerCase()).toContain("what's going wrong");
+  });
+
+  it("'what issue I have?' asks for the problem instead of a canned dump", () => {
+    const answer = findFaqAnswer("what issue I have?");
+    expect(answer).not.toBeNull();
+    expect(answer!).not.toContain("Get in touch");
+  });
+
+  it("build-a-bot asks get the compliance-gateway pivot with a code sample", () => {
+    for (const q of ["help me to build the ai bot", "help me to build the abs system", "coading?"]) {
+      const answer = findFaqAnswer(q);
+      expect(answer, q).not.toBeNull();
+      expect(answer!, q).toContain("proxy.houndshield.com/v1");
+    }
+  });
+
+  it("specific product questions still outrank the help triage (two-tier)", () => {
+    const answer = findFaqAnswer("help me install houndshield")!;
+    expect(answer).toContain("gateway.houndshield.com");
+    expect(answer).not.toContain("what's going wrong");
+  })
+
+  it("real contact intent still reaches the contact answer", () => {
+    const answer = findFaqAnswer("how do I contact sales?")!;
+    expect(answer).toContain("info@houndshield.com");
+  });
+
+  it("word boundaries: 'vs'/'pro' no longer fire inside other words", () => {
+    // "canvas" must not trigger the competitor-comparison entry via "vs"
+    expect(findFaqAnswer("I love canvas art and painting")).toBeNull();
+    // "problem" must not trigger pricing via "pro" — it triages instead
+    const answer = findFaqAnswer("I have a problem");
+    expect(answer === null || !answer.includes("$199")).toBe(true);
+  });
+});
+
 describe("findFaqAnswer — compliance questions still outrank chit-chat", () => {
   it("'how does CMMC work' routes to the CMMC answer, not the check-in", () => {
     const answer = findFaqAnswer("how does cmmc level 2 work");

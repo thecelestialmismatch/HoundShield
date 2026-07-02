@@ -33,7 +33,7 @@ export default function AssessmentPage() {
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
       <ScrollProgressBar />
       <NavV3 />
-      <main className="max-w-4xl mx-auto px-6 pt-32 pb-24">
+      <main className="max-w-4xl mx-auto px-6 pt-16 pb-24">
         {/* Hero */}
         <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--hs-steel-dark)] mb-3">
           The fastest CMMC / HIPAA AI evidence

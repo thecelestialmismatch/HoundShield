@@ -56,11 +56,20 @@ describe('NavV3 — exact-copy of the Direction-A demo nav', () => {
     expect(screen.queryByText(/intercepted/i)).toBeNull()
   })
 
-  it('renders the logo with the cursor-reactive transform hook', () => {
+  it('renders the demo brand block: 36px static mark + Hound<b>Shield</b> text', () => {
     render(<NavV3 />)
     const logo = document.querySelector('img[alt="HoundShield"]')
     expect(logo).toBeTruthy()
-    expect(logo!.closest('a')!.className).toContain('group/brand')
+    // Demo `.brand-mark` (hover tilt lives in hermes.css: .brand:hover .brand-mark)
+    expect(logo!.className).toContain('brand-mark')
+    expect(logo!.closest('a')!.className).toContain('brand')
+    // Demo look: NO idle-breathe class, NO invert filter class on the mark.
+    expect(logo!.className).not.toContain('logo-img')
+    expect(logo!.className).not.toContain('logo-on-dark')
+    // "Shield" is the steel <b> inside .brand-text
+    const brandText = document.querySelector('.brand-text')
+    expect(brandText).toBeTruthy()
+    expect(brandText!.querySelector('b')?.textContent).toBe('Shield')
   })
 
   it('still renders the Start free CTA and nav landmark', () => {

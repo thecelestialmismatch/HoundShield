@@ -102,7 +102,7 @@ export default function ChangelogPage() {
       <NavV3 />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden">
+      <section className="relative pt-16 pb-20 md:pt-24 md:pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-brand-500/[0.07] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
           <FadeIn>
