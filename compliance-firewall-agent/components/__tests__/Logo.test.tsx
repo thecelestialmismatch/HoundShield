@@ -43,4 +43,15 @@ describe("Logo", () => {
     // `.logo-img` is the hook the global hs-logo-idle animation + hover pose bind to.
     expect(img.className).toMatch(/\blogo-img\b/);
   });
+
+  it("carries NO per-component animation override — hover motion is the shared tilt", () => {
+    // A running [animation:…] class beats the global hover pose in the CSS
+    // cascade — that loophole is how the sideways-sway regression shipped.
+    // The mark's motion (rotate(-4deg) scale(1.06) tilt in place) lives ONLY
+    // in app/globals.css. See app/__tests__/logo-motion-contract.test.ts.
+    const { container } = render(<Logo />);
+    const img = container.firstChild as HTMLElement;
+    expect(img.className).not.toContain("[animation:");
+    expect(img.className).not.toContain("sway");
+  });
 });
