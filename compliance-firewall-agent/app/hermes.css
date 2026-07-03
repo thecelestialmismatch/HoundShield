@@ -343,7 +343,6 @@
 .hermes .demo-dash-bar .dots { display: flex; gap: .4rem; }
 .hermes .demo-dash-bar .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
 .hermes .demo-dash-brand { display: flex; align-items: center; gap: .45rem; margin-left: .2rem; }
-.hermes .demo-dash-brand .brand-mark { height: 20px; width: auto; }
 .hermes .demo-dash-brand span { font-family: var(--f-disp); font-weight: 700; font-size: .92rem; letter-spacing: -.01em; color: var(--text); }
 .hermes .demo-dash-brand b { color: var(--brand); font-weight: 700; }
 .hermes .demo-live {
