@@ -37,8 +37,8 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-[var(--hs-surface-0)] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2.5 mb-8">
-          <Logo className="w-9 h-9" />
+        <div className="group/brand flex items-center justify-center gap-2.5 mb-8">
+          <Logo size={36} />
           <TextLogo />
         </div>
 

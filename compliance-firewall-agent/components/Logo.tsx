@@ -28,20 +28,16 @@ interface LogoProps {
  * `transform` (animation) and `filter` (dark-surface invert) are independent
  * CSS properties, so the tone treatments below coexist with the motion.
  */
+const SWAY = "[animation:hs-logo-sway_.55s_ease-in-out_infinite]";
 const HOVER_MOTION =
-  "transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] " +
-  // Pointer hover (desktop) on the mark itself or a parent `group/brand` link.
-  "hover:[transform:rotate(-4deg)_scale(1.06)] " +
-  "group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] " +
-  // Touch/tap (mobile): :active fires while a finger is down, so the mark
-  // still animates where :hover never triggers.
-  "active:[transform:rotate(-4deg)_scale(1.06)] " +
-  "group-active/brand:[transform:rotate(-4deg)_scale(1.06)] " +
-  "motion-reduce:transition-none " +
-  "motion-reduce:hover:[transform:none] motion-reduce:active:[transform:none] " +
-  "motion-reduce:group-hover/brand:[transform:none] motion-reduce:group-active/brand:[transform:none]";
+  // Pointer hover (desktop) on the mark itself or a parent `group/brand` link:
+  // the mark sways side-to-side. Touch/tap (:active) triggers it on mobile too.
+  `hover:${SWAY} group-hover/brand:${SWAY} active:${SWAY} group-active/brand:${SWAY} ` +
+  "motion-reduce:[animation:none] " +
+  "motion-reduce:hover:[animation:none] motion-reduce:active:[animation:none] " +
+  "motion-reduce:group-hover/brand:[animation:none] motion-reduce:group-active/brand:[animation:none]";
 
-export function Logo({ className = "", size = 38, variant }: LogoProps) {
+export function Logo({ className = "", size = 36, variant }: LogoProps) {
   const toneClass = variant === "dark" ? "logo-on-dark" : "logo-img";
   return (
     <Image
@@ -50,6 +46,11 @@ export function Logo({ className = "", size = 38, variant }: LogoProps) {
       aria-hidden="true"
       width={Math.round(size * WIDTH_RATIO)}
       height={size}
+      // Inline height + auto width LOCKS the aspect ratio: the mark always
+      // renders exactly `size` px tall on every surface, so a stray width
+      // utility class (w-10, w-9, …) can never stretch or resize it. This is
+      // the sanctioned inline-style exception (deterministic sizing).
+      style={{ height: `${size}px`, width: "auto" }}
       className={`${toneClass} ${HOVER_MOTION} flex-shrink-0 object-contain ${className}`}
     />
   );

@@ -217,7 +217,7 @@ export function PlatformDashboard() {
         {/* ── Top bar ─────────────────────────────────────── */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] bg-white/[0.01]">
           <div className="flex items-center gap-3">
-            <Logo variant="dark" className="!w-5 !h-5 !rounded-md" />
+            <Logo variant="dark" size={20} className="!rounded-md" />
             <span className="text-[11px] font-mono text-slate-500">hound shield — command center</span>
             <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
               <Activity className="w-2.5 h-2.5 text-emerald-400" />
