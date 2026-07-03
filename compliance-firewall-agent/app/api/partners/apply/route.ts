@@ -1,29 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/client";
+import { z } from "zod";
+
+// Bounded, validated input (audit M2).
+const ApplySchema = z.object({
+  name: z.string().min(1).max(200),
+  company: z.string().min(1).max(200),
+  email: z.string().email().max(320),
+  clientCount: z.number().int().min(0).max(1_000_000).optional(),
+  partnerType: z.enum(["referral", "reseller", "technology"]).optional(),
+  message: z.string().max(5000).optional(),
+});
+
+/** Escape untrusted text before interpolating into notification HTML (audit M2). */
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, company, email, clientCount, partnerType, message } = body;
-
-    // Validate required fields
-    if (!name || !company || !email) {
+    // Let malformed JSON throw → handled as 500 by the outer catch.
+    const raw = await request.json();
+    const parsed = ApplySchema.safeParse(raw);
+    if (!parsed.success) {
+      // Surface the offending field in the error string (e.g. "email: ...").
+      const issue = parsed.error.issues[0];
+      const field = issue?.path?.join(".") ?? "input";
       return NextResponse.json(
-        { error: "Name, company, and email are required" },
+        { error: `${field}: ${issue?.message ?? "Invalid application"}`, details: parsed.error.issues },
         { status: 400 }
       );
     }
 
-    // Basic email validation
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json(
-        { error: "Invalid email address" },
-        { status: 400 }
-      );
-    }
-
-    const validTypes = ["referral", "reseller", "technology"];
-    const type = validTypes.includes(partnerType) ? partnerType : "referral";
+    const { name, company, email, clientCount, message } = parsed.data;
+    const type = parsed.data.partnerType ?? "referral";
 
     const supabase = createServiceClient();
 
@@ -53,15 +68,15 @@ export async function POST(request: NextRequest) {
         await resend.emails.send({
           from: "HoundShield Partners <noreply@houndshield.com>",
           to: process.env.FOUNDER_EMAIL || "info@houndshield.com",
-          subject: `New Partner Application: ${company}`,
+          subject: `New Partner Application: ${escapeHtml(company)}`,
           html: `
             <h2>New Partner Application</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Company:</strong> ${company}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Client Count:</strong> ${clientCount || "Not specified"}</p>
-            <p><strong>Partner Type:</strong> ${type}</p>
-            <p><strong>Message:</strong> ${message || "None"}</p>
+            <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+            <p><strong>Company:</strong> ${escapeHtml(company)}</p>
+            <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+            <p><strong>Client Count:</strong> ${clientCount ?? "Not specified"}</p>
+            <p><strong>Partner Type:</strong> ${escapeHtml(type)}</p>
+            <p><strong>Message:</strong> ${message ? escapeHtml(message) : "None"}</p>
           `,
         });
 

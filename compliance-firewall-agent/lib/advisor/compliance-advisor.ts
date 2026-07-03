@@ -21,6 +21,8 @@
  * If not configured, returns null and the caller falls back gracefully.
  */
 
+import { isCloudAssistEnabled } from "@/lib/classifier/cloud-assist";
+
 export type AdvisorRiskLevel = "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 export type AdvisorAction = "PASS" | "WARN" | "BLOCK" | "QUARANTINE";
 
@@ -254,11 +256,15 @@ export async function classifyWithAdvisor(
 }
 
 /**
- * Returns true when ANTHROPIC_API_KEY is available and the advisor can be used.
- * Used by risk-engine.ts to gate the Stage 6.5 advisor escalation.
+ * Returns true when the advisor is available AND cloud assist is explicitly
+ * enabled. The advisor sends prompt text to the Anthropic API, so it is a cloud
+ * egress of potentially-CUI content and must be opted into via
+ * HOUNDSHIELD_CLOUD_ASSIST (OFF by default — see audit C6). Used by
+ * risk-engine.ts to gate the Stage 6.5 advisor escalation.
  */
 export function isAdvisorConfigured(): boolean {
-  return Boolean(
-    process.env.ANTHROPIC_API_KEY_PRIMARY || process.env.ANTHROPIC_API_KEY
+  return (
+    isCloudAssistEnabled() &&
+    Boolean(process.env.ANTHROPIC_API_KEY_PRIMARY || process.env.ANTHROPIC_API_KEY)
   );
 }

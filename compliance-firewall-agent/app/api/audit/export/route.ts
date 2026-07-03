@@ -24,6 +24,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
 import { createHash } from "crypto";
 
 // ---------------------------------------------------------------------------
@@ -172,43 +173,32 @@ function mapToExportRow(
 }
 
 // ---------------------------------------------------------------------------
-// Auth
-// ---------------------------------------------------------------------------
-
-async function validateApiKey(apiKey: string): Promise<boolean> {
-  if (!isSupabaseConfigured()) {
-    return apiKey.length > 0;
-  }
-  try {
-    const supabase = createServiceClient();
-    const { data, error } = await supabase
-      .from("api_keys")
-      .select("id")
-      .eq("key_hash", apiKey)
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-    if (error?.code === "42P01") return apiKey.length > 0;
-    return !!data;
-  } catch {
-    return apiKey.length > 0;
-  }
-}
-
-// ---------------------------------------------------------------------------
 // Route handler
 // ---------------------------------------------------------------------------
 
 export async function GET(req: NextRequest) {
-  // Auth
+  // Auth — resolve identity from the key server-side (audit C2). The export is
+  // then scoped to this user only.
   const apiKey = req.headers.get("x-api-key");
   if (!apiKey) {
     return NextResponse.json({ error: "Missing x-api-key header" }, { status: 401 });
   }
-  const valid = await validateApiKey(apiKey);
-  if (!valid) {
+  let resolved;
+  try {
+    resolved = await resolveApiKey(apiKey);
+  } catch (e) {
+    if (e instanceof ApiKeyBackendUnavailable) {
+      return NextResponse.json(
+        { error: "Key validation is unavailable. Contact support." },
+        { status: 503 }
+      );
+    }
+    throw e;
+  }
+  if (!resolved) {
     return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
   }
+  const scopedUserId = resolved.userId;
 
   // Parse query params
   const { searchParams } = new URL(req.url);
@@ -249,6 +239,7 @@ export async function GET(req: NextRequest) {
     let query = supabase
       .from("compliance_events")
       .select("*", { count: "exact" })
+      .eq("user_id", scopedUserId)
       .order("created_at", { ascending: false })
       .limit(limit);
 

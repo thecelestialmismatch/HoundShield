@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { requireUser } from "@/lib/auth/api-guard";
 import { getComplianceEvents } from "@/lib/audit/logger";
 import { DEMO_EVENTS } from "@/lib/demo-data";
 import type { RiskLevel, ActionTaken } from "@/lib/supabase/types";
@@ -35,11 +36,16 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ events, total, limit, offset, demo: true });
     }
 
-    // Production mode — query Supabase
+    // Production mode — require a session and scope events to the caller only.
+    // The client-supplied `user_id` filter is ignored to prevent cross-tenant
+    // disclosure (audit C5).
+    const auth = await requireUser();
+    if (!auth.user) return auth.response;
+
     const filters = {
       risk_level: riskFilter,
       action_taken: actionFilter,
-      user_id: params.get("user_id") ?? undefined,
+      user_id: auth.user.id,
       from_date: params.get("from") ?? undefined,
       to_date: params.get("to") ?? undefined,
       limit,

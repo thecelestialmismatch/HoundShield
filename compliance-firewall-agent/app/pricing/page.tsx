@@ -5,6 +5,10 @@ import Link from 'next/link'
 import { Check } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
+import { FaqAccordion } from '@/components/ui/FaqAccordion'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { faqPageSchema } from '@/lib/seo/structured-data'
+import { pricingFaqs } from '@/lib/seo/faqs'
 
 /* ─────────────────────────────────────────────────────────────────
  * /pricing — verbatim port of the HERMES demo pricing view
@@ -110,7 +114,7 @@ export default function PricingPage() {
           <div className="container">
             <div className="section-head">
               <div className="eyebrow">Pricing</div>
-              <h2 className="display">Simple, transparent pricing</h2>
+              <h1 className="display">Simple, transparent pricing</h1>
               <p>
                 Every framework — CMMC, HIPAA, SOC 2 — included in every paid plan. Start free,
                 scale when you&apos;re ready.
@@ -186,6 +190,25 @@ export default function PricingPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            <p className="center muted" style={{ marginTop: 18, fontSize: '.82rem' }}>
+              Annual plans save up to 20%. Every paid plan includes a 30-day money-back guarantee.
+            </p>
+          </div>
+        </div>
+
+        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO). Hermes section styling
+            matches the rest of the page. */}
+        <div className="section alt">
+          <div className="container">
+            <div className="section-head">
+              <div className="eyebrow">FAQ</div>
+              <h2 className="display">Pricing questions, answered</h2>
+            </div>
+            <div style={{ maxWidth: 720, margin: '0 auto' }}>
+              <JsonLd schema={faqPageSchema(pricingFaqs)} />
+              <FaqAccordion items={pricingFaqs} />
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   softwareApplicationSchema,
   organizationSchema,
+  websiteSchema,
   faqPageSchema,
   howToSchema,
   breadcrumbSchema,
@@ -19,15 +20,22 @@ describe("softwareApplicationSchema", () => {
     expect(schema.url).toBe(BASE_URL);
   });
 
-  it("exposes all five priced offers", () => {
+  it("leads with the $499 report offer and matches the pricing tiers", () => {
     const offers = schema.offers as Array<Record<string, unknown>>;
-    expect(offers).toHaveLength(5);
+    expect(offers).toHaveLength(6);
     for (const offer of offers) {
       expect(offer["@type"]).toBe("Offer");
       expect(offer.priceCurrency).toBe("USD");
       expect(typeof offer.price).toBe("string");
     }
-    expect(offers.map((o) => o.price)).toEqual(["0", "199", "499", "999", "2499"]);
+    // $499 one-time report is the lead product (listed first).
+    expect(offers[0].name).toBe("CMMC AI Risk Assessment Report");
+    expect(offers[0].price).toBe("499");
+    // Tier prices match app/pricing/page.tsx (Free/Pro/Growth/Enterprise/Agency).
+    expect(offers.map((o) => o.price)).toEqual(["499", "0", "199", "499", "999", "2499"]);
+    // The $2,499 tier is "Agency", not "Federal".
+    expect(offers.some((o) => o.name === "Agency")).toBe(true);
+    expect(offers.some((o) => o.name === "Federal")).toBe(false);
   });
 
   it("lists product features", () => {
@@ -38,12 +46,24 @@ describe("softwareApplicationSchema", () => {
 });
 
 describe("organizationSchema", () => {
-  it("declares a valid Organization with logo and contact", () => {
+  it("declares a valid Organization with logo, contact, and social profile", () => {
     const schema = organizationSchema();
     expect(schema["@type"]).toBe("Organization");
     expect(schema.name).toBe("HoundShield");
     expect((schema.logo as Record<string, unknown>)["@type"]).toBe("ImageObject");
     expect((schema.contactPoint as Record<string, unknown>).contactType).toBe("Sales");
+    // sameAs must carry the verified profile (Knowledge Panel signal).
+    expect(schema.sameAs as string[]).toContain("https://x.com/houndshield");
+  });
+});
+
+describe("websiteSchema", () => {
+  it("declares a WebSite with the brand name (site-name signal)", () => {
+    const schema = websiteSchema();
+    expect(schema["@type"]).toBe("WebSite");
+    expect(schema.name).toBe("HoundShield");
+    expect(schema.url).toBe(BASE_URL);
+    expect((schema.publisher as Record<string, unknown>)["@type"]).toBe("Organization");
   });
 });
 

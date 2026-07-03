@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { interceptLLMRequest } from "@/lib/interceptor/middleware";
-import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
+import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
 import { z } from "zod";
 
 const InterceptRequestSchema = z.object({
@@ -13,40 +13,6 @@ const InterceptRequestSchema = z.object({
 
 // Maximum request body size (1MB)
 const MAX_BODY_SIZE = 1_048_576;
-
-/**
- * Validates an API key against stored keys in the database,
- * or accepts any non-empty key in demo mode.
- */
-async function validateApiKey(apiKey: string): Promise<boolean> {
-  if (!isSupabaseConfigured()) {
-    // Demo mode: accept any non-empty key
-    return apiKey.length > 0;
-  }
-
-  try {
-    const supabase = createServiceClient();
-    const { data, error } = await supabase
-      .from("api_keys")
-      .select("id")
-      .eq("key_hash", apiKey)
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-
-    // If the api_keys table doesn't exist yet, fall back to presence check
-    if (error?.code === "42P01") {
-      console.warn("api_keys table not found — accepting any key. Run migrations to enable key validation.");
-      return apiKey.length > 0;
-    }
-
-    return !!data;
-  } catch {
-    // If validation fails, don't block the request — log and allow
-    console.error("API key validation error — falling back to presence check");
-    return apiKey.length > 0;
-  }
-}
 
 /**
  * POST /api/gateway/intercept
@@ -90,15 +56,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const isValid = await validateApiKey(apiKey);
-    if (!isValid) {
-      return NextResponse.json(
-        { error: "Invalid API key" },
-        { status: 401 }
-      );
+    // Resolve the caller's identity from the key server-side. The client's
+    // x-user-id header is NOT trusted (audit C2) — a caller cannot declare who
+    // they are or what tier they hold.
+    let resolved;
+    try {
+      resolved = await resolveApiKey(apiKey);
+    } catch (e) {
+      if (e instanceof ApiKeyBackendUnavailable) {
+        return NextResponse.json(
+          { error: "Gateway key validation is unavailable. Contact support." },
+          { status: 503 }
+        );
+      }
+      throw e;
+    }
+    if (!resolved) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
 
-    const userId = req.headers.get("x-user-id") ?? "anonymous";
+    const userId = resolved.userId;
 
     // --- Subscription gate ------------------------------------------------
     const tier = await getUserSubscription(userId);

@@ -151,3 +151,23 @@ Nodes cover gaps not previously in either KB store.
 | TurboQuant | Self-hosted inference only |
 | Managed Agents product | Weeks of work — deferred to post-Series A |
 | swarmvault for classifier | Build before Series A — currently out of scope |
+
+## 2026-07-03 — Competitive check (pre-launch audit)
+
+- **Prediction Guard** (new entrant, not previously mapped): deploys the entire
+  PII detection/redaction control plane inside the customer's own infrastructure
+  — the closest architectural competitor to our Mode B (Docker/on-prem). Watch
+  closely. Our counter is CMMC-specific evidence they do not ship: SPRS scoring,
+  110-control NIST 800-171 mapping, and the C3PAO-ready SHA-256-signed PDF.
+- **Nightfall AI** (July 2026): still cloud-first ($25K–$80K/yr) and publicly
+  documented as having "limited coverage of on-premises environments" — the
+  Mode B wedge holds. They now market HIPAA/CMMC mappings + prompt-based custom
+  detectors, so our differentiation must stay local-only + PDF evidence + SMB
+  price, not detection breadth.
+- **Brand-search reality:** a Google/web search for "HoundShield" surfaces
+  Shield AI / AIShield / Bosch AIShield, not us. Name-collision + zero brand
+  authority. Technical fixes shipped this pass (removed the homepage-canonical
+  bug, added WebSite JSON-LD as the site-name signal, web manifest). Ops must
+  follow: Google Search Console + Bing Webmaster verification, submit sitemap,
+  request indexing, and earn a few backlinks (Cyber AB marketplace listing, RPO
+  partner pages, blog syndication).

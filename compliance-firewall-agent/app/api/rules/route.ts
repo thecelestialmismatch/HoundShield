@@ -10,7 +10,12 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { requireUser, requireRole } from "@/lib/auth/api-guard";
 import { z } from "zod";
+
+// Roles allowed to create/modify detection rules (weakening detection is a
+// privileged action — see audit C3).
+const RULE_ADMIN_ROLES = ["admin", "consultant"];
 
 // ---------------------------------------------------------------------------
 // Validation schema
@@ -37,6 +42,10 @@ export async function GET() {
     // Return empty list in demo mode so the UI renders without error.
     return NextResponse.json({ rules: [], total: 0, demo_mode: true });
   }
+
+  // Reading the active policy set requires a signed-in user.
+  const auth = await requireUser();
+  if (!auth.user) return auth.response;
 
   try {
     const supabase = createServiceClient();
@@ -71,6 +80,10 @@ export async function POST(req: NextRequest) {
       { status: 503 }
     );
   }
+
+  // Creating/weakening detection rules is admin-only (audit C3).
+  const auth = await requireRole(RULE_ADMIN_ROLES);
+  if (!auth.user) return auth.response;
 
   let body: unknown;
   try {

@@ -7,7 +7,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { requireRole } from "@/lib/auth/api-guard";
 import { z } from "zod";
+
+// Roles allowed to modify/delete detection rules (see audit C3).
+const RULE_ADMIN_ROLES = ["admin", "consultant"];
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -38,6 +42,9 @@ export async function PUT(
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ error: "Database not configured" }, { status: 503 });
   }
+
+  const auth = await requireRole(RULE_ADMIN_ROLES);
+  if (!auth.user) return auth.response;
 
   const { id } = await params;
   if (!id) {
@@ -111,6 +118,9 @@ export async function DELETE(
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ error: "Database not configured" }, { status: 503 });
   }
+
+  const auth = await requireRole(RULE_ADMIN_ROLES);
+  if (!auth.user) return auth.response;
 
   const { id } = await params;
   if (!id) {

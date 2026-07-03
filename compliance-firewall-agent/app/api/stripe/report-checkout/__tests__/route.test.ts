@@ -17,8 +17,32 @@ vi.mock("stripe", () => ({
   }),
 }));
 
+// Supabase mock — drives the H3 partner_ref verification.
+const { mockPartnerLookup, mockIsConfigured } = vi.hoisted(() => ({
+  mockPartnerLookup: vi.fn(),
+  mockIsConfigured: vi.fn(() => false),
+}));
+vi.mock("@/lib/supabase/client", () => ({
+  isSupabaseConfigured: () => mockIsConfigured(),
+  createServiceClient: () => ({
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          in: () => ({
+            limit: () => ({
+              maybeSingle: () => mockPartnerLookup(),
+            }),
+          }),
+        }),
+      }),
+    }),
+  }),
+}));
+
 import { POST } from "@/app/api/stripe/report-checkout/route";
 import { NextRequest } from "next/server";
+
+const APPROVED_UUID = "11111111-1111-4111-8111-111111111111";
 
 function makeRequest(body: unknown = {}) {
   return new NextRequest("http://localhost/api/stripe/report-checkout", {
@@ -32,6 +56,9 @@ describe("POST /api/stripe/report-checkout", () => {
   beforeEach(() => {
     mockSessionsCreate.mockReset();
     mockSessionsCreate.mockResolvedValue({ url: "https://checkout.stripe.com/test" });
+    mockIsConfigured.mockReturnValue(false);
+    mockPartnerLookup.mockReset();
+    mockPartnerLookup.mockResolvedValue({ data: null });
   });
 
   afterEach(() => {
@@ -66,13 +93,25 @@ describe("POST /api/stripe/report-checkout", () => {
     expect(args.metadata.wholesale).toBe("false");
   });
 
-  it("allows $299 wholesale only with a partner_ref", async () => {
+  it("does NOT grant $299 wholesale for an unverified partner_ref (H3)", async () => {
     process.env.STRIPE_SECRET_KEY = "sk_test";
+    // Arbitrary, non-approved ref → must fall back to $499 retail.
     await POST(makeRequest({ wholesale: true, partner_ref: "summit7" }));
+    const args = mockSessionsCreate.mock.calls[0][0];
+    expect(args.line_items[0].price_data.unit_amount).toBe(49900);
+    expect(args.metadata.wholesale).toBe("false");
+  });
+
+  it("grants $299 wholesale only for a verified approved partner (H3)", async () => {
+    process.env.STRIPE_SECRET_KEY = "sk_test";
+    mockIsConfigured.mockReturnValue(true);
+    mockPartnerLookup.mockResolvedValue({ data: { id: APPROVED_UUID, status: "approved" } });
+
+    await POST(makeRequest({ wholesale: true, partner_ref: APPROVED_UUID }));
     const args = mockSessionsCreate.mock.calls[0][0];
     expect(args.line_items[0].price_data.unit_amount).toBe(29900);
     expect(args.metadata.wholesale).toBe("true");
-    expect(args.metadata.partner_ref).toBe("summit7");
+    expect(args.metadata.partner_ref).toBe(APPROVED_UUID);
   });
 
   it("uses the configured SKU at retail when STRIPE_REPORT_PRICE_ID is set", async () => {

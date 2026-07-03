@@ -62,8 +62,15 @@ function setupSupabase() {
     upsert: mockUpsert,
     update: mockUpdate,
     select: vi.fn().mockReturnValue({
+      // subscription/customer lookups: select().eq().single()
       eq: vi.fn().mockReturnValue({
         single: vi.fn().mockResolvedValue({ data: null }),
+      }),
+      // report-order account linkage: select().ilike().limit().maybeSingle()
+      ilike: vi.fn().mockReturnValue({
+        limit: vi.fn().mockReturnValue({
+          maybeSingle: vi.fn().mockResolvedValue({ data: null }),
+        }),
       }),
     }),
   });

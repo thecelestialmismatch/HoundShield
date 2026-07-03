@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { z } from "zod";
-import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 import { streamProxy } from "@/lib/gateway/stream-proxy";
 import { eventBus } from "@/lib/gateway/event-bus";
 import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
+import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
+import { gatewayCorsHeaders } from "@/lib/gateway/cors";
 import type { ActionTaken, RiskLevel } from "@/lib/supabase/types";
 
 // ---------------------------------------------------------------------------
@@ -32,59 +33,14 @@ const StreamRequestSchema = z.object({
 const MAX_BODY_SIZE = 1_048_576;
 
 // ---------------------------------------------------------------------------
-// Auth — mirrors the pattern from app/api/gateway/intercept/route.ts
+// OPTIONS preflight — origin-scoped CORS (see lib/gateway/cors.ts, audit H4)
 // ---------------------------------------------------------------------------
 
-/**
- * Validates a HoundShield API key against stored keys in the database,
- * or accepts any non-empty key when running in demo mode.
- */
-async function validateApiKey(apiKey: string): Promise<boolean> {
-  if (!isSupabaseConfigured()) {
-    return apiKey.length > 0;
-  }
-
-  try {
-    const supabase = createServiceClient();
-    const { data, error } = await supabase
-      .from("api_keys")
-      .select("id")
-      .eq("key_hash", apiKey)
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-
-    if (error?.code === "42P01") {
-      console.warn(
-        "api_keys table not found — accepting any key. Run migrations to enable key validation."
-      );
-      return apiKey.length > 0;
-    }
-
-    return !!data;
-  } catch {
-    console.error("API key validation error — falling back to presence check");
-    return apiKey.length > 0;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// CORS headers
-// ---------------------------------------------------------------------------
-
-const CORS_HEADERS: Record<string, string> = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers":
-    "Content-Type, x-api-key, x-user-id, x-destination-url",
-};
-
-// ---------------------------------------------------------------------------
-// OPTIONS preflight
-// ---------------------------------------------------------------------------
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, {
+    status: 204,
+    headers: gatewayCorsHeaders(req.headers.get("origin")),
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -112,6 +68,7 @@ export async function OPTIONS() {
  */
 export async function POST(req: NextRequest) {
   const requestId = randomUUID();
+  const CORS_HEADERS = gatewayCorsHeaders(req.headers.get("origin"));
 
   try {
     // --- Size check -------------------------------------------------------
@@ -123,7 +80,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // --- Auth -------------------------------------------------------------
+    // --- Auth: resolve identity from the key server-side (audit C2) --------
     const apiKey = req.headers.get("x-api-key");
     if (!apiKey) {
       return NextResponse.json(
@@ -132,8 +89,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const isValid = await validateApiKey(apiKey);
-    if (!isValid) {
+    let resolved;
+    try {
+      resolved = await resolveApiKey(apiKey);
+    } catch (e) {
+      if (e instanceof ApiKeyBackendUnavailable) {
+        return NextResponse.json(
+          { error: "Gateway key validation is unavailable. Contact support.", request_id: requestId },
+          { status: 503, headers: CORS_HEADERS }
+        );
+      }
+      throw e;
+    }
+    if (!resolved) {
       return NextResponse.json(
         { error: "Invalid API key", request_id: requestId },
         { status: 401, headers: CORS_HEADERS }
@@ -164,7 +132,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = parseResult.data;
-    const userId = req.headers.get("x-user-id") ?? "anonymous";
+    const userId = resolved.userId;
 
     // --- Subscription gate ------------------------------------------------
     const tier = await getUserSubscription(userId);

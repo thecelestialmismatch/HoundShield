@@ -29,9 +29,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { z } from "zod";
-import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
+import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
+import { gatewayCorsHeaders } from "@/lib/gateway/cors";
 import type { ActionTaken, RiskLevel } from "@/lib/supabase/types";
 
 // ---------------------------------------------------------------------------
@@ -40,8 +41,9 @@ import type { ActionTaken, RiskLevel } from "@/lib/supabase/types";
 
 const MAX_BODY_SIZE = 1_048_576; // 1 MB
 
+// Base CORS (methods + headers). The Access-Control-Allow-Origin value is added
+// per-request from the allow-list (audit H4) — never a wildcard.
 const CORS_HEADERS: Record<string, string> = {
-  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers":
     "Content-Type, Authorization, x-provider, x-provider-api-key, x-user-id",
@@ -98,34 +100,6 @@ function openAIError(
     { error: { message, type, ...(code ? { code } : {}), param: null } },
     { status, headers: CORS_HEADERS }
   );
-}
-
-/**
- * Validates a HoundShield gateway API key.
- * Accepts any non-empty key in demo mode (Supabase not configured).
- */
-async function validateGatewayKey(key: string): Promise<boolean> {
-  if (!isSupabaseConfigured()) {
-    return key.length > 0;
-  }
-  try {
-    const supabase = createServiceClient();
-    const { data, error } = await supabase
-      .from("api_keys")
-      .select("id")
-      .eq("key_hash", key)
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-
-    if (error?.code === "42P01") {
-      // Table not yet migrated; accept any key
-      return key.length > 0;
-    }
-    return !!data;
-  } catch {
-    return key.length > 0;
-  }
 }
 
 /**
@@ -501,8 +475,11 @@ function buildStreamingProxy(
 // Route handlers
 // ---------------------------------------------------------------------------
 
-export async function OPTIONS(): Promise<Response> {
-  return new Response(null, { status: 204, headers: CORS_HEADERS });
+export async function OPTIONS(req: NextRequest): Promise<Response> {
+  return new Response(null, {
+    status: 204,
+    headers: { ...CORS_HEADERS, ...gatewayCorsHeaders(req.headers.get("origin")) },
+  });
 }
 
 export async function POST(req: NextRequest): Promise<Response> {
@@ -534,8 +511,23 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
-  const isValid = await validateGatewayKey(gatewayKey);
-  if (!isValid) {
+  // Resolve identity from the key server-side (audit C2). The x-user-id header
+  // and body.user are NOT trusted for identity or tier.
+  let resolved;
+  try {
+    resolved = await resolveApiKey(gatewayKey);
+  } catch (e) {
+    if (e instanceof ApiKeyBackendUnavailable) {
+      return openAIError(
+        "Gateway key validation is unavailable. Contact support.",
+        "api_error",
+        "key_backend_unavailable",
+        503
+      );
+    }
+    throw e;
+  }
+  if (!resolved) {
     return openAIError("Invalid API key.", "invalid_request_error", "invalid_api_key", 401);
   }
 
@@ -559,7 +551,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   const body = parseResult.data;
-  const userId = req.headers.get("x-user-id") ?? body.user ?? "anonymous";
+  const userId = resolved.userId;
 
   // --- Subscription gate ------------------------------------------------
   const tier = await getUserSubscription(userId);

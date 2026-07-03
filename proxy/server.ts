@@ -83,10 +83,35 @@ const OrgPolicyUpdateSchema = z.object({
   lockout_duration_minutes: z.number().int().min(1).max(10080).optional(),
 });
 
+// Admin token for management routes (quarantine release, policy changes).
+// Defaults to the license key so single-tenant Docker deployments work out of
+// the box, but can be set independently for stronger separation.
+const ADMIN_TOKEN = process.env.HOUNDSHIELD_ADMIN_TOKEN ?? LICENSE_KEY;
+
 // ── App ─────────────────────────────────────────────────────────────────────
 
 const app = express();
 app.use(express.json({ limit: "4mb" }));
+
+/**
+ * Guard for mutating/management endpoints (audit H5).
+ *
+ * Previously only POST /v1/chat/completions validated the license; the
+ * quarantine-release and policy-update routes had NO auth, so anyone with
+ * network reach to the container could release quarantined CUI or weaken the
+ * customer's own detection policy. Require the admin token on every such route.
+ */
+function requireAdmin(req: Request, res: Response, next: NextFunction): void {
+  const provided =
+    (req.headers["x-admin-token"] as string | undefined) ??
+    (req.headers["x-license-key"] as string | undefined) ??
+    "";
+  if (!ADMIN_TOKEN || provided !== ADMIN_TOKEN) {
+    res.status(401).json({ error: { message: "Unauthorized — x-admin-token required" } });
+    return;
+  }
+  next();
+}
 
 // ── Health ──────────────────────────────────────────────────────────────────
 
@@ -150,7 +175,7 @@ app.post("/v1/chat/completions", async (req: Request, res: Response) => {
 
 // ── Local audit endpoints ───────────────────────────────────────────────────
 
-app.get("/v1/events", (req: Request, res: Response) => {
+app.get("/v1/events", requireAdmin, (req: Request, res: Response) => {
   const limit = Math.min(parseInt((req.query.limit as string) ?? "100", 10), 500);
   const offset = parseInt((req.query.offset as string) ?? "0", 10);
   const action = req.query.action as string | undefined;
@@ -164,7 +189,7 @@ app.get("/v1/stats", (_req: Request, res: Response) => {
 
 // ── Quarantine management ───────────────────────────────────────────────────
 
-app.get("/v1/quarantine", (req: Request, res: Response) => {
+app.get("/v1/quarantine", requireAdmin, (req: Request, res: Response) => {
   const orgId = req.query.org_id as string | undefined;
   if (!orgId) {
     res.status(400).json({ error: { message: "org_id query param required" } });
@@ -175,7 +200,7 @@ app.get("/v1/quarantine", (req: Request, res: Response) => {
   res.json({ success: true, data: getQuarantineRows(orgId, status, limit) });
 });
 
-app.put("/v1/quarantine/:requestId", (req: Request, res: Response) => {
+app.put("/v1/quarantine/:requestId", requireAdmin, (req: Request, res: Response) => {
   const requestId = req.params.requestId as string;
   const { status, reviewed_by } = req.body as {
     status?: "released" | "blocked";
@@ -203,13 +228,13 @@ app.get("/v1/baselines/:entityId", (req: Request, res: Response) => {
 
 // ── Org policy management ───────────────────────────────────────────────────
 
-app.get("/v1/policy/:orgId", (req: Request, res: Response) => {
+app.get("/v1/policy/:orgId", requireAdmin, (req: Request, res: Response) => {
   const orgId = req.params.orgId as string;
   const policy = getOrgPolicyRow(orgId) ?? { ...DEFAULT_POLICY, org_id: orgId };
   res.json({ success: true, data: policy });
 });
 
-app.put("/v1/policy/:orgId", (req: Request, res: Response) => {
+app.put("/v1/policy/:orgId", requireAdmin, (req: Request, res: Response) => {
   const orgId = req.params.orgId as string;
   const parsed = OrgPolicyUpdateSchema.safeParse(req.body);
   if (!parsed.success) {
