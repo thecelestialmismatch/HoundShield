@@ -239,7 +239,7 @@ export function GlobalChat() {
         {isOpen ? (
           <X className="w-5 h-5 text-white" />
         ) : (
-          <Logo variant="dark" className="w-7" />
+          <Logo variant="dark" size={30} />
         )}
       </button>
 
@@ -264,7 +264,7 @@ export function GlobalChat() {
                   border: "1px solid rgba(129,166,198,0.3)",
                 }}
               >
-                <Logo variant="dark" className="w-5" />
+                <Logo variant="dark" size={20} />
               </div>
               <div>
                 <div className="text-sm font-bold text-white">Brain AI</div>
