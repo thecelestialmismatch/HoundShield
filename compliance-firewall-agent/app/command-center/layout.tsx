@@ -32,6 +32,7 @@ import {
   BarChart3,
   Download,
   Map,
+  Rocket,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
@@ -56,6 +57,7 @@ const NAV_SECTIONS: NavSection[] = [
     label: "Firewall",
     icon: Shield,
     items: [
+      { id: "getting-started", label: "Getting Started", icon: Rocket, href: "/command-center/getting-started" },
       { id: "overview", label: "Overview", icon: LayoutDashboard, href: "/command-center" },
       { id: "realtime", label: "Real-Time Feed", icon: Zap, href: "/command-center/realtime" },
       { id: "timeline", label: "Threat Timeline", icon: Activity, href: "/command-center/timeline" },

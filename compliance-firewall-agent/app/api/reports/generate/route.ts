@@ -26,27 +26,34 @@ export async function GET(req: NextRequest) {
 
     const format = req.nextUrl.searchParams.get("format"); // "pdf" | null
 
-    // PDF format requires Growth tier or higher (production only — demo mode always allows)
-    if (format === "pdf" && isSupabaseConfigured()) {
+    // Production (Supabase configured): the whole endpoint requires a session.
+    // Previously only the PDF branch was gated, leaving the JSON branch as an
+    // unauthenticated cross-tenant data-disclosure + anonymous-write path
+    // (audit C5). Scope every query to the authenticated user.
+    let scopedUserId: string | null = null;
+    if (isSupabaseConfigured()) {
       const userClient = await createClient();
       const { data: { user } } = await userClient.auth.getUser();
 
       if (!user) {
         return NextResponse.json({ error: "Authentication required" }, { status: 401 });
       }
+      scopedUserId = user.id;
 
-      const tier: SubscriptionTier = await getUserSubscription(user.id);
-      // PDF requires Growth+ (pro cannot download PDF per pricing matrix)
-      const pdfTiers: SubscriptionTier[] = ["growth", "enterprise", "agency"];
-      if (!pdfTiers.includes(tier)) {
-        return NextResponse.json(
-          {
-            error: "PDF reports require the Growth plan or higher",
-            upgrade_url: "/pricing",
-            current_tier: tier,
-          },
-          { status: 402 }
-        );
+      if (format === "pdf") {
+        const tier: SubscriptionTier = await getUserSubscription(user.id);
+        // PDF requires Growth+ (pro cannot download PDF per pricing matrix)
+        const pdfTiers: SubscriptionTier[] = ["growth", "enterprise", "agency"];
+        if (!pdfTiers.includes(tier)) {
+          return NextResponse.json(
+            {
+              error: "PDF reports require the Growth plan or higher",
+              upgrade_url: "/pricing",
+              current_tier: tier,
+            },
+            { status: 402 }
+          );
+        }
       }
     }
 
@@ -114,6 +121,7 @@ export async function GET(req: NextRequest) {
     const { data: events, error } = await supabase
       .from("compliance_events")
       .select("*")
+      .eq("user_id", scopedUserId as string)
       .gte("created_at", from)
       .lte("created_at", to)
       .order("created_at", { ascending: true });

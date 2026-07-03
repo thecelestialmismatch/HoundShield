@@ -23,7 +23,13 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  // Surface auth-callback failures (app/auth/callback redirects here with
+  // ?error=auth_failed when the OAuth code exchange fails).
+  const [error, setError] = useState(
+    searchParams.get('error') === 'auth_failed'
+      ? 'Sign-in could not be completed. Please try again.'
+      : '',
+  );
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {

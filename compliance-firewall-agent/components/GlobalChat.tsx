@@ -1,9 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
+
+// Auth/onboarding routes where the floating chat bubble must NOT render — it
+// otherwise overlaps the Terms/Privacy line on the mobile signup card.
+const HIDE_ON_ROUTES = ["/login", "/signup", "/auth", "/forgot-password"];
 
 const QUICK_ACTIONS = [
   "How does CMMC Level 2 work?",
@@ -56,6 +61,7 @@ function TypingDots() {
 }
 
 export function GlobalChat() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -210,6 +216,11 @@ export function GlobalChat() {
       ]);
     }
   }, [messages, isTyping]);
+
+  // Hide the floating bubble on auth/onboarding routes (all hooks run first).
+  if (HIDE_ON_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`))) {
+    return null;
+  }
 
   return (
     <>

@@ -25,7 +25,9 @@ export default function DpaPage() {
             <p>
               This Data Processing Agreement (&ldquo;DPA&rdquo;) forms part of the
               <Link href="/terms" className="text-brand-700 hover:text-brand-700"> Terms of Service</Link>{" "}
-              between the customer (&ldquo;Controller&rdquo;) and HoundShield (&ldquo;Processor&rdquo;)
+              between the customer (&ldquo;Controller&rdquo;) and{" "}
+              <strong className="text-[var(--hs-ink-secondary)]">[COMPANY LEGAL NAME]</strong>, operator of HoundShield
+              (&ldquo;Processor&rdquo;),
               and governs the processing of Personal Data and Covered Defense Information. It is offered to
               satisfy GDPR Art. 28, the HIPAA Business Associate requirements, and DFARS 252.204-7012 flow-down
               obligations. For a countersigned copy, email{" "}

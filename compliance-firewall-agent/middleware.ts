@@ -20,6 +20,7 @@ const RATE_LIMIT_MAX_REQUESTS = 60;
 const MAX_ENTRIES = 10_000;
 const SCAN_RATE_LIMIT_MAX = 15;
 const GATEWAY_RATE_LIMIT_MAX = 120; // gateway endpoints need higher headroom
+const CHECKOUT_RATE_LIMIT_MAX = 10; // unauthenticated Stripe checkout creation
 
 /** Removes all expired entries from the map. O(n) sweep. */
 function evictExpired(): void {
@@ -104,6 +105,39 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  // Content-Security-Policy (audit M4) — defense-in-depth for the blog HTML
+  // render and inline JSON-LD/style usage. 'unsafe-inline' is required for
+  // Next.js inline bootstrap + styled-jsx; script sources are otherwise 'self'.
+  response.headers.set(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com data:",
+      "img-src 'self' data: https: blob:",
+      "connect-src 'self' https:",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; ')
+  );
+
+  // ── noindex for private / auth / dashboard surfaces (SEO Phase 1 #6) ──────
+  // robots.txt disallow alone does not stop indexing from external links, so
+  // add an explicit header for every non-public route.
+  if (
+    pathname.startsWith('/command-center') ||
+    pathname.startsWith('/partner') ||
+    pathname.startsWith('/console') ||
+    pathname.startsWith('/auth') ||
+    pathname === '/login' ||
+    pathname === '/signup' ||
+    pathname === '/forgot-password' ||
+    pathname.startsWith('/report/thank-you')
+  ) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
 
   // ── Rate Limiting (API routes only) ──────────────────────────────────────
   if (pathname.startsWith('/api/')) {
@@ -111,7 +145,11 @@ export async function middleware(request: NextRequest) {
       ? SCAN_RATE_LIMIT_MAX
       : pathname.startsWith('/api/gateway')
         ? GATEWAY_RATE_LIMIT_MAX
-        : RATE_LIMIT_MAX_REQUESTS;
+        // Unauthenticated Stripe checkout creation — tighter bucket so a flood
+        // can't exhaust the shared Stripe API rate limit (audit M6).
+        : pathname === '/api/stripe/report-checkout'
+          ? CHECKOUT_RATE_LIMIT_MAX
+          : RATE_LIMIT_MAX_REQUESTS;
 
     if (isRateLimited(ip, maxRequests)) {
       return NextResponse.json(
@@ -165,6 +203,16 @@ export async function middleware(request: NextRequest) {
   // Only run Supabase logic on routes that actually need authentication.
   // Skipping it on pure API routes and public pages reduces cold-start
   // latency by ~10-20ms per request.
+  // FAIL CLOSED (audit H1): if a protected route is requested but Supabase auth
+  // is not configured, do not silently render it — send the user to login
+  // rather than exposing the dashboard. (The /login and /signup pages are in
+  // needsAuth only for the authenticated-redirect below, so exclude them here.)
+  if (!isSupabaseReady() && pathname.startsWith('/command-center')) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
   if (isSupabaseReady() && needsAuth(pathname)) {
     const supabase = createServerClient(
       (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim(),

@@ -4,6 +4,13 @@ import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ModeBNotice } from '@/components/ModeBNotice'
 import { HeroScanLog } from '@/components/landing/HeroScanLog'
+import type { Metadata } from 'next'
+
+// Self-referencing canonical for the homepage. The root layout no longer sets a
+// cascading canonical, so the homepage declares its own here.
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 /* ─────────────────────────────────────────────────────────────────
  * Homepage — verbatim port of the HERMES demo's home view

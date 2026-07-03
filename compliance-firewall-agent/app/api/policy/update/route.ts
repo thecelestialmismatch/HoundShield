@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/client";
+import { requireRole } from "@/lib/auth/api-guard";
 import {
   requestApproval,
   checkApprovalStatus,
@@ -7,6 +8,7 @@ import {
 import { createSeedAnchor } from "@/lib/audit/seed-anchor";
 import { z } from "zod";
 
+// `requested_by` is taken from the session, NOT the body (audit H2).
 const PolicyUpdateSchema = z.object({
   rule_id: z.string().uuid(),
   updates: z.object({
@@ -16,9 +18,11 @@ const PolicyUpdateSchema = z.object({
     threshold: z.number().min(0).max(1).optional(),
     is_active: z.boolean().optional(),
   }),
-  requested_by: z.string().min(1),
   justification: z.string().min(1),
 });
+
+// Roles allowed to request/approve policy changes.
+const POLICY_ROLES = ["admin", "consultant"];
 
 /**
  * POST /api/policy/update
@@ -32,6 +36,9 @@ const PolicyUpdateSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   try {
+    const auth = await requireRole(POLICY_ROLES);
+    if (!auth.user) return auth.response;
+
     const body = await req.json();
     const parseResult = PolicyUpdateSchema.safeParse(body);
 
@@ -42,7 +49,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { rule_id, updates, requested_by, justification } = parseResult.data;
+    const { rule_id, updates, justification } = parseResult.data;
+    const requested_by = auth.user.id;
 
     // Validate regex pattern if provided — prevents ReDoS and crashes
     if (updates.pattern) {
@@ -125,6 +133,9 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
+    const auth = await requireRole(POLICY_ROLES);
+    if (!auth.user) return auth.response;
+
     const approvalId = req.nextUrl.searchParams.get("approval_id");
     if (!approvalId) {
       return NextResponse.json(

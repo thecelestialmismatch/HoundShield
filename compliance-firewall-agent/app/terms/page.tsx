@@ -6,6 +6,7 @@ import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBar
 export const metadata: Metadata = {
   title: "Terms of Service | HoundShield",
   description: "Terms and conditions for using the HoundShield compliance platform.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {
@@ -82,8 +83,12 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">11. Contact</h2>
-            <p>Questions about these terms? Contact us at <a href="mailto:info@houndshield.com" className="text-brand-700 hover:text-brand-700">info@houndshield.com</a>. For enterprise legal inquiries, reach our team at <a href="mailto:admin@houndshield.com" className="text-brand-700 hover:text-brand-700">admin@houndshield.com</a>.</p>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">11. Company &amp; Contact</h2>
+            <p>
+              HoundShield is operated by <strong className="text-[var(--hs-ink-secondary)]">[COMPANY LEGAL NAME]</strong>,{" "}
+              <strong className="text-[var(--hs-ink-secondary)]">[MAILING ADDRESS]</strong>.
+            </p>
+            <p className="mt-2">Questions about these terms? Contact us at <a href="mailto:legal@houndshield.com" className="text-brand-700 hover:text-brand-700">legal@houndshield.com</a>.</p>
           </section>
         </div>
 

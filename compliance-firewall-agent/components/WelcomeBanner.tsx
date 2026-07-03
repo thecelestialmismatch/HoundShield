@@ -1,8 +1,9 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircle2, X } from 'lucide-react';
+import { CheckCircle2, X, ArrowRight } from 'lucide-react';
 
 /**
  * Post-signup welcome banner. Shows once when a freshly created account lands on
@@ -23,17 +24,26 @@ function WelcomeBannerInner() {
       <div className="flex items-center gap-2.5">
         <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-[var(--hs-success,#059669)]" />
         <span>
-          Your account is ready. Let&apos;s check your CMMC posture — start with your SPRS score below.
+          Your account is ready. New here? The Getting Started guide walks you from setup to
+          C3PAO-ready evidence.
         </span>
       </div>
-      <button
-        type="button"
-        onClick={() => setDismissed(true)}
-        aria-label="Dismiss welcome message"
-        className="flex-shrink-0 rounded-md p-1 text-[var(--hs-ink-tertiary,#2E4150)] transition-colors hover:bg-black/5"
-      >
-        <X className="h-4 w-4" />
-      </button>
+      <div className="flex flex-shrink-0 items-center gap-1">
+        <Link
+          href="/command-center/getting-started"
+          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-sm font-medium text-[var(--hs-steel-dark,#3A6EA5)] transition-colors hover:bg-black/5"
+        >
+          Get started <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+        <button
+          type="button"
+          onClick={() => setDismissed(true)}
+          aria-label="Dismiss welcome message"
+          className="rounded-md p-1 text-[var(--hs-ink-tertiary,#2E4150)] transition-colors hover:bg-black/5"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBar
 export const metadata: Metadata = {
   title: "Privacy Policy | HoundShield",
   description: "How HoundShield collects, uses, and protects your data.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {
@@ -80,12 +81,29 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">7. Cookies</h2>
-            <p>We use essential cookies for authentication and session management. We use anonymous analytics cookies to improve the platform. You can control cookie preferences through your browser settings.</p>
+            <p>We use essential cookies for authentication and session management. We use anonymous analytics cookies only after you opt in via our cookie consent banner. You can control cookie preferences through the banner or your browser settings.</p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">8. Contact</h2>
-            <p>For privacy-related inquiries, contact us at <a href="mailto:admin@houndshield.com" className="text-brand-700 hover:text-brand-700">admin@houndshield.com</a>.</p>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">8. California Privacy Rights (CCPA/CPRA)</h2>
+            <p>If you are a California resident, the California Consumer Privacy Act (as amended by the CPRA) gives you the right to:</p>
+            <ul className="list-disc pl-5 space-y-1 mt-2">
+              <li>Know what personal information we collect, use, and disclose</li>
+              <li>Request access to, or deletion of, your personal information</li>
+              <li>Correct inaccurate personal information</li>
+              <li>Opt out of the &ldquo;sale&rdquo; or &ldquo;sharing&rdquo; of personal information</li>
+              <li>Not receive discriminatory treatment for exercising these rights</li>
+            </ul>
+            <p className="mt-2"><strong className="text-[var(--hs-ink-secondary)]">We do not sell or share your personal information</strong> as those terms are defined under the CCPA/CPRA. To exercise any of these rights, contact us at the address below; we will verify your request and respond within the timelines required by law. You may use an authorized agent to submit a request on your behalf.</p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">9. Contact &amp; Data Controller</h2>
+            <p>
+              This service is operated by <strong className="text-[var(--hs-ink-secondary)]">[COMPANY LEGAL NAME]</strong>{" "}
+              (&ldquo;HoundShield&rdquo;), <strong className="text-[var(--hs-ink-secondary)]">[MAILING ADDRESS]</strong>, which is the data controller for the personal information described in this policy.
+            </p>
+            <p className="mt-2">For privacy requests or questions, contact <a href="mailto:legal@houndshield.com" className="text-brand-700 hover:text-brand-700">legal@houndshield.com</a>.</p>
           </section>
         </div>
 

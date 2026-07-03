@@ -42,7 +42,7 @@ export default function SignupPage() {
         password,
         options: {
           data: { full_name: name },
-          emailRedirectTo: `${window.location.origin}/auth/callback?redirect=/console`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent('/console?welcome=true')}`,
         },
       }));
     } catch {
@@ -60,7 +60,9 @@ export default function SignupPage() {
         router.push(outcome.to);
         return;
       case 'already-registered':
-        setError('That email is already registered. Try signing in instead.');
+        setError(
+          'That email is already registered. Sign in instead — and if you first signed up with Google or GitHub, use that button above.',
+        );
         setLoading(false);
         return;
       case 'error':

@@ -10,6 +10,7 @@
 // ============================================================================
 
 import { NextRequest } from 'next/server';
+import { timingSafeEqual } from 'crypto';
 import {
   getAllMetrics,
   getViolations,
@@ -72,11 +73,20 @@ export async function GET(req: NextRequest) {
 // DELETE — reset metrics (admin)
 // ---------------------------------------------------------------------------
 
+/** Constant-time string comparison that never throws on length mismatch. */
+function safeEqual(a: string, b: string): boolean {
+  const ab = Buffer.from(a);
+  const bb = Buffer.from(b);
+  if (ab.length !== bb.length) return false;
+  return timingSafeEqual(ab, bb);
+}
+
 export async function DELETE(req: NextRequest) {
   const serviceKey = req.headers.get('x-service-key');
-  const expectedKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Use a DEDICATED admin key, not the Supabase service-role secret (audit M1).
+  const expectedKey = process.env.METRICS_ADMIN_KEY;
 
-  if (!expectedKey || serviceKey !== expectedKey) {
+  if (!expectedKey || !serviceKey || !safeEqual(serviceKey, expectedKey)) {
     return Response.json(
       { error: 'Unauthorized — x-service-key required' },
       { status: 401 }

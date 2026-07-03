@@ -68,6 +68,19 @@ async function handleReportOrder(
   const meta = session.metadata ?? {};
   const isWholesale = meta.wholesale === 'true';
 
+  // Reconcile the purchase to an existing account by email, if one exists, so
+  // the buyer sees their order once they sign in (migration 017 adds user_id).
+  let linkedUserId: string | null = null;
+  if (email) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id')
+      .ilike('email', email)
+      .limit(1)
+      .maybeSingle();
+    linkedUserId = profile?.id ?? null;
+  }
+
   const { error } = await supabase.from('report_orders').upsert(
     {
       email,
@@ -81,6 +94,7 @@ async function handleReportOrder(
       partner_ref: meta.partner_ref || null,
       is_wholesale: isWholesale,
       status: 'paid',
+      user_id: linkedUserId,
     },
     { onConflict: 'stripe_session_id' },
   );

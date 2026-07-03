@@ -3,6 +3,10 @@ import Link from 'next/link'
 import { Eye, Clock, FileText, Shield, Brain, ArrowRight } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
+import { FaqAccordion } from '@/components/ui/FaqAccordion'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { faqPageSchema } from '@/lib/seo/structured-data'
+import { featuresFaqs } from '@/lib/seo/faqs'
 
 /* ─────────────────────────────────────────────────────────────────
  * /features — verbatim port of the HERMES demo features view
@@ -105,6 +109,20 @@ export default function FeaturesPage() {
               <Link className="btn btn-primary" href="/pricing">
                 See pricing <ArrowRight />
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO). */}
+        <div className="section alt">
+          <div className="container">
+            <div className="section-head">
+              <div className="eyebrow">FAQ</div>
+              <h2 className="display">Feature questions, answered</h2>
+            </div>
+            <div style={{ maxWidth: 720, margin: '0 auto' }}>
+              <JsonLd schema={faqPageSchema(featuresFaqs)} />
+              <FaqAccordion items={featuresFaqs} />
             </div>
           </div>
         </div>

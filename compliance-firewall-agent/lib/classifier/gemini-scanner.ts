@@ -21,6 +21,8 @@
  * Fallback: if GEMINI_API_KEY is not set, the module returns null instantly.
  */
 
+import { isCloudAssistEnabled } from "./cloud-assist";
+
 export interface GeminiScanResult {
   is_sensitive: boolean;
   risk_level: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
@@ -172,8 +174,11 @@ export async function scanWithGeminiFlash(
 }
 
 /**
- * Returns true if Gemini Flash is configured and should be attempted.
+ * Returns true if Gemini Flash is configured AND cloud assist has been
+ * explicitly opted into. Sending prompt text to Gemini is a cloud egress of
+ * potentially-CUI content, so it is gated behind HOUNDSHIELD_CLOUD_ASSIST
+ * (OFF by default — see lib/classifier/cloud-assist.ts and audit C6).
  */
 export function isGeminiConfigured(): boolean {
-  return Boolean(process.env.GEMINI_API_KEY);
+  return isCloudAssistEnabled() && Boolean(process.env.GEMINI_API_KEY);
 }

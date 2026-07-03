@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import {
   softwareApplicationSchema,
   organizationSchema,
+  websiteSchema,
 } from "@/lib/seo/structured-data";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
@@ -51,9 +52,12 @@ export const metadata: Metadata = {
   creator: "HoundShield",
   publisher: "HoundShield",
   metadataBase: new URL(BASE_URL),
-  alternates: {
-    canonical: BASE_URL,
-  },
+  // NOTE: no `alternates.canonical` here. A canonical set on the root metadata
+  // cascades to EVERY page that doesn't override it, pointing them all at the
+  // homepage — the same bug the removed <link> tag caused. Canonicals are now
+  // per-page: the homepage sets its own in app/page.tsx, and each route sets
+  // `alternates.canonical` in its metadata. Pages without one self-canonicalize
+  // to their own URL (correct, since each route has a single clean URL).
   openGraph: {
     title: "HoundShield | AI Compliance Firewall for CMMC, HIPAA & SOC 2",
     description:
@@ -98,7 +102,11 @@ export const metadata: Metadata = {
 // ── Global JSON-LD: site-wide product + organization entities ─────────────────
 // FAQPage schema is intentionally page-scoped (rendered per page via
 // <FaqSection>), so the visible Q&A always matches the structured data.
-const globalJsonLd = [softwareApplicationSchema(), organizationSchema()];
+const globalJsonLd = [
+  softwareApplicationSchema(),
+  organizationSchema(),
+  websiteSchema(),
+];
 
 export default function RootLayout({
   children,
@@ -112,11 +120,16 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="canonical" href={BASE_URL} />
+        {/* NOTE: no hardcoded <link rel="canonical"> here. It previously pointed
+            EVERY page at the homepage, telling Google the homepage is the
+            canonical version of /pricing, /features, etc. — which suppressed
+            indexing of every non-home page. Canonicals now come from Next.js
+            metadata: the root `alternates.canonical` (homepage) plus per-page
+            `alternates.canonical` on each route. */}
         {/* JetBrains Mono preconnect — loaded via CSS @import */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Global JSON-LD: product + organization (FAQ schema is page-scoped) */}
+        {/* Global JSON-LD: product + organization + website (FAQ schema is page-scoped) */}
         <JsonLd schema={globalJsonLd} />
       </head>
       <body className="min-h-screen font-sans antialiased relative">
