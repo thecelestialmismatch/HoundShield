@@ -104,7 +104,7 @@ export default function SignupPage() {
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-700 text-white text-sm font-semibold hover:bg-brand-800 transition-all"
           >
             Go to Login <ArrowRight className="w-4 h-4" />
           </Link>
@@ -212,7 +212,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-700 text-white text-sm font-semibold hover:bg-brand-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -269,7 +269,7 @@ export default function SignupPage() {
         {/* Login link */}
         <p className="text-center text-sm text-[var(--hs-ink-secondary)] mt-6">
           Already have an account?{' '}
-          <Link href="/login" className="text-brand-400 hover:text-brand-400 font-medium">
+          <Link href="/login" className="text-brand-700 hover:text-brand-800 font-semibold">
             Sign in
           </Link>
         </p>
