@@ -98,7 +98,7 @@
 .hermes .nav-inner { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .hermes .brand { display: flex; align-items: center; gap: .6rem; cursor: pointer; }
 .hermes .brand-mark { width: auto; height: 36px; object-fit: contain; display: block; transition: transform .3s var(--ease); }
-.hermes .brand:hover .brand-mark { animation: hs-logo-sway .55s ease-in-out infinite; }
+.hermes .brand:hover .brand-mark { transform: rotate(-4deg) scale(1.06); }
 .hermes .app-side .brand-mark { height: 32px; }
 .hermes .brand-text { font-family: var(--f-disp); font-weight: 700; font-size: 1.2rem; letter-spacing: -.01em; color: var(--text); }
 .hermes .brand-text b { color: var(--brand); }

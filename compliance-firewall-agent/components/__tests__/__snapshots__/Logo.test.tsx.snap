@@ -4,7 +4,7 @@ exports[`Logo > matches snapshot 1`] = `
 <img
   alt=""
   aria-hidden="true"
-  class="logo-img hover:[animation:hs-logo-sway_.55s_ease-in-out_infinite] group-hover/brand:[animation:hs-logo-sway_.55s_ease-in-out_infinite] active:[animation:hs-logo-sway_.55s_ease-in-out_infinite] group-active/brand:[animation:hs-logo-sway_.55s_ease-in-out_infinite] motion-reduce:[animation:none] motion-reduce:hover:[animation:none] motion-reduce:active:[animation:none] motion-reduce:group-hover/brand:[animation:none] motion-reduce:group-active/brand:[animation:none] flex-shrink-0 object-contain "
+  class="logo-img flex-shrink-0 object-contain "
   data-nimg="1"
   decoding="async"
   height="36"
