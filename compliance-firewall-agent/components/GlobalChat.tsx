@@ -227,7 +227,7 @@ export function GlobalChat() {
       {/* Trigger Button */}
       <button
         onClick={handleOpen}
-        className="fixed bottom-7 right-7 z-[200] w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
+        className="group/brand fixed bottom-7 right-7 z-[200] w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
         style={{
           background: "linear-gradient(135deg, var(--hs-steel-dark), var(--hs-steel))",
           boxShadow: "0 4px 24px rgba(129,166,198,0.45), 0 0 0 0 rgba(129,166,198,0.3)",

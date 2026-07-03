@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { NavV3 } from "@/components/layout/NavV3";
+import { FooterV3 } from "@/components/layout/FooterV3";
 import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
 import {
     ShieldCheck, AlertTriangle, Lock, ArrowRight, CheckCircle2,
@@ -637,11 +638,7 @@ export default function FreeDemoPage() {
                 </div>
             </main>
 
-            <footer className="border-t border-[var(--hs-border)] bg-transparent py-8">
-                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-[var(--hs-ink-tertiary)]">
-                    &copy; {new Date().getFullYear()} HoundShield — All rights reserved.
-                </div>
-            </footer>
+            <FooterV3 />
         </div>
     );
 }

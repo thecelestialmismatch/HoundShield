@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { NavV3 } from "@/components/layout/NavV3";
-import { TextLogo } from "@/components/TextLogo";
+import { FooterV3 } from "@/components/layout/FooterV3";
 import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-section";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
@@ -215,15 +215,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-[var(--hs-border)] py-12 px-6">
-                <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                        <TextLogo />
-                    </Link>
-                    <p className="text-xs text-[var(--hs-ink-tertiary)]">&copy; 2026 HoundShield — All rights reserved.</p>
-                </div>
-            </footer>
+            <FooterV3 />
         </div>
     );
 }
