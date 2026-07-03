@@ -15,18 +15,37 @@ describe("CookieConsent", () => {
     expect(screen.getByText(/essential cookies/i)).toBeTruthy();
   });
 
-  it("hides and stores 'accepted' when Accept is clicked", () => {
+  it("offers three choices and never a bare 'Reject'", () => {
     render(<CookieConsent />);
-    fireEvent.click(screen.getByRole("button", { name: /accept/i }));
+    expect(screen.getByRole("button", { name: /accept all/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /accept essential/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /cookie settings/i })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /^reject$/i })).toBeNull();
+  });
+
+  it("stores 'accepted' when Accept all is clicked", () => {
+    render(<CookieConsent />);
+    fireEvent.click(screen.getByRole("button", { name: /accept all/i }));
     expect(getConsent()).toBe("accepted");
     expect(screen.queryByRole("dialog", { name: /cookie consent/i })).toBeNull();
   });
 
-  it("hides and stores 'rejected' when Reject is clicked", () => {
+  it("stores 'rejected' (essential only) when Accept essential is clicked", () => {
     render(<CookieConsent />);
-    fireEvent.click(screen.getByRole("button", { name: /reject/i }));
+    fireEvent.click(screen.getByRole("button", { name: /accept essential/i }));
     expect(getConsent()).toBe("rejected");
     expect(screen.queryByRole("dialog", { name: /cookie consent/i })).toBeNull();
+  });
+
+  it("opens the settings modal and saves analytics-on as 'accepted'", () => {
+    render(<CookieConsent />);
+    fireEvent.click(screen.getByRole("button", { name: /cookie settings/i }));
+    // Modal appears with the analytics toggle (off by default).
+    const toggle = screen.getByRole("switch", { name: /analytics/i });
+    expect(toggle.getAttribute("aria-checked")).toBe("false");
+    fireEvent.click(toggle);
+    fireEvent.click(screen.getByRole("button", { name: /save preferences/i }));
+    expect(getConsent()).toBe("accepted");
   });
 
   it("does not render when a choice already exists", () => {

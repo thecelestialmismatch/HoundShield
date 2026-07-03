@@ -1,10 +1,9 @@
 "use client";
 
-import { Logo } from "@/components/Logo";
-import { TextLogo } from "@/components/TextLogo";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { NavV3 } from "@/components/layout/NavV3";
+import { FooterV3 } from "@/components/layout/FooterV3";
 import {
   Shield,
   Zap,
@@ -780,62 +779,7 @@ export default function AgentsPage() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-[var(--hs-border-subtle)] py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="group/brand flex items-center gap-2 mb-4">
-                <Logo className="w-7 h-7" />
-                <TextLogo />
-              </Link>
-              <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
-                Agentic AI compliance firewall with 18 agent templates, 8 tools, and 13 AI models.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-3">Product</h4>
-              <div className="space-y-2">
-                {[
-                  { label: "Features", href: "/features" },
-                  { label: "How It Works", href: "/how-it-works" },
-                  { label: "AI Agents", href: "/agents" },
-                  { label: "Pricing", href: "/pricing" },
-                  { label: "Dashboard", href: "/dashboard" },
-                ].map((item) => (
-                  <Link key={item.label} href={item.href} className="block text-sm text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] transition-colors">
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-3">Compliance</h4>
-              <div className="space-y-2">
-                {["SOC 2 Type II", "GDPR", "HIPAA", "EU AI Act"].map((item) => (
-                  <span key={item} className="block text-sm text-[var(--hs-ink-tertiary)]">{item}</span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-[var(--hs-ink-secondary)] uppercase tracking-wider mb-3">Company</h4>
-              <div className="space-y-2">
-                {["Documentation", "API Reference", "GitHub", "Contact"].map((item) => (
-                  <span key={item} className="block text-sm text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] cursor-pointer transition-colors">{item}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="pt-6 border-t border-[var(--hs-border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-[var(--hs-ink-tertiary)]">&copy; 2026 HoundShield — All rights reserved.</p>
-            <div className="flex items-center gap-4">
-              <span className="text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-tertiary)] cursor-pointer transition-colors">Privacy Policy</span>
-              <span className="text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-tertiary)] cursor-pointer transition-colors">Terms of Service</span>
-              <span className="text-xs text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink-tertiary)] cursor-pointer transition-colors">Security</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <FooterV3 />
     </div>
   );
 }

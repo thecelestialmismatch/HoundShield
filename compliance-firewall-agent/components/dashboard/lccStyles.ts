@@ -24,6 +24,7 @@ export const LCC_CSS = `
   --ok:#0E9F6E; --okbg:rgba(14,159,110,.12);
   --bad:#E5484D; --badbg:rgba(229,72,77,.12);
   --warn:#D9870B; --warnbg:rgba(217,135,11,.12);
+  --orange:#E07B39; --orangebg:rgba(224,123,57,.12);
   --f-disp:'Fraunces',serif; --f:'DM Sans',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
   --r:14px; --r-sm:10px;
   font-family:var(--f);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
@@ -117,7 +118,7 @@ export const LCC_CSS = `
 
 .hs-lcc .eng{display:grid;grid-template-columns:92px 1fr 40px;align-items:center;gap:12px;padding:.4rem 0;font-size:.82rem;color:var(--mut)}
 .hs-lcc .bar{height:8px;border-radius:99px;background:var(--track);overflow:hidden}
-.hs-lcc .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--bright));border-radius:99px;transition:width .8s ease}
+.hs-lcc .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--bright),var(--orange));border-radius:99px;transition:width .8s ease}
 .hs-lcc .eng b{text-align:right;font-family:var(--f-mono);color:var(--text);font-weight:600}
 
 .hs-lcc .sprs{display:flex;flex-direction:column;align-items:center;padding:18px}
