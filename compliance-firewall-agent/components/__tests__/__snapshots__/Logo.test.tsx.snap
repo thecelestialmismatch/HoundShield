@@ -4,14 +4,14 @@ exports[`Logo > matches snapshot 1`] = `
 <img
   alt=""
   aria-hidden="true"
-  class="logo-img transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] hover:[transform:rotate(-4deg)_scale(1.06)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] active:[transform:rotate(-4deg)_scale(1.06)] group-active/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:hover:[transform:none] motion-reduce:active:[transform:none] motion-reduce:group-hover/brand:[transform:none] motion-reduce:group-active/brand:[transform:none] flex-shrink-0 object-contain "
+  class="logo-img hover:[animation:hs-logo-sway_.55s_ease-in-out_infinite] group-hover/brand:[animation:hs-logo-sway_.55s_ease-in-out_infinite] active:[animation:hs-logo-sway_.55s_ease-in-out_infinite] group-active/brand:[animation:hs-logo-sway_.55s_ease-in-out_infinite] motion-reduce:[animation:none] motion-reduce:hover:[animation:none] motion-reduce:active:[animation:none] motion-reduce:group-hover/brand:[animation:none] motion-reduce:group-active/brand:[animation:none] flex-shrink-0 object-contain "
   data-nimg="1"
   decoding="async"
-  height="38"
+  height="36"
   loading="lazy"
   src="/_next/image?url=%2Fhoundshield-logo.png&w=64&q=75"
   srcset="/_next/image?url=%2Fhoundshield-logo.png&w=32&q=75 1x, /_next/image?url=%2Fhoundshield-logo.png&w=64&q=75 2x"
-  style="color: transparent;"
-  width="29"
+  style="color: transparent; height: 36px; width: auto;"
+  width="28"
 />
 `;

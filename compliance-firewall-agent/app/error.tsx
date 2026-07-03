@@ -13,7 +13,7 @@ export default function Error({
   return (
     <div className="min-h-screen bg-[var(--hs-surface-0)] flex items-center justify-center p-8">
       <div className="text-center max-w-md">
-        <Logo className="w-16 h-16 rounded-2xl mx-auto mb-6" />
+        <Logo size={56} className="rounded-2xl mx-auto mb-6" />
         <h1 className="text-2xl font-bold text-[var(--hs-ink)] mb-2">Something went wrong</h1>
         <p className="text-[var(--hs-ink-secondary)] mb-2 text-sm">
           An unexpected error occurred. Your data is safe — the compliance

@@ -52,7 +52,7 @@ export function FooterV3({ dark = false }: FooterV3Props) {
                   alt="HoundShield"
                   width={48}
                   height={48}
-                  className="logo-on-dark opacity-90 transition-transform duration-300 ease-[cubic-bezier(.22,.61,.36,1)] group-hover/brand:[transform:rotate(-4deg)_scale(1.06)] motion-reduce:transition-none motion-reduce:group-hover/brand:[transform:none]"
+                  className="logo-on-dark opacity-90 group-hover/brand:[animation:hs-logo-sway_.55s_ease-in-out_infinite] motion-reduce:group-hover/brand:[animation:none]"
                 />
                 <span className="font-bold text-white text-lg font-[var(--font-body)]">
                   HoundShield

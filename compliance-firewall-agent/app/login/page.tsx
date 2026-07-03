@@ -87,7 +87,7 @@ export default function LoginPage() {
       >
         {/* Logo */}
         <Link href="/" className="group/brand flex items-center justify-center gap-3 mb-8">
-          <Logo className="w-10" />
+          <Logo size={36} />
           <TextLogo />
         </Link>
 
