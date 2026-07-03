@@ -10,7 +10,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import { Logo } from '@/components/Logo'
 
 type Feed = { verdict: 'BLOCKED' | 'PASSED'; label: string; detail: string; lat: string }
 
@@ -35,11 +35,10 @@ export function HeroDemoDashboard() {
   const [sprs, setSprs] = useState(84)
 
   useEffect(() => {
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
-    if (prefersReduced) return
-
+    // The hero demo always advances — it's the product showcase. Reduced-motion
+    // is respected for the CSS transforms (row slide-in / ping) via the media
+    // query in hermes.css; a ticking counter is not vestibular motion, so we do
+    // not freeze the data here (freezing made the demo look broken).
     const id = setInterval(() => {
       setCursor((c) => c + 1)
       setScans((s) => s + Math.floor(1 + Math.random() * 3))
@@ -69,8 +68,8 @@ export function HeroDemoDashboard() {
           <i style={{ background: '#ffbd2e' }} />
           <i style={{ background: '#27c93f' }} />
         </div>
-        <div className="demo-dash-brand">
-          <Image className="brand-mark" src="/houndshield-logo.png" alt="HoundShield" width={16} height={20} />
+        <div className="demo-dash-brand group/brand">
+          <Logo size={20} />
           <span>Hound<b>Shield</b></span>
         </div>
         <span className="demo-live"><i /> Live demo</span>

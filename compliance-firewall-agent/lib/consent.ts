@@ -9,8 +9,13 @@
 
 export type ConsentChoice = "accepted" | "rejected";
 
-/** localStorage key holding the visitor's choice. */
-export const CONSENT_KEY = "hs-cookie-consent";
+/**
+ * localStorage key holding the visitor's choice.
+ * Versioned: bumping the suffix invalidates prior consents so the current
+ * banner is shown again to everyone (e.g. after a material change to the
+ * choices offered — the "essential / all / settings" model).
+ */
+export const CONSENT_KEY = "hs-cookie-consent-v2";
 
 /** Window event dispatched whenever the choice changes, so listeners react. */
 export const CONSENT_EVENT = "hs-consent-changed";
