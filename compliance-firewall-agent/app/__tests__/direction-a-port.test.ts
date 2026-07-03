@@ -40,10 +40,11 @@ describe('Direction-A port — demo copy present', () => {
     expect(feat).toContain('CAGE codes')
   })
 
-  it('hero terminal: demo scan-log rows', () => {
-    const hero = read('components/landing/HeroScanLog.tsx')
-    expect(hero).toContain('CUI · CAGE 1ABC2')
+  it('hero live demo dashboard: scan-feed rows', () => {
+    const hero = read('components/landing/HeroDemoDashboard.tsx')
+    expect(hero).toContain('CAGE 1ABC2')
     expect(hero).toMatch(/BLOCKED|PASSED/)
+    expect(hero).toContain('Live demo')
   })
 
   it('footer: demo columns + badges', () => {

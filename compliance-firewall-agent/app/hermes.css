@@ -15,6 +15,27 @@
    Source of truth: HoundShield — HERMES Redesign Demo (Direction A & B).html
    ============================================================ */
 
+/* ============================================================
+   PAGE CONVENTION — every new marketing/content page MUST follow this
+   so the whole site stays one consistent system. No exceptions.
+
+   Structure: wrap the page in a div with className "hermes", render
+   NavV3 at the top, the page content inside a main.page, and FooterV3
+   at the bottom. Import NavV3 and FooterV3 from components/layout.
+
+   Rules baked into this stylesheet — do not re-implement per page:
+     - Footer background is cream (.footer uses var(--warm-band)).
+       Always use FooterV3; never hand-roll a footer or change its colour.
+     - The brand mark (.brand-mark inside .brand) tilts on hover
+       (.brand:hover .brand-mark). Any standalone logo must use the shared
+       Logo component, which carries the same motion — so the logo moves
+       under the cursor identically on every surface (nav, footer, chat
+       bubble, dashboard). Never render a bare img tag for the logo.
+     - Colours come only from the tokens in .hermes below (steel + cream,
+       orange as the warm data-viz accent). Never amber/yellow/indigo/blue.
+     - Metrics/code use var(--f-mono); display headers use var(--f-disp).
+   ============================================================ */
+
 .hermes {
   /* ---------- GLOBAL TOKENS ---------- */
   --steel: #81A6C6; --sky: #AACDDC; --cream: #F3E3D0; --sand: #D2C4B4;
@@ -35,6 +56,8 @@
   --text: #0F1E2E; --text-2: #42566B; --text-3: #7089A0;
   --line: rgba(15, 30, 46, .10); --line-2: rgba(129, 166, 198, .30);
   --brand: #5A86A8; --brand-bright: #81A6C6; --brand-2: #AACDDC;
+  /* Dashboard warm accent — hint of orange for live data-viz (steel stays primary) */
+  --orange: #E07B39; --orange-bright: #F09A5B; --orange-bg: rgba(224, 123, 57, .12);
   --cta: #5A86A8; --cta-text: #FFFFFF; --cta-hover: #456C8C;
   --accent-warm: #F3E3D0; --halo: rgba(129, 166, 198, .22);
   --hero-from: #F4F8FC; --hero-to: #FFFFFF;
@@ -295,6 +318,84 @@
 }
 @media (max-width: 560px) {
   .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   LIVE DEMO DASHBOARD (hero) — a light cream/steel product window.
+   Mirrors what a customer sees after login (LiveCommandCenter), so the
+   marketing hero and the real dashboard read as one system. Steel is
+   primary; orange is the warm live-data accent.
+   ============================================================ */
+.hermes .demo-dash {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  font-family: var(--f-body);
+}
+.hermes .demo-dash-bar {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .7rem .9rem;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+}
+.hermes .demo-dash-bar .dots { display: flex; gap: .4rem; }
+.hermes .demo-dash-bar .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+.hermes .demo-dash-brand { display: flex; align-items: center; gap: .45rem; margin-left: .2rem; }
+.hermes .demo-dash-brand .brand-mark { height: 20px; width: auto; }
+.hermes .demo-dash-brand span { font-family: var(--f-disp); font-weight: 700; font-size: .92rem; letter-spacing: -.01em; color: var(--text); }
+.hermes .demo-dash-brand b { color: var(--brand); font-weight: 700; }
+.hermes .demo-live {
+  margin-left: auto; display: inline-flex; align-items: center; gap: .4rem;
+  font-family: var(--f-mono); font-size: .64rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ok);
+  background: var(--ok-bg); border-radius: 99px; padding: .22rem .55rem;
+}
+.hermes .demo-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); animation: demoPing 1.6s ease infinite; }
+@keyframes demoPing { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.7); } }
+
+.hermes .demo-dash-body { padding: 1rem 1.05rem 1.15rem; }
+.hermes .demo-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-bottom: .9rem; }
+.hermes .demo-stat { border: 1px solid var(--line); border-radius: var(--r-sm); padding: .6rem .65rem; background: var(--surface-2); }
+.hermes .demo-stat .k { font-family: var(--f-mono); font-size: .58rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+.hermes .demo-stat .v { font-family: var(--f-disp); font-weight: 700; font-size: 1.5rem; line-height: 1.1; color: var(--text); margin-top: .1rem; }
+.hermes .demo-stat .v.steel { color: var(--brand); }
+.hermes .demo-stat .v.orange { color: var(--orange); }
+.hermes .demo-stat .d { font-size: .62rem; color: var(--text-3); margin-top: .05rem; }
+
+/* SPRS-style bar */
+.hermes .demo-gauge { margin-bottom: .9rem; }
+.hermes .demo-gauge-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .35rem; }
+.hermes .demo-gauge-top .lab { font-family: var(--f-mono); font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+.hermes .demo-gauge-top .val { font-family: var(--f-mono); font-size: .74rem; font-weight: 700; color: var(--brand); }
+.hermes .demo-gauge-track { height: 8px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.hermes .demo-gauge-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand), var(--brand-2)); transition: width .8s var(--ease); }
+
+/* Live scan feed */
+.hermes .demo-feed-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: .45rem; }
+.hermes .demo-feed-head .t { font-family: var(--f-mono); font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+.hermes .demo-feed { display: flex; flex-direction: column; gap: .3rem; }
+.hermes .demo-row {
+  display: flex; align-items: center; justify-content: space-between; gap: .6rem;
+  padding: .42rem .55rem; border-radius: var(--r-sm);
+  border: 1px solid var(--line); background: var(--surface);
+  animation: demoRowIn .45s var(--ease);
+}
+@keyframes demoRowIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+.hermes .demo-row .left { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.hermes .demo-row .verdict { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--f-mono); font-size: .68rem; font-weight: 700; letter-spacing: .02em; white-space: nowrap; }
+.hermes .demo-row .verdict.block { color: var(--bad); }
+.hermes .demo-row .verdict.pass { color: var(--ok); }
+.hermes .demo-row .verdict .d { width: 7px; height: 7px; border-radius: 50%; }
+.hermes .demo-row .verdict.block .d { background: var(--bad); }
+.hermes .demo-row .verdict.pass .d { background: var(--ok); }
+.hermes .demo-row .detail { font-family: var(--f-mono); font-size: .68rem; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hermes .demo-row .lat { font-family: var(--f-mono); font-size: .66rem; color: var(--text-3); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hermes .demo-live i, .hermes .demo-row { animation: none; }
+  .hermes .demo-gauge-fill { transition: none; }
 }
 
 /* Reduced motion: park the entrance fade + live-dot ping (never breaks layout) */

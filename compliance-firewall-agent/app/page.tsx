@@ -3,7 +3,7 @@ import { ArrowRight, Check, Globe, Briefcase, Shield, Brain, FileText, Eye, Zap,
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ModeBNotice } from '@/components/ModeBNotice'
-import { HeroScanLog } from '@/components/landing/HeroScanLog'
+import { HeroDemoDashboard } from '@/components/landing/HeroDemoDashboard'
 import type { Metadata } from 'next'
 
 // Self-referencing canonical for the homepage. The root layout no longer sets a
@@ -71,7 +71,7 @@ export default function HomePage() {
                 <span><Check /> C3PAO-ready</span>
               </div>
             </div>
-            <HeroScanLog />
+            <HeroDemoDashboard />
           </div>
         </div>
 

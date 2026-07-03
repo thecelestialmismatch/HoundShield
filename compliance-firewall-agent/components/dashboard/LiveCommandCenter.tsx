@@ -161,6 +161,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
     const series: number[] = []
     for (let i = 0; i < 60; i++) series.push(34 + Math.round(Math.random() * 30))
     const brandc = () => getComputedStyle(root).getPropertyValue('--brand').trim() || '#81A6C6'
+    const orangec = () => getComputedStyle(root).getPropertyValue('--orange').trim() || '#E07B39'
     const drawChart = () => {
       if (!cv) return
       const w = cv.clientWidth; if (w < 10) return
@@ -178,7 +179,10 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       for (let j = 0; j < n; j++) { const lx = j * step, ly = h - (series[j] / max) * (h - 18) - 8; j ? x.lineTo(lx, ly) : x.moveTo(lx, ly) }
       x.strokeStyle = c; x.lineWidth = 2; x.lineJoin = 'round'; x.stroke()
       const ex = (n - 1) * step, ey = h - (series[n - 1] / max) * (h - 18) - 8
-      x.beginPath(); x.arc(ex, ey, 3.5, 0, 7); x.fillStyle = c; x.fill()
+      // Warm orange "live" pulse dot at the leading edge (hint-of-orange accent).
+      const o = orangec()
+      x.beginPath(); x.arc(ex, ey, 6, 0, 7); x.globalAlpha = 0.18; x.fillStyle = o; x.fill(); x.globalAlpha = 1
+      x.beginPath(); x.arc(ex, ey, 3.5, 0, 7); x.fillStyle = o; x.fill()
     }
     timers.push(setInterval(() => { series.push(30 + Math.round(Math.random() * 36)); series.shift(); drawChart() }, 1000))
     window.addEventListener('resize', drawChart)

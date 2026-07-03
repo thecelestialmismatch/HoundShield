@@ -63,9 +63,10 @@ describe('HomePage — HERMES demo parity', () => {
     expect(container.textContent).toMatch(/scanned on your hardware/i)
   })
 
-  it('renders the demo proxy-config terminal in the hero', () => {
+  it('renders the live demo dashboard in the hero', () => {
     render(<HomePage />)
-    expect(screen.getByText('proxy-config.env')).toBeTruthy()
+    expect(screen.getByText('Live demo')).toBeTruthy()
+    expect(screen.getByText('Live prompt scans')).toBeTruthy()
   })
 
   it('hero trust row lists the four demo checks', () => {

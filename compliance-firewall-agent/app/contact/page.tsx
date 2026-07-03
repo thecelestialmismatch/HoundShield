@@ -6,8 +6,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import { Mail, CalendarCheck, Clock, Send, ChevronDown, CheckCircle2, Shield, ArrowRight } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
-import { Logo } from "@/components/Logo";
-import { TextLogo } from "@/components/TextLogo";
+import { FooterV3 } from "@/components/layout/FooterV3";
 
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
@@ -184,56 +183,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-[var(--hs-border)] py-16 px-6">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div>
-              <div className="group/brand flex items-center gap-2 mb-4">
-                <Logo className="w-8 h-8" />
-                <TextLogo />
-              </div>
-              <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">AI compliance firewall. Real-time interception. Encrypted quarantine. Immutable audit trails.</p>
-            </div>
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.15em] text-[var(--hs-ink-secondary)] font-semibold mb-4">Product</p>
-              <div className="space-y-2.5">
-                <Link href="/features" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Features</Link>
-                <Link href="/pricing" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Pricing</Link>
-                <Link href="/command-center" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Command Center</Link>
-                <Link href="/changelog" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Changelog</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.15em] text-[var(--hs-ink-secondary)] font-semibold mb-4">Compliance</p>
-              <div className="space-y-2.5">
-                <span className="block text-sm text-[var(--hs-ink-secondary)]">SOC 2</span>
-                <span className="block text-sm text-[var(--hs-ink-secondary)]">GDPR</span>
-                <span className="block text-sm text-[var(--hs-ink-secondary)]">EU AI Act</span>
-                <span className="block text-sm text-[var(--hs-ink-secondary)]">HIPAA</span>
-                <span className="block text-sm text-[var(--hs-ink-secondary)]">CMMC / NIST 800-171</span>
-              </div>
-            </div>
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.15em] text-[var(--hs-ink-secondary)] font-semibold mb-4">Company</p>
-              <div className="space-y-2.5">
-                <Link href="/about" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">About</Link>
-                <Link href="/docs" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Documentation</Link>
-                <Link href="/contact" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Contact</Link>
-                <Link href="/signup" className="block text-sm text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Get Started</Link>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-[var(--hs-border)] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-[var(--hs-ink-tertiary)]">&copy; 2026 HoundShield -- All rights reserved.</p>
-            <div className="flex items-center gap-4 text-xs text-[var(--hs-ink-tertiary)]">
-              <Link href="/privacy" className="hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Terms of Service</Link>
-              <Link href="/docs" className="hover:text-[var(--hs-ink)] transition-colors cursor-pointer">Security</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <FooterV3 />
     </div>
   );
 }

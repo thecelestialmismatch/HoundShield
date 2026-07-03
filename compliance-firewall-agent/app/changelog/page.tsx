@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { NavV3 } from "@/components/layout/NavV3";
+import { FooterV3 } from "@/components/layout/FooterV3";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   Shield, Cpu, CreditCard, LayoutDashboard, KeyRound, Blocks,
@@ -208,13 +209,7 @@ export default function ChangelogPage() {
         </FadeIn>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-[var(--hs-border)] py-10 px-6">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <Link href="/" className="text-sm font-semibold text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors cursor-pointer">HoundShield</Link>
-          <p className="text-xs text-[var(--hs-ink-tertiary)]">&copy; 2026 HoundShield. All rights reserved.</p>
-        </div>
-      </footer>
+      <FooterV3 />
     </div>
   );
 }
