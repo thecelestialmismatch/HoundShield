@@ -20,12 +20,16 @@ interface OfferInput {
   description: string;
 }
 
+// Tier names and prices must match app/pricing/page.tsx exactly. The $499
+// one-time CMMC AI Risk Assessment Report is the lead product and is listed
+// first. The $2,499 tier is "Agency" on the pricing page (not "Federal").
 const PRODUCT_OFFERS: readonly OfferInput[] = [
-  { name: "Free", price: "0", description: "Free tier — AI prompt scanning, basic compliance reports" },
-  { name: "Pro", price: "199", description: "Pro — advanced scanning, PDF evidence export, CMMC controls" },
-  { name: "Growth", price: "499", description: "Growth — multi-user, gateway mode, SPRS score tracking" },
-  { name: "Enterprise", price: "999", description: "Enterprise — C3PAO-ready reports, dedicated support" },
-  { name: "Federal", price: "2499", description: "Federal — multi-tenant agency deployments, SLA, custom integrations" },
+  { name: "CMMC AI Risk Assessment Report", price: "499", description: "One-time $499 report — run the proxy 14 days in your own environment for a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription." },
+  { name: "Free", price: "0", description: "Free tier — CMMC self-assessment, SPRS calculator, up to 1,000 prompts/mo" },
+  { name: "Pro", price: "199", description: "Pro — AI gateway (50,000 scans/mo), SSP & POA&M generation, 10 seats" },
+  { name: "Growth", price: "499", description: "Growth — unlimited scans, PDF reports, C3PAO coordination, SSO & RBAC, 25 seats" },
+  { name: "Enterprise", price: "999", description: "Enterprise — on-prem / air-gapped, white-label PDF, dedicated CSM" },
+  { name: "Agency", price: "2499", description: "Agency / MSP — multi-tenant, unlimited client accounts, revenue-share program" },
 ];
 
 const PRODUCT_FEATURES: readonly string[] = [
@@ -81,7 +85,25 @@ export function organizationSchema(): JsonLdSchema {
       contactType: "Sales",
       url: `${BASE_URL}/contact`,
     },
-    sameAs: [],
+    // Verified profiles only — the @houndshield handle is claimed in the site's
+    // Twitter/X metadata. Add more (LinkedIn, GitHub) as they are established.
+    sameAs: ["https://x.com/houndshield"],
+  };
+}
+
+/**
+ * Site-wide WebSite entity. This is Google's primary signal for the site name
+ * shown in results and is a key fix for brand-name searches ("HoundShield")
+ * resolving to us instead of similarly-named products. Rendered once in root.
+ */
+export function websiteSchema(): JsonLdSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "HoundShield",
+    alternateName: "HoundShield AI Compliance Firewall",
+    url: BASE_URL,
+    publisher: { "@type": "Organization", name: "HoundShield", url: BASE_URL },
   };
 }
 

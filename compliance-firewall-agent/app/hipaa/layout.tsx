@@ -3,13 +3,13 @@ import type { Metadata } from "next";
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 export const metadata: Metadata = {
-  title: "HIPAA Compliance | AI Firewall for Healthcare PHI Protection",
+  title: "HIPAA & AI | PHI Protection for Healthcare AI Usage",
   description:
-    "HIPAA-compliant AI usage for healthcare organizations. HoundShield detects PHI in AI prompts before they reach cloud services, generates BAA-supporting audit trails, and ensures your AI tools don't create HIPAA violations.",
+    "Help your team use AI without exposing PHI. HoundShield detects PHI in AI prompts before they reach cloud services and generates audit trails to support your HIPAA program. Self-hosted (Mode B) deployment keeps PHI inside your boundary; a BAA is available for that mode.",
   keywords: [
-    "HIPAA AI compliance",
+    "HIPAA AI",
     "PHI protection AI",
-    "HIPAA compliant ChatGPT",
+    "ChatGPT PHI risk",
     "healthcare AI security",
     "PHI detection",
     "HIPAA AI firewall",
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: `${BASE_URL}/hipaa` },
   openGraph: {
-    title: "HIPAA Compliance | HoundShield AI Firewall",
+    title: "HIPAA & AI | HoundShield",
     description:
-      "Stop PHI from reaching cloud AI services. Local-only PHI detection, HIPAA audit trails, and BAA-supporting compliance documentation for healthcare organizations.",
+      "Help prevent PHI from reaching cloud AI services. Local PHI detection, audit trails to support your HIPAA program, and a BAA available for self-hosted (Mode B) deployments.",
     url: `${BASE_URL}/hipaa`,
     type: "website",
   },

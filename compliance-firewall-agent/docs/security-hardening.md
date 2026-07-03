@@ -510,3 +510,69 @@ Defense intelligence services don't trust assumptions — they verify. Applied h
 7. **Key rotation plan** — ENCRYPTION_KEY, Stripe keys, Supabase keys all documented with rotation procedure
 
 The current codebase is well-structured. The gaps above are specific and fixable in a single sprint. Priority order: CRIT-01 (RLS) → CRIT-02 (CORS) → CRIT-03 (TS) → HIGH-01 (logging) → HIGH-02 (distributed rate limit).
+
+---
+
+## 2026-07-03 Pre-Launch Hardening Pass (branch: claude/houndshield-seo-audit)
+
+A full read-only audit found live, exploitable gaps beyond the CRIT-01..03 above.
+All of the following are fixed in this pass.
+
+### Fixed — CRITICAL
+- **C1 RLS on profiles/subscriptions/usage_tracking.** Migration 003's
+  `using (true)` policies (no `TO` clause) defaulted to PUBLIC, letting the
+  anon key read/write all customer PII + billing. Fixed in
+  `supabase/migrations/018_fix_profiles_rls.sql` (scoped `to service_role` +
+  self-scoped user policies; users can no longer change their own role/tier).
+- **C2 Gateway key fail-open.** The `api_keys` table never existed, so every
+  key check fell through to "accept any non-empty string", and `x-user-id` was
+  trusted for identity/tier. Fixed: `supabase/migrations/019_api_keys.sql`
+  creates the table; `lib/gateway/api-key.ts` resolves identity server-side and
+  fails CLOSED (503) when the table is absent; gateway routes
+  (`intercept`, `stream`, `v1/chat/completions`, `audit/export`) no longer read
+  `x-user-id`.
+- **C3 `/api/rules` write auth** — now `requireRole(['admin','consultant'])`.
+- **C4 `/api/quarantine/review`** — reviewer identity from session, not body.
+- **C5 `/api/compliance/events` + `/api/reports/generate`** — require auth,
+  scope every query to the caller's `user_id`.
+- **C6 Classifier cloud egress.** `classifyRisk()` sent unredacted prompt text
+  to Gemini/Anthropic whenever a key was set — the exact spillage HoundShield
+  markets against. Now gated behind `HOUNDSHIELD_CLOUD_ASSIST` (OFF by default,
+  must never be on in Mode B/C) via `lib/classifier/cloud-assist.ts`.
+
+### Fixed — HIGH
+- **H1** middleware now fails CLOSED (redirects `/command-center/*` to login)
+  when Supabase env is missing.
+- **H2** `/api/policy/update` requires an admin/consultant session; `requested_by`
+  comes from the session.
+- **H3** `$299` wholesale price now validates `partner_ref` against an active
+  `partner_applications` row server-side (protects the $499 floor).
+- **H4** gateway routes use an origin allow-list (`lib/gateway/cors.ts`) instead
+  of `Access-Control-Allow-Origin: *`.
+- **H5** proxy management routes (`/v1/quarantine/:id`, `/v1/policy/:orgId`,
+  `/v1/events`, `/v1/policy` GET) now require `x-admin-token`
+  (`HOUNDSHIELD_ADMIN_TOKEN`, defaults to the license key).
+
+### Fixed — MEDIUM
+- **M1** `/api/gateway/metrics` DELETE uses a dedicated `METRICS_ADMIN_KEY` with
+  constant-time comparison (not the Supabase service-role key).
+- **M2** `/api/partners/apply` validates with Zod + HTML-escapes values in the
+  notification email.
+- **M4** Content-Security-Policy header added in `middleware.ts`.
+- **M6** tighter rate-limit bucket for `/api/stripe/report-checkout`.
+
+### Tiered entitlement (customer access scales with plan; kernel stays founder-only)
+Every gateway/AI call resolves tier **server-side** from the authenticated
+`api_keys` row → `profiles.tier`/`subscriptions` (never the client header), and
+gates via `canAccessGateway`/`getApiCallLimit`. Provider API keys live only in
+server env and are never selectable from the client. Admin power is gated on
+`profiles.role`, which RLS forbids users from editing.
+
+### One human = one account (dedupe)
+- `supabase/migrations/017_profile_email_dedupe.sql` merges existing duplicate
+  profiles, adds a unique index on `lower(email)`, makes `handle_new_user()`
+  idempotent, and links `report_orders` to accounts by email.
+- **Dashboard config REQUIRED (not in repo):** in Supabase Auth settings, enable
+  email confirmation AND verified-email identity auto-linking. Auto-linking a
+  Google identity to an email/password identity only works when both emails are
+  verified — so email confirmation must be ON, or duplicate accounts recur.

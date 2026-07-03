@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
 
 /**
  * POST /api/stripe/report-checkout
@@ -33,6 +34,33 @@ function getStripe() {
 
 const VALID_VERTICALS = new Set(['defense', 'healthcare', 'legal']);
 
+/**
+ * Wholesale ($299) is only valid for a real, approved partner (audit H3).
+ * `partner_ref` must be the id of a partner_applications row whose status is
+ * 'approved' or 'active'. Any unverified ref falls back to the $499 retail price
+ * so the $499 anchor can never be self-served away.
+ */
+async function isApprovedPartner(partnerRef: string | undefined): Promise<boolean> {
+  if (!partnerRef || !isSupabaseConfigured()) return false;
+  // partner_ref must look like a UUID (the partner application id).
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(partnerRef)) {
+    return false;
+  }
+  try {
+    const supabase = createServiceClient();
+    const { data } = await supabase
+      .from('partner_applications')
+      .select('id, status')
+      .eq('id', partnerRef)
+      .in('status', ['approved', 'active'])
+      .limit(1)
+      .maybeSingle();
+    return !!data;
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     if (!process.env.STRIPE_SECRET_KEY) {
@@ -49,9 +77,10 @@ export async function POST(request: NextRequest) {
       wholesale = false,
     } = body as { vertical?: string; partner_ref?: string; wholesale?: boolean };
 
-    // Wholesale ($299) is only valid with a partner reference — never offer it
-    // self-serve, or it undercuts the $499 anchor.
-    const isWholesale = Boolean(wholesale) && Boolean(partner_ref);
+    // Wholesale ($299) is only valid for a verified, approved partner — the
+    // ref is checked against the DB server-side (audit H3). A client cannot
+    // self-serve the wholesale price by passing an arbitrary partner_ref.
+    const isWholesale = Boolean(wholesale) && (await isApprovedPartner(partner_ref));
     const amount = isWholesale ? WHOLESALE_CENTS : RETAIL_CENTS;
 
     const cleanVertical =

@@ -230,12 +230,12 @@ export default function AuthPage() {
     [signUpEmail, signUpPassword, fullName]
   );
 
-  const handleSocialAuth = useCallback(async (provider: "google" | "github" | "sso") => {
+  const handleSocialAuth = useCallback(async (provider: "google" | "github") => {
     setLoading(true);
     try {
       const supabase = createClient();
       await supabase.auth.signInWithOAuth({
-        provider: provider as 'google' | 'github',
+        provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
         },
@@ -420,12 +420,12 @@ export default function AuthPage() {
                     <label className="block text-xs font-medium text-[var(--hs-ink-secondary)]">
                       Password
                     </label>
-                    <button
-                      type="button"
+                    <Link
+                      href="/forgot-password"
                       className="text-[11px] text-brand-400 hover:text-brand-300 transition-colors"
                     >
                       Forgot password?
-                    </button>
+                    </Link>
                   </div>
                   <div className="relative">
                     <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-tertiary)]" />
@@ -591,27 +591,19 @@ export default function AuthPage() {
                 <GitHubLogo className="w-4 h-4" />
                 Continue with GitHub
               </button>
-              <button
-                onClick={() => handleSocialAuth("sso")}
-                disabled={loading}
-                className="flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-white border border-[var(--hs-border-subtle)] text-sm text-[var(--hs-ink)] font-medium hover:bg-white hover:border-[var(--hs-border)] active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                Continue with SSO
-              </button>
             </div>
 
             {/* Terms (sign up only) */}
             {activeTab === "signup" && (
               <p className="text-[11px] text-[var(--hs-ink-tertiary)] text-center mt-6 leading-relaxed">
                 By creating an account, you agree to our{" "}
-                <span className="text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] cursor-pointer transition-colors">
+                <Link href="/terms" className="text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] underline transition-colors">
                   Terms of Service
-                </span>{" "}
+                </Link>{" "}
                 and{" "}
-                <span className="text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] cursor-pointer transition-colors">
+                <Link href="/privacy" className="text-[var(--hs-ink-tertiary)] hover:text-[var(--hs-ink)] underline transition-colors">
                   Privacy Policy
-                </span>
+                </Link>
                 .
               </p>
             )}

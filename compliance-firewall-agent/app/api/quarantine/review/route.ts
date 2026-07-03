@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { requireRole } from "@/lib/auth/api-guard";
 import {
   reviewQuarantineItem,
   getPendingQuarantineItems,
@@ -7,12 +8,15 @@ import {
 import { DEMO_QUARANTINE_ITEMS } from "@/lib/demo-data";
 import { z } from "zod";
 
+// Reviewer identity is taken from the session, NOT the request body (audit C4).
 const ReviewSchema = z.object({
   quarantine_id: z.string().min(1),
   decision: z.enum(["APPROVED", "REJECTED"]),
-  reviewer_id: z.string().min(1),
   notes: z.string().optional(),
 });
+
+// Only these roles may release/reject quarantined CUI/PHI.
+const REVIEW_ROLES = ["admin", "consultant"];
 
 /**
  * POST /api/quarantine/review
@@ -21,6 +25,10 @@ const ReviewSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   try {
+    // Only authenticated reviewers may act; identity comes from the session.
+    const auth = await requireRole(REVIEW_ROLES);
+    if (!auth.user) return auth.response;
+
     const body = await req.json();
     const parseResult = ReviewSchema.safeParse(body);
 
@@ -31,18 +39,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { quarantine_id, decision, reviewer_id, notes } = parseResult.data;
+    const { quarantine_id, decision, notes } = parseResult.data;
+    const reviewer_id = auth.user.id;
 
-    // Demo mode — simulate success
-    if (!isSupabaseConfigured()) {
-      return NextResponse.json({
-        success: true,
-        quarantine_id,
-        decision,
-        demo: true,
-      });
-    }
-
+    // Demo mode is unreachable here (requireRole fails closed when Supabase is
+    // not configured), but keep the shape consistent.
     await reviewQuarantineItem(quarantine_id, decision, reviewer_id, notes);
 
     return NextResponse.json({ success: true, quarantine_id, decision });
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
-    // Demo mode — return mock quarantine items
+    // Demo mode — return mock quarantine items (no real data exists).
     if (!isSupabaseConfigured()) {
       return NextResponse.json({
         items: DEMO_QUARANTINE_ITEMS,
@@ -68,6 +69,10 @@ export async function GET(req: NextRequest) {
         demo: true,
       });
     }
+
+    // The pending queue contains regulated data — require a reviewer session.
+    const auth = await requireRole(REVIEW_ROLES);
+    if (!auth.user) return auth.response;
 
     const limit = parseInt(req.nextUrl.searchParams.get("limit") ?? "50");
     const items = await getPendingQuarantineItems(limit);
