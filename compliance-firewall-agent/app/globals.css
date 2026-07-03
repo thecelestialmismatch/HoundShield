@@ -5,16 +5,14 @@
 /* JetBrains Mono via CSS — next/font doesn't support it without self-hosting */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-/* Shared logo hover motion — a gentle side-to-side sway so the brand mark
-   visibly moves SIDEWAYS under the cursor, identically on every surface
-   (nav, footer, sidebar, dashboard, chat bubble, hero demo). Global so both
-   Tailwind arbitrary `[animation:hs-logo-sway_...]` classes and scoped CSS
-   (.hermes / .hs-lcc) can reference it. Disabled under reduced-motion. */
-@keyframes hs-logo-sway {
-  0%   { transform: translateX(-3px); }
-  50%  { transform: translateX(3px); }
-  100% { transform: translateX(-3px); }
-}
+/* Logo hover contract (founder-approved, Direction-A demo verbatim): the mark
+   TILTS IN PLACE on hover — rotate(-4deg) scale(1.06) — it must NEVER translate
+   sideways. The shared .logo-img/.logo-on-dark rule below (brand-mark motion
+   section) owns this pose; hermes.css and lccStyles.ts carry the same rule for
+   their scoped img tags. Do not re-add per-component [animation:…] overrides —
+   a running animation's keyframe transform beats the hover pose in the cascade,
+   which is exactly how the sideways-sway regression happened.
+   Guard: app/__tests__/logo-motion-contract.test.ts */
 
 /* ═══════════════════════════════════════════════════════════════════
    HOUND SHIELD — BEAST UI v3.0

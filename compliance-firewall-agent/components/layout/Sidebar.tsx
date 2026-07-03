@@ -42,7 +42,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-4 h-16 border-b border-[var(--hs-border-subtle)] shrink-0">
         <div
-          className="w-7 h-7 rounded-md overflow-hidden bg-white hover:[animation:hs-logo-sway_.55s_ease-in-out_infinite] motion-reduce:hover:[animation:none]"
+          className="group/brand w-7 h-7 rounded-md overflow-hidden bg-white"
           style={{ boxShadow: 'var(--shadow-logo)' }}
         >
           <Image
