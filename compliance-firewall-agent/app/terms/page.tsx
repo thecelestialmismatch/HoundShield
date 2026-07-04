@@ -1,4 +1,5 @@
 import { NavV3 } from "@/components/layout/NavV3";
+import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
@@ -98,6 +99,7 @@ export default function TermsPage() {
           </Link>
         </div>
       </main>
+      <FooterV3 />
     </div>
   );
 }
