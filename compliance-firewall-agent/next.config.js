@@ -80,6 +80,17 @@ const nextConfig = {
         headers: [
           { key: "X-DNS-Prefetch-Control", value: "on" },
           { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
+          // Security headers — these MUST byte-match middleware.ts. Two layers on
+          // purpose: middleware covers dynamic responses; this next.config layer
+          // covers statically-generated pages served straight from Vercel's CDN
+          // (where middleware is bypassed on cache hits). Identical values mean the
+          // two layers can never contradict. Guard: app/__tests__/security-headers.test.ts.
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
           {
             key: "Content-Security-Policy",
             value: [
