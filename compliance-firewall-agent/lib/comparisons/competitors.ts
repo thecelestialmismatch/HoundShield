@@ -148,7 +148,7 @@ export const COMPARISONS: Comparison[] = [
     summary:
       "Prompt Security is a capable enterprise AI gateway — now part of SentinelOne — that inspects LLM traffic through the browser and a cloud service. It scales per seat and routes inspection through its cloud, which reintroduces the same SC.3.177 transit problem for regulated data.",
     theirApproach:
-      "Prompt Security sits between employees and AI apps (browser extension + proxy), inspecting prompts and responses for sensitive data, prompt injection, and shadow-AI usage. Inspection is delivered as a cloud service. Following the SentinelOne acquisition it is positioned inside a broader enterprise security suite.",
+      "Prompt Security sits between employees and AI apps (browser extension + proxy), inspecting prompts and responses for sensitive data, prompt injection, and shadow-AI usage. It is delivered primarily as a managed service. Following the SentinelOne acquisition it is positioned inside a broader enterprise security suite — confirm current deployment options with their team.",
     theirStrengths: [
       "Strong prompt-injection and shadow-AI discovery, not just DLP",
       "Enterprise backing and integration with SentinelOne's platform",
@@ -157,8 +157,8 @@ export const COMPARISONS: Comparison[] = [
     ],
     ourEdge: [
       {
-        title: "Local inspection, not cloud-routed",
-        body: "HoundShield Mode B keeps prompt content on your infrastructure. Prompt Security delivers inspection as a cloud service — for CUI that transit is the exposure.",
+        title: "Local inspection by architecture",
+        body: "HoundShield Mode B keeps prompt content on your own infrastructure by design. Prompt Security is delivered primarily as a managed service — for CUI, any inspection transit is the exposure you're trying to remove.",
       },
       {
         title: "Per-organization, not per-seat",
@@ -174,7 +174,7 @@ export const COMPARISONS: Comparison[] = [
       },
     ],
     matrix: [
-      { dimension: "Where prompts are scanned", houndshield: "Locally (Mode B/C)", competitor: "Cloud service", advantage: "houndshield" },
+      { dimension: "Where prompts are scanned", houndshield: "Locally (Mode B/C)", competitor: "Managed / cloud service", advantage: "houndshield" },
       { dimension: "Pricing model", houndshield: "$499 report + per-org plans", competitor: "Per-seat, enterprise-quoted", advantage: "houndshield" },
       { dimension: "Prompt-injection / shadow-AI detection", houndshield: "Prompt scanning + audit; injection on roadmap", competitor: "Mature", advantage: "competitor" },
       { dimension: "CMMC / NIST 800-171 evidence PDF", houndshield: "$499 one-time, control-mapped", competitor: "Not a deliverable", advantage: "houndshield" },
@@ -195,7 +195,7 @@ export const COMPARISONS: Comparison[] = [
     faqs: [
       {
         q: "Is Prompt Security on-premise?",
-        a: "Prompt Security delivers inspection as a cloud service. HoundShield's Mode B runs on your own Docker infrastructure so prompt content never leaves your network.",
+        a: "Prompt Security is delivered primarily as a managed service; confirm current on-prem options with their team. HoundShield's Mode B runs on your own Docker infrastructure by design, so prompt content never leaves your network.",
       },
       {
         q: "How is HoundShield priced versus Prompt Security?",
@@ -210,12 +210,12 @@ export const COMPARISONS: Comparison[] = [
     competitorShort: "Purview / GCC High",
     category: "Microsoft-only governance",
     tagline:
-      "Purview governs Copilot inside GCC High. It does not stop an employee pasting CUI into ChatGPT in a browser. HoundShield does.",
+      "Purview governs Copilot inside GCC High. HoundShield covers ChatGPT, Claude, and Gemini too — one proxy, a CMMC evidence PDF, and no GCC High migration.",
     metaTitle: "HoundShield vs Microsoft Purview + GCC High Copilot for CMMC (2026)",
     metaDescription:
       "HoundShield vs Microsoft Purview and GCC High Copilot. Purview governs Microsoft Copilot inside a GCC High tenant (E5 + costly migration); it doesn't cover ChatGPT/Claude/Gemini in the browser. HoundShield scans any AI tool locally with a $499 NIST 800-171 evidence PDF — no GCC High migration.",
     summary:
-      "If your organization is fully migrated to Microsoft 365 GCC High, Purview + Copilot is a strong, compliant option inside that walled garden. The gap: Purview governs Microsoft Copilot — it does not stop employees pasting CUI into ChatGPT, Claude, or Gemini in a browser, and GCC High migration is only economical above ~200 seats.",
+      "If your organization is fully migrated to Microsoft 365 GCC High, Purview + Copilot is a strong, compliant option inside that ecosystem. The gap: Purview governs Microsoft Copilot natively; covering third-party browser AI (ChatGPT, Claude, Gemini) leans on Purview Endpoint DLP configured across every device, still doesn't yield a CMMC-mapped AI assessment PDF, and the GCC High path is typically only economical above ~200 seats.",
     theirApproach:
       "Microsoft 365 GCC High runs in physically separated US datacenters. Purview provides sensitivity labeling and DLP, and (extending into GCC High / DoD through 2026) endpoint DLP. Copilot in GCC High keeps data inside the Microsoft boundary. Governance is native to the Microsoft ecosystem and requires E5-class licensing plus a GCC High tenant.",
     theirStrengths: [
@@ -227,7 +227,7 @@ export const COMPARISONS: Comparison[] = [
     ourEdge: [
       {
         title: "Covers the tools your employees actually use",
-        body: "The real leak is an engineer pasting a CAGE-coded spec into consumer ChatGPT. Purview governs Copilot, not third-party AI. HoundShield's proxy covers ChatGPT, Claude, Gemini and any OpenAI-compatible endpoint.",
+        body: "The real leak is an engineer pasting a CAGE-coded spec into consumer ChatGPT. Purview governs Copilot natively; catching third-party browser AI leans on Endpoint DLP deployed to every device. HoundShield's single proxy covers ChatGPT, Claude, Gemini and any OpenAI-compatible endpoint.",
       },
       {
         title: "No GCC High migration",
@@ -243,7 +243,7 @@ export const COMPARISONS: Comparison[] = [
       },
     ],
     matrix: [
-      { dimension: "Governs ChatGPT / Claude / Gemini", houndshield: "Yes — any AI tool via proxy", competitor: "No — Microsoft Copilot only", advantage: "houndshield" },
+      { dimension: "Governs ChatGPT / Claude / Gemini", houndshield: "Yes — any AI tool via one proxy", competitor: "Only via per-device Endpoint DLP; native scope is Copilot", advantage: "houndshield" },
       { dimension: "Requires GCC High migration", houndshield: "No", competitor: "Yes (E5 + tenant migration)", advantage: "houndshield" },
       { dimension: "Economical below 200 seats", houndshield: "Yes", competitor: "Rarely", advantage: "houndshield" },
       { dimension: "Data stays in-boundary", houndshield: "Yes (local scan)", competitor: "Yes (within GCC High)", advantage: "even" },
@@ -264,7 +264,7 @@ export const COMPARISONS: Comparison[] = [
     faqs: [
       {
         q: "Does Microsoft Purview stop employees using ChatGPT?",
-        a: "Purview governs Microsoft Copilot and M365 data. It does not intercept an employee pasting content into consumer ChatGPT, Claude, or Gemini in a browser. HoundShield's proxy covers any AI tool, locally.",
+        a: "Purview governs Microsoft Copilot and M365 data natively; restricting content pasted into consumer ChatGPT, Claude, or Gemini relies on Purview Endpoint DLP policies deployed to each device, and still doesn't produce a CMMC AI assessment. HoundShield's single proxy covers any AI tool, scanned locally, and ships the $499 evidence PDF.",
       },
       {
         q: "Do I need GCC High to use HoundShield?",
