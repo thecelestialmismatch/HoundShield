@@ -261,3 +261,31 @@ two 404s in a portal being presented as polished.
 **Rule:** When a nav points at routes that were never built, remove the links (and now-unused imports)
 as part of the surrounding fix. Building the missing pages is net-new feature work — flag to the
 founder, keep it out of a copy/legal PR (No-feature-creep still holds).
+
+## 2026-07-04 — Logo motion: the cascade loophole (PR #144)
+
+### A running animation silently kills any hover transform — guard the mechanism, not the instance
+**What:** Founder reported the logo "moves sideways" on hover instead of tilting. PR #143 had attached
+`hs-logo-sway` (translateX ±3px, infinite) to every logo via per-component `[animation:…]` Tailwind
+classes. The correct hover pose (`rotate(-4deg) scale(1.06)`) was ALREADY in the shared
+`.logo-img`/`.logo-on-dark` rule in globals.css — but a running CSS animation's keyframe transform
+beats the hover `transform` declaration in the cascade, so the classes overrode it everywhere.
+**Rule:** Logo motion lives in exactly THREE places — globals.css shared rule, hermes.css `.brand-mark`
+rule, lccStyles.ts `.hs-lcc .brand` rule — never per-component. Any `[animation:…]` class on a logo
+element is a bug even when it "looks intentional."
+**Guard:** `app/__tests__/logo-motion-contract.test.ts` parses actual CSS rules: any rule targeting a
+logo surface may not contain translate/matrix/skew and may only run allowlisted animation names
+(closes the rename-the-keyframes evasion). Negative-tested against injected violations before trusting.
+
+### Multi-agent adversarial review earns its cost on GUARD tests, not just shipping code
+**What:** 3-lens review of the diff found shipping code clean, but confirmed 3 evasion holes in the
+brand-new guard test itself (keyframe-name evasion, translate smuggled into the hover pose, brittle
+exact-string match). All closed before merge.
+**Rule:** When the deliverable includes a regression guard, review the guard as adversarially as the
+fix — a guard that can be evaded while green is worse than no guard (false confidence).
+
+### `npm run build` while the dev server runs corrupts `.next` — sequence, don't parallel
+**What:** Production build + running dev server on the same `.next` dir → `ENOENT routes-manifest.json`,
+dev serving 500s. Fix: stop server, move `.next` aside, restart.
+**Rule:** Never run the prod build gate while the preview dev server is up. Gate first, preview after —
+or stop/clean/restart the dev server following a build.
