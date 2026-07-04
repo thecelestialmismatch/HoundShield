@@ -262,6 +262,35 @@ two 404s in a portal being presented as polished.
 as part of the surrounding fix. Building the missing pages is net-new feature work — flag to the
 founder, keep it out of a copy/legal PR (No-feature-creep still holds).
 
+## 2026-07-04 — Close the $499 post-purchase loop (branch claude/do-everything-ooda-1ijxav)
+
+### An RLS policy with no consumer is a dangling thread, not "done"
+**What:** Migration 020 added `auth_users_read_own_report_orders` (a customer can read their own
+$499 orders) and the changelog marked it complete — but no API or page ever read it. Likewise the
+checkout `success_url` passed `?session_id={CHECKOUT_SESSION_ID}` to `/report/thank-you`, and the page
+threw it away. The buyer paid $499 and the app never acknowledged their specific order.
+**Root cause:** Backend capability (RLS policy, redirect param) shipped without the surface that uses
+it. "The migration is applied" ≠ "the buyer can see their order."
+**Rule:** When a migration grants a read path, ship the endpoint + UI that exercises it in the same
+arc — or it's dead code that silently rots. Grep `success_url`/redirect params for values the
+destination never reads. A capability with no caller is incomplete, not deferred.
+
+### Confirm from the payment processor, not the webhook, to beat the race
+**What:** The Stripe webhook writes `report_orders` asynchronously; the buyer hits the success_url
+immediately. A confirmation page that reads only the DB row shows nothing for the first few seconds.
+**Rule:** For an instant post-purchase confirmation, make Stripe the source of truth
+(`checkout.sessions.retrieve` + require `payment_status: 'paid'`), then *enrich* with the DB row if it
+has landed. The `cs_...` session id is an unguessable bearer token for that one order — safe to key an
+unauth lookup on, provided the response is sanitized (mask email, never echo Stripe/customer ids).
+
+### Put the sanitization in a pure function so it's the tested boundary
+**What:** Two endpoints (public confirmation + authed list) both return order data. Duplicating the
+"mask email, drop Stripe ids, format money/dates" logic risks one path leaking what the other hides.
+**Rule:** A single pure `buildOrderView()` is the only thing that constructs the buyer-facing object;
+both routes return its output and nothing else. Assert in its unit tests that the raw email and
+`stripe_session_id` never appear in the serialized view — the leak test lives with the function, not
+scattered across route tests.
+
 ## 2026-07-04 — Logo motion: the cascade loophole (PR #144)
 
 ### A running animation silently kills any hover transform — guard the mechanism, not the instance
