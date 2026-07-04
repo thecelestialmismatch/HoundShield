@@ -18,7 +18,7 @@ Scan every AI prompt for CUI, PII, PHI, and secrets in **&lt;10&nbsp;ms** — on
 ![NIST 800-171](https://img.shields.io/badge/NIST_800--171-110_controls-C8A24B?style=flat-square)
 ![CMMC](https://img.shields.io/badge/CMMC-Level_2-C8A24B?style=flat-square)
 
-[**Website**](https://www.houndshield.com) · [**Pricing**](https://www.houndshield.com/pricing) · [**Contributing**](CONTRIBUTING.md) · [**Report a Vulnerability**](SECURITY.md)
+[**Website**](https://www.houndshield.com) · [**Pricing**](https://www.houndshield.com/pricing) · [**Compare**](https://www.houndshield.com/compare) · [**Contributing**](CONTRIBUTING.md) · [**Report a Vulnerability**](SECURITY.md)
 
 </div>
 
