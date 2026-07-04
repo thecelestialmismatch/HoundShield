@@ -26,14 +26,26 @@
    Rules baked into this stylesheet — do not re-implement per page:
      - Footer background is cream (.footer uses var(--warm-band)).
        Always use FooterV3; never hand-roll a footer or change its colour.
-     - The brand mark (.brand-mark inside .brand) tilts on hover
-       (.brand:hover .brand-mark). Any standalone logo must use the shared
-       Logo component, which carries the same motion — so the logo moves
-       under the cursor identically on every surface (nav, footer, chat
-       bubble, dashboard). Never render a bare img tag for the logo.
+       This includes legal pages (/privacy, /terms, /dpa, /acceptable-use) —
+       every routable public page ends in the same cream FooterV3.
+     - The brand mark (.brand-mark inside .brand) TILTS IN PLACE on hover —
+       rotate(-4deg) scale(1.06), never a translate/sway. Any standalone
+       logo must use the shared Logo component (motion comes from the
+       shared rule in globals.css), so the logo moves identically on every
+       surface: nav, footer, chat bubble, hero demo, dashboards. Never
+       render a bare img tag for the logo, and never attach an
+       [animation:…] class to one — a running animation overrides the
+       hover pose in the cascade.
+       Guard: app/__tests__/logo-motion-contract.test.ts
+     - On light surfaces the mark is always the native dark (black) mark;
+       variant="dark" (white) is ONLY for genuinely dark chrome
+       (command-center, dark demo panels, the steel chat bubble).
      - Colours come only from the tokens in .hermes below (steel + cream,
        orange as the warm data-viz accent). Never amber/yellow/indigo/blue.
      - Metrics/code use var(--f-mono); display headers use var(--f-disp).
+       Tailwind font-sans/font-display map to the SAME next/font variables
+       (--font-body / --font-display in tailwind.config.js) — renaming one
+       side without the other regresses every non-hermes page to Times.
    ============================================================ */
 
 .hermes {
