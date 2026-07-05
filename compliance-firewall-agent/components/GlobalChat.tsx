@@ -108,6 +108,19 @@ export function GlobalChat() {
     abortRef.current?.abort();
     abortRef.current = new AbortController();
 
+    // The user's OWN SPRS slice, computed locally from assessment data in the
+    // browser. Lazy-loaded so the 110-control dataset never bloats first paint on
+    // marketing pages. The server uses it ONLY for the caller's own status answer,
+    // and ONLY if they've granted Brain AI data-access consent — it never leaves
+    // for the commercial LLM.
+    let sprs: unknown = null;
+    try {
+      const mod = await import("@/lib/customer/client-status");
+      sprs = mod.computeSprsInput();
+    } catch {
+      sprs = null;
+    }
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -119,6 +132,7 @@ export function GlobalChat() {
           model: "gemini-flash",
           temperature: 0.7,
           scanInput: false,
+          sprs,
         }),
       });
 

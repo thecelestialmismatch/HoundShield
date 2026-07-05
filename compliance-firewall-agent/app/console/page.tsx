@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { LiveCommandCenter } from '@/components/dashboard/LiveCommandCenter'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
+import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
 import { createClient } from '@/lib/supabase/server'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
 import { buildDashboardViewer } from '@/lib/auth/dashboard-viewer'
@@ -45,6 +46,7 @@ export default async function ConsolePage() {
     <>
       <div className="px-4 pt-4 sm:px-6 lg:px-8">
         <WelcomeBanner />
+        <CustomerStatusPanel />
       </div>
       <LiveCommandCenter viewer={viewer} />
     </>
