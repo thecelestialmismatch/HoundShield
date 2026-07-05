@@ -63,6 +63,24 @@ order state — it never falsely claims a paying customer "hasn't started".
 4. **Fail closed.** Anonymous visitors, demo mode, and any error all resolve to
    "no consent" → Brain AI asks permission rather than guessing.
 
+## Evolution 2026-07-05b — personalization, progress trend, brighter mobile-first dashboard
+
+- **Correct name, always.** `GET /api/me` returns the caller's OWN session-derived
+  first name (never a sample org, never another account, never the email/id). The
+  dashboard panel greets "Welcome back, {firstName}", the Brain AI chat opens with a
+  personal greeting, and the command-center avatar uses the real viewer initials
+  (fixed a hardcoded `AD` that showed the wrong identity for everyone).
+- **Progress over time.** `customer_status_snapshots` (migration 023, own-row RLS,
+  consent-gated) stores non-CUI posture (SPRS/stage/gap-count/next-step). The panel
+  POSTs a deduped snapshot on load and shows a trend chip ("+18 SPRS since Jul 1").
+  Pure helpers in `lib/customer/snapshot.ts` (`toSnapshotRow`, `shouldInsertSnapshot`,
+  `computeTrend`). Fails closed without consent — no posture is stored.
+- **Brighter, information-dense, mobile-first panel.** `CustomerStatusPanel` now has an
+  SVG SPRS ring coloured by standing, a completion progress bar, four stat tiles, the
+  next-step CTA, top gaps with fixes, and "still needed" — self-contained on a solid
+  dark card. Responsive: ring stacks, tiles reflow 2-up on phones. The command-center
+  shell gains a ≤560px breakpoint (single-column KPIs, decluttered top bar).
+
 ## Tests
 
 - `lib/customer/__tests__/status.test.ts` — every stage branch + the answer formatter
