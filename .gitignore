@@ -108,3 +108,43 @@ compliance-firewall-agent/supabase/.temp/
 
 # Compass/artifact analysis files (sensitive competitive content)
 compass_artifact_*.md
+
+# Non-shipping repo junk (kept local, removed from repo 2026-07-04 — backed up to
+# ~/Desktop/HoundShield-repo-junk-backup-20260704). Vercel builds only from
+# compliance-firewall-agent/; none of these ship. See docs/REPO-CLEANUP-2026-07-04.md.
+/archive/
+/legacy/
+/OldVersions/
+/FUTUREPARK/
+/FutureApp/
+/FutureUse/
+/future/
+/files/
+/legacy-command-shims/
+# docs/ keeps reference .md/.pdf only — the stale duplicate app is ignored:
+/docs/legacy/
+/docs/app/
+/docs/lib/
+/docs/components/
+/docs/supabase/
+/docs/sdk/
+/docs/superpowers/
+/docs/reference-data/
+/docs/public/
+/docs/docs/
+/docs/market-research/
+/docs/*.js
+/docs/*.mjs
+/docs/*.ts
+/docs/*.tsx
+/docs/*.jsx
+/docs/*.json
+/docs/*.sh
+/docs/*.yml
+/docs/*.sql
+/docs/*.html
+/docs/Dockerfile
+/docs/package-lock.json
+
+# Skill scratch files under docs/
+/docs/*.skill
