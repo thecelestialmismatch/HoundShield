@@ -29,7 +29,37 @@
 > Shipped under `claude/houndshield-revenue-roadmap-m3de37`. See `compliance-firewall-agent/docs/STAGE-1-EXECUTION.md`.
 > Build green · tsc clean · 539/539 tests. Remaining Stage-1 items are GTM/sales + ops config (env vars, migration push, Docker Hub secrets).
 
-## Active — Close the $499 post-purchase loop (2026-07-04, branch claude/do-everything-ooda-1ijxav)
+## Active — Customer status intelligence + consent-gated Brain AI (2026-07-05, branch claude/do-everything-ooda-1ijxav)
+
+Founder ask: update site info through July 2026, make Brain AI customer-aware
+(where they stand, next step, what's wrong, how to fix), keep it safe (no
+cross-customer leaks), legal, and permission-gated. Shipped end-to-end:
+
+- [x] **`lib/customer/status.ts`** — pure engine: `buildCustomerStatus()` (stage,
+  standing, single next step, gaps + fixes) + `buildStatusAnswer()` (deterministic
+  Brain AI answer). 12 tests, every stage branch.
+- [x] **`lib/customer/client-status.ts`** — computes the SPRS slice from localStorage
+  (assessment data never leaves the browser); merged with the account slice.
+- [x] **Consent model** — migration 022 adds `profiles.brain_ai_data_consent`
+  (default false, revocable) + `brain_ai_consent_updated_at`. `GET/POST /api/brain/consent`
+  (own-row via RLS). 8 tests.
+- [x] **`GET /api/customer/status`** — account-level status, own-data (RLS). 4 tests.
+- [x] **Brain AI status handler** — `/api/chat` step 1c: consent-gated, own-data,
+  deterministic answer BEFORE FAQ/LLM (no customer data ever reaches OpenRouter).
+  Asks permission when consent is off. `lib/brain-ai/status-intent.ts`, 9 tests.
+- [x] **`<CustomerStatusPanel />`** on `/console` (after login) + **`<BrainDataConsent />`**
+  in Settings (states exactly what the AI can/can't access, off by default).
+- [x] **Info freshness (through July 2026)** — changelog: new 2.6.0 (July 2026) release
+  entry for this work + the $499 confirmation; roadmap quarters advanced (Q2→Q3, Q3→Q4).
+  FAQ: added Brain AI data-privacy/consent answer. No fabricated metrics.
+- [x] **Docs** — `docs/CUSTOMER-STATUS-AND-BRAIN-CONSENT.md` (architecture + privacy guarantees).
+
+> tsc clean · lint clean (no new warnings) · vitest 770/770 (+33) · build green ·
+> dev-smoke-tested: consent defaults off, a status question asks permission, panel mounts,
+> changelog shows July 2026. Privacy: own-data-only + fail-closed + nothing to the commercial LLM.
+> Note: migration 022 must be pushed to prod (`npx supabase db push`) — env/ops step.
+
+## Active — Close the $499 post-purchase loop (2026-07-04, branch claude/do-everything-ooda-1ijxav) — ✅ MERGED as PR #147
 
 The `success_url` passed `?session_id={CHECKOUT_SESSION_ID}` back to `/report/thank-you`, but the
 page ignored it — a buyer paid $499 and the app never acknowledged their specific order. Migration

@@ -58,6 +58,17 @@ const FAQ_DB: FaqEntry[] = [
       "You're very welcome! I'm here whenever you need me — whether it's your SPRS score, a CUI or PHI question, or getting HoundShield set up. Take care.",
   },
 
+  // ── BRAIN AI DATA PRIVACY / CONSENT ─────────────────────────────────
+  {
+    keywords: [
+      "can brain ai see my data", "is my data safe", "does brain ai know about me",
+      "brain ai privacy", "what can the ai access", "does the ai see my", "my data private",
+      "data access", "consent", "can you see other customers", "do you share my data",
+    ],
+    answer:
+      "Your data stays yours. By default I have no access to your account data — you turn that on explicitly in Settings under 'Brain AI data access', and you can withdraw it anytime. When it's on, I can use only your OWN data (your SPRS score, assessment progress, open gaps, and $499 report order status) to answer questions like \"where do I stand?\" I can never see another customer's data, and your assessment answers are computed in your own browser — no prompt content, CUI, or PHI is ever sent to a commercial AI. Ask me \"where do I stand?\" once you've turned access on.",
+  },
+
   // ── PRODUCT IDENTITY ────────────────────────────────────────────────
   {
     keywords: ["what is houndshield", "houndshield", "what does it do", "explain houndshield", "overview", "product", "firewall"],
