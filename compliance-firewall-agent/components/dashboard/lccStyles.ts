@@ -175,4 +175,13 @@ export const LCC_CSS = `
   .hs-lcc .cards3{grid-template-columns:1fr}
   .hs-lcc .burger{display:inline-flex}
 }
+/* Phones: single-column KPIs, tighter padding, decluttered top bar */
+@media(max-width:560px){
+  .hs-lcc .top{padding:12px 16px;gap:.5rem}
+  .hs-lcc .body{padding:16px 16px 48px}
+  .hs-lcc .kpis{grid-template-columns:1fr}
+  .hs-lcc .top-right{gap:.5rem}
+  .hs-lcc .top-right .clock,.hs-lcc .top-right .statpill{display:none}
+  .hs-lcc .top h1{font-size:1.1rem}
+}
 `

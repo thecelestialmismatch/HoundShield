@@ -29,7 +29,32 @@
 > Shipped under `claude/houndshield-revenue-roadmap-m3de37`. See `compliance-firewall-agent/docs/STAGE-1-EXECUTION.md`.
 > Build green · tsc clean · 539/539 tests. Remaining Stage-1 items are GTM/sales + ops config (env vars, migration push, Docker Hub secrets).
 
-## Active — Customer status intelligence + consent-gated Brain AI (2026-07-05, branch claude/do-everything-ooda-1ijxav)
+## Active — Personalized Brain + brighter mobile-first dashboard + progress trend (2026-07-05c, branch claude/do-everything-ooda-1ijxav)
+
+Founder ask: Brain must greet by the CORRECT username (own account), login returns to
+the dashboard, the after-login dashboard must be brighter/clearer/more info + best-in-class,
+and everything mobile-responsive. Shipped:
+
+- [x] **Correct name** — `GET /api/me` (session-derived, own-account, no email/id). Dashboard
+  greets "Welcome back, {firstName}"; Brain chat opens with a personal greeting; fixed the
+  hardcoded `AD` avatar in LiveCommandCenter that showed the wrong identity for everyone. 4 tests.
+- [x] **Login redirect** — verified already correct: middleware sets `?redirect=`, login page +
+  OAuth callback honor it same-origin. No change needed (documented).
+- [x] **Brighter, information-dense, mobile-first `CustomerStatusPanel`** — SVG SPRS ring (coloured
+  by standing), completion progress bar, 4 stat tiles, gradient next-step CTA, top gaps with fixes,
+  "still needed". Solid dark self-contained card (fixed white-on-white invisibility). Screenshot-verified
+  desktop + 390px mobile.
+- [x] **Progress trend** — migration 023 `customer_status_snapshots` (own-row RLS, consent-gated) +
+  `POST /api/customer/status/snapshot` (deduped) + `lib/customer/snapshot.ts` pure helpers. Panel shows
+  "+18 SPRS since Jul 1" trend chip. 17 tests (10 helpers + 7 route).
+- [x] **Mobile** — command-center ≤560px breakpoint (single-col KPIs, decluttered top bar); panel fully responsive.
+- [x] **Docs** — updated `docs/CUSTOMER-STATUS-AND-BRAIN-CONSENT.md`.
+
+> tsc clean · lint clean (no new warnings) · vitest 791/791 (+21) · build green · screenshot-verified
+> desktop + mobile. Privacy preserved: own-data-only, consent-gated snapshots, fail-closed.
+> Ops: migrations 022 + 023 must be pushed to prod (`npx supabase db push`).
+
+## Active — Customer status intelligence + consent-gated Brain AI (2026-07-05, branch claude/do-everything-ooda-1ijxav) — ✅ MERGED as PR #148
 
 Founder ask: update site info through July 2026, make Brain AI customer-aware
 (where they stand, next step, what's wrong, how to fix), keep it safe (no

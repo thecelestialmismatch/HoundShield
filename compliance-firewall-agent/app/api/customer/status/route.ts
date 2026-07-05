@@ -46,7 +46,7 @@ export async function GET() {
   }
 
   const [profileRes, ordersRes] = await Promise.all([
-    supabase.from('profiles').select('tier, company').eq('id', user.id).maybeSingle(),
+    supabase.from('profiles').select('tier, company, full_name').eq('id', user.id).maybeSingle(),
     supabase
       .from('report_orders')
       .select(
@@ -59,6 +59,8 @@ export async function GET() {
 
   const tier = (profileRes.data?.tier as string) || 'free';
   const company = (profileRes.data?.company as string) || null;
+  const fullName = (profileRes.data?.full_name as string) || '';
+  const firstName = fullName.trim().split(/\s+/)[0] || null;
   const latestRow = (ordersRes.data?.[0] as OrderRowLike | undefined) ?? null;
   const latestOrder = latestRow ? toOrderSummary(latestRow) : null;
 
@@ -68,5 +70,5 @@ export async function GET() {
     org: { name: company },
   });
 
-  return NextResponse.json({ status, configured: true });
+  return NextResponse.json({ status, firstName, configured: true });
 }

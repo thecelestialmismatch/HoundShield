@@ -291,6 +291,33 @@ both routes return its output and nothing else. Assert in its unit tests that th
 `stripe_session_id` never appear in the serialized view — the leak test lives with the function, not
 scattered across route tests.
 
+## 2026-07-05c — Dark components on light pages, and "wrong username" is usually a fallback
+
+### A dark-themed card dropped on a light page renders white-on-white — screenshot it
+**What:** The new `CustomerStatusPanel` used `bg-gradient from-white/[0.05]` (translucent) and white
+text — correct inside the dark command-center shell, but on `/console` it sits ABOVE that shell on the
+LIGHT page background, so the greeting and CTA text were invisible. Unit tests + build were green; only
+a real screenshot caught it.
+**Rule:** A component that will render outside its usual theme context must carry its OWN solid
+background (here `bg-[#12121b]→[#0b0b12]`), not a translucent one that inherits the page. After any
+substantial dashboard UI, screenshot it at desktop AND phone widths (Chromium is preinstalled;
+`createRequire('/opt/node22/lib/node_modules/')` loads the global `playwright`). Build-green ≠ readable.
+
+### "Shows the wrong name" is almost always a hardcoded/sample fallback, not a data bug
+**What:** Founder: Brain/dashboard shows "the other one". Root cause wasn't the session lookup (that was
+correct) — it was a hardcoded `<div className="av">AD</div>` (Acme Defense) in the command-center top bar,
+shown to every user regardless of who's logged in, plus sample-org fallbacks.
+**Rule:** For personalization, derive the name from the session server-side (`/api/me`, own account) and
+wire EVERY identity surface (greeting, avatar, sidebar) to it. Grep the dashboard for hardcoded initials
+/ sample names ("AD", "Acme", "Vector Defense") before claiming personalization works.
+
+### Verify the claim before building the fix — the login redirect was already correct
+**What:** Founder asked to "come back to the same page after login". Investigation showed it was already
+implemented correctly (middleware sets `?redirect=`, login page + OAuth callback honor it same-origin).
+**Rule:** Read the existing flow before rebuilding it. Confirm the reported bug reproduces; if the code is
+already correct, document that (and look for the ADJACENT real bug — here, the identity fallback), rather
+than churning working auth code.
+
 ## 2026-07-05 — Customer-aware Brain AI: privacy is an architecture, not a disclaimer
 
 ### "AI knows the customer" + "route through a commercial LLM" = spillage unless you split compute

@@ -44,6 +44,15 @@ const HOUNDSHIELD_SYSTEM =
 const GREETING =
   "Hi! I'm Brain AI — powered by HoundShield. I can help with CMMC Level 2 compliance, CUI detection, SPRS scoring, and anything about AI security for defense contractors. Ask me anything!";
 
+/** Warm, personalized opening for a signed-in customer, addressed by their own name. */
+function personalGreeting(firstName: string): string {
+  return (
+    `Hi ${firstName}! 👋 I'm Brain AI, and I'm connected to your account. ` +
+    `Ask me “where do I stand?” for your SPRS score, next step, and open gaps — ` +
+    `or anything about CMMC Level 2, CUI detection, and getting HoundShield deployed.`
+  );
+}
+
 type Message = { role: "user" | "bot"; text: string };
 
 function TypingDots() {
@@ -82,7 +91,22 @@ export function GlobalChat() {
     setIsOpen(opening);
     if (opening && !hasGreeted) {
       setHasGreeted(true);
+      // Instant default greeting…
       setMessages([{ role: "bot", text: GREETING }]);
+      // …then personalize by the signed-in user's OWN name (session-derived,
+      // own account only). Best-effort; guests keep the default greeting.
+      fetch("/api/me")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((me: { authenticated?: boolean; firstName?: string | null } | null) => {
+          if (me?.authenticated && me.firstName) {
+            setMessages((prev) =>
+              prev.length === 1 && prev[0].role === "bot"
+                ? [{ role: "bot", text: personalGreeting(me.firstName as string) }]
+                : prev,
+            );
+          }
+        })
+        .catch(() => undefined);
     }
   };
 
