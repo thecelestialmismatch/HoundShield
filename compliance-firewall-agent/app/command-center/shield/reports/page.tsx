@@ -26,6 +26,7 @@ import {
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses, getOrganization } from "@/lib/shieldready/storage";
 import type { AssessmentResponse, ControlFamily } from "@/lib/shieldready/types";
+import { MyReportOrders } from "@/components/reports/MyReportOrders";
 
 export default function ReportsPage() {
   const [responses, setResponses] = useState<AssessmentResponse[]>([]);
@@ -136,6 +137,11 @@ export default function ReportsPage() {
             {pdfLoading ? "Generating…" : "Download PDF Report"}
           </button>
         </div>
+      </div>
+
+      {/* Purchased $499 CMMC AI Risk Assessment Report orders (renders only if any) */}
+      <div className="print:hidden">
+        <MyReportOrders />
       </div>
 
       {/* PDF error / upgrade nudge */}

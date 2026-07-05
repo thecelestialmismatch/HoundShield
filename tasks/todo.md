@@ -29,6 +29,29 @@
 > Shipped under `claude/houndshield-revenue-roadmap-m3de37`. See `compliance-firewall-agent/docs/STAGE-1-EXECUTION.md`.
 > Build green · tsc clean · 539/539 tests. Remaining Stage-1 items are GTM/sales + ops config (env vars, migration push, Docker Hub secrets).
 
+## Active — Close the $499 post-purchase loop (2026-07-04, branch claude/do-everything-ooda-1ijxav)
+
+The `success_url` passed `?session_id={CHECKOUT_SESSION_ID}` back to `/report/thank-you`, but the
+page ignored it — a buyer paid $499 and the app never acknowledged their specific order. Migration
+020 had already added an RLS read policy (`auth_users_read_own_report_orders`) that **nothing
+consumed**. Both were dangling threads on the revenue-critical path. Closed end-to-end:
+
+- [x] **`lib/reports/order-view.ts`** — pure, sanitizing view builder (mask email, opaque `HS-XXXXXXXX`
+  reference, `$499.00` formatting, 14-day report-due date, status→label/step). Zero-mock unit tests (25).
+- [x] **`GET /api/reports/order?session_id=`** — unauth, session-id-keyed confirmation. Verifies the
+  session is genuinely `paid` with Stripe (instant, webhook-race-proof), enriches from `report_orders`
+  if the row landed, returns only the sanitized view. Guards: shape (400), config (503), unknown/unpaid
+  (generic 404). 9 tests.
+- [x] **`GET /api/reports/orders`** — authenticated list; finally consumes migration 020's RLS policy
+  (own rows via `auth.uid()`). 4 tests.
+- [x] **`<OrderConfirmation />`** on `/report/thank-you` — reads the real order (reference, amount,
+  masked email, report-due date, status). Degrades to `null` when there's no session / lookup fails,
+  so the static 14-day timeline always renders.
+- [x] **`<MyReportOrders />`** on the signed-in Reports page — renders purchased orders, silent when none.
+
+> tsc clean · lint clean · vitest 710/710 (+38) · build green · dev-server smoke-tested (page 200s,
+> endpoints return 400/503/404/200 as designed). No fabricated metrics, Mode-B framing preserved.
+
 ## Active — Launch-readiness sweep (2026-06-24, branch dreamy-mcclintock-fc9d8b)
 
 Rebased onto `origin/main` (5d117d5) after discovering main already shipped `ModeBNotice` (#122/#123),
