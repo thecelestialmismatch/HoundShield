@@ -1,6 +1,7 @@
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { ModeBNotice } from "@/components/ModeBNotice";
+import { OrderConfirmation } from "@/components/reports/OrderConfirmation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2, ArrowRight, Server, FileText } from "lucide-react";
@@ -31,7 +32,12 @@ const STEPS = [
   },
 ];
 
-export default function ReportThankYouPage() {
+export default async function ReportThankYouPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ session_id?: string }>;
+}) {
+  const { session_id } = await searchParams;
   return (
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
       <NavV3 />
@@ -52,6 +58,8 @@ export default function ReportThankYouPage() {
           A confirmation with deployment instructions is in your inbox. Here&apos;s the 14-day path
           from policy violation to C3PAO-ready evidence.
         </p>
+
+        <OrderConfirmation sessionId={session_id} />
 
         <div className="grid grid-cols-1 gap-4 mb-12">
           {STEPS.map((step, i) => (
