@@ -57,20 +57,41 @@ const EVENTS: [string, string, string, string][] = [
 ]
 
 // On-device Brain AI — deterministic keyword answers, grounded in the
-// account's own (mock) assessment data. Returns [html, source].
+// account's own (mock) assessment data. Returns [html, source]. Ordered
+// most-specific → most-general so a precise intent wins over a broad one.
 export function brainAnswer(qRaw: string): [string, string] {
   const q = qRaw.toLowerCase()
-  if (/who are you|what are you|your name/.test(q))
+  if (/who are you|what are you|your name|are you (chatgpt|gpt|claude)/.test(q))
     return ["I'm <b>Brain AI</b>, HoundShield's on-device compliance analyst. I read your assessment, audit logs and the NIST 800-171 knowledge base — running on your hardware with your own key, so nothing I see is sent to HoundShield.", 'identity · brain-core']
-  if (/what is houndshield|houndshield|what do you do/.test(q))
-    return ['<b>HoundShield</b> is a local-only AI compliance firewall. It intercepts every prompt your team sends to ChatGPT, Copilot or Claude and blocks CUI, PII, PHI, secrets and CAGE codes in under 10ms — before they leave your network.', 'product · brain-core']
-  if (/sprs|score/.test(q))
-    return ['Your current SPRS score is <b>+78</b> of +110. 78 controls implemented, 8 partial, 14 open. Closing the three 3.8 Media Protection gaps moves you to +84 — the fastest path to conditional CMMC L2.', 'sprs · live assessment']
-  if (/ready|certif|pass/.test(q))
-    return ["Almost. A C3PAO needs a POA&M with no open high-weight controls. You have 2 (3.8.3 media sanitization, 3.13.11 FIPS crypto). Fix those, export the SSP + POA&M, and you're assessment-ready.", 'readiness · brain-core']
-  if (/dfars|7012|spill|leak/.test(q))
-    return ['A <b>DFARS 252.204-7012</b> spill is CUI reaching a system not authorized to hold it. Pasting CUI into ChatGPT transmits it to OpenAI — a reportable spill. Cloud DLP causes the same spill by sending data to their cloud. HoundShield scans locally, so CUI never leaves.', 'dfars · knowledge-base']
-  return ['I can help with your CMMC posture, SPRS score, a NIST 800-171 control, HIPAA/PHI, DFARS 7012, or what HoundShield does. Everything I answer is grounded in your own assessment and audit data, on-device.', 'brain-core']
+  if (/next step|what should i|fastest|quick win|improve|raise my score|which control|fix first/.test(q))
+    return ['Your highest-impact move: close <b>3.8.3</b> (media sanitization) and <b>3.13.11</b> (FIPS crypto) — each is +3 SPRS and both are open high-weight controls blocking a clean POA&amp;M. Do those two, then re-run the assessment and export the SSP.', 'next-step · live assessment']
+  if (/sprs|my score|score/.test(q))
+    return ['Your current SPRS score is <b>+78</b> of +110 — 78 controls implemented, 8 partial, 14 open. Closing the three 3.8 Media Protection gaps moves you to <b>+84</b>, the fastest path to conditional CMMC Level 2.', 'sprs · live assessment']
+  if (/ready|certif|pass|assessment ready|audit ready/.test(q))
+    return ["Almost. A C3PAO needs a POA&amp;M with no open high-weight controls. You have 2 open: <b>3.8.3</b> media sanitization and <b>3.13.11</b> FIPS crypto. Fix those, export the SSP + POA&amp;M, and you're assessment-ready.", 'readiness · brain-core']
+  if (/dfars|7012|spill|leak|reportable/.test(q))
+    return ['A <b>DFARS 252.204-7012</b> spill is CUI reaching a system not authorized to hold it. Pasting CUI into ChatGPT transmits it to OpenAI — a reportable spill. Cloud DLP causes the same spill by sending data to their cloud. HoundShield scans locally, so CUI never leaves your network.', 'dfars · knowledge-base']
+  if (/hipaa|phi|patient|health|mrn|baa/.test(q))
+    return ['For <b>HIPAA</b>, HoundShield blocks PHI (MRNs, diagnoses, patient identifiers) before a prompt reaches ChatGPT — which is not HIPAA-compliant without a BAA. Run <b>Mode B (Docker on your infra)</b> so PHI never leaves your boundary and you keep a signed audit trail.', 'hipaa · knowledge-base']
+  if (/gap|open control|remediat|poa|poam/.test(q))
+    return ['You have <b>14 open</b> and <b>8 partial</b> controls. The three 3.8 Media Protection gaps carry the most SPRS weight. Open <b>CMMC Assessment → Fastest wins</b> for the AI-ranked list, then generate a POA&amp;M PDF from Reports.', 'gaps · live assessment']
+  if (/install|set ?up|deploy|proxy|get started|onboard|how do i start|docker/.test(q))
+    return ['Setup takes ~10 minutes: point your team\'s OpenAI base URL at the HoundShield proxy (see <b>Settings → Gateway</b> for your URL + key). For CUI, run <b>Mode B</b> — the Docker image on your own infrastructure so nothing leaves your boundary.', 'setup · brain-core']
+  if (/price|pricing|cost|how much|\$499|subscription|plan/.test(q))
+    return ['The lead product is the <b>$499 CMMC AI Risk Assessment Report</b> — one-time, no subscription: run the proxy 14 days, get a SHA-256-signed PDF scoring every AI prompt event against NIST 800-171. Monitoring subscriptions are separate. See the Pricing page for the full grid.', 'pricing · brain-core']
+  if (/audit|log|evidence|report|pdf|ssp|export/.test(q))
+    return ['Every intercepted prompt is written to a <b>SHA-256 hash-chained audit log</b> — tamper-evident and mapped to NIST 800-171 controls. From <b>Reports</b> you can export the SSP, POA&amp;M, and a C3PAO-ready evidence pack as signed PDFs.', 'audit · knowledge-base']
+  if (/quarantine|review|held|pending/.test(q))
+    return ['Your <b>quarantine queue</b> holds prompts that need a human decision — usually ambiguous CUI or borderline PII. Clear it from the Live Threat Feed; each decision is logged to the audit trail as evidence of AU.2.041 accountability.', 'quarantine · brain-core']
+  if (/what is houndshield|houndshield|what do you do|what does this do/.test(q))
+    return ['<b>HoundShield</b> is a local-only AI compliance firewall. It intercepts every prompt your team sends to ChatGPT, Copilot or Claude and blocks CUI, PII, PHI, secrets and CAGE codes in under 10ms — before they leave your network — while writing a signed audit trail for CMMC, HIPAA and SOC 2.', 'product · brain-core']
+  if (/^(hi|hey|hello|yo|good (morning|afternoon|evening)|howdy)\b/.test(q))
+    return ["Hi — I'm <b>Brain AI</b>, your on-device compliance analyst. Ask me about your SPRS score, whether you're assessment-ready, a NIST 800-171 control, HIPAA/PHI, or how to raise your score fastest.", 'greeting · brain-core']
+  if (/thank|thanks|cheers|appreciate/.test(q))
+    return ["Anytime. When you're ready, the fastest path forward is closing 3.8.3 and 3.13.11, then exporting your POA&amp;M from Reports.", 'brain-core']
+  if (/contact|human|support|help me talk|sales|email/.test(q))
+    return ['For a human, reach the team at <b>hello@houndshield.com</b> or book a call from the site. For anything about your posture, gaps or reports, I can answer right here — on-device.', 'contact · brain-core']
+  return ['I can help with your CMMC posture, SPRS score, a NIST 800-171 control, HIPAA/PHI, DFARS 7012 spills, your fastest wins, or how to deploy HoundShield. Everything I answer is grounded in your own assessment and audit data, on-device.', 'brain-core']
 }
 
 /** Identity shown in the sidebar footer. Omitted for the public demo, in which
@@ -246,19 +267,43 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
     const blog = blogRef.current, bi = inputRef.current
     const add = (role: 'u' | 'b', html: string, src?: string) => {
       if (!blog) return
-      const b = document.createElement('div')
-      b.className = 'bub ' + role
-      b.innerHTML = html + (src ? `<span class="src">source: ${src}</span>` : '')
-      blog.appendChild(b); blog.scrollTop = blog.scrollHeight
+      if (role === 'b') {
+        // Assistant replies carry a HoundShield logo avatar — the brand mark is
+        // present on every Brain AI turn. (html here is always trusted canned
+        // copy from brainAnswer(); operator text only ever arrives via role 'u'.)
+        const row = document.createElement('div')
+        row.className = 'brow'
+        row.innerHTML = `<span class="ava-mini"><img src="/houndshield-logo.png" alt="" /></span><div class="bub b">${html}${src ? `<span class="src">source: ${src}</span>` : ''}</div>`
+        blog.appendChild(row)
+      } else {
+        const b = document.createElement('div')
+        b.className = 'bub ' + role
+        b.innerHTML = html
+        blog.appendChild(b)
+      }
+      blog.scrollTop = blog.scrollHeight
     }
     // Escape the operator's free-text before it touches innerHTML — the only
     // untrusted path in this component (all other strings are static literals).
     const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    const askTimers: ReturnType<typeof setTimeout>[] = []
     const ask = (q: string) => {
       if (!q.trim()) return
       add('u', esc(q))
       if (bi) bi.value = ''
-      setTimeout(() => { const a = brainAnswer(q); add('b', a[0], a[1]) }, 420)
+      // Animated typing indicator, then swap in the grounded answer — gives the
+      // on-device analyst a considered, human cadence instead of an instant pop.
+      let typing: HTMLDivElement | null = null
+      if (blog) {
+        typing = document.createElement('div')
+        typing.className = 'brow'
+        typing.innerHTML = '<span class="ava-mini"><img src="/houndshield-logo.png" alt="" /></span><div class="bub b typing"><i></i><i></i><i></i></div>'
+        blog.appendChild(typing); blog.scrollTop = blog.scrollHeight
+      }
+      askTimers.push(setTimeout(() => {
+        typing?.remove()
+        const a = brainAnswer(q); add('b', a[0], a[1])
+      }, reduce ? 140 : 560))
     }
     const onSend = () => ask(bi?.value || '')
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Enter') ask(bi?.value || '') }
@@ -276,6 +321,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
 
     return () => {
       timers.forEach(clearInterval)
+      askTimers.forEach(clearTimeout)
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener('resize', drawChart)
       sendBtn?.removeEventListener('click', onSend)
@@ -322,11 +368,20 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           </div>
         </aside>
 
+        {/* Backdrop — dismisses the off-canvas sidebar on tap (mobile only) */}
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className={`side-backdrop${sideOpen ? ' show' : ''}`}
+          onClick={() => setSideOpen(false)}
+        />
+
         {/* ── Main ── */}
         <div className="main">
           <div className="top">
             <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
               <button type="button" className="btn btn-g btn-sm burger" aria-label="Toggle navigation" onClick={() => setSideOpen((v) => !v)}><Menu /></button>
+              <Image src="/houndshield-logo.png" alt="HoundShield" width={20} height={26} className="top-logo" />
               <div><div className="crumb">HoundShield · Command Center</div><h1>{TAB_TITLES[tab]}</h1></div>
             </div>
             <div className="top-right">
@@ -340,6 +395,24 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           <div className="body">
             {/* OVERVIEW */}
             <div className={tabClass('overview')}>
+              {/* Branded hero command band */}
+              <div className="hero">
+                <div className="hero-l">
+                  <div className="hero-logo"><Image src="/houndshield-logo.png" alt="HoundShield" width={36} height={46} /></div>
+                  <div className="min-w-0">
+                    <div className="hero-org">{viewer?.company ?? 'Acme Defense'}</div>
+                    <div className="hero-tag">
+                      <span>HoundShield AI Compliance Command Center</span>
+                      <span className="liv"><span className="dot" /> Gateway live</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="hero-r">
+                  <div className="hero-metric"><b>78</b><span>SPRS / 110</span></div>
+                  <div className="hero-metric"><b>16/16</b><span>Engines</span></div>
+                  <div className="hero-metric"><b>&lt;10ms</b><span>Scan p50</span></div>
+                </div>
+              </div>
               <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago</div>
 
               <div className="kpis">
@@ -450,18 +523,24 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
             {/* BRAIN */}
             <div className={tabClass('brain')}>
               <div className="panel">
-                <div className="ph"><h3><Brain style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline' }} /> Brain AI — on-device CMMC analyst</h3><span className="mono">your key · nothing sent to HoundShield</span></div>
+                <div className="ph"><h3><span className="brain-logo"><Image src="/houndshield-logo.png" alt="HoundShield" width={17} height={22} /></span> Brain AI — on-device CMMC analyst</h3><span className="mono">your key · nothing sent to HoundShield</span></div>
                 <div className="brain">
                   <div className="blog" ref={blogRef}>
-                    <div className="bub b" dangerouslySetInnerHTML={{ __html: "I'm <b>Brain AI</b> — HoundShield's on-device compliance analyst. Ask me about your CMMC posture, a NIST control, or what HoundShield does.<span class=\"src\">running locally · your OpenRouter key</span>" }} />
+                    <div className="brow">
+                      <span className="ava-mini"><Image src="/houndshield-logo.png" alt="" width={19} height={24} /></span>
+                      <div className="bub b" dangerouslySetInnerHTML={{ __html: "I'm <b>Brain AI</b> — HoundShield's on-device compliance analyst. Ask me about your CMMC posture, a NIST control, or what HoundShield does.<span class=\"src\">running locally · your OpenRouter key</span>" }} />
+                    </div>
                   </div>
                   <div className="chips">
                     <button type="button">Who are you?</button>
                     <button type="button">What&apos;s my SPRS score?</button>
                     <button type="button">Am I CMMC ready?</button>
+                    <button type="button">How do I raise my score fastest?</button>
+                    <button type="button">Is this HIPAA safe?</button>
                     <button type="button">What is a DFARS 7012 spill?</button>
                   </div>
-                  <div className="bin"><input id="lcc-bi" ref={inputRef} placeholder="Ask Brain AI…" autoComplete="off" /><button type="button" className="btn btn-p btn-sm" id="lcc-bsend">Send</button></div>
+                  <div className="bin"><input id="lcc-bi" ref={inputRef} placeholder="Ask Brain AI about your posture…" autoComplete="off" aria-label="Ask Brain AI" /><button type="button" className="btn btn-p btn-sm" id="lcc-bsend">Send</button></div>
+                  <div className="brain-trust"><Shield /> On-device · grounded in your own assessment &amp; audit data · nothing sent to HoundShield</div>
                 </div>
               </div>
             </div>

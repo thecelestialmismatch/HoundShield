@@ -720,8 +720,12 @@ a:active > .logo-img,
 button:active > .logo-img,
 .group\/brand:active .logo-img,
 .group\/brand:active .logo-on-dark {
+  /* Cursor-over pose: a pronounced, unmistakable sideways tilt (founder-directed,
+     2026-07-05). The idle breathe only leans ~3deg, so the hover must lean well
+     past it to read as a deliberate "tilt on hover" gesture — rotate/scale only,
+     never a translate (the sideways-SLIDE regression stays dead). */
   animation: none;
-  transform: rotate(-4deg) scale(1.06);
+  transform: rotate(-8deg) scale(1.08);
 }
 @media (prefers-reduced-motion: reduce) {
   /* The brand mark is the single, deliberate exception we keep gently alive
