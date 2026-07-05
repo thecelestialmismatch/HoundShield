@@ -43,12 +43,12 @@ async function getViewer() {
 export default async function ConsolePage() {
   const viewer = await getViewer()
   return (
-    <>
+    <div className="bg-[var(--hs-surface-1,#EEF3F9)]">
       <div className="px-4 pt-4 sm:px-6 lg:px-8">
         <WelcomeBanner />
         <CustomerStatusPanel />
       </div>
       <LiveCommandCenter viewer={viewer} />
-    </>
+    </div>
   )
 }

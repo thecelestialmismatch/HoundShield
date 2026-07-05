@@ -354,6 +354,31 @@ exact-string match). All closed before merge.
 **Rule:** When the deliverable includes a regression guard, review the guard as adversarially as the
 fix — a guard that can be evaded while green is worse than no guard (false confidence).
 
+## 2026-07-05 — Post-login dashboard redesign (branch claude/post-login-dashboard-redesign-mp5hdp)
+
+### Scoped CSS must reference the app's next/font VARIABLES, not literal family names
+**What:** `lccStyles.ts` set `--f-disp:'Fraunces',serif` / `--f:'DM Sans',...`. next/font
+exposes those families only as `--font-display` / `--font-body` (each paired with a
+size-adjusted `"... Fallback"`), never as a plain global family. A bare literal is fragile —
+it drops the adjusted fallback and breaks entirely the moment next/font hashes the name (the
+footgun the tailwind.config comment warns about). Only `JetBrains Mono` (loaded via a real
+`@import` under its own name) resolved.
+**Rule:** Any scoped/inline stylesheet that wants the brand fonts references
+`var(--font-display)` / `var(--font-body)` / `var(--font-mono)` with literal fallbacks —
+never the bare family name. Verify with a real-browser computed-`font-family` check, and ship
+a guard test asserting the `var(...)` form.
+
+### A dark-themed component mounted on a light page is invisible, not just off-brand
+**What:** `CustomerStatusPanel` was built for the dark dashboard (`text-white`,
+`bg-white/[0.03]`, `border-white/[0.08]`) but renders on the LIGHT `/console` page above the
+light command center → white text on near-white = unreadable. Tests/build were green; only a
+real-browser pass would catch it.
+**Rule:** A component's theme must match the surface it actually mounts on, not the surface it
+was designed for. When moving a component between light/dark planes, re-token it to that
+plane's palette (`--hs-ink*`/`--hs-surface*` for light) and add a guard test that the
+dark-only translucent surfaces don't come back. Verify in-browser (recurring "never ship UI
+blind" lesson).
+
 ### `npm run build` while the dev server runs corrupts `.next` — sequence, don't parallel
 **What:** Production build + running dev server on the same `.next` dir → `ENOENT routes-manifest.json`,
 dev serving 500s. Fix: stop server, move `.next` aside, restart.

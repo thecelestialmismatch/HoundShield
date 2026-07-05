@@ -67,16 +67,16 @@ const ALLOWED_LOGO_ANIMATIONS = new Set(["none", "hs-logo-idle", "hs-logo-idle-s
 const CSS_SOURCES = ["app/globals.css", "app/hermes.css", "components/dashboard/lccStyles.ts"];
 
 describe("logo motion — the approved pose exists on every surface", () => {
-  it("hermes.css carries the demo-verbatim hover tilt on .brand-mark", () => {
+  it("hermes.css carries the pronounced hover tilt on .brand-mark", () => {
     expect(read("app/hermes.css")).toMatch(
-      /\.hermes \.brand:hover \.brand-mark\s*\{[^}]*transform:\s*rotate\(-4deg\)\s+scale\(1\.06\)/,
+      /\.hermes \.brand:hover \.brand-mark\s*\{[^}]*transform:\s*rotate\(-8deg\)\s+scale\(1\.08\)/,
     );
   });
 
   it("globals.css shared .logo-img/.logo-on-dark hover rule strikes the same pose", () => {
     const css = read("app/globals.css");
     expect(css).toMatch(
-      /\.logo-img:hover[\s\S]{0,600}?transform:\s*rotate\(-4deg\)\s*scale\(1\.06\)/,
+      /\.logo-img:hover[\s\S]{0,1200}?transform:\s*rotate\(-8deg\)\s*scale\(1\.08\)/,
     );
     // The pose must also bind through a parent group/brand hover so standalone
     // marks (chat bubble, footer link, sidebar chip, hero demo) tilt too.
@@ -86,8 +86,23 @@ describe("logo motion — the approved pose exists on every surface", () => {
 
   it("command-center (lccStyles) hover pauses idle and strikes the same pose", () => {
     expect(read("components/dashboard/lccStyles.ts")).toMatch(
-      /\.hs-lcc \.brand:hover img[^{]*\{[^}]*animation:\s*none;\s*transform:\s*rotate\(-4deg\)\s+scale\(1\.06\)/,
+      /\.hs-lcc \.brand:hover img[^{]*\{[^}]*animation:\s*none;\s*transform:\s*rotate\(-8deg\)\s+scale\(1\.08\)/,
     );
+  });
+
+  it("every after-login logo placement tilts on hover (topbar, hero, Brain header + avatars)", () => {
+    // The founder-directed "logo everywhere + tilt on hover" contract for the
+    // dashboard: each brand-mark surface added to the command center must carry
+    // the pronounced rotate/scale hover pose (never a translate).
+    const lcc = read("components/dashboard/lccStyles.ts");
+    for (const sel of [
+      /\.hs-lcc \.top-logo:hover\{transform:rotate\(-8deg\) scale\(1\.08\)\}/,
+      /\.hs-lcc \.hero-logo:hover img\{transform:rotate\(-8deg\) scale\(1\.08\)\}/,
+      /\.hs-lcc \.brain-logo:hover img\{transform:rotate\(-8deg\) scale\(1\.08\)\}/,
+      /\.hs-lcc \.ava-mini:hover img\{transform:rotate\(-8deg\) scale\(1\.08\)\}/,
+    ]) {
+      expect(lcc).toMatch(sel);
+    }
   });
 
   it("the Brain AI chat bubble keeps group/brand so the inner mark tilts on hover", () => {

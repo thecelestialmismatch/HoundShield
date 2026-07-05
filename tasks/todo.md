@@ -29,6 +29,28 @@
 > Shipped under `claude/houndshield-revenue-roadmap-m3de37`. See `compliance-firewall-agent/docs/STAGE-1-EXECUTION.md`.
 > Build green · tsc clean · 539/539 tests. Remaining Stage-1 items are GTM/sales + ops config (env vars, migration push, Docker Hub secrets).
 
+## Active — Post-login dashboard redesign (2026-07-05, branch claude/post-login-dashboard-redesign-mp5hdp)
+
+Founder ask: evolve the after-login dashboard — neat/clean, auto-responsive on phone +
+desktop, more colour + more developed, best recognised fonts visible clearly everywhere,
+Brain AI top-notch. Competitor-audited (Drata = clean/guided, Vanta = dense). Shipped:
+
+- [x] **Fonts render in the real brand families** — `lccStyles.ts` used literal `'Fraunces'`/
+  `'DM Sans'` (next/font only exposes them as `--font-display`/`--font-body`); switched to the
+  `var(--font-*)` form + guard test. Verified computed font-family in-browser.
+- [x] **`CustomerStatusPanel` light-themed** — was dark (`text-white`/`bg-white/[0.03]`) on the
+  light `/console` page = invisible. Rebuilt on the Steel & Cream `--hs-*` tokens + guard test.
+- [x] **Fully responsive** — off-canvas sidebar + tap-dismiss backdrop, phone/tablet
+  breakpoints, `100dvh` + safe-area insets, condensed sticky topbar, stacked panels.
+- [x] **More colour / depth** — per-metric KPI accents + glows, gradient wordmark/SPRS ring,
+  panel-header gradients, layered shadows, glowing engine bars (all in-palette).
+- [x] **Brain AI top-notch** — typing indicator, 13 grounded intents (HIPAA/next-step/setup/
+  pricing-$499/audit/…), trust header+footer, more chips; input still HTML-escaped.
+- [x] **Docs** — `docs/POST-LOGIN-DASHBOARD-REDESIGN.md` (rationale + competitor audit + verification).
+
+> next lint clean · tsc clean · vitest 783/783 (+13) · build green · real-browser verified at
+> 1440/768/390px. Deployment plane = marketing/dashboard (Vercel) — no CUI data path touched.
+
 ## Active — Customer status intelligence + consent-gated Brain AI (2026-07-05, branch claude/do-everything-ooda-1ijxav)
 
 Founder ask: update site info through July 2026, make Brain AI customer-aware
