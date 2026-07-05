@@ -19,6 +19,9 @@ import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { sanitizeChatInput } from "@/lib/brain-ai/sanitize-input";
 import { resolveLlmProvider, type LlmProvider } from "@/lib/agent/provider";
 import { buildUserContextPrompt, buildIdentityAnswer, isIdentityQuestion, type BrainUserContext } from "@/lib/brain-ai/user-context";
+import { isStatusQuestion, statusAnswerFromConsent, sprsInputSchema } from "@/lib/brain-ai/status-intent";
+import { buildCustomerStatus, type CustomerStatus, type OrderSummary, type SprsInput } from "@/lib/customer/status";
+import { buildOrderView, type OrderRowLike } from "@/lib/reports/order-view";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import {
@@ -114,6 +117,78 @@ async function getSessionProfile(): Promise<BrainUserContext | null> {
     };
   } catch {
     return null;
+  }
+}
+
+/**
+ * Resolve a signed-in customer's Brain-AI-access consent (authoritative, from
+ * the DB) and their status. Consent defaults OFF (migration 022) — so anonymous
+ * visitors, demo mode, and any error all resolve to { consent: false }, meaning
+ * Brain AI will ask permission rather than reveal anything.
+ *
+ * When consent is granted:
+ *   - Prefer the client-supplied status (the user's OWN browser computed it from
+ *     local assessment data — richer, includes SPRS, and never had to leave the
+ *     device). Validated by shape; anything malformed is ignored.
+ *   - Otherwise fall back to an account-level status assembled server-side from
+ *     the caller's OWN rows (RLS-scoped to auth.uid()).
+ * Every read is the caller's own data only — no other customer is ever touched.
+ */
+async function resolveSessionStatus(
+  clientSprs: unknown,
+): Promise<{ consent: boolean; status: CustomerStatus | null }> {
+  try {
+    if (!isSupabaseConfigured()) return { consent: false, status: null };
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { consent: false, status: null };
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("brain_ai_data_consent, tier, company")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const consent = Boolean(profile?.brain_ai_data_consent);
+    if (!consent) return { consent: false, status: null };
+
+    // Consent granted. Merge the (validated) client SPRS slice — assessment data
+    // that never had to leave the browser — with the account slice we read from
+    // the caller's OWN rows. Malformed client input is ignored (account-only).
+    const parsedSprs = sprsInputSchema.safeParse(clientSprs);
+    const sprs: SprsInput | null = parsedSprs.success ? parsedSprs.data : null;
+
+    // Account slice: latest report order (own rows only).
+    const { data: orderRows } = await supabase
+      .from("report_orders")
+      .select(
+        "id, email, full_name, vertical, amount_cents, currency, status, is_wholesale, stripe_session_id, report_delivered_at, created_at",
+      )
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    const row = (orderRows?.[0] as OrderRowLike | undefined) ?? null;
+    let latestOrder: OrderSummary | null = null;
+    if (row) {
+      const view = buildOrderView(row);
+      latestOrder = {
+        reference: view.reference,
+        status: view.status,
+        statusLabel: view.statusLabel,
+        reportDueDate: view.reportDueDate,
+        isDelivered: view.status === "report_delivered" || Boolean(view.reportDeliveredAt),
+      };
+    }
+
+    const status = buildCustomerStatus({
+      sprs,
+      account: { tier: (profile?.tier as string) || "free", latestOrder },
+      org: { name: (profile?.company as string) || null },
+    });
+    return { consent: true, status };
+  } catch {
+    return { consent: false, status: null };
   }
 }
 
@@ -263,6 +338,7 @@ export async function POST(request: NextRequest) {
       sessionId,
       userId,
       promptVersion = "v1.0",
+      sprs: clientSprs, // optional: the user's OWN SPRS slice, computed client-side
     } = body;
 
     // ── STEP 1: Capture request, open trace ───────────────────────────────
@@ -340,6 +416,23 @@ export async function POST(request: NextRequest) {
         finalizeTrace(trace, { userQuestion, finalAnswer: identityAnswer, ragContext: null }).catch(() => undefined);
       }
       return new Response(streamTextAsSSE(identityAnswer), { headers: sseHeaders });
+    }
+
+    // ── 1c. Personalized status ("where do I stand / next step") ───────────
+    // Consent-gated and own-data-only. Answered deterministically from the
+    // customer's OWN status — never sent to the commercial LLM, never mixed
+    // with another customer's data. Asks permission when consent is off.
+    if (lastUserMsg?.content && isStatusQuestion(lastUserMsg.content)) {
+      const statusSpan = trace ? openSpan(trace, "retriever", "customer_status") : null;
+      const { consent, status } = await resolveSessionStatus(clientSprs);
+      const statusAnswer = statusAnswerFromConsent({ consent, status });
+      if (statusSpan) closeSpan(statusSpan, { consent, hasStatus: !!status });
+      if (trace) {
+        const respSpan = openSpan(trace, "final_response", "customer_status_response");
+        closeSpan(respSpan, statusAnswer);
+        finalizeTrace(trace, { userQuestion, finalAnswer: statusAnswer, ragContext: null }).catch(() => undefined);
+      }
+      return new Response(streamTextAsSSE(cleanAnswer(statusAnswer)), { headers: sseHeaders });
     }
 
     // ── 2. Local FAQ match (always works, no API key needed) ───────────────

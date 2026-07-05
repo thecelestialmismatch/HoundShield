@@ -9,7 +9,7 @@ import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   Shield, Cpu, CreditCard, LayoutDashboard, KeyRound, Blocks,
   Sparkles, Zap, Wrench, Calendar, Rocket, FolderSearch,
-  Users, ClipboardCheck, Smartphone, ArrowRight,
+  Users, ClipboardCheck, Smartphone, ArrowRight, Compass,
 } from "lucide-react";
 
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -34,6 +34,15 @@ type Item = { tag: keyof typeof badgeStyles; text: string };
 type Release = { version: string; date: string; title: string; icon: typeof Shield; items: Item[] };
 
 const releases: Release[] = [
+  {
+    version: "2.6.0", date: "July 2026", title: "Customer Status Intelligence & Personalized Brain AI", icon: Compass,
+    items: [
+      { tag: "Feature", text: "After-login status panel: where you stand, your single next step, and your highest-impact gaps with fixes" },
+      { tag: "Feature", text: "Brain AI answers “where do I stand?” from your own data — consent-gated, off by default, revocable" },
+      { tag: "Feature", text: "Order confirmation for the $499 CMMC AI Risk Assessment Report — reference, amount, report-due date, live status" },
+      { tag: "Improvement", text: "Privacy by design: assessment data stays in your browser; no customer data is ever sent to a commercial LLM" },
+    ],
+  },
   {
     version: "2.5.0", date: "March 2026", title: "CMMC Level 2 Full Mapping", icon: Shield,
     items: [
@@ -90,10 +99,10 @@ const releases: Release[] = [
 ];
 
 const roadmap = [
-  { q: "Q2 2026", title: "Evidence Collection Automation", desc: "Auto-gather artifacts and screenshots mapped to CMMC controls.", icon: FolderSearch },
-  { q: "Q2 2026", title: "Multi-Organization Support", desc: "Manage multiple subsidiaries under a single parent account.", icon: Users },
-  { q: "Q3 2026", title: "C3PAO Assessment Prep Wizard", desc: "Guided walkthrough to prepare for third-party CMMC assessments.", icon: ClipboardCheck },
-  { q: "Q3 2026", title: "Mobile App (iOS / Android)", desc: "Review alerts, approve quarantine actions, and track compliance on the go.", icon: Smartphone },
+  { q: "Q3 2026", title: "Evidence Collection Automation", desc: "Auto-gather artifacts and screenshots mapped to CMMC controls.", icon: FolderSearch },
+  { q: "Q3 2026", title: "Multi-Organization Support", desc: "Manage multiple subsidiaries under a single parent account.", icon: Users },
+  { q: "Q4 2026", title: "C3PAO Assessment Prep Wizard", desc: "Guided walkthrough to prepare for third-party CMMC assessments.", icon: ClipboardCheck },
+  { q: "Q4 2026", title: "Mobile App (iOS / Android)", desc: "Review alerts, approve quarantine actions, and track compliance on the go.", icon: Smartphone },
 ];
 
 export default function ChangelogPage() {

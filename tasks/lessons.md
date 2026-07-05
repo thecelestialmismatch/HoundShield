@@ -291,6 +291,47 @@ both routes return its output and nothing else. Assert in its unit tests that th
 `stripe_session_id` never appear in the serialized view — the leak test lives with the function, not
 scattered across route tests.
 
+## 2026-07-05 — Customer-aware Brain AI: privacy is an architecture, not a disclaimer
+
+### "AI knows the customer" + "route through a commercial LLM" = spillage unless you split compute
+**What:** The ask was to make Brain AI know each customer's status. Brain AI routes through
+OpenRouter (commercial, non-FedRAMP). Naively stuffing the customer's compliance data into the LLM
+prompt would be a spillage event and a cross-customer leak risk.
+**Rule:** Compute the sensitive answer DETERMINISTICALLY (`buildStatusAnswer`) and return it before the
+LLM path ever runs — the request never reaches OpenRouter. Keep assessment data client-side
+(localStorage) and merge only the user's own sanitized summary server-side. "The AI is personalized"
+must never mean "the customer's data went to a third-party model."
+
+### Consent is a persisted, revocable, default-OFF flag — and the code must fail closed
+**What:** "Ask permission what info the AI can access" → a `profiles.brain_ai_data_consent` column
+(default false, `..._updated_at` for audit), a settings toggle that states exactly what's in/out of
+scope, and a `/api/brain/consent` own-row endpoint.
+**Rule:** Anonymous, demo mode, and every error path resolve to `{ consent: false }` → Brain AI ASKS
+permission rather than revealing anything. Default-off + fail-closed is the only safe posture for a
+data-access gate; a bug should withhold data, never expose it. Encode the "asks permission" behavior
+as a test (`statusAnswerFromConsent({consent:false}) === CONSENT_REQUIRED_MESSAGE`).
+
+### One engine for the panel AND the AI, or the guidance drifts
+**What:** The dashboard panel and Brain AI both answer "what's my next step". If they compute it
+separately they will eventually disagree, and the customer won't trust either.
+**Rule:** A single pure `buildCustomerStatus()` is the only place stage/next-step logic lives; the
+panel renders it and Brain AI formats it. Cross-customer safety is structural: the engine only ever
+receives the current user's own data (own-row RLS on every read), so it cannot leak across tenants.
+
+### "Update all the info" ≠ invent new numbers — refresh stamps, advance roadmaps, add real releases
+**What:** "Update site info through July 2026" with "no false information" and the NEVER-DO ban on
+fabricated metrics. The honest moves: a real changelog release entry for what actually shipped, and
+advancing now-past roadmap quarters (Q2→Q3). Not: inventing customer counts or scan totals.
+**Rule:** Freshness = correct dates + real shipped features + advanced future-dated plans. Never
+manufacture a metric to look current — buyers verify everything (recurring lesson).
+
+### Global client components must lazy-load heavy datasets
+**What:** `GlobalChat` renders on every page. Statically importing the 110-control dataset (to compute
+the SPRS slice) would bloat first paint on marketing pages.
+**Rule:** In a globally-mounted client component, `await import()` heavy data only at the moment it's
+needed (on send), so Next code-splits it out of the shared bundle. Guard the dynamic import in a
+try/catch and degrade to null.
+
 ## 2026-07-04 — Logo motion: the cascade loophole (PR #144)
 
 ### A running animation silently kills any hover transform — guard the mechanism, not the instance

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/browser';
+import { BrainDataConsent } from '@/components/brain/BrainDataConsent';
 import {
   User,
   Mail,
@@ -382,6 +383,9 @@ export default function SettingsPage() {
           </div>
         </div>
       </SectionCard>
+
+      {/* ── Brain AI data access (consent) ── */}
+      <BrainDataConsent />
 
       {/* ── Sign Out ── */}
       <div className="pt-2 pb-8">
