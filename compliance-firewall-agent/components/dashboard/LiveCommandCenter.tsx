@@ -333,7 +333,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               <span className="clock" id="lcc-clock">--:--:--</span>
               <span className="statpill"><span className="dot" /> gateway live · p50 <b id="lcc-p50" style={{ color: 'var(--ok)' }}>7ms</b></span>
               <Link href="/" className="side-link" title="View marketing site"><ExternalLink /></Link>
-              <div className="av">AD</div>
+              <div className="av" title={viewer?.company ?? undefined}>{viewer?.initials ?? 'AD'}</div>
             </div>
           </div>
 
