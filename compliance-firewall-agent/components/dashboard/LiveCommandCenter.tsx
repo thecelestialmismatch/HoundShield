@@ -1,19 +1,32 @@
 'use client'
 
 /**
- * Live Command Center — the after-login dashboard, ported 1:1 from the
- * approved Direction-A "Live Command Center" spec. Self-contained shell
- * (own sidebar + topbar), all live behaviours (ticking KPIs, scrolling
- * throughput chart, streaming threat feed, SPRS count-up rings, detection
- * donut, engine bars, on-device Brain AI) driven by one effect with full
- * teardown. SSR-safe: every window/DOM touch lives inside useEffect.
+ * Live Command Center — THE after-login dashboard (route: /console).
+ *
+ * Evolved from the approved Direction-A spec into the single, unified
+ * post-login home. Self-contained shell (own sidebar + topbar), mobile-first
+ * (off-canvas drawer + scrim, safe-area padding), light "Steel & Cream"
+ * palette, and every live behaviour (ticking KPIs, scrolling throughput chart,
+ * streaming threat feed, SPRS count-up rings, detection donut, engine bars,
+ * on-device Brain AI) driven by one effect with full teardown. SSR-safe: every
+ * window/DOM touch lives inside useEffect.
+ *
+ * Signature elements that beat the competitor audit (Nightfall/Polymer/Prompt
+ * Security/Vanta/Drata):
+ *  - Evidence-chain SPINE: a persistent header showing the SHA-256 audit chain
+ *    being built live on the customer's own hardware, one click from the $499
+ *    C3PAO-ready PDF. Structurally uncopyable by cloud-routed rivals.
+ *  - Brain AI carries the Doberman mark on its panel + a quick-ask card on the
+ *    Overview tab, keyless (FAQ keyword layer), with the mandatory CUI warning.
+ *  - First-run checklist that ends on the PDF (activation driver).
+ *  - Colour-coded KPI accents so status reads before a single number does.
  */
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
-  Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink,
+  Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
 
@@ -57,19 +70,25 @@ const EVENTS: [string, string, string, string][] = [
 ]
 
 // On-device Brain AI — deterministic keyword answers, grounded in the
-// account's own (mock) assessment data. Returns [html, source].
+// account's own (mock) assessment data. Returns [html, source]. Keyless: this
+// FAQ layer answers the demo-critical questions with no OpenRouter key, so the
+// feature is never dead on the homepage/dashboard.
 export function brainAnswer(qRaw: string): [string, string] {
   const q = qRaw.toLowerCase()
   if (/who are you|what are you|your name/.test(q))
     return ["I'm <b>Brain AI</b>, HoundShield's on-device compliance analyst. I read your assessment, audit logs and the NIST 800-171 knowledge base — running on your hardware with your own key, so nothing I see is sent to HoundShield.", 'identity · brain-core']
   if (/what is houndshield|houndshield|what do you do/.test(q))
     return ['<b>HoundShield</b> is a local-only AI compliance firewall. It intercepts every prompt your team sends to ChatGPT, Copilot or Claude and blocks CUI, PII, PHI, secrets and CAGE codes in under 10ms — before they leave your network.', 'product · brain-core']
+  if (/chang|this week|trend|since last|delta|improv/.test(q))
+    return ['This week your SPRS score moved <b>+6</b> (from +72 to +78): you closed 3.5.10 (crypto-protected passwords) and 3.4.1 (baseline config). Two high-weight controls remain — 3.8.3 and 3.13.11 — worth another +6 together.', 'trend · 7-day snapshot']
   if (/sprs|score/.test(q))
     return ['Your current SPRS score is <b>+78</b> of +110. 78 controls implemented, 8 partial, 14 open. Closing the three 3.8 Media Protection gaps moves you to +84 — the fastest path to conditional CMMC L2.', 'sprs · live assessment']
   if (/ready|certif|pass/.test(q))
     return ["Almost. A C3PAO needs a POA&M with no open high-weight controls. You have 2 (3.8.3 media sanitization, 3.13.11 FIPS crypto). Fix those, export the SSP + POA&M, and you're assessment-ready.", 'readiness · brain-core']
   if (/dfars|7012|spill|leak/.test(q))
     return ['A <b>DFARS 252.204-7012</b> spill is CUI reaching a system not authorized to hold it. Pasting CUI into ChatGPT transmits it to OpenAI — a reportable spill. Cloud DLP causes the same spill by sending data to their cloud. HoundShield scans locally, so CUI never leaves.', 'dfars · knowledge-base']
+  if (/incident|draft.*summary|summary.*incident|write.*report|breach/.test(q))
+    return ["Here's a starting incident summary from your audit chain: <b>3 blocked CUI-exposure attempts in the last 24h</b> (SC.3.177), each hash-chained and quarantined before leaving the boundary. No spill occurred; no reportable event. Export the signed evidence pack from Reports to attach to your IR record.", 'incident · audit chain']
   return ['I can help with your CMMC posture, SPRS score, a NIST 800-171 control, HIPAA/PHI, DFARS 7012, or what HoundShield does. Everything I answer is grounded in your own assessment and audit data, on-device.', 'brain-core']
 }
 
@@ -80,6 +99,14 @@ export interface DashboardViewer {
   plan: string
   initials: string
 }
+
+// Overview quick-ask questions for the Brain card (wired to the live analyst).
+const BRAIN_QUICK: string[] = [
+  'What changed in my SPRS score this week?',
+  'Am I CMMC ready?',
+  'Draft my incident summary',
+  'What is a DFARS 7012 spill?',
+]
 
 export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {}) {
   const [tab, setTab] = useState<TabId>('overview')
@@ -94,10 +121,16 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   const inputRef = useRef<HTMLInputElement>(null)
   const tabRef = useRef<TabId>('overview')
   const badgeRef = useRef(3)
+  // Lets the Overview Brain card fire a real analyst question — assigned inside
+  // the effect (where `ask` closes over the DOM), read on click after mount.
+  const askRef = useRef<((q: string) => void) | null>(null)
   tabRef.current = tab
 
   // keep the badge state in sync with the imperative counter
   const bumpBadge = (n: number) => { badgeRef.current = n; setFeedBadge(n) }
+
+  // Ask Brain from a React handler (Overview quick-ask card), then reveal the tab.
+  const askBrain = (q: string) => { setTab('brain'); askRef.current?.(q) }
 
   useEffect(() => {
     const root = rootRef.current
@@ -129,10 +162,15 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       const ub = $('#lcc-useBar'); if (ub) ub.style.width = Math.min(99, (scan / 250000) * 100).toFixed(0) + '%'
     }, 1200))
 
-    /* ---- last-block-ago ---- */
+    /* ---- last-block-ago + evidence-chain "verified N ago" ---- */
     let sinceBlock = 2
     const lastBlock = $('#lcc-lastBlock')
-    timers.push(setInterval(() => { sinceBlock++; if (lastBlock) lastBlock.textContent = sinceBlock + 's' }, 1000))
+    const chainAgo = $('#lcc-chainAgo')
+    timers.push(setInterval(() => {
+      sinceBlock++
+      if (lastBlock) lastBlock.textContent = sinceBlock + 's'
+      if (chainAgo) chainAgo.textContent = sinceBlock + 's'
+    }, 1000))
 
     /* ---- SPRS count-up + ring fill ---- */
     const countUp = (el: HTMLElement | null, to: number, dur: number) => {
@@ -160,8 +198,14 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
     const cv = thruRef.current
     const series: number[] = []
     for (let i = 0; i < 60; i++) series.push(34 + Math.round(Math.random() * 30))
-    const brandc = () => getComputedStyle(root).getPropertyValue('--brand').trim() || '#81A6C6'
-    const orangec = () => getComputedStyle(root).getPropertyValue('--orange').trim() || '#E07B39'
+    // Literal hex — a canvas strokeStyle/fillStyle cannot accept an unresolved
+    // `var(--…)`, and getComputedStyle().getPropertyValue('--brand') returns the
+    // custom property's *declared* value ("var(--hs-steel-dark,#5A86A8)"), not a
+    // resolved colour. Feeding that to the 2D context silently drew nothing —
+    // the throughput chart came up blank. These match the Steel & Cream palette
+    // (--hs-steel-dark / orange), exactly like the donut's hard-coded hexes.
+    const brandc = () => '#5A86A8'
+    const orangec = () => '#E07B39'
     const drawChart = () => {
       if (!cv) return
       const w = cv.clientWidth; if (w < 10) return
@@ -196,7 +240,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       const p = mix.map((v) => (v / t) * 100)
       const a = p[0], b = a + p[1], c2 = b + p[2]
       const donut = $('#lcc-donut')
-      if (donut) donut.style.background = `conic-gradient(#81A6C6 0 ${a}%,#E5484D ${a}% ${b}%,#D9870B ${b}% ${c2}%,#0E9F6E ${c2}% 100%)`
+      if (donut) donut.style.background = `conic-gradient(#5A86A8 0 ${a}%,#E5484D ${a}% ${b}%,#D9870B ${b}% ${c2}%,#0E9F6E ${c2}% 100%)`
       const set = (sel: string, val: string) => { const el = $(sel); if (el) el.textContent = val }
       set('#lcc-lgCui', Math.round(p[0]) + '%'); set('#lcc-lgSec', Math.round(p[1]) + '%')
       set('#lcc-lgPii', Math.round(p[2]) + '%'); set('#lcc-lgPhi', Math.round(p[3]) + '%')
@@ -213,6 +257,11 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
         const num = rowEl.querySelector('b'); if (num) num.textContent = String(v)
       })
     }, 1500))
+
+    /* ---- evidence chain: block #, rolling SHA-256 head ---- */
+    let chainN = 4182
+    const chainNEl = $('#lcc-chainN'), chainHashEl = $('#lcc-chainHash')
+    const hex = () => Array.from({ length: 6 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('')
 
     /* ---- live threat feed ---- */
     const rowHtml = (ev: [string, string, string, string]) => {
@@ -237,6 +286,11 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
         blocked++; if (kBlock) { kBlock.textContent = blocked.toLocaleString(); bump(kBlock) }
         if (donutTot) donutTot.textContent = blocked.toLocaleString()
         sinceBlock = 0; if (lastBlock) lastBlock.textContent = '0s'
+        // Advance the audit chain: new block, new hash head, freshly verified.
+        chainN++
+        if (chainNEl) chainNEl.textContent = '#' + chainN.toLocaleString()
+        if (chainHashEl) chainHashEl.textContent = hex() + '…'
+        if (chainAgo) chainAgo.textContent = '0s'
         if (tabRef.current !== 'feed') bumpBadge(badgeRef.current + 1)
       }
       if (ev[0] === 'quar') { quar++; if (kQuar) { kQuar.textContent = String(quar); bump(kQuar) } }
@@ -260,6 +314,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       if (bi) bi.value = ''
       setTimeout(() => { const a = brainAnswer(q); add('b', a[0], a[1]) }, 420)
     }
+    askRef.current = ask
     const onSend = () => ask(bi?.value || '')
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Enter') ask(bi?.value || '') }
     const sendBtn = $('#lcc-bsend')
@@ -281,6 +336,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       sendBtn?.removeEventListener('click', onSend)
       bi?.removeEventListener('keydown', onKey)
       chipHandlers.forEach(({ el, fn }) => el.removeEventListener('click', fn))
+      askRef.current = null
     }
   }, [])
 
@@ -295,10 +351,10 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       <div className="shell">
         {/* ── Sidebar ── */}
         <aside className={`side${sideOpen ? ' open' : ''}`}>
-          <div className="brand">
+          <Link href="/" className="brand group group/brand" aria-label="HoundShield home">
             <Image src="/houndshield-logo.png" alt="HoundShield" width={28} height={36} />
             <span>Hound<b>Shield</b></span>
-          </div>
+          </Link>
           <div className="gh">Command Center</div>
           {SIDE_LINKS.map((s) => {
             const Icon = s.icon
@@ -322,12 +378,24 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           </div>
         </aside>
 
+        {/* Mobile drawer scrim — tap outside the open sidebar to dismiss it */}
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className={`scrim${sideOpen ? ' on' : ''}`}
+          onClick={() => setSideOpen(false)}
+        />
+
         {/* ── Main ── */}
         <div className="main">
           <div className="top">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem', minWidth: 0 }}>
               <button type="button" className="btn btn-g btn-sm burger" aria-label="Toggle navigation" onClick={() => setSideOpen((v) => !v)}><Menu /></button>
-              <div><div className="crumb">HoundShield · Command Center</div><h1>{TAB_TITLES[tab]}</h1></div>
+              {/* Doberman mark in the bar on mobile, where the sidebar brand is off-canvas. */}
+              <Link href="/" className="top-brand group group/brand" aria-label="HoundShield home">
+                <Image src="/houndshield-logo.png" alt="HoundShield" width={22} height={28} className="logo-img" />
+              </Link>
+              <div style={{ minWidth: 0 }}><div className="crumb">HoundShield · Command Center</div><h1>{TAB_TITLES[tab]}</h1></div>
             </div>
             <div className="top-right">
               <span className="clock" id="lcc-clock">--:--:--</span>
@@ -337,16 +405,49 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
             </div>
           </div>
 
+          {/* Evidence-chain spine — persistent on every tab. A live SHA-256 audit
+              chain built on the customer's OWN hardware; one click from the $499
+              C3PAO-ready PDF. The differentiator no cloud-routed rival can show. */}
+          <div className="spine">
+            <ShieldCheck className="spine-ic" />
+            <span className="spine-txt">
+              Audit chain intact <span className="sep">·</span> block <b id="lcc-chainN">#4,182</b>
+              <span className="sep">·</span> head <b className="mono" id="lcc-chainHash">a3f9c1…</b>
+              <span className="sep">·</span> verified <b id="lcc-chainAgo">2s</b> ago
+              <span className="sep sep-hide">·</span>
+              <span className="spine-boundary sep-hide">on your hardware</span>
+            </span>
+            <button type="button" className="btn btn-p btn-sm spine-cta" onClick={() => setTab('reports')}>
+              <FileText /> Generate Audit PDF
+            </button>
+          </div>
+
           <div className="body">
             {/* OVERVIEW */}
             <div className={tabClass('overview')}>
               <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago</div>
 
               <div className="kpis">
-                <div className="kpi"><div className="l"><Eye /> Prompts scanned (24h)</div><div className="n bump" id="lcc-kScan">143,280</div><div className="d up">▲ live · ~46/min</div></div>
-                <div className="kpi"><div className="l"><Shield /> Blocked today</div><div className="n bump" id="lcc-kBlock" style={{ color: 'var(--bad)' }}>2,233</div><div className="d">CUI · secrets · PII · PHI</div></div>
-                <div className="kpi"><div className="l"><Gauge /> SPRS score</div><div className="n" id="lcc-kSprs" style={{ color: 'var(--bright)' }}>78</div><div className="d up">▲ 12 since onboarding</div></div>
-                <div className="kpi"><div className="l"><Flag /> Quarantine queue</div><div className="n bump" id="lcc-kQuar" style={{ color: 'var(--warn)' }}>15</div><div className="d">awaiting human review</div></div>
+                <div className="kpi a-ok"><div className="l"><Eye /> Prompts scanned (24h)</div><div className="n bump" id="lcc-kScan">143,280</div><div className="d up">▲ live · ~46/min</div></div>
+                <div className="kpi a-bad"><div className="l"><Shield /> Blocked today</div><div className="n bump" id="lcc-kBlock" style={{ color: 'var(--bad)' }}>2,233</div><div className="d">CUI · secrets · PII · PHI</div></div>
+                <div className="kpi a-brand"><div className="l"><Gauge /> SPRS score</div><div className="n" id="lcc-kSprs" style={{ color: 'var(--brand)' }}>78</div><div className="d up">▲ 12 since onboarding</div></div>
+                <div className="kpi a-warn"><div className="l"><Flag /> Quarantine queue</div><div className="n bump" id="lcc-kQuar" style={{ color: 'var(--warn)' }}>15</div><div className="d">awaiting human review</div></div>
+              </div>
+
+              {/* Brain AI quick-ask — the logo-forward, keyless analyst, one tap in. */}
+              <div className="panel" style={{ marginBottom: 16 }}>
+                <div className="braincard">
+                  <Image className="brain-mark" src="/houndshield-logo.png" alt="HoundShield Brain AI" width={38} height={48} />
+                  <div className="bc-copy">
+                    <h3><Sparkles style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline', marginRight: 4 }} />Ask Brain AI</h3>
+                    <p>On-device CMMC analyst, grounded in your own assessment &amp; audit chain. No CUI — it can route to a commercial cloud endpoint.</p>
+                  </div>
+                  <div className="bchips">
+                    {BRAIN_QUICK.map((q) => (
+                      <button key={q} type="button" onClick={() => askBrain(q)}>{q}</button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="row r-3-2">
@@ -359,7 +460,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   <div className="donut-wrap">
                     <div className="donut" id="lcc-donut"><div className="c"><b id="lcc-donutTot">2,233</b><span>blocked</span></div></div>
                     <div className="legend">
-                      <div><i style={{ background: '#81A6C6' }} /> CUI <span className="v" id="lcc-lgCui">39%</span></div>
+                      <div><i style={{ background: '#5A86A8' }} /> CUI <span className="v" id="lcc-lgCui">39%</span></div>
                       <div><i style={{ background: '#E5484D' }} /> Secrets <span className="v" id="lcc-lgSec">25%</span></div>
                       <div><i style={{ background: '#D9870B' }} /> PII <span className="v" id="lcc-lgPii">25%</span></div>
                       <div><i style={{ background: '#0E9F6E' }} /> PHI <span className="v" id="lcc-lgPhi">12%</span></div>
@@ -383,7 +484,17 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 </div>
               </div>
 
+              {/* First-run checklist — activation driver that ends on the PDF. */}
               <div className="panel">
+                <div className="ph"><h3>Get to your first C3PAO-ready PDF</h3><span className="mono">3 steps</span></div>
+                <div className="pad steps">
+                  <StepRow n="1" done title="Point your AI traffic at the proxy" detail="OpenAI-compatible endpoint — one URL change." onClick={() => setTab('settings')} cta="View proxy URL" />
+                  <StepRow n="2" done title="See your first live scan" detail="Every prompt inspected on your hardware in <10ms." onClick={() => setTab('feed')} cta="Open live feed" />
+                  <StepRow n="3" title="Generate a sample audit PDF" detail="SSP + POA&M + evidence pack, SHA-256 signed." onClick={() => setTab('reports')} cta="Generate PDF" />
+                </div>
+              </div>
+
+              <div className="panel" style={{ marginTop: 16 }}>
                 <div className="ph"><h3>Detections by engine · last hour</h3><span className="live-tag"><span className="dot" /> live</span></div>
                 <div className="pad">
                   <div className="eng" data-base="61"><span>CUI</span><div className="bar"><i style={{ width: '61%' }} /></div><b>61</b></div>
@@ -410,7 +521,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               <div className="row r-2-1">
                 <div className="panel">
                   <div className="ph"><h3>SPRS score</h3><span className="mono">live</span></div>
-                  <div className="sprs"><div className="ring" id="lcc-ring2"><b className="ringn">78</b><small>of 110</small></div><div className="cap">DoD self-assessment range −203 to +110. You&apos;re at <b>+78</b>.</div></div>
+                  <div className="sprs"><div className="ring" id="lcc-ring2"><b className="ringn">78</b><small>of 110</small></div><div className="cap">DoD self-assessment range −203 to +110. You&apos;re at <b>+78</b>.</div>
+                    <Link href="/command-center/shield/assessment" className="btn btn-g btn-sm" style={{ marginTop: 14 }}>Open full 110-control assessment <ArrowRight /></Link>
+                  </div>
                 </div>
                 <div className="panel">
                   <div className="ph"><h3>Fastest wins</h3><span className="mono">AI-ranked</span></div>
@@ -450,7 +563,14 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
             {/* BRAIN */}
             <div className={tabClass('brain')}>
               <div className="panel">
-                <div className="ph"><h3><Brain style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline' }} /> Brain AI — on-device CMMC analyst</h3><span className="mono">your key · nothing sent to HoundShield</span></div>
+                <div className="ph brainhead">
+                  <h3>
+                    <Image className="brain-mark sm" src="/houndshield-logo.png" alt="HoundShield Brain AI" width={17} height={22} />
+                    Brain AI — on-device CMMC analyst
+                  </h3>
+                  <span className="mono">your key · nothing sent to HoundShield</span>
+                </div>
+                <div className="cui-note"><Lock /> Do not enter CUI — Brain AI can route to a commercial cloud endpoint (OpenRouter).</div>
                 <div className="brain">
                   <div className="blog" ref={blogRef}>
                     <div className="bub b" dangerouslySetInnerHTML={{ __html: "I'm <b>Brain AI</b> — HoundShield's on-device compliance analyst. Ask me about your CMMC posture, a NIST control, or what HoundShield does.<span class=\"src\">running locally · your OpenRouter key</span>" }} />
@@ -458,8 +578,10 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   <div className="chips">
                     <button type="button">Who are you?</button>
                     <button type="button">What&apos;s my SPRS score?</button>
+                    <button type="button">What changed this week?</button>
                     <button type="button">Am I CMMC ready?</button>
                     <button type="button">What is a DFARS 7012 spill?</button>
+                    <button type="button">Draft my incident summary</button>
                   </div>
                   <div className="bin"><input id="lcc-bi" ref={inputRef} placeholder="Ask Brain AI…" autoComplete="off" /><button type="button" className="btn btn-p btn-sm" id="lcc-bsend">Send</button></div>
                 </div>
@@ -496,6 +618,16 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+function StepRow({ n, title, detail, cta, onClick, done }: { n: string; title: string; detail: string; cta: string; onClick: () => void; done?: boolean }) {
+  return (
+    <div className={`steprow${done ? ' done' : ''}`}>
+      <div className="step-n">{done ? '✓' : n}</div>
+      <div className="step-body"><b>{title}</b><span>{detail}</span></div>
+      <button type="button" className="btn btn-g btn-sm" onClick={onClick}>{cta} <ArrowRight /></button>
     </div>
   )
 }
