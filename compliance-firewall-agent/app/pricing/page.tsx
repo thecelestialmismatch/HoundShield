@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Check } from 'lucide-react'
+import { ReportCheckoutButton } from '@/components/ReportCheckoutButton'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { FaqAccordion } from '@/components/ui/FaqAccordion'
@@ -162,9 +163,11 @@ export default function PricingPage() {
 
             <p className="center muted" style={{ marginTop: 8, fontSize: '.86rem' }}>
               Need audit-ready evidence without a subscription? The <b>$499 one-time CMMC AI Risk
-              Assessment Report</b> scores 14 days of real AI traffic against NIST 800-171.{' '}
-              <Link href="/contact" style={{ color: 'var(--brand)', fontWeight: 600 }}>Request the report →</Link>
+              Assessment Report</b> scores 14 days of real AI traffic against NIST 800-171.
             </p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
+              <ReportCheckoutButton label="Request the report" />
+            </div>
 
             <div className="compare">
               <table>
