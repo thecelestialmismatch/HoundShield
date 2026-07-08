@@ -5,7 +5,7 @@ import path from "path";
 /**
  * Logo motion contract (founder-approved, Direction-A demo verbatim).
  *
- * On hover the brand mark TILTS IN PLACE — rotate(-4deg) scale(1.06) — on
+ * On hover the brand mark TILTS IN PLACE — rotate(-8deg) scale(1.08) — on
  * every surface (hermes nav/footer, shared <Logo>, sidebar chip, chat bubble,
  * hero demo dashboard, command-center). It must NEVER translate sideways.
  * The sideways-sway regression (hs-logo-sway, translateX keyframes) shipped
@@ -69,14 +69,14 @@ const CSS_SOURCES = ["app/globals.css", "app/hermes.css", "components/dashboard/
 describe("logo motion — the approved pose exists on every surface", () => {
   it("hermes.css carries the demo-verbatim hover tilt on .brand-mark", () => {
     expect(read("app/hermes.css")).toMatch(
-      /\.hermes \.brand:hover \.brand-mark\s*\{[^}]*transform:\s*rotate\(-4deg\)\s+scale\(1\.06\)/,
+      /\.hermes \.brand:hover \.brand-mark\s*\{[^}]*transform:\s*rotate\(-8deg\)\s+scale\(1\.08\)/,
     );
   });
 
   it("globals.css shared .logo-img/.logo-on-dark hover rule strikes the same pose", () => {
     const css = read("app/globals.css");
     expect(css).toMatch(
-      /\.logo-img:hover[\s\S]{0,600}?transform:\s*rotate\(-4deg\)\s*scale\(1\.06\)/,
+      /\.logo-img:hover[\s\S]{0,1000}?transform:\s*rotate\(-8deg\)\s*scale\(1\.08\)/,
     );
     // The pose must also bind through a parent group/brand hover so standalone
     // marks (chat bubble, footer link, sidebar chip, hero demo) tilt too.
@@ -86,7 +86,7 @@ describe("logo motion — the approved pose exists on every surface", () => {
 
   it("command-center (lccStyles) hover pauses idle and strikes the same pose", () => {
     expect(read("components/dashboard/lccStyles.ts")).toMatch(
-      /\.hs-lcc \.brand:hover img[^{]*\{[^}]*animation:\s*none;\s*transform:\s*rotate\(-4deg\)\s+scale\(1\.06\)/,
+      /\.hs-lcc \.brand:hover img[^{]*\{[^}]*animation:\s*none;\s*transform:\s*rotate\(-8deg\)\s+scale\(1\.08\)/,
     );
   });
 

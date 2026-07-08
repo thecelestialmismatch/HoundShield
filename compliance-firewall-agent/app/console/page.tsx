@@ -44,7 +44,10 @@ export default async function ConsolePage() {
   const viewer = await getViewer()
   return (
     <>
-      <div className="px-4 pt-4 sm:px-6 lg:px-8">
+      {/* Personalized status header — scoped to the light "Steel & Cream" palette
+          (cc-light) so it matches the LiveCommandCenter below it: one consistent
+          light dashboard, no dark→light seam. */}
+      <div className="cc-light bg-[var(--hs-surface-1)] px-4 pt-4 sm:px-6 lg:px-8">
         <WelcomeBanner />
         <CustomerStatusPanel />
       </div>
