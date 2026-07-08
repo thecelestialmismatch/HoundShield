@@ -115,22 +115,23 @@ function Sidebar({
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[#111111] border-r border-white/[0.06] transition-all duration-300 ${
+      className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[var(--hs-surface-1)] border-r border-[var(--hs-border-ink)] transition-all duration-300 ${
         collapsed ? "w-[68px]" : "w-[260px]"
       }`}
     >
-      {/* Brand */}
-      <div className="flex h-16 items-center gap-2.5 border-b border-white/[0.06] px-4">
+      {/* Brand — aspect-correct dark-on-light Doberman mark (no forced square box),
+          tilts on hover via the shared group/brand rule. */}
+      <div className="flex h-16 items-center gap-2.5 border-b border-[var(--hs-border-ink)] px-4">
         <Link href="/" className="flex items-center gap-2.5 group group/brand">
-          <Logo variant="dark" className="w-9 h-9" />
+          <Logo size={34} />
           {!collapsed && (
             <motion.div
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               className="flex flex-col"
             >
-              <TextLogo className="text-lg" variant="dark" />
-              <span className="text-[10px] text-slate-500 -mt-0.5 tracking-wider uppercase">
+              <TextLogo className="text-lg" />
+              <span className="text-[10px] text-[var(--hs-ink-tertiary)] -mt-0.5 tracking-wider uppercase">
                 Command Center
               </span>
             </motion.div>
@@ -282,7 +283,7 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
 
   return (
     <header
-      className={`fixed top-0 right-0 z-40 h-14 border-b border-white/[0.06] bg-[#0a0a0a]/80 backdrop-blur-xl flex items-center justify-between px-6 transition-all duration-300 ${
+      className={`fixed top-0 right-0 z-40 h-14 border-b border-[var(--hs-border-ink)] bg-[rgba(250,252,255,0.85)] backdrop-blur-xl flex items-center justify-between px-6 transition-all duration-300 ${
         sidebarCollapsed ? "left-[68px]" : "left-[260px]"
       }`}
     >
@@ -314,7 +315,7 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
           href="/command-center/settings"
           className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
         >
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white text-xs font-bold shadow-sm">
             {userInitial}
           </div>
           <ChevronDown className="w-3 h-3 text-slate-500" />
@@ -334,11 +335,11 @@ export default function CommandCenterLayout({
   const demoMode = !isSupabaseConfigured();
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
-      {/* Subtle background mesh */}
+    <div className="cc-light min-h-screen bg-[var(--hs-surface-1)] text-[var(--hs-ink)] font-sans">
+      {/* Subtle background mesh (steel + warm cream haze — matches /console) */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[40%] rounded-full bg-brand-400/[0.03] blur-[120px]" />
-        <div className="absolute top-[40%] -right-[10%] h-[50%] w-[35%] rounded-full bg-brand-400/[0.02] blur-[120px]" />
+        <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[40%] rounded-full bg-brand-400/[0.06] blur-[120px]" />
+        <div className="absolute top-[40%] -right-[10%] h-[50%] w-[35%] rounded-full bg-[rgba(243,227,208,0.4)] blur-[120px]" />
       </div>
 
       <Sidebar
