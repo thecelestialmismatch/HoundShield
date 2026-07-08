@@ -1,159 +1,21 @@
 # Hound Shield — Task Queue
 
-> **Compass-corrected 2026-06-23.** Mission = FIRST REVENUE. Stage 1 milestone by **June 25**:
-> ≥3 paid **$499 CMMC AI Risk Assessment Reports** + ≥1 **RPO/MSP signed referral agreement**.
-> Lead with the $499 one-time PDF, NOT a subscription. RPOs/MSPs are the channel — NOT C3PAOs.
-> Sprints below (Sprint 1–4, C3PAO-channel framing) predate this correction — kept for history only.
+## Active
 
-## Stage 1 — by 2026-06-25 (THE milestone)
+### 2026-07-08 — Reality check (HERMES session: direct GitHub push restored)
+- [ ] **FOUNDER, 5 min — THE revenue blocker:** set `STRIPE_SECRET_KEY` in Vercel.
+      Live `/api/health` says `payments: missing_key` — ALL checkout (subscriptions + the $499 report) is dead until this lands.
+      While there: set `STRIPE_WEBHOOK_SECRET` + point the Stripe webhook at `https://houndshield.com/api/stripe/webhook`, then re-verify `/api/health`.
+      (`database` and `ai_router` show ✅ connected — those 06-10 env items are done.)
+- [ ] Merge PR #151 — /pricing $499 report CTA now uses the ReportCheckoutButton rail (503-safe while the key is missing). Merge = auto prod deploy from main.
+- [ ] **FOUNDER, ~20 min:** send the 10 C3PAO partner emails sitting in Gmail drafts (from 06-10 — status unknown; still the highest-leverage GTM action if unsent).
+- [x] `hermes/redesign-demos` pushed (503e114 — HERMES site Direction A); Vercel preview build READY (2026-07-08)
+- [x] 06-10 "push feature/beast-ui-v3" task CLOSED as obsolete — main independently shipped the CTA / testimonial / og-image fixes via PRs #103–#149; the one surviving gap (direct $499 CTA on /pricing) is PR #151 (2026-07-08)
 
-**Gate:** ≥3 paid $499 reports · ≥1 RPO agreement · Docker image published · Brain AI CUI warning live · one pricing page · `/security` live.
-
-- [x] **$499 "CMMC AI Risk Assessment Report" Stripe SKU** — `POST /api/stripe/report-checkout`
-  (one-time `mode:'payment'`, no-auth, inline-$499 fallback, $299 wholesale gated on `partner_ref`);
-  webhook fulfillment → `report_orders` (migration 014) + `reportOrderEmail`; `/report/thank-you` page.
-- [x] **Pricing page = one grid, $499 report as the hero** — report hero card on top, subscriptions
-  reframed as Stage-2 monitoring; removed fabricated "2M+ / 500+" metrics.
-- [x] **Mode-B / Vercel boundary disclosure everywhere** — reusable `<ModeBNotice />` on
-  /pricing, /security, /partners, /report/thank-you.
-- [x] **Brain AI CUI warning live** — persistent disclosure above the GlobalChat input; system
-  prompt corrected to lead with the $499 report + three deployment modes.
-- [x] **Publish Docker image** — `.github/workflows/docker-publish.yml` builds `proxy/Dockerfile`
-  on every proxy PR; publishes `houndshield/proxy:latest` on a `proxy-v*` tag (needs Docker Hub secrets).
-- [x] **/partners → RPO/MSP referral** — rewritten off C3PAO-endorsement framing onto $499 report
-  co-brand ($299 wholesale / 40% referral) + explicit C3PAO-exclusion note; NavV3 item updated.
-- [x] **RPO outreach list** — `docs/gtm/rpo-outreach-list.md` (7 named targets + frame + tracking).
-- [ ] **HIPAA-first direct outreach** (Rachel) — parallel track (GTM execution, not code).
-- [ ] **Close ≥3 paid reports + ≥1 RPO agreement** — the actual revenue milestone (sales execution).
-
-> Shipped under `claude/houndshield-revenue-roadmap-m3de37`. See `compliance-firewall-agent/docs/STAGE-1-EXECUTION.md`.
-> Build green · tsc clean · 539/539 tests. Remaining Stage-1 items are GTM/sales + ops config (env vars, migration push, Docker Hub secrets).
-
-## Active — Personalized Brain + brighter mobile-first dashboard + progress trend (2026-07-05c, branch claude/do-everything-ooda-1ijxav)
-
-Founder ask: Brain must greet by the CORRECT username (own account), login returns to
-the dashboard, the after-login dashboard must be brighter/clearer/more info + best-in-class,
-and everything mobile-responsive. Shipped:
-
-- [x] **Correct name** — `GET /api/me` (session-derived, own-account, no email/id). Dashboard
-  greets "Welcome back, {firstName}"; Brain chat opens with a personal greeting; fixed the
-  hardcoded `AD` avatar in LiveCommandCenter that showed the wrong identity for everyone. 4 tests.
-- [x] **Login redirect** — verified already correct: middleware sets `?redirect=`, login page +
-  OAuth callback honor it same-origin. No change needed (documented).
-- [x] **Brighter, information-dense, mobile-first `CustomerStatusPanel`** — SVG SPRS ring (coloured
-  by standing), completion progress bar, 4 stat tiles, gradient next-step CTA, top gaps with fixes,
-  "still needed". Solid dark self-contained card (fixed white-on-white invisibility). Screenshot-verified
-  desktop + 390px mobile.
-- [x] **Progress trend** — migration 023 `customer_status_snapshots` (own-row RLS, consent-gated) +
-  `POST /api/customer/status/snapshot` (deduped) + `lib/customer/snapshot.ts` pure helpers. Panel shows
-  "+18 SPRS since Jul 1" trend chip. 17 tests (10 helpers + 7 route).
-- [x] **Mobile** — command-center ≤560px breakpoint (single-col KPIs, decluttered top bar); panel fully responsive.
-- [x] **Docs** — updated `docs/CUSTOMER-STATUS-AND-BRAIN-CONSENT.md`.
-
-> tsc clean · lint clean (no new warnings) · vitest 791/791 (+21) · build green · screenshot-verified
-> desktop + mobile. Privacy preserved: own-data-only, consent-gated snapshots, fail-closed.
-> Ops: migrations 022 + 023 must be pushed to prod (`npx supabase db push`).
-
-## Active — Customer status intelligence + consent-gated Brain AI (2026-07-05, branch claude/do-everything-ooda-1ijxav) — ✅ MERGED as PR #148
-
-Founder ask: update site info through July 2026, make Brain AI customer-aware
-(where they stand, next step, what's wrong, how to fix), keep it safe (no
-cross-customer leaks), legal, and permission-gated. Shipped end-to-end:
-
-- [x] **`lib/customer/status.ts`** — pure engine: `buildCustomerStatus()` (stage,
-  standing, single next step, gaps + fixes) + `buildStatusAnswer()` (deterministic
-  Brain AI answer). 12 tests, every stage branch.
-- [x] **`lib/customer/client-status.ts`** — computes the SPRS slice from localStorage
-  (assessment data never leaves the browser); merged with the account slice.
-- [x] **Consent model** — migration 022 adds `profiles.brain_ai_data_consent`
-  (default false, revocable) + `brain_ai_consent_updated_at`. `GET/POST /api/brain/consent`
-  (own-row via RLS). 8 tests.
-- [x] **`GET /api/customer/status`** — account-level status, own-data (RLS). 4 tests.
-- [x] **Brain AI status handler** — `/api/chat` step 1c: consent-gated, own-data,
-  deterministic answer BEFORE FAQ/LLM (no customer data ever reaches OpenRouter).
-  Asks permission when consent is off. `lib/brain-ai/status-intent.ts`, 9 tests.
-- [x] **`<CustomerStatusPanel />`** on `/console` (after login) + **`<BrainDataConsent />`**
-  in Settings (states exactly what the AI can/can't access, off by default).
-- [x] **Info freshness (through July 2026)** — changelog: new 2.6.0 (July 2026) release
-  entry for this work + the $499 confirmation; roadmap quarters advanced (Q2→Q3, Q3→Q4).
-  FAQ: added Brain AI data-privacy/consent answer. No fabricated metrics.
-- [x] **Docs** — `docs/CUSTOMER-STATUS-AND-BRAIN-CONSENT.md` (architecture + privacy guarantees).
-
-> tsc clean · lint clean (no new warnings) · vitest 770/770 (+33) · build green ·
-> dev-smoke-tested: consent defaults off, a status question asks permission, panel mounts,
-> changelog shows July 2026. Privacy: own-data-only + fail-closed + nothing to the commercial LLM.
-> Note: migration 022 must be pushed to prod (`npx supabase db push`) — env/ops step.
-
-## Active — Close the $499 post-purchase loop (2026-07-04, branch claude/do-everything-ooda-1ijxav) — ✅ MERGED as PR #147
-
-The `success_url` passed `?session_id={CHECKOUT_SESSION_ID}` back to `/report/thank-you`, but the
-page ignored it — a buyer paid $499 and the app never acknowledged their specific order. Migration
-020 had already added an RLS read policy (`auth_users_read_own_report_orders`) that **nothing
-consumed**. Both were dangling threads on the revenue-critical path. Closed end-to-end:
-
-- [x] **`lib/reports/order-view.ts`** — pure, sanitizing view builder (mask email, opaque `HS-XXXXXXXX`
-  reference, `$499.00` formatting, 14-day report-due date, status→label/step). Zero-mock unit tests (25).
-- [x] **`GET /api/reports/order?session_id=`** — unauth, session-id-keyed confirmation. Verifies the
-  session is genuinely `paid` with Stripe (instant, webhook-race-proof), enriches from `report_orders`
-  if the row landed, returns only the sanitized view. Guards: shape (400), config (503), unknown/unpaid
-  (generic 404). 9 tests.
-- [x] **`GET /api/reports/orders`** — authenticated list; finally consumes migration 020's RLS policy
-  (own rows via `auth.uid()`). 4 tests.
-- [x] **`<OrderConfirmation />`** on `/report/thank-you` — reads the real order (reference, amount,
-  masked email, report-due date, status). Degrades to `null` when there's no session / lookup fails,
-  so the static 14-day timeline always renders.
-- [x] **`<MyReportOrders />`** on the signed-in Reports page — renders purchased orders, silent when none.
-
-> tsc clean · lint clean · vitest 710/710 (+38) · build green · dev-server smoke-tested (page 200s,
-> endpoints return 400/503/404/200 as designed). No fabricated metrics, Mode-B framing preserved.
-
-## Active — Launch-readiness sweep (2026-06-24, branch dreamy-mcclintock-fc9d8b)
-
-Rebased onto `origin/main` (5d117d5) after discovering main already shipped `ModeBNotice` (#122/#123),
-logo-motion-everywhere (#124), and the fabricated-stats-bar removal. Kept only the genuinely-missing fixes:
-
-- [x] **Mode-B disclosure on the homepage** — `ModeBNotice variant="inline"` after the stats strip (CLAUDE.md gate; main covered pricing/security/partners but not home)
-- [x] **Mode-B disclosure + CUI-claim honesty on `/brain-ai`** — added `ModeBNotice`; softened metadata "safe for CUI" + card "Local-only, CUI-safe" → Mode-B/C qualifier + hosted-trial caveat
-- [x] **Public forbidden colors → tokens** — `partner/layout` avatar `to-purple-500` → steel; `/status` (3) + `/assessment` (1) emerald/amber → `--hs-success`/`--hs-warn`. Public pages now zero forbidden classes.
-- [x] **/hipaa PHI over-claim** (advisor catch — Rachel's lead page) — "HIPAA-compliant AI monitoring starting free" softened to "start free; run Mode B for live PHI" + added an inline PHI/BAA boundary note (hosted = non-PHI eval, no BAA).
-
-## Active — Partner-portal channel reframe (2026-06-26, branch HoundShield/frosty-rhodes-841deb)
-
-Resolves the founder-verify flag below. The authed `/partner` portal is a multi-tenant
-**reseller/management** surface — that model is exactly what 32 CFR Part 170 / ISO 17020 bar a
-C3PAO from doing (refer/resell to a client it assesses). Doctrine channel = RPO/MSP, so the portal
-is reframed, not the functionality.
-
-- [x] **Authed `/partner` portal C3PAO → RPO/MSP** — `layout.tsx` (sidebar "RPO / MSP Portal", badge "RPO / MSP Partner", topbar "RPO / MSP Partner Portal" + tokenized the forbidden `emerald-*` badge → `--hs-success`), `page.tsx`, `clients/page.tsx`, `billing/page.tsx`. Product-feature "C3PAO-ready PDF/evidence" mentions left intact (they live outside the authed portal).
-- [x] **`/partners` SEO metadata** — title/description/keywords/OG were still pitching "C3PAO partner" / "AI compliance reseller", contradicting the page body's own exclusion note; reframed to RPO/MSP + kept an honest one-line C3PAO-exclusion in the meta description.
-- [x] **Dead nav links removed** — sidebar linked to `/partner/team` + `/partner/settings`, which 404 (pages never built). Removed both items (+ now-unused `Users`/`Settings` imports). Building those pages is net-new feature work — flag to founder if wanted, not in this PR.
-- [x] **Stale code comments** — `partner-welcome.ts` + `apply/route.ts` called C3PAO "the channel"; corrected to RPO/MSP partner channel.
-- [x] **Regression guard** — `app/partner/__tests__/channel-framing.test.ts`: fails the build if any `/c3pao/i` returns to the authed `/partner` tree, asserts RPO/MSP framing present, and asserts the `/partners` metadata never re-pitches a "C3PAO partner" keyword. (This is the in-PR grep gate the lessons file prescribes.)
-
-> tsc clean · vitest 548/548 (+9) · build green · public `/partners` live-verified (title now "RPO & MSP…", exclusion note renders). Authed `/partner` shell unrenderable in dev (pre-existing `supabaseUrl is required`, env-only) — covered by the guard test + prerendered build.
-
-### Review
-Minimal additive PR on top of current main. Build green, tests green (539), live-verified. Regulated-data disclosure now on homepage + /brain-ai + /hipaa + (existing) pricing/security/partners/thank-you. Swept all public `page.tsx` for "never leaves your network"/CUI/PHI claims — remaining hits are Mode-B-framed inline or on pages that already carry the notice.
-
-**Founder-verify before public launch (untouched — unverifiable / product decision):**
-- `app/about` testimonial "Maria Chen / Vanguard Aero" + history timeline + future "1,000+ Users"; homepage testimonial; per-tier SLA commitments.
-- ~~`partner/layout` is branded "C3PAO Partner Portal / Authorized C3PAO"~~ — ✅ **RESOLVED 2026-06-26** (branch `HoundShield/frosty-rhodes-841deb`): authed portal reframed to RPO/MSP; guard test added. Intent did not need confirming — C3PAO referral framing is already on the CLAUDE.md NEVER-DO list (32 CFR Part 170).
-
-**Env-only (founder, per LAUNCH-CHECKLIST):** `database:demo_mode` + `payments:missing_key` — Supabase prod keys, Stripe price IDs + webhook secret, OPENROUTER key (rotate first).
-
-## Superseded by compass correction (history)
-
-## Done — 2026-06-21
-- [x] **Lifecycle email system + C3PAO outreach** — Day 14 onboarding finale (PDF report = purchase
-  unlock) wired into the drip cron (migration 013 adds `day14_sent_at`); transactional payment-receipt
-  + cancellation/win-back emails wired into the Stripe webhook (best-effort, never blocks billing);
-  C3PAO partner applicant-confirmation wired into `/api/partners/apply`; full 5-touch C3PAO cold
-  outreach sequence in `docs/gtm/c3pao-outreach-sequence.md`. +16 tests, 519/519, build green.
-- [x] **Pre-launch hardening sweep** (PR `claude/pre-launch-audit-6iieir`) — GDPR cookie consent
-  (PostHog gated on opt-in), `security.txt` (RFC 9116), `/security` Trust page, `/dpa` Data
-  Processing Agreement, `/acceptable-use` AUP, `/status` live health page, footer Legal column,
-  sitemap entries. Build green, 503/503 tests (+11). Remaining launch blockers are config/keys
-  only — see `PRE-LAUNCH-AUDIT-2026-06-21.md`.
+### Superseded 2026-06-10 audit items (kept for trail)
+- [~] Push `feature/beast-ui-v3` — obsolete; superseded by main (see above)
+- [x] Supabase + OpenRouter env vars — verified `connected` via live /api/health (2026-07-08); Stripe keys remain the open item
+- [x] Gap Report $499 payment link LIVE → https://buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00 (`prod_Ug034JhG2q2AA7`)
 
 ## Sprint 1 (Week of 2026-04-28) — Jordan deploys in 10 minutes, exports a PDF ✅ MERGED PR #62
 
