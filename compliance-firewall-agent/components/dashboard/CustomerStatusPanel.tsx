@@ -16,17 +16,18 @@ import { buildLocalCustomerStatus, computeSprsInput } from "@/lib/customer/clien
 import type { CustomerStatus, OrderSummary, StandingLevel } from "@/lib/customer/status";
 import type { StatusTrend } from "@/lib/customer/snapshot";
 
-/** Per-standing accent palette (dark shell). Bright, distinct, colourful. */
+/** Per-standing accent palette (light "Steel & Cream" shell). Colourful chips
+ *  with -700 text on a soft tint so status reads at a glance on white. */
 const LEVEL: Record<
   StandingLevel,
   { ring: string; chip: string; glow: string; label: string }
 > = {
-  excellent: { ring: "#34d399", chip: "text-emerald-300 bg-emerald-400/15 border-emerald-400/30", glow: "rgba(52,211,153,0.18)", label: "Assessment-ready" },
-  good: { ring: "#4ade80", chip: "text-green-300 bg-green-400/15 border-green-400/30", glow: "rgba(74,222,128,0.16)", label: "On track" },
-  fair: { ring: "#fbbf24", chip: "text-amber-300 bg-amber-400/15 border-amber-400/30", glow: "rgba(251,191,36,0.16)", label: "Making progress" },
-  poor: { ring: "#fb923c", chip: "text-orange-300 bg-orange-400/15 border-orange-400/30", glow: "rgba(251,146,60,0.16)", label: "Needs attention" },
-  critical: { ring: "#f87171", chip: "text-red-300 bg-red-400/15 border-red-400/30", glow: "rgba(248,113,113,0.18)", label: "Urgent" },
-  unknown: { ring: "#94a3b8", chip: "text-slate-300 bg-white/10 border-white/15", glow: "rgba(148,163,184,0.12)", label: "Getting started" },
+  excellent: { ring: "#059669", chip: "text-emerald-700 bg-emerald-500/10 border-emerald-500/30", glow: "rgba(5,150,105,0.16)", label: "Assessment-ready" },
+  good: { ring: "#16a34a", chip: "text-green-700 bg-green-500/10 border-green-500/25", glow: "rgba(22,163,74,0.14)", label: "On track" },
+  fair: { ring: "#d97706", chip: "text-amber-700 bg-amber-500/10 border-amber-500/25", glow: "rgba(217,119,6,0.14)", label: "Making progress" },
+  poor: { ring: "#ea580c", chip: "text-orange-700 bg-orange-500/10 border-orange-500/25", glow: "rgba(234,88,12,0.14)", label: "Needs attention" },
+  critical: { ring: "#dc2626", chip: "text-red-700 bg-red-500/10 border-red-500/25", glow: "rgba(220,38,38,0.16)", label: "Urgent" },
+  unknown: { ring: "#5A86A8", chip: "text-slate-600 bg-slate-500/10 border-slate-500/20", glow: "rgba(90,134,168,0.12)", label: "Getting started" },
 };
 
 const SPRS_MIN = -203;
@@ -53,7 +54,7 @@ function SprsRing({ score, color }: { score: number | null; color: string }) {
   return (
     <div className="relative h-24 w-24 flex-shrink-0" aria-hidden>
       <svg viewBox="0 0 80 80" className="h-24 w-24 -rotate-90">
-        <circle cx="40" cy="40" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="7" />
+        <circle cx="40" cy="40" r={r} fill="none" stroke="rgba(15,30,46,0.10)" strokeWidth="7" />
         <circle
           cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="7" strokeLinecap="round"
           strokeDasharray={c} strokeDashoffset={c * (1 - frac)}
@@ -78,8 +79,8 @@ function TrendChip({ trend }: { trend: StatusTrend }) {
   const cls = flat
     ? "text-white/50 bg-white/5 border-white/10"
     : up
-      ? "text-emerald-300 bg-emerald-400/15 border-emerald-400/30"
-      : "text-orange-300 bg-orange-400/15 border-orange-400/30";
+      ? "text-emerald-700 bg-emerald-500/10 border-emerald-500/30"
+      : "text-orange-700 bg-orange-500/10 border-orange-500/30";
   const sign = trend.sprsDelta > 0 ? "+" : "";
   return (
     <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium ${cls}`}>
@@ -167,8 +168,8 @@ export function CustomerStatusPanel() {
 
   return (
     <section
-      className="mb-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#12121b] to-[#0b0b12]"
-      style={{ boxShadow: `0 0 60px -20px ${lvl.glow}` }}
+      className="mb-6 overflow-hidden rounded-2xl border border-[var(--hs-border-ink)] bg-gradient-to-br from-white to-[#EDF3F9]"
+      style={{ boxShadow: `0 10px 40px -24px ${lvl.glow}` }}
     >
       {/* Header: greeting + ring + standing */}
       <div className="flex flex-col gap-5 border-b border-white/[0.06] p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
@@ -204,9 +205,9 @@ export function CustomerStatusPanel() {
       </div>
 
       {/* Stat tiles — 2 cols on mobile, 4 on desktop */}
-      <div className="grid grid-cols-2 gap-px bg-white/[0.06] sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-px bg-[var(--hs-border-ink)] sm:grid-cols-4">
         {tiles.map((t) => (
-          <div key={t.label} className="bg-[#12121b] p-4">
+          <div key={t.label} className="bg-white p-4">
             <p className="text-[11px] uppercase tracking-wide text-white/40">{t.label}</p>
             <p className="mt-1 font-mono text-xl font-bold text-white">{t.value}</p>
             <p className="truncate text-[11px] text-white/40">{t.sub}</p>
@@ -217,7 +218,7 @@ export function CustomerStatusPanel() {
       {/* Next step — the hero CTA */}
       <div className="flex flex-col gap-4 border-t border-white/[0.06] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="min-w-0">
-          <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-brand-300">
+          <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-brand-700">
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />
             Your next step
           </p>
@@ -246,9 +247,9 @@ export function CustomerStatusPanel() {
             {status.topGaps.slice(0, 3).map((gap) => (
               <li key={gap.controlId} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
                 <div className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="font-mono text-sm font-bold text-brand-300">{gap.controlId}</span>
+                  <span className="font-mono text-sm font-bold text-brand-700">{gap.controlId}</span>
                   <span className="text-sm text-white/85">{gap.title}</span>
-                  <span className="ml-auto rounded-md bg-red-400/10 px-2 py-0.5 font-mono text-[11px] text-red-300">
+                  <span className="ml-auto rounded-md bg-red-500/10 px-2 py-0.5 font-mono text-[11px] text-red-600">
                     −{Math.abs(gap.deduction)} SPRS
                   </span>
                 </div>

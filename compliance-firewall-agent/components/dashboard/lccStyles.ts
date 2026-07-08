@@ -1,8 +1,18 @@
 /**
- * Live Command Center — scoped styles, ported 1:1 from the approved
- * Direction-A "Live Command Center (After-Login Dashboard)" spec.
- * Every selector is namespaced under `.hs-lcc` and keyframes are renamed
- * (lcc*) so nothing leaks into the rest of the app.
+ * Live Command Center — scoped styles, evolved from the approved Direction-A
+ * "Live Command Center (After-Login Dashboard)" spec. Every selector is
+ * namespaced under `.hs-lcc` and keyframes are renamed (lcc*) so nothing
+ * leaks into the rest of the app.
+ *
+ * Layout contract: ONE document scroll. The shell grid spans the page, the
+ * sidebar is sticky at 100dvh, and `.main` has no height/overflow of its own —
+ * the old nested `height:100vh; overflow:auto` produced a scrollbar-inside-a-
+ * scrollbar whenever anything rendered above the shell (mobile killer).
+ *
+ * Font contract: next/font registers Fraunces & DM Sans under HASHED family
+ * names, reachable ONLY via var(--font-display)/var(--font-body) (set on
+ * <html> in app/layout.tsx). A literal 'Fraunces' here silently falls back to
+ * Times — that shipped once. Guard: app/__tests__/console-dashboard-contract.test.ts
  */
 export const LCC_CSS = `
 .hs-lcc{
@@ -25,19 +35,20 @@ export const LCC_CSS = `
   --bad:#E5484D; --badbg:rgba(229,72,77,.12);
   --warn:#D9870B; --warnbg:rgba(217,135,11,.12);
   --orange:#E07B39; --orangebg:rgba(224,123,57,.12);
-  --f-disp:'Fraunces',serif; --f:'DM Sans',system-ui,sans-serif; --f-mono:'JetBrains Mono',monospace;
+  --f-disp:var(--font-display),Georgia,'Times New Roman',serif;
+  --f:var(--font-body),system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --r:14px; --r-sm:10px;
   font-family:var(--f);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
 }
 .hs-lcc *{margin:0;padding:0;box-sizing:border-box}
 .hs-lcc .mono{font-family:var(--f-mono)}
-.hs-lcc .shell{display:grid;grid-template-columns:244px 1fr;min-height:100vh}
+.hs-lcc .shell{display:grid;grid-template-columns:248px 1fr;min-height:100dvh}
 
-.hs-lcc .side{background:var(--panel2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh;overflow:auto}
+.hs-lcc .side{background:var(--panel2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100dvh;overflow-y:auto}
 .hs-lcc .brand{display:flex;align-items:center;gap:.55rem;padding:.4rem .5rem 1.1rem}
 .hs-lcc .brand img{height:30px;width:auto;mix-blend-mode:multiply;transition:transform .3s cubic-bezier(.22,.61,.36,1);transform-origin:center;animation:hs-logo-idle 4.5s ease-in-out infinite}
-.hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brand:active img,.hs-lcc .brand img:active{animation:none;transform:rotate(-4deg) scale(1.06)}
-@media (prefers-reduced-motion: reduce){.hs-lcc .brand img{animation:none;transition:none}.hs-lcc .brand:hover img,.hs-lcc .brand img:hover{animation:none}}
+.hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brand:active img,.hs-lcc .brand img:active{animation:none;transform:rotate(-8deg) scale(1.08)}
 .hs-lcc .brand span{font-family:var(--f-disp);font-weight:600;font-size:1.18rem}
 .hs-lcc .brand span b{color:var(--brand)}
 .hs-lcc .gh{font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2);margin:1rem .6rem .35rem}
@@ -45,19 +56,26 @@ export const LCC_CSS = `
 .hs-lcc .slink svg{width:17px;height:17px}
 .hs-lcc .slink:hover{background:var(--hover);color:var(--text)}
 .hs-lcc .slink.on{background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand);font-weight:600}
-.hs-lcc .slink.on::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--brand)}
+.hs-lcc .slink.on::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--brand),var(--orange))}
 .hs-lcc .slink .pp{margin-left:auto;font-family:var(--f-mono);font-size:.62rem;font-weight:700;background:var(--badbg);color:var(--bad);padding:.05rem .35rem;border-radius:5px}
+.hs-lcc .slink:focus-visible,.hs-lcc .btn:focus-visible,.hs-lcc .chips button:focus-visible,.hs-lcc .bchips button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hs-lcc .side-foot{margin-top:auto;padding:.7rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:.6rem}
-.hs-lcc .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--bright));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+.hs-lcc .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--orange));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.82rem;flex-shrink:0}
 .hs-lcc .side-foot .nm{font-size:.84rem;font-weight:600}.hs-lcc .side-foot .sub{font-size:.72rem;color:var(--mut2)}
 .hs-lcc .side-link{display:flex;align-items:center;gap:.65rem;padding:.6rem .7rem;border-radius:var(--r-sm);font-size:.84rem;font-weight:500;color:var(--mut);text-decoration:none;transition:all .15s}
 .hs-lcc .side-link:hover{background:var(--hover);color:var(--bright)}
 .hs-lcc .side-link svg{width:16px;height:16px}
 
-.hs-lcc .main{overflow:auto;height:100vh}
+/* Mobile drawer scrim — tap anywhere outside the open sidebar to close it. */
+.hs-lcc .scrim{position:fixed;inset:0;z-index:55;background:rgba(15,30,46,.45);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .25s ease}
+.hs-lcc .scrim.on{opacity:1;pointer-events:auto}
+@media(min-width:1001px){.hs-lcc .scrim{display:none}}
+
+.hs-lcc .main{min-width:0}
 .hs-lcc .top{position:sticky;top:0;z-index:20;background:rgba(250,252,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .hs-lcc .top h1{font-family:var(--f-disp);font-size:1.4rem;font-weight:600}
 .hs-lcc .top .crumb{font-size:.74rem;color:var(--mut2)}
+.hs-lcc .top-brand{display:none;align-items:center;flex-shrink:0}
 .hs-lcc .top-right{display:flex;align-items:center;gap:.8rem}
 .hs-lcc .clock{font-family:var(--f-mono);font-size:.82rem;color:var(--mut);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.4rem .7rem}
 .hs-lcc .statpill{display:inline-flex;align-items:center;gap:.45rem;font-size:.76rem;font-weight:600;color:var(--ok);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 28%,transparent);border-radius:999px;padding:.35rem .7rem}
@@ -69,15 +87,56 @@ export const LCC_CSS = `
 .hs-lcc .atab{display:none}.hs-lcc .atab.on{display:block;animation:lccFade .35s ease}
 @keyframes lccFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-.hs-lcc .ops{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.7rem 16px;font-size:.84rem;color:var(--mut);margin-bottom:18px}
+.hs-lcc .ops{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.7rem 16px;font-size:.84rem;color:var(--mut);margin-bottom:18px;box-shadow:0 1px 2px rgba(15,30,46,.04)}
 .hs-lcc .ops b{color:var(--text);font-family:var(--f-mono);font-weight:600}
 .hs-lcc .ops .sep{color:var(--mut2)}
 
+/* ── Evidence-chain spine — the persistent, uncopyable differentiator ──
+   A cream-tinted strip under the top bar: the live SHA-256 audit chain being
+   built on the customer's own hardware, one click from the $499 PDF. */
+.hs-lcc .spine{position:sticky;top:63px;z-index:19;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+  padding:.5rem 26px;border-bottom:1px solid var(--line);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--cream) 55%,#fff),var(--panel) 70%);
+  font-size:.8rem;color:var(--mut)}
+.hs-lcc .spine-ic{width:16px;height:16px;color:var(--ok);flex-shrink:0}
+.hs-lcc .spine-txt{flex:1;min-width:0}
+.hs-lcc .spine-txt b{color:var(--text);font-weight:600}
+.hs-lcc .spine-txt .sep{color:var(--mut2);margin:0 .1rem}
+.hs-lcc .spine-boundary{font-family:var(--f-mono);font-size:.72rem;color:var(--ok);background:var(--okbg);border-radius:6px;padding:.05rem .4rem}
+.hs-lcc .spine-cta{flex-shrink:0}
+
+/* Doberman mark on the Brain surfaces (Overview quick-ask card + Brain header). */
+.hs-lcc .brain-mark{height:38px;width:auto;flex-shrink:0;mix-blend-mode:multiply;transition:transform .3s cubic-bezier(.22,.61,.36,1);transform-origin:center;animation:hs-logo-idle 4.5s ease-in-out infinite}
+.hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
+.hs-lcc .brain-mark.sm{height:20px;vertical-align:-4px;display:inline-block;margin-right:.4rem}
+
+/* CUI warning — compliance requirement: Brain AI routes to a commercial cloud. */
+.hs-lcc .cui-note{display:flex;align-items:center;gap:.45rem;padding:.5rem 18px;font-size:.76rem;color:var(--warn);background:var(--warnbg);border-bottom:1px solid var(--line)}
+.hs-lcc .cui-note svg{width:14px;height:14px;flex-shrink:0}
+.hs-lcc .bub.b{border-left:3px solid var(--brand)}
+
+/* First-run checklist — ends on the PDF (activation driver). */
+.hs-lcc .steps{display:flex;flex-direction:column;gap:10px}
+.hs-lcc .steprow{display:flex;align-items:center;gap:.8rem;padding:.6rem .2rem;border-bottom:1px solid var(--line)}
+.hs-lcc .steprow:last-child{border:none}
+.hs-lcc .step-n{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:.8rem;flex-shrink:0;background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand)}
+.hs-lcc .steprow.done .step-n{background:var(--okbg);color:var(--ok)}
+.hs-lcc .step-body{flex:1;min-width:0;display:flex;flex-direction:column}
+.hs-lcc .step-body b{font-size:.9rem;font-weight:600}
+.hs-lcc .step-body span{font-size:.78rem;color:var(--mut2)}
+
+/* KPI tiles — each carries its own accent hue as a gradient hairline + icon
+   tint, so status reads in colour before you read a single number. */
 .hs-lcc .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
-.hs-lcc .kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:border-color .2s}
-.hs-lcc .kpi:hover{border-color:var(--line2)}
+.hs-lcc .kpi{--accent:var(--brand);position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:border-color .2s,box-shadow .2s;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 8%,transparent))}
+.hs-lcc .kpi:hover{border-color:color-mix(in srgb,var(--accent) 40%,transparent);box-shadow:0 8px 24px -14px color-mix(in srgb,var(--accent) 60%,transparent)}
+.hs-lcc .kpi.a-bad{--accent:var(--bad)}
+.hs-lcc .kpi.a-ok{--accent:var(--ok)}
+.hs-lcc .kpi.a-warn{--accent:var(--warn)}
+.hs-lcc .kpi.a-orange{--accent:var(--orange)}
 .hs-lcc .kpi .l{font-size:.76rem;color:var(--mut2);display:flex;align-items:center;gap:.4rem}
-.hs-lcc .kpi .l svg{width:13px;height:13px}
+.hs-lcc .kpi .l svg{width:13px;height:13px;color:var(--accent)}
 .hs-lcc .kpi .n{font-family:var(--f-disp);font-size:1.9rem;font-weight:600;margin-top:.3rem;font-variant-numeric:tabular-nums}
 .hs-lcc .kpi .d{font-size:.73rem;margin-top:.15rem;color:var(--mut)}
 .hs-lcc .kpi .d.up{color:var(--ok)}.hs-lcc .kpi .d.dn{color:var(--bad)}
@@ -86,8 +145,8 @@ export const LCC_CSS = `
 .hs-lcc .row{display:grid;gap:16px;margin-bottom:16px}
 .hs-lcc .r-2-1{grid-template-columns:1.55fr 1fr}
 .hs-lcc .r-3-2{grid-template-columns:1.45fr 1fr}
-.hs-lcc .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.hs-lcc .ph{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.hs-lcc .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .ph{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,color-mix(in srgb,var(--brand) 4%,transparent),transparent)}
 .hs-lcc .ph h3{font-size:.98rem;font-weight:600}
 .hs-lcc .ph .mono{font-size:.7rem;color:var(--mut2)}
 .hs-lcc .live-tag{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-mono);font-size:.66rem;font-weight:700;color:var(--ok);text-transform:uppercase;letter-spacing:.08em}
@@ -140,48 +199,90 @@ export const LCC_CSS = `
 .hs-lcc .btn-sm{padding:.4rem .7rem;font-size:.78rem}
 
 .hs-lcc .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.hs-lcc .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:all .2s}
-.hs-lcc .card:hover{border-color:var(--line2);transform:translateY(-3px)}
-.hs-lcc .card .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--bright);margin-bottom:.8rem}
+.hs-lcc .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:all .2s;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .card:hover{border-color:var(--line2);transform:translateY(-3px);box-shadow:0 12px 28px -18px rgba(15,30,46,.35)}
+.hs-lcc .card .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--brand);margin-bottom:.8rem}
 .hs-lcc .card .ic svg{width:19px;height:19px}
 .hs-lcc .card h4{font-size:1rem;font-weight:600;margin-bottom:.3rem}.hs-lcc .card p{font-size:.84rem;color:var(--mut)}
 
 .hs-lcc .gw{display:flex;align-items:center;justify-content:space-between;gap:.6rem;background:var(--panel2);border:1px dashed var(--line2);border-radius:10px;padding:.65rem .85rem;font-family:var(--f-mono);font-size:.8rem}
-.hs-lcc .gw button{border:none;background:var(--brand);color:#fff;border-radius:7px;padding:.32rem .6rem;font-size:.7rem;font-weight:700;cursor:pointer}
+.hs-lcc .gw span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hs-lcc .gw button{border:none;background:var(--brand);color:#fff;border-radius:7px;padding:.32rem .6rem;font-size:.7rem;font-weight:700;cursor:pointer;flex-shrink:0}
 .hs-lcc .usebar{height:8px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:.35rem}
-.hs-lcc .usebar i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.hs-lcc .usebar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--orange));border-radius:99px}
 
+/* Brain AI — the flagship surface: warm cream halo, the Doberman mark on the
+   panel and on every analyst reply, quick-ask card on the Overview tab. */
+.hs-lcc .brainhead{display:flex;align-items:center;gap:.5rem}
+.hs-lcc .braincard{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:16px 18px;background:linear-gradient(135deg,color-mix(in srgb,var(--cream) 60%,#fff),var(--panel) 65%)}
+.hs-lcc .braincard .bc-copy{flex:1;min-width:220px}
+.hs-lcc .braincard h3{font-family:var(--f-disp);font-size:1.05rem;font-weight:600}
+.hs-lcc .braincard p{font-size:.8rem;color:var(--mut);margin-top:.15rem;line-height:1.45}
+.hs-lcc .bchips{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.hs-lcc .bchips button{font-size:.74rem;border:1px solid var(--line2);background:var(--panel);color:var(--mut);border-radius:99px;padding:.35rem .7rem;cursor:pointer;transition:all .15s}
+.hs-lcc .bchips button:hover{border-color:var(--orange);color:var(--orange);background:var(--orangebg)}
 .hs-lcc .brain{display:flex;flex-direction:column;height:460px}
 .hs-lcc .blog{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
 .hs-lcc .bub{max-width:80%;padding:.65rem .9rem;border-radius:13px;font-size:.86rem;line-height:1.5}
 .hs-lcc .bub.u{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:4px}
 .hs-lcc .bub.b{align-self:flex-start;background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.hs-lcc .bub.b .bav{width:15px;height:auto;display:inline-block;vertical-align:-2px;margin-right:.4rem}
 .hs-lcc .bub.b .src{display:block;margin-top:.4rem;font-family:var(--f-mono);font-size:.64rem;color:var(--mut2)}
 .hs-lcc .chips{display:flex;gap:.4rem;flex-wrap:wrap;padding:0 14px 12px}
 .hs-lcc .chips button{font-size:.74rem;border:1px solid var(--line);background:var(--panel2);color:var(--mut);border-radius:99px;padding:.3rem .6rem;cursor:pointer}
 .hs-lcc .chips button:hover{border-color:var(--brand);color:var(--bright)}
 .hs-lcc .bin{display:flex;gap:.5rem;padding:14px;border-top:1px solid var(--line)}
-.hs-lcc .bin input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.6rem .8rem;color:var(--text);font-family:var(--f);font-size:.88rem;outline:none}
+.hs-lcc .bin input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.6rem .8rem;color:var(--text);font-family:var(--f);font-size:.88rem;outline:none}
 .hs-lcc .bin input:focus{border-color:var(--brand)}
 
 .hs-lcc .note{font-size:.78rem;color:var(--mut2);margin-top:14px}
 .hs-lcc .burger{display:none}
+.hs-lcc .top-brand{text-decoration:none}
+.hs-lcc .top-brand img{height:26px;width:auto}
+
+/* ── Tablet & below: sidebar becomes an off-canvas drawer over a scrim ── */
 @media(max-width:1000px){
   .hs-lcc .shell{grid-template-columns:1fr}
-  .hs-lcc .side{position:fixed;left:0;top:0;bottom:0;z-index:60;width:244px;transform:translateX(-100%);transition:transform .25s ease}
+  .hs-lcc .side{position:fixed;left:0;top:0;bottom:0;z-index:60;width:min(84vw,300px);height:100dvh;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 40px rgba(15,30,46,.22);padding-bottom:calc(16px + env(safe-area-inset-bottom))}
   .hs-lcc .side.open{transform:none}
   .hs-lcc .kpis{grid-template-columns:1fr 1fr}
   .hs-lcc .r-2-1,.hs-lcc .r-3-2{grid-template-columns:1fr}
-  .hs-lcc .cards3{grid-template-columns:1fr}
+  .hs-lcc .cards3{grid-template-columns:1fr 1fr}
   .hs-lcc .burger{display:inline-flex}
+  .hs-lcc .top-brand{display:inline-flex}
 }
-/* Phones: single-column KPIs, tighter padding, decluttered top bar */
-@media(max-width:560px){
-  .hs-lcc .top{padding:12px 16px;gap:.5rem}
-  .hs-lcc .body{padding:16px 16px 48px}
-  .hs-lcc .kpis{grid-template-columns:1fr}
+/* ── Phones: comfortable touch targets, decluttered top bar, stacked donut ── */
+@media(max-width:640px){
+  .hs-lcc .top{padding:10px 14px;gap:.5rem}
+  .hs-lcc .body{padding:14px 14px calc(48px + env(safe-area-inset-bottom))}
+  .hs-lcc .kpis{gap:10px}
+  .hs-lcc .kpi{padding:13px 14px}
+  .hs-lcc .kpi .n{font-size:1.5rem}
+  .hs-lcc .top h1{font-size:1.08rem}
+  .hs-lcc .crumb{display:none}
   .hs-lcc .top-right{gap:.5rem}
-  .hs-lcc .top-right .clock,.hs-lcc .top-right .statpill{display:none}
-  .hs-lcc .top h1{font-size:1.1rem}
+  .hs-lcc .top-right .clock{display:none}
+  .hs-lcc .slink{padding:.72rem .75rem}
+  .hs-lcc .donut-wrap{flex-direction:column;align-items:stretch}
+  .hs-lcc .donut{margin:0 auto}
+  .hs-lcc .feed-row{padding:.55rem 14px}
+  .hs-lcc .feed-row .eng{display:none}
+  .hs-lcc .cards3{grid-template-columns:1fr}
+  .hs-lcc .bub{max-width:92%}
+  /* Spine: stop sticking (top-bar height differs on mobile) and drop the
+     boundary/extra segments so the chain + PDF CTA stay on one tidy line. */
+  .hs-lcc .spine{position:static;padding:.5rem 14px}
+  .hs-lcc .sep-hide{display:none}
+  .hs-lcc .braincard{padding:14px}
+  .hs-lcc .brain-mark{height:32px}
+}
+@media(max-width:400px){
+  .hs-lcc .top-right .statpill{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  .hs-lcc .brand img,.hs-lcc .brain-mark{animation:none;transition:none}
+  .hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
+  .hs-lcc .side,.hs-lcc .scrim{transition:none}
+  .hs-lcc .atab.on{animation:none}
 }
 `
