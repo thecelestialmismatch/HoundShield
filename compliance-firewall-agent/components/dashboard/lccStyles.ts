@@ -279,10 +279,59 @@ export const LCC_CSS = `
 @media(max-width:400px){
   .hs-lcc .top-right .statpill{display:none}
 }
+
+/* ── Personalized greeting band ── */
+.hs-lcc .greet{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(120deg,color-mix(in srgb,var(--brand) 10%,var(--panel)),var(--panel) 62%);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .greet-copy h2{font-family:var(--f-disp);font-size:1.4rem;font-weight:600;letter-spacing:-.01em;background:linear-gradient(90deg,var(--text),var(--brand));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hs-lcc .greet-copy p{font-size:.84rem;color:var(--mut);margin-top:.2rem}
+.hs-lcc .greet-plan{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;text-align:right}
+.hs-lcc .plan-chip{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;font-size:.8rem;color:#fff;background:linear-gradient(135deg,var(--brand),var(--orange));border-radius:99px;padding:.35rem .8rem;box-shadow:0 4px 14px -6px var(--orange)}
+.hs-lcc .plan-chip svg{width:14px;height:14px}
+.hs-lcc .plan-sub{font-family:var(--f-mono);font-size:.68rem;color:var(--mut2)}
+
+/* ── Plan & usage panel ── */
+.hs-lcc .planbadge{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--brand),var(--orange));border-radius:99px;padding:.2rem .6rem}
+.hs-lcc .planbadge svg{width:12px;height:12px}
+.hs-lcc .plan-tag{font-size:.8rem;color:var(--mut);margin-bottom:1rem}
+.hs-lcc .usage-block{margin-bottom:1rem}
+.hs-lcc .usage-row{display:flex;justify-content:space-between;font-size:.86rem;color:var(--mut)}
+.hs-lcc .usage-row b{color:var(--text);font-family:var(--f-mono)}
+.hs-lcc .topplan{display:flex;align-items:center;gap:.45rem;margin-top:16px;font-size:.82rem;font-weight:600;color:var(--ok);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 26%,transparent);border-radius:var(--r-sm);padding:.6rem .75rem}
+.hs-lcc .topplan svg{width:15px;height:15px}
+
+/* ── Feature grid (what your plan unlocks) ── */
+.hs-lcc .feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.5rem}
+.hs-lcc .feat{display:flex;align-items:center;gap:.55rem;padding:.6rem .7rem;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--panel)}
+.hs-lcc .feat.off{background:var(--panel2);opacity:.92}
+.hs-lcc .feat-ic{width:16px;height:16px;flex-shrink:0}
+.hs-lcc .feat-ic.ok{color:var(--ok)}
+.hs-lcc .feat-ic.lk{color:var(--mut2)}
+.hs-lcc .feat-name{flex:1;font-size:.82rem;font-weight:500;color:var(--text)}
+.hs-lcc .feat.off .feat-name{color:var(--mut)}
+.hs-lcc .feat-tag{font-family:var(--f-mono);font-size:.62rem;font-weight:700;padding:.1rem .4rem;border-radius:5px}
+.hs-lcc .feat-tag.inc{color:var(--ok);background:var(--okbg)}
+.hs-lcc .feat-tag.lock{color:var(--orange);background:var(--orangebg)}
+
+/* ── Brain AI budget meter + typing indicator ── */
+.hs-lcc .brain-budget{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:.55rem .8rem;background:var(--panel2);border:1px solid var(--line);border-radius:var(--r-sm);margin:0 0 .7rem}
+.hs-lcc .bb-label{display:inline-flex;align-items:center;gap:.35rem;font-size:.74rem;font-weight:700;color:var(--brand)}
+.hs-lcc .bb-label svg{width:13px;height:13px;color:var(--orange)}
+.hs-lcc .bb-meter{flex:1;min-width:120px;height:7px;border-radius:99px;background:var(--track);overflow:hidden}
+.hs-lcc .bb-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--orange));border-radius:99px;transition:width .4s ease}
+.hs-lcc .bb-count{font-family:var(--f-mono);font-size:.68rem;color:var(--mut2)}
+.hs-lcc .bub.typing{display:inline-flex;gap:4px;align-items:center;padding:.7rem .9rem}
+.hs-lcc .bub.typing .tdot{width:6px;height:6px;border-radius:50%;background:var(--mut2);animation:lcc-typing 1.1s infinite ease-in-out}
+.hs-lcc .bub.typing .tdot:nth-child(2){animation-delay:.18s}
+.hs-lcc .bub.typing .tdot:nth-child(3){animation-delay:.36s}
+@keyframes lcc-typing{0%,60%,100%{opacity:.28;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+@media(max-width:640px){.hs-lcc .greet-plan{align-items:flex-start;text-align:left}.hs-lcc .greet-copy h2{font-size:1.2rem}}
+
 @media (prefers-reduced-motion: reduce){
   .hs-lcc .brand img,.hs-lcc .brain-mark{animation:none;transition:none}
   .hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
   .hs-lcc .side,.hs-lcc .scrim{transition:none}
   .hs-lcc .atab.on{animation:none}
+  .hs-lcc .bub.typing .tdot{animation:none}
+  .hs-lcc .bb-meter i{transition:none}
 }
 `

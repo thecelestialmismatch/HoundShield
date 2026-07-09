@@ -9,7 +9,8 @@ vi.mock('next/link', () => ({
   default: ({ children, href, ...p }: { children: React.ReactNode; href: string; [k: string]: unknown }) => <a href={href} {...(p as object)}>{children}</a>,
 }))
 
-import { LiveCommandCenter, brainAnswer } from '../LiveCommandCenter'
+import { LiveCommandCenter, brainAnswer, escapeHtml } from '../LiveCommandCenter'
+import { getEntitlements } from '@/lib/billing/entitlements'
 
 describe('brainAnswer — on-device keyword analyst', () => {
   it('answers identity', () => {
@@ -30,6 +31,41 @@ describe('brainAnswer — on-device keyword analyst', () => {
   })
   it('falls back gracefully', () => {
     expect(brainAnswer('hello there')[1]).toBe('brain-core')
+  })
+})
+
+describe('brainAnswer — personalized + tier-aware (human, not monotone)', () => {
+  it('greets the operator by name when context is supplied', () => {
+    const [html] = brainAnswer('who are you?', { name: 'Jordan' })
+    expect(html).toMatch(/Jordan/)
+  })
+  it('leaves anonymous answers name-free (public demo path)', () => {
+    expect(brainAnswer('who are you?')[0]).not.toMatch(/undefined|null/)
+  })
+  it('reports the plan + remaining Brain queries from entitlements', () => {
+    const [html, src] = brainAnswer("what's on my plan?", {
+      name: 'Rachel',
+      ent: getEntitlements('pro'),
+      brainUsed: 100,
+    })
+    expect(src).toMatch(/plan/)
+    expect(html).toMatch(/Pro/)
+    // 500 Pro cap − 100 used = 400 left
+    expect(html).toMatch(/400/)
+  })
+  it('gates PDF reports truthfully by tier', () => {
+    const pro = brainAnswer('can I generate a PDF report?', { ent: getEntitlements('pro') })[0]
+    expect(pro).toMatch(/Growth/)
+    const growth = brainAnswer('generate a PDF report', { ent: getEntitlements('growth') })[0]
+    expect(growth).toMatch(/Reports/)
+  })
+})
+
+describe('escapeHtml — injection-safe personalization boundary', () => {
+  it('neutralizes angle brackets and quotes', () => {
+    expect(escapeHtml('<img src=x onerror=alert(1)>')).toBe(
+      '&lt;img src=x onerror=alert(1)&gt;',
+    )
   })
 })
 
@@ -77,5 +113,39 @@ describe('LiveCommandCenter — exact-copy after-login dashboard', () => {
     fireEvent.click(send)
     // The raw tag must never become a real element in the transcript.
     expect(document.querySelector('.blog img')).toBeNull()
+  })
+})
+
+describe('LiveCommandCenter — subscription-aware + personalized', () => {
+  const viewer = { company: 'Vector Defense', plan: 'Growth', initials: 'VD', tier: 'growth', firstName: 'Jordan' }
+
+  it('greets the signed-in operator by name', () => {
+    render(<LiveCommandCenter viewer={viewer} />)
+    expect(screen.getByText('Welcome back, Jordan')).toBeTruthy()
+  })
+
+  it("surfaces the operator's plan (chip + sidebar footer), not a hardcoded Pro", () => {
+    const { container } = render(<LiveCommandCenter viewer={viewer} />)
+    expect(container.querySelector('.plan-chip')?.textContent).toMatch(/Growth/)
+    expect(container.querySelector('.side-foot .sub')?.textContent).toMatch(/Growth · 25 seats/)
+  })
+
+  it('drives the Settings plan meters + feature grid from entitlements', () => {
+    const { container } = render(<LiveCommandCenter viewer={viewer} />)
+    // Growth unlocks PDF reports; the feature grid marks it Included.
+    const feats = Array.from(container.querySelectorAll('.feat'))
+    const pdf = feats.find((f) => f.textContent?.includes('PDF compliance reports'))
+    expect(pdf?.className).toContain('on')
+    // Growth = unlimited gateway scans.
+    expect(container.querySelector('#lcc-useScan')?.textContent).toMatch(/Unlimited/)
+  })
+
+  it('locks a higher-tier feature for a Pro viewer with a truthful unlock label', () => {
+    const pro = { company: 'Acme', plan: 'Pro', initials: 'AC', tier: 'pro', firstName: 'Rachel' }
+    const { container } = render(<LiveCommandCenter viewer={pro} />)
+    const feats = Array.from(container.querySelectorAll('.feat'))
+    const onprem = feats.find((f) => f.textContent?.includes('On-prem'))
+    expect(onprem?.className).toContain('off')
+    expect(onprem?.textContent).toMatch(/Enterprise\+/)
   })
 })
