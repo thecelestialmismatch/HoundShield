@@ -93,7 +93,8 @@ describe('LiveCommandCenter — exact-copy after-login dashboard', () => {
 
   it('shows the Acme Defense org and Brain AI chips', () => {
     render(<LiveCommandCenter />)
-    expect(screen.getByText('Acme Defense')).toBeTruthy()
+    // org appears on the hero identity band AND the sidebar footer
+    expect(screen.getAllByText('Acme Defense').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Who are you?')).toBeTruthy()
   })
 

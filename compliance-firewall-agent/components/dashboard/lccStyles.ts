@@ -240,6 +240,25 @@ export const LCC_CSS = `
 .hs-lcc .top-brand{text-decoration:none}
 .hs-lcc .top-brand img{height:26px;width:auto}
 
+/* ── Branded hero identity band (Overview) — brand-forward welcome anchor.
+   Status chips are Engines / Scan p50 / Regions so they COMPLEMENT (never
+   duplicate) the SPRS/scanned/blocked/quarantine KPI tiles below. ── */
+.hs-lcc .hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap;background:linear-gradient(120deg,color-mix(in srgb,var(--brand) 88%,#05121f),var(--brand) 46%,var(--bright));border:1px solid color-mix(in srgb,var(--brand) 40%,transparent);border-radius:var(--r);padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 30px rgba(30,58,90,.14);color:#fff}
+.hs-lcc .hero::before{content:"";position:absolute;right:-28px;top:-64px;width:230px;height:230px;background:url(/houndshield-logo.png) no-repeat center/contain;opacity:.10;filter:brightness(0) invert(1);pointer-events:none}
+.hs-lcc .hero-l{display:flex;align-items:center;gap:1rem;z-index:1;min-width:0}
+.hs-lcc .hero-logo{width:54px;height:54px;border-radius:15px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);display:grid;place-items:center;flex-shrink:0;box-shadow:0 6px 18px rgba(5,18,31,.26)}
+.hs-lcc .hero-logo img{height:34px;width:auto;filter:brightness(0) invert(1);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.hs-lcc .hero-logo:hover img{transform:rotate(-8deg) scale(1.08)}
+.hs-lcc .hero-org{font-family:var(--f-disp);font-size:1.5rem;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+.hs-lcc .hero-tag{font-size:.82rem;color:rgba(255,255,255,.85);margin-top:.2rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.hs-lcc .hero-tag .liv{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-mono);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:rgba(255,255,255,.16);padding:.16rem .5rem;border-radius:999px}
+.hs-lcc .hero-tag .liv .dot{background:#c8f5df}
+.hs-lcc .hero-r{display:flex;align-items:stretch;gap:.7rem;z-index:1;flex-wrap:wrap}
+.hs-lcc .hero-metric{text-align:right;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:.55rem .85rem;min-width:92px}
+.hs-lcc .hero-metric b{font-family:var(--f-disp);font-size:1.55rem;font-weight:600;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.hs-lcc .hero-metric span{font-size:.64rem;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:.08em}
+@media (prefers-reduced-motion: reduce){.hs-lcc .hero-logo img{transition:none}.hs-lcc .hero-logo:hover img{transform:none}}
+
 /* ── Tablet & below: sidebar becomes an off-canvas drawer over a scrim ── */
 @media(max-width:1000px){
   .hs-lcc .shell{grid-template-columns:1fr}
@@ -255,6 +274,12 @@ export const LCC_CSS = `
 @media(max-width:640px){
   .hs-lcc .top{padding:10px 14px;gap:.5rem}
   .hs-lcc .body{padding:14px 14px calc(48px + env(safe-area-inset-bottom))}
+  .hs-lcc .hero{padding:16px;gap:.9rem}
+  .hs-lcc .hero-org{font-size:1.25rem}
+  .hs-lcc .hero-logo{width:46px;height:46px}
+  .hs-lcc .hero-logo img{height:30px}
+  .hs-lcc .hero-r{width:100%}
+  .hs-lcc .hero-metric{flex:1;text-align:center;min-width:0}
   .hs-lcc .kpis{gap:10px}
   .hs-lcc .kpi{padding:13px 14px}
   .hs-lcc .kpi .n{font-size:1.5rem}
@@ -280,14 +305,9 @@ export const LCC_CSS = `
   .hs-lcc .top-right .statpill{display:none}
 }
 
-/* ── Personalized greeting band ── */
-.hs-lcc .greet{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(120deg,color-mix(in srgb,var(--brand) 10%,var(--panel)),var(--panel) 62%);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(15,30,46,.04)}
-.hs-lcc .greet-copy h2{font-family:var(--f-disp);font-size:1.4rem;font-weight:600;letter-spacing:-.01em;background:linear-gradient(90deg,var(--text),var(--brand));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hs-lcc .greet-copy p{font-size:.84rem;color:var(--mut);margin-top:.2rem}
-.hs-lcc .greet-plan{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;text-align:right}
-.hs-lcc .plan-chip{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;font-size:.8rem;color:#fff;background:linear-gradient(135deg,var(--brand),var(--orange));border-radius:99px;padding:.35rem .8rem;box-shadow:0 4px 14px -6px var(--orange)}
-.hs-lcc .plan-chip svg{width:14px;height:14px}
-.hs-lcc .plan-sub{font-family:var(--f-mono);font-size:.68rem;color:var(--mut2)}
+/* ── Plan chip — lives inside the hero band's tag row (greet-by-name + plan). ── */
+.hs-lcc .plan-chip{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;font-size:.74rem;color:#fff;background:linear-gradient(135deg,var(--brand),var(--orange));border-radius:99px;padding:.28rem .7rem;box-shadow:0 4px 14px -6px var(--orange)}
+.hs-lcc .plan-chip svg{width:13px;height:13px}
 
 /* ── Plan & usage panel ── */
 .hs-lcc .planbadge{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--brand),var(--orange));border-radius:99px;padding:.2rem .6rem}
@@ -324,7 +344,6 @@ export const LCC_CSS = `
 .hs-lcc .bub.typing .tdot:nth-child(2){animation-delay:.18s}
 .hs-lcc .bub.typing .tdot:nth-child(3){animation-delay:.36s}
 @keyframes lcc-typing{0%,60%,100%{opacity:.28;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
-@media(max-width:640px){.hs-lcc .greet-plan{align-items:flex-start;text-align:left}.hs-lcc .greet-copy h2{font-size:1.2rem}}
 
 @media (prefers-reduced-motion: reduce){
   .hs-lcc .brand img,.hs-lcc .brain-mark{animation:none;transition:none}
