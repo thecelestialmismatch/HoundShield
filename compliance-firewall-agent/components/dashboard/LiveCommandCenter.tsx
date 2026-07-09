@@ -553,16 +553,25 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           <div className="body">
             {/* OVERVIEW */}
             <div className={tabClass('overview')}>
-              {/* Personalized greeting band — addresses the operator by name and
-                  surfaces their live plan, so the dashboard feels like theirs. */}
-              <div className="greet">
-                <div className="greet-copy">
-                  <h2>{name ? `Welcome back, ${name}` : 'Welcome back'}</h2>
-                  <p>Here&apos;s {orgName}&apos;s live compliance posture — every AI prompt inspected on your own hardware.</p>
+              {/* Branded hero identity band — brand-forward welcome anchor that
+                  ALSO carries the personalization (greet-by-name + live plan): one
+                  premium band instead of a plain greeting strip. */}
+              <div className="hero">
+                <div className="hero-l">
+                  <div className="hero-logo"><Image src="/houndshield-logo.png" alt="HoundShield" width={34} height={44} /></div>
+                  <div style={{ minWidth: 0 }}>
+                    <div className="hero-org">{name ? `Welcome back, ${name}` : (viewer?.company ?? 'Acme Defense')}</div>
+                    <div className="hero-tag">
+                      <span>HoundShield AI Compliance Command Center</span>
+                      <span className="liv"><span className="dot" /> Gateway live</span>
+                      <span className="plan-chip"><Crown /> {ent.name} plan</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="greet-plan">
-                  <span className="plan-chip"><Crown /> {ent.name} plan</span>
-                  <span className="plan-sub">{formatLimit(ent.gatewayScans)} scans · {formatLimit(ent.brainQueries)} Brain queries / mo</span>
+                <div className="hero-r">
+                  <div className="hero-metric"><b>16/16</b><span>Engines</span></div>
+                  <div className="hero-metric"><b>&lt;10ms</b><span>Scan p50</span></div>
+                  <div className="hero-metric"><b>4</b><span>Regions</span></div>
                 </div>
               </div>
 
