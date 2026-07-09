@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/browser";
+import { authClient, isBetterAuthClientEnabled } from "@/lib/auth/auth-client";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 
@@ -17,6 +18,23 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Better Auth path: emails a single-use token linking to /reset-password.
+    // It intentionally reports success even for unknown emails (no account
+    // enumeration), so we always show the "check your email" state.
+    if (isBetterAuthClientEnabled()) {
+      try {
+        await authClient.requestPasswordReset({
+          email,
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        setSent(true);
+      } catch {
+        setError("We couldn't reach the reset service. Please try again in a moment.");
+      }
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
 

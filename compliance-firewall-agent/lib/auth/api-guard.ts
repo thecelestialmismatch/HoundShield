@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
+import { createServiceClient } from "@/lib/supabase/client";
+import { getSessionUser } from "@/lib/auth/session";
 
 /**
  * Server-side auth guards for API route handlers.
@@ -37,23 +37,22 @@ function forbidden(): GuardFailure {
  * fails closed with 401 — protected routes must not be reachable anonymously.
  */
 export async function requireUser(): Promise<GuardResult> {
-  if (!isSupabaseConfigured()) return unauthorized();
-
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return unauthorized();
+  // Identity comes from the unified session resolver (Better Auth when enabled,
+  // else Supabase). Fails closed: no session → 401, so protected routes are
+  // never reachable anonymously in demo mode either.
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) return unauthorized();
 
   // Resolve role from profiles (service role read; never trust the client).
+  // Best-effort — if the lookup fails or Supabase isn't configured, default to
+  // the least-privileged role.
   let role = "user";
   try {
     const svc = createServiceClient();
     const { data } = await svc
       .from("profiles")
       .select("role")
-      .eq("id", user.id)
+      .eq("id", sessionUser.id)
       .maybeSingle();
     if (data?.role) role = data.role as string;
   } catch {
@@ -61,7 +60,7 @@ export async function requireUser(): Promise<GuardResult> {
   }
 
   return {
-    user: { id: user.id, email: user.email ?? null, role },
+    user: { id: sessionUser.id, email: sessionUser.email, role },
     response: null,
   };
 }
