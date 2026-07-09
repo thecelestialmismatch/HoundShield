@@ -27,8 +27,13 @@ import Image from 'next/image'
 import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
   Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
+  Check, Zap, Crown,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
+import {
+  getEntitlements, formatLimit, usagePercent, hasFeature, tierThatUnlocks,
+  FEATURE_LABELS, UNLIMITED, type Entitlements, type FeatureKey,
+} from '@/lib/billing/entitlements'
 
 type TabId = 'overview' | 'feed' | 'assess' | 'reports' | 'brain' | 'settings'
 
@@ -69,35 +74,92 @@ const EVENTS: [string, string, string, string][] = [
   ['pass', 'Explain NIST 800-171 3.1.1', 'clean', '9ms'],
 ]
 
-// On-device Brain AI — deterministic keyword answers, grounded in the
-// account's own (mock) assessment data. Returns [html, source]. Keyless: this
-// FAQ layer answers the demo-critical questions with no OpenRouter key, so the
-// feature is never dead on the homepage/dashboard.
-export function brainAnswer(qRaw: string): [string, string] {
+/** Escape a profile-sourced string before it reaches innerHTML. Names/company
+ *  are the operator's own (self-XSS at worst), but escaping keeps every
+ *  dangerouslySetInnerHTML / Brain-output path provably injection-free. */
+export function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+/**
+ * Context that lets Brain AI talk like it actually knows the operator: their
+ * first name, their plan's entitlements, and how much of their Brain allotment
+ * they've used this session. All optional — with no context Brain still answers
+ * every question (the public demo path), just without the personal touch.
+ */
+export interface BrainContext {
+  name?: string
+  ent?: Entitlements
+  brainUsed?: number
+}
+
+// On-device Brain AI — deterministic keyword answers, grounded in the account's
+// own (mock) assessment data, and personalized to the signed-in operator when a
+// BrainContext is supplied. Returns [html, source]. Keyless: this FAQ layer
+// answers the demo-critical questions with no OpenRouter key, so the feature is
+// never dead on the homepage/dashboard. Written to read like a helpful human
+// analyst — greets by name, varies its phrasing, never monotone — while staying
+// fully deterministic (no randomness) so it is testable.
+export function brainAnswer(qRaw: string, ctx?: BrainContext): [string, string] {
   const q = qRaw.toLowerCase()
+  const name = ctx?.name?.trim()
+  // Warm, natural opener when we know who we're talking to; empty otherwise so
+  // the anonymous demo answers are unchanged (and the unit tests stay green).
+  const hi = name ? `${name}, ` : ''
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
   if (/who are you|what are you|your name/.test(q))
-    return ["I'm <b>Brain AI</b>, HoundShield's on-device compliance analyst. I read your assessment, audit logs and the NIST 800-171 knowledge base — running on your hardware with your own key, so nothing I see is sent to HoundShield.", 'identity · brain-core']
+    return [`${name ? `Hi ${name} — i` : 'I'}'m <b>Brain AI</b>, HoundShield's on-device compliance analyst. I read your assessment, audit logs and the NIST 800-171 knowledge base — running on your hardware with your own key, so nothing I see is sent to HoundShield. Ask me anything about where you stand.`, 'identity · brain-core']
   if (/what is houndshield|houndshield|what do you do/.test(q))
     return ['<b>HoundShield</b> is a local-only AI compliance firewall. It intercepts every prompt your team sends to ChatGPT, Copilot or Claude and blocks CUI, PII, PHI, secrets and CAGE codes in under 10ms — before they leave your network.', 'product · brain-core']
+  if (/plan|subscription|tier|token|quota|usage|how many|limit|upgrade|seat/.test(q)) {
+    const e = ctx?.ent
+    if (e) {
+      const used = ctx?.brainUsed ?? 0
+      const brainLine = e.brainQueries === UNLIMITED
+        ? 'unlimited Brain AI queries'
+        : `${(e.brainQueries - used).toLocaleString()} of ${formatLimit(e.brainQueries)} Brain AI queries left this month`
+      const up = e.nextTier
+        ? ` When you're ready for more, <b>${cap(e.nextTier)}</b> steps you up to ${formatLimit(getEntitlements(e.nextTier).gatewayScans)} scans and ${formatLimit(getEntitlements(e.nextTier).brainQueries)} Brain queries.`
+        : " You're on our top plan — you have everything."
+      return [`${hi}you're on the <b>${e.name}</b> plan. This cycle you've got ${formatLimit(e.gatewayScans)} AI gateway scans, ${brainLine}, ${formatLimit(e.seats)} seats, and ${e.retentionDays}-day audit-log retention.${up}`, 'plan · entitlements']
+    }
+    return [`${hi}each plan scales what you can use — gateway scans, Brain AI queries, seats and log retention all step up as you move from Free → Pro → Growth → Enterprise. Open Settings to see exactly where your plan stands this cycle.`, 'plan · entitlements']
+  }
+  if (/pdf|report|ssp|poa/.test(q)) {
+    const e = ctx?.ent
+    if (e && !hasFeature(e, 'pdfReports')) {
+      const unlock = tierThatUnlocks('pdfReports')
+      return [`${hi}signed <b>PDF</b> compliance reports (SSP + POA&M, C3PAO-ready) unlock on <b>${unlock?.name ?? 'Growth'}</b> — you're on ${e.name}. On ${e.name} you can still export full JSON evidence from Reports, and your audit chain is already being signed on-device. Want me to show you what ${unlock?.name ?? 'Growth'} adds?`, 'reports · entitlements']
+    }
+    return [`${hi}head to <b>Reports</b> — your SSP, POA&M and C3PAO evidence pack are generated across all 110 controls and SHA-256 signed on your own hardware. One click and the PDF is on screen.`, 'reports · brain-core']
+  }
   if (/chang|this week|trend|since last|delta|improv/.test(q))
-    return ['This week your SPRS score moved <b>+6</b> (from +72 to +78): you closed 3.5.10 (crypto-protected passwords) and 3.4.1 (baseline config). Two high-weight controls remain — 3.8.3 and 3.13.11 — worth another +6 together.', 'trend · 7-day snapshot']
-  if (/sprs|score/.test(q))
-    return ['Your current SPRS score is <b>+78</b> of +110. 78 controls implemented, 8 partial, 14 open. Closing the three 3.8 Media Protection gaps moves you to +84 — the fastest path to conditional CMMC L2.', 'sprs · live assessment']
-  if (/ready|certif|pass/.test(q))
-    return ["Almost. A C3PAO needs a POA&M with no open high-weight controls. You have 2 (3.8.3 media sanitization, 3.13.11 FIPS crypto). Fix those, export the SSP + POA&M, and you're assessment-ready.", 'readiness · brain-core']
+    return [`${hi}good news — this week your SPRS score moved <b>+6</b> (from +72 to +78): you closed 3.5.10 (crypto-protected passwords) and 3.4.1 (baseline config). Two high-weight controls remain — 3.8.3 and 3.13.11 — worth another +6 together.`, 'trend · 7-day snapshot']
+  if (/sprs|score|where.*stand|posture/.test(q))
+    return [`${hi}your current SPRS score is <b>+78</b> of +110. 78 controls implemented, 8 partial, 14 open. Closing the three 3.8 Media Protection gaps moves you to +84 — the fastest path to conditional CMMC L2.`, 'sprs · live assessment']
+  if (/ready|certif|pass|next step|what.*do/.test(q))
+    return [`${name ? `Almost, ${name}` : 'Almost'}. A C3PAO needs a POA&M with no open high-weight controls. You have 2 (3.8.3 media sanitization, 3.13.11 FIPS crypto). Fix those, export the SSP + POA&M, and you're assessment-ready. Want me to draft the remediation order?`, 'readiness · brain-core']
+  if (/hipaa|phi|patient|health/.test(q))
+    return [`${hi}for HIPAA, the key point: ChatGPT isn't HIPAA-compliant without a BAA, so a nurse pasting patient data into it is a disclosure. HoundShield blocks PHI locally before it leaves — and to stay CUI/PHI-safe you must run <b>Mode B</b> (Docker on your own infra), never the hosted trial endpoint.`, 'hipaa · knowledge-base']
   if (/dfars|7012|spill|leak/.test(q))
     return ['A <b>DFARS 252.204-7012</b> spill is CUI reaching a system not authorized to hold it. Pasting CUI into ChatGPT transmits it to OpenAI — a reportable spill. Cloud DLP causes the same spill by sending data to their cloud. HoundShield scans locally, so CUI never leaves.', 'dfars · knowledge-base']
   if (/incident|draft.*summary|summary.*incident|write.*report|breach/.test(q))
-    return ["Here's a starting incident summary from your audit chain: <b>3 blocked CUI-exposure attempts in the last 24h</b> (SC.3.177), each hash-chained and quarantined before leaving the boundary. No spill occurred; no reportable event. Export the signed evidence pack from Reports to attach to your IR record.", 'incident · audit chain']
-  return ['I can help with your CMMC posture, SPRS score, a NIST 800-171 control, HIPAA/PHI, DFARS 7012, or what HoundShield does. Everything I answer is grounded in your own assessment and audit data, on-device.', 'brain-core']
+    return [`${name ? `Here's a starting incident summary for you, ${name}` : "Here's a starting incident summary"}, straight from your audit chain: <b>3 blocked CUI-exposure attempts in the last 24h</b> (SC.3.177), each hash-chained and quarantined before leaving the boundary. No spill occurred; no reportable event. Export the signed evidence pack from Reports to attach to your IR record.`, 'incident · audit chain']
+  return [`${name ? `Happy to help, ${name}. ` : ''}I can help with your CMMC posture, SPRS score, a NIST 800-171 control, HIPAA/PHI, DFARS 7012, your plan &amp; usage, or what HoundShield does. Everything I answer is grounded in your own assessment and audit data, on-device.`, 'brain-core']
 }
 
-/** Identity shown in the sidebar footer. Omitted for the public demo, in which
- *  case the sample "Acme Defense" org is shown. */
+/** Identity shown in the sidebar footer + used to personalize the dashboard.
+ *  Omitted for the public demo, in which case the sample "Acme Defense" org is
+ *  shown on the Pro plan. */
 export interface DashboardViewer {
   company: string
   plan: string
   initials: string
+  /** Raw tier slug (free|pro|growth|enterprise|agency) → resolves to entitlements. */
+  tier?: string
+  /** Operator's first name, for the by-name greeting + Brain AI. */
+  firstName?: string
 }
 
 // Overview quick-ask questions for the Brain card (wired to the live analyst).
@@ -113,6 +175,22 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   const [sideOpen, setSideOpen] = useState(false)
   const [feedBadge, setFeedBadge] = useState(3)
 
+  // ── Subscription context ─────────────────────────────────────────────────
+  // The signed-in plan drives every entitlement in the dashboard (usage caps,
+  // seats, retention, which features are unlocked). The public demo has no
+  // viewer, so it shows the sample "Acme Defense" org on the Pro plan.
+  const ent = getEntitlements(viewer?.tier ?? 'pro')
+  const name = viewer?.firstName?.trim() || undefined
+  const orgName = viewer?.company ?? 'Acme Defense'
+  // Seeded "already used this cycle" for the sample org so the meters look lived-in.
+  const seedScans = ent.gatewayScans === UNLIMITED ? 148_920 : Math.round(ent.gatewayScans * 0.57)
+  const seedSeats = Math.min(ent.seats === UNLIMITED ? 24 : ent.seats, ent.seats === UNLIMITED ? 24 : Math.max(1, Math.round(ent.seats * 0.7)))
+
+  // Brain AI query budget — consumed as the operator asks, shown as a meter so
+  // the metered-usage model is felt, not just described.
+  const [brainUsed, setBrainUsed] = useState(0)
+  const brainUsedRef = useRef(0)
+
   const rootRef = useRef<HTMLDivElement>(null)
   const thruRef = useRef<HTMLCanvasElement>(null)
   const feedRef = useRef<HTMLDivElement>(null)
@@ -124,6 +202,12 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   // Lets the Overview Brain card fire a real analyst question — assigned inside
   // the effect (where `ask` closes over the DOM), read on click after mount.
   const askRef = useRef<((q: string) => void) | null>(null)
+  // Entitlements read imperatively inside the mount-once effect.
+  const entRef = useRef(ent)
+  // Name is HTML-escaped for the Brain-output path (rendered via innerHTML).
+  const nameRef = useRef(name ? escapeHtml(name) : undefined)
+  entRef.current = ent
+  nameRef.current = name ? escapeHtml(name) : undefined
   tabRef.current = tab
 
   // keep the badge state in sync with the imperative counter
@@ -152,14 +236,21 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
     const p50 = $('#lcc-p50')
     timers.push(setInterval(() => { if (p50) p50.textContent = (5 + Math.floor(Math.random() * 5)) + 'ms' }, 1100))
 
-    /* ---- ticking scan counter + usage bar ---- */
+    /* ---- ticking 24h scan KPI ---- */
     let scan = 142690
     const kScan = $('#lcc-kScan')
+    /* ---- billing-cycle usage meter (separate from the 24h KPI), driven by the
+            signed-in plan's gateway-scan allotment ---- */
+    const scanCap = entRef.current.gatewayScans
+    const capLabel = scanCap === UNLIMITED ? 'Unlimited' : scanCap.toLocaleString()
+    let monthScan = scanCap === UNLIMITED ? 148_920 : Math.round(scanCap * 0.57)
     timers.push(setInterval(() => {
       scan += 3 + Math.floor(Math.random() * 11)
       if (kScan) { kScan.textContent = scan.toLocaleString(); bump(kScan) }
-      const u = $('#lcc-useScan'); if (u) u.textContent = scan.toLocaleString() + ' / 250,000'
-      const ub = $('#lcc-useBar'); if (ub) ub.style.width = Math.min(99, (scan / 250000) * 100).toFixed(0) + '%'
+      monthScan += 2 + Math.floor(Math.random() * 6)
+      const u = $('#lcc-useScan'); if (u) u.textContent = monthScan.toLocaleString() + ' / ' + capLabel
+      const ub = $('#lcc-useBar')
+      if (ub) ub.style.width = (scanCap === UNLIMITED ? 6 : Math.min(99, (monthScan / scanCap) * 100)).toFixed(0) + '%'
     }, 1200))
 
     /* ---- last-block-ago + evidence-chain "verified N ago" ---- */
@@ -308,11 +399,48 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
     // Escape the operator's free-text before it touches innerHTML — the only
     // untrusted path in this component (all other strings are static literals).
     const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+    // Reflect Brain-budget consumption on the in-panel meter (metered usage,
+    // felt not just described). Unlimited plans never decrement.
+    const brainCap = entRef.current.brainQueries
+    const syncBrainMeter = () => {
+      const used = brainUsedRef.current
+      const left = brainCap === UNLIMITED ? '∞' : Math.max(0, brainCap - used).toLocaleString()
+      const label = $('#lcc-brainUse')
+      if (label) label.textContent = brainCap === UNLIMITED ? 'Unlimited queries' : `${left} of ${brainCap.toLocaleString()} queries left this month`
+      const bar = $('#lcc-brainBar')
+      if (bar) bar.style.width = (brainCap === UNLIMITED ? 6 : Math.min(100, (used / brainCap) * 100)).toFixed(0) + '%'
+    }
+    syncBrainMeter()
+
+    let thinking = false
     const ask = (q: string) => {
-      if (!q.trim()) return
+      if (!q.trim() || thinking) return
       add('u', esc(q))
       if (bi) bi.value = ''
-      setTimeout(() => { const a = brainAnswer(q); add('b', a[0], a[1]) }, 420)
+      // Out of budget on a metered plan → answer with a truthful upgrade nudge,
+      // never a dead end, and don't burn a (non-existent) query.
+      if (brainCap !== UNLIMITED && brainUsedRef.current >= brainCap) {
+        const up = entRef.current.nextTier ? getEntitlements(entRef.current.nextTier) : null
+        add('b', `You've used all ${brainCap.toLocaleString()} Brain AI queries on the <b>${entRef.current.name}</b> plan this month.${up ? ` <b>${up.name}</b> raises you to ${formatLimit(up.brainQueries)} queries — upgrade in Settings to keep going.` : ''} Your dashboard, audit chain and reports keep running regardless.`, 'plan · entitlements')
+        return
+      }
+      // Consume one query + refresh the meter.
+      brainUsedRef.current += 1
+      setBrainUsed(brainUsedRef.current)
+      syncBrainMeter()
+      // Typing indicator → grounded answer, personalized to this operator + plan.
+      thinking = true
+      const typing = document.createElement('div')
+      typing.className = 'bub b typing'
+      typing.innerHTML = '<span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>'
+      if (blog) { blog.appendChild(typing); blog.scrollTop = blog.scrollHeight }
+      setTimeout(() => {
+        typing.remove()
+        const a = brainAnswer(q, { name: nameRef.current, ent: entRef.current, brainUsed: brainUsedRef.current })
+        add('b', a[0], a[1])
+        thinking = false
+      }, 480)
     }
     askRef.current = ask
     const onSend = () => ask(bi?.value || '')
@@ -374,7 +502,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           </Link>
           <div className="side-foot">
             <div className="av">{viewer?.initials ?? 'AD'}</div>
-            <div><div className="nm">{viewer?.company ?? 'Acme Defense'}</div><div className="sub">{viewer?.plan ?? 'Pro · 10 seats'}</div></div>
+            <div><div className="nm">{orgName}</div><div className="sub">{ent.name} · {formatLimit(ent.seats)} seats</div></div>
           </div>
         </aside>
 
@@ -425,6 +553,19 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           <div className="body">
             {/* OVERVIEW */}
             <div className={tabClass('overview')}>
+              {/* Personalized greeting band — addresses the operator by name and
+                  surfaces their live plan, so the dashboard feels like theirs. */}
+              <div className="greet">
+                <div className="greet-copy">
+                  <h2>{name ? `Welcome back, ${name}` : 'Welcome back'}</h2>
+                  <p>Here&apos;s {orgName}&apos;s live compliance posture — every AI prompt inspected on your own hardware.</p>
+                </div>
+                <div className="greet-plan">
+                  <span className="plan-chip"><Crown /> {ent.name} plan</span>
+                  <span className="plan-sub">{formatLimit(ent.gatewayScans)} scans · {formatLimit(ent.brainQueries)} Brain queries / mo</span>
+                </div>
+              </div>
+
               <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago</div>
 
               <div className="kpis">
@@ -439,7 +580,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 <div className="braincard">
                   <Image className="brain-mark" src="/houndshield-logo.png" alt="HoundShield Brain AI" width={38} height={48} />
                   <div className="bc-copy">
-                    <h3><Sparkles style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline', marginRight: 4 }} />Ask Brain AI</h3>
+                    <h3><Sparkles style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline', marginRight: 4 }} />{name ? `${name}, ask Brain AI` : 'Ask Brain AI'}</h3>
                     <p>On-device CMMC analyst, grounded in your own assessment &amp; audit chain. No CUI — it can route to a commercial cloud endpoint.</p>
                   </div>
                   <div className="bchips">
@@ -570,20 +711,27 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </h3>
                   <span className="mono">your key · nothing sent to HoundShield</span>
                 </div>
+                {/* Brain-query budget — the metered-usage model, made visible. */}
+                <div className="brain-budget">
+                  <span className="bb-label"><Zap /> Brain AI · {ent.name} plan</span>
+                  <div className="bb-meter"><i id="lcc-brainBar" style={{ width: `${ent.brainQueries === UNLIMITED ? 6 : usagePercent(brainUsed, ent.brainQueries)}%` }} /></div>
+                  <span className="bb-count" id="lcc-brainUse">{ent.brainQueries === UNLIMITED ? 'Unlimited queries' : `${formatLimit(ent.brainQueries)} queries left this month`}</span>
+                </div>
                 <div className="cui-note"><Lock /> Do not enter CUI — Brain AI can route to a commercial cloud endpoint (OpenRouter).</div>
                 <div className="brain">
                   <div className="blog" ref={blogRef}>
-                    <div className="bub b" dangerouslySetInnerHTML={{ __html: "I'm <b>Brain AI</b> — HoundShield's on-device compliance analyst. Ask me about your CMMC posture, a NIST control, or what HoundShield does.<span class=\"src\">running locally · your OpenRouter key</span>" }} />
+                    <div className="bub b" dangerouslySetInnerHTML={{ __html: `${name ? `Hi <b>${escapeHtml(name)}</b> — I'm` : "I'm"} <b>Brain AI</b>, ${escapeHtml(orgName)}'s on-device compliance analyst. Ask me about your CMMC posture, your SPRS score, a NIST control, your plan &amp; usage, or what HoundShield does — everything I answer is grounded in your own data.<span class="src">running locally · your OpenRouter key</span>` }} />
                   </div>
                   <div className="chips">
                     <button type="button">Who are you?</button>
                     <button type="button">What&apos;s my SPRS score?</button>
                     <button type="button">What changed this week?</button>
                     <button type="button">Am I CMMC ready?</button>
+                    <button type="button">What&apos;s on my plan?</button>
                     <button type="button">What is a DFARS 7012 spill?</button>
                     <button type="button">Draft my incident summary</button>
                   </div>
-                  <div className="bin"><input id="lcc-bi" ref={inputRef} placeholder="Ask Brain AI…" autoComplete="off" /><button type="button" className="btn btn-p btn-sm" id="lcc-bsend">Send</button></div>
+                  <div className="bin"><input id="lcc-bi" ref={inputRef} placeholder={name ? `Ask Brain AI, ${name}…` : 'Ask Brain AI…'} autoComplete="off" /><button type="button" className="btn btn-p btn-sm" id="lcc-bsend">Send</button></div>
                 </div>
               </div>
             </div>
@@ -603,21 +751,55 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </div>
                 </div>
                 <div className="panel">
-                  <div className="ph"><h3>Plan &amp; usage</h3><span className="mono">Pro</span></div>
+                  <div className="ph"><h3>Plan &amp; usage</h3><span className="planbadge"><Crown /> {ent.name}</span></div>
                   <div className="pad">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.86rem' }}><span style={{ color: 'var(--mut)' }}>AI gateway scans</span><b id="lcc-useScan">143,280 / 250,000</b></div>
-                    <div className="usebar"><i id="lcc-useBar" style={{ width: '57%' }} /></div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.86rem', marginTop: '1rem' }}><span style={{ color: 'var(--mut)' }}>Seats used</span><b>7 / 10</b></div>
-                    <div className="usebar"><i style={{ width: '70%' }} /></div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.86rem', marginTop: '1rem' }}><span style={{ color: 'var(--mut)' }}>Log retention</span><b>90 days</b></div>
-                    <Link href="/pricing" className="btn btn-p btn-sm" style={{ marginTop: 18 }}>Upgrade to Growth <ArrowRight /></Link>
+                    <p className="plan-tag">{ent.tagline}{ent.priceMonthly !== null ? ` · $${ent.priceMonthly}/mo` : ' · custom pricing'}</p>
+                    <UsageMeter label="AI gateway scans" id="lcc-useScan" value={`${seedScans.toLocaleString()} / ${formatLimit(ent.gatewayScans)}`} barId="lcc-useBar" pct={ent.gatewayScans === UNLIMITED ? 6 : usagePercent(seedScans, ent.gatewayScans)} />
+                    <UsageMeter label="Brain AI queries" value={ent.brainQueries === UNLIMITED ? 'Unlimited' : `${brainUsed.toLocaleString()} / ${formatLimit(ent.brainQueries)}`} pct={ent.brainQueries === UNLIMITED ? 6 : usagePercent(brainUsed, ent.brainQueries)} />
+                    <UsageMeter label="Team seats" value={`${seedSeats} / ${formatLimit(ent.seats)}`} pct={ent.seats === UNLIMITED ? 8 : usagePercent(seedSeats, ent.seats)} />
+                    <div className="usage-row" style={{ marginTop: '1rem' }}><span>Audit-log retention</span><b>{ent.retentionDays >= 365 ? `${Math.round(ent.retentionDays / 365)} yr` : `${ent.retentionDays} days`}</b></div>
+                    {ent.nextTier ? (
+                      <Link href="/pricing" className="btn btn-p btn-sm" style={{ marginTop: 18 }}>Upgrade to {getEntitlements(ent.nextTier).name} <ArrowRight /></Link>
+                    ) : (
+                      <div className="topplan"><Crown /> You&apos;re on our top plan — everything unlocked.</div>
+                    )}
                   </div>
+                </div>
+              </div>
+
+              {/* What's included on this plan vs what an upgrade unlocks — the
+                  subscription value made explicit, gated feature by feature. */}
+              <div className="panel" style={{ marginTop: 16 }}>
+                <div className="ph"><h3>What your {ent.name} plan includes</h3>{ent.nextTier && <span className="mono">↑ {getEntitlements(ent.nextTier).name} unlocks more</span>}</div>
+                <div className="pad feat-grid">
+                  {(Object.keys(FEATURE_LABELS) as FeatureKey[]).map((k) => {
+                    const on = hasFeature(ent, k)
+                    const unlock = on ? null : tierThatUnlocks(k)
+                    return (
+                      <div key={k} className={`feat${on ? ' on' : ' off'}`}>
+                        {on ? <Check className="feat-ic ok" /> : <Lock className="feat-ic lk" />}
+                        <span className="feat-name">{FEATURE_LABELS[k]}</span>
+                        {on ? <span className="feat-tag inc">Included</span> : <span className="feat-tag lock">{unlock ? `${unlock.name}+` : 'Add-on'}</span>}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+/** One labelled usage meter (value + fill bar). Optional ids let the live effect
+ *  drive the number/width imperatively (gateway scans, Brain queries). */
+function UsageMeter({ label, value, pct, id, barId }: { label: string; value: string; pct: number; id?: string; barId?: string }) {
+  return (
+    <div className="usage-block">
+      <div className="usage-row"><span>{label}</span><b id={id}>{value}</b></div>
+      <div className="usebar"><i id={barId} style={{ width: `${pct}%` }} /></div>
     </div>
   )
 }
