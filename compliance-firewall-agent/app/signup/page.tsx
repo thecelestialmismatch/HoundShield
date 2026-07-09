@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
+import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
 import { interpretSignUp, validateSignUpInput } from '@/lib/auth/signup-result';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
@@ -33,6 +34,29 @@ export default function SignupPage() {
     }
 
     setLoading(true);
+
+    // Better Auth path (self-hosted) when active; Supabase otherwise.
+    if (isBetterAuthClientEnabled()) {
+      try {
+        const { error: baError } = await authClient.signUp.email({ email, password, name });
+        if (baError) {
+          if (/exist|already/i.test(baError.message || '')) {
+            setError('That email is already registered. Sign in instead.');
+          } else {
+            setError(baError.message || 'Could not create your account.');
+          }
+          setLoading(false);
+          return;
+        }
+      } catch {
+        setError("We couldn't reach the sign-up service. Please try again in a moment.");
+        setLoading(false);
+        return;
+      }
+      // Email/password with verification off → session is live; drop into product.
+      router.push('/console?welcome=true');
+      return;
+    }
 
     let data, authError;
     try {
@@ -77,6 +101,10 @@ export default function SignupPage() {
   };
 
   const handleOAuthSignup = async (provider: 'google' | 'github') => {
+    if (isBetterAuthClientEnabled()) {
+      await authClient.signIn.social({ provider, callbackURL: '/console?welcome=true' });
+      return;
+    }
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,
