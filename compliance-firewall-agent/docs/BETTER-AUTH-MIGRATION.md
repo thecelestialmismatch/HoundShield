@@ -16,6 +16,17 @@ Supabase Postgres), which fits the local-only story and costs nothing.
 | API catch-all (sign-in/up/social/session) | `app/api/auth/[...all]/route.ts` |
 | Route protection | `middleware.ts` (cookie-based when BA active) |
 | DB schema | `supabase/migrations/024_better_auth_core.sql` |
+| Transactional email (reset / verify) | `lib/auth/auth-emails.ts` (Resend) |
+| Password-reset UI | `app/forgot-password/page.tsx` → `app/reset-password/page.tsx` |
+
+**Password reset & verification email** are wired through Resend (the app's
+email provider): `sendResetPassword` / `sendVerificationEmail` in
+`lib/auth/better-auth.ts` call the branded builders in `lib/auth/auth-emails.ts`.
+A missing `RESEND_API_KEY` is a graceful no-op (logged), so flows never hard-fail
+in dev. The reset link lands on `/reset-password?token=…`; `requestPasswordReset`
+reports success even for unknown emails (no account enumeration). Email
+verification is built but left optional (`requireEmailVerification: false`) — flip
+it on in `better-auth.ts` when you want it enforced.
 
 Everything routes through `getSessionUser()` and `isBetterAuthEnabled()`, so the
 cutover is a single env flip — no code change.

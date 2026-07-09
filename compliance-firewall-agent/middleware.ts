@@ -149,6 +149,7 @@ export async function middleware(request: NextRequest) {
     pathname === '/login' ||
     pathname === '/signup' ||
     pathname === '/forgot-password' ||
+    pathname === '/reset-password' ||
     pathname.startsWith('/report/thank-you')
   ) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');

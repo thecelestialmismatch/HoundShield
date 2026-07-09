@@ -3,6 +3,7 @@ import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { Pool } from "pg";
 import { isBetterAuthEnabled, betterAuthBaseUrl } from "./auth-config";
+import { sendPasswordResetEmail, sendVerificationEmail } from "./auth-emails";
 
 // Re-export the gating helpers so existing importers of this server module keep
 // working; the pure implementations live in auth-config (test/edge-safe).
@@ -54,10 +55,22 @@ function buildAuth() {
     trustedOrigins: [baseURL, "https://houndshield.com", "http://localhost:3000"],
     emailAndPassword: {
       enabled: true,
-      // Resend is wired for transactional email; flip on when the verification
-      // template is ready (docs/BETTER-AUTH-MIGRATION.md).
+      // Email verification is available (sendVerificationEmail below) but left
+      // optional for now to keep the funnel frictionless; flip to true when
+      // ready. See docs/BETTER-AUTH-MIGRATION.md.
       requireEmailVerification: false,
       minPasswordLength: 8,
+      // Password reset — the /forgot-password → /reset-password flow. `url`
+      // targets the redirectTo the client passed, with ?token appended.
+      sendResetPassword: async ({ user, url }) => {
+        await sendPasswordResetEmail(user.email, url);
+      },
+    },
+    emailVerification: {
+      sendOnSignUp: false,
+      sendVerificationEmail: async ({ user, url }) => {
+        await sendVerificationEmail(user.email, url);
+      },
     },
     socialProviders,
     session: {
