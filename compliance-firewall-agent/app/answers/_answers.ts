@@ -353,6 +353,111 @@ export const ANSWERS: Answer[] = [
       },
     ],
   },
+
+  // ── Commercial-intent additions (2026-07-10, second tranche) ──
+  {
+    slug: "nightfall-alternatives-for-cmmc",
+    metaTitle: "Nightfall Alternatives for CMMC Compliance (2026)",
+    metaDescription:
+      "The honest list of Nightfall AI alternatives for CMMC teams: HoundShield (local-only), Prompt Security, Strac, Polymer, and Microsoft Purview — compared by where scanning happens.",
+    h1: "What are the best Nightfall alternatives for CMMC?",
+    lede: "For CMMC teams, the Nightfall alternatives worth evaluating are HoundShield (local-only scanning on your own infrastructure), Prompt Security (browser-based, cloud-routed), Strac and Polymer (cloud SaaS DLP), and Microsoft Purview inside GCC High (for large all-Microsoft contractors). The deciding question is architectural: where does prompt content go to be scanned? Nightfall and most alternatives inspect content in the vendor's cloud — for CUI, that transit is itself the exposure. Only a locally deployed scanner keeps the data path inside your boundary.",
+    sections: [
+      {
+        heading: "The architectural filter that shortens the list",
+        paragraphs: [
+          "Every AI DLP tool answers one question differently: where is the prompt scanned? Cloud-routed tools (Nightfall, Strac, Polymer, browser-plugin products) transmit content to the vendor to inspect it — strong general-purpose privacy tools, but for DFARS 7012-covered data the transmission is the problem. Locally deployed scanners inspect content on your own infrastructure, so nothing leaves the boundary in order to be checked.",
+          "That filter matters more than feature lists. A contractor who cannot let CUI transit a vendor cloud has a short list by definition.",
+        ],
+      },
+      {
+        heading: "The alternatives, honestly compared",
+        table: {
+          headers: ["Tool", "Where scanning happens", "Best for"],
+          rows: [
+            ["HoundShield", "Your own network (self-hosted Docker; air-gapped option)", "5–500 person contractors needing CMMC evidence"],
+            ["Prompt Security (SentinelOne)", "Vendor cloud, per-seat browser deployment", "Enterprises standardizing on SentinelOne"],
+            ["Strac", "Vendor cloud", "Broad SaaS DLP (email, ticketing, chat)"],
+            ["Polymer", "Vendor cloud", "Low-cost general SaaS DLP for non-regulated data"],
+            ["Purview + GCC High Copilot", "US-sovereign Microsoft boundary", "200+ person all-Microsoft DIB orgs"],
+          ],
+        },
+        paragraphs: [
+          "Full head-to-head pages with matrices and when-to-choose-them guidance: HoundShield vs Nightfall, vs Prompt Security, vs Strac, vs Polymer, and vs Microsoft Purview + GCC High are all on the compare hub.",
+        ],
+      },
+      {
+        heading: "What only HoundShield adds for CMMC specifically",
+        paragraphs: [
+          "Beyond the local data path, the deliverable differs: HoundShield produces a $499 one-time CMMC AI Risk Assessment — a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171 Rev 2 controls. General DLP tools produce dashboards; assessors read control-mapped evidence.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Is Nightfall CMMC compliant?",
+        a: "Nightfall is a capable cloud DLP, but its published architecture scans content in Nightfall's cloud — so CUI transits a third party in order to be inspected. CMMC assessors evaluate where CUI flows; that data path is what gets assessed, regardless of the vendor's own certifications.",
+      },
+      {
+        q: "What's the cheapest way to get CMMC-grade AI monitoring?",
+        a: "For most small and mid-size contractors, a self-hosted proxy is the lowest-cost compliant architecture: HoundShield starts with a $499 one-time assessment and published plans, versus enterprise-quoted cloud DLP contracts or a six-figure GCC High migration.",
+      },
+      {
+        q: "Can I just use Microsoft Purview instead?",
+        a: "If you're already in GCC High with E5/G5 licensing, Purview plus Copilot inside that boundary is a legitimate architecture. If you're not, the migration typically runs $149K–$200K per year — the cost math is walked through in our GCC High vs AI proxy analysis.",
+      },
+    ],
+  },
+  {
+    slug: "how-much-does-cmmc-ai-monitoring-cost",
+    metaTitle: "How Much Does CMMC AI Monitoring Cost? (2026 Price Guide)",
+    metaDescription:
+      "CMMC AI monitoring costs range from a $499 one-time assessment to $149K+/yr GCC High migrations. The real 2026 price landscape: proxies, cloud DLP, and Microsoft — compared.",
+    h1: "How much does CMMC AI monitoring cost?",
+    lede: "CMMC AI monitoring in 2026 costs anywhere from $499 one-time to over $149,000 per year, depending on architecture. A self-hosted AI firewall starts at a $499 one-time assessment report with published subscription plans after; enterprise cloud DLP platforms are typically quoted in the tens of thousands per year; and Microsoft's compliant path — Copilot inside GCC High — carries a migration commonly quoted at $149K–$200K per year before licensing. For context, a CMMC Level 2 assessment itself runs $30K–$150K, so the AI-monitoring line item should be small next to what it protects.",
+    sections: [
+      {
+        heading: "The 2026 price landscape by architecture",
+        table: {
+          headers: ["Approach", "Typical cost", "What you get"],
+          rows: [
+            ["Self-hosted AI firewall (HoundShield)", "$499 one-time assessment; published plans after", "Local scanning on your infra + NIST 800-171-mapped evidence PDF"],
+            ["Cloud AI DLP (Nightfall-class)", "Enterprise-quoted, commonly $25K–$80K/yr", "Cloud-scanned DLP dashboards across SaaS apps"],
+            ["Per-seat browser DLP", "Roughly $250/seat/yr at Prompt Security-class pricing", "Browser-level AI controls, cloud-routed"],
+            ["Copilot inside GCC High", "$149K–$200K/yr migration + E5/G5 licensing", "AI inside a US-sovereign Microsoft boundary"],
+            ["Written policy only", "$0", "No enforcement, no evidence — fails the assessor's follow-up"],
+          ],
+        },
+      },
+      {
+        heading: "Why the cheapest compliant option is usually local",
+        paragraphs: [
+          "Cloud DLP pricing scales with seats and data volume because the vendor runs the scanning infrastructure — and for CUI, routing content through that infrastructure is itself the compliance problem. A self-hosted scanner inverts both: your own hardware does the work (compute cost is trivial — scans run in milliseconds), and the data path stays inside your boundary, which is what the assessor is evaluating in the first place.",
+          "The honest exception: if you are already inside GCC High with E5/G5 licensing, Copilot there is incremental cost, not a migration — the full math is in our GCC High vs AI proxy cost analysis.",
+        ],
+      },
+      {
+        heading: "What the $499 actually buys",
+        paragraphs: [
+          "HoundShield's entry product is deliberately not a subscription: a $499 one-time CMMC AI Risk Assessment. The proxy runs 14 days in your environment (self-hosted Docker, on your own infrastructure), then produces a SHA-256-signed PDF that risk-scores every AI prompt event against NIST 800-171 Rev 2 — the evidence artifact for your SSP and your C3PAO conversation. No MSA, no procurement review for most orgs, no data leaving your network.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Is there a free way to monitor AI usage for CMMC?",
+        a: "A written AI policy is free, and HoundShield's free tier includes the 110-control self-assessment and SPRS calculator. But monitoring that satisfies an assessor needs enforcement plus tamper-evident logs — that's the $499 assessment's job, and it's the cheapest evidence-producing option on the market.",
+      },
+      {
+        q: "Why is the report $499 when subscriptions exist?",
+        a: "Because a one-time $499 purchase order clears most companies' procurement threshold without review, and the report is the artifact buyers actually need first — proof of what their AI traffic contains, mapped to controls. Recurring monitoring plans exist for teams that want continuous coverage afterward.",
+      },
+      {
+        q: "How does this compare to the cost of a CMMC assessment itself?",
+        a: "A CMMC Level 2 C3PAO assessment typically runs $30K–$150K. AI monitoring at $499 to a few hundred per month is a rounding error against that — and against the contract revenue the certification protects.",
+      },
+    ],
+  },
 ];
 
 export const ANSWER_SLUGS = ANSWERS.map((a) => a.slug);

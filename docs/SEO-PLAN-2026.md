@@ -332,3 +332,23 @@ $499 anchor never undercut, and Mode B qualifier on every boundary-safety claim.
 
 **Next per this plan:** legal-cluster blog article (privilege deep-dive), C3PAO
 AI-usage checklist (Tier 2), then programmatic NIST-control pages (§8).
+
+## Execution Log — 2026-07-10b (second tranche: programmatic + commercial)
+
+- **§8 programmatic SEO SHIPPED:** /controls — index + all 110 NIST 800-171
+  control pages generated from the ShieldReady dataset (official text, plain
+  English, SPRS deduction, remediation, assessor evidence). Each carries an
+  HONEST AI-relevance verdict (7 direct, 6 supporting, 97 "no") enforced by
+  `app/__tests__/controls-pages-contract.test.ts` — the ratio is a test, so the
+  pages can never drift into spin. FAQPage + TechArticle + Breadcrumb JSON-LD.
+- **Commercial-intent answers:** /answers/nightfall-alternatives-for-cmmc,
+  /answers/how-much-does-cmmc-ai-monitoring-cost (the "alternative"/"cost"
+  bucket the playbook weights at 40%).
+- **Tier-2 article:** /blog/c3pao-ai-usage-checklist-cmmc-assessment — 12
+  assessor questions, deep internal links into /controls.
+- **Channel:** /partners/kit — RPO/MSP co-branded report kit ($299 wholesale),
+  with the C3PAO-exclusion note stated on-page.
+- **Infra:** Lighthouse CI (informational) on marketing pages; security-audit
+  workflow (report-only; both packages carry known prod advisories) +
+  Dependabot for the fixes; scanner latency benchmark in CI proving the <10ms
+  claim (measured p99: 0.565ms over 2,000 cold scans).

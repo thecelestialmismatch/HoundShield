@@ -3,6 +3,7 @@ import { getAllPosts } from "@/lib/blog/posts";
 import { INDUSTRY_SLUGS } from "./products/_industries";
 import { ANSWER_SLUGS } from "./answers/_answers";
 import { COMPARISON_SLUGS } from "@/lib/comparisons/competitors";
+import { CONTROL_SLUGS } from "./controls/_meta";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
@@ -195,7 +196,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  // RPO/MSP partner kit (co-branded $499 report resale program)
+  const partnerKitPage: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/partners/kit`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    },
+  ];
+
+  // NIST 800-171 control reference hub + all 110 control pages (/controls/[slug])
+  const controlPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/controls`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    ...CONTROL_SLUGS.map((slug) => ({
+      url: `${baseUrl}/controls/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
+
   // NOTE: /login /signup /forgot-password /command-center excluded —
   // auth-gated routes waste crawl budget and are blocked in robots.ts
-  return [...staticPages, ...productPages, ...answerPages, ...comparePages, ...blogPosts];
+  return [...staticPages, ...productPages, ...answerPages, ...comparePages, ...blogPosts, ...partnerKitPage, ...controlPages];
 }

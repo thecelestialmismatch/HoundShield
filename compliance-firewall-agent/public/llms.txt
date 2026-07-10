@@ -79,6 +79,13 @@ Subscription tiers (secondary):
 - CUI Pasted Into ChatGPT — Incident-Response Playbook: https://houndshield.com/blog/employee-pasted-cui-into-chatgpt-incident-response-playbook
 - NIST 800-171 Controls That Map to AI Prompt Monitoring: https://houndshield.com/blog/nist-800-171-controls-that-map-to-ai-prompt-monitoring
 - CMMC AI Use Policy Template (free, control-mapped): https://houndshield.com/blog/cmmc-ai-use-policy-template
+- C3PAO AI-Usage Checklist (12 assessor questions): https://houndshield.com/blog/c3pao-ai-usage-checklist-cmmc-assessment
+
+## NIST 800-171 Control Reference (110 pages)
+
+- All 110 controls explained, with AI-relevance verdicts: https://houndshield.com/controls
+- Example — Control CUI Flow (AC.2.003): https://houndshield.com/controls/ac-2-003
+- Example — Boundary Protection (SC.1.001): https://houndshield.com/controls/sc-1-001
 
 ## Direct Answers (AEO pages — quotable, FAQ-schema-backed)
 
@@ -88,6 +95,9 @@ Subscription tiers (secondary):
 - Is ChatGPT HIPAA compliant?: https://houndshield.com/answers/is-chatgpt-hipaa-compliant
 - Can law firms use ChatGPT?: https://houndshield.com/answers/can-law-firms-use-chatgpt
 - What happens if you paste CUI into ChatGPT?: https://houndshield.com/answers/what-happens-if-you-paste-cui-into-chatgpt
+- Nightfall alternatives for CMMC: https://houndshield.com/answers/nightfall-alternatives-for-cmmc
+- How much does CMMC AI monitoring cost?: https://houndshield.com/answers/how-much-does-cmmc-ai-monitoring-cost
+- RPO/MSP partner kit (co-branded assessments): https://houndshield.com/partners/kit
 
 ## Honest Competitor Comparisons
 

@@ -2,6 +2,14 @@
 
 ## Active
 
+### 2026-07-10 — Second tranche (founder said "go"; fresh branch off merged #159)
+- [x] /controls — 110 programmatic NIST 800-171 pages + index, honest AI-relevance verdicts, contract-tested
+- [x] Commercial answers (nightfall-alternatives · cmmc-ai-monitoring-cost) + C3PAO checklist article + /partners/kit (RPO/MSP)
+- [x] CI: scanner latency bench (<10ms p99 gate; measured 0.565ms) · security-audit (report-only) · Dependabot · Lighthouse CI (informational)
+- [ ] **FOUNDER, 5 min:** STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET in Vercel — still THE revenue blocker
+- [ ] **FOUNDER, 5 min:** DOCKERHUB_USERNAME/TOKEN secrets + push tag `proxy-v2.0.0` → publishes houndshield/proxy:latest
+- [ ] **FOUNDER:** send the 10 RPO/MSP emails (now with /partners/kit to land on); Y/N on the two frozen-content flags (llms.txt "C3PAO partner program", "Kaelus" in old post)
+
 ### 2026-07-10 — Tier-1 SEO content sprint (same branch/PR #159, additive-only per founder freeze)
 - [x] 5 Tier-1 blog articles shipped (GCC High cost math · HIPAA Privacy Officer 2026 · CUI incident-response playbook · NIST 800-171 AI mapping · AI policy template)
 - [x] 3 AEO answers (is-chatgpt-hipaa-compliant · can-law-firms-use-chatgpt · what-happens-if-you-paste-cui-into-chatgpt)
