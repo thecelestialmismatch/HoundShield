@@ -372,8 +372,10 @@ config, pin `css: { postcss: {} }` so config-file upward search can't escape the
 **What:** docker-publish.yml guarded login/push with `env.DOCKERHUB_USERNAME != ''` where the env
 var was declared on the same step — the guard always read empty, so the Stage 1 "publish
 houndshield/proxy:latest" deliverable could never actually publish, even with secrets configured.
-**Rule:** In a step `if:`, reference `secrets.FOO` directly (supported at step level), or hoist the
-env to job level. Never gate a step on its own `env:` block.
+**Rule:** Hoist the env mapping to JOB level (`jobs.<id>.env`) — job-level env IS visible in step
+`if:`. Never gate a step on its own `env:` block, and never reference `secrets.*` inside any `if:`
+(GitHub rejects the whole workflow file at validation — the run fails in 0s named by file path,
+which is the fingerprint of an invalid workflow, not a failing job).
 
 ### A repo-structure gate that isn't in CI silently rots
 **What:** PR #146 deleted the holding folders; `npm run verify:structure` had been failing ever
