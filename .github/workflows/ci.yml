@@ -70,6 +70,9 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Scanner latency benchmark (<10ms p99 contract)
+        run: npm run bench
+
       - name: Build
         run: npm run build
 

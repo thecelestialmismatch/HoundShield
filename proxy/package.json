@@ -9,6 +9,7 @@
     "dev": "tsx watch server.ts",
     "lint": "tsc --noEmit",
     "test": "vitest run --reporter=verbose",
+    "bench": "tsx bench/scan-bench.ts",
     "test:watch": "vitest --reporter=verbose",
     "test:coverage": "vitest run --coverage --reporter=verbose"
   },

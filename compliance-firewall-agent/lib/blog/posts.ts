@@ -469,6 +469,59 @@ const posts: BlogPost[] = [
 <p>Section 4 is the one assessors probe: a policy that says "employees must not paste CUI" with no enforcement is an honor system, and honor systems fail audits. The enforcement architecture — local scanning, blocking, hash-chained logs — is exactly what <a href="/docs">HoundShield deploys in minutes as self-hosted Docker</a>. If an incident has already happened, start with the <a href="/blog/employee-pasted-cui-into-chatgpt-incident-response-playbook">incident-response playbook</a>; to baseline what your team is actually sending to AI tools today, run the <a href="/pricing">$499 assessment</a> and attach its PDF to this policy as evidence.</p>
     `,
   },
+  {
+    slug: "c3pao-ai-usage-checklist-cmmc-assessment",
+    title: "The C3PAO AI-Usage Checklist: 12 Questions Your Assessor Will Ask in 2026",
+    description:
+      "C3PAO assessors now probe AI usage in CMMC Level 2 assessments. The 12 questions they ask about ChatGPT and Copilot — and the evidence that answers each one.",
+    excerpt:
+      "AI usage is the newest line of questioning in CMMC Level 2 assessments: unmonitored ChatGPT prompts are an unmonitored egress path, and assessors know it. The 12 questions to expect, the evidence that answers each, and how to walk in with answers instead of a deficiency.",
+    date: "2026-07-10",
+    author: "HoundShield Security Team",
+    authorTitle: "AI Compliance Engineers",
+    category: "CMMC Compliance",
+    tags: ["CMMC", "C3PAO", "assessment prep", "AI usage", "checklist", "NIST 800-171"],
+    readingTime: 9,
+    featured: false,
+    content: `
+<p><strong>Bottom line up front:</strong> your C3PAO assessment will include questions about AI usage, because prompts to ChatGPT, Copilot, and Claude are data flows across your external boundary — squarely inside NIST 800-171's scope. Below are the 12 questions to prepare for, grouped by control family, each with the evidence that answers it. If you can answer all 12, AI usage becomes a strength in your assessment instead of a finding.</p>
+
+<h2>Flow control and external systems (3.1.x)</h2>
+<ol>
+  <li><strong>"Which AI tools are in use in your environment, and how do you know?"</strong> — Evidence: an inventory of approved AI endpoints and the proxy configuration that makes any other path unavailable from organizational systems.</li>
+  <li><strong>"How do you prevent CUI from being entered into AI tools?"</strong> — Evidence: the technical control (local scanning proxy with blocking policy), not just the written policy. See <a href="/controls/ac-2-003">AC.2.003 — Control CUI flow</a>.</li>
+  <li><strong>"Are AI services treated as external systems in your SSP?"</strong> — Evidence: SSP section listing AI endpoints as controlled external connections (<a href="/controls/ac-2-020">AC.2.020</a>), with the data-flow diagram showing the inspection point inside your boundary.</li>
+  <li><strong>"Can employees reach AI tools from personal accounts on organizational systems?"</strong> — Evidence: network-level routing through the gateway; browser/device policy for the rest.</li>
+</ol>
+
+<h2>Audit and accountability (3.3.x)</h2>
+<ol start="5">
+  <li><strong>"Show me the log of AI usage."</strong> — Evidence: the audit trail of allowed and blocked prompt events with timestamps and user attribution (<a href="/controls/au-2-001">AU.2.001</a>).</li>
+  <li><strong>"Can an AI prompt event be traced to an individual?"</strong> — Evidence: per-user attribution in the log (<a href="/controls/au-2-002">AU.2.002</a>) — shared accounts fail this instantly.</li>
+  <li><strong>"How do you know the log hasn't been altered?"</strong> — Evidence: tamper-evidence — HoundShield uses a SHA-256 hash chain, so any modification breaks verification (<a href="/controls/au-2-008">AU.2.008</a>).</li>
+</ol>
+
+<h2>Boundary protection (3.13.x)</h2>
+<ol start="8">
+  <li><strong>"Where are AI-bound communications monitored and controlled?"</strong> — Evidence: the proxy as a named boundary control (<a href="/controls/sc-1-001">SC.1.001</a>). Deployment mode matters here: scanning must happen on your own infrastructure — a cloud-scanning DLP moves the CUI exposure to the DLP vendor.</li>
+  <li><strong>"What patterns does the control detect?"</strong> — Evidence: the active detection set (CUI markers, contract identifiers, ITAR indicators, PII/PHI) and the block/quarantine policy configuration.</li>
+</ol>
+
+<h2>Incident response (3.6.x)</h2>
+<ol start="10">
+  <li><strong>"What happens when someone attempts to send CUI to an AI tool?"</strong> — Evidence: the blocked-event workflow — alert, review, disposition — and a sample record.</li>
+  <li><strong>"Walk me through your response if CUI actually reached a public AI service."</strong> — Evidence: your incident-response plan naming this scenario, the 72-hour DIBNet reporting path, and evidence-preservation steps. Our <a href="/blog/employee-pasted-cui-into-chatgpt-incident-response-playbook">incident-response playbook</a> is the sequence.</li>
+</ol>
+
+<h2>Policy and training</h2>
+<ol start="12">
+  <li><strong>"Show me your AI acceptable-use policy and the training record."</strong> — Evidence: the signed policy (use our <a href="/blog/cmmc-ai-use-policy-template">control-mapped template</a>) and training acknowledgments referencing AI scenarios.</li>
+</ol>
+
+<h2>Walking in prepared</h2>
+<p>Every question above is answerable from one architecture: AI traffic routed through a locally hosted scanning proxy, a hash-chained event log, and a written policy the control enforces. The <a href="/pricing">$499 CMMC AI Risk Assessment</a> packages exactly this into a signed PDF after 14 days in your environment — the artifact you hand across the table when question 5 lands. For the control-by-control detail, the <a href="/controls">full 110-control reference</a> marks which requirements AI monitoring evidences and which it honestly does not.</p>
+    `,
+  },
 ];
 
 // ─── Public API ──────────────────────────────────────────────────────────────
