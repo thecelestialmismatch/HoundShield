@@ -361,7 +361,7 @@ export const ANSWERS: Answer[] = [
     metaDescription:
       "The honest list of Nightfall AI alternatives for CMMC teams: HoundShield (local-only), Prompt Security, Strac, Polymer, and Microsoft Purview — compared by where scanning happens.",
     h1: "What are the best Nightfall alternatives for CMMC?",
-    lede: "For CMMC teams, the Nightfall alternatives worth evaluating are HoundShield (local-only scanning on your own infrastructure), Prompt Security (browser-based, cloud-routed), Strac and Polymer (cloud SaaS DLP), and Microsoft Purview inside GCC High (for large all-Microsoft contractors). The deciding question is architectural: where does prompt content go to be scanned? Nightfall and most alternatives inspect content in the vendor's cloud — for CUI, that transit is itself the exposure. Only a locally deployed scanner keeps the data path inside your boundary.",
+    lede: "For CMMC teams, the Nightfall alternatives worth evaluating are HoundShield (local-only scanning on your own infrastructure), Prompt Security (cloud-first enterprise suite, with an on-prem SKU announced in 2026), Strac and Polymer (cloud SaaS DLP), and Microsoft Purview inside GCC High (for large all-Microsoft contractors). The deciding question is architectural: where does prompt content go to be scanned, and at what price of entry? Nightfall and most alternatives inspect content in the vendor's cloud — for CUI, that transit is itself the exposure. A locally deployed scanner keeps the data path inside your boundary.",
     sections: [
       {
         heading: "The architectural filter that shortens the list",
@@ -376,7 +376,7 @@ export const ANSWERS: Answer[] = [
           headers: ["Tool", "Where scanning happens", "Best for"],
           rows: [
             ["HoundShield", "Your own network (self-hosted Docker; air-gapped option)", "5–500 person contractors needing CMMC evidence"],
-            ["Prompt Security (SentinelOne)", "Vendor cloud, per-seat browser deployment", "Enterprises standardizing on SentinelOne"],
+            ["Prompt Security (SentinelOne)", "Vendor cloud by default; on-prem as enterprise SKU", "Enterprises standardizing on SentinelOne"],
             ["Strac", "Vendor cloud", "Broad SaaS DLP (email, ticketing, chat)"],
             ["Polymer", "Vendor cloud", "Low-cost general SaaS DLP for non-regulated data"],
             ["Purview + GCC High Copilot", "US-sovereign Microsoft boundary", "200+ person all-Microsoft DIB orgs"],
