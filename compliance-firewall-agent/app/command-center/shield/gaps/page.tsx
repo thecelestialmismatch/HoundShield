@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Shield,
   ChevronDown,
+  ExternalLink,
 } from "lucide-react";
 import SPRSGauge from "@/components/dashboard/SPRSGauge";
 import { ALL_CONTROLS } from "@/lib/shieldready/controls";
@@ -16,6 +17,7 @@ import {
   calculateSPRS,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses } from "@/lib/shieldready/storage";
+import { controlSlug } from "@/app/controls/_meta";
 import type { AssessmentResponse, RiskPriority } from "@/lib/shieldready/types";
 
 const PRIORITY_COLORS: Record<RiskPriority, { bg: string; text: string; border: string }> = {
@@ -247,6 +249,15 @@ export default function GapsPage() {
                           </ul>
                         </div>
                       )}
+
+                      <a
+                        href={`/controls/${controlSlug(control.id)}`}
+                        target="_blank"
+                        rel="noopener"
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-400 hover:text-brand-300 transition-colors"
+                      >
+                        Full control guide <ExternalLink size={11} />
+                      </a>
                     </div>
                   </div>
                 </motion.div>

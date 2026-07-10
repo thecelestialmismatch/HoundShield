@@ -12,8 +12,10 @@ import {
   Wrench,
   DollarSign,
   ClipboardList,
+  ExternalLink,
 } from "lucide-react";
 import type { NISTControl, ControlStatus } from "@/lib/shieldready/types";
+import { controlSlug } from "@/app/controls/_meta";
 
 interface ControlCardProps {
   control: NISTControl;
@@ -217,6 +219,16 @@ export default function ControlCard({
                   </span>
                   <span>•</span>
                   <span>CMMC Level {control.cmmcLevel}</span>
+                  <span className="ml-auto">
+                    <a
+                      href={`/controls/${controlSlug(control.id)}`}
+                      target="_blank"
+                      rel="noopener"
+                      className="inline-flex items-center gap-1 font-medium text-brand-400 hover:text-brand-300 transition-colors"
+                    >
+                      Full control guide <ExternalLink size={11} />
+                    </a>
+                  </span>
                 </div>
               </div>
             </motion.div>
