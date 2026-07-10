@@ -342,6 +342,146 @@ export const COMPARISONS: Comparison[] = [
     ],
     updated: UPDATED,
   },
+
+  // ── Tier-1 SEO sprint (2026-07-10) — additive only; entries above unchanged ──
+  {
+    slug: "strac",
+    competitor: "Strac",
+    competitorShort: "Strac",
+    category: "Cloud-routed AI & SaaS DLP",
+    tagline:
+      "Strac redacts sensitive data across SaaS apps by scanning it in Strac's cloud. HoundShield scans AI prompts inside your network — nothing leaves the boundary.",
+    metaTitle: "HoundShield vs Strac — Local vs Cloud-Routed AI DLP for CMMC (2026)",
+    metaDescription:
+      "An honest HoundShield vs Strac comparison for CMMC and HIPAA buyers. Strac scans and redacts content in its cloud across SaaS and AI surfaces; HoundShield scans locally (Mode B) so CUI/PHI never leaves your network, with a $499 NIST 800-171 evidence PDF.",
+    summary:
+      "Strac is a capable SaaS DLP with strong redaction UX across email, ticketing, and AI surfaces — but like other cloud DLPs, its published architecture inspects content in Strac's cloud. For a buyer whose problem is regulated data leaving the network, the inspection path is the exposure.",
+    theirApproach:
+      "Strac provides SaaS and endpoint DLP with automatic detection and redaction of sensitive data (PII, PHI, payment data) across tools like email, Slack, Zendesk, and generative AI apps. Content is scanned by Strac's cloud service, which then redacts or blocks per policy.",
+    theirStrengths: [
+      "Polished redaction workflow — masks the sensitive element instead of blocking the whole message",
+      "Broad SaaS app catalog beyond AI (email, support desks, chat, storage)",
+      "Quick SaaS onboarding with no infrastructure to run",
+      "Solid PII/PHI detector coverage for general privacy programs",
+    ],
+    ourEdge: [
+      {
+        title: "Scanning happens inside your boundary",
+        body: "HoundShield Mode B (self-hosted Docker) inspects every AI-bound prompt on your own infrastructure in <10ms. A cloud DLP must receive your content to scan it — for CUI under DFARS 7012, that transit is the exposure you were trying to prevent.",
+      },
+      {
+        title: "CMMC evidence artifact, not just prevention",
+        body: "The $499 CMMC AI Risk Assessment maps every prompt event to NIST 800-171 Rev 2 controls in a SHA-256-signed PDF — a deliverable your assessor reads. General DLP dashboards don't translate to assessor evidence.",
+      },
+      {
+        title: "One proxy covers every AI tool",
+        body: "Any OpenAI-compatible endpoint — ChatGPT, Copilot, Claude, Gemini — is covered by one URL change at the network level, rather than per-app SaaS integrations.",
+      },
+      {
+        title: "Air-gapped option for defense environments",
+        body: "Mode C runs with no external connectivity at all. Cloud-native DLP architectures cannot follow you into an isolated network.",
+      },
+    ],
+    matrix: [
+      { dimension: "Where content is scanned", houndshield: "Locally, inside your network (Mode B/C)", competitor: "In Strac's cloud", advantage: "houndshield" },
+      { dimension: "CUI/PHI leaves your boundary to be checked?", houndshield: "No", competitor: "Yes — sent to their service to scan", advantage: "houndshield" },
+      { dimension: "CMMC / NIST 800-171 evidence PDF", houndshield: "$499 one-time, control-mapped", competitor: "Not a deliverable", advantage: "houndshield" },
+      { dimension: "SaaS app coverage beyond AI", houndshield: "AI endpoints via proxy", competitor: "Email, Slack, Zendesk, storage, and more", advantage: "competitor" },
+      { dimension: "Redaction UX", houndshield: "Block/quarantine with audit trail", competitor: "Inline masking of the sensitive element", advantage: "competitor" },
+      { dimension: "Air-gapped deployment", houndshield: "Yes (Mode C)", competitor: "No (cloud-native)", advantage: "houndshield" },
+    ],
+    buyerFit:
+      "Defense subcontractors and healthcare privacy officers whose core requirement is that regulated content never transits a vendor cloud — and who need assessor-grade evidence, not just prevention.",
+    chooseThemWhen: [
+      "Your priority is broad SaaS DLP (email, ticketing, chat) and your data isn't barred from cloud inspection",
+      "You want inline redaction UX across many SaaS apps with zero infrastructure",
+    ],
+    chooseUsWhen: [
+      "You handle CUI, ITAR, or PHI that cannot leave your network — even to be scanned",
+      "You need a NIST 800-171-mapped assessment PDF for a C3PAO or auditor",
+      "You need on-prem or air-gapped deployment",
+    ],
+    faqs: [
+      {
+        q: "Does Strac scan content in its own cloud?",
+        a: "Strac's published architecture is a cloud service: content from your SaaS apps and AI surfaces is scanned by Strac to detect and redact sensitive data. HoundShield's Mode B scans on your own infrastructure, so content never leaves your network to be checked.",
+      },
+      {
+        q: "Is Strac suitable for CMMC compliance?",
+        a: "Strac is general-purpose DLP and can strengthen a privacy program, but it does not keep CUI inside your boundary during scanning and does not produce a control-mapped CMMC artifact. HoundShield scans locally and ships a $499 NIST 800-171 evidence PDF.",
+      },
+    ],
+    updated: "2026-07-10",
+  },
+  {
+    slug: "witnessai",
+    competitor: "WitnessAI",
+    competitorShort: "WitnessAI",
+    category: "Enterprise AI governance platform",
+    tagline:
+      "WitnessAI is enterprise AI governance with a federal go-to-market. HoundShield is the mid-market answer: deployed in minutes, evidence in 14 days, $499 to start.",
+    metaTitle: "HoundShield vs WitnessAI — SMB CMMC AI Firewall vs Enterprise Platform",
+    metaDescription:
+      "An honest HoundShield vs WitnessAI comparison. WitnessAI is an enterprise AI governance platform with a strong federal channel; HoundShield serves 5–500 person contractors with local scanning (Mode B), self-serve Docker deployment, and a $499 NIST 800-171 evidence PDF.",
+    summary:
+      "WitnessAI is a serious enterprise AI security and governance platform with deep observability and a federal-friendly channel (it sells through Carahsoft and has heavyweight security leadership on its board). For a 50–500 person contractor, the gap is fit: enterprise platforms mean enterprise procurement, enterprise pricing, and enterprise deployment timelines. HoundShield is built for the buyer who needs enforcement this week and assessor evidence this month.",
+    theirApproach:
+      "WitnessAI provides an enterprise platform for observing, governing, and securing employee AI usage — visibility into which AI apps are in use, policy enforcement, and protection against prompt-level risks — sold primarily to large enterprises and public-sector buyers through channel partners.",
+    theirStrengths: [
+      "Enterprise-scale AI observability and governance breadth",
+      "Federal-friendly go-to-market through the Carahsoft channel",
+      "Credible security pedigree, including former senior US intelligence leadership as advisors",
+      "Fits organizations that need company-wide AI governance beyond prompt blocking",
+    ],
+    ourEdge: [
+      {
+        title: "Built for the 5–500 person contractor",
+        body: "HoundShield deploys as self-hosted Docker (Mode B) in minutes and starts at a $499 one-time assessment — no enterprise sales cycle, no platform rollout. The DIB mid-market can't wait a procurement quarter for AI controls.",
+      },
+      {
+        title: "Evidence in 14 days",
+        body: "The $499 CMMC AI Risk Assessment runs two weeks in your environment and produces a SHA-256-signed PDF mapping every AI prompt event to NIST 800-171 Rev 2 — an artifact you hand your C3PAO, not a dashboard you interpret.",
+      },
+      {
+        title: "Transparent, published pricing",
+        body: "The report is $499. Plans are published on the pricing page. Enterprise platforms are quoted — and quotes gate SMBs out.",
+      },
+      {
+        title: "Local-only data path by design",
+        body: "In Mode B, prompt scanning happens entirely on your infrastructure; in Mode C it runs air-gapped. Nothing about your AI usage — content or metadata — needs to reach us.",
+      },
+    ],
+    matrix: [
+      { dimension: "Target buyer", houndshield: "5–500 person DIB / healthcare / legal", competitor: "Large enterprise and federal", advantage: "even" },
+      { dimension: "Time to deployment", houndshield: "Minutes (self-hosted Docker)", competitor: "Enterprise rollout cycle", advantage: "houndshield" },
+      { dimension: "Entry price", houndshield: "$499 one-time assessment, published plans", competitor: "Enterprise-quoted", advantage: "houndshield" },
+      { dimension: "CMMC / NIST 800-171 evidence PDF", houndshield: "Yes — control-mapped, signed", competitor: "Governance reporting, not a CMMC assessment artifact", advantage: "houndshield" },
+      { dimension: "AI governance breadth at enterprise scale", houndshield: "Focused prompt firewall + audit", competitor: "Broad observability and governance platform", advantage: "competitor" },
+      { dimension: "Federal channel presence", houndshield: "Direct + RPO/MSP partners", competitor: "Established Carahsoft channel", advantage: "competitor" },
+    ],
+    buyerFit:
+      "Defense subcontractors, clinics, and law firms in the 5–500 person range who need enforced AI controls and assessor-grade evidence now — without an enterprise platform project.",
+    chooseThemWhen: [
+      "You are a large enterprise or agency buying AI governance company-wide through an established federal channel",
+      "You need broad AI usage observability across thousands of employees, beyond prompt-level blocking",
+    ],
+    chooseUsWhen: [
+      "You are a 5–500 person contractor who needs CUI/PHI blocked this week, not next quarter",
+      "You need a NIST 800-171-mapped assessment PDF for a C3PAO on a deadline",
+      "You want published pricing and self-serve Docker deployment on your own infrastructure",
+    ],
+    faqs: [
+      {
+        q: "Is WitnessAI available to small defense contractors?",
+        a: "WitnessAI sells primarily to large enterprises and public-sector buyers through channel partners, with quoted pricing. Most 50–500 person contractors find the procurement path and price point sized for enterprises — which is exactly the gap HoundShield's $499 self-serve assessment fills.",
+      },
+      {
+        q: "Does HoundShield replace an AI governance platform?",
+        a: "For a mid-market contractor, usually yes: the requirement is enforced blocking of regulated data plus assessor evidence, which the local proxy and the $499 NIST 800-171-mapped report deliver. A global enterprise wanting organization-wide AI observability may genuinely need a platform like WitnessAI.",
+      },
+    ],
+    updated: "2026-07-10",
+  },
 ];
 
 export const COMPARISON_SLUGS: string[] = COMPARISONS.map((c) => c.slug);

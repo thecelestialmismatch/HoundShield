@@ -2,6 +2,13 @@
 
 ## Active
 
+### 2026-07-10 — Tier-1 SEO content sprint (same branch/PR #159, additive-only per founder freeze)
+- [x] 5 Tier-1 blog articles shipped (GCC High cost math · HIPAA Privacy Officer 2026 · CUI incident-response playbook · NIST 800-171 AI mapping · AI policy template)
+- [x] 3 AEO answers (is-chatgpt-hipaa-compliant · can-law-firms-use-chatgpt · what-happens-if-you-paste-cui-into-chatgpt)
+- [x] 2 comparisons (/compare/strac · /compare/witnessai) — pass the honest-editorial guard
+- [x] llms.txt: insert-only additions (new articles + answers + compare list); blog SEO contract test added to CI
+- [ ] **FOUNDER FLAG:** llms.txt still says "C3PAO partner program" (channel-identity framing — the barred kind per 2026-06-23 lesson) and the frozen blog post "how-to-protect-cui…" says "your Kaelus endpoint" (stale brand). Both left untouched per the don't-touch-existing-SEO freeze — approve fixes and they're one-line edits.
+
 ### 2026-07-10 — Unseen-issues sweep (branch claude/project-unseen-issues-206sz6)
 - [x] Proxy test suite un-broken (root postcss.config.mjs leak) + proxy added to CI (it had ZERO CI coverage)
 - [x] docker-publish.yml: publish steps could never run (step env invisible to its own `if:`) — fixed with `secrets` context; `houndshield/proxy:latest` can now actually publish once DOCKERHUB_* secrets are set
