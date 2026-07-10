@@ -162,7 +162,7 @@ export default function TeamView() {
   const todayCompleted = AGENTS.reduce((sum, a) => sum + Math.floor(a.tasksCompleted * 0.04), 0);
   const totalCompleted = AGENTS.reduce((sum, a) => sum + a.tasksCompleted, 0);
 
-  const handleAssign = (agentId: string) => {
+  const handleAssign = (_agentId: string) => {
     if (!assignText.trim()) return;
     // In a real app this would push to the agent's queue
     setAssignText('');
@@ -210,7 +210,6 @@ export default function TeamView() {
             const typeConf = TYPE_CONFIG[agent.type];
             const statusConf = STATUS_CONFIG[agent.status];
             const TypeIcon = typeConf.icon;
-            const StatusIcon = statusConf.icon;
 
             return (
               <div

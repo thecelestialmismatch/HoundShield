@@ -2,6 +2,14 @@
 
 ## Active
 
+### 2026-07-10 — Unseen-issues sweep (branch claude/project-unseen-issues-206sz6)
+- [x] Proxy test suite un-broken (root postcss.config.mjs leak) + proxy added to CI (it had ZERO CI coverage)
+- [x] docker-publish.yml: publish steps could never run (step env invisible to its own `if:`) — fixed with `secrets` context; `houndshield/proxy:latest` can now actually publish once DOCKERHUB_* secrets are set
+- [x] `npm run verify:structure` failing since PR #146 — manifest + PROJECT-STRUCTURE.md synced, added as CI Structure Guard job
+- [x] ESLint 153→0 warnings (eslint-plugin-unused-imports + `^_` pattern); pre-commit `--max-warnings 0` no longer landmined
+- [x] SecurityAdvisor system prompts were never sent to the model (JSON parse always fell back) — wired via ReasoningLoop `systemPrompt`
+- [x] /auth sign-up now shows a confirmation banner (was silent after success); fake "Live Scanning" counters relabeled "Demo — Simulated Traffic"
+
 ### 2026-07-08 — Reality check (HERMES session: direct GitHub push restored)
 - [ ] **FOUNDER, 5 min — THE revenue blocker:** set `STRIPE_SECRET_KEY` in Vercel.
       Live `/api/health` says `payments: missing_key` — ALL checkout (subscriptions + the $499 report) is dead until this lands.

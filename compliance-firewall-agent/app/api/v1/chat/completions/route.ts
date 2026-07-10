@@ -33,7 +33,7 @@ import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
 import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
 import { gatewayCorsHeaders } from "@/lib/gateway/cors";
-import type { ActionTaken, RiskLevel } from "@/lib/supabase/types";
+import type { ActionTaken } from "@/lib/supabase/types";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -216,7 +216,7 @@ async function fetchNonStreaming(
   provider: string,
   providerApiKey: string,
   body: z.infer<typeof CompletionRequestSchema>,
-  requestId: string
+  _requestId: string
 ): Promise<{ content: string; finishReason: string; promptTokens: number; completionTokens: number }> {
   let url = PROVIDER_ENDPOINTS[provider];
   let requestBody: Record<string, unknown>;
@@ -338,7 +338,6 @@ function buildStreamingProxy(
         const reader = upstream.body.getReader();
         const decoder = new TextDecoder();
         let buf = "";
-        let tokenIndex = 0;
 
         while (true) {
           const { done, value } = await reader.read();
@@ -414,7 +413,6 @@ function buildStreamingProxy(
                 ],
               };
               enqueue(`data: ${JSON.stringify(chunk)}\n\n`);
-              tokenIndex++;
             }
 
             // Emit finish chunk on stream stop signals

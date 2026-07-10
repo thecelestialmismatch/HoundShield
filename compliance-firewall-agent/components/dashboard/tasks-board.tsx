@@ -5,7 +5,6 @@ import {
   Plus,
   Filter,
   ListTodo,
-  Clock,
   PlayCircle,
   Eye,
   CheckCircle2,

@@ -7,8 +7,7 @@
  * Shows analytics panel with blocked vs allowed request counts.
  */
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { Code2, Copy, Check, Terminal, Package, BarChart3, Shield, Zap, TrendingUp, TrendingDown } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -102,7 +101,7 @@ const blockRate = Math.round((totalBlocked / (totalAllowed + totalBlocked)) * 10
 // Code block component
 // ---------------------------------------------------------------------------
 
-function CodeBlock({ code, language, label }: { code: string; language: string; label: string }) {
+function CodeBlock({ code, label }: { code: string; language: string; label: string }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
     navigator.clipboard.writeText(code).catch(() => {});

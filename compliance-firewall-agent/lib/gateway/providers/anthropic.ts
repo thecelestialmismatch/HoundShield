@@ -35,7 +35,6 @@ import type {
   TokenUsage,
   ChatMessage,
 } from "./types";
-import { getAnthropicApiKey } from "../../secrets-manager";
 
 // ---------------------------------------------------------------------------
 // Anthropic SSE event types

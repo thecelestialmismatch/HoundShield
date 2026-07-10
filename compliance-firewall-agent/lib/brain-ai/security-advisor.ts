@@ -82,6 +82,7 @@ export class SecurityAdvisor {
       model: "claude-sonnet-4-6",
       n_iterations: 2,
       apiKey: this.apiKey,
+      systemPrompt: API_SECURITY_SYSTEM_PROMPT,
     });
 
     const query = `Endpoint: ${input.method} ${input.endpoint}
@@ -106,6 +107,7 @@ Generate a comprehensive security checklist for this API endpoint.`;
       model: "claude-sonnet-4-6",
       n_iterations: 2,
       apiKey: this.apiKey,
+      systemPrompt: THREAT_MODEL_SYSTEM_PROMPT,
     });
 
     const query = `Stack: ${input.stack.join(", ")}
@@ -132,6 +134,7 @@ Generate a STRIDE threat model for this system.`;
       model: "claude-sonnet-4-6",
       n_iterations: 2,
       apiKey: this.apiKey,
+      systemPrompt: LOGIC_HUNTER_SYSTEM_PROMPT,
     });
 
     const query = `Feature: ${featureDescription}

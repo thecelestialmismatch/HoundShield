@@ -23,7 +23,6 @@ import {
   AgentStreamEvent,
   OpenRouterMessage,
   OpenRouterStreamChunk,
-  OpenRouterToolCall,
   MODEL_PRICING,
 } from './types';
 import { toolRegistry } from './tools/index';

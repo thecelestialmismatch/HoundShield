@@ -28,8 +28,6 @@ import {
   Trash2,
   Power,
   PowerOff,
-  ChevronDown,
-  ChevronUp,
   Loader2,
   CheckCircle2,
   XCircle,
@@ -40,7 +38,6 @@ import {
   Save,
   RefreshCw,
   Filter,
-  Info,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------

@@ -26,7 +26,6 @@ import { CONTROL_FAMILIES } from "@/lib/shieldready/controls/families";
 import {
   calculateSPRS,
   getCompletionPercent,
-  getRemediationPriorities,
   estimateTimeToTarget,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses } from "@/lib/shieldready/storage";

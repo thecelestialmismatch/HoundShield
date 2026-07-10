@@ -43,6 +43,45 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
+  proxy-build-and-test:
+    name: Proxy Build & Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: proxy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: proxy/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  structure-guard:
+    name: Repo Structure Guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify repo matches PROJECT-STRUCTURE.md
+        run: node scripts/verify-structure.mjs
+
   compliance-guard:
     name: Compliance Pattern Guard
     runs-on: ubuntu-latest

@@ -371,7 +371,7 @@ function patternConfidence(
  */
 function computeConfidence(
   entities: DetectedEntity[],
-  textLength: number
+  _textLength: number
 ): number {
   if (entities.length === 0) return 0;
 

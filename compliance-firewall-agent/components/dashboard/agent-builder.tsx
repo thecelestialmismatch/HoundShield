@@ -18,7 +18,6 @@ import {
   Database,
   Play,
   CheckCircle,
-  Settings2,
   TrendingUp,
   Target,
   Users,
@@ -29,10 +28,6 @@ import {
   AlertTriangle,
   Rocket,
   Brain,
-  Search,
-  FileText,
-  BookOpen,
-  Wrench,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -443,7 +438,10 @@ const TECHNICAL_TEMPLATES: Array<{
 
 import { OPENCLAW_TEMPLATES } from "./openclaw-templates";
 
-const ALL_TEMPLATES = [...MCKINSEY_TEMPLATES, ...TECHNICAL_TEMPLATES, ...OPENCLAW_TEMPLATES];
+type AgentTemplate =
+  | (typeof MCKINSEY_TEMPLATES)[number]
+  | (typeof TECHNICAL_TEMPLATES)[number]
+  | (typeof OPENCLAW_TEMPLATES)[number];
 
 const COLOR_MAP: Record<string, { icon: string; bg: string; border: string }> = {
   brand: { icon: "text-indigo-400", bg: "bg-indigo-500/10", border: "border-indigo-500/20" },
@@ -567,7 +565,7 @@ export function AgentBuilder({
     );
   };
 
-  const applyTemplate = (template: (typeof ALL_TEMPLATES)[0]) => {
+  const applyTemplate = (template: AgentTemplate) => {
     setForm({
       name: template.name,
       description: template.description,
@@ -614,7 +612,7 @@ export function AgentBuilder({
     }
   };
 
-  const quickLaunchTemplate = (template: (typeof ALL_TEMPLATES)[0]) => {
+  const quickLaunchTemplate = (template: AgentTemplate) => {
     if (onLaunchWorkspace) {
       onLaunchWorkspace({
         name: template.name,

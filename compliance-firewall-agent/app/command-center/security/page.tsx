@@ -14,7 +14,7 @@
  * Data source: /api/audit/export (real Supabase) with demo fallback.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Shield,
@@ -25,7 +25,6 @@ import {
   TrendingDown,
   RefreshCw,
   BarChart3,
-  CheckCircle2,
   XCircle,
   Eye,
 } from "lucide-react";

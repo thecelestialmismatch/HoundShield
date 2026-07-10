@@ -19,6 +19,8 @@ export interface ReasoningLoopConfig {
   confidenceThreshold?: number;
   maxBudgetTokens?: number;
   apiKey?: string;
+  /** Overrides the default CMMC-expert system prompt (e.g. to demand a JSON shape). */
+  systemPrompt?: string;
 }
 
 export interface ReasoningResult {
@@ -34,6 +36,7 @@ const DEFAULT_CONFIG: Required<ReasoningLoopConfig> = {
   confidenceThreshold: 0.95,
   maxBudgetTokens: 4096,
   apiKey: "",
+  systemPrompt: "",
 };
 
 function extractConfidence(text: string): number {
@@ -88,6 +91,7 @@ export class ReasoningLoop {
 
   async run(query: string, context?: string): Promise<ReasoningResult> {
     const systemPrompt =
+      this.config.systemPrompt ||
       "You are a CMMC Level 2 compliance expert. Be precise. Reference specific NIST 800-171 Rev 2 control numbers. After your answer, output: CONFIDENCE: <0.0-1.0>";
 
     const chain: string[] = [];

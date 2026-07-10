@@ -9,7 +9,6 @@ import {
   Eye,
   CheckCircle2,
   Tag,
-  MoreHorizontal,
   GripVertical,
   X,
   ArrowRight,

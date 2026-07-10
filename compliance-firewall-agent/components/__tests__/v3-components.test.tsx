@@ -65,7 +65,6 @@ describe('CountdownTimer', () => {
 
   it('updates seconds after 1000ms', async () => {
     render(<CountdownTimer />)
-    const before = screen.getByTestId('countdown-seconds').textContent
     act(() => { vi.advanceTimersByTime(1000) })
     const after = screen.getByTestId('countdown-seconds').textContent
     // Either same (59→00 rollover) or different

@@ -4,13 +4,13 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
-import { ScrollProgressBar, ScrollReveal } from "@/components/scroll-effects";
+import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
     ShieldCheck, AlertTriangle, Lock, ArrowRight, CheckCircle2,
     Key, Mail, CreditCard, Globe, Database, Fingerprint,
     Eye, Zap, Shield, RotateCcw, ChevronRight, Building2,
-    FileText, Lightbulb, BookOpen, Brain, Radar, Activity,
-    Server, Users, ChevronDown, ExternalLink, Package
+    FileText, Lightbulb, BookOpen, Radar,
+    Server, ChevronDown, Package
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════
@@ -316,7 +316,6 @@ export default function FreeDemoPage() {
     const criticalCount = results.filter((r) => r.severity === "critical").length;
     const highCount = results.filter((r) => r.severity === "high").length;
     const mediumCount = results.filter((r) => r.severity === "medium").length;
-    const totalThreats = results.reduce((acc, r) => acc + r.matches.length, 0);
 
     return (
         <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)] font-sans overflow-x-hidden">

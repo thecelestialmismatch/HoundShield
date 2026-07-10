@@ -7,51 +7,33 @@ import { FooterV3 } from "@/components/layout/FooterV3";
 import {
   Shield,
   Zap,
-  Lock,
   Eye,
-  FileCheck,
   ArrowRight,
-  Menu,
-  X,
   ShieldCheck,
   Globe,
-  Activity,
   ChevronRight,
   ChevronDown,
-  Server,
-  Network,
   Brain,
   CheckCircle2,
-  Layers,
-  Clock,
   Terminal,
   Search,
   Database,
   Code2,
   LineChart,
   BookOpen,
-  Workflow,
   Cpu,
-  Radio,
-  Radar,
-  BarChart3,
   RefreshCw,
   Play,
   Pause,
-  Users,
   Bot,
-  Sparkles,
   Fingerprint,
   Scale,
-  Briefcase,
-  Microscope,
   Gavel,
   HeartPulse,
   TrendingUp,
   FileSearch,
   Wrench,
   Settings,
-  MessageSquare,
   AlertTriangle,
 } from "lucide-react";
 
@@ -90,12 +72,7 @@ function AnimatedSection({ children, className = "", delay = 0 }: { children: Re
 }
 
 /* ===== LIVE AGENT EXECUTION SIMULATOR ===== */
-function AgentSimulator() {
-  const [step, setStep] = useState(0);
-  const [isRunning, setIsRunning] = useState(true);
-  const [thought, setThought] = useState("");
-
-  const execution = [
+const execution = [
     { phase: "OBSERVE", thought: "Received request: 'Analyze Q3 financials for compliance risks'. Gathering context from knowledge base...", tool: null, color: "text-brand-400" },
     { phase: "THINK", thought: "This involves financial data analysis. I need to: (1) scan for PII, (2) check regulatory compliance, (3) identify risk patterns.", tool: null, color: "text-[var(--hs-steel)]" },
     { phase: "ACT", thought: "Running compliance scan on input data...", tool: "Compliance Scan", color: "text-brand-400" },
@@ -104,7 +81,12 @@ function AgentSimulator() {
     { phase: "ACT", thought: "Classifying sensitivity levels and generating compliance report...", tool: "Data Query", color: "text-brand-400" },
     { phase: "ACT", thought: "Generating visual compliance summary...", tool: "Chart Gen", color: "text-brand-400" },
     { phase: "RESULT", thought: "Analysis complete. 2 items flagged for review. Compliance report generated with risk assessment.", tool: null, color: "text-[var(--hs-success)]" },
-  ];
+];
+
+function AgentSimulator() {
+  const [step, setStep] = useState(0);
+  const [isRunning, setIsRunning] = useState(true);
+  const [thought, setThought] = useState("");
 
   useEffect(() => {
     if (!isRunning) return;
@@ -212,16 +194,7 @@ function AgentSimulator() {
 
 /* ===== MAIN PAGE ===== */
 export default function AgentsPage() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTemplate, setActiveTemplate] = useState<number | null>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
 
 
   const tools = [
@@ -703,7 +676,7 @@ export default function AgentsPage() {
                     <span className="text-sm font-semibold text-[var(--hs-ink)]">Select Tools</span>
                   </div>
                   <div className="glass-card p-4 space-y-2">
-                    {["Compliance Scan", "Data Query", "File Analysis", "Knowledge Base"].map((tool, i) => (
+                    {["Compliance Scan", "Data Query", "File Analysis", "Knowledge Base"].map((tool) => (
                       <div key={tool} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-[var(--hs-border-subtle)]">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[var(--hs-success)]" />
                         <span className="text-xs text-[var(--hs-ink-secondary)]">{tool}</span>

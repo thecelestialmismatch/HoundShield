@@ -34,7 +34,7 @@ import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { StreamScanner } from "./stream-scanner";
 import { modelLeaderboard } from "./model-leaderboard";
 import { extractPromptFromBody } from "@/lib/interceptor/request-parser";
-import type { RiskLevel, ActionTaken } from "@/lib/supabase/types";
+import type { RiskLevel } from "@/lib/supabase/types";
 
 // ---------------------------------------------------------------------------
 // Public types
