@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/client";
 import { getSessionUser } from "@/lib/auth/session";
+import { isBetterAuthEnabled, profileKeyColumn } from "@/lib/auth/auth-config";
 
 /**
  * Server-side auth guards for API route handlers.
@@ -52,7 +53,9 @@ export async function requireUser(): Promise<GuardResult> {
     const { data } = await svc
       .from("profiles")
       .select("role")
-      .eq("id", sessionUser.id)
+      // Supabase sessions key profiles by id (uuid); Better Auth sessions by
+      // better_auth_user_id (text, written by the migration-025 trigger).
+      .eq(profileKeyColumn(isBetterAuthEnabled()), sessionUser.id)
       .maybeSingle();
     if (data?.role) role = data.role as string;
   } catch {

@@ -22,8 +22,8 @@ import { buildUserContextPrompt, buildIdentityAnswer, isIdentityQuestion, type B
 import { isStatusQuestion, statusAnswerFromConsent, sprsInputSchema } from "@/lib/brain-ai/status-intent";
 import { buildCustomerStatus, type CustomerStatus, type OrderSummary, type SprsInput } from "@/lib/customer/status";
 import { buildOrderView, type OrderRowLike } from "@/lib/reports/order-view";
-import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { getSessionProfile as resolveSessionProfileRow } from "@/lib/auth/profile";
+import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import {
   captureRequest,
   openSpan,
@@ -93,27 +93,21 @@ function streamTextAsSSE(text: string): ReadableStream {
 }
 
 /**
- * Best-effort profile from the Supabase SESSION (never a client-sent id).
+ * Best-effort profile from the SESSION (never a client-sent id). Provider-
+ * agnostic via lib/auth/profile — works under Supabase Auth and Better Auth.
  * Returns null for anonymous visitors, demo mode, or any error —
  * personalization is a bonus, never a blocker.
  */
 async function getSessionProfile(): Promise<BrainUserContext | null> {
   try {
-    if (!isSupabaseConfigured()) return null;
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return null;
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("full_name, company, role, tier")
-      .eq("id", user.id)
-      .single();
+    const session = await resolveSessionProfileRow("full_name, company, role, tier");
+    const profile = session?.profile;
     if (!profile) return null;
     return {
-      name: profile.full_name,
-      company: profile.company,
-      role: profile.role,
-      tier: profile.tier,
+      name: (profile.full_name as string | null) ?? null,
+      company: (profile.company as string | null) ?? null,
+      role: (profile.role as string | null) ?? null,
+      tier: (profile.tier as string | null) ?? null,
     };
   } catch {
     return null;
@@ -139,17 +133,14 @@ async function resolveSessionStatus(
 ): Promise<{ consent: boolean; status: CustomerStatus | null }> {
   try {
     if (!isSupabaseConfigured()) return { consent: false, status: null };
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { consent: false, status: null };
+    // Provider-agnostic session → own-profile resolution (Supabase or Better
+    // Auth). `id` is the profile uuid — the key report_orders.user_id points at
+    // since migration 025, under BOTH providers.
+    const session = await resolveSessionProfileRow("id, brain_ai_data_consent, tier, company");
+    const profile = session?.profile;
+    if (!profile) return { consent: false, status: null };
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("brain_ai_data_consent, tier, company")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    const consent = Boolean(profile?.brain_ai_data_consent);
+    const consent = Boolean(profile.brain_ai_data_consent);
     if (!consent) return { consent: false, status: null };
 
     // Consent granted. Merge the (validated) client SPRS slice — assessment data
@@ -158,13 +149,16 @@ async function resolveSessionStatus(
     const parsedSprs = sprsInputSchema.safeParse(clientSprs);
     const sprs: SprsInput | null = parsedSprs.success ? parsedSprs.data : null;
 
-    // Account slice: latest report order (own rows only).
-    const { data: orderRows } = await supabase
+    // Account slice: latest report order — the caller's OWN rows only. The
+    // service client is scoped by the session-derived profile id (never a
+    // client-sent id), same trust model as the api-guard role lookup.
+    const svc = createServiceClient();
+    const { data: orderRows } = await svc
       .from("report_orders")
       .select(
         "id, email, full_name, vertical, amount_cents, currency, status, is_wholesale, stripe_session_id, report_delivered_at, created_at",
       )
-      .eq("user_id", user.id)
+      .eq("user_id", profile.id as string)
       .order("created_at", { ascending: false })
       .limit(1);
 

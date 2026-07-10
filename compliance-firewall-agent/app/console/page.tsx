@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import { LiveCommandCenter } from '@/components/dashboard/LiveCommandCenter'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
 import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
-import { createClient } from '@/lib/supabase/server'
-import { isSupabaseConfigured } from '@/lib/supabase/client'
-import { buildDashboardViewer } from '@/lib/auth/dashboard-viewer'
+import { getSessionProfile } from '@/lib/auth/profile'
+import { buildDashboardViewer, type ViewerProfile } from '@/lib/auth/dashboard-viewer'
 
 export const metadata: Metadata = {
   title: 'Live Command Center — HoundShield',
@@ -23,18 +22,11 @@ export const dynamic = 'force-dynamic'
  */
 async function getViewer() {
   try {
-    if (!isSupabaseConfigured()) return undefined
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) return undefined
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('company, full_name, tier')
-      .eq('id', user.id)
-      .single()
-    return buildDashboardViewer(profile) ?? undefined
+    // Provider-agnostic: resolves the session (Better Auth or Supabase) and
+    // the caller's own profile row through lib/auth/profile.
+    const session = await getSessionProfile('company, full_name, tier')
+    if (!session?.profile) return undefined
+    return buildDashboardViewer(session.profile as ViewerProfile) ?? undefined
   } catch {
     return undefined
   }
