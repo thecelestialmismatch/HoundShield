@@ -64,6 +64,67 @@ describe("Brain AI — logo-forward and CUI-safe", () => {
   });
 });
 
+describe("subscription-aware — the dashboard bills against entitlements, not hardcoded caps", () => {
+  const lcc = read("components/dashboard/LiveCommandCenter.tsx");
+  it("resolves the signed-in plan through the entitlements model", () => {
+    expect(lcc).toMatch(/from '@\/lib\/billing\/entitlements'/);
+    expect(lcc).toMatch(/getEntitlements\(viewer\?\.tier/);
+  });
+  it("no longer hardcodes the old 250,000 scan cap or a fixed Pro plan", () => {
+    expect(lcc).not.toContain("250,000");
+    expect(lcc).not.toContain("143,280 / 250,000");
+  });
+  it("renders the gated feature grid + a plan-driven upgrade CTA", () => {
+    expect(lcc).toMatch(/FEATURE_LABELS/);
+    expect(lcc).toMatch(/Upgrade to \{getEntitlements\(ent\.nextTier\)\.name\}/);
+  });
+});
+
+describe("personalized Brain AI — greets by name, human + tier-aware", () => {
+  const lcc = read("components/dashboard/LiveCommandCenter.tsx");
+  it("brainAnswer accepts an operator context (name + entitlements)", () => {
+    expect(lcc).toMatch(/export function brainAnswer\(qRaw: string, ctx\?: BrainContext\)/);
+  });
+  it("greets the operator by first name on the dashboard", () => {
+    expect(lcc).toMatch(/Welcome back, \$\{name\}/);
+  });
+  it("shows a Brain-query budget meter (metered usage made visible)", () => {
+    expect(lcc).toContain('id="lcc-brainUse"');
+    expect(lcc).toContain('id="lcc-brainBar"');
+  });
+  it("escapes profile-sourced strings before they reach innerHTML", () => {
+    expect(lcc).toMatch(/export function escapeHtml/);
+    expect(lcc).toMatch(/escapeHtml\(orgName\)/);
+  });
+});
+
+describe("hero identity band — brand-forward Overview anchor (carries the greeting + plan)", () => {
+  const lcc = read("components/dashboard/LiveCommandCenter.tsx");
+  const css = read("components/dashboard/lccStyles.ts");
+  it("renders a branded hero band with the logo + greeting/org in hero-org", () => {
+    expect(lcc).toMatch(/className="hero"/);
+    expect(lcc).toMatch(/hero-logo[\s\S]{0,80}houndshield-logo\.png/);
+    expect(lcc).toMatch(/hero-org/);
+  });
+  it("carries the personalization inside the hero (greet-by-name + plan chip)", () => {
+    expect(lcc).toMatch(/hero-org[\s\S]{0,80}Welcome back, \$\{name\}/);
+    expect(lcc).toMatch(/hero[\s\S]{0,400}plan-chip/);
+  });
+  it("its status chips COMPLEMENT the KPIs (Engines / Scan p50 / Regions — no SPRS/blocked dupes)", () => {
+    expect(lcc).toMatch(/hero-metric[\s\S]{0,120}Engines/);
+    expect(lcc).toMatch(/hero-metric[\s\S]{0,120}Scan p50/);
+    expect(lcc).toMatch(/hero-metric[\s\S]{0,120}Regions/);
+  });
+  it("the hero logo tilts on hover (rotate/scale only, never a translate)", () => {
+    expect(css).toMatch(/\.hs-lcc \.hero-logo:hover img\{transform:rotate\(-8deg\) scale\(1\.08\)\}/);
+    // guard: the hero band must not smuggle a translate into the mark
+    const heroRules = css.match(/\.hs-lcc \.hero-logo[^{]*\{[^}]*\}/g) ?? [];
+    for (const rule of heroRules) {
+      if (/transform\s*:/.test(rule)) expect(rule).not.toMatch(/translate|matrix|skew/i);
+    }
+  });
+});
+
 describe("mobile — off-canvas drawer with a dismiss scrim", () => {
   const lcc = read("components/dashboard/LiveCommandCenter.tsx");
   const css = read("components/dashboard/lccStyles.ts");

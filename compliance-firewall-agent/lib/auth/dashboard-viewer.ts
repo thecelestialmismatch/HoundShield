@@ -28,6 +28,11 @@ export interface ViewerProfile {
   tier?: string | null;
 }
 
+/** First name from a full name: "Jordan Marsh" -> "Jordan". Empty when blank. */
+export function firstNameFrom(fullName: string | null | undefined): string {
+  return (fullName ?? "").trim().split(/\s+/).filter(Boolean)[0] ?? "";
+}
+
 export function buildDashboardViewer(profile: ViewerProfile | null): DashboardViewer | null {
   if (!profile) return null;
   const company = (profile.company ?? "").trim();
@@ -36,9 +41,14 @@ export function buildDashboardViewer(profile: ViewerProfile | null): DashboardVi
   if (!label) return null;
 
   const tier = (profile.tier ?? "free").trim().toLowerCase();
+  const firstName = firstNameFrom(name);
   return {
     company: label,
+    // Raw tier slug — the dashboard resolves it to entitlements (caps, seats,
+    // feature gates). `plan` keeps the human label for the sidebar footer.
+    tier: tier || "free",
     plan: TIER_LABEL[tier] ?? "Free",
     initials: initialsFrom(label) || "HS",
+    ...(firstName ? { firstName } : {}),
   };
 }
