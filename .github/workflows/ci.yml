@@ -16,7 +16,7 @@ jobs:
         working-directory: compliance-firewall-agent
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -52,7 +52,7 @@ jobs:
         working-directory: proxy
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -80,7 +80,7 @@ jobs:
     name: Repo Structure Guard
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Verify repo matches PROJECT-STRUCTURE.md
         run: node scripts/verify-structure.mjs
@@ -89,7 +89,7 @@ jobs:
     name: Compliance Pattern Guard
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Verify 16+ CUI patterns present
         run: |
