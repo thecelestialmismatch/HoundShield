@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BookOpen,
   Plus,
@@ -33,24 +33,7 @@ export default function KnowledgeBase() {
   const [newDoc, setNewDoc] = useState({ title: '', content: '', type: 'text' as KBDocument['type'] });
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchDocuments = useCallback(async () => {
-    try {
-      const res = await fetch('/api/agent/execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{ role: 'user', content: 'list documents' }],
-          model: 'gemini-flash',
-          tools: ['knowledge_base'],
-          systemPrompt: 'List all documents in the knowledge base. Call the knowledge_base tool with action "list".',
-          maxIterations: 1,
-        }),
-      });
-      // We'll just re-render with local data for now
-    } catch {
-      // Ignore - we use local state tracking
-    }
-  }, []);
+  // Documents are tracked in localStorage — there is no server-side list call.
 
   // Load from localStorage
   useEffect(() => {

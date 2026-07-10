@@ -9,7 +9,7 @@ const KEY_LENGTH = 32; // 256 bits
  */
 function getKey(): Buffer {
   const hexKey = process.env.ENCRYPTION_KEY;
-  if (!hexKey || hexKey.length !== 64) {
+  if (!hexKey || hexKey.length !== KEY_LENGTH * 2) {
     throw new Error(
       "ENCRYPTION_KEY must be a 64-character hex string. Generate with: openssl rand -hex 32"
     );

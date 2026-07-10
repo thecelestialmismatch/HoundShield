@@ -4,23 +4,19 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   AlertTriangle,
-  ArrowUpRight,
   Clock,
   DollarSign,
   TrendingUp,
   Shield,
   ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 import SPRSGauge from "@/components/dashboard/SPRSGauge";
 import { ALL_CONTROLS } from "@/lib/shieldready/controls";
 import {
   calculateSPRS,
-  getRemediationPriorities,
-  estimateTimeToTarget,
 } from "@/lib/shieldready/scoring";
-import { getAssessmentResponses, getOrganization } from "@/lib/shieldready/storage";
-import type { AssessmentResponse, NISTControl, RiskPriority } from "@/lib/shieldready/types";
+import { getAssessmentResponses } from "@/lib/shieldready/storage";
+import type { AssessmentResponse, RiskPriority } from "@/lib/shieldready/types";
 
 const PRIORITY_COLORS: Record<RiskPriority, { bg: string; text: string; border: string }> = {
   CRITICAL: { bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" },
@@ -38,22 +34,7 @@ export default function GapsPage() {
     setResponses(getAssessmentResponses());
   }, []);
 
-  const org = useMemo(() => {
-    if (typeof window === "undefined") return null;
-    return getOrganization();
-  }, []);
-
   const sprs = useMemo(() => calculateSPRS(ALL_CONTROLS, responses), [responses]);
-
-  const priorities = useMemo(
-    () => getRemediationPriorities(ALL_CONTROLS, responses),
-    [responses],
-  );
-
-  const timeEstimate = useMemo(
-    () => estimateTimeToTarget(ALL_CONTROLS, responses, 110),
-    [responses],
-  );
 
   // Gaps = controls that are UNMET or PARTIAL
   const gaps = useMemo(() => {

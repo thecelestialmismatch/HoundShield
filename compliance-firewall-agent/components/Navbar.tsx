@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { getPlan, formatUSD } from "@/lib/pricing/plans";
 import { NAV_TRUST_BADGE } from "@/lib/site/metrics";
 import {
@@ -162,55 +162,6 @@ function FlyoutPanel<T extends { icon: React.ElementType; color: string; bg: str
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-/* ── Hover Nav Item (wraps each link with flyout) ────────── */
-function HoverNavItem({
-  label,
-  href,
-  isDark,
-  isActive,
-  children,
-}: {
-  label: string;
-  href: string;
-  isDark: boolean;
-  isActive: boolean;
-  children?: React.ReactNode;
-}) {
-  const [open, setOpen] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleEnter = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setOpen(true);
-  };
-  const handleLeave = () => {
-    closeTimer.current = setTimeout(() => setOpen(false), 150);
-  };
-
-  const linkActive  = isDark ? "text-brand-400 bg-brand-500/10" : "text-brand-500 bg-brand-50";
-  const linkDefault = isDark ? "text-slate-400 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-slate-900 hover:bg-slate-50";
-  const activeOpen  = open && !isActive ? (isDark ? "text-white bg-white/8" : "text-slate-900 bg-slate-100") : "";
-
-  return (
-    <div className="relative" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
-      <Link
-        href={href}
-        className={`inline-flex items-center gap-1 px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-          isActive ? linkActive : activeOpen || linkDefault
-        }`}
-      >
-        {label}
-        {children && (
-          <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }} className="flex-shrink-0">
-            <ChevronDown className="w-3 h-3" />
-          </motion.span>
-        )}
-      </Link>
-      {children && open && children}
-    </div>
   );
 }
 

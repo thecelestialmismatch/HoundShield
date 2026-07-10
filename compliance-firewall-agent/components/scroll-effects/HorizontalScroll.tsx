@@ -31,8 +31,6 @@ export function HorizontalScroll({ panels, className = "", label }: HorizontalSc
     ["0vw", `${-(panels.length - 1) * 100}vw`]
   );
 
-  const activeIndex = useTransform(scrollYProgress, [0, 1], [0, panels.length - 1]);
-
   return (
     <div
       ref={containerRef}

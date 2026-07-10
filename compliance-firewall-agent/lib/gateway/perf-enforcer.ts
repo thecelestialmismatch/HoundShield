@@ -192,7 +192,7 @@ export function withBudgetSync<T>(
 // Internal helpers
 // ---------------------------------------------------------------------------
 
-function recordSample(op: OperationType, durationMs: number, requestId?: string): void {
+function recordSample(op: OperationType, durationMs: number, _requestId?: string): void {
   perfStore.samples.get(op)?.push(durationMs);
 
   const counter = perfStore.counters.get(op)!;

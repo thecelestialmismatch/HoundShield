@@ -208,7 +208,6 @@ export function computeMetrics(trace: Trace): TraceMetrics {
   const llmSpans   = trace.spans.filter(s => s.type === 'llm_call');
   const ragSpans   = trace.spans.filter(s => s.type === 'retriever' || s.type === 'retrieved_chunks');
   const toolSpans  = trace.spans.filter(s => s.type === 'tool_call');
-  const errorSpans = trace.spans.filter(s => s.error);
 
   const llmLatencyMs      = sum(llmSpans.map(s => s.durationMs ?? 0));
   const retrievalLatencyMs = sum(ragSpans.map(s => s.durationMs ?? 0));
@@ -465,10 +464,6 @@ function generateSpanId(): string {
 
 function hashContent(content: string): string {
   return createHash('sha256').update(content).digest('hex').slice(0, 16);
-}
-
-function hashObject(obj: unknown): string {
-  return hashContent(JSON.stringify(obj));
 }
 
 function sum(nums: number[]): number {

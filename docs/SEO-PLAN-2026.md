@@ -294,3 +294,41 @@ Once the first 5 manual posts rank, scale with programmatic content:
 - `NIST 800-171 Practice [X.X.X] — AI Tool Compliance Guide` (one per control)
 
 **Volume target:** 50 programmatic pages by Month 3. Each targets a long-tail keyword with 10-100 monthly searches. Combined = 2,000-5,000 monthly organic visitors.
+
+---
+
+## Execution Log — 2026-07-10 (Tier-1 content sprint, PR #159)
+
+Shipped additively (zero edits to any previously ranking page — existing titles,
+metas, sitemap entries, and copy untouched):
+
+**Blog (5 Tier-1 articles from the CLAUDE.md priority list):**
+- `/blog/gcc-high-copilot-vs-third-party-ai-proxy-cmmc-cost` — the highest-value
+  comparison query; honest cost math incl. when GCC High wins
+- `/blog/chatgpt-and-hipaa-what-privacy-officers-need-to-know-2026` — first
+  HIPAA-cluster article (Rachel, fastest-closing buyer)
+- `/blog/employee-pasted-cui-into-chatgpt-incident-response-playbook` — highest-
+  intent post-incident query; 72-hour DFARS/DIBNet sequence
+- `/blog/nist-800-171-controls-that-map-to-ai-prompt-monitoring` — authority
+  piece; full Rev 2 control mapping table
+- `/blog/cmmc-ai-use-policy-template` — free-template link magnet, control-mapped
+
+**AEO answers (FAQPage + Article JSON-LD, answer-first ledes):**
+- `/answers/is-chatgpt-hipaa-compliant`
+- `/answers/can-law-firms-use-chatgpt`
+- `/answers/what-happens-if-you-paste-cui-into-chatgpt`
+
+**Comparisons (honest, concede-a-row editorial contract):**
+- `/compare/strac` · `/compare/witnessai`
+
+**Infrastructure:** all new URLs flow into sitemap.xml automatically via the
+existing collections; llms.txt gained (insert-only) the new articles, an AEO
+answers section, and the full /compare list for AI-assistant citation.
+
+**Guard:** `lib/blog/__tests__/blog-seo-contract.test.ts` now enforces the blog
+corpus contract in CI — Tier-1 set stays published, snippet-length metadata,
+zero internal link rot, no fabricated metrics, no hosted-CUI-safe pairing,
+$499 anchor never undercut, and Mode B qualifier on every boundary-safety claim.
+
+**Next per this plan:** legal-cluster blog article (privilege deep-dive), C3PAO
+AI-usage checklist (Tier 2), then programmatic NIST-control pages (§8).

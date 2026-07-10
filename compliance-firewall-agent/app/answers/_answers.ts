@@ -204,6 +204,155 @@ export const ANSWERS: Answer[] = [
       },
     ],
   },
+
+  // ── Tier-1 SEO sprint (2026-07-10) — additive only; entries above unchanged ──
+  {
+    slug: "is-chatgpt-hipaa-compliant",
+    metaTitle: "Is ChatGPT HIPAA Compliant? (2026 Privacy Officer Answer)",
+    metaDescription:
+      "No — ChatGPT is not HIPAA-compliant by default. Consumer and Plus versions have no BAA, so entering PHI is a disclosure. Here's what compliant AI use looks like in 2026.",
+    h1: "Is ChatGPT HIPAA compliant?",
+    lede: "No — ChatGPT is not HIPAA-compliant by default. The consumer and Plus versions offer no Business Associate Agreement (BAA), so entering protected health information (PHI) discloses it to a vendor with no HIPAA obligations — a potential reportable breach. OpenAI supports BAAs only for its API and enterprise offerings, and even then organizations must add safeguards like minimum-necessary limits, access controls, and audit trails. Most healthcare teams get compliant by blocking PHI locally before prompts leave their network.",
+    sections: [
+      {
+        heading: "Why consumer ChatGPT fails HIPAA",
+        paragraphs: [
+          "HIPAA requires a Business Associate Agreement before any third party creates, receives, maintains, or transmits PHI on a covered entity's behalf. Consumer ChatGPT has no BAA, and its terms do not contemplate PHI at all. The moment a nurse pastes a patient chart in to summarize it, PHI has been disclosed to OpenAI with no HIPAA protections attached.",
+          "This is not a fringe behavior problem. Netskope's May 2025 analysis found 81% of data policy violations in healthcare organizations involved regulated data — and generative AI prompts are one of the fastest-growing channels for it.",
+        ],
+      },
+      {
+        heading: "The paths to compliant AI use",
+        ordered: [
+          "BAA-covered pathway: use OpenAI's API or enterprise offerings under a signed BAA, with minimum-necessary discipline, access controls, and audit logging layered on. A BAA is necessary but not sufficient.",
+          "Block-PHI-locally pathway: keep staff on the AI tools they already use, but route traffic through a firewall running on your own infrastructure that scans each prompt for PHI markers and blocks matches before they leave the network.",
+          "Most clinics combine both: a BAA-covered pathway for sanctioned workflows, and local blocking as the safety net for everything else.",
+        ],
+      },
+      {
+        heading: "Why cloud DLP tools don't solve this",
+        paragraphs: [
+          "A DLP product that scans your prompts in the vendor's cloud has to receive your PHI in order to protect it — which puts you back in BAA territory with the DLP vendor itself. Local scanning avoids the recursion: HoundShield's self-hosted deployment inspects prompts in under 10ms on your own infrastructure, so PHI never leaves your boundary to be checked.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Does ChatGPT Enterprise have a BAA?",
+        a: "OpenAI supports Business Associate Agreements for its API and enterprise offerings on request — but a BAA covers the vendor relationship, not your workflows. You still need minimum-necessary limits, access controls, and audit trails to be defensible.",
+      },
+      {
+        q: "Is pasting PHI into ChatGPT a reportable breach?",
+        a: "PHI sent to a vendor with no BAA is an impermissible disclosure, which triggers a four-factor breach risk assessment and potentially notification to patients and HHS. Loop in your Privacy Officer immediately and preserve the conversation record for scoping.",
+      },
+      {
+        q: "Can we just ban AI tools instead?",
+        a: "Policy-only bans rarely hold — staff switch to personal devices and accounts, and you lose visibility entirely. An enforced technical control that blocks PHI but allows clean prompts keeps the productivity win while making the policy real.",
+      },
+      {
+        q: "Do AI medical scribes have the same problem?",
+        a: "Dedicated ambient-scribe vendors typically sign BAAs and are purpose-built for PHI — a different risk profile from staff pasting charts into consumer chatbots. Vet the scribe's BAA and data handling, and still control what general-purpose AI tools can receive.",
+      },
+    ],
+  },
+  {
+    slug: "can-law-firms-use-chatgpt",
+    metaTitle: "Can Law Firms Use ChatGPT? (Privilege & Ethics, 2026)",
+    metaDescription:
+      "Yes — law firms can use ChatGPT if client confidences never reach it unprotected. Bar ethics opinions require confidentiality safeguards; here's the compliant setup.",
+    h1: "Can law firms use ChatGPT?",
+    lede: "Yes — law firms can use ChatGPT, but only with safeguards that keep client confidences out of it. State bar ethics opinions issued in 2024–2025 (including New York, California, and Florida) permit generative AI use while holding lawyers to their existing duties of confidentiality, competence, and supervision. Pasting privileged communications or client-identifying facts into a consumer chatbot risks both an ethics violation and an argument that privilege was waived. The compliant pattern: scan and block confidential content locally before any prompt leaves the firm's network.",
+    sections: [
+      {
+        heading: "What the bar opinions actually require",
+        paragraphs: [
+          "No major bar has banned generative AI. Instead, the 2024–2025 opinions converge on the same duties: understand the technology (competence), protect client information (confidentiality), supervise its output (supervision), and in some circumstances obtain informed consent before inputting client data into tools that may retain or train on it.",
+          "The confidentiality duty is the operative constraint. A consumer chatbot that retains conversations is a third party — disclosing client confidences to it without safeguards is the same category of problem as discussing a case in a crowded elevator, except logged.",
+        ],
+      },
+      {
+        heading: "The privilege problem is sharper than the ethics problem",
+        paragraphs: [
+          "Attorney-client privilege protects communications kept confidential. Opposing counsel will argue that routing privileged material through a retaining, non-confidential AI service was a voluntary disclosure that waived privilege. Whether that argument wins is unsettled — which is exactly why firms should never have to litigate it about their own conduct.",
+        ],
+      },
+      {
+        heading: "The compliant setup for a 50–500 attorney firm",
+        ordered: [
+          "Publish an AI use policy: which tools are approved, what content is prohibited (client identities, privileged communications, deal terms, PII).",
+          "Route firm AI traffic through a locally hosted scanning proxy that detects client-matter identifiers, privileged-material markers, and PII in prompts — and blocks them before transmission. Scanning happens inside the firm's network; no third party receives the content in order to check it.",
+          "Keep the tamper-evident log. It is your evidence of supervision — for the ethics inquiry you hope never comes, and for clients (increasingly common in outside counsel guidelines) who ask how you police AI use.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Does using ChatGPT waive attorney-client privilege?",
+        a: "It is unsettled — and that is the problem. Opposing counsel can argue that submitting privileged material to a retaining third-party service was a disclosure inconsistent with confidentiality. The defensible position is technical prevention: privileged content never reaches the tool.",
+      },
+      {
+        q: "Do we need client consent to use AI?",
+        a: "Several bar opinions suggest informed consent when client confidences would be input into tools that retain or train on data. If confidential content is blocked from reaching AI tools entirely, the consent question largely falls away for general-purpose use.",
+      },
+      {
+        q: "What about legal-specific AI tools with confidentiality terms?",
+        a: "Legal-vertical AI vendors with contractual confidentiality, no-training commitments, and access controls present a different risk profile than consumer chatbots. Vet their terms — and still control what general-purpose tools can receive, because staff use those too.",
+      },
+      {
+        q: "How do we monitor without reading our own lawyers' prompts?",
+        a: "Local scanning inspects prompts programmatically on your own infrastructure and logs the decision — pattern matched, action taken — rather than shipping prompt content to a vendor. Review focuses on blocked events, not routine surveillance.",
+      },
+    ],
+  },
+  {
+    slug: "what-happens-if-you-paste-cui-into-chatgpt",
+    metaTitle: "What Happens If You Paste CUI Into ChatGPT? (DFARS 7012)",
+    metaDescription:
+      "Pasting CUI into ChatGPT sends it to OpenAI's servers — a potential DFARS 7012 cyber incident with a 72-hour DoD reporting clock. What happens next, step by step.",
+    h1: "What happens if you paste CUI into ChatGPT?",
+    lede: "Pasting CUI into ChatGPT transmits it to OpenAI's servers — systems not authorized to hold Controlled Unclassified Information. For a defense contractor, that is a potential cyber incident under DFARS 252.204-7012, which requires rapid reporting to DoD through DIBNet within 72 hours of discovery, evidence preservation for at least 90 days, and notification up your contract chain. Deleting the chat afterward does not un-disclose the data. The right response is a scoped incident process now and a technical control that prevents the next one.",
+    sections: [
+      {
+        heading: "The immediate consequences, in order",
+        ordered: [
+          "The data has left your covered system: OpenAI's infrastructure received the content, and depending on account settings it may be retained.",
+          "The 72-hour clock may be running: if the content was CUI, DFARS 252.204-7012 directs a rapid report through DoD's DIBNet portal — which requires a medium-assurance certificate most contractors don't have on hand.",
+          "Evidence must be preserved: 7012 requires preserving images of affected systems and monitoring data for at least 90 days from the report.",
+          "Your prime may need to know: flowdown clauses commonly require notifying the prime contractor or contracting officer.",
+        ],
+      },
+      {
+        heading: "What deleting the conversation does and doesn't do",
+        paragraphs: [
+          "Submitting a deletion request and turning off chat history are sensible mitigation steps — document both. But they are mitigation, not remedy: the disclosure already happened, and your reporting obligations are triggered by the incident, not by whether the vendor still holds the data.",
+        ],
+      },
+      {
+        heading: "Preventing the next one",
+        paragraphs: [
+          "The corrective action assessors respect is technical: route all AI traffic through a proxy on your own infrastructure that scans prompts locally and blocks CUI patterns before transmission, writing every event to a tamper-evident log. That converts this incident's corrective action into standing evidence for flow control (3.1.3), boundary protection (3.13.1), and audit (3.3.1).",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Is one pasted prompt really a reportable incident?",
+        a: "If the content was CUI, treat it as one until scoping says otherwise. DFARS 7012 reporting turns on whether a cyber incident affected covered defense information — a disclosure to an unauthorized system qualifies. Involve counsel and your contracts team immediately.",
+      },
+      {
+        q: "What is DIBNet and do we need anything to use it?",
+        a: "DIBNet (dibnet.dod.mil) is DoD's portal for defense industrial base cyber incident reporting. Submitting requires a DoD-approved medium-assurance certificate — procure one before you need it, because issuance takes days the 72-hour clock does not give you.",
+      },
+      {
+        q: "Does it matter whether chat history or training was enabled?",
+        a: "It matters for scoping and mitigation — an account with history and training enabled has broader retention exposure — but the disclosure itself occurred at submission. Document the account type and settings in your incident record either way.",
+      },
+      {
+        q: "How do we stop this happening again without banning AI?",
+        a: "Local prompt scanning: a self-hosted proxy inspects every AI-bound prompt inside your network in under 10ms and blocks CUI patterns before they leave. Employees keep their AI tools; CUI stays inside the boundary; the log becomes assessor evidence.",
+      },
+    ],
+  },
 ];
 
 export const ANSWER_SLUGS = ANSWERS.map((a) => a.slug);

@@ -16,7 +16,7 @@
  * loop and settles quickly. No external physics library required.
  */
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain,
@@ -300,7 +300,6 @@ function tickLayout(
     if (!a || !b) continue;
     const dx = b.x - a.x;
     const dy = b.y - a.y;
-    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
     const strength = (edge.strength ?? 0.5) * ATTRACTION;
     const fx = dx * strength;
     const fy = dy * strength;

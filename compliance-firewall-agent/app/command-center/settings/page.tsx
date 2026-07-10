@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/browser';
 import { BrainDataConsent } from '@/components/brain/BrainDataConsent';
 import {
   User,
-  Mail,
   Shield,
   CreditCard,
   LogOut,
@@ -19,7 +18,6 @@ import {
   Copy,
   Eye,
   EyeOff,
-  RefreshCw,
 } from 'lucide-react';
 
 /* ── Types ── */

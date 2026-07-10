@@ -3,10 +3,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
-  ChevronLeft,
-  ChevronRight,
-  Save,
-  RotateCcw,
   Filter,
   BarChart3,
 } from "lucide-react";

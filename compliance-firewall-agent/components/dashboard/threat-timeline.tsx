@@ -9,7 +9,6 @@ import {
   Clock,
   User,
   Globe,
-  TrendingUp,
   Activity,
   RefreshCw,
   Zap,
@@ -75,7 +74,6 @@ export function ThreatTimeline() {
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [liveCount, setLiveCount] = useState(0);
 
   const fetchEvents = useCallback(async (showRefresh = false) => {
     if (showRefresh) setRefreshing(true);
@@ -85,9 +83,6 @@ export function ThreatTimeline() {
       const res = await fetch("/api/compliance/events?limit=20");
       const data = await res.json();
       const newEvents = data.events ?? [];
-      if (newEvents.length > events.length) {
-        setLiveCount((prev) => prev + (newEvents.length - events.length));
-      }
       setEvents(newEvents);
     } catch {
       // Keep existing events
@@ -95,7 +90,7 @@ export function ThreatTimeline() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [events.length]);
+  }, []);
 
   useEffect(() => {
     fetchEvents();

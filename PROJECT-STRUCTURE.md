@@ -30,10 +30,7 @@ Legend:  🟢 product (don't break) · 📚 reusable library · 📄 docs · ⚙
 | **Brain AI knowledge data** | `brain/` |
 | **Deploy config** | `vercel.json` (root) · crons in `compliance-firewall-agent/vercel.json` |
 | **AgentHarness (deep research)** | `tools/agent-harness/` (submodule) + bridge `tools/agent-harness-bridge/` |
-| **Old / duplicate stuff (kept)** | `OldVersions/` |
-| **Parked-for-later material** | `FutureUse/` (+ the older `FUTUREPARK/` archive) |
-| **Future app surfaces / launchers** | `FutureApp/` (`launch-app.sh`) |
-| **How to launch the app locally** | `FutureApp/launch-app.sh` · `dev-start.sh` · `.claude/launch.json` |
+| **How to launch the app locally** | `dev-start.sh` · `.claude/launch.json` |
 
 ---
 
@@ -72,10 +69,6 @@ HoundShield/                         Project root Claude Code reads
 ├── agents/ skills/ commands/ rules/ 📚 reusable LIBRARIES (root) — supersets of .claude/
 │   └── agents/agentharness/         🤖 AgentHarness deep-research agent bridges
 ├── tools/                           agent-harness (submodule) + agent-harness-bridge
-│
-├── OldVersions/                     🗄️ superseded / stray copies (kept, never deleted)
-├── FutureUse/                       🗄️ parked-for-later (+ legacy FUTUREPARK/ archive)
-├── FutureApp/                       🗄️ future app surfaces & launchers
 │
 ├── docs/  brain/  tasks/  research/  advisory/   📄 docs / knowledge / planning
 └── scripts/ config/ schemas/ manifests/ integrations/  ⚙️ tooling & config
@@ -162,35 +155,29 @@ from. Active, curated copies live under `.claude/`.
 | `tasks/` | `todo.md` (sprint queue) + `lessons.md` (correction log) — read first each session |
 | `brain/` | Brain AI knowledge data (`BrainData.md`) |
 
-## 🗄️ Holding folders (kept, never deleted)
+## 🗄️ Holding folders (removed in PR #146)
 
-Three labeled buckets keep the root clean **without losing anything**. Each has a
-README manifest; see also `npm run verify:structure`.
-
-| Path | Purpose | What's inside |
-|------|---------|---------------|
-| `OldVersions/` | Superseded / stray copies | `files-1-stray-copy/` (was `files 1/` — a divergent copy of `files/` with **unique** files; mine before deleting). Manifest: `OldVersions/README.md`. |
-| `FutureUse/` | Parked-for-later material | Canonical "use someday" shelf. The older `FUTUREPARK/` archive (design refs, `HERMES_*`/`KAELUS-*` strategy, side projects, embedded gitlinks) is kept in place and indexed here. Manifest: `FutureUse/README.md`. |
-| `FutureApp/` | Future app surfaces & launchers | `launch-app.sh` (portable launcher), plus the plan for desktop/mobile/CLI/packaged-proxy surfaces. Manifest: `FutureApp/README.md`. |
-| `FUTUREPARK/` | (legacy name of FutureUse) | Existing parked archive — kept in place (contains embedded git repos + `*.docx`). See `FUTUREPARK/README.md`. |
-| `archive/` · `files/` | Older archive + misc playbooks | Binaries/old artifacts; 48 misc notes. |
+The former holding buckets (`OldVersions/`, `FutureUse/`, `FutureApp/`,
+`FUTUREPARK/`, `archive/`, `files/`) were intentionally deleted in the PR #146
+repo cleanup (−7,363 files). Their contents live in git history; recover with
+`git log --all -- <path>` + `git checkout <sha> -- <path>` if ever needed.
 
 ## 🧪 Tests
 
 | Path | What it is |
 |------|-----------|
-| `__tests__/` | Root test suite (`budget.test.ts`, `pricing.test.ts`, vitest). |
-| `scripts/verify-structure.mjs` | **Structure test** — asserts this map (`npm run verify:structure`, exit non-zero on drift). |
-| `compliance-firewall-agent/` | App tests (vitest) live with the app; Vercel build is the app gate. |
+| `scripts/verify-structure.mjs` | **Structure test** — asserts this map (`npm run verify:structure`, exit non-zero on drift; also runs in CI as the Repo Structure Guard). |
+| `compliance-firewall-agent/` | App tests (vitest) live with the app; CI runs tsc + lint + tests + build. |
+| `proxy/` | Proxy tests (vitest) live with the proxy; CI runs tsc + tests + build (Proxy Build & Test job). |
 
 ---
 
 ## Maintenance rules
 
-1. **Move, don't delete.** Superseded → `OldVersions/`; future-use → `FutureUse/`;
-   future app/launch → `FutureApp/`. Always add a row to that folder's README.
-2. **Reference-safety before any move** — `grep -rIl` the path first. App code
-   (`compliance-firewall-agent/`, `proxy/`) never moves into a holding folder.
+1. **Git history is the archive.** Superseded material is deleted, not parked —
+   the old holding folders were removed in PR #146; recover anything via git history.
+2. **Reference-safety before any move or delete** — `grep -rIl` the path first.
+   App code (`compliance-firewall-agent/`, `proxy/`) never gets bulk-moved.
 3. **Keep this map true** — after structural changes, run `npm run verify:structure`
    and update the tables here. The two are meant to agree.
 4. **Active vs library** — wire things into `.claude/` to make them active; leave the

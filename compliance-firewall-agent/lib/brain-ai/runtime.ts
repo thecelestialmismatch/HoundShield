@@ -11,12 +11,11 @@
 import {
   RoutedMatch,
   RuntimeSession,
-  TurnResult,
   createUsageSummary,
   PermissionDenial,
 } from "./models";
-import { loadCommandSnapshot, scoreCommandMatch, CommandSnapshot } from "./commands";
-import { loadToolSnapshot, scoreToolMatch, ToolSnapshot } from "./tools";
+import { loadCommandSnapshot, scoreCommandMatch } from "./commands";
+import { loadToolSnapshot, scoreToolMatch } from "./tools";
 import { QueryEnginePort, QueryEngineEvent } from "./query-engine";
 import { createSession, saveSession, loadSession } from "./session-store";
 

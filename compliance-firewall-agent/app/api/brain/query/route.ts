@@ -14,7 +14,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { queryBrain, getBrainSummary } from "@/lib/brain";
+import { queryBrain } from "@/lib/brain";
 import { ask as askGraph } from "@/lib/brain-ai/brain-query";
 import { MultiAgentOrchestrator } from "@/lib/brain-ai/multi-agent-orchestrator";
 import { z } from "zod";
