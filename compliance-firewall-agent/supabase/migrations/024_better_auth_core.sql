@@ -12,8 +12,18 @@
 -- SEPARATE, data-dependent migration (025) written once the founder confirms
 -- fresh-start vs. migrate-existing. See docs/BETTER-AUTH-MIGRATION.md.
 --
--- These tables intentionally have RLS DISABLED: Better Auth connects as the
--- app's Postgres role (not via PostgREST/anon), and authorization is enforced
+-- SECURITY — RLS is ENABLED with NO policies on all four tables. This is
+-- deliberate and load-bearing: these tables live in the `public` schema of a
+-- Supabase project whose anon/authenticated PostgREST API is internet-exposed.
+-- They hold session tokens, password hashes, and OAuth access/refresh tokens —
+-- if RLS were disabled, anyone holding the public anon key could read every
+-- session token via `GET /rest/v1/session` and take over any account.
+--
+-- Enabling RLS with zero policies denies ALL PostgREST (anon/authenticated)
+-- access, closing that hole. Better Auth is unaffected: it connects over a
+-- direct Postgres pool (DATABASE_URL) as the table OWNER, which bypasses RLS by
+-- default. We do NOT `force row level security` (that would apply RLS to the
+-- owner too and lock Better Auth out). Authorization for app reads still lives
 -- in route/app code through lib/auth/session.ts — not via auth.uid() RLS.
 
 create table if not exists "user" (
@@ -74,3 +84,19 @@ alter table if exists "profiles"
 create unique index if not exists "profiles_better_auth_user_id_key"
   on "profiles" ("better_auth_user_id")
   where "better_auth_user_id" is not null;
+
+-- ── RLS: lock these tables away from the exposed PostgREST/anon API ──────────
+-- Enable RLS with NO policies → PostgREST (anon + authenticated) is denied on
+-- every row, so session tokens / password hashes / OAuth tokens can never be
+-- read with the public anon key. Better Auth's direct owner-role Pool bypasses
+-- RLS, so its reads/writes are untouched. (No FORCE — the owner must stay
+-- exempt or Better Auth locks itself out.)
+alter table "user"         enable row level security;
+alter table "session"      enable row level security;
+alter table "account"      enable row level security;
+alter table "verification" enable row level security;
+
+-- Defense in depth: revoke the implicit grants Supabase hands the API roles so
+-- the tables are not even reachable before the RLS check. Better Auth (owner)
+-- and service_role are unaffected.
+revoke all on "user", "session", "account", "verification" from anon, authenticated;

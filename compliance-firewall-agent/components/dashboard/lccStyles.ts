@@ -240,6 +240,25 @@ export const LCC_CSS = `
 .hs-lcc .top-brand{text-decoration:none}
 .hs-lcc .top-brand img{height:26px;width:auto}
 
+/* ── Branded hero identity band (Overview) — brand-forward welcome anchor.
+   Status chips are Engines / Scan p50 / Regions so they COMPLEMENT (never
+   duplicate) the SPRS/scanned/blocked/quarantine KPI tiles below. ── */
+.hs-lcc .hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap;background:linear-gradient(120deg,color-mix(in srgb,var(--brand) 88%,#05121f),var(--brand) 46%,var(--bright));border:1px solid color-mix(in srgb,var(--brand) 40%,transparent);border-radius:var(--r);padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 30px rgba(30,58,90,.14);color:#fff}
+.hs-lcc .hero::before{content:"";position:absolute;right:-28px;top:-64px;width:230px;height:230px;background:url(/houndshield-logo.png) no-repeat center/contain;opacity:.10;filter:brightness(0) invert(1);pointer-events:none}
+.hs-lcc .hero-l{display:flex;align-items:center;gap:1rem;z-index:1;min-width:0}
+.hs-lcc .hero-logo{width:54px;height:54px;border-radius:15px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);display:grid;place-items:center;flex-shrink:0;box-shadow:0 6px 18px rgba(5,18,31,.26)}
+.hs-lcc .hero-logo img{height:34px;width:auto;filter:brightness(0) invert(1);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.hs-lcc .hero-logo:hover img{transform:rotate(-8deg) scale(1.08)}
+.hs-lcc .hero-org{font-family:var(--f-disp);font-size:1.5rem;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+.hs-lcc .hero-tag{font-size:.82rem;color:rgba(255,255,255,.85);margin-top:.2rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.hs-lcc .hero-tag .liv{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-mono);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:rgba(255,255,255,.16);padding:.16rem .5rem;border-radius:999px}
+.hs-lcc .hero-tag .liv .dot{background:#c8f5df}
+.hs-lcc .hero-r{display:flex;align-items:stretch;gap:.7rem;z-index:1;flex-wrap:wrap}
+.hs-lcc .hero-metric{text-align:right;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:.55rem .85rem;min-width:92px}
+.hs-lcc .hero-metric b{font-family:var(--f-disp);font-size:1.55rem;font-weight:600;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.hs-lcc .hero-metric span{font-size:.64rem;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:.08em}
+@media (prefers-reduced-motion: reduce){.hs-lcc .hero-logo img{transition:none}.hs-lcc .hero-logo:hover img{transform:none}}
+
 /* ── Tablet & below: sidebar becomes an off-canvas drawer over a scrim ── */
 @media(max-width:1000px){
   .hs-lcc .shell{grid-template-columns:1fr}
@@ -255,6 +274,12 @@ export const LCC_CSS = `
 @media(max-width:640px){
   .hs-lcc .top{padding:10px 14px;gap:.5rem}
   .hs-lcc .body{padding:14px 14px calc(48px + env(safe-area-inset-bottom))}
+  .hs-lcc .hero{padding:16px;gap:.9rem}
+  .hs-lcc .hero-org{font-size:1.25rem}
+  .hs-lcc .hero-logo{width:46px;height:46px}
+  .hs-lcc .hero-logo img{height:30px}
+  .hs-lcc .hero-r{width:100%}
+  .hs-lcc .hero-metric{flex:1;text-align:center;min-width:0}
   .hs-lcc .kpis{gap:10px}
   .hs-lcc .kpi{padding:13px 14px}
   .hs-lcc .kpi .n{font-size:1.5rem}
@@ -279,10 +304,53 @@ export const LCC_CSS = `
 @media(max-width:400px){
   .hs-lcc .top-right .statpill{display:none}
 }
+
+/* ── Plan chip — lives inside the hero band's tag row (greet-by-name + plan). ── */
+.hs-lcc .plan-chip{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;font-size:.74rem;color:#fff;background:linear-gradient(135deg,var(--brand),var(--orange));border-radius:99px;padding:.28rem .7rem;box-shadow:0 4px 14px -6px var(--orange)}
+.hs-lcc .plan-chip svg{width:13px;height:13px}
+
+/* ── Plan & usage panel ── */
+.hs-lcc .planbadge{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--brand),var(--orange));border-radius:99px;padding:.2rem .6rem}
+.hs-lcc .planbadge svg{width:12px;height:12px}
+.hs-lcc .plan-tag{font-size:.8rem;color:var(--mut);margin-bottom:1rem}
+.hs-lcc .usage-block{margin-bottom:1rem}
+.hs-lcc .usage-row{display:flex;justify-content:space-between;font-size:.86rem;color:var(--mut)}
+.hs-lcc .usage-row b{color:var(--text);font-family:var(--f-mono)}
+.hs-lcc .topplan{display:flex;align-items:center;gap:.45rem;margin-top:16px;font-size:.82rem;font-weight:600;color:var(--ok);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 26%,transparent);border-radius:var(--r-sm);padding:.6rem .75rem}
+.hs-lcc .topplan svg{width:15px;height:15px}
+
+/* ── Feature grid (what your plan unlocks) ── */
+.hs-lcc .feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.5rem}
+.hs-lcc .feat{display:flex;align-items:center;gap:.55rem;padding:.6rem .7rem;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--panel)}
+.hs-lcc .feat.off{background:var(--panel2);opacity:.92}
+.hs-lcc .feat-ic{width:16px;height:16px;flex-shrink:0}
+.hs-lcc .feat-ic.ok{color:var(--ok)}
+.hs-lcc .feat-ic.lk{color:var(--mut2)}
+.hs-lcc .feat-name{flex:1;font-size:.82rem;font-weight:500;color:var(--text)}
+.hs-lcc .feat.off .feat-name{color:var(--mut)}
+.hs-lcc .feat-tag{font-family:var(--f-mono);font-size:.62rem;font-weight:700;padding:.1rem .4rem;border-radius:5px}
+.hs-lcc .feat-tag.inc{color:var(--ok);background:var(--okbg)}
+.hs-lcc .feat-tag.lock{color:var(--orange);background:var(--orangebg)}
+
+/* ── Brain AI budget meter + typing indicator ── */
+.hs-lcc .brain-budget{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:.55rem .8rem;background:var(--panel2);border:1px solid var(--line);border-radius:var(--r-sm);margin:0 0 .7rem}
+.hs-lcc .bb-label{display:inline-flex;align-items:center;gap:.35rem;font-size:.74rem;font-weight:700;color:var(--brand)}
+.hs-lcc .bb-label svg{width:13px;height:13px;color:var(--orange)}
+.hs-lcc .bb-meter{flex:1;min-width:120px;height:7px;border-radius:99px;background:var(--track);overflow:hidden}
+.hs-lcc .bb-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--orange));border-radius:99px;transition:width .4s ease}
+.hs-lcc .bb-count{font-family:var(--f-mono);font-size:.68rem;color:var(--mut2)}
+.hs-lcc .bub.typing{display:inline-flex;gap:4px;align-items:center;padding:.7rem .9rem}
+.hs-lcc .bub.typing .tdot{width:6px;height:6px;border-radius:50%;background:var(--mut2);animation:lcc-typing 1.1s infinite ease-in-out}
+.hs-lcc .bub.typing .tdot:nth-child(2){animation-delay:.18s}
+.hs-lcc .bub.typing .tdot:nth-child(3){animation-delay:.36s}
+@keyframes lcc-typing{0%,60%,100%{opacity:.28;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+
 @media (prefers-reduced-motion: reduce){
   .hs-lcc .brand img,.hs-lcc .brain-mark{animation:none;transition:none}
   .hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
   .hs-lcc .side,.hs-lcc .scrim{transition:none}
   .hs-lcc .atab.on{animation:none}
+  .hs-lcc .bub.typing .tdot{animation:none}
+  .hs-lcc .bb-meter i{transition:none}
 }
 `
