@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
 import {
-  FileText,
   Download,
   Printer,
   Calendar,
@@ -20,12 +18,11 @@ import { ALL_CONTROLS } from "@/lib/shieldready/controls";
 import { CONTROL_FAMILIES } from "@/lib/shieldready/controls/families";
 import {
   calculateSPRS,
-  calculateFamilyBreakdown,
   getRemediationPriorities,
   getCompletionPercent,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses, getOrganization } from "@/lib/shieldready/storage";
-import type { AssessmentResponse, ControlFamily } from "@/lib/shieldready/types";
+import type { AssessmentResponse } from "@/lib/shieldready/types";
 import { MyReportOrders } from "@/components/reports/MyReportOrders";
 
 export default function ReportsPage() {
@@ -42,7 +39,6 @@ export default function ReportsPage() {
   }, []);
 
   const sprs = useMemo(() => calculateSPRS(ALL_CONTROLS, responses), [responses]);
-  const breakdown = useMemo(() => calculateFamilyBreakdown(ALL_CONTROLS, responses), [responses]);
   const priorities = useMemo(() => getRemediationPriorities(ALL_CONTROLS, responses), [responses]);
   const completionPercent = useMemo(() => getCompletionPercent(ALL_CONTROLS.length, responses), [responses]);
 

@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Send,
   Loader2,
-  Bot,
   User,
   Brain,
   Wrench,
@@ -257,7 +256,6 @@ export default function AgentWorkspace({
       let thinkingContent = '';
       let answerContent = '';
       let currentToolCalls: Message['toolCalls'] = [];
-      let isThinking = true;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -311,7 +309,6 @@ export default function AgentWorkspace({
                 break;
 
               case 'tool_call': {
-                isThinking = false;
                 // Complete thinking step
                 setTraceSteps(prev => prev.map(s =>
                   s.type === 'thinking' && s.status === 'running'

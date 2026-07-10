@@ -311,7 +311,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       for (let i = 0; i < n; i++) x.lineTo(i * step, h - (series[i] / max) * (h - 18) - 8)
       x.lineTo(w, h); x.closePath(); x.globalAlpha = 0.15; x.fillStyle = c; x.fill(); x.globalAlpha = 1
       x.beginPath()
-      for (let j = 0; j < n; j++) { const lx = j * step, ly = h - (series[j] / max) * (h - 18) - 8; j ? x.lineTo(lx, ly) : x.moveTo(lx, ly) }
+      for (let j = 0; j < n; j++) { const lx = j * step, ly = h - (series[j] / max) * (h - 18) - 8; if (j) { x.lineTo(lx, ly) } else { x.moveTo(lx, ly) } }
       x.strokeStyle = c; x.lineWidth = 2; x.lineJoin = 'round'; x.stroke()
       const ex = (n - 1) * step, ey = h - (series[n - 1] / max) * (h - 18) - 8
       // Warm orange "live" pulse dot at the leading edge (hint-of-orange accent).

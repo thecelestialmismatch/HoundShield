@@ -40,9 +40,6 @@ const CONNECTION_TIMEOUT_MS = 60 * 60 * 1000;
 /** Interval between server-initiated WebSocket pings (ms). */
 const HEARTBEAT_INTERVAL_MS = 30_000;
 
-/** Time to wait for a pong response before considering the connection dead (ms). */
-const PONG_TIMEOUT_MS = 10_000;
-
 /** Maximum time to wait for the auth message after connecting (ms). */
 const AUTH_TIMEOUT_MS = 15_000;
 

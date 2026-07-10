@@ -5,7 +5,6 @@ import {
   Shield,
   ShieldAlert,
   ShieldCheck,
-  AlertTriangle,
   AlertCircle,
   Loader2,
   Copy,
@@ -14,7 +13,6 @@ import {
   Clock,
   Eye,
   Trash2,
-  Info,
 } from "lucide-react";
 
 interface ScanResult {

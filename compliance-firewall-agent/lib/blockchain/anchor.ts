@@ -151,7 +151,7 @@ export async function verifyOnChain(
       blockNumber: tx.blockNumber,
       blockTimestamp,
     };
-  } catch (error) {
+  } catch {
     return {
       verified: false,
       txHash,

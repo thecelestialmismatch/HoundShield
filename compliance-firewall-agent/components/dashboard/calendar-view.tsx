@@ -10,7 +10,6 @@ import {
   Terminal,
   Bell,
   CalendarDays,
-  Plus,
   X,
 } from 'lucide-react';
 
@@ -111,7 +110,7 @@ export default function CalendarView() {
 
   // Upcoming events (next 7 days from real today)
   const upcoming = useMemo(() => {
-    const start = new Date(today);
+    const start = new Date();
     start.setHours(0, 0, 0, 0);
     const end = new Date(start);
     end.setDate(end.getDate() + 7);

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 import { createClient } from "@/lib/supabase/server";
-import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
+import { getUserSubscription } from "@/lib/subscription/check";
 import type { SubscriptionTier } from "@/lib/subscription/check";
 import { createSeedAnchor, computeMerkleRoot } from "@/lib/audit/seed-anchor";
 import { DEMO_EVENTS } from "@/lib/demo-data";

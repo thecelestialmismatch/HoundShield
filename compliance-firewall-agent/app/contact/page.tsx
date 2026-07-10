@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ScrollProgressBar } from "@/components/scroll-effects";
-import { Mail, CalendarCheck, Clock, Send, ChevronDown, CheckCircle2, Shield, ArrowRight } from "lucide-react";
+import { Mail, CalendarCheck, Clock, Send, ChevronDown, CheckCircle2, ArrowRight } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 

@@ -41,8 +41,6 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const apiKey = process.env.OPENROUTER_API_KEY ?? "";
-
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {

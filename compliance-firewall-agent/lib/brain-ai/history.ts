@@ -23,7 +23,6 @@ export interface CompactedHistory {
 }
 
 const DEFAULT_MAX_MESSAGES = 50;
-const DEFAULT_MAX_TOKENS = 4000;
 
 /**
  * Compact conversation history to stay within limits.

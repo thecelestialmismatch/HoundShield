@@ -60,14 +60,9 @@ const REQUIRED = [
   ['agents/agentharness/apodex-gateway-benchmark.md', 'file', 'Gateway benchmark agent'],
   ['agents/agentharness/brain-smoke-eval.md', 'file', 'Brain AI regression agent'],
 
-  // 🗂️ holding folders (the three buckets)
-  ['OldVersions', 'dir', 'Superseded / stray copies (kept)'],
-  ['OldVersions/README.md', 'file', 'OldVersions manifest'],
-  ['FutureUse', 'dir', 'Parked-for-later material'],
-  ['FutureUse/README.md', 'file', 'FutureUse manifest'],
-  ['FutureApp', 'dir', 'Future app surfaces / launchers'],
-  ['FutureApp/README.md', 'file', 'FutureApp manifest'],
-  ['FutureApp/launch-app.sh', 'file', 'Portable app launcher'],
+  // 🗂️ holding folders: OldVersions/, FutureUse/, and FutureApp/ were
+  // intentionally removed in the PR #146 repo cleanup (−7,363 files); they are
+  // no longer part of the required layout.
 
   // 📄 the map itself
   ['PROJECT-STRUCTURE.md', 'file', 'Top-level structure map + find index'],

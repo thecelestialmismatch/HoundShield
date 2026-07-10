@@ -22,7 +22,6 @@ import {
   QueryEngineConfig,
   defaultQueryEngineConfig,
   StoredSession,
-  StoredMessage,
   UsageSummary,
   TurnResult,
   createUsageSummary,

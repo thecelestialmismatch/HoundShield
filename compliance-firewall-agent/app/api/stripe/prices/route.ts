@@ -31,7 +31,7 @@ export async function GET() {
         const amount = p?.unit_amount ?? null; // in cents
         const currency = p?.currency ?? 'usd';
         return { id, amount, currency };
-      } catch (e) {
+      } catch {
         return { id, amount: null, currency: null };
       }
     })

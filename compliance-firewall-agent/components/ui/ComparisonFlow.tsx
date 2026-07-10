@@ -1,4 +1,4 @@
-import { Shield, Cloud, Lock, AlertTriangle } from 'lucide-react'
+import { Shield, AlertTriangle } from 'lucide-react'
 
 export function ComparisonFlow() {
   return (

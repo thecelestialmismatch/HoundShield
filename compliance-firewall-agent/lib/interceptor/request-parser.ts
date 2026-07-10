@@ -28,7 +28,7 @@ export function detectProvider(url: string): string | null {
  */
 export function extractPromptFromBody(
   body: Record<string, unknown>,
-  provider: string | null
+  _provider: string | null
 ): string {
   // OpenAI chat completions format
   if (body.messages && Array.isArray(body.messages)) {

@@ -359,6 +359,38 @@ the SPRS slice) would bloat first paint on marketing pages.
 needed (on send), so Next code-splits it out of the shared bundle. Guard the dynamic import in a
 try/catch and degrade to null.
 
+## 2026-07-10 — Unseen-issues sweep: gates that don't run are gates that don't exist
+
+### The proxy (the actual product) had ZERO CI coverage
+**What:** ci.yml gated only `compliance-firewall-agent`. The proxy's vitest setup had been broken
+for an unknown time (Vite walked up to the repo-root `postcss.config.mjs`, whose Tailwind plugin
+isn't resolvable from `proxy/`, killing the whole suite before one test ran) — and nothing noticed.
+**Rule:** Every package with a test script gets its own CI job. In any nested package's Vite/Vitest
+config, pin `css: { postcss: {} }` so config-file upward search can't escape the package.
+
+### A step's own `env:` block is invisible to that same step's `if:`
+**What:** docker-publish.yml guarded login/push with `env.DOCKERHUB_USERNAME != ''` where the env
+var was declared on the same step — the guard always read empty, so the Stage 1 "publish
+houndshield/proxy:latest" deliverable could never actually publish, even with secrets configured.
+**Rule:** Hoist the env mapping to JOB level (`jobs.<id>.env`) — job-level env IS visible in step
+`if:`. Never gate a step on its own `env:` block, and never reference `secrets.*` inside any `if:`
+(GitHub rejects the whole workflow file at validation — the run fails in 0s named by file path,
+which is the fingerprint of an invalid workflow, not a failing job).
+
+### A repo-structure gate that isn't in CI silently rots
+**What:** PR #146 deleted the holding folders; `npm run verify:structure` had been failing ever
+since because the manifest + PROJECT-STRUCTURE.md were never updated — and nothing ran the script.
+**Rule:** Structural changes update the verifier manifest + doc in the same PR, and the verifier
+runs in CI (Structure Guard job) so drift fails loudly.
+
+### Warnings-only lint + `--max-warnings 0` pre-commit = landmines
+**What:** 153 lint warnings sat in main; the pre-commit hook blocks ANY staged file with a warning,
+so touching those files blocked unrelated commits. Also: `eslint-plugin-unused-imports` auto-fixes
+unused imports on `lint --fix`; `^_` ignore patterns make intentional unused args explicit.
+**Rule:** Keep main at zero warnings — the hook's `--max-warnings 0` makes every warning someone
+else's future blocker. Unused-vars cleanup is also bug-hunting: it surfaced never-sent system
+prompts (SecurityAdvisor) and a sign-up flow with no success feedback.
+
 ## 2026-07-04 — Logo motion: the cascade loophole (PR #144)
 
 ### A running animation silently kills any hover transform — guard the mechanism, not the instance

@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Lock, Eye, EyeOff, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
 import { authClient } from "@/lib/auth/auth-client";
 import { Logo } from "@/components/Logo";
@@ -15,7 +15,6 @@ import { TextLogo } from "@/components/TextLogo";
  * useSearchParams must sit behind Suspense in the App Router.
  */
 function ResetPasswordInner() {
-  const router = useRouter();
   const params = useSearchParams();
   const token = params.get("token") ?? "";
   const tokenError = params.get("error"); // e.g. INVALID_TOKEN

@@ -12,25 +12,15 @@ import {
   CheckCircle2,
   XCircle,
   Clock,
-  TrendingUp,
-  TrendingDown,
-  Eye,
-  Lock,
-  Globe,
   BarChart3,
   Target,
   Scan,
   Brain,
   Bot,
   ShieldCheck,
-  Crosshair,
   ClipboardCheck,
   RefreshCw,
   Calendar,
-  Filter,
-  Database,
-  Cpu,
-  Wifi,
 } from "lucide-react";
 import {
   AreaChart,
@@ -60,7 +50,6 @@ import { ALL_CONTROLS } from "@/lib/shieldready/controls";
 import {
   calculateSPRS,
   getCompletionPercent,
-  getRemediationPriorities,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses } from "@/lib/shieldready/storage";
 import type { AssessmentResponse } from "@/lib/shieldready/types";
@@ -284,10 +273,6 @@ export default function CommandCenterOverview() {
   );
   const completion = useMemo(
     () => getCompletionPercent(ALL_CONTROLS.length, responses),
-    [responses]
-  );
-  const priorities = useMemo(
-    () => getRemediationPriorities(ALL_CONTROLS, responses),
     [responses]
   );
 

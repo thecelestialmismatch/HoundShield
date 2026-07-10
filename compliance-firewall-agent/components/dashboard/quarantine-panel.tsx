@@ -12,7 +12,6 @@ import {
   XCircle,
   ShieldCheck,
   RefreshCw,
-  Filter,
 } from "lucide-react";
 
 interface QuarantineItem {
@@ -78,6 +77,9 @@ export function QuarantinePanel() {
 
   useEffect(() => {
     fetchItems();
+    // Fetch once on mount only. fetchItems reads reviewedItems; depending on it
+    // would refetch from the network after every review action.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchItems() {

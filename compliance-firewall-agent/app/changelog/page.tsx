@@ -8,7 +8,7 @@ import { FooterV3 } from "@/components/layout/FooterV3";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   Shield, Cpu, CreditCard, LayoutDashboard, KeyRound, Blocks,
-  Sparkles, Zap, Wrench, Calendar, Rocket, FolderSearch,
+  Sparkles, Calendar, Rocket, FolderSearch,
   Users, ClipboardCheck, Smartphone, ArrowRight, Compass,
 } from "lucide-react";
 

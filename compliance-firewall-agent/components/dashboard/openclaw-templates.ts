@@ -1,6 +1,6 @@
 
 import {
-  Users, Globe, Target, Database, Shield, LineChart, Code, PenTool, FileText, Brain, TrendingUp, AlertTriangle, Rocket
+  Users, Globe, Target, Database, Shield, LineChart, Code, PenTool, FileText, Brain
 } from "lucide-react";
 
 export const OPENCLAW_TEMPLATES = [

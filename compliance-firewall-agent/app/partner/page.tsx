@@ -7,7 +7,6 @@ import {
   Building2,
   Shield,
   AlertTriangle,
-  CheckCircle2,
   TrendingUp,
   Box,
   Plus,

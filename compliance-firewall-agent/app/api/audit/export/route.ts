@@ -25,7 +25,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
-import { createHash } from "crypto";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -58,16 +57,6 @@ interface ExportRow {
 function verifyHashChain(events: Record<string, unknown>[]): boolean {
   for (const event of events) {
     if (!event.seed_hash) continue;
-    // Re-derive the expected hash from stable fields
-    const payload = JSON.stringify({
-      id: event.id,
-      user_id: event.user_id,
-      prompt_hash: event.prompt_hash,
-      risk_level: event.risk_level,
-      action_taken: event.action_taken,
-      created_at: event.created_at,
-    });
-    const expected = createHash("sha256").update(payload).digest("hex");
     // Seed hashes are stored as chained anchors — we verify the hash is non-empty
     // and matches the format (64-char hex). Full chain verification requires the
     // seed-anchor table; here we validate structural integrity.

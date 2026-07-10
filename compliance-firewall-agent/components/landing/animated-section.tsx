@@ -45,7 +45,6 @@ export function AnimatedCounter({ target, suffix = "", prefix = "" }: { target: 
         const obs = new IntersectionObserver(
             ([e]) => {
                 if (e.isIntersecting) {
-                    const start = 0;
                     const duration = 2000;
                     const startTime = performance.now();
                     const animate = (now: number) => {

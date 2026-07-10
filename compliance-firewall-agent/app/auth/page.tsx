@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
 import {
-  Shield,
   ArrowLeft,
   Lock,
   Zap,
@@ -65,7 +64,6 @@ function GitHubLogo({ className }: { className?: string }) {
 function LiveScanner() {
   const [threats, setThreats] = useState(2847);
   const [requests, setRequests] = useState(14923);
-  const [scanLines, setScanLines] = useState<{ id: number; y: number }[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -75,14 +73,6 @@ function LiveScanner() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    let id = 0;
-    const interval = setInterval(() => {
-      id++;
-      setScanLines((prev) => [...prev.slice(-4), { id, y: Math.random() * 100 }]);
-    }, 800);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="relative w-full mt-8">
@@ -98,7 +88,7 @@ function LiveScanner() {
             <div className="absolute inset-0 w-2 h-2 rounded-full bg-[var(--hs-success)] animate-ping opacity-75" />
           </div>
           <span className="text-[11px] font-medium text-[var(--hs-success)] uppercase tracking-widest">
-            Live Scanning
+            Demo — Simulated Traffic
           </span>
           <Activity className="w-3 h-3 text-[rgba(5,150,105,0.6)] ml-auto animate-pulse" />
         </div>
@@ -385,6 +375,13 @@ export default function AuthPage() {
             {error && (
               <div className="mb-4 px-3 py-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-fade-in">
                 {error}
+              </div>
+            )}
+
+            {/* Sign-up confirmation */}
+            {signUpSuccess && (
+              <div className="mb-4 px-3 py-2.5 rounded-lg bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] text-[var(--hs-success)] text-sm animate-fade-in">
+                Account created. Check your email for a confirmation link, then sign in.
               </div>
             )}
 
