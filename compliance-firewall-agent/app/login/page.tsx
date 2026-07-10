@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
+import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
 
@@ -37,6 +38,25 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
+    // Better Auth path (self-hosted) when active; Supabase otherwise.
+    if (isBetterAuthClientEnabled()) {
+      try {
+        const { error: baError } = await authClient.signIn.email({ email, password });
+        if (baError) {
+          setError(baError.message || 'Invalid email or password.');
+          setLoading(false);
+          return;
+        }
+      } catch {
+        setError("We couldn't reach the sign-in service. Please try again in a moment.");
+        setLoading(false);
+        return;
+      }
+      router.push(redirect);
+      router.refresh();
+      return;
+    }
+
     let authError;
     try {
       const supabase = createClient();
@@ -61,6 +81,10 @@ export default function LoginPage() {
   };
 
   const handleOAuthLogin = async (provider: 'google' | 'github') => {
+    if (isBetterAuthClientEnabled()) {
+      await authClient.signIn.social({ provider, callbackURL: redirect });
+      return;
+    }
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,

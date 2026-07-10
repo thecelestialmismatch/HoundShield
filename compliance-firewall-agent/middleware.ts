@@ -1,6 +1,21 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { getSessionCookie } from 'better-auth/cookies';
+
+/**
+ * Is Better Auth the active provider? Mirrors lib/auth/better-auth.ts
+ * isBetterAuthEnabled(), re-declared inline so the middleware (edge-safe) does
+ * not import the pg-backed server module. When true, route protection is
+ * cookie-based via getSessionCookie; otherwise the Supabase path below runs.
+ */
+function betterAuthEnabled(): boolean {
+  return (
+    (process.env.AUTH_PROVIDER ?? '').trim() === 'better-auth' &&
+    (process.env.DATABASE_URL ?? '').trim().length > 0 &&
+    (process.env.BETTER_AUTH_SECRET ?? '').trim().length > 0
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Rate Limiter — in-memory sliding window with LRU eviction
@@ -134,6 +149,7 @@ export async function middleware(request: NextRequest) {
     pathname === '/login' ||
     pathname === '/signup' ||
     pathname === '/forgot-password' ||
+    pathname === '/reset-password' ||
     pathname.startsWith('/report/thank-you')
   ) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
@@ -199,14 +215,27 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/signup', request.url));
   }
 
-  // ── Auth: Refresh session + protect routes ────────────────────────────────
-  // Only run Supabase logic on routes that actually need authentication.
-  // Skipping it on pure API routes and public pages reduces cold-start
-  // latency by ~10-20ms per request.
-  // FAIL CLOSED (audit H1): if a protected route is requested but Supabase auth
-  // is not configured, do not silently render it — send the user to login
-  // rather than exposing the dashboard. (The /login and /signup pages are in
-  // needsAuth only for the authenticated-redirect below, so exclude them here.)
+  // ── Auth: protect routes ──────────────────────────────────────────────────
+  // Better Auth path (when active): cookie-based protection, no Supabase.
+  if (betterAuthEnabled()) {
+    if (needsAuth(pathname)) {
+      const sessionCookie = getSessionCookie(request);
+      if (pathname.startsWith('/command-center') && !sessionCookie) {
+        const loginUrl = new URL('/login', request.url);
+        loginUrl.searchParams.set('redirect', pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+      if ((pathname === '/login' || pathname === '/signup') && sessionCookie) {
+        return NextResponse.redirect(new URL('/console', request.url));
+      }
+    }
+    return response;
+  }
+
+  // Supabase path (default). Only run Supabase logic on routes that actually
+  // need authentication. FAIL CLOSED (audit H1): if a protected route is
+  // requested but Supabase auth is not configured, send the user to login
+  // rather than exposing the dashboard.
   if (!isSupabaseReady() && pathname.startsWith('/command-center')) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
