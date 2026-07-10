@@ -1,0 +1,64 @@
+name: Lighthouse CI
+
+# Core Web Vitals scoreboard for the pages that earn search clicks.
+# Informational (continue-on-error): scores and reports are uploaded as
+# artifacts on every PR so regressions are visible before they cost CTR —
+# slow pages bleed rankings. Tighten into a hard gate once budgets are set.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "compliance-firewall-agent/**"
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Lighthouse (marketing pages)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: compliance-firewall-agent
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: compliance-firewall-agent/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Start server
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run Lighthouse
+        run: |
+          npx --yes @lhci/cli@0.14.x collect \
+            --url=http://localhost:3000/ \
+            --url=http://localhost:3000/pricing \
+            --url=http://localhost:3000/controls \
+            --url=http://localhost:3000/blog \
+            --numberOfRuns=1
+          npx --yes @lhci/cli@0.14.x assert \
+            --assertions.categories:performance=warn \
+            --assertions.categories:seo=warn || true
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: compliance-firewall-agent/.lighthouseci
+          retention-days: 14

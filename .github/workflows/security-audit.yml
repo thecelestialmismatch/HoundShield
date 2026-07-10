@@ -1,0 +1,37 @@
+name: Security Audit
+
+# Report-only dependency audit for production dependencies in both packages.
+# Both packages currently carry known advisories, so this job surfaces the
+# state on every PR without blocking merges — remediation lands through
+# Dependabot PRs (see .github/dependabot.yml), each gated by full CI.
+# Flip `continue-on-error` to false once the baseline is clean to make this
+# a hard gate.
+
+on:
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: npm audit (prod deps)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        package: [compliance-firewall-agent, proxy]
+    defaults:
+      run:
+        working-directory: ${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Audit production dependencies (high+)
+        run: npm audit --omit=dev --audit-level=high

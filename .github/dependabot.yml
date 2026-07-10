@@ -1,0 +1,27 @@
+# Dependabot — keeps both packages and the Actions pins patched via reviewed
+# PRs. The security-audit workflow reports current vulnerability state on
+# every PR; the fixes land through these updates, each gated by full CI.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/compliance-firewall-agent"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/proxy"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

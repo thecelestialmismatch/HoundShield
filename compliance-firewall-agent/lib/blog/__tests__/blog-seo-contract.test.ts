@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { getAllPosts, getPostBySlug, getFeaturedPosts } from "../posts";
 import { ANSWER_SLUGS } from "../../../app/answers/_answers";
 import { COMPARISON_SLUGS } from "../../comparisons/competitors";
+import { CONTROL_SLUGS } from "../../../app/controls/_meta";
 
 /**
  * SEO contract for the blog corpus (mirrors the /compare and /answers guards):
@@ -46,6 +47,8 @@ const STATIC_ROUTES = new Set([
   "/how-it-works",
   "/roadmap",
   "/trust",
+  "/controls",
+  "/partners/kit",
 ]);
 
 function isKnownInternalRoute(href: string): boolean {
@@ -57,6 +60,8 @@ function isKnownInternalRoute(href: string): boolean {
   if (answer) return ANSWER_SLUGS.includes(answer[1]);
   const compare = path.match(/^\/compare\/([a-z0-9-]+)$/);
   if (compare) return COMPARISON_SLUGS.includes(compare[1]);
+  const control = path.match(/^\/controls\/([a-z0-9-]+)$/);
+  if (control) return CONTROL_SLUGS.includes(control[1]);
   return false;
 }
 
