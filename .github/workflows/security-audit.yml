@@ -2,10 +2,11 @@ name: Security Audit
 
 # Report-only dependency audit for production dependencies in both packages.
 # Both packages currently carry known advisories, so this job surfaces the
-# state on every PR without blocking merges — remediation lands through
-# Dependabot PRs (see .github/dependabot.yml), each gated by full CI.
-# Flip `continue-on-error` to false once the baseline is clean to make this
-# a hard gate.
+# state as a WARNING ANNOTATION on every PR without failing the check —
+# a red X here would read as broken CI while the signal is "known baseline".
+# Remediation lands through Dependabot PRs (see .github/dependabot.yml),
+# each gated by full CI. Once the baseline is clean, drop the `if !` wrapper
+# to make this a hard gate.
 
 on:
   pull_request:
@@ -18,7 +19,6 @@ jobs:
   audit:
     name: npm audit (prod deps)
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       matrix:
         package: [compliance-firewall-agent, proxy]
@@ -34,4 +34,7 @@ jobs:
           node-version: "20"
 
       - name: Audit production dependencies (high+)
-        run: npm audit --omit=dev --audit-level=high
+        run: |
+          if ! npm audit --omit=dev --audit-level=high; then
+            echo "::warning title=npm audit (${{ matrix.package }})::High-severity advisories present in production dependencies — full report in this job's log. Fixes arrive via Dependabot PRs."
+          fi
