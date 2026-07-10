@@ -24,3 +24,13 @@ export function isBetterAuthEnabled(): boolean {
 export function betterAuthBaseUrl(): string {
   return trim(process.env.BETTER_AUTH_URL) || "https://www.houndshield.com";
 }
+
+/**
+ * Which `profiles` column keys the session user id for the active provider.
+ * Supabase sessions → profiles.id (uuid). Better Auth sessions →
+ * profiles.better_auth_user_id (text, written by the migration-025 trigger).
+ * Pure so tests/middleware can import it without touching pg/server-only.
+ */
+export function profileKeyColumn(betterAuthActive: boolean): "better_auth_user_id" | "id" {
+  return betterAuthActive ? "better_auth_user_id" : "id";
+}

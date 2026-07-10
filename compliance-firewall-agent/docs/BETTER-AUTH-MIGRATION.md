@@ -96,24 +96,29 @@ one callback per app.) **Regenerate the client secret** that was shared in chat.
 5. Set the same env vars in **Vercel** (Production + Preview), redeploy.
 6. Roll back instantly by setting `AUTH_PROVIDER=supabase` — no code change.
 
-## The data re-key (migration 025 — deliberately separate)
+## The data re-key (migration 025 — SHIPPED, fresh-start path)
 
-`profiles`, `orders`, and assessment rows are keyed by `auth.users(id)` (uuid)
-and protected by RLS on `auth.uid()`. Better Auth issues its own sessions and
-its `user.id` is `text`, so:
+**Decision made: fresh-start** (Stage 1, pre-revenue). Migration
+`025_better_auth_fresh_start.sql` is applied to prod and does three things:
 
-- **Authorization** already moved into app/route code via `getSessionUser()` +
-  the api-guard helpers — it no longer depends on `auth.uid()` RLS.
-- **Re-keying** the existing tables (drop the `auth.users` FKs, point them at
-  `"user"(id)`, move the `handle_new_user` trigger onto `"user"`) is migration
-  **025**, written once you confirm **fresh-start** (pre-revenue → simplest;
-  ~no live users to carry) vs **migrate-existing** (export `auth.users` →
-  `"user"`, preserve ids). Migration 024 adds a nullable `profiles.better_auth_user_id`
-  link column so either path is possible without data loss.
+1. **`profiles` is the provider-agnostic identity root** — its FK to
+   `auth.users` is dropped. Legacy rows keep their uuids (== auth.users ids);
+   Better Auth signups get fresh uuids linked via `better_auth_user_id`.
+2. **Every public-schema user FK now points at `profiles(id)`** (same on-delete
+   behavior as before; `report_orders` keeps SET NULL so revenue records
+   survive account deletion). Nothing references `auth.users` from the public
+   schema anymore.
+3. **Signup trigger** `on_better_auth_user_created` on `"user"` auto-provisions
+   a profile — and if an unlinked legacy profile shares the email, it is
+   LINKED, not duplicated, so a returning customer keeps their tier and order
+   history. A `unique_violation` never aborts the signup.
 
-Recommendation given Stage 1 (pre-revenue): **fresh-start**. New Better Auth
-signups create `profiles` rows keyed by the Better Auth user id via a trigger in
-025; no legacy user data to migrate.
+**Profile resolution in app code** goes through `lib/auth/profile.ts`
+(`getSessionProfile(columns)`): Supabase sessions key `profiles.id`, Better
+Auth sessions key `profiles.better_auth_user_id` (`profileKeyColumn()` in
+`auth-config.ts`). The api-guard role lookup, `/console` viewer, and the chat
+route's personalization/consent reads all use it — no route reads
+`auth.uid()`-dependent rows for identity anymore.
 
 ## Rollback
 `AUTH_PROVIDER=supabase` (+ `NEXT_PUBLIC_AUTH_PROVIDER=supabase`) → the app is
