@@ -31,6 +31,30 @@ it on in `better-auth.ts` when you want it enforced.
 Everything routes through `getSessionUser()` and `isBetterAuthEnabled()`, so the
 cutover is a single env flip — no code change.
 
+## Security: RLS on the Better Auth tables (non-negotiable)
+
+The four Better Auth tables (`user`, `session`, `account`, `verification`) live
+in the **public** schema of a Supabase project whose anon/authenticated
+PostgREST API is internet-exposed. They hold **session tokens, password hashes,
+and OAuth access/refresh tokens**. If RLS were disabled, anyone holding the
+public anon key could read every session token via `GET /rest/v1/session` and
+take over any account.
+
+Migration 024 therefore **enables RLS with zero policies** on all four tables
+and **revokes** the implicit `anon`/`authenticated` grants:
+
+- PostgREST (anon + authenticated) → denied on every row. Hole closed.
+- Better Auth → **unaffected**: it connects over a direct Postgres pool
+  (`DATABASE_URL`) as the table **owner**, which bypasses RLS by default.
+
+Two rules keep this correct, pinned by
+`lib/auth/__tests__/better-auth-migration-security.test.ts`:
+
+1. **Never** `disable row level security` on these tables.
+2. **Never** `force row level security` — FORCE applies RLS to the owner too and
+   would lock Better Auth out. App-layer authorization (`getSessionUser()` +
+   api-guard) is what gates reads, exactly as for the rest of the app.
+
 ## Environment variables
 
 Set in `.env.local` (local) and Vercel (prod). Never commit secrets.
