@@ -458,6 +458,58 @@ export const ANSWERS: Answer[] = [
       },
     ],
   },
+  {
+    slug: "what-evidence-does-a-c3pao-accept-for-ai-usage",
+    metaTitle: "What Evidence Does a C3PAO Accept for AI Usage? (CMMC)",
+    metaDescription:
+      "C3PAO assessors accept four artifacts for AI usage: a data-flow diagram, the enforcement configuration, tamper-evident logs, and a control-mapped report. What each must show.",
+    h1: "What evidence does a C3PAO accept for AI usage?",
+    lede: "For AI usage, C3PAO assessors accept the same categories of evidence they accept everywhere else: architecture, configuration, records, and policy. Concretely that means four artifacts — a data-flow diagram showing where AI-bound prompts are inspected relative to your boundary, the enforcement configuration (detection patterns and blocking policy), tamper-evident logs attributing allowed and blocked prompt events to individual users, and a written AI acceptable-use policy the technical control actually enforces. A control-mapped assessment report packages the first three into a single reviewable document.",
+    sections: [
+      {
+        heading: "The four artifacts, and what each must show",
+        table: {
+          headers: ["Artifact", "What the assessor checks", "Controls it evidences"],
+          rows: [
+            ["Data-flow diagram", "AI traffic routes through an inspection point INSIDE your boundary — not a vendor cloud", "3.1.3, 3.13.1 (AC.2.003, SC.1.001)"],
+            ["Enforcement configuration", "Active CUI/PII patterns and a blocking (not just alerting) policy", "3.1.3, 3.1.22"],
+            ["Tamper-evident event log", "Allowed AND blocked prompts, per-user attribution, integrity protection (e.g. hash chain)", "3.3.1, 3.3.2, 3.3.8 (AU.2.001/002/008)"],
+            ["Signed policy + training records", "The written rule the control enforces, acknowledged by staff", "3.2.x, 3.6.1"],
+          ],
+        },
+      },
+      {
+        heading: "What assessors reject",
+        paragraphs: [
+          "Screenshots of a vendor dashboard with no data-path diagram behind them; a written AI ban with no technical enforcement (the follow-up question is always 'and what stops it?'); logs that only show blocked events with no user attribution; and any architecture where prompt content leaves the boundary to be scanned — because then the scanning service itself becomes part of the assessment scope.",
+        ],
+      },
+      {
+        heading: "The packaged version",
+        paragraphs: [
+          "HoundShield's $499 CMMC AI Risk Assessment produces the packaged artifact: after 14 days running on your own infrastructure (self-hosted Docker), it generates a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171 Rev 2 controls — the architecture, configuration, and records evidence in one document you hand across the table. Pair it with the free control-mapped AI use policy template and the four-artifact set is complete.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Does a C3PAO require a specific AI monitoring product?",
+        a: "No — assessors are barred from recommending products (32 CFR Part 170 conflict-of-interest rules). They evaluate whether your evidence demonstrates the controls. Any architecture that inspects AI traffic inside your boundary, blocks unauthorized flows, and produces attributable, tamper-evident records can satisfy them.",
+      },
+      {
+        q: "Is a screenshot of our DLP dashboard enough?",
+        a: "Rarely. A dashboard shows that a tool exists; the assessor needs the data-flow diagram showing where inspection happens, the configuration proving blocking is enforced, and log samples they can trace to individuals. Evidence is tested, not displayed.",
+      },
+      {
+        q: "Do we need AI evidence if we've banned AI tools?",
+        a: "Yes — a ban is a policy, and the assessor's next question is what technically enforces it and what the logs show. An unenforced ban is often weaker evidence than monitored, controlled AI usage, because it claims a control that doesn't exist.",
+      },
+      {
+        q: "How far back should AI usage logs go?",
+        a: "Follow your audit-retention policy (commonly 1–3 years for 3.3.1 records). For a first assessment, assessors typically sample recent weeks — which is why a 14-day monitored baseline with a signed report is a workable starting artifact while your retention builds.",
+      },
+    ],
+  },
 ];
 
 export const ANSWER_SLUGS = ANSWERS.map((a) => a.slug);
