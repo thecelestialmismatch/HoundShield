@@ -186,7 +186,7 @@ If any check fails:
 | Competitor | Fatal flaw for our buyer | Status |
 |------------|--------------------------|--------|
 | Purview + GCC High Copilot | "Free" with E5/G5 but $149K–$200K/yr GCC High migration — only 200+ orgs | Threat for large DIB |
-| Prompt Security (SentinelOne) | Browser-based ~$250/seat/yr, cloud-routed — same SC.3.177 problem | Active competitor |
+| Prompt Security (SentinelOne) | Cloud-first ~$250/seat/yr; **on-prem SKU shipped 2026** (enterprise procurement only) — architecture moat gone at enterprise tier; price/procurement + evidence-PDF moat holds | Active — reposition: local-by-default vs local-as-upsell |
 | Nightfall AI | Cloud-routed, $25K–$80K/yr, no CMMC PDF | Not in SMB |
 | Polymer | $5/user/mo, transparent pricing | Active in SMB |
 | WitnessAI | Carahsoft channel, ex-NSA director on board | Not in SMB |

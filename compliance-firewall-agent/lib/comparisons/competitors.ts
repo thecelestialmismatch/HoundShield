@@ -146,9 +146,9 @@ export const COMPARISONS: Comparison[] = [
     metaDescription:
       "HoundShield vs Prompt Security for CMMC/HIPAA teams. Prompt Security is a cloud-routed, per-seat AI gateway now owned by SentinelOne; HoundShield scans locally (Mode B) so CUI/PHI stays on-prem, with a $499 NIST 800-171 evidence PDF and per-org pricing.",
     summary:
-      "Prompt Security is a capable enterprise AI gateway — now part of SentinelOne — that inspects LLM traffic through the browser and a cloud service. It scales per seat and routes inspection through its cloud, which reintroduces the same SC.3.177 transit problem for regulated data.",
+      "Prompt Security is a capable enterprise AI gateway — now part of SentinelOne — that inspects LLM traffic through the browser and a cloud service, with an on-premises SKU announced in 2026 for disconnected environments. The default cloud delivery reintroduces the SC.3.177 transit problem for regulated data; the on-prem option removes it, but arrives as an enterprise platform SKU through enterprise procurement.",
     theirApproach:
-      "Prompt Security sits between employees and AI apps (browser extension + proxy), inspecting prompts and responses for sensitive data, prompt injection, and shadow-AI usage. It is delivered primarily as a managed service. Following the SentinelOne acquisition it is positioned inside a broader enterprise security suite — confirm current deployment options with their team.",
+      "Prompt Security sits between employees and AI apps (browser extension + proxy), inspecting prompts and responses for sensitive data, prompt injection, and shadow-AI usage. It is delivered primarily as a managed cloud service; following the SentinelOne acquisition it sits inside a broader enterprise security suite, and SentinelOne has announced an on-premises version aimed at disconnected and air-gapped environments. Confirm current deployment options and pricing with their team.",
     theirStrengths: [
       "Strong prompt-injection and shadow-AI discovery, not just DLP",
       "Enterprise backing and integration with SentinelOne's platform",
@@ -157,8 +157,8 @@ export const COMPARISONS: Comparison[] = [
     ],
     ourEdge: [
       {
-        title: "Local inspection by architecture",
-        body: "HoundShield Mode B keeps prompt content on your own infrastructure by design. Prompt Security is delivered primarily as a managed service — for CUI, any inspection transit is the exposure you're trying to remove.",
+        title: "Local-first, not local-as-enterprise-upsell",
+        body: "HoundShield Mode B keeps prompt content on your own infrastructure by design and by default — $499 self-serve, Docker, minutes to deploy. SentinelOne's on-prem Prompt Security SKU validates the architecture, but it ships as an enterprise platform purchase; their default cloud delivery still routes inspection through their service, which for CUI is the exposure you're trying to remove.",
       },
       {
         title: "Per-organization, not per-seat",
@@ -174,11 +174,11 @@ export const COMPARISONS: Comparison[] = [
       },
     ],
     matrix: [
-      { dimension: "Where prompts are scanned", houndshield: "Locally (Mode B/C)", competitor: "Managed / cloud service", advantage: "houndshield" },
+      { dimension: "Where prompts are scanned", houndshield: "Locally by default (Mode B/C)", competitor: "Cloud service by default; on-prem as enterprise SKU", advantage: "houndshield" },
       { dimension: "Pricing model", houndshield: "$499 report + per-org plans", competitor: "Per-seat, enterprise-quoted", advantage: "houndshield" },
       { dimension: "Prompt-injection / shadow-AI detection", houndshield: "Prompt scanning + audit; injection on roadmap", competitor: "Mature", advantage: "competitor" },
       { dimension: "CMMC / NIST 800-171 evidence PDF", houndshield: "$499 one-time, control-mapped", competitor: "Not a deliverable", advantage: "houndshield" },
-      { dimension: "Air-gapped deployment", houndshield: "Yes (Mode C)", competitor: "No", advantage: "houndshield" },
+      { dimension: "Air-gapped deployment", houndshield: "Yes (Mode C), self-serve", competitor: "On-prem SKU announced (2026), enterprise procurement", advantage: "even" },
       { dimension: "Best-fit org size", houndshield: "50–500 employees, regulated", competitor: "Large enterprise", advantage: "even" },
     ],
     buyerFit:
@@ -195,7 +195,7 @@ export const COMPARISONS: Comparison[] = [
     faqs: [
       {
         q: "Is Prompt Security on-premise?",
-        a: "Prompt Security is delivered primarily as a managed service; confirm current on-prem options with their team. HoundShield's Mode B runs on your own Docker infrastructure by design, so prompt content never leaves your network.",
+        a: "SentinelOne announced an on-premises Prompt Security SKU in 2026 for disconnected and air-gapped environments — sold as part of its enterprise platform. The default delivery remains a managed cloud service. HoundShield's Mode B runs on your own Docker infrastructure by design and by default, self-serve from $499, so prompt content never leaves your network regardless of tier.",
       },
       {
         q: "How is HoundShield priced versus Prompt Security?",

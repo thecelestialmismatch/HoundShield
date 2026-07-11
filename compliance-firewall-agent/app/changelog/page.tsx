@@ -35,6 +35,15 @@ type Release = { version: string; date: string; title: string; icon: typeof Shie
 
 const releases: Release[] = [
   {
+    version: "2.7.0", date: "July 2026", title: "Control Reference Library & Partner Kit", icon: ClipboardCheck,
+    items: [
+      { tag: "Feature", text: "All 110 NIST 800-171 controls published as a free reference — official text, plain English, remediation, assessor evidence, and an honest AI-relevance verdict per control" },
+      { tag: "Feature", text: "RPO/MSP partner kit: co-branded CMMC AI Risk Assessment at published wholesale terms" },
+      { tag: "Feature", text: "Console assessment and gap views now deep-link every control to its full guide" },
+      { tag: "Improvement", text: "Scanner latency is now a CI-enforced contract: 2,000 cold scans per build must keep p99 under 10ms (currently 0.57ms)" },
+    ],
+  },
+  {
     version: "2.6.0", date: "July 2026", title: "Customer Status Intelligence & Personalized Brain AI", icon: Compass,
     items: [
       { tag: "Feature", text: "After-login status panel: where you stand, your single next step, and your highest-impact gaps with fixes" },
