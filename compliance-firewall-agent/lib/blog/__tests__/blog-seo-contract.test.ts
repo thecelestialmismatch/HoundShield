@@ -3,6 +3,7 @@ import { getAllPosts, getPostBySlug, getFeaturedPosts } from "../posts";
 import { ANSWER_SLUGS } from "../../../app/answers/_answers";
 import { COMPARISON_SLUGS } from "../../comparisons/competitors";
 import { CONTROL_SLUGS } from "../../../app/controls/_meta";
+import { INDUSTRY_SLUGS } from "../../../app/products/_industries";
 
 /**
  * SEO contract for the blog corpus (mirrors the /compare and /answers guards):
@@ -62,6 +63,8 @@ function isKnownInternalRoute(href: string): boolean {
   if (compare) return COMPARISON_SLUGS.includes(compare[1]);
   const control = path.match(/^\/controls\/([a-z0-9-]+)$/);
   if (control) return CONTROL_SLUGS.includes(control[1]);
+  const industry = path.match(/^\/products\/([a-z0-9-]+)$/);
+  if (industry) return INDUSTRY_SLUGS.includes(industry[1]);
   return false;
 }
 
