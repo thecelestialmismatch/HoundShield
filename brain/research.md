@@ -171,3 +171,38 @@ Nodes cover gaps not previously in either KB store.
   follow: Google Search Console + Bing Webmaster verification, submit sitemap,
   request indexing, and earn a few backlinks (Cyber AB marketplace listing, RPO
   partner pages, blog syndication).
+
+## 2026-07-10 — Competitive deep-dive (ORACLE sweep, founder-requested)
+
+**HEADLINE: the local-scanning architecture moat is eroding on schedule — the
+evidence-artifact moat is not.** The brain predicted a 1–2 quarter window
+before incumbents shipped on-prem; that window has now closed at the
+enterprise tier.
+
+1. **SentinelOne shipped Prompt Security ON-PREMISES** (announced 2026, RSAC
+   lineup + air-gapped positioning). Sold as an enterprise platform SKU. Our
+   /compare/prompt-security page carried a stale "air-gapped: No" claim —
+   corrected same-day (matrix now concedes "even" with the procurement-path
+   distinction). Reposition vs them: local-by-DEFAULT at $499 self-serve vs
+   local-as-enterprise-upsell.
+2. **Nightfall remains cloud-native** — but its Developer Platform can now be
+   "shipped & self-hosted behind your firewall" (SDK, not product). Watch for
+   productization.
+3. **New self-hosted entrants exist at the low end:** Philter AI Proxy
+   (self-hosted, explicitly markets "never a business associate" HIPAA
+   framing — closest copy of our pitch), ZeroTrusted.ai AI Firewall (blocks
+   "classified markings" — defense-flavored), plus OSS gateways (AISG, Trylon).
+   Architecture alone is no longer a differentiator. **The durable moat is the
+   control-mapped evidence artifact ($499 NIST 800-171 PDF + SPRS engine) and
+   the CMMC/HIPAA vertical GTM — no competitor at any tier ships that.**
+4. **Knostic**: $19.3M raised, Copilot-oversharing niche (need-to-know LLM
+   access control), enterprise/gov focus via Purview pairing. Adjacent, not
+   head-on for SMB DIB; watch.
+5. **CMMC Phase 2 timeline HOLDS at Nov 10, 2026** — no delay signals. ~97
+   C3PAOs, 3–6 month assessment wait times and growing. Kill-criterion #3 not
+   triggered. Sales math: a contractor starting remediation today is already
+   tight — urgency copy is factual, not FUD.
+
+**Actions taken same-day:** stale comparison claims fixed (compare page +
+nightfall-alternatives answer), CLAUDE.md competitive map updated, weekly
+competitive-watch Routine created so this sweep repeats automatically.

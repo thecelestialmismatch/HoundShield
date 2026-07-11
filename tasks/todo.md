@@ -2,6 +2,13 @@
 
 ## Active
 
+### 2026-07-10 — Evidence-moat tranche (PR #175, after competitive deep-dive)
+- [x] Gaps page: "AI-relevant gaps / SPRS points at stake" banner (honest scope, uses the contract-tested relevance set)
+- [x] Changelog 2.7.0 — real shipped features only (control library, partner kit, console links, latency CI gate)
+- [x] docs/EMAIL-SEQUENCES.md — RPO outreach 3-touch (arms the 10 drafts) + $499 buyer onboarding day 1/3/7 (manual send until wired)
+- [x] /answers/what-evidence-does-a-c3pao-accept-for-ai-usage — the pre-purchase Jordan question, four-artifact table
+- [ ] **FOUNDER:** approve the weekly competitive-watch Routine + TinyFish MCP in an interactive session (both blocked on approval here)
+
 ### 2026-07-10 — Second tranche (founder said "go"; fresh branch off merged #159)
 - [x] /controls — 110 programmatic NIST 800-171 pages + index, honest AI-relevance verdicts, contract-tested
 - [x] Commercial answers (nightfall-alternatives · cmmc-ai-monitoring-cost) + C3PAO checklist article + /partners/kit (RPO/MSP)

@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Shield,
   ChevronDown,
+  ExternalLink,
 } from "lucide-react";
 import SPRSGauge from "@/components/dashboard/SPRSGauge";
 import { ALL_CONTROLS } from "@/lib/shieldready/controls";
@@ -16,6 +17,7 @@ import {
   calculateSPRS,
 } from "@/lib/shieldready/scoring";
 import { getAssessmentResponses } from "@/lib/shieldready/storage";
+import { controlSlug, aiRelevance } from "@/app/controls/_meta";
 import type { AssessmentResponse, RiskPriority } from "@/lib/shieldready/types";
 
 const PRIORITY_COLORS: Record<RiskPriority, { bg: string; text: string; border: string }> = {
@@ -57,6 +59,11 @@ export default function GapsPage() {
   const highCount = gaps.filter((g) => g.riskPriority === "HIGH").length;
   const totalHours = gaps.reduce((sum, g) => sum + g.estimatedHours, 0);
   const potentialPoints = Math.abs(gaps.reduce((sum, g) => sum + g.sprsDeduction, 0));
+
+  // Gaps on controls where AI prompt monitoring provides direct or supporting
+  // evidence (curated set, contract-tested in controls-pages-contract.test.ts)
+  const aiGaps = gaps.filter((g) => aiRelevance(g.id) !== "none");
+  const aiPointsAtStake = Math.abs(aiGaps.reduce((sum, g) => sum + g.sprsDeduction, 0));
 
   return (
     <div className="min-h-screen p-6 lg:p-8 max-w-7xl mx-auto">
@@ -118,6 +125,40 @@ export default function GapsPage() {
           </div>
         </div>
       </div>
+
+      {/* AI-relevant gaps banner — honest scope: evidence for the AI data path */}
+      {aiGaps.length > 0 && (
+        <div className="mb-6 rounded-2xl border border-brand-500/25 bg-brand-500/5 backdrop-blur-xl p-5 flex flex-col lg:flex-row lg:items-center gap-4">
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-white">
+              {aiGaps.length} of your open gaps sit on AI-relevant controls — {aiPointsAtStake} SPRS points at stake
+            </p>
+            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              These are controls (flow control, boundary protection, audit, incident support) where an AI
+              prompt firewall produces direct or supporting evidence for the AI data path. The rest of each
+              control still needs the fix steps below — see each control&rsquo;s guide for the honest scope.
+            </p>
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <a
+              href="/controls"
+              target="_blank"
+              rel="noopener"
+              className="px-3 py-2 rounded-lg text-xs font-medium bg-white/[0.05] border border-white/10 text-slate-300 hover:text-white transition-colors"
+            >
+              Control guides
+            </a>
+            <a
+              href="/pricing"
+              target="_blank"
+              rel="noopener"
+              className="px-3 py-2 rounded-lg text-xs font-medium bg-brand-500/20 border border-brand-500/30 text-brand-400 hover:text-brand-300 transition-colors"
+            >
+              $499 evidence report
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Sort Controls */}
       <div className="flex items-center gap-3 mb-6">
@@ -247,6 +288,15 @@ export default function GapsPage() {
                           </ul>
                         </div>
                       )}
+
+                      <a
+                        href={`/controls/${controlSlug(control.id)}`}
+                        target="_blank"
+                        rel="noopener"
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-400 hover:text-brand-300 transition-colors"
+                      >
+                        Full control guide <ExternalLink size={11} />
+                      </a>
                     </div>
                   </div>
                 </motion.div>
