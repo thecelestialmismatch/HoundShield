@@ -21,10 +21,10 @@ jobs:
       run:
         working-directory: compliance-firewall-agent
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "20"
           cache: "npm"
@@ -57,7 +57,7 @@ jobs:
             --assertions.categories:seo=warn || true
 
       - name: Upload reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lighthouse-reports
           path: compliance-firewall-agent/.lighthouseci
