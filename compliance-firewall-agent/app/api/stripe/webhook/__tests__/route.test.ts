@@ -37,6 +37,18 @@ vi.mock("stripe", () => ({
   }),
 }));
 
+// Resend — the webhook imports it dynamically (`await import('resend')`), so the
+// mock must be hoisted (mirrors app/api/contact/__tests__/route.test.ts). Email
+// is best-effort; most tests keep RESEND_API_KEY unset so this never loads.
+const { mockResendSend } = vi.hoisted(() => ({
+  mockResendSend: vi.fn().mockResolvedValue({ id: "email-1" }),
+}));
+vi.mock("resend", () => ({
+  Resend: vi.fn().mockImplementation(function () {
+    return { emails: { send: mockResendSend } };
+  }),
+}));
+
 // ── Import route handler after mocks ──────────────────────────────────────
 
 import { POST } from "@/app/api/stripe/webhook/route";
@@ -303,6 +315,109 @@ describe("POST /api/stripe/webhook — report order (mode: payment)", () => {
         amount_cents: 29900,
       }),
       expect.any(Object)
+    );
+  });
+});
+
+// ── report order — founder alert (fires alongside the buyer receipt) ────────
+
+describe("POST /api/stripe/webhook — report order founder alert", () => {
+  beforeEach(() => {
+    process.env.STRIPE_SECRET_KEY = "sk_test";
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    process.env.RESEND_API_KEY = "re_test"; // enable the best-effort email path
+    process.env.FOUNDER_EMAIL = "founder@houndshield.com";
+    setupSupabase();
+  });
+
+  afterEach(() => {
+    delete process.env.STRIPE_SECRET_KEY;
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.FOUNDER_EMAIL;
+    vi.clearAllMocks();
+  });
+
+  it("emails BOTH the buyer receipt and the founder alert on a paid report", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report_alert",
+      data: {
+        object: {
+          id: "cs_report_alert",
+          mode: "payment",
+          customer_details: { email: "rachel@clinic.com", name: "Rachel H" },
+          amount_total: 49900,
+          currency: "usd",
+          metadata: { product: "cmmc_ai_risk_report", vertical: "healthcare", wholesale: "false" },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+
+    // Two sends: buyer receipt + founder alert.
+    expect(mockResendSend).toHaveBeenCalledTimes(2);
+    const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
+    expect(recipients).toContain("rachel@clinic.com");
+    expect(recipients).toContain("founder@houndshield.com");
+
+    // The founder alert is the money-and-buyer notification.
+    const founderCall = mockResendSend.mock.calls.find(
+      (c) => c[0].to === "founder@houndshield.com",
+    );
+    expect(founderCall?.[0].subject).toContain("$499");
+    expect(founderCall?.[0].subject).toContain("rachel@clinic.com");
+  });
+
+  it("falls back to contact@houndshield.com when FOUNDER_EMAIL is unset", async () => {
+    delete process.env.FOUNDER_EMAIL;
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report_alert2",
+      data: {
+        object: {
+          id: "cs_report_alert2",
+          mode: "payment",
+          customer_details: { email: "jordan@dib.com", name: "Jordan M" },
+          amount_total: 49900,
+          currency: "usd",
+          metadata: { product: "cmmc_ai_risk_report", vertical: "defense" },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
+    expect(recipients).toContain("contact@houndshield.com");
+  });
+
+  it("still returns 200 (billing unaffected) when an email send throws", async () => {
+    mockResendSend.mockRejectedValueOnce(new Error("Resend outage")); // a send fails
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report_alert3",
+      data: {
+        object: {
+          id: "cs_report_alert3",
+          mode: "payment",
+          customer_details: { email: "marcus@lawfirm.com", name: "Marcus T" },
+          amount_total: 49900,
+          currency: "usd",
+          metadata: { product: "cmmc_ai_risk_report", vertical: "legal" },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    // Email is best-effort — a send failure must never fail the webhook.
+    expect(res.status).toBe(200);
+    // The order row must still have been written.
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ stripe_session_id: "cs_report_alert3", status: "paid" }),
+      expect.any(Object),
     );
   });
 });

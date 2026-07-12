@@ -104,11 +104,27 @@ async function handleReportOrder(
   }
   console.log(`[Stripe Webhook] report order recorded: ${session.id} email=${email} wholesale=${isWholesale}`);
 
+  // Buyer receipt + fulfillment kickoff (best-effort).
   await sendTransactionalToEmail(email, {
     from: reportOrderEmail.from,
     subject: reportOrderEmail.subject,
     html: reportOrderEmail.html(fullName),
   });
+
+  // Founder alert — actionable "go fulfill this" notification for the
+  // manually-delivered product, beyond Stripe's generic payment receipt.
+  // Best-effort; billing already succeeded, so this never blocks or throws.
+  const founderEmail = process.env.FOUNDER_EMAIL || 'contact@houndshield.com';
+  await sendTransactionalToEmail(
+    founderEmail,
+    reportOrderEmail.founderAlert({
+      email,
+      name: fullName,
+      vertical: meta.vertical,
+      isWholesale,
+      amountCents: session.amount_total ?? undefined,
+    }),
+  );
 }
 
 function getStripe() {
