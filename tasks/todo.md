@@ -2,6 +2,16 @@
 
 ## Active
 
+### 2026-07-12d — Founder gets alerted when a report sells + go-live runbook (PR pending)
+- [x] Traced the full $499 money path end-to-end (button → checkout → thank-you → webhook → order row → emails). All links exist EXCEPT: on a sale the webhook emailed only the **buyer**, never the founder. The report is manually fulfilled → founder needs an actionable "go deploy for X, start their 14-day assessment" alert (Stripe's default receipt only says "you got $499"). Added `reportOrderEmail.founderAlert(...)` (HTML-escaped buyer input) + wired it into `handleReportOrder` (best-effort, never blocks billing) → `FOUNDER_EMAIL || contact@houndshield.com`. Retail/$499 vs wholesale/$299 aware.
+- [x] Tests: 8 template unit tests + 3 webhook integration tests (buyer+founder both emailed, FOUNDER_EMAIL fallback, email-throw never fails the webhook). `vi.hoisted` resend mock. Local suite green.
+- [x] Wrote `docs/GO-LIVE-STRIPE.md` — founder runbook to actually take money. Leads with the REAL blocker: `payments:missing_key` persisted AFTER a redeploy, so it's not a missing redeploy — it's Production-scope / name-typo / stray-quotes on `STRIPE_SECRET_KEY`. Then webhook registration, FOUNDER_EMAIL, test-card dry run, manual-invoice fallback.
+- [ ] **FOUNDER:** work `docs/GO-LIVE-STRIPE.md` Step 1 first (fix the env-var scope) → `/api/health` must read `payments: connected`. Merging PRs alone will NOT fix Stripe.
+
+### 2026-07-12c — Outreach pack produced (removes "I don't know how to sell")
+- [x] Wrote ready-to-send outreach: 4 cold emails (healthcare/legal/defense direct + RPO co-sell), follow-up, subject bank, $499 offer blurb, and a step-by-step "how to send" (find contacts → 10/day → book call → invoice manually while Stripe is off). Saved: scratchpad/outreach-pack.md.
+- [ ] FOUNDER: pick Healthcare or Legal (fastest, no FedRAMP blocker), send 10 today. First "yes" → manual invoice (don't wait for Stripe key).
+
 ### 2026-07-12b — Stop losing leads (houndshield session, PR pending)
 - [x] Freshness re-check: CMMC Phase 2 still **Nov 10 2026** (no slip) → CONTINUE verdict holds. Idea validation NOT re-run (merged #177 12h earlier).
 - [x] **Contact form was FAKE** — `handleSubmit` did `setTimeout → "Message sent"` and delivered NOTHING. Every lead (incl. $499 buyers deflected from dead Stripe checkout) was silently dropped. Fixed: real `POST /api/contact` (new route, Resend → founder inbox, mirrors `/api/partners/apply`). Honest 503 fallback (shows direct email) when Resend unset — never a fake success. Browser-verified: real POST, honest fallback shown, 0 console errors.

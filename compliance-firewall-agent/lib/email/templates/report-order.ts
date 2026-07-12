@@ -1,6 +1,15 @@
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
 const FROM = 'HoundShield <noreply@houndshield.com>';
 
+/** Escape untrusted values (buyer name/email from Stripe) before HTML interpolation. */
+function esc(v: string): string {
+  return v
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 /**
  * Transactional fulfillment email for the $499 one-time "CMMC AI Risk
  * Assessment Report" — fires from the Stripe webhook on
@@ -76,5 +85,73 @@ export const reportOrderEmail = {
   </div>
 </body>
 </html>`;
+  },
+
+  /**
+   * Internal founder notification — fires alongside the buyer receipt when a
+   * report sells. Stripe already emails the merchant a generic "you were paid
+   * $499" receipt; this is the *actionable* version for a manually-fulfilled
+   * product: who bought, which vertical, retail vs wholesale, and the next
+   * step (start their 14-day assessment). It means the engagement kicks off
+   * without the founder polling the Stripe dashboard or the report_orders
+   * table. Sent to FOUNDER_EMAIL (see the webhook); never blocks billing.
+   */
+  founderAlert: ({
+    email,
+    name,
+    vertical,
+    isWholesale = false,
+    amountCents,
+  }: {
+    email: string;
+    name?: string;
+    vertical?: string;
+    isWholesale?: boolean;
+    amountCents?: number;
+  }): { from: string; subject: string; html: string } => {
+    const dollars =
+      typeof amountCents === "number" && amountCents > 0
+        ? `$${Math.round(amountCents / 100)}`
+        : isWholesale
+          ? "$299"
+          : "$499";
+    const safeEmail = esc(email);
+    const buyer =
+      name && name.trim() ? `${esc(name.trim())} &lt;${safeEmail}&gt;` : safeEmail;
+    const vert = vertical && vertical.trim() ? esc(vertical.trim()) : "unspecified";
+    const priceLine = isWholesale ? `${dollars} wholesale (RPO/MSP co-brand)` : `${dollars} retail`;
+    return {
+      from: FROM,
+      subject: `💰 ${dollars} CMMC report sold — ${email}`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;margin:0;padding:32px 20px;">
+  <div style="max-width:540px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+    <div style="background:#14532d;padding:24px 32px;">
+      <p style="color:#bbf7d0;margin:0;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;">HoundShield — new sale</p>
+      <h1 style="color:#fff;margin:6px 0 0;font-size:22px;font-weight:700;">${priceLine} — paid</h1>
+    </div>
+    <div style="padding:28px 32px;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;color:#334155;">
+        <tr><td style="padding:6px 0;color:#64748b;width:110px;">Product</td><td style="padding:6px 0;">CMMC AI Risk Assessment Report</td></tr>
+        <tr><td style="padding:6px 0;color:#64748b;">Buyer</td><td style="padding:6px 0;"><strong>${buyer}</strong></td></tr>
+        <tr><td style="padding:6px 0;color:#64748b;">Vertical</td><td style="padding:6px 0;">${vert}</td></tr>
+        <tr><td style="padding:6px 0;color:#64748b;">Price</td><td style="padding:6px 0;">${priceLine}</td></tr>
+      </table>
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:16px 20px;margin:22px 0 0;">
+        <p style="color:#9a3412;font-weight:600;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">Next step — fulfill it</p>
+        <p style="color:#7c2d12;font-size:14px;line-height:1.6;margin:0;">
+          Start the 14-day engagement: reply to the buyer, deploy the proxy in
+          their environment (Mode B / Docker), and schedule the assessment.
+          Their paid order is recorded in <code>report_orders</code>.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    };
   },
 };
