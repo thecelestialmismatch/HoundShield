@@ -522,6 +522,50 @@ const posts: BlogPost[] = [
 <p>Every question above is answerable from one architecture: AI traffic routed through a locally hosted scanning proxy, a hash-chained event log, and a written policy the control enforces. The <a href="/pricing">$499 CMMC AI Risk Assessment</a> packages exactly this into a signed PDF after 14 days in your environment — the artifact you hand across the table when question 5 lands. For the control-by-control detail, the <a href="/controls">full 110-control reference</a> marks which requirements AI monitoring evidences and which it honestly does not.</p>
     `,
   },
+  {
+    slug: "ai-attorney-client-privilege-what-bar-opinions-mean",
+    title: "AI and Attorney-Client Privilege: What the 2024–2025 Bar Opinions Mean for Your Firm",
+    description:
+      "NY, CA, and FL bar opinions permit AI in law practice — with confidentiality duties intact. What that means for privilege, waiver risk, and how firms comply.",
+    excerpt:
+      "No bar has banned generative AI — but every major opinion holds lawyers to their existing duties, and opposing counsel is already probing whether AI use waived privilege. What the 2024–2025 opinions require, where the waiver risk sits, and the architecture that ends the argument.",
+    date: "2026-07-11",
+    author: "HoundShield Security Team",
+    authorTitle: "AI Compliance Engineers",
+    category: "AI Security",
+    tags: ["legal", "attorney-client privilege", "bar ethics", "law firm", "AI policy", "confidentiality"],
+    readingTime: 10,
+    featured: false,
+    content: `
+<p><strong>Bottom line up front:</strong> the state bar opinions issued in 2024–2025 (New York, California, and Florida among them) permit lawyers to use generative AI — while holding them to the duties they already have: competence, confidentiality, supervision, and in some circumstances informed client consent. The sharper risk is not an ethics complaint; it is a privilege-waiver argument from opposing counsel. The defensible position is architectural: client confidences are technically prevented from reaching AI tools, so there is nothing to argue about. This is an engineering firm's read for law-firm IT leaders — bring your ethics counsel into any policy decision.</p>
+
+<h2>What the opinions actually converge on</h2>
+<p>Strip away the jurisdictional differences and the 2024–2025 guidance lands on four duties:</p>
+<ul>
+  <li><strong>Competence:</strong> a lawyer using AI must understand, at a practical level, what the tool does with inputs — including whether prompts are retained or used for training.</li>
+  <li><strong>Confidentiality:</strong> client information may not be disclosed to a third-party AI service without safeguards. A consumer chatbot that retains conversations is a third party.</li>
+  <li><strong>Supervision:</strong> AI output must be reviewed like the work of a junior — the sanctions cases that made headlines were supervision failures, not AI failures.</li>
+  <li><strong>Consent (situational):</strong> several opinions suggest informed client consent before inputting client confidences into tools that retain or train on data.</li>
+</ul>
+
+<h2>The privilege problem is sharper than the ethics problem</h2>
+<p>Attorney-client privilege protects communications that are kept confidential. When privileged material is routed through a retaining, non-confidential AI service, opposing counsel has a ready argument: the disclosure was voluntary and inconsistent with confidentiality, so privilege is waived. Whether that argument ultimately wins is unsettled — and unsettled is exactly where a firm does not want to be, at deposition, about its own conduct.</p>
+<p>Note the asymmetry: an ethics inquiry evaluates the lawyer's diligence; a waiver fight evaluates the <em>data path</em>. That is why the durable answer is technical, not procedural.</p>
+
+<h2>Outside counsel guidelines are forcing the issue anyway</h2>
+<p>Corporate clients increasingly write AI restrictions directly into outside counsel guidelines — disclosure of AI use, prohibitions on client data in public tools, and audit rights. Firms that can demonstrate an enforced control answer those questionnaires in one paragraph. Firms with a memo-only policy answer them with hope.</p>
+
+<h2>The architecture that ends the argument</h2>
+<ol>
+  <li><strong>Publish the policy:</strong> which tools are approved, what content is prohibited — client identities, privileged communications, deal terms, PII. (Our <a href="/blog/cmmc-ai-use-policy-template">control-mapped template</a> adapts to a firm in an afternoon; swap the CUI definitions for client-confidence categories.)</li>
+  <li><strong>Enforce it at the network:</strong> route firm AI traffic through a locally hosted scanning proxy that detects client-matter identifiers, privileged-material markers, and PII in prompts and blocks them before transmission. Scanning happens on the firm's own infrastructure (self-hosted Docker) — no third party receives content in order to check it, which matters, because a cloud-scanning DLP would itself be a disclosure vector.</li>
+  <li><strong>Keep the log:</strong> a tamper-evident record of allowed and blocked events is the supervision evidence — for the ethics inquiry, the client audit, and the waiver fight that never gets traction because the answer is "the material never reached the tool."</li>
+</ol>
+
+<h2>What this looks like at a 50–500 attorney firm</h2>
+<p>Deployment is a network-level change, not a per-laptop rollout: point the firm's AI tools at the proxy endpoint, and every associate keeps ChatGPT while the firm gains the control. The <a href="/answers/can-law-firms-use-chatgpt">short answer page</a> covers the common questions (consent, legal-vertical AI tools, monitoring without reading privileged prompts), and the <a href="/products/legal">legal industry overview</a> maps the detection patterns to law-firm data types. To see what your attorneys are actually sending to AI tools today, the <a href="/pricing">$499 assessment</a> runs 14 days on your own infrastructure and reports every flagged event — the baseline your managing partner will ask for eventually, produced before it's asked for.</p>
+    `,
+  },
 ];
 
 // ─── Public API ──────────────────────────────────────────────────────────────
