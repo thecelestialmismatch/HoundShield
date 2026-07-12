@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ScrollProgressBar } from "@/components/scroll-effects";
@@ -24,7 +24,7 @@ const faqs = [
   { q: "Do I need a C3PAO assessment?", a: "Yes, CMMC Level 2 certification requires an assessment by a CMMC Third-Party Assessment Organization (C3PAO). HoundShield prepares you for this assessment by running continuous self-assessments aligned to official scoring methodology." },
   { q: "What's included in the free tier?", a: "The free tier includes a baseline SPRS score, gap analysis for up to 25 NIST 800-171 controls, basic compliance reporting, and access to our AI compliance assistant. Upgrade to Pro for full 110-control coverage." },
   { q: "Can I export compliance reports?", a: "Absolutely. Export audit-ready PDF and CSV reports including your System Security Plan (SSP), Plan of Action & Milestones (POA&M), and SPRS scoring worksheets -- all formatted for C3PAO review." },
-  { q: "Is my data secure?", a: "Your data is encrypted at rest (AES-256) and in transit (TLS 1.3). We use isolated tenancy, immutable audit logs with SHA-256 hashing, and never train AI models on your data. Infrastructure is hosted on FedRAMP-authorized cloud services." },
+  { q: "Is my data secure?", a: "Prompt content never leaves your network. HoundShield scans locally: in the self-hosted Docker mode (Mode B), the CUI-safe deployment, nothing you scan is transmitted to us. The hosted trial runs on Vercel, which is not FedRAMP-authorized, so it is for non-CUI evaluation only. Audit logs are immutable and SHA-256 hash-chained, and we never train AI models on your data." },
 ];
 
 export default function ContactPage() {
@@ -32,7 +32,21 @@ export default function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // A $499 report buyer whose Stripe checkout is unconfigured is deflected here
+  // via /contact?topic=assessment-report — tag the subject so the lead is triaged.
+  useEffect(() => {
+    const topic = new URLSearchParams(window.location.search).get("topic");
+    if (topic === "assessment-report") {
+      setForm((f) => ({
+        ...f,
+        subject: "Assessment Report",
+        message: f.message || "I'm interested in the $499 CMMC AI Risk Assessment Report.",
+      }));
+    }
+  }, []);
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -44,11 +58,30 @@ export default function ContactPage() {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-    setTimeout(() => { setLoading(false); setSubmitted(true); }, 1500);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setSubmitted(true);
+        return;
+      }
+      // Never a fake success. If delivery isn't wired, show the direct address.
+      const fallback = data.fallbackEmail || "contact@houndshield.com";
+      setSubmitError(`We couldn't send that just now. Please email us directly at ${fallback} and we'll respond within 4 business hours.`);
+    } catch {
+      setSubmitError("Network error. Please email us directly at contact@houndshield.com.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputCls = "w-full bg-white border border-[var(--hs-border)] rounded-xl px-4 py-3 text-sm text-[var(--hs-ink)] placeholder-white/20 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 transition-all duration-200";
@@ -135,6 +168,7 @@ export default function ContactPage() {
                         <select value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} className={`${inputCls} cursor-pointer appearance-none`}>
                           <option value="General">General Inquiry</option>
                           <option value="Sales">Sales</option>
+                          <option value="Assessment Report">Assessment Report ($499)</option>
                           <option value="Support">Technical Support</option>
                           <option value="Partnership">Partnership</option>
                         </select>
@@ -148,6 +182,7 @@ export default function ContactPage() {
                         {loading ? <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
                         {loading ? "Sending..." : "Send Message"}
                       </button>
+                      {submitError && <p className="text-sm text-red-500 mt-1" role="alert">{submitError}</p>}
                     </form>
                   </motion.div>
                 )}

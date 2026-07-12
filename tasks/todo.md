@@ -2,12 +2,20 @@
 
 ## Active
 
+### 2026-07-12b — Stop losing leads (houndshield session, PR pending)
+- [x] Freshness re-check: CMMC Phase 2 still **Nov 10 2026** (no slip) → CONTINUE verdict holds. Idea validation NOT re-run (merged #177 12h earlier).
+- [x] **Contact form was FAKE** — `handleSubmit` did `setTimeout → "Message sent"` and delivered NOTHING. Every lead (incl. $499 buyers deflected from dead Stripe checkout) was silently dropped. Fixed: real `POST /api/contact` (new route, Resend → founder inbox, mirrors `/api/partners/apply`). Honest 503 fallback (shows direct email) when Resend unset — never a fake success. Browser-verified: real POST, honest fallback shown, 0 console errors.
+- [x] Removed banned false claim on /contact ("hosted on FedRAMP-authorized cloud services") — NEVER-DO violation; replaced with the honest Mode-B / non-CUI-trial wording.
+- [x] /pricing: $499 one-time report is now the **hero h1** (doctrine: lead product first); subscription grid reframed "Ongoing monitoring" → kills the "$499/mo Growth vs $499 one-time" collision. Guard test (direction-a-port) green.
+- [x] Guards added: `app/api/contact/__tests__/route.test.ts` + `app/contact/__tests__/contact-delivery-contract.test.ts` (fake-form + FedRAMP-claim can't silently return). Full suite 1026/1026, build+lint+tsc green.
+- [ ] **FOUNDER, 5 min — STILL THE #1 BLOCKER:** set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` in Vercel, point webhook at `https://houndshield.com/api/stripe/webhook`, redeploy, verify `/api/health` shows `payments: connected`. Until then checkout 503s (but leads now survive via the fixed /contact form).
+
 ### 2026-07-12 — Idea validation + houndshield skill upgrade (this session)
 - [x] 7-axis market validation (TinyFish web research + adversarial verify). VERDICT: **CONTINUE** — product is done, market real, CMMC timing intact; the gap is checkout + distribution, not product. Full writeup: `docs/VALIDATION-2026-07-12.md`
 - [x] `houndshield` skill upgraded — now self-orients (reads todo/lessons/primer/health → real briefing, not placeholders), keeps all 12 personas, logs each session for continuity
 - [x] Confirmed BOTH payment paths dead: `/api/health` → payments:missing_key (checkout 503) AND backup link buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00 → **EXPIRED** (2026-07-12). Company cannot take a dollar until fixed.
 - [ ] **FOUNDER, 5 min — THE #1 BLOCKER:** set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` in Vercel, point webhook at `https://houndshield.com/api/stripe/webhook`, redeploy, verify `/api/health` shows `payments: connected`. (Backup Stripe payment link is expired — must create a fresh one OR set the key.)
-- [ ] NEXT PR (once payments green, so it can be verified end-to-end): /pricing lead with the $499 one-time report; fix "$499/mo Growth" vs "$499 one-time" naming collision; push subscription grid below.
+- [x] DONE 2026-07-12b: /pricing now leads with the $499 one-time report (hero h1); "$499/mo Growth" vs "$499 one-time" collision fixed by reframing the grid as "Ongoing monitoring". Didn't wait for payments-green — clarity fix needs no live checkout, and the report CTA safely deflects to the now-working /contact form.
 - [ ] FOUNDER: send the 10 RPO/MSP emails as a **referral/co-sell pilot** (not white-label — RPOs gate white-label on SOC 2 + insurance + references); land 1 design-partner testimonial (free/half-price $499 report for a case study).
 
 ### 2026-07-11 — Vertical-balance tranche
