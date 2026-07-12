@@ -5,6 +5,18 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-12
+
+### Eight months building, zero selling — the product was never the problem
+**What:** Validation across 7 axes found the product live, honest, and in a real market with intact CMMC timing — yet $0 revenue and 0 customer conversations. Both payment paths were dead (`/api/health` payments:missing_key; backup Stripe link expired), so the company literally could not take money.
+**Root cause:** Effort compounded on the 90% that feels safe (building) and avoided the 10% that produces revenue (checkout + selling). Classic "built the product, skipped distribution."
+**Rule:** Before any new feature, verify a customer can actually pay (`/api/health` must show `payments: connected`) and that ≥1 real sales conversation is in flight. If either is false, the only allowed work is fixing checkout or selling. No exceptions until first revenue.
+
+### Verify a payment link is live before wiring it into UI
+**What:** Was about to wire the recorded Stripe payment link into the /assessment CTA as a checkout-key workaround; a pre-flight curl showed it returns "Expired."
+**Root cause:** Trusted a link recorded in todo.md weeks earlier without checking its current state.
+**Rule:** Never ship a payment/redirect URL without a live check first (`curl` for HTTP 200 + expected content). A dead payment link is worse than a contact form.
+
 ## 2026-04-25
 
 ### OODA Analysis: Cloud DLP architecture is a CMMC disqualifier

@@ -2,6 +2,14 @@
 
 ## Active
 
+### 2026-07-12 — Idea validation + houndshield skill upgrade (this session)
+- [x] 7-axis market validation (TinyFish web research + adversarial verify). VERDICT: **CONTINUE** — product is done, market real, CMMC timing intact; the gap is checkout + distribution, not product. Full writeup: `docs/VALIDATION-2026-07-12.md`
+- [x] `houndshield` skill upgraded — now self-orients (reads todo/lessons/primer/health → real briefing, not placeholders), keeps all 12 personas, logs each session for continuity
+- [x] Confirmed BOTH payment paths dead: `/api/health` → payments:missing_key (checkout 503) AND backup link buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00 → **EXPIRED** (2026-07-12). Company cannot take a dollar until fixed.
+- [ ] **FOUNDER, 5 min — THE #1 BLOCKER:** set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` in Vercel, point webhook at `https://houndshield.com/api/stripe/webhook`, redeploy, verify `/api/health` shows `payments: connected`. (Backup Stripe payment link is expired — must create a fresh one OR set the key.)
+- [ ] NEXT PR (once payments green, so it can be verified end-to-end): /pricing lead with the $499 one-time report; fix "$499/mo Growth" vs "$499 one-time" naming collision; push subscription grid below.
+- [ ] FOUNDER: send the 10 RPO/MSP emails as a **referral/co-sell pilot** (not white-label — RPOs gate white-label on SOC 2 + insurance + references); land 1 design-partner testimonial (free/half-price $499 report for a case study).
+
 ### 2026-07-11 — Vertical-balance tranche
 - [x] Legal cluster opened (Marcus had ZERO articles): /blog/ai-attorney-client-privilege-what-bar-opinions-mean
 - [x] /answers/does-vanta-or-drata-cover-ai-usage — complementary-tool traffic capture, honest "we don't replace them" framing
