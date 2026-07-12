@@ -7,6 +7,30 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ## 2026-07-12
 
+### A manually-fulfilled sale needs an actionable alert, not just a receipt — and check the default before crying catastrophe
+**What:** Traced the $499 flow and found the webhook emailed only the buyer on a sale, never the founder.
+First framing was "customer pays → founder blind → customer gets nothing → catastrophe." Advisor caught it:
+Stripe emails the merchant a receipt by default, so the founder is NOT blind. The real (narrower, still real)
+value is an *actionable* alert for a hand-fulfilled product — buyer, vertical, retail/wholesale, "start the
+14-day assessment" — vs Stripe's generic "you got $499."
+**Root cause:** Assumed absence of a notification without checking the platform's default behavior; inflated
+severity to justify the build.
+**Rule:** Before framing a missing-notification as a silent-failure catastrophe, verify what the platform
+already sends by default. Build the feature for its true marginal value and describe it honestly in the
+commit/PR — never claim "customers were getting nothing" when the receipt already existed. For a
+manually-fulfilled product, the alert must be *actionable* (what to do), not just informational.
+
+### The env var was "added" but prod can't see it → it's scope, not a missing redeploy
+**What:** Founder set `STRIPE_SECRET_KEY`; `/api/health` still read `payments: missing_key` — AFTER a merge
+had already redeployed prod (uptime 204s = fresh boot). Kept the diagnosis honest: since a redeploy already
+happened and failed, the cause is Production-scope-not-ticked / name-typo / stray-quotes, NOT "you forgot to
+redeploy."
+**Root cause:** The generic advice ("add var, redeploy") had already been followed; repeating it would waste
+the founder's time on the wrong fix.
+**Rule:** When an env var "is set" but the app can't read it AND a deploy has already happened since, stop
+saying "redeploy." Point at Vercel env **scope (Production vs Preview)**, exact **name**, and **quotes/whitespace**
+in the value — the three real causes. Give the load-bearing sentence first, not buried under a feature.
+
 ### A form that fakes success is a silent lead shredder — worse than a dead button
 **What:** `/contact`'s `handleSubmit` ran `setTimeout(1500) → setSubmitted(true)` and showed
 "Message sent" while sending NOTHING — no fetch, no email. Every lead vanished, including the $499
