@@ -10,6 +10,11 @@
 - [ ] NEXT PR (once payments green, so it can be verified end-to-end): /pricing lead with the $499 one-time report; fix "$499/mo Growth" vs "$499 one-time" naming collision; push subscription grid below.
 - [ ] FOUNDER: send the 10 RPO/MSP emails as a **referral/co-sell pilot** (not white-label — RPOs gate white-label on SOC 2 + insurance + references); land 1 design-partner testimonial (free/half-price $499 report for a case study).
 
+### 2026-07-11 — Vertical-balance tranche
+- [x] Legal cluster opened (Marcus had ZERO articles): /blog/ai-attorney-client-privilege-what-bar-opinions-mean
+- [x] /answers/does-vanta-or-drata-cover-ai-usage — complementary-tool traffic capture, honest "we don't replace them" framing
+- [x] Verified Stage-1 gates already live: Brain AI CUI warning (GlobalChat) + RFC 9116 security.txt (tested)
+
 ### 2026-07-10 — Evidence-moat tranche (PR #175, after competitive deep-dive)
 - [x] Gaps page: "AI-relevant gaps / SPRS points at stake" banner (honest scope, uses the contract-tested relevance set)
 - [x] Changelog 2.7.0 — real shipped features only (control library, partner kit, console links, latency CI gate)

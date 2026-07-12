@@ -510,6 +510,54 @@ export const ANSWERS: Answer[] = [
       },
     ],
   },
+  {
+    slug: "does-vanta-or-drata-cover-ai-usage",
+    metaTitle: "Does Vanta or Drata Cover AI Usage? (What They Do & Don't)",
+    metaDescription:
+      "Vanta and Drata automate compliance programs — evidence collection, policies, monitoring integrations. They don't inspect or block AI prompts. What fills that gap.",
+    h1: "Does Vanta or Drata cover AI usage?",
+    lede: "Not the data path. Vanta and Drata are compliance-automation platforms: they collect evidence from your integrations, manage policies, and track control status for frameworks like SOC 2 and ISO 27001. What they do not do is sit in front of ChatGPT or Copilot to inspect and block the prompts your employees send — so 'AI usage' shows up in them as a policy document, not an enforced control. The two categories are complementary: the platform runs your compliance program; an AI firewall produces the enforcement and the evidence that program needs for AI data flows.",
+    sections: [
+      {
+        heading: "What Vanta and Drata actually do well",
+        paragraphs: [
+          "Continuous evidence collection from your stack (cloud, HR, MDM, ticketing), policy templates and acknowledgment tracking, vendor management, and audit-readiness workflows for SOC 2, ISO 27001, HIPAA programs, and increasingly CMMC preparation. If you run a compliance program, a platform like this is the system of record for it — that's why the HoundShield doctrine classifies them as complementary, not competitors.",
+        ],
+      },
+      {
+        heading: "Where the AI gap sits",
+        paragraphs: [
+          "A compliance platform can host your AI acceptable-use policy and record that employees acknowledged it. It cannot see the prompt a designer pastes into ChatGPT at 4:45pm, block the client data inside it, or produce a per-event log an assessor can trace. Enforcement and event evidence live at the network layer, in front of the AI endpoints — a place evidence-collection platforms don't operate.",
+        ],
+      },
+      {
+        heading: "How the two fit together",
+        ordered: [
+          "The platform (Vanta/Drata) holds the AI policy, the training acknowledgments, and the control status.",
+          "The AI firewall (HoundShield, self-hosted on your own infrastructure) enforces the policy at the boundary — scanning prompts locally, blocking regulated data, writing a tamper-evident event log.",
+          "The firewall's output becomes the platform's evidence: the assessment PDF and log samples are exactly the artifacts you attach to the relevant controls in your program.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Is HoundShield a Vanta or Drata replacement?",
+        a: "No — and it doesn't try to be. HoundShield enforces and evidences the AI data path (prompt scanning, blocking, hash-chained logs, a NIST 800-171-mapped report). Vanta and Drata run the broader compliance program. Most regulated teams end up with both: the program platform, and the enforcement control it cites.",
+      },
+      {
+        q: "Vanta/Drata list AI features now — isn't that the same thing?",
+        a: "Their AI features focus on governance of the program itself (AI-assisted questionnaires, policy content, vendor AI risk reviews) and inventorying AI vendors — not interception of live prompts. Check any platform's data path: if it never sits between your users and the AI endpoint, it can't block what gets sent there.",
+      },
+      {
+        q: "Can I attach HoundShield's report as evidence in my compliance platform?",
+        a: "Yes — that's the intended workflow. The $499 CMMC AI Risk Assessment is a signed PDF mapping AI prompt events to NIST 800-171 Rev 2 controls; attach it (plus periodic log samples) to the corresponding controls in your platform as the enforcement evidence behind your AI policy.",
+      },
+      {
+        q: "We're doing SOC 2, not CMMC — does this still apply?",
+        a: "Yes. SOC 2's logical-access and confidentiality criteria raise the same question — what controls sensitive data leaving to third-party AI services? Local prompt scanning with attributable logs is the same answer, and the audit trail feeds your SOC 2 evidence the same way.",
+      },
+    ],
+  },
 ];
 
 export const ANSWER_SLUGS = ANSWERS.map((a) => a.slug);
