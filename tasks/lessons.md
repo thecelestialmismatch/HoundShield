@@ -7,6 +7,27 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ## 2026-07-12
 
+### A form that fakes success is a silent lead shredder — worse than a dead button
+**What:** `/contact`'s `handleSubmit` ran `setTimeout(1500) → setSubmitted(true)` and showed
+"Message sent" while sending NOTHING — no fetch, no email. Every lead vanished, including the $499
+buyers the dead-Stripe checkout deflects to `/contact?topic=assessment-report`. A visible 503 would
+have been better: at least the buyer knows to try again.
+**Root cause:** A demo-stubbed UI (fake async to show the success animation) shipped as if it were
+wired. Green tests + green build never exercised the network path because there wasn't one.
+**Rule:** Any form that shows a success state MUST make a real request and only succeed on `res.ok`.
+On failure, degrade honestly (show the direct email) — never a fake success. Guard the wiring with a
+source-contract test (`fetch("/api/...")` present; no `setTimeout(...setSubmitted)`). When checkout is
+the known blocker, audit EVERY lead-capture surface for the same silent-drop pattern before adding features.
+
+### Freshness-check the one variable that can flip a merged verdict — don't re-run the whole validation
+**What:** Asked to "re-validate the idea." The 7-axis validation had merged 12h earlier (#177). Re-running
+the full multi-agent web crawl would burn tokens re-deriving a known CONTINUE. Instead did a single
+TinyFish check on the only kill-criterion input that could have changed since: CMMC Phase 2 timing
+(still Nov 10 2026 — no slip).
+**Rule:** A recent merged conclusion is an asset, not something to redo. Re-check only the load-bearing
+variable(s) that could invalidate it; cite the merged doc for the rest. Redundant re-work is the same
+anti-pattern as building instead of selling.
+
 ### Eight months building, zero selling — the product was never the problem
 **What:** Validation across 7 axes found the product live, honest, and in a real market with intact CMMC timing — yet $0 revenue and 0 customer conversations. Both payment paths were dead (`/api/health` payments:missing_key; backup Stripe link expired), so the company literally could not take money.
 **Root cause:** Effort compounded on the 90% that feels safe (building) and avoided the 10% that produces revenue (checkout + selling). Classic "built the product, skipped distribution."

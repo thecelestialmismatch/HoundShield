@@ -114,8 +114,21 @@ export default function PricingPage() {
         <div className="section">
           <div className="container">
             <div className="section-head">
-              <div className="eyebrow">Pricing</div>
-              <h1 className="display">Simple, transparent pricing</h1>
+              <div className="eyebrow">Start here · one-time</div>
+              <h1 className="display">The $499 CMMC AI Risk Assessment Report</h1>
+              <p>
+                No subscription, no signup. We run the proxy across 14 days of your real AI
+                traffic and hand you a SHA-256-signed PDF that scores every prompt event against
+                NIST 800-171 — the evidence your C3PAO asks for.
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+                <ReportCheckoutButton label="Get your $499 report" />
+              </div>
+            </div>
+
+            <div className="section-head" style={{ marginTop: 8 }}>
+              <div className="eyebrow">Ongoing monitoring</div>
+              <h2 className="display">Or subscribe for continuous coverage</h2>
               <p>
                 Every framework — CMMC, HIPAA, SOC 2 — included in every paid plan. Start free,
                 scale when you&apos;re ready.
@@ -160,14 +173,6 @@ export default function PricingPage() {
               dashboard, unlimited client accounts and a partner revenue share.{' '}
               <Link href="/partners" style={{ color: 'var(--brand)', fontWeight: 600 }}>See partner program →</Link>
             </p>
-
-            <p className="center muted" style={{ marginTop: 8, fontSize: '.86rem' }}>
-              Need audit-ready evidence without a subscription? The <b>$499 one-time CMMC AI Risk
-              Assessment Report</b> scores 14 days of real AI traffic against NIST 800-171.
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
-              <ReportCheckoutButton label="Request the report" />
-            </div>
 
             <div className="compare">
               <table>
