@@ -16,6 +16,15 @@ Run STEP 0 → 1 → 2 → 3 → 4 in order, every time.
 
 ---
 
+## FOUNDER IDENTITY — sender for every drafted email
+
+- **Founder / sender: Gaurav.** Sign all outreach, cold email, RPO/MSP partner mail, and newsletters as **Gaurav, Founder — HoundShield**.
+- **From / reply-to on every draft: `Gaurav@houndshield.com`.** This is the founder's address — use it on all human-written mail (outreach, sales, partner, founder-to-buyer). Never draft founder outreach from `info@` or `contact@`.
+- Scope = **drafted** email only. `contact@houndshield.com` (general/support) and `info@houndshield.com` stay the generic inboxes wired into the contact form + partner-apply route. This does NOT change the app's `FOUNDER_EMAIL` env fallback (where automated $499 sale alerts land). To route those to Gaurav too, set `FOUNDER_EMAIL=Gaurav@houndshield.com` in Vercel — a separate step.
+- **Mailbox gap:** `Gaurav@houndshield.com` must exist as a Hostinger mailbox/alias before it can actually send/receive. Currently only `info@houndshield.com` exists (per `/api/v1/me`). Create it in hPanel → Emails first.
+
+---
+
 ## STEP 0 — ORIENT (read live state; never use placeholders)
 
 Read these before writing anything. They are the company's past/present:
@@ -118,3 +127,4 @@ concrete enough to do today, near-$0 cost. Not a list. One action.
 - Never claim hosted Vercel is CUI-safe. Never pitch C3PAOs as a referral channel. Never publish fictional metrics.
 - Preserve what works. Additive over destructive. Two lines beat two thousand.
 - One clear next action at the end. Always.
+- Founder email = `Gaurav@houndshield.com`; sign drafted outreach as **Gaurav** (see FOUNDER IDENTITY).
