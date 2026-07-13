@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { LiveCommandCenter } from '@/components/dashboard/LiveCommandCenter'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
 import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
+import { ConsoleDashboard } from '@/components/dashboard/ConsoleDashboard'
 import { getSessionProfile } from '@/lib/auth/profile'
 import { buildDashboardViewer, type ViewerProfile } from '@/lib/auth/dashboard-viewer'
 
@@ -42,6 +43,10 @@ export default async function ConsolePage() {
       <div className="cc-light bg-[var(--hs-surface-1)] px-4 pt-4 sm:px-6 lg:px-8">
         <WelcomeBanner />
         <CustomerStatusPanel />
+        {/* Tier-gated capability grid + inline CMMC self-assessment. Free sees a
+            restricted board (assessment unlocked, paid capabilities locked with an
+            Upgrade CTA); paid tiers see everything unlocked. */}
+        <ConsoleDashboard tier={viewer?.tier} />
       </div>
       <LiveCommandCenter viewer={viewer} />
     </>

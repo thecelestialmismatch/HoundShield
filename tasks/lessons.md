@@ -5,6 +5,33 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-13
+
+### A specific founder instruction that contradicts the plan → run the HERMES CHALLENGE, don't silently comply OR silently refuse
+**What:** Founder asked to build a tier-gated dashboard (restricted-free / full-paid). That's Stage-2
+subscription plumbing the plan says defer until the $499 report sells (0/3), and it gates tiers nobody can buy
+(`payments:missing_key`) on a console ~nobody reaches (OAuth login dead). First instinct was to treat the
+ambient "boil the ocean" mantra as consent and just build. The stronger reviewer flagged: that mantra is
+pasted on every message — it's not specific authorization for *this* tradeoff.
+**Root cause:** Conflating a standing maximalist directive with informed consent to a specific off-plan build.
+**Rule:** When a concrete request contradicts a written plan constraint, surface the *specific* tradeoff with
+the facts (the project's own HERMES CHALLENGE mechanism / an explicit question) before building. "You decide"
++ the facts in front of them = a real override; the mantra alone is not. Then build the on-plan version if one
+exists (here: gate the dashboard, but funnel every upgrade to /pricing → the live $499 report, not
+un-purchasable subscription SKUs).
+
+### Before fearing a dark-on-light design clash, check whether an existing remap already themes it
+**What:** Worried that embedding the dark-styled 110-control `AssessmentBoard` (text-white, bg-white/[0.03])
+inline on the light `/console` would break the design. Turned out `app/command-center/layout.tsx` already
+wraps the whole command-center — assessment included — in `.cc-light`, a globals.css remap that turns exactly
+those dark utilities into the light Steel & Cream palette. Mounting the board inside the console's own
+`.cc-light` scope themes it identically, zero new CSS.
+**Root cause:** Almost re-themed / duplicated styling to solve a clash a shared mechanism already handled.
+**Rule:** Before restyling a component to fit a new context, check for an existing theme-scoping layer
+(`.cc-light` here) that the component already renders under elsewhere — reuse the scope instead of forking styles.
+
+---
+
 ## 2026-07-12
 
 ### A manually-fulfilled sale needs an actionable alert, not just a receipt — and check the default before crying catastrophe
