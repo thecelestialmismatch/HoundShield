@@ -159,6 +159,14 @@ export function CustomerStatusPanel() {
   const greeting = firstName ? `Welcome back, ${firstName}` : "Welcome back";
   const pct = status.completionPercent ?? 0;
 
+  // The assessment now lives inline on this same dashboard (ConsoleDashboard's
+  // #assessment section), so the "Begin/Continue assessment" CTA opens it in
+  // place instead of bouncing the user to the standalone command-center route.
+  const ASSESSMENT_ROUTE = "/command-center/shield/assessment";
+  const action = status.nextStep.action;
+  const actionIsAssessment = action?.href === ASSESSMENT_ROUTE;
+  const actionHref = actionIsAssessment ? "#assessment" : action?.href;
+
   const tiles = [
     { label: "SPRS score", value: status.sprsScore === null ? "—" : String(status.sprsScore), sub: status.sprsLabel },
     { label: "Assessed", value: status.completionPercent === null ? "—" : `${status.completionPercent}%`, sub: "of 110 controls" },
@@ -225,15 +233,25 @@ export function CustomerStatusPanel() {
           <p className="font-semibold text-white">{status.nextStep.title}</p>
           <p className="mt-0.5 text-sm text-white/60">{status.nextStep.detail}</p>
         </div>
-        {status.nextStep.action && (
-          <Link
-            href={status.nextStep.action.href}
-            className="inline-flex flex-shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition-transform hover:scale-[1.02] active:scale-95"
-          >
-            {status.nextStep.action.label}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        )}
+        {action &&
+          (actionIsAssessment ? (
+            // Same-page anchor → fires hashchange so the inline assessment opens.
+            <a
+              href={actionHref}
+              className="inline-flex flex-shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition-transform hover:scale-[1.02] active:scale-95"
+            >
+              {action.label}
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </a>
+          ) : (
+            <Link
+              href={action.href}
+              className="inline-flex flex-shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition-transform hover:scale-[1.02] active:scale-95"
+            >
+              {action.label}
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          ))}
       </div>
 
       {/* How to fix — top gaps */}
