@@ -81,6 +81,19 @@ async function handleReportOrder(
     linkedUserId = profile?.id ?? null;
   }
 
+  // Idempotency guard. Stripe retries webhooks (delivery timeout / any non-2xx),
+  // so the same checkout.session.completed can arrive more than once. The upsert
+  // below is idempotent (onConflict: stripe_session_id), but the fulfillment
+  // emails are NOT — a naive retry re-sends both the buyer receipt AND the founder
+  // sale alert. Probe for an existing order first so we email only the first time
+  // it is recorded.
+  const { data: existingOrder } = await supabase
+    .from('report_orders')
+    .select('id')
+    .eq('stripe_session_id', session.id)
+    .maybeSingle();
+  const isNewOrder = !existingOrder;
+
   const { error } = await supabase.from('report_orders').upsert(
     {
       email,
@@ -103,6 +116,14 @@ async function handleReportOrder(
     console.error('[Stripe Webhook] report_orders upsert failed:', error);
   }
   console.log(`[Stripe Webhook] report order recorded: ${session.id} email=${email} wholesale=${isWholesale}`);
+
+  // Fulfillment emails fire once — on first record only. A Stripe retry re-runs
+  // this handler (and idempotently re-upserts the row), but must not re-notify the
+  // buyer or the founder. The DB is the source of truth; the emails are not.
+  if (!isNewOrder) {
+    console.log(`[Stripe Webhook] report order ${session.id} already recorded — skipping duplicate fulfillment emails`);
+    return;
+  }
 
   // Buyer receipt + fulfillment kickoff (best-effort).
   await sendTransactionalToEmail(email, {
