@@ -75,8 +75,10 @@ function setupSupabase() {
     update: mockUpdate,
     select: vi.fn().mockReturnValue({
       // subscription/customer lookups: select().eq().single()
+      // report-order idempotency probe: select().eq('stripe_session_id',…).maybeSingle()
       eq: vi.fn().mockReturnValue({
         single: vi.fn().mockResolvedValue({ data: null }),
+        maybeSingle: vi.fn().mockResolvedValue({ data: null }),
       }),
       // report-order account linkage: select().ilike().limit().maybeSingle()
       ilike: vi.fn().mockReturnValue({
@@ -419,6 +421,93 @@ describe("POST /api/stripe/webhook — report order founder alert", () => {
       expect.objectContaining({ stripe_session_id: "cs_report_alert3", status: "paid" }),
       expect.any(Object),
     );
+  });
+});
+
+// ── report order idempotency (Stripe retries must NOT re-send emails) ───────
+
+describe("POST /api/stripe/webhook — report order idempotency", () => {
+  beforeEach(() => {
+    process.env.STRIPE_SECRET_KEY = "sk_test";
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    process.env.RESEND_API_KEY = "re_test"; // enable the best-effort email path
+    process.env.FOUNDER_EMAIL = "gaurav@houndshield.com";
+    mockUpdate.mockReturnValue({ eq: mockEq });
+    mockEq.mockReturnValue({ eq: mockEq2 });
+  });
+
+  afterEach(() => {
+    delete process.env.STRIPE_SECRET_KEY;
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.FOUNDER_EMAIL;
+    vi.clearAllMocks();
+  });
+
+  // Wire the report_orders idempotency probe to a specific result. `existing`
+  // truthy = the order was already recorded by a prior webhook delivery.
+  function setupWithExistingOrder(existing: { id: string } | null) {
+    mockFrom.mockReturnValue({
+      upsert: mockUpsert,
+      update: mockUpdate,
+      select: vi.fn().mockReturnValue({
+        // idempotency probe: select('id').eq('stripe_session_id',…).maybeSingle()
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({ data: null }),
+          maybeSingle: vi.fn().mockResolvedValue({ data: existing }),
+        }),
+        // account linkage: select('id').ilike('email',…).limit().maybeSingle()
+        ilike: vi.fn().mockReturnValue({
+          limit: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({ data: null }),
+          }),
+        }),
+      }),
+    });
+  }
+
+  const reportEvent = (id: string) => ({
+    type: "checkout.session.completed",
+    id,
+    data: {
+      object: {
+        id: "cs_report_dup",
+        mode: "payment",
+        customer_details: { email: "rachel@clinic.com", name: "Rachel H" },
+        amount_total: 49900,
+        currency: "usd",
+        metadata: { product: "cmmc_ai_risk_report", vertical: "healthcare", wholesale: "false" },
+      },
+    },
+  });
+
+  it("does NOT re-send the buyer receipt or founder alert on a duplicate (retried) event", async () => {
+    // The order was already recorded by a prior delivery of the same session.
+    setupWithExistingOrder({ id: "existing-order-1" });
+    mockConstructEvent.mockReturnValueOnce(reportEvent("evt_report_dup"));
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    // The row is still upserted idempotently — DB stays the source of truth…
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ stripe_session_id: "cs_report_dup", status: "paid" }),
+      expect.any(Object),
+    );
+    // …but NO emails go out the second time. This is the whole fix.
+    expect(mockResendSend).not.toHaveBeenCalled();
+  });
+
+  it("sends both emails on the FIRST delivery of an order", async () => {
+    // No existing row → this is the first time we record the order.
+    setupWithExistingOrder(null);
+    mockConstructEvent.mockReturnValueOnce(reportEvent("evt_report_first"));
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockResendSend).toHaveBeenCalledTimes(2);
+    const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
+    expect(recipients).toContain("rachel@clinic.com");
+    expect(recipients).toContain("gaurav@houndshield.com");
   });
 });
 
