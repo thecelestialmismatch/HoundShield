@@ -97,8 +97,15 @@ function HourlyActivity() {
               </g>
             )
           })}
+          {/* First/last labels anchor inward so nothing clips at the viewBox edge. */}
           {[0, 6, 12, 18, 23].map((hr) => (
-            <text key={hr} x={hr * bw + bw / 2} y={H + 11} textAnchor="middle" className="ovc-axis">
+            <text
+              key={hr}
+              x={hr === 0 ? 2 : hr === 23 ? W - 2 : hr * bw + bw / 2}
+              y={H + 11}
+              textAnchor={hr === 0 ? 'start' : hr === 23 ? 'end' : 'middle'}
+              className="ovc-axis"
+            >
               {hr === 23 ? 'now' : `${String(hr).padStart(2, '0')}:00`}
             </text>
           ))}

@@ -2,7 +2,11 @@
 
 ## Active
 
-### 2026-07-14c — Dashboards made diverse + self-explanatory (PR pending)
+### 2026-07-14d — Deep-dive audit of the session's work (PR pending)
+- [x] Reviewed the cumulative #183–#185 diff + click-drove every flow. Found & fixed: Settings "Copy" button was ANOTHER fake-success stub (now really writes the clipboard, only confirms on success — regression-tested); hour-axis labels clipped at the chart edges (inward anchors); duplicate React keys possible on rapid re-exports (monotonic id). Browser-verified: guide→"Begin assessment" opens the inline board in place with the hash cleared; clipboard actually contains the proxy URL.
+- [x] Data polish (no deploy): founder profiles get company='HoundShield' → PDFs now read SSP_HoundShield_… and the sidebar shows the org, not the first name.
+
+### 2026-07-14c — Dashboards made diverse + self-explanatory (MERGED #185, live in prod)
 - [x] Founder: "more graphs, more colours, small explanations, consistent data — console AND the hero-page dashboard." Console Overview gains 4 dataviz-validated panels (`OverviewCharts`): Activity by hour (stacked, blocked share), Where prompts go (ChatGPT/Copilot/Claude/Other), SPRS 30-day trend vs the L2 target line, Risk mix (severity stack with counts). Every panel carries plain-English microcopy + accessible labels. Homepage hero gains a "Where prompts go" panel + captions on every chart.
 - [x] Consistency is now a TEST: chart sums must equal the KPI seeds (142,690 scans / 2,233 blocked) or the build fails — the contract caught its first mismatch immediately.
 

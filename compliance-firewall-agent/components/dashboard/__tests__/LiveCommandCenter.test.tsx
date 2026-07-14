@@ -129,6 +129,15 @@ describe('LiveCommandCenter — exact-copy after-login dashboard', () => {
     // The raw tag must never become a real element in the transcript.
     expect(document.querySelector('.blog img')).toBeNull()
   })
+
+  it('the Settings "Copy" button REALLY copies the proxy URL (no fake confirmation)', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    Object.assign(navigator, { clipboard: { writeText } })
+    render(<LiveCommandCenter />)
+    fireEvent.click(screen.getAllByText('Copy')[0].closest('button')!)
+    await screen.findByText('Copied')
+    expect(writeText).toHaveBeenCalledWith('https://proxy.houndshield.com/v1')
+  })
 })
 
 describe('LiveCommandCenter — guide + paywall behind sidebar buttons (founder direction)', () => {
