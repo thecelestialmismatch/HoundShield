@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeSecretKey } from '@/lib/stripe/env';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  return new Stripe(getStripeSecretKey()!, {
     apiVersion: '2026-02-25.clover',
   });
 }
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!process.env.STRIPE_SECRET_KEY) {
+    if (!getStripeSecretKey()) {
       return NextResponse.json(
         { error: 'Stripe not configured. Set STRIPE_SECRET_KEY in environment.' },
         { status: 503 }
