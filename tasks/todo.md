@@ -2,6 +2,12 @@
 
 ## Active
 
+### 2026-07-14e — STRIPE IS LIVE: paste-proof key handling + first live checkout verified (MERGED #187 + #202, live in prod)
+- [x] Founder: "every paste comes out empty — fix it or recreate the placeholder." Shipped `lib/stripe/env.ts` (auto-cleans quotes/newlines/zero-width chars/whole-line `NAME=value` pastes; ALL six Stripe routes now read through it) + `/api/health` diagnostics: `payments: connected|malformed_key|missing_key` and now `payments_webhook: configured|malformed_secret|missing_secret`, each with a value-free `*_hint` naming the exact fix. Leak-proof by tested contract.
+- [x] **`payments: connected` on prod — the 2-week #1 blocker is CLEARED.** Verified beyond the health check: drove the real buyer flow in a browser → `/pricing` → $499 CTA → **live Stripe Checkout (`cs_live_…`) showing "CMMC AI Risk Assessment Report — $499.00"**. A customer can pay today.
+- [ ] **FOUNDER — new #1 (5 min): the webhook.** Prod reads `payments_webhook: missing_secret` → a card can be CHARGED but the order is never recorded and no sale alert is sent. Do `docs/GO-LIVE-STRIPE.md` Step 2: Stripe → Developers → Webhooks → endpoint `https://houndshield.com/api/stripe/webhook` → copy `whsec_…` → Vercel (project compliance-firewall-agent, Production ticked) as `STRIPE_WEBHOOK_SECRET` → redeploy → health shows `payments_webhook: configured`. Then the Step 4 test-card dry run.
+- [ ] Tech-debt noted (not blocking): `app/api/stripe/prices/route.ts` is dead (zero in-app consumers) and its 8 hardcoded price IDs fail live-mode lookup — delete or re-point when subscription tiers (Stage 2) get real live prices.
+
 ### 2026-07-14d — Deep-dive audit of the session's work (PR pending)
 - [x] Reviewed the cumulative #183–#185 diff + click-drove every flow. Found & fixed: Settings "Copy" button was ANOTHER fake-success stub (now really writes the clipboard, only confirms on success — regression-tested); hour-axis labels clipped at the chart edges (inward anchors); duplicate React keys possible on rapid re-exports (monotonic id). Browser-verified: guide→"Begin assessment" opens the inline board in place with the hash cleared; clipboard actually contains the proxy URL.
 - [x] Data polish (no deploy): founder profiles get company='HoundShield' → PDFs now read SSP_HoundShield_… and the sidebar shows the org, not the first name.
