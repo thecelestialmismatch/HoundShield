@@ -160,7 +160,9 @@ function coverPage(doc: jsPDF, type: ArtifactType, input: ArtifactInput): number
   kv("Organization", input.orgName);
   kv("Generated", formatDate(input.generatedAt));
   kv("CMMC Level", String(input.cmmcLevel));
-  kv("SPRS Score", `${input.sprs.total} (range −203 to +110)`);
+  // ASCII hyphen only — U+2212 MINUS is outside jsPDF's WinAnsi font encoding
+  // and prints as a stray quote character.
+  kv("SPRS Score", `${input.sprs.total} (range -203 to +110)`);
   kv(
     "Assessment",
     `${input.sprs.metCount} met · ${input.sprs.partialCount} partial · ${input.sprs.unmetCount} unmet · ${input.controls.length - input.sprs.assessedCount} not assessed`,
@@ -271,7 +273,8 @@ export function generateArtifactPdf(type: ArtifactType, input: ArtifactInput): G
       );
       autoTable(doc, {
         startY: y + 4,
-        head: [["Control", "Weakness", "Status", "Priority", "SPRS Δ", "Planned remediation", "Est."]],
+        // "SPRS" not "SPRS Δ" — Greek delta is outside WinAnsi and misprints.
+        head: [["Control", "Weakness", "Status", "Priority", "SPRS", "Planned remediation", "Est."]],
         body: rows,
         margin: { left: MARGIN, right: MARGIN, top: 16 },
         headStyles: { fillColor: BRAND, textColor: "#FFFFFF", fontStyle: "bold", fontSize: 7.5 },
