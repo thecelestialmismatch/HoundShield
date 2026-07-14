@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
 import { buildOrderView, type OrderRowLike } from '@/lib/reports/order-view';
 import { buildCustomerStatus, type OrderSummary } from '@/lib/customer/status';
+import { resolveEffectiveTier } from '@/lib/billing/founder-access';
 
 /**
  * GET /api/customer/status — the signed-in customer's ACCOUNT-level status
@@ -57,7 +58,9 @@ export async function GET() {
       .limit(1),
   ]);
 
-  const tier = (profileRes.data?.tier as string) || 'free';
+  // Founder accounts resolve to the top tier (full access, no payment) —
+  // keyed on the session-verified email, never anything client-sent.
+  const tier = resolveEffectiveTier(user.email, (profileRes.data?.tier as string) || 'free');
   const company = (profileRes.data?.company as string) || null;
   const fullName = (profileRes.data?.full_name as string) || '';
   const firstName = fullName.trim().split(/\s+/)[0] || null;

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('next/link', () => ({
@@ -9,22 +9,13 @@ vi.mock('next/link', () => ({
   ),
 }));
 
-// Keep the heavy 110-control board out of the render — a stub proves the inline
-// mount without loading Framer Motion / localStorage machinery.
-vi.mock('next/dynamic', () => ({
-  default: () => {
-    const Stub = () => <div data-testid="assessment-board">assessment board</div>;
-    return Stub;
-  },
-}));
+import { PlanUnlocksBoard } from '../PlanUnlocksBoard';
 
-import { ConsoleDashboard } from '../ConsoleDashboard';
-
-describe('ConsoleDashboard — tier gating', () => {
-  it('free: restricted board with the $499 upgrade CTA and locked evidence tiles', () => {
-    render(<ConsoleDashboard tier="free" />);
+describe('PlanUnlocksBoard — the sidebar paywall view', () => {
+  it('free: restricted plan with the $499 upgrade CTA and locked tiles', () => {
+    render(<PlanUnlocksBoard tier="free" />);
     expect(screen.getByText(/Free plan/)).toBeTruthy();
-    expect(screen.getByText(/Restricted dashboard/)).toBeTruthy();
+    expect(screen.getByText(/Restricted plan/)).toBeTruthy();
     expect(screen.getByText(/\$499 report/)).toBeTruthy();
 
     // The gateway is included on Free…
@@ -34,19 +25,16 @@ describe('ConsoleDashboard — tier gating', () => {
     expect(screen.getAllByText(/Available on Growth/).length).toBeGreaterThan(0);
   });
 
-  it('free: assessment is the unlocked hero and mounts inline on demand (no bounce)', () => {
-    render(<ConsoleDashboard tier="free" />);
-    // Board is not mounted until the user begins.
-    expect(screen.queryByTestId('assessment-board')).toBeNull();
-
-    fireEvent.click(screen.getByRole('button', { name: /Begin assessment/i }));
-
-    expect(screen.getByTestId('assessment-board')).toBeTruthy();
-    expect(screen.getByRole('button', { name: /Hide assessment/i })).toBeTruthy();
+  it('free: every locked tile says exactly what it costs to unlock', () => {
+    render(<PlanUnlocksBoard tier="free" />);
+    // Growth-locked capabilities carry the Growth price; Pro-locked the Pro price.
+    expect(screen.getAllByText(/Available on Growth — \$499\/mo/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Available on Pro — \$199\/mo/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Available on Enterprise — \$999\/mo/).length).toBeGreaterThan(0);
   });
 
   it('paid (growth): full access, PDF reports unlocked, no free-upgrade CTA', () => {
-    render(<ConsoleDashboard tier="growth" />);
+    render(<PlanUnlocksBoard tier="growth" />);
     expect(screen.getByText(/Growth plan/)).toBeTruthy();
     expect(screen.getByText(/Full access/)).toBeTruthy();
     // PDF reports now included; Enterprise-only capability still locked.
@@ -57,14 +45,22 @@ describe('ConsoleDashboard — tier gating', () => {
   });
 
   it('enterprise: everything unlocked — no locked section at all', () => {
-    render(<ConsoleDashboard tier="enterprise" />);
+    render(<PlanUnlocksBoard tier="enterprise" />);
     expect(screen.getByText(/Enterprise plan/)).toBeTruthy();
-    expect(screen.queryByText(/Unlock with an upgrade/)).toBeNull();
+    expect(screen.queryByText(/Locked — upgrade to unlock/)).toBeNull();
   });
 
   it('unknown tier falls back to the restricted free board', () => {
-    render(<ConsoleDashboard tier="nonsense" />);
+    render(<PlanUnlocksBoard tier="nonsense" />);
     expect(screen.getByText(/Free plan/)).toBeTruthy();
-    expect(screen.getByText(/Restricted dashboard/)).toBeTruthy();
+    expect(screen.getByText(/Restricted plan/)).toBeTruthy();
+  });
+
+  it('founder: everything unlocked, explicit no-payment banner, zero upgrade copy', () => {
+    render(<PlanUnlocksBoard tier="agency" founder />);
+    expect(screen.getByText(/Founder plan/)).toBeTruthy();
+    expect(screen.getByText(/no payment required/i)).toBeTruthy();
+    expect(screen.queryByText(/Locked — upgrade to unlock/)).toBeNull();
+    expect(screen.queryByText(/\$499 report/)).toBeNull();
   });
 });

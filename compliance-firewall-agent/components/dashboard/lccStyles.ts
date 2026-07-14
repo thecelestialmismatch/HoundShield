@@ -41,7 +41,13 @@ export const LCC_CSS = `
   --r:14px; --r-sm:10px;
   font-family:var(--f);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
 }
-.hs-lcc *{margin:0;padding:0;box-sizing:border-box}
+/* Scoped reset. :where() keeps it at ZERO specificity so the Tailwind-styled
+   panels embedded in the shell (WelcomeBanner, CustomerStatusPanel,
+   PlanUnlocksBoard, AssessmentBoard under .cc-light) keep their utility
+   spacing — this style tag renders after the global sheet, so a full-strength
+   ".hs-lcc *" reset would silently beat every p-/m- utility inside. */
+.hs-lcc *{box-sizing:border-box}
+:where(.hs-lcc *){margin:0;padding:0}
 .hs-lcc .mono{font-family:var(--f-mono)}
 .hs-lcc .shell{display:grid;grid-template-columns:248px 1fr;min-height:100dvh}
 
