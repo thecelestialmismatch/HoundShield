@@ -2,6 +2,13 @@
 
 ## Active
 
+### 2026-07-14 — Console redesign: dashboard-first + founder full access (PR pending)
+- [x] Founder feedback on the 07-13 console: the "buy this / do this" stack above the dashboard is gone. `/console` = the Live Command Center alone; the guide (CustomerStatusPanel) and the paywall (PlanUnlocksBoard, ex-ConsoleDashboard) moved into SIDEBAR buttons ("Your Guide", "Plan & Unlocks"). Locked tiles now price the restriction ("Available on Growth — $499/mo"). Assessment = mid-list tab, runs INLINE (lazy board, `#assessment` hash opens it); the bounce link to /command-center/shield/assessment removed.
+- [x] Founder access: `gaurav@houndshield.com` (lib/billing/founder-access.ts, env-extendable) → top-tier entitlements with NO payment across ALL gates: console viewer, /api/me, /api/customer/status, getUserSubscription (PDF 402 + gateway). Session-email keyed, fail-closed, unit-tested.
+- [x] Fixed 2 latent rendering bugs the browser pass caught: `.hs-lcc *` reset was nuking Tailwind spacing inside embedded panels (now zero-specificity `:where()`); cc-light lacked text-white/45/55/65 remaps (white-on-white text). Screenshot-verified desktop+mobile, 0 console errors. 1087/1087 tests, build+lint+tsc green.
+- [ ] **FOUNDER:** after merge, sign in on houndshield.com with `gaurav@houndshield.com` and verify: sidebar shows "Founder · full access", Plan & Unlocks all unlocked, PDF export works without paying. (The account must EXIST via sign-up first — founder access keys on the login email.)
+- [ ] **FOUNDER — still the #1 revenue blocker (unchanged):** `STRIPE_SECRET_KEY` Production scope in Vercel → `/api/health` must read `payments: connected`.
+
 ### 2026-07-13 — Tier-gated after-login console + inline assessment (PR pending)
 - [x] Founder asked (looking at live site): don't bounce "Begin assessment" to a deep link — put it on the same after-login dashboard; and build a restricted dashboard for free users / everything for paid, per the plan. Ran the HERMES CHALLENGE first (this is Stage-2 subscription plumbing, gates tiers nobody can buy while `payments:missing_key`, on a console ~nobody reaches). Founder: **"you decide" + boil-the-ocean** → informed override. Chose the on-plan version: build it, but every upgrade CTA funnels to `/pricing` (which leads with the live $499 report).
 - [x] Reused the existing single source of truth `lib/billing/entitlements.ts` — did NOT build a new entitlements model. New pure projection `lib/billing/console-sections.ts` → `buildConsoleSections(tier)` = `{isPaid, unlocked[], locked[]}`; locked tiles carry a truthful "Available on <tier>" (via `tierThatUnlocks`) + Upgrade→/pricing.

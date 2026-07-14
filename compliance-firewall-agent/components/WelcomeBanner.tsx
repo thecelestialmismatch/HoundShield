@@ -19,7 +19,7 @@ function WelcomeBannerInner() {
   return (
     <div
       role="status"
-      className="flex items-center justify-between gap-3 rounded-xl border border-[rgba(5,150,105,0.25)] bg-[rgba(5,150,105,0.08)] px-4 py-3 text-sm text-[var(--hs-ink,#0A1420)]"
+      className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-[rgba(5,150,105,0.25)] bg-[rgba(5,150,105,0.08)] px-4 py-3 text-sm text-[var(--hs-ink,#0A1420)]"
     >
       <div className="flex items-center gap-2.5">
         <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-[var(--hs-success,#059669)]" />

@@ -159,9 +159,9 @@ export function CustomerStatusPanel() {
   const greeting = firstName ? `Welcome back, ${firstName}` : "Welcome back";
   const pct = status.completionPercent ?? 0;
 
-  // The assessment now lives inline on this same dashboard (ConsoleDashboard's
-  // #assessment section), so the "Begin/Continue assessment" CTA opens it in
-  // place instead of bouncing the user to the standalone command-center route.
+  // The assessment lives inline on this same dashboard (the command center's
+  // CMMC Assessment tab listens for #assessment), so the "Begin/Continue
+  // assessment" CTA opens it in place instead of bouncing to another route.
   const ASSESSMENT_ROUTE = "/command-center/shield/assessment";
   const action = status.nextStep.action;
   const actionIsAssessment = action?.href === ASSESSMENT_ROUTE;
