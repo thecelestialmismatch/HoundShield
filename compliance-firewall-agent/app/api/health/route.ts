@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { isLlmConfigured } from "@/lib/agent/provider";
 import { cached } from "@/lib/cache/swr-cache";
-import { stripeKeyDiagnostic } from "@/lib/stripe/env";
+import { stripeKeyDiagnostic, stripeWebhookDiagnostic } from "@/lib/stripe/env";
 
 /**
  * GET /api/health
@@ -24,11 +24,14 @@ function computeServices(): Services {
   // the operator can fix a bad paste without guessing. The hint never
   // contains any part of the configured value (shape + length only).
   const payments = stripeKeyDiagnostic();
+  const webhook = stripeWebhookDiagnostic();
   return {
     database: isSupabaseConfigured() ? "connected" : "demo_mode",
     ai_router: isLlmConfigured() ? "connected" : "missing_key",
     payments: payments.status,
     ...(payments.hint ? { payments_hint: payments.hint } : {}),
+    payments_webhook: webhook.status,
+    ...(webhook.hint ? { payments_webhook_hint: webhook.hint } : {}),
     classifier: "operational",
     quarantine: "operational",
     audit_chain: "operational",

@@ -33,18 +33,27 @@ connecting Stripe. This is a dashboard task, not a coding task.
 
 ## Where you are right now
 
+**✅ STEP 1 IS DONE — verified live on 2026-07-14.**
 `https://www.houndshield.com/api/health` reports:
 
 ```json
-"payments": "missing_key"
+"payments": "connected"
 ```
 
-You said you added the Stripe secret key — but prod already redeployed after that
-(the health endpoint shows a fresh boot) and it **still** reads `missing_key`.
+And it's not just the key landing: the real buyer flow was exercised end-to-end
+in a browser — `/pricing` → the $499 CTA → a **live Stripe Checkout page**
+(`checkout.stripe.com`, `cs_live_…`) showing "CMMC AI Risk Assessment Report —
+$499.00". A customer can pay you right now.
 
-**So "add the key and redeploy" is already done and it didn't take.** That rules
-out the usual cause. It is now one of exactly three things (see Step 1). This is
-the single most important fix on the whole project — do it first.
+**That makes Step 2 (the webhook) the urgent one.** Until
+`STRIPE_WEBHOOK_SECRET` is set, a card can be charged but the order is never
+recorded and no "go fulfill this" alert is sent — you'd only find out from
+Stripe's own dashboard. The health endpoint now reports this too:
+
+```json
+"payments_webhook": "configured"   ← what you want
+"payments_webhook": "missing_secret" + payments_webhook_hint   ← do Step 2
+```
 
 ---
 
