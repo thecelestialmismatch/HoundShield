@@ -34,6 +34,7 @@ import { LCC_CSS } from './lccStyles'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
 import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
 import { PlanUnlocksBoard } from '@/components/dashboard/PlanUnlocksBoard'
+import { ReportsPanel } from '@/components/dashboard/ReportsPanel'
 import {
   getEntitlements, formatLimit, usagePercent, hasFeature, tierThatUnlocks,
   FEATURE_LABELS, UNLIMITED, type Entitlements, type FeatureKey,
@@ -766,19 +767,16 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               </div>
             </div>
 
-            {/* REPORTS */}
+            {/* REPORTS — real artifact generation (SSP · POA&M · Evidence Pack),
+                plan-gated for customers, always free for the founder. */}
             <div className={tabClass('reports')}>
-              <div className="cards3">
-                <ReportCard icon={FileText} title="System Security Plan" body="Auto-generated SSP across all 110 controls. SHA-256 signed." done="✓ SSP_AcmeDefense.pdf" label="Generate PDF" />
-                <ReportCard icon={Flag} title="POA&M" body="Plan of Action & Milestones for your 14 open controls." done="✓ POAM_AcmeDefense.pdf" label="Generate PDF" />
-                <ReportCard icon={Shield} title="C3PAO Evidence Pack" body="Tamper-evident audit log mapped to NIST controls." done="✓ Evidence_2026.pdf" label="Export" />
-              </div>
-              <div className="panel" style={{ marginTop: 16 }}>
-                <div className="ph"><h3>Recent exports</h3><span className="mono">signed · timestamped</span></div>
-                <div className="crow"><span>SSP_AcmeDefense_2026-06.pdf</span><span className="mono" style={{ color: 'var(--mut2)' }}>sha256:9f3a… · 2d ago</span></div>
-                <div className="crow"><span>SPRS_attestation_Q2.pdf</span><span className="mono" style={{ color: 'var(--mut2)' }}>sha256:1c08… · 5d ago</span></div>
-                <div className="crow"><span>Audit_trail_May.json</span><span className="mono" style={{ color: 'var(--mut2)' }}>sha256:7be2… · 12d ago</span></div>
-              </div>
+              <ReportsPanel
+                ent={ent}
+                founder={viewer?.isFounder}
+                orgFallback={viewer?.company}
+                sampleMode={!viewer}
+                onGoToPlan={() => setTab('plan')}
+              />
             </div>
 
             {/* BRAIN */}
@@ -892,18 +890,6 @@ function StepRow({ n, title, detail, cta, onClick, done }: { n: string; title: s
       <div className="step-n">{done ? '✓' : n}</div>
       <div className="step-body"><b>{title}</b><span>{detail}</span></div>
       <button type="button" className="btn btn-g btn-sm" onClick={onClick}>{cta} <ArrowRight /></button>
-    </div>
-  )
-}
-
-function ReportCard({ icon: Icon, title, body, done, label }: { icon: React.ElementType; title: string; body: string; done: string; label: string }) {
-  const [text, setText] = useState(label)
-  return (
-    <div className="card">
-      <div className="ic"><Icon /></div>
-      <h4>{title}</h4>
-      <p>{body}</p>
-      <button type="button" className="btn btn-p btn-sm" style={{ marginTop: 14 }} onClick={() => setText(done)}>{text}</button>
     </div>
   )
 }

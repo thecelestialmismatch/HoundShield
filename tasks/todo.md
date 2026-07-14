@@ -2,6 +2,11 @@
 
 ## Active
 
+### 2026-07-14b — Report PDFs made REAL + founder account live (PR pending)
+- [x] Founder: "generate PDF was not working." Root cause: the console Reports tab's three buttons were stubs (label flip, no file — the fake-success anti-pattern again). Built `lib/reports/artifact-pdfs.ts` (SSP / POA&M / C3PAO Evidence Pack — three DISTINCT jsPDF artifacts from the user's own local assessment) + `ReportsPanel` (real download, true SHA-256 in Recent exports, visible errors, honest empty state). Growth+ gated with the priced restriction routing to Plan & Unlocks; **founder always free**.
+- [x] Founder account made real: created `gaurav@houndshield.com` in prod Supabase auth (pre-confirmed) + agency profile/subscription grants for it, `gauravbt10@gmail.com`, `info@houndshield.com` (demo account left Free). Browser-verified live sign-in → "Founder · full access", nothing locked.
+- [ ] **FOUNDER:** change the temp password after first sign-in (chat-transmitted); create the `gaurav@houndshield.com` mailbox in Hostinger so password reset emails can ever work.
+
 ### 2026-07-14 — Console redesign: dashboard-first + founder full access (PR pending)
 - [x] Founder feedback on the 07-13 console: the "buy this / do this" stack above the dashboard is gone. `/console` = the Live Command Center alone; the guide (CustomerStatusPanel) and the paywall (PlanUnlocksBoard, ex-ConsoleDashboard) moved into SIDEBAR buttons ("Your Guide", "Plan & Unlocks"). Locked tiles now price the restriction ("Available on Growth — $499/mo"). Assessment = mid-list tab, runs INLINE (lazy board, `#assessment` hash opens it); the bounce link to /command-center/shield/assessment removed.
 - [x] Founder access: `gaurav@houndshield.com` (lib/billing/founder-access.ts, env-extendable) → top-tier entitlements with NO payment across ALL gates: console viewer, /api/me, /api/customer/status, getUserSubscription (PDF 402 + gateway). Session-email keyed, fail-closed, unit-tested.
