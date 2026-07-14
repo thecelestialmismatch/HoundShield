@@ -24,18 +24,34 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
   Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
-  Check, Zap, Crown,
+  Check, Zap, Crown, ListChecks,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
+import { WelcomeBanner } from '@/components/WelcomeBanner'
+import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
+import { PlanUnlocksBoard } from '@/components/dashboard/PlanUnlocksBoard'
 import {
   getEntitlements, formatLimit, usagePercent, hasFeature, tierThatUnlocks,
   FEATURE_LABELS, UNLIMITED, type Entitlements, type FeatureKey,
 } from '@/lib/billing/entitlements'
 
-type TabId = 'overview' | 'feed' | 'assess' | 'reports' | 'brain' | 'settings'
+/**
+ * The 110-control assessment is heavy (Framer Motion + every control). It only
+ * loads after the operator actually opens the CMMC Assessment tab — the
+ * console's first paint stays light.
+ */
+const AssessmentBoard = dynamic(() => import('@/components/dashboard/AssessmentBoard'), {
+  ssr: false,
+  loading: () => (
+    <div className="p-8 text-center text-sm text-white/50">Loading your assessment…</div>
+  ),
+})
+
+type TabId = 'overview' | 'feed' | 'assess' | 'reports' | 'brain' | 'guide' | 'plan' | 'settings'
 
 const TAB_TITLES: Record<TabId, string> = {
   overview: 'Live Operations',
@@ -43,6 +59,8 @@ const TAB_TITLES: Record<TabId, string> = {
   assess: 'CMMC Assessment',
   reports: 'Reports',
   brain: 'Brain AI',
+  guide: 'Your Guide',
+  plan: 'Plan & Unlocks',
   settings: 'Settings',
 }
 
@@ -160,6 +178,8 @@ export interface DashboardViewer {
   tier?: string
   /** Operator's first name, for the by-name greeting + Brain AI. */
   firstName?: string
+  /** Founder account — full access, no payment required, "Founder" labels. */
+  isFounder?: boolean
 }
 
 // Overview quick-ask questions for the Brain card (wired to the live analyst).
@@ -174,6 +194,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   const [tab, setTab] = useState<TabId>('overview')
   const [sideOpen, setSideOpen] = useState(false)
   const [feedBadge, setFeedBadge] = useState(3)
+  // The 110-control board mounts the first time the assessment tab is opened
+  // (tabs hide via CSS, so an eager mount would load it on every console visit).
+  const [assessSeen, setAssessSeen] = useState(false)
 
   // ── Subscription context ─────────────────────────────────────────────────
   // The signed-in plan drives every entitlement in the dashboard (usage caps,
@@ -471,6 +494,24 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   // reset the unread badge when the operator opens the feed tab
   useEffect(() => { if (tab === 'feed') bumpBadge(0) }, [tab])
 
+  // mount the heavy assessment board the first time its tab opens
+  useEffect(() => { if (tab === 'assess') setAssessSeen(true) }, [tab])
+
+  // `#assessment` deep link (used by the guide's "Begin assessment" CTA and any
+  // legacy link) opens the assessment tab in place — no bounce to another page.
+  // The hash is cleared afterwards so a repeat click re-fires hashchange.
+  useEffect(() => {
+    const openIfHash = () => {
+      if (window.location.hash === '#assessment') {
+        setTab('assess')
+        history.replaceState(null, '', window.location.pathname + window.location.search)
+      }
+    }
+    openIfHash()
+    window.addEventListener('hashchange', openIfHash)
+    return () => window.removeEventListener('hashchange', openIfHash)
+  }, [])
+
   const tabClass = (id: TabId) => (tab === id ? 'atab on' : 'atab')
 
   return (
@@ -494,6 +535,15 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
             )
           })}
           <div className="gh">Account</div>
+          {/* The guide ("do this next") and the plan restrictions ("pay to
+              unlock") live HERE as sidebar buttons — never stacked above the
+              dashboard (founder direction, 2026-07-14). */}
+          <button type="button" className={`slink${tab === 'guide' ? ' on' : ''}`} onClick={() => { setTab('guide'); setSideOpen(false) }}>
+            <ListChecks /> Your Guide
+          </button>
+          <button type="button" className={`slink${tab === 'plan' ? ' on' : ''}`} onClick={() => { setTab('plan'); setSideOpen(false) }}>
+            <Crown /> Plan &amp; Unlocks
+          </button>
           <button type="button" className={`slink${tab === 'settings' ? ' on' : ''}`} onClick={() => { setTab('settings'); setSideOpen(false) }}>
             <Cog /> Settings
           </button>
@@ -502,7 +552,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           </Link>
           <div className="side-foot">
             <div className="av">{viewer?.initials ?? 'AD'}</div>
-            <div><div className="nm">{orgName}</div><div className="sub">{ent.name} · {formatLimit(ent.seats)} seats</div></div>
+            <div><div className="nm">{orgName}</div><div className="sub">{viewer?.isFounder ? 'Founder · full access' : `${ent.name} · ${formatLimit(ent.seats)} seats`}</div></div>
           </div>
         </aside>
 
@@ -551,6 +601,10 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           </div>
 
           <div className="body">
+            {/* Post-signup welcome (renders only on /console?welcome=true;
+                carries its own bottom margin so nothing shifts when absent). */}
+            <WelcomeBanner />
+
             {/* OVERVIEW */}
             <div className={tabClass('overview')}>
               {/* Branded hero identity band — brand-forward welcome anchor that
@@ -564,7 +618,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                     <div className="hero-tag">
                       <span>HoundShield AI Compliance Command Center</span>
                       <span className="liv"><span className="dot" /> Gateway live</span>
-                      <span className="plan-chip"><Crown /> {ent.name} plan</span>
+                      <span className="plan-chip"><Crown /> {viewer?.isFounder ? 'Founder access' : `${ent.name} plan`}</span>
                     </div>
                   </div>
                 </div>
@@ -666,14 +720,13 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               </div>
             </div>
 
-            {/* ASSESSMENT */}
+            {/* ASSESSMENT — the real 110-control board, inline. No bounce to a
+                separate page: the operator answers controls right here. */}
             <div className={tabClass('assess')}>
               <div className="row r-2-1">
                 <div className="panel">
                   <div className="ph"><h3>SPRS score</h3><span className="mono">live</span></div>
-                  <div className="sprs"><div className="ring" id="lcc-ring2"><b className="ringn">78</b><small>of 110</small></div><div className="cap">DoD self-assessment range −203 to +110. You&apos;re at <b>+78</b>.</div>
-                    <Link href="/command-center/shield/assessment" className="btn btn-g btn-sm" style={{ marginTop: 14 }}>Open full 110-control assessment <ArrowRight /></Link>
-                  </div>
+                  <div className="sprs"><div className="ring" id="lcc-ring2"><b className="ringn">78</b><small>of 110</small></div><div className="cap">DoD self-assessment range −203 to +110. You&apos;re at <b>+78</b>. Answer the controls below to update it.</div></div>
                 </div>
                 <div className="panel">
                   <div className="ph"><h3>Fastest wins</h3><span className="mono">AI-ranked</span></div>
@@ -684,14 +737,32 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 </div>
               </div>
               <div className="panel" style={{ marginTop: 16 }}>
-                <div className="ph"><h3>Control families · NIST 800-171</h3><span className="mono">14 domains · 110 controls</span></div>
-                <div className="crow"><span>3.1 Access Control (22)</span><span className="st met">19 met</span></div>
-                <div className="crow"><span>3.3 Audit &amp; Accountability (9)</span><span className="st met">9 met</span></div>
-                <div className="crow"><span>3.4 Configuration Management (9)</span><span className="st part">6 partial</span></div>
-                <div className="crow"><span>3.5 Identification &amp; Auth (11)</span><span className="st met">10 met</span></div>
-                <div className="crow"><span>3.8 Media Protection (9)</span><span className="st gap">3 gaps</span></div>
-                <div className="crow"><span>3.13 System &amp; Comms Protection (16)</span><span className="st part">11 partial</span></div>
-                <div className="crow"><span>3.14 System &amp; Info Integrity (7)</span><span className="st met">7 met</span></div>
+                <div className="ph"><h3>Full 110-control assessment</h3><span className="mono">answers save locally · NIST 800-171 Rev 2</span></div>
+                {/* cc-light re-themes the board's dark utilities onto this light
+                    shell — same remap layer the command-center already uses. */}
+                {assessSeen && (
+                  <div className="cc-light">
+                    <AssessmentBoard embedded />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* YOUR GUIDE — status, next step, top gaps. Behind its own sidebar
+                button per founder direction; never stacked above the dashboard. */}
+            <div className={tabClass('guide')}>
+              <div className="cc-light">
+                <CustomerStatusPanel />
+              </div>
+            </div>
+
+            {/* PLAN & UNLOCKS — the restrictions view: what's included, what's
+                locked, and exactly what each locked capability costs to unlock. */}
+            <div className={tabClass('plan')}>
+              <div className="cc-light">
+                {/* The public demo (no viewer) shows the sample org's Pro plan
+                    everywhere else — keep the paywall view on the same plan. */}
+                <PlanUnlocksBoard tier={viewer?.tier ?? 'pro'} founder={viewer?.isFounder} />
               </div>
             </div>
 
@@ -760,14 +831,16 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </div>
                 </div>
                 <div className="panel">
-                  <div className="ph"><h3>Plan &amp; usage</h3><span className="planbadge"><Crown /> {ent.name}</span></div>
+                  <div className="ph"><h3>Plan &amp; usage</h3><span className="planbadge"><Crown /> {viewer?.isFounder ? 'Founder' : ent.name}</span></div>
                   <div className="pad">
-                    <p className="plan-tag">{ent.tagline}{ent.priceMonthly !== null ? ` · $${ent.priceMonthly}/mo` : ' · custom pricing'}</p>
+                    <p className="plan-tag">{viewer?.isFounder ? 'Founder account — full access to everything, no payment required.' : `${ent.tagline}${ent.priceMonthly !== null ? ` · $${ent.priceMonthly}/mo` : ' · custom pricing'}`}</p>
                     <UsageMeter label="AI gateway scans" id="lcc-useScan" value={`${seedScans.toLocaleString()} / ${formatLimit(ent.gatewayScans)}`} barId="lcc-useBar" pct={ent.gatewayScans === UNLIMITED ? 6 : usagePercent(seedScans, ent.gatewayScans)} />
                     <UsageMeter label="Brain AI queries" value={ent.brainQueries === UNLIMITED ? 'Unlimited' : `${brainUsed.toLocaleString()} / ${formatLimit(ent.brainQueries)}`} pct={ent.brainQueries === UNLIMITED ? 6 : usagePercent(brainUsed, ent.brainQueries)} />
                     <UsageMeter label="Team seats" value={`${seedSeats} / ${formatLimit(ent.seats)}`} pct={ent.seats === UNLIMITED ? 8 : usagePercent(seedSeats, ent.seats)} />
                     <div className="usage-row" style={{ marginTop: '1rem' }}><span>Audit-log retention</span><b>{ent.retentionDays >= 365 ? `${Math.round(ent.retentionDays / 365)} yr` : `${ent.retentionDays} days`}</b></div>
-                    {ent.nextTier ? (
+                    {viewer?.isFounder ? (
+                      <div className="topplan"><Crown /> Founder access — everything unlocked, no payment required.</div>
+                    ) : ent.nextTier ? (
                       <Link href="/pricing" className="btn btn-p btn-sm" style={{ marginTop: 18 }}>Upgrade to {getEntitlements(ent.nextTier).name} <ArrowRight /></Link>
                     ) : (
                       <div className="topplan"><Crown /> You&apos;re on our top plan — everything unlocked.</div>

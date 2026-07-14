@@ -66,4 +66,51 @@ describe("buildDashboardViewer", () => {
     expect(buildDashboardViewer(null)).toBeNull();
     expect(buildDashboardViewer({ company: "", full_name: "", tier: "pro" })).toBeNull();
   });
+
+  it("falls back to the session name when the profile row has no name yet", () => {
+    const v = buildDashboardViewer({ company: null, full_name: null, tier: "pro" }, {
+      email: "jordan@vector.com",
+      name: "Jordan Marsh",
+    });
+    expect(v?.company).toBe("Jordan Marsh");
+    expect(v?.firstName).toBe("Jordan");
+    expect(v?.tier).toBe("pro");
+    expect(v).not.toHaveProperty("isFounder");
+  });
+});
+
+describe("buildDashboardViewer — founder access (full access, no payment)", () => {
+  const session = { email: "gaurav@houndshield.com", name: "Gaurav" };
+
+  it("founder resolves to the top tier with the Founder plan label, whatever the profile says", () => {
+    const v = buildDashboardViewer({ company: "HoundShield", full_name: "Gaurav", tier: "free" }, session);
+    expect(v).toMatchObject({
+      company: "HoundShield",
+      tier: "agency",
+      plan: "Founder",
+      isFounder: true,
+      firstName: "Gaurav",
+    });
+  });
+
+  it("founder gets a viewer even with NO profile row (fresh sign-in)", () => {
+    const v = buildDashboardViewer(null, session);
+    expect(v?.isFounder).toBe(true);
+    expect(v?.tier).toBe("agency");
+    expect(v?.plan).toBe("Founder");
+    expect(v?.company).toBe("Gaurav");
+  });
+
+  it("founder with no profile AND no session name falls back to the email local part", () => {
+    const v = buildDashboardViewer(null, { email: "Gaurav@HoundShield.com" });
+    expect(v?.isFounder).toBe(true);
+    expect(v?.company).toBe("Gaurav");
+  });
+
+  it("a non-founder session never gets the founder treatment", () => {
+    const v = buildDashboardViewer({ company: "Acme", tier: "free" }, { email: "jordan@acme.com" });
+    expect(v?.tier).toBe("free");
+    expect(v?.plan).toBe("Free");
+    expect(v).not.toHaveProperty("isFounder");
+  });
 });

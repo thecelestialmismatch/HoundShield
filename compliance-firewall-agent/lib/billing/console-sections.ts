@@ -104,6 +104,8 @@ export interface LockedConsoleTile extends ConsoleTile {
   availableOnTier: TierSlug;
   /** Human name of that tier ("Pro", "Growth", …). */
   availableOnName: string;
+  /** Monthly list price of that tier — the restriction says what it costs. null = custom. */
+  availableOnPriceMonthly: number | null;
   /** Where the Upgrade CTA sends them (always /pricing → $499 report first). */
   upgradeHref: string;
 }
@@ -170,6 +172,7 @@ export function buildConsoleSections(tier: string | null | undefined): ConsoleSe
       href: CONSOLE_UPGRADE_HREF,
       availableOnTier: unlocks?.tier ?? 'enterprise',
       availableOnName: unlocks?.name ?? 'Enterprise',
+      availableOnPriceMonthly: unlocks?.priceMonthly ?? null,
       upgradeHref: CONSOLE_UPGRADE_HREF,
     });
   }

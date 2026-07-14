@@ -5,6 +5,35 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-14
+
+### A scoped `* { margin:0; padding:0 }` reset silently beats Tailwind utilities injected after the global sheet
+**What:** Embedding the Tailwind-styled guide/paywall panels inside the Live Command Center shell
+stripped ALL their padding/margins — clipped CTAs, flush text. The shell's component-injected
+`<style>` has `.hs-lcc * { margin:0; padding:0 }`; it renders after the global stylesheet, so at
+equal specificity it wins over every `p-*`/`m-*` utility in the subtree. Build + unit tests were
+green; only the screenshot pass caught it.
+**Root cause:** A scoped hand-rolled reset assumes it owns every descendant; the moment Tailwind
+components are composed inside, cascade order decides and the reset wins.
+**Rule:** Scoped resets must be ZERO specificity: `:where(.scope *) { margin:0; padding:0 }` (keep
+`box-sizing` on the strong selector — it conflicts with nothing). Then utilities and scoped classes
+always win, while bare elements still get the reset. And when a shell composes foreign-styled
+children, screenshot the composition — green tests never render the cascade.
+
+### A backtick inside a template-literal CSS comment truncates the stylesheet AND becomes live code
+**What:** Writing a code comment inside the LCC_CSS template literal that quoted a selector in
+backticks terminated the string early; the rest parsed as JS (`.hs-lcc *` → `hs - lcc`) and threw
+`ReferenceError: lcc is not defined` at chunk load — the whole /console error-boundaried. `next build`
+compiled it fine (syntactically valid); tsc WOULD have caught it, but the gates had been run before
+that final edit.
+**Root cause:** Backticks in prose inside a template literal + declaring gates green before the last
+edit landed.
+**Rule:** Never use backticks (or `${`) inside template-literal CSS/comment prose — quote with
+double-quotes. And gates count only if they run AFTER the final edit: any change to shipping code,
+however cosmetic-looking, re-runs at minimum tsc + a page load of the affected route.
+
+---
+
 ## 2026-07-13
 
 ### A specific founder instruction that contradicts the plan → run the HERMES CHALLENGE, don't silently comply OR silently refuse

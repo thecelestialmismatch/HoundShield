@@ -1,8 +1,5 @@
 import type { Metadata } from 'next'
 import { LiveCommandCenter } from '@/components/dashboard/LiveCommandCenter'
-import { WelcomeBanner } from '@/components/WelcomeBanner'
-import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
-import { ConsoleDashboard } from '@/components/dashboard/ConsoleDashboard'
 import { getSessionProfile } from '@/lib/auth/profile'
 import { buildDashboardViewer, type ViewerProfile } from '@/lib/auth/dashboard-viewer'
 
@@ -20,35 +17,35 @@ export const dynamic = 'force-dynamic'
  * Resolve the signed-in user into the dashboard identity. Best-effort: any
  * failure (anonymous visitor, demo mode, missing profile) falls back to the
  * public sample org. Never blocks the page.
+ *
+ * Founder accounts (lib/billing/founder-access) resolve to a full-access
+ * viewer — top tier, "Founder" plan label — even without a profile row.
  */
 async function getViewer() {
   try {
     // Provider-agnostic: resolves the session (Better Auth or Supabase) and
     // the caller's own profile row through lib/auth/profile.
     const session = await getSessionProfile('company, full_name, tier')
-    if (!session?.profile) return undefined
-    return buildDashboardViewer(session.profile as ViewerProfile) ?? undefined
+    if (!session) return undefined
+    return (
+      buildDashboardViewer(session.profile as ViewerProfile | null, {
+        email: session.user.email,
+        name: session.user.name,
+      }) ?? undefined
+    )
   } catch {
     return undefined
   }
 }
 
+/**
+ * THE after-login dashboard. The Live Command Center is the whole page — the
+ * operator lands on live operations first. The guide ("what to do next") and
+ * the plan restrictions ("pay to unlock") live behind their own SIDEBAR
+ * buttons inside the command center, per founder direction — never stacked
+ * above the dashboard, and never leading with the assessment.
+ */
 export default async function ConsolePage() {
   const viewer = await getViewer()
-  return (
-    <>
-      {/* Personalized status header — scoped to the light "Steel & Cream" palette
-          (cc-light) so it matches the LiveCommandCenter below it: one consistent
-          light dashboard, no dark→light seam. */}
-      <div className="cc-light bg-[var(--hs-surface-1)] px-4 pt-4 sm:px-6 lg:px-8">
-        <WelcomeBanner />
-        <CustomerStatusPanel />
-        {/* Tier-gated capability grid + inline CMMC self-assessment. Free sees a
-            restricted board (assessment unlocked, paid capabilities locked with an
-            Upgrade CTA); paid tiers see everything unlocked. */}
-        <ConsoleDashboard tier={viewer?.tier} />
-      </div>
-      <LiveCommandCenter viewer={viewer} />
-    </>
-  )
+  return <LiveCommandCenter viewer={viewer} />
 }

@@ -1,17 +1,26 @@
-# The tier-gated after-login console
+# The after-login console — dashboard first, gates in the sidebar
 
-_How `/console` decides what a signed-in user sees — restricted for Free, full for paid — and where the CMMC self-assessment now lives._
+_How `/console` decides what a signed-in user sees, where the guide and the
+paywall live, and how founder access works._
 
 ## What changed (and why)
 
-Two founder-requested changes:
+Founder direction, 2026-07-14 (iterating on the 2026-07-13 tier-gated console):
 
-1. **The CMMC self-assessment now begins on the dashboard itself.** Previously the
-   "Begin assessment" CTA bounced the user out to the deep link
-   `/command-center/shield/assessment`. Now it expands the assessment **inline on
-   `/console`** — same page they land on, no bounce.
-2. **The dashboard is tier-gated.** Free users get a **restricted** board;
-   paid users get **everything their plan includes**.
+1. **The dashboard IS the page.** `/console` renders the Live Command Center
+   alone — live operations first. The guide ("do this next") and the plan
+   restrictions ("pay to unlock") no longer stack above the dashboard.
+2. **Guide + paywall moved into the sidebar as buttons.**
+   - **Your Guide** → the status/next-step panel (SPRS ring, progress, top gaps).
+   - **Plan & Unlocks** → the restriction view: what the plan includes, what is
+     locked, and **exactly what each locked capability costs** ("Available on
+     Growth — $499/mo") with one Upgrade CTA to `/pricing`.
+3. **The assessment is never first.** It stays a mid-list sidebar tab and runs
+   **inline** inside that tab (no bounce to a separate page). The
+   `#assessment` hash deep-link opens the tab in place.
+4. **Founder access.** The founder email (`gaurav@houndshield.com`) gets full
+   access to everything — top-tier entitlements, no payment, no Stripe row —
+   across the console AND every server-side gate.
 
 ## Where the rules come from (single source of truth)
 
@@ -25,45 +34,64 @@ pure helper:
   - **`unlocked`** — capabilities the plan includes → each links straight into
     the command center.
   - **`locked`** — capabilities the plan lacks → each shows a padlock, a truthful
-    **"Available on `<tier>`"** (from `tierThatUnlocks()`), and a single Upgrade
-    CTA to `/pricing`.
+    **"Available on `<tier>` — $`<price>`/mo"** (`tierThatUnlocks()` +
+    `availableOnPriceMonthly`), and a single Upgrade CTA to `/pricing`.
 
 Because both the console and the pricing page read the same grid, the numbers and
 feature availability can never drift between them.
 
+## Founder access (no payment required)
+
+[`lib/billing/founder-access.ts`](../compliance-firewall-agent/lib/billing/founder-access.ts)
+is the one place that decides "this account gets everything":
+
+- `isFounderEmail(email)` — matches `gaurav@houndshield.com` (case-insensitive);
+  extendable via the `FOUNDER_ACCESS_EMAILS` env var (comma-separated), never
+  replaceable.
+- `resolveEffectiveTier(email, storedTier)` — founder → `agency` (top of the
+  ladder, strict superset of every plan); everyone else keeps their stored tier.
+- The match is always on the **session-verified email** (Supabase/Better Auth) or
+  the server-stored `profiles.email` — never anything client-sent.
+
+Wired into every gate:
+
+| Gate | File | Effect for founder |
+|---|---|---|
+| Console viewer | `lib/auth/dashboard-viewer.ts` | Full-access viewer even with no profile row; "Founder" plan label |
+| `/api/me` | `app/api/me/route.ts` | `tier: "agency"`, `founder: true` |
+| `/api/customer/status` | `app/api/customer/status/route.ts` | Status computed on the top tier |
+| PDF 402 + gateway access | `lib/subscription/check.ts` (`getUserSubscription`) | Top tier with **no subscriptions row**; profile-email lookup runs in parallel (no added latency), fails closed |
+
 ### The Free vs. paid split
 
-| Capability | Free | Pro | Growth | Enterprise / Agency |
+| Capability | Free | Pro | Growth | Enterprise / Agency / Founder |
 |---|---|---|---|---|
-| CMMC self-assessment + SPRS | ✅ (inline hero) | ✅ | ✅ | ✅ |
+| CMMC self-assessment + SPRS | ✅ | ✅ | ✅ | ✅ |
 | AI prompt gateway | ✅ (1k scans) | ✅ | ✅ | ✅ |
-| Email & Slack alerts, API + JSON, audit export | 🔒 | ✅ | ✅ | ✅ |
-| PDF reports, C3PAO coordination, SSO/RBAC, priority support | 🔒 | 🔒 | ✅ | ✅ |
-| HITL quarantine, on-prem, white-label | 🔒 | 🔒 | 🔒 | ✅ |
-
-The **CMMC self-assessment is the free lead magnet** — unlocked on every tier and
-the hero of the restricted board.
+| Email & Slack alerts, API + JSON, audit export | 🔒 $199/mo | ✅ | ✅ | ✅ |
+| PDF reports, C3PAO coordination, SSO/RBAC, priority support | 🔒 $499/mo | 🔒 | ✅ | ✅ |
+| HITL quarantine, on-prem, white-label | 🔒 $999/mo | 🔒 | 🔒 | ✅ |
 
 ## The inline assessment
 
-- The 110-control board was extracted from the route page into
-  [`components/dashboard/AssessmentBoard.tsx`](../compliance-firewall-agent/components/dashboard/AssessmentBoard.tsx),
-  so **one component** renders in two places:
-  - its own route `/command-center/shield/assessment` (`embedded=false`), and
-  - inline on `/console` inside `ConsoleDashboard` (`embedded=true`).
-- On the console it is **lazy-loaded** (`next/dynamic`, `ssr:false`) and mounts
-  only when the user clicks **Begin assessment** — so the console stays light.
-- It opens automatically when navigated to via the `#assessment` hash. The status
-  panel's "Begin/Continue assessment" CTA now targets `#assessment` instead of the
-  external route, so it scrolls to and opens the inline board.
+- The 110-control board
+  ([`components/dashboard/AssessmentBoard.tsx`](../compliance-firewall-agent/components/dashboard/AssessmentBoard.tsx))
+  renders in two places: its own route `/command-center/shield/assessment`
+  (`embedded=false`) and inside the command center's **CMMC Assessment tab**
+  (`embedded=true`).
+- It is **lazy-loaded** (`next/dynamic`, `ssr:false`) and mounts the first time
+  the tab is opened — the console's first paint stays light.
+- The `#assessment` hash (used by the guide's "Begin/Continue assessment" CTA)
+  switches to the tab in place; the hash is cleared afterwards so repeat clicks
+  keep working.
 
-### Theming note (why the dark board looks right on the light console)
+### Theming note (why the dark panels look right on the light console)
 
-`AssessmentBoard` uses "dark" utility classes (`text-white`, `bg-white/[0.03]`, …).
-The command-center already renders it under `.cc-light` (see
-`app/globals.css`), a remap layer that turns those dark utilities into the light
-"Steel & Cream" palette. `/console` mounts the board inside the **same `.cc-light`
-scope**, so it themes identically — no new CSS, no seam.
+`AssessmentBoard`, `CustomerStatusPanel` and `PlanUnlocksBoard` use "dark"
+utility classes (`text-white`, `bg-white/[0.03]`, …). The command center mounts
+each of them inside a **`.cc-light` scope** (see `app/globals.css`), the remap
+layer that turns those dark utilities into the light "Steel & Cream" palette —
+no new CSS, no seam.
 
 ## Honest status (read before assuming this makes money)
 
@@ -73,22 +101,27 @@ This ships a dashboard; it **connects no revenue by itself**:
   Risk Assessment Report** — the product we can actually fulfil today. That is the
   on-plan funnel.
 - The **subscription** tiers this gates (Pro/Growth/Enterprise) are **not
-  purchasable** until Stripe is connected (`/api/health` still reports
-  `payments: missing_key`) and subscription SKUs exist. Per the HERMES plan,
-  subscriptions are Stage 2 — prove the $499 report sells first.
-- Very few real users reach `/console` today (OAuth login is not wired; buyers
-  don't log in to buy the report). Treat this as scaffolding that becomes valuable
-  once login + payments are live.
+  purchasable** until Stripe is connected (`/api/health` reports
+  `payments: missing_key` as of 2026-07-14) and subscription SKUs exist. Per the
+  HERMES plan, subscriptions are Stage 2 — prove the $499 report sells first.
+- Founder access exists so the founder can test and demo every surface without a
+  payment path. It grants nothing to anyone else.
 
 ## Files
 
 | File | Role |
 |---|---|
-| `lib/billing/console-sections.ts` | Pure tier → unlocked/locked projection |
-| `components/dashboard/ConsoleDashboard.tsx` | The gated grid + inline assessment |
+| `lib/billing/founder-access.ts` | Founder email → top-tier override (pure) |
+| `lib/billing/console-sections.ts` | Pure tier → unlocked/locked projection (now priced) |
+| `components/dashboard/LiveCommandCenter.tsx` | THE after-login dashboard (sidebar owns guide/plan/assessment tabs) |
+| `components/dashboard/PlanUnlocksBoard.tsx` | "Plan & Unlocks" sidebar view (was `ConsoleDashboard`) |
+| `components/dashboard/CustomerStatusPanel.tsx` | "Your Guide" sidebar view; assessment CTA → `#assessment` |
 | `components/dashboard/AssessmentBoard.tsx` | Extracted 110-control board (shared) |
 | `app/command-center/shield/assessment/page.tsx` | Thin route → renders the board |
-| `app/console/page.tsx` | Mounts `ConsoleDashboard` under `.cc-light` |
-| `components/dashboard/CustomerStatusPanel.tsx` | Assessment CTA now → `#assessment` |
-| `lib/billing/__tests__/console-sections.test.ts` | Gating contract tests |
-| `components/dashboard/__tests__/ConsoleDashboard.test.tsx` | Render/gating tests |
+| `app/console/page.tsx` | Resolves the viewer (incl. founder) → mounts the command center |
+| `lib/subscription/check.ts` | Server tier gate (PDF/gateway) with founder override |
+| `lib/billing/__tests__/founder-access.test.ts` | Founder contract tests |
+| `lib/billing/__tests__/console-sections.test.ts` | Gating + pricing contract tests |
+| `components/dashboard/__tests__/PlanUnlocksBoard.test.tsx` | Paywall view tests |
+| `components/dashboard/__tests__/LiveCommandCenter.test.tsx` | Sidebar/tabs/founder render tests |
+| `lib/subscription/__tests__/check.test.ts` | Server gate founder tests |

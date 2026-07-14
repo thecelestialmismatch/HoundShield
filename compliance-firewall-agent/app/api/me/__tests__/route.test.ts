@@ -64,4 +64,26 @@ describe('GET /api/me', () => {
     expect(body.firstName).toBeNull();
     expect(body.tier).toBe('free');
   });
+
+  it('founder session resolves to the top tier — full access with no payment', async () => {
+    mockGetUser.mockResolvedValue({
+      data: { user: { id: 'u1', email: 'Gaurav@HoundShield.com' } },
+    });
+    mockProfile.mockResolvedValue({ data: { full_name: 'Gaurav', company: null, role: null, tier: 'free' } });
+    const res = await GET();
+    const body = await res.json();
+    expect(body.tier).toBe('agency');
+    expect(body.founder).toBe(true);
+    // Still never leaks the email itself.
+    expect(JSON.stringify(body).toLowerCase()).not.toContain('houndshield.com');
+  });
+
+  it('a non-founder email keeps its stored tier and no founder flag', async () => {
+    mockGetUser.mockResolvedValue({ data: { user: { id: 'u2', email: 'rachel@clinic.com' } } });
+    mockProfile.mockResolvedValue({ data: { full_name: 'Rachel', company: null, role: null, tier: 'pro' } });
+    const res = await GET();
+    const body = await res.json();
+    expect(body.tier).toBe('pro');
+    expect(body.founder).toBeUndefined();
+  });
 });

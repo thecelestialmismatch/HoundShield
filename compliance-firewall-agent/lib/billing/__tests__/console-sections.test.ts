@@ -36,6 +36,18 @@ describe('buildConsoleSections', () => {
     expect(byKey.hitlQuarantine.availableOnName).toBe('Enterprise');
   });
 
+  it('prices every locked capability truthfully from the entitlements grid', () => {
+    const s = buildConsoleSections('free');
+    const byKey = Object.fromEntries(s.locked.map((t) => [t.key, t]));
+    expect(byKey.auditExport.availableOnPriceMonthly).toBe(199); // Pro
+    expect(byKey.pdfReports.availableOnPriceMonthly).toBe(499); // Growth
+    expect(byKey.hitlQuarantine.availableOnPriceMonthly).toBe(999); // Enterprise
+    // Every locked tile carries a price (no tier in the grid is price-less).
+    for (const tile of s.locked) {
+      expect(typeof tile.availableOnPriceMonthly).toBe('number');
+    }
+  });
+
   it('points every locked/upgrade CTA at /pricing (the $499 report funnel)', () => {
     const s = buildConsoleSections('free');
     expect(s.upgradeHref).toBe('/pricing');

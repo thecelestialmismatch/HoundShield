@@ -92,4 +92,16 @@ describe('GET /api/customer/status', () => {
     expect(status.stage).toBe('not_started');
     expect(status.order).toBeNull();
   });
+
+  it('founder session reports the top tier regardless of the stored profile tier', async () => {
+    mockGetUser.mockResolvedValue({
+      data: { user: { id: 'u1', email: 'gaurav@houndshield.com' } },
+    });
+    mockProfile.mockResolvedValue({ data: { tier: 'free', company: null }, error: null });
+    mockOrders.mockResolvedValue({ data: [], error: null });
+    const res = await GET();
+    expect(res.status).toBe(200);
+    const { status } = await res.json();
+    expect(status.tier).toBe('agency');
+  });
 });

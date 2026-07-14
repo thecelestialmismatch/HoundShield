@@ -8,6 +8,20 @@ vi.mock('next/image', () => ({
 vi.mock('next/link', () => ({
   default: ({ children, href, ...p }: { children: React.ReactNode; href: string; [k: string]: unknown }) => <a href={href} {...(p as object)}>{children}</a>,
 }))
+// Keep the heavy 110-control board out of the render — a stub proves the
+// inline mount without loading Framer Motion / localStorage machinery.
+vi.mock('next/dynamic', () => ({
+  default: () => {
+    const Stub = () => <div data-testid="assessment-board">assessment board</div>
+    return Stub
+  },
+}))
+// The guide panel fetches /api/customer/status on mount — stub it out here;
+// its own behaviour is covered by the customer-status suites.
+vi.mock('@/components/dashboard/CustomerStatusPanel', () => ({
+  CustomerStatusPanel: () => <div data-testid="status-panel">status panel</div>,
+}))
+vi.mock('@/components/WelcomeBanner', () => ({ WelcomeBanner: () => null }))
 
 import { LiveCommandCenter, brainAnswer, escapeHtml } from '../LiveCommandCenter'
 import { getEntitlements } from '@/lib/billing/entitlements'
@@ -76,9 +90,9 @@ describe('LiveCommandCenter — exact-copy after-login dashboard', () => {
     expect(container.querySelector('.shell')).toBeTruthy()
   })
 
-  it('renders all six sidebar sections', () => {
+  it('renders every sidebar section — guide + plan live in the sidebar, not above the dashboard', () => {
     render(<LiveCommandCenter />)
-    for (const s of ['Overview', 'Live Threat Feed', 'CMMC Assessment', 'Reports', 'Brain AI', 'Settings']) {
+    for (const s of ['Overview', 'Live Threat Feed', 'CMMC Assessment', 'Reports', 'Brain AI', 'Your Guide', 'Plan & Unlocks', 'Settings']) {
       expect(screen.getAllByText(s).length).toBeGreaterThanOrEqual(1)
     }
   })
@@ -114,6 +128,86 @@ describe('LiveCommandCenter — exact-copy after-login dashboard', () => {
     fireEvent.click(send)
     // The raw tag must never become a real element in the transcript.
     expect(document.querySelector('.blog img')).toBeNull()
+  })
+})
+
+describe('LiveCommandCenter — guide + paywall behind sidebar buttons (founder direction)', () => {
+  const clickSidebar = (label: string) => {
+    const btn = screen.getAllByText(label).find((el) => el.closest('.slink'))!.closest('button')!
+    fireEvent.click(btn)
+  }
+
+  it('clicking "Plan & Unlocks" opens the restriction view with priced locks (free tier)', () => {
+    const { container } = render(
+      <LiveCommandCenter viewer={{ company: 'Acme', plan: 'Free', initials: 'AC', tier: 'free' }} />,
+    )
+    clickSidebar('Plan & Unlocks')
+    const planTab = Array.from(container.querySelectorAll('.atab')).find((t) =>
+      t.textContent?.includes('Restricted plan'),
+    )
+    expect(planTab?.className).toContain('on')
+    // The restriction says exactly what unlocking costs.
+    expect(planTab?.textContent).toMatch(/Available on Growth — \$499\/mo/)
+  })
+
+  it('clicking "Your Guide" opens the status/next-step panel', () => {
+    const { container } = render(<LiveCommandCenter />)
+    clickSidebar('Your Guide')
+    const guideTab = screen.getByTestId('status-panel').closest('.atab')
+    expect(guideTab?.className).toContain('on')
+    // …and the Overview tab is no longer the active one.
+    const overview = Array.from(container.querySelectorAll('.atab'))[0]
+    expect(overview?.className).toBe('atab')
+  })
+
+  it('the dashboard (Overview) is what loads first — never the guide or assessment', () => {
+    render(<LiveCommandCenter />)
+    expect(screen.getAllByText('Live Operations').length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('the assessment mounts inline in its tab on first open — no bounce link', () => {
+    render(<LiveCommandCenter />)
+    // Not mounted until the operator opens the tab (keeps first paint light).
+    expect(screen.queryByTestId('assessment-board')).toBeNull()
+    clickSidebar('CMMC Assessment')
+    expect(screen.getByTestId('assessment-board')).toBeTruthy()
+    // The old deep-link that bounced users off the dashboard is gone.
+    expect(document.querySelector('a[href="/command-center/shield/assessment"]')).toBeNull()
+  })
+})
+
+describe('LiveCommandCenter — founder: full access, no payment required', () => {
+  const founder = {
+    company: 'HoundShield',
+    plan: 'Founder',
+    initials: 'GA',
+    tier: 'agency',
+    firstName: 'Gaurav',
+    isFounder: true,
+  }
+
+  it('shows the founder identity in the sidebar footer', () => {
+    const { container } = render(<LiveCommandCenter viewer={founder} />)
+    expect(container.querySelector('.side-foot .sub')?.textContent).toBe('Founder · full access')
+    expect(container.querySelector('.plan-chip')?.textContent).toMatch(/Founder access/)
+  })
+
+  it('Plan & Unlocks shows everything unlocked with the no-payment banner', () => {
+    const { container } = render(<LiveCommandCenter viewer={founder} />)
+    const planTab = Array.from(container.querySelectorAll('.atab')).find((t) =>
+      t.textContent?.includes('Founder plan'),
+    )
+    expect(planTab?.textContent).toMatch(/no payment required/i)
+    expect(planTab?.textContent).not.toMatch(/Locked — upgrade to unlock/)
+  })
+
+  it('Settings shows the founder plan badge and no upgrade CTA', () => {
+    const { container } = render(<LiveCommandCenter viewer={founder} />)
+    expect(container.querySelector('.planbadge')?.textContent).toMatch(/Founder/)
+    expect(container.querySelector('.topplan')?.textContent).toMatch(/no payment required/i)
+    // Founder tier unlocks every capability in the settings feature grid.
+    const lockedFeats = Array.from(container.querySelectorAll('.feat.off'))
+    expect(lockedFeats).toEqual([])
   })
 })
 
