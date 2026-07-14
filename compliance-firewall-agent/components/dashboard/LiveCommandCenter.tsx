@@ -35,6 +35,7 @@ import { WelcomeBanner } from '@/components/WelcomeBanner'
 import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
 import { PlanUnlocksBoard } from '@/components/dashboard/PlanUnlocksBoard'
 import { ReportsPanel } from '@/components/dashboard/ReportsPanel'
+import { OverviewCharts } from '@/components/dashboard/OverviewCharts'
 import {
   getEntitlements, formatLimit, usagePercent, hasFeature, tierThatUnlocks,
   FEATURE_LABELS, UNLIMITED, type Entitlements, type FeatureKey,
@@ -654,6 +655,11 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </div>
                 </div>
               </div>
+
+              {/* Four small self-explanatory charts — hourly activity, AI
+                  destinations, SPRS trend, risk mix. Numbers agree with the
+                  KPI tiles above (contract-tested in OverviewCharts.test). */}
+              <OverviewCharts />
 
               <div className="row r-3-2">
                 <div className="panel">
