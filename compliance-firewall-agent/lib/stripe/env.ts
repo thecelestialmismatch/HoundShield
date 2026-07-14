@@ -83,3 +83,41 @@ export function stripeKeyDiagnostic(): StripeKeyDiagnostic {
     hint: `STRIPE_SECRET_KEY is set (${key.length} characters) but does not start with "sk_" — it is not a Stripe secret key. Copy the Secret key from Stripe → Developers → API keys (not the publishable "pk_" key, not a price or product id).`,
   };
 }
+
+export type StripeWebhookDiagnostic = {
+  /** configured = usable · malformed_secret = set but not a whsec_ value · missing_secret = unset/blank */
+  status: 'configured' | 'malformed_secret' | 'missing_secret';
+  /** Plain-English, value-free hint for the operator. Only set when actionable. */
+  hint?: string;
+};
+
+/**
+ * Shape-only diagnostic for the webhook signing secret. Matters because a live
+ * key without the webhook means a card can be CHARGED but the order is never
+ * recorded and no fulfillment alert goes out. Value-free like the key
+ * diagnostic — length and prefix booleans only.
+ */
+export function stripeWebhookDiagnostic(): StripeWebhookDiagnostic {
+  const raw = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!raw || raw.trim().length === 0) {
+    return {
+      status: 'missing_secret',
+      hint:
+        'STRIPE_WEBHOOK_SECRET is not set. Payments can complete but orders will NOT be recorded and no sale alert will be sent. In Stripe: Developers → Webhooks → Add endpoint (https://houndshield.com/api/stripe/webhook), copy the whsec_ signing secret into Vercel project compliance-firewall-agent with the Production box checked, then redeploy.',
+    };
+  }
+  const secret = getStripeWebhookSecret();
+  if (!secret) {
+    return {
+      status: 'missing_secret',
+      hint: 'STRIPE_WEBHOOK_SECRET is set but contains only whitespace/quotes. Delete it and paste the bare whsec_ value.',
+    };
+  }
+  if (secret.startsWith('whsec_')) {
+    return { status: 'configured' };
+  }
+  return {
+    status: 'malformed_secret',
+    hint: `STRIPE_WEBHOOK_SECRET is set (${secret.length} characters) but does not start with "whsec_" — it is not a webhook signing secret. Copy it from Stripe → Developers → Webhooks → your endpoint → Signing secret.`,
+  };
+}
