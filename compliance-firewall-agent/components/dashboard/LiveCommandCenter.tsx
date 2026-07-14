@@ -900,9 +900,26 @@ function StepRow({ n, title, detail, cta, onClick, done }: { n: string; title: s
   )
 }
 
+/** Value row with an action button. "Copy" REALLY copies to the clipboard and
+ *  only reports success when the write succeeded — never a fake confirmation
+ *  (tasks/lessons.md 2026-07-12). Other actions (Reveal/Edit) are demo chrome. */
 function CopyRow({ value, action, done }: { value: string; action: string; done: string }) {
   const [label, setLabel] = useState(action)
+  const onClick = async () => {
+    if (action !== 'Copy') {
+      setLabel(done)
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(value)
+      setLabel(done)
+      setTimeout(() => setLabel(action), 2000)
+    } catch {
+      setLabel('Copy failed')
+      setTimeout(() => setLabel(action), 2000)
+    }
+  }
   return (
-    <div className="gw"><span>{value}</span><button type="button" onClick={() => setLabel(done)}>{label}</button></div>
+    <div className="gw"><span>{value}</span><button type="button" onClick={onClick}>{label}</button></div>
   )
 }
