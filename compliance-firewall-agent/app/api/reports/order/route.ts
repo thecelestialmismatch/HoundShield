@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeSecretKey } from '@/lib/stripe/env';
 import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
 import { buildOrderView, type OrderRowLike } from '@/lib/reports/order-view';
 
@@ -23,7 +24,7 @@ import { buildOrderView, type OrderRowLike } from '@/lib/reports/order-view';
 export const dynamic = 'force-dynamic';
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  return new Stripe(getStripeSecretKey()!, {
     apiVersion: '2026-02-25.clover',
   });
 }
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid or missing session_id' }, { status: 400 });
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!getStripeSecretKey()) {
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 });
   }
 

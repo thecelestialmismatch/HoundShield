@@ -1,10 +1,11 @@
 import Stripe from 'stripe';
+import { getStripeSecretKey } from '@/lib/stripe/env';
 import { NextResponse } from 'next/server';
 
 let stripeClient: Stripe | null = null;
 function getStripeClient(): Stripe {
   if (!stripeClient) {
-    const key = process.env.STRIPE_SECRET_KEY;
+    const key = getStripeSecretKey();
     if (!key) throw new Error('STRIPE_SECRET_KEY not configured');
     stripeClient = new Stripe(key, { apiVersion: '2025-01-27.acacia' as Stripe.LatestApiVersion });
   }

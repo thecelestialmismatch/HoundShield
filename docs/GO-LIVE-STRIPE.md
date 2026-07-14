@@ -1,6 +1,28 @@
 # Go Live: take money for the $499 report
 
-_Last updated 2026-07-12. Written for the founder — no code required. Follow top to bottom._
+_Last updated 2026-07-14. Written for the founder — no code required. Follow top to bottom._
+
+> **2026-07-14 update — the paste keeps "coming out empty":**
+> 1. **Check you are in the right project.** Your Vercel team has TWO projects:
+>    **`compliance-firewall-agent`** (this is houndshield.com — set the key HERE)
+>    and `aibudgetguard` (a different product — a key set there does nothing for
+>    HoundShield). This alone explains a paste that "never lands."
+> 2. **Delete-and-recreate walkthrough:** Vercel → project
+>    **compliance-firewall-agent** → Settings → Environment Variables → find any
+>    row named `STRIPE_SECRET_KEY` → ⋯ → **Delete** (repeat until none remain) →
+>    **Add New** → Key: `STRIPE_SECRET_KEY` → Value: paste the key → make sure
+>    the **Production** checkbox is ticked → Save → Deployments tab → ⋯ on the
+>    newest deployment → **Redeploy**. (Note: after saving, Vercel HIDES the
+>    value — the field looking "empty" when you reopen it is normal and does NOT
+>    mean it saved empty.)
+> 3. **The app now forgives messy pastes.** Quotes, spaces, trailing newlines,
+>    invisible characters from a password manager, even pasting the whole
+>    `STRIPE_SECRET_KEY=sk_live_…` line into the value box — all auto-cleaned.
+> 4. **The health check now tells you exactly what's wrong.** Open
+>    `https://www.houndshield.com/api/health`: `payments` reads `connected`,
+>    `missing_key` (not set / wrong project / Production unticked), or
+>    `malformed_key` (set, but the value isn't a Stripe secret key — e.g. you
+>    pasted the publishable `pk_` key). A `payments_hint` field spells out the fix.
 
 The $499 **CMMC AI Risk Assessment Report** is the Stage-1 product. The site, the
 checkout button, the thank-you page, the order database, and the emails are all

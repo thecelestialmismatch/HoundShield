@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeSecretKey, getStripeWebhookSecret } from '@/lib/stripe/env';
 import { createServiceClient } from '@/lib/supabase/client';
 import { upgradeEmail } from '@/lib/email/templates/upgrade';
 import { canceledEmail } from '@/lib/email/templates/canceled';
@@ -149,7 +150,7 @@ async function handleReportOrder(
 }
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  return new Stripe(getStripeSecretKey()!, {
     apiVersion: '2026-02-25.clover',
   });
 }
@@ -169,8 +170,8 @@ function extractPeriodDates(sub: Record<string, unknown>) {
 }
 
 export async function POST(request: NextRequest) {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
-  if (!process.env.STRIPE_SECRET_KEY || !webhookSecret) {
+  const webhookSecret = getStripeWebhookSecret() || '';
+  if (!getStripeSecretKey() || !webhookSecret) {
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 });
   }
 
