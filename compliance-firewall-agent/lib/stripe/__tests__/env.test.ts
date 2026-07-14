@@ -10,6 +10,7 @@ import {
   getStripeSecretKey,
   getStripeWebhookSecret,
   stripeKeyDiagnostic,
+  stripeWebhookDiagnostic,
 } from '@/lib/stripe/env';
 
 const KEY = 'sk_live_a1b2c3d4e5f6';
@@ -101,5 +102,34 @@ describe('stripeKeyDiagnostic — value-free operator diagnosis for /api/health'
   it('restricted keys (rk_) also count as connected', () => {
     process.env.STRIPE_SECRET_KEY = 'rk_live_restricted123';
     expect(stripeKeyDiagnostic().status).toBe('connected');
+  });
+});
+
+describe('stripeWebhookDiagnostic — a live key without the webhook loses orders', () => {
+  it('missing: unset, with a hint that warns orders will not be recorded', () => {
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    const d = stripeWebhookDiagnostic();
+    expect(d.status).toBe('missing_secret');
+    expect(d.hint).toMatch(/NOT be recorded/);
+    expect(d.hint).toMatch(/api\/stripe\/webhook/);
+  });
+
+  it('missing: quotes-only value is treated as unset', () => {
+    process.env.STRIPE_WEBHOOK_SECRET = '""';
+    expect(stripeWebhookDiagnostic().status).toBe('missing_secret');
+  });
+
+  it('configured: a clean whsec_ value, even with paste artifacts', () => {
+    process.env.STRIPE_WEBHOOK_SECRET = '"whsec_abc123"\n';
+    expect(stripeWebhookDiagnostic()).toEqual({ status: 'configured' });
+  });
+
+  it('malformed: set but not whsec_ — hint never echoes the value', () => {
+    process.env.STRIPE_WEBHOOK_SECRET = 'sk_live_pasted_the_wrong_secret';
+    const d = stripeWebhookDiagnostic();
+    expect(d.status).toBe('malformed_secret');
+    expect(d.hint).toMatch(/does not start with "whsec_"/);
+    expect(d.hint).not.toContain('sk_live');
+    expect(d.hint).not.toContain('wrong_secret');
   });
 });
