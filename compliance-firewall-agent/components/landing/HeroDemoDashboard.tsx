@@ -38,6 +38,15 @@ const ENGINES: [string, string, number][] = [
   ['CAGE', 'var(--d-sky)', 19],
 ]
 
+// Where prompts go — [tool, colour, share %]. Sums to 100; identity is never
+// colour-alone (each row carries its label + percentage).
+const DESTS: [string, string, number][] = [
+  ['ChatGPT', 'var(--d-sky)', 46],
+  ['Copilot', 'var(--d-orange)', 31],
+  ['Claude', 'var(--d-green)', 18],
+  ['Other', 'var(--d-violet)', 5],
+]
+
 const N = 40 // line-chart points
 const FEED = 5
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
@@ -124,6 +133,7 @@ export function HeroDemoDashboard() {
         <div className="hd-grid">
           <div className="hd-panel">
             <div className="hd-ph"><span>Gateway throughput</span><span className="live"><i /> prompts/sec</span></div>
+            <p className="hd-cap">Prompts flowing through the local gateway, scanned in &lt;10ms each.</p>
             <svg className="hd-line" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="throughput line chart">
               <defs>
                 <linearGradient id="hdStroke" x1="0" y1="0" x2="1" y2="0">
@@ -144,6 +154,7 @@ export function HeroDemoDashboard() {
 
           <div className="hd-panel">
             <div className="hd-ph"><span>Detection mix</span><span className="mono">today</span></div>
+            <p className="hd-cap">What the blocks were — CUI, secrets, PII and PHI.</p>
             <div className="hd-donut-wrap">
               <div className="hd-donut" style={{ background: donut }}><div className="hd-donut-c"><b>{blocked.toLocaleString()}</b><span>blocked</span></div></div>
               <div className="hd-legend">
@@ -155,23 +166,39 @@ export function HeroDemoDashboard() {
           </div>
         </div>
 
-        {/* Bar chart */}
-        <div className="hd-panel hd-bars-panel">
-          <div className="hd-ph"><span>Detections by engine · last hour</span><span className="live"><i /> live</span></div>
-          <div className="hd-bars">
-            {ENGINES.map(([label, colour], i) => (
-              <div className="hd-bar-row" key={label}>
-                <span className="hd-bar-lab">{label}</span>
-                <div className="hd-bar-track"><i style={{ width: `${bars[i]}%`, background: colour }} /></div>
-                <b>{bars[i]}</b>
-              </div>
-            ))}
+        {/* Engine bars + AI destinations, side by side */}
+        <div className="hd-grid hd-grid-even">
+          <div className="hd-panel">
+            <div className="hd-ph"><span>Detections by engine</span><span className="live"><i /> live</span></div>
+            <p className="hd-cap">Which of the 16 detection engines are firing right now.</p>
+            <div className="hd-bars">
+              {ENGINES.map(([label, colour], i) => (
+                <div className="hd-bar-row" key={label}>
+                  <span className="hd-bar-lab">{label}</span>
+                  <div className="hd-bar-track"><i style={{ width: `${bars[i]}%`, background: colour }} /></div>
+                  <b>{bars[i]}</b>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="hd-panel">
+            <div className="hd-ph"><span>Where prompts go</span><span className="mono">24h</span></div>
+            <p className="hd-cap">The AI tools your team uses — every prompt scanned locally first.</p>
+            <div className="hd-bars">
+              {DESTS.map(([label, colour, share]) => (
+                <div className="hd-bar-row" key={label}>
+                  <span className="hd-bar-lab">{label}</span>
+                  <div className="hd-bar-track"><i style={{ width: `${share * 2}%`, background: colour }} /></div>
+                  <b>{share}%</b>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* SPRS coverage gauge */}
         <div className="hd-gauge">
-          <div className="hd-gauge-top"><span>CMMC Level 2 coverage</span><span className="val">SPRS {sprs} · {coverage}%</span></div>
+          <div className="hd-gauge-top"><span>CMMC Level 2 coverage — DoD supplier score, live from the assessment</span><span className="val">SPRS {sprs} · {coverage}%</span></div>
           <div className="hd-gauge-track"><i style={{ width: `${coverage}%` }} /></div>
         </div>
 
@@ -228,6 +255,8 @@ const DEMO_CSS = `
 .hs-demo .hd-ph .mono{font-family:var(--d-mono);font-size:.58rem;color:var(--d-mut2)}
 .hs-demo .hd-ph .live{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--d-mono);font-size:.56rem;color:var(--d-green)}
 .hs-demo .hd-ph .live i{width:6px;height:6px;border-radius:50%;background:var(--d-green);animation:hdPing 1.5s ease infinite}
+.hs-demo .hd-cap{font-size:.58rem;line-height:1.4;color:var(--d-mut2);margin:-.2rem 0 .45rem}
+.hs-demo .hd-grid-even{grid-template-columns:1fr 1fr;margin-bottom:.7rem}
 .hs-demo .hd-line{width:100%;height:78px;display:block}
 .hs-demo .hd-grid-l{stroke:rgba(255,255,255,.06);stroke-width:1}
 

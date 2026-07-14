@@ -351,6 +351,32 @@ export const LCC_CSS = `
 .hs-lcc .bub.typing .tdot:nth-child(3){animation-delay:.36s}
 @keyframes lcc-typing{0%,60%,100%{opacity:.28;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
 
+/* ── Overview analytics row (OverviewCharts) — small self-explanatory charts.
+   Colors are dataviz-validated on the light panel surface; identity always
+   carries a direct label, never color alone. ── */
+.hs-lcc .ph-sub{padding:8px 18px 0;font-size:.76rem;line-height:1.45;color:var(--mut2)}
+.hs-lcc .ovc-svg{width:100%;height:auto;display:block}
+.hs-lcc .ovc-axis{font-family:var(--f-mono);font-size:9px;fill:var(--mut2)}
+.hs-lcc .ovc-num{font-family:var(--f-mono);font-size:11px;font-weight:700;fill:var(--text)}
+.hs-lcc .ovc-legend{display:flex;gap:1.1rem;flex-wrap:wrap;margin-top:.55rem;font-size:.74rem;color:var(--mut)}
+.hs-lcc .ovc-legend span{display:inline-flex;align-items:center;gap:.4rem}
+.hs-lcc .ovc-legend i{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.hs-lcc .ovc-legend .ovc-dash{width:14px;height:0;border-top:2px dashed #0E9F6E;border-radius:0}
+.hs-lcc .ovc-hrow{display:grid;grid-template-columns:64px 1fr 42px;align-items:center;gap:.6rem;padding:.34rem 0}
+.hs-lcc .ovc-hlab{font-size:.8rem;color:var(--mut)}
+.hs-lcc .ovc-htrack{height:12px;border-radius:6px;background:var(--track);overflow:hidden}
+.hs-lcc .ovc-htrack i{display:block;height:100%;border-radius:6px;transition:width .8s ease}
+.hs-lcc .ovc-hval{font-family:var(--f-mono);font-size:.74rem;color:var(--text);text-align:right}
+.hs-lcc .ovc-stack{display:flex;gap:2px;height:16px;border-radius:8px;overflow:hidden}
+.hs-lcc .ovc-stack i{display:block;height:100%;min-width:6px}
+.hs-lcc .ovc-risk-legend{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .9rem;margin-top:.7rem}
+.hs-lcc .ovc-risk-legend > div{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:.15rem .5rem}
+.hs-lcc .ovc-risk-name{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:600;color:var(--text)}
+.hs-lcc .ovc-risk-name i{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.hs-lcc .ovc-risk-legend b{font-family:var(--f-mono);font-size:.76rem;color:var(--text)}
+.hs-lcc .ovc-risk-legend small{grid-column:1 / -1;font-size:.68rem;color:var(--mut2)}
+@media(max-width:640px){.hs-lcc .ovc-risk-legend{grid-template-columns:1fr}}
+
 @media (prefers-reduced-motion: reduce){
   .hs-lcc .brand img,.hs-lcc .brain-mark{animation:none;transition:none}
   .hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
