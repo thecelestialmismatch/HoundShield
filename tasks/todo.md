@@ -2,7 +2,11 @@
 
 ## Active
 
-### 2026-07-14b — Report PDFs made REAL + founder account live (PR pending)
+### 2026-07-14c — Dashboards made diverse + self-explanatory (PR pending)
+- [x] Founder: "more graphs, more colours, small explanations, consistent data — console AND the hero-page dashboard." Console Overview gains 4 dataviz-validated panels (`OverviewCharts`): Activity by hour (stacked, blocked share), Where prompts go (ChatGPT/Copilot/Claude/Other), SPRS 30-day trend vs the L2 target line, Risk mix (severity stack with counts). Every panel carries plain-English microcopy + accessible labels. Homepage hero gains a "Where prompts go" panel + captions on every chart.
+- [x] Consistency is now a TEST: chart sums must equal the KPI seeds (142,690 scans / 2,233 blocked) or the build fails — the contract caught its first mismatch immediately.
+
+### 2026-07-14b — Report PDFs made REAL + founder account live (MERGED #184, live in prod)
 - [x] Founder: "generate PDF was not working." Root cause: the console Reports tab's three buttons were stubs (label flip, no file — the fake-success anti-pattern again). Built `lib/reports/artifact-pdfs.ts` (SSP / POA&M / C3PAO Evidence Pack — three DISTINCT jsPDF artifacts from the user's own local assessment) + `ReportsPanel` (real download, true SHA-256 in Recent exports, visible errors, honest empty state). Growth+ gated with the priced restriction routing to Plan & Unlocks; **founder always free**.
 - [x] Founder account made real: created `gaurav@houndshield.com` in prod Supabase auth (pre-confirmed) + agency profile/subscription grants for it, `gauravbt10@gmail.com`, `info@houndshield.com` (demo account left Free). Browser-verified live sign-in → "Founder · full access", nothing locked.
 - [ ] **FOUNDER:** change the temp password after first sign-in (chat-transmitted); create the `gaurav@houndshield.com` mailbox in Hostinger so password reset emails can ever work.
