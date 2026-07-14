@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeSecretKey } from '@/lib/stripe/env';
 import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
 
 /**
@@ -27,7 +28,7 @@ const RETAIL_CENTS = 49900;     // $499 — never lower (anchors value)
 const WHOLESALE_CENTS = 29900;  // $299 — RPO/MSP co-brand wholesale only
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  return new Stripe(getStripeSecretKey()!, {
     apiVersion: '2026-02-25.clover',
   });
 }
@@ -63,7 +64,7 @@ async function isApprovedPartner(partnerRef: string | undefined): Promise<boolea
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.STRIPE_SECRET_KEY) {
+    if (!getStripeSecretKey()) {
       return NextResponse.json(
         { error: 'Stripe not configured. Set STRIPE_SECRET_KEY in environment.' },
         { status: 503 }
