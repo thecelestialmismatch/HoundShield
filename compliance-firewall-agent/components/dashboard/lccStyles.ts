@@ -9,10 +9,11 @@
  * the old nested `height:100vh; overflow:auto` produced a scrollbar-inside-a-
  * scrollbar whenever anything rendered above the shell (mobile killer).
  *
- * Font contract: next/font registers Fraunces & DM Sans under HASHED family
- * names, reachable ONLY via var(--font-display)/var(--font-body) (set on
- * <html> in app/layout.tsx). A literal 'Fraunces' here silently falls back to
- * Times — that shipped once. Guard: app/__tests__/console-dashboard-contract.test.ts
+ * Font contract: next/font registers the brand typeface (Geist) under HASHED
+ * family names, reachable ONLY via var(--font-display)/var(--font-body) (set
+ * on <html> in app/layout.tsx). A literal family name here silently falls
+ * back to the browser default — that shipped once. Guards:
+ * app/__tests__/console-dashboard-contract.test.ts + font-brand-contract.test.ts
  */
 export const LCC_CSS = `
 .hs-lcc{
@@ -35,7 +36,7 @@ export const LCC_CSS = `
   --bad:#E5484D; --badbg:rgba(229,72,77,.12);
   --warn:#D9870B; --warnbg:rgba(217,135,11,.12);
   --orange:#E07B39; --orangebg:rgba(224,123,57,.12);
-  --f-disp:var(--font-display),Georgia,'Times New Roman',serif;
+  --f-disp:var(--font-display),system-ui,sans-serif;
   --f:var(--font-body),system-ui,-apple-system,'Segoe UI',sans-serif;
   --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --r:14px; --r-sm:10px;
