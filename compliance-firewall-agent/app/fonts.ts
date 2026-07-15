@@ -1,4 +1,4 @@
-import { Geist } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 
 /**
  * Brand typeface: Geist (OFL) — the founder-approved geometric grotesque
@@ -19,6 +19,19 @@ export const displayFont = Geist({
 export const bodyFont = Geist({
   subsets: ['latin'],
   variable: '--font-body',
+  display: 'swap',
+  weight: 'variable',
+})
+
+/**
+ * Metrics/code face: Geist Mono — same family as the brand sans, self-hosted
+ * like the others. This replaced a runtime CSS @import of the previous mono
+ * from a third-party font CDN (an external request on every visit — wrong for
+ * a zero-data-exfiltration brand, and slower: CSS import chains block render).
+ */
+export const monoFont = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
   display: 'swap',
   weight: 'variable',
 })

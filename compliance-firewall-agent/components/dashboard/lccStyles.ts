@@ -38,7 +38,7 @@ export const LCC_CSS = `
   --orange:#E07B39; --orangebg:rgba(224,123,57,.12);
   --f-disp:var(--font-display),system-ui,sans-serif;
   --f:var(--font-body),system-ui,-apple-system,'Segoe UI',sans-serif;
-  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f-mono:var(--font-mono),ui-monospace,SFMono-Regular,Menlo,monospace;
   --r:14px; --r-sm:10px;
   font-family:var(--f);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
 }

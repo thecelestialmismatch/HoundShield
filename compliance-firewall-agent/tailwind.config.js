@@ -86,7 +86,7 @@ module.exports = {
         sans:      ["var(--font-body)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
         display:   ["var(--font-display)", "var(--font-body)", "ui-sans-serif", "system-ui", "sans-serif"],
         editorial: ["var(--font-display)", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono:      ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
+        mono:      ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
         grotesk:   ["Anton", "Impact", "ui-sans-serif", "system-ui", "sans-serif"],
         condiment: ["Condiment", "cursive"],
       },

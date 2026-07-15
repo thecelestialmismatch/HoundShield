@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* JetBrains Mono via CSS — next/font doesn't support it without self-hosting */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* Logo hover contract (founder-approved, Direction-A demo verbatim): the mark
    TILTS IN PLACE on hover — rotate(-4deg) scale(1.06) — it must NEVER translate
@@ -76,7 +74,7 @@
   /* ── Typography ───────────────────────────────────── */
   --font-display:       'Geist', system-ui, sans-serif;
   --font-body:          'Geist', system-ui, sans-serif;
-  --font-mono:          'JetBrains Mono', 'Fira Code', monospace;
+  --font-mono:          'Geist Mono', ui-monospace, monospace;
 
   /* ── Motion ───────────────────────────────────────── */
   --ease-out:           cubic-bezier(0.16, 1, 0.3, 1);
