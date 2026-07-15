@@ -4,6 +4,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
 import { ReportCheckoutButton } from "@/components/ReportCheckoutButton";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { reportFaqs } from "@/lib/seo/faqs";
 import { Check, ShieldCheck, FileText, Server, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -112,6 +114,14 @@ export default function AssessmentPage() {
             or our <Link href="/dpa" className="text-brand-700 hover:text-brand-700">Data Processing Agreement</Link>.
           </p>
         </section>
+
+        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO) */}
+        <FaqSection
+          items={reportFaqs}
+          title="Assessment report questions, answered"
+          align="left"
+          className="!px-0 !py-0 mt-16"
+        />
 
         {/* Final CTA */}
         <section className="mt-16 text-center">

@@ -2,6 +2,14 @@
 
 ## Active
 
+### 2026-07-15 — FAQ system rebuilt sitewide + $499 offer card (PR pending)
+- [x] Founder: "improve the FAQ section of every page… and the $499 thing, make it a proper button." Rebuilt the shared `FaqAccordion` (card-per-question, readable type — questions were 14px, now 16–17px; answers 15px/1.7 — steel open-state, a11y ring, aria-controls) and `FaqSection` (eyebrow + display heading + "Still have questions?" contact row + coupled FAQPage JSON-LD). All 5 hand-rolled FAQ implementations (contact, answers/[slug], partners/kit, products/[industry], pricing/features inline blocks) replaced with the one shared system.
+- [x] FAQs ADDED where missing: homepage (new `homeFaqs`), /how-it-works (orphaned `howItWorksFaqs` finally rendered), /assessment (new `reportFaqs`). Contact FAQ content moved to `contactFaqs` with two factual fixes (free tier = 110 controls read-only + 1,000 prompts/mo, not "25 controls"; PDF exports = Growth+, not "PDF and CSV on all plans").
+- [x] pricingFaqs rewritten: now leads with the $499 one-time report, kills the "$499 report vs $499/mo Growth" collision with an explicit Q&A, and removes the banned "Federal at $2,499/month" tier claim (NEVER-DO).
+- [x] $499 CTA: new `ReportOfferCard` (pitch + included checklist + trust row | big $499 panel + full-width buy button + "talk to us first" + sample-report link) — now the hero of /pricing AND a band on the homepage before the CTA band. `.section.alt` (used but never defined) now styles a real alternate band.
+- [x] Guards: `app/__tests__/faq-surface-contract.test.ts` (FAQPage JSON-LD ⇒ visible FAQ UI; core pages must carry a FAQ; home+pricing must carry the offer card) + new datasets added to the AEO faqs test (uniqueness/snippet-length enforced). 1151/1151 tests, tsc, lint, build green; 20 prod-server screenshots (10 pages × desktop+mobile), 0 console errors.
+- [ ] **FOUNDER — still the #1 revenue blocker (unchanged):** `STRIPE_SECRET_KEY` Production scope in Vercel → `/api/health` must read `payments: connected`. The new buy buttons 503-deflect to /contact until then.
+
 ### 2026-07-14d — Deep-dive audit of the session's work (PR pending)
 - [x] Reviewed the cumulative #183–#185 diff + click-drove every flow. Found & fixed: Settings "Copy" button was ANOTHER fake-success stub (now really writes the clipboard, only confirms on success — regression-tested); hour-axis labels clipped at the chart edges (inward anchors); duplicate React keys possible on rapid re-exports (monotonic id). Browser-verified: guide→"Begin assessment" opens the inline board in place with the hash cleared; clipboard actually contains the proxy URL.
 - [x] Data polish (no deploy): founder profiles get company='HoundShield' → PDFs now read SSP_HoundShield_… and the sidebar shows the org, not the first name.

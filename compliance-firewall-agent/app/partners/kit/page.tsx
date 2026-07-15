@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, FileCheck2, Percent, Timer } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { FaqAccordion } from "@/components/ui/FaqAccordion";
 
 const TITLE = "RPO & MSP Partner Kit — Co-Branded CMMC AI Risk Assessments | HoundShield";
 const DESCRIPTION =
@@ -138,20 +139,14 @@ export default function PartnerKitPage() {
           </p>
         </section>
 
-        {/* FAQ */}
-        <h2 className="mt-12 font-[var(--font-display)] text-xl font-semibold text-[var(--hs-ink)]">
+        {/* FAQ — shared accordion, matches the FAQPage JSON-LD */}
+        <h2 className="mt-12 font-[var(--font-display)] text-2xl font-semibold text-[var(--hs-ink)]">
           Partner questions
         </h2>
-        <div className="mt-5 space-y-3">
-          {FAQS.map((f) => (
-            <details key={f.q} className="group rounded-2xl border border-[var(--hs-border)] bg-[var(--hs-surface-1)] p-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between text-base font-semibold text-[var(--hs-ink)]">
-                {f.q}
-                <span className="text-[var(--hs-steel-dark)] transition group-open:rotate-45">+</span>
-              </summary>
-              <p className="mt-3 text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{f.a}</p>
-            </details>
-          ))}
+        <div className="mt-5">
+          <FaqAccordion
+            items={FAQS.map((f) => ({ question: f.q, answer: f.a }))}
+          />
         </div>
 
         {/* CTA */}
