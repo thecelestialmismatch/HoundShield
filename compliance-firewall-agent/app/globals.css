@@ -74,8 +74,8 @@
   --hs-warn-bg:         #FFFBEB;
 
   /* ── Typography ───────────────────────────────────── */
-  --font-display:       'Fraunces', Georgia, serif;
-  --font-body:          'DM Sans', system-ui, sans-serif;
+  --font-display:       'Geist', system-ui, sans-serif;
+  --font-body:          'Geist', system-ui, sans-serif;
   --font-mono:          'JetBrains Mono', 'Fira Code', monospace;
 
   /* ── Motion ───────────────────────────────────────── */

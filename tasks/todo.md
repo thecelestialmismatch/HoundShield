@@ -2,6 +2,10 @@
 
 ## Active
 
+### 2026-07-15b — Brand typeface → Geist everywhere (founder call, same PR #204)
+- [x] Founder shared a base44.app ad ("I love this font, use it everywhere"). The ad face is a commercial-class neo-grotesque; closest open-licensed (OFL) production match is **Geist**, self-hosted at build time via next/font (zero external font requests, GDPR-clean). Swapped in ONE place — `app/fonts.ts` now loads Geist into both `--font-display` and `--font-body` — so hermes pages, v3 pages, dashboard, and command center all switch together (no split-brain). Fallback stacks de-serifed in globals.css, hermes.css, tailwind.config.js (font-editorial), lccStyles.ts.
+- [x] Guard: `app/__tests__/font-brand-contract.test.ts` — fonts.ts must load Geist for both roles; the four stack-definition files may not reference the old families or any serif fallback. It caught a stale comment on first run. `public/hermes-demo.html` + `_bootstrap.html` are byte-equality archives and stay untouched by design.
+
 ### 2026-07-15 — FAQ system rebuilt sitewide + $499 offer card (PR pending)
 - [x] Founder: "improve the FAQ section of every page… and the $499 thing, make it a proper button." Rebuilt the shared `FaqAccordion` (card-per-question, readable type — questions were 14px, now 16–17px; answers 15px/1.7 — steel open-state, a11y ring, aria-controls) and `FaqSection` (eyebrow + display heading + "Still have questions?" contact row + coupled FAQPage JSON-LD). All 5 hand-rolled FAQ implementations (contact, answers/[slug], partners/kit, products/[industry], pricing/features inline blocks) replaced with the one shared system.
 - [x] FAQs ADDED where missing: homepage (new `homeFaqs`), /how-it-works (orphaned `howItWorksFaqs` finally rendered), /assessment (new `reportFaqs`). Contact FAQ content moved to `contactFaqs` with two factual fixes (free tier = 110 controls read-only + 1,000 prompts/mo, not "25 controls"; PDF exports = Growth+, not "PDF and CSV on all plans").
