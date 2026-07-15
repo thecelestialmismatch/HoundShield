@@ -46,24 +46,126 @@ export const hipaaFaqs: FaqItem[] = [
 /** /pricing — cost and plan questions ("how much does X cost"). */
 export const pricingFaqs: FaqItem[] = [
   {
-    question: "How much does HoundShield cost?",
+    question: "How much does the CMMC AI Risk Assessment Report cost?",
     answer:
-      "HoundShield offers a free tier for AI prompt scanning and basic reports, then paid plans: Pro at $199/month, Growth at $499/month, Enterprise at $999/month, and Federal at $2,499/month for multi-tenant agency deployments. Higher tiers add gateway mode, SPRS tracking, C3PAO-ready PDF evidence, and dedicated support.",
+      "The CMMC AI Risk Assessment Report costs $499, one time — no subscription and no signup required. We run HoundShield's proxy across 14 days of your real AI traffic and deliver a SHA-256-signed PDF that scores every prompt event against NIST 800-171, the evidence a C3PAO assessor asks for.",
+  },
+  {
+    question: "How much does a HoundShield subscription cost?",
+    answer:
+      "HoundShield subscriptions start free for self-assessment, then scale by coverage: Pro at $199/month adds the AI gateway with 50,000 scans, Growth at $499/month adds unlimited scans plus C3PAO-ready PDF evidence, and Enterprise at $999/month adds on-prem or air-gapped deployment. Annual billing saves 20% on every paid plan.",
+  },
+  {
+    question: "What's the difference between the $499 report and the $499/month plan?",
+    answer:
+      "The $499 report is a one-time engagement: a 14-day scan of your AI traffic and a signed PDF deliverable, with no ongoing commitment. Growth at $499 per month is continuous coverage — unlimited live scanning, alerts, and fresh evidence exports every month. Most teams start with the report, then subscribe to stay covered.",
   },
   {
     question: "Is there a free version of HoundShield?",
     answer:
-      "Yes. HoundShield's free tier includes real-time AI prompt scanning across the core detection engines plus basic compliance reports, so you can start protecting AI usage at no cost. Paid plans add gateway mode, multi-user access, SPRS score tracking, and C3PAO-ready PDF evidence export.",
+      "Yes. HoundShield's free tier includes the full 110-control CMMC self-assessment, a live SPRS calculator, and scanning for up to 1,000 prompts per month — no credit card required. Paid plans add the AI gateway at scale, PDF evidence exports, more seats, and email and Slack alerts.",
   },
   {
     question: "Do I need the Enterprise plan for a CMMC assessment?",
     answer:
-      "Not necessarily. SPRS scoring and CUI detection are available on Growth ($499/month), which covers most contractors preparing for a self-assessment. The Enterprise plan ($999/month) adds C3PAO-ready PDF evidence packages and dedicated support, which are useful when a certified third-party assessor reviews your environment on-site.",
+      "Not necessarily. The 110-control self-assessment is free, and Growth at $499/month adds unlimited scanning plus the C3PAO-ready PDF evidence most contractors need for a Level 2 assessment. Choose Enterprise at $999/month when you need on-prem or air-gapped deployment, white-label PDFs, or a custom SLA.",
   },
   {
     question: "Does HoundShield offer annual billing?",
     answer:
-      "Yes. Every paid HoundShield plan can be billed annually, which lowers the effective monthly cost compared with month-to-month billing. Annual billing is the typical choice for contractors and healthcare teams budgeting against a fixed compliance deadline. Contact sales for federal and multi-tenant agency pricing.",
+      "Yes. Every paid HoundShield plan can be billed annually at a 20% discount compared with month-to-month billing, and every paid plan carries a 30-day money-back guarantee. Annual billing is the typical choice for contractors and healthcare teams budgeting against a fixed compliance deadline. Contact sales for multi-tenant agency pricing.",
+  },
+];
+
+/** Homepage — the top-of-funnel "what is this" questions. */
+export const homeFaqs: FaqItem[] = [
+  {
+    question: "What is HoundShield?",
+    answer:
+      "HoundShield is a local-only AI compliance firewall. It sits between your team and tools like ChatGPT, Copilot, and Claude, scans every prompt on your own hardware in under 10 milliseconds, blocks CUI, PHI, and PII before anything leaves your network, and writes tamper-evident audit evidence mapped to NIST 800-171.",
+  },
+  {
+    question: "How does HoundShield stop employees pasting CUI into ChatGPT?",
+    answer:
+      "HoundShield works as an OpenAI-compatible proxy: you change one base URL and every AI request passes through 16 local detection engines before it leaves your perimeter. Prompts containing CUI markings, CAGE codes, contract numbers, or clearance terms are blocked instantly and logged to a SHA-256 hash-chained audit trail.",
+  },
+  {
+    question: "Does HoundShield send my prompts to the cloud?",
+    answer:
+      "No. In self-hosted Docker mode, scanning happens entirely on your infrastructure and prompt content never leaves your network — unlike cloud DLP tools, which must receive your data to inspect it. Only the hosted trial runs in our cloud, and it is for demos and non-CUI evaluation only.",
+  },
+  {
+    question: "Who is HoundShield for?",
+    answer:
+      "HoundShield is built for regulated teams that use AI: defense contractors preparing for CMMC Level 2, healthcare organizations protecting PHI under HIPAA, and law firms guarding privileged communications. If your staff use ChatGPT, Copilot, or Claude and an auditor will ever ask for evidence, HoundShield is for you.",
+  },
+  {
+    question: "How quickly can we get started with HoundShield?",
+    answer:
+      "Most teams deploy in under 15 minutes: run the Docker gateway, point your AI tools' base URL at it, and verify a test prompt in the audit log. The free tier needs no credit card, and the $499 assessment report delivers signed evidence within days of intake.",
+  },
+];
+
+/** /assessment — the $499 one-time report (the Stage-1 lead product). */
+export const reportFaqs: FaqItem[] = [
+  {
+    question: "What is the CMMC AI Risk Assessment Report?",
+    answer:
+      "It is a one-time $499 engagement. HoundShield's proxy runs locally in your environment for 14 days, scoring every AI prompt event against NIST 800-171 Rev 2. You receive a SHA-256-signed PDF documenting what your team sent to AI tools, which controls it implicates, and the remediation sequence.",
+  },
+  {
+    question: "How long does the $499 assessment take?",
+    answer:
+      "Fourteen days of passive scanning plus a few days to compile the report. Setup is a one-URL change behind a Docker container you run yourself, so there is no disruption — your team keeps using ChatGPT, Copilot, and Claude normally while the proxy observes and scores the traffic.",
+  },
+  {
+    question: "Is my data safe during the assessment?",
+    answer:
+      "Yes. The proxy runs on your own infrastructure in Mode B, so prompt content never leaves your network — we never see it. The report is built from local scan results and control mappings only, and the audit trail is SHA-256 hash-chained so evidence cannot be silently altered.",
+  },
+  {
+    question: "Do I need a HoundShield subscription to buy the report?",
+    answer:
+      "No. The report is a standalone $499 purchase with no subscription, no signup, and no procurement cycle — checkout takes a card and an email address. Many teams later add a monthly plan for continuous monitoring, but the report stands on its own as assessor-ready evidence.",
+  },
+  {
+    question: "Will a C3PAO accept the report as evidence?",
+    answer:
+      "The report is designed as supporting evidence: findings are mapped to specific NIST 800-171 Rev 2 controls with SPRS impact, and every event carries a tamper-evident hash. Assessors make their own judgments, but control-mapped, hash-chained documentation of AI usage is exactly the artifact they ask contractors to produce.",
+  },
+];
+
+/** /contact — the pre-sales questions people ask before writing to us. */
+export const contactFaqs: FaqItem[] = [
+  {
+    question: "What is CMMC Level 2 certification?",
+    answer:
+      "CMMC Level 2 requires organizations to implement 110 security practices from NIST SP 800-171 to protect Controlled Unclassified Information (CUI). It is mandatory for defense contractors handling CUI and, for most contracts, requires an assessment by an accredited third-party organization rather than a self-attestation alone.",
+  },
+  {
+    question: "How long does CMMC compliance take with HoundShield?",
+    answer:
+      "Timelines vary based on your current posture, but most organizations reach CMMC Level 2 readiness in three to six months with HoundShield. The platform identifies gaps across all 110 controls instantly, provides a prioritized remediation roadmap, and tracks your SPRS score as each practice is closed.",
+  },
+  {
+    question: "Do I need a C3PAO assessment for CMMC Level 2?",
+    answer:
+      "Yes — CMMC Level 2 certification for contracts involving CUI requires an assessment by a CMMC Third-Party Assessment Organization (C3PAO). HoundShield prepares you for that assessment by running continuous self-assessments aligned to the official scoring methodology and packaging the evidence an assessor will ask to see.",
+  },
+  {
+    question: "What's included in HoundShield's free tier?",
+    answer:
+      "The free tier includes the full 110-control CMMC self-assessment in read-only mode, a live SPRS score calculator, scanning for up to 1,000 prompts per month, and community support. Upgrading to Pro adds the AI gateway at scale, editable assessments, and SSP and POA&M generation.",
+  },
+  {
+    question: "Can I export compliance reports from HoundShield?",
+    answer:
+      "Yes. Growth and Enterprise plans export audit-ready PDF reports — your System Security Plan (SSP), Plan of Action & Milestones (POA&M), and C3PAO evidence packages — while every paid plan exports JSON compliance reports. All artifacts are formatted for assessor review and carry SHA-256-signed evidence.",
+  },
+  {
+    question: "Is my data secure with HoundShield?",
+    answer:
+      "Prompt content never leaves your network. HoundShield scans locally: in the self-hosted Docker mode (Mode B), the CUI-safe deployment, nothing you scan is transmitted to us. The hosted trial runs on Vercel, which is not FedRAMP-authorized, so it is for non-CUI evaluation only. Audit logs are immutable and SHA-256 hash-chained, and we never train AI models on your data.",
   },
 ];
 

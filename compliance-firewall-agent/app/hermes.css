@@ -175,7 +175,6 @@
 .hermes .chip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 @media (max-width: 760px) { .hermes .chip-grid { grid-template-columns: 1fr 1fr; } }
 .hermes .map-sub { color: var(--text-3); font-size: .8rem; font-weight: 400; }
-.hermes .faq-q { font-size: 1.02rem; margin-bottom: .4rem; font-weight: 700; }
 .hermes .ctrl-row span b { font-weight: 700; }
 .hermes .opsbar { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: .75rem 18px; margin-bottom: 18px; font-size: .85rem; color: var(--text-2); }
 .hermes .opsbar b { color: var(--text); font-family: var(--f-mono); font-weight: 600; }
@@ -239,6 +238,36 @@
 .hermes .step p { color: var(--text-2); font-size: .95rem; }
 .hermes .step .ic { margin-left: auto; width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand); flex-shrink: 0; }
 .hermes .step .ic svg { width: 20px; height: 20px; }
+
+/* Alternate section band (FAQ / secondary sections) */
+.hermes .section.alt { background: var(--page-2); border-top: 1px solid var(--line); }
+
+/* ---------- $499 REPORT OFFER CARD ---------- */
+.hermes .report-offer { display: grid; grid-template-columns: 1.15fr .85fr; border: 1px solid var(--line-2); border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+.hermes .report-offer-pitch { padding: 44px 44px 40px; }
+.hermes .report-offer-pitch .eyebrow { margin-bottom: .8rem; display: block; }
+.hermes .report-offer-pitch h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); margin-bottom: .8rem; }
+.hermes .report-offer-pitch > p { font-size: 1.02rem; color: var(--text-2); max-width: 520px; margin-bottom: 1.4rem; }
+.hermes .report-includes { list-style: none; display: grid; grid-template-columns: 1fr; gap: .65rem; margin: 0 0 1.4rem; }
+.hermes .report-includes li { display: flex; gap: .6rem; align-items: flex-start; font-size: .95rem; color: var(--text-2); }
+.hermes .report-includes li svg { width: 17px; height: 17px; color: var(--ok); flex-shrink: 0; margin-top: 2px; }
+.hermes .report-includes li b { color: var(--text); font-weight: 600; }
+.hermes .report-trust { display: flex; gap: 1.2rem; flex-wrap: wrap; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+.hermes .report-trust span { display: inline-flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--text-3); }
+.hermes .report-trust svg { width: 14px; height: 14px; color: var(--brand); }
+.hermes .report-offer-buy { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .35rem; padding: 44px 36px; background: linear-gradient(180deg, var(--page-2), var(--surface)); border-left: 1px solid var(--line); }
+.hermes .report-offer-buy .price-tag { font-family: var(--f-disp); font-weight: 700; font-size: 3.6rem; line-height: 1; color: var(--text); }
+.hermes .report-offer-buy .price-sub { font-family: var(--f-mono); font-size: .74rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 1.1rem; }
+.hermes .report-offer-buy .report-buy-btn { width: 100%; max-width: 300px; justify-content: center; font-size: 1rem; padding: .95rem 1.4rem; }
+.hermes .report-offer-buy .talk-first { display: inline-flex; align-items: center; gap: .3rem; margin-top: .9rem; font-size: .88rem; font-weight: 600; color: var(--brand); }
+.hermes .report-offer-buy .talk-first:hover { color: var(--cta-hover); }
+.hermes .report-offer-buy .fine { font-size: .76rem; color: var(--text-3); margin-top: 1rem; }
+.hermes .report-offer-buy .fine a { color: var(--brand); font-weight: 600; }
+@media (max-width: 900px) {
+  .hermes .report-offer { grid-template-columns: 1fr; }
+  .hermes .report-offer-buy { border-left: none; border-top: 1px solid var(--line); }
+  .hermes .report-offer-pitch { padding: 32px 26px 28px; }
+}
 
 /* ---------- PRICING ---------- */
 .hermes .bill-toggle { display: inline-flex; align-items: center; gap: .4rem; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: .3rem; margin: 0 auto 40px; position: relative; }

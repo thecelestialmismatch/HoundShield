@@ -3,12 +3,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Check } from 'lucide-react'
-import { ReportCheckoutButton } from '@/components/ReportCheckoutButton'
+import { ReportOfferCard } from '@/components/ReportOfferCard'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
-import { FaqAccordion } from '@/components/ui/FaqAccordion'
-import { JsonLd } from '@/components/seo/JsonLd'
-import { faqPageSchema } from '@/lib/seo/structured-data'
+import { FaqSection } from '@/components/seo/FaqSection'
 import { pricingFaqs } from '@/lib/seo/faqs'
 
 /* ─────────────────────────────────────────────────────────────────
@@ -113,20 +111,18 @@ export default function PricingPage() {
       <main className="page">
         <div className="section">
           <div className="container">
-            <div className="section-head">
-              <div className="eyebrow">Start here · one-time</div>
-              <h1 className="display">The $499 CMMC AI Risk Assessment Report</h1>
+            <div className="section-head" style={{ marginBottom: 28 }}>
+              <div className="eyebrow">Pricing</div>
+              <h1 className="display">One report to start. One plan to stay covered.</h1>
               <p>
-                No subscription, no signup. We run the proxy across 14 days of your real AI
-                traffic and hand you a SHA-256-signed PDF that scores every prompt event against
-                NIST 800-171 — the evidence your C3PAO asks for.
+                Lead with the $499 one-time assessment report — then subscribe only when you
+                want continuous coverage.
               </p>
-              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-                <ReportCheckoutButton label="Get your $499 report" />
-              </div>
             </div>
 
-            <div className="section-head" style={{ marginTop: 8 }}>
+            <ReportOfferCard />
+
+            <div className="section-head" style={{ marginTop: 72 }}>
               <div className="eyebrow">Ongoing monitoring</div>
               <h2 className="display">Or subscribe for continuous coverage</h2>
               <p>
@@ -206,18 +202,14 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO). Hermes section styling
-            matches the rest of the page. */}
+        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO), one shared component. */}
         <div className="section alt">
           <div className="container">
-            <div className="section-head">
-              <div className="eyebrow">FAQ</div>
-              <h2 className="display">Pricing questions, answered</h2>
-            </div>
-            <div style={{ maxWidth: 720, margin: '0 auto' }}>
-              <JsonLd schema={faqPageSchema(pricingFaqs)} />
-              <FaqAccordion items={pricingFaqs} />
-            </div>
+            <FaqSection
+              items={pricingFaqs}
+              title="Pricing questions, answered"
+              className="!py-0"
+            />
           </div>
         </div>
       </main>
