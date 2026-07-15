@@ -4,6 +4,9 @@ import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ModeBNotice } from '@/components/ModeBNotice'
 import { HeroDemoDashboard } from '@/components/landing/HeroDemoDashboard'
+import { ReportOfferCard } from '@/components/ReportOfferCard'
+import { FaqSection } from '@/components/seo/FaqSection'
+import { homeFaqs } from '@/lib/seo/faqs'
 import type { Metadata } from 'next'
 
 // Self-referencing canonical for the homepage. The root layout no longer sets a
@@ -155,6 +158,24 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* ── $499 REPORT OFFER (Stage-1 lead product) ─────────── */}
+        <div className="section tight">
+          <div className="container">
+            <ReportOfferCard />
+          </div>
+        </div>
+
+        {/* ── FAQ (visible Q&A + FAQPage JSON-LD, AEO) ─────────── */}
+        <div className="section alt tight">
+          <div className="container">
+            <FaqSection
+              items={homeFaqs}
+              title="Questions teams ask before deploying"
+              className="!py-0"
+            />
           </div>
         </div>
 

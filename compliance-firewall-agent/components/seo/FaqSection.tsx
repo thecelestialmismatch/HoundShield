@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqPageSchema } from "@/lib/seo/structured-data";
@@ -8,6 +9,10 @@ interface FaqSectionProps {
   /** Question-format heading — the AEO-correct way to title an FAQ block. */
   title?: string;
   eyebrow?: string;
+  /** Center the heading (hermes marketing convention) or keep it left-aligned. */
+  align?: "center" | "left";
+  /** Show the "Still have questions?" contact row under the accordion. */
+  contactCta?: boolean;
   className?: string;
 }
 
@@ -21,10 +26,14 @@ interface FaqSectionProps {
 export function FaqSection({
   items,
   title = "Frequently asked questions",
-  eyebrow,
+  eyebrow = "FAQ",
+  align = "center",
+  contactCta = true,
   className = "",
 }: FaqSectionProps) {
   if (items.length === 0) return null;
+
+  const centered = align === "center";
 
   return (
     <section
@@ -33,20 +42,37 @@ export function FaqSection({
     >
       <JsonLd schema={faqPageSchema(items)} />
 
-      {eyebrow ? (
-        <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--hs-ink-tertiary)] mb-3">
-          {eyebrow}
-        </p>
-      ) : null}
+      <div className={`mb-10 ${centered ? "text-center" : ""}`}>
+        {eyebrow ? (
+          <p className="text-xs font-mono font-bold uppercase tracking-[0.22em] text-[var(--hs-steel-dark)] mb-3">
+            {eyebrow}
+          </p>
+        ) : null}
 
-      <h2
-        id="faq-heading"
-        className="text-[clamp(28px,4vw,44px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)] mb-8"
-      >
-        {title}
-      </h2>
+        <h2
+          id="faq-heading"
+          className="text-[clamp(28px,4vw,40px)] font-editorial font-semibold tracking-tight leading-[1.08] text-[var(--hs-ink)]"
+        >
+          {title}
+        </h2>
+      </div>
 
       <FaqAccordion items={items} />
+
+      {contactCta ? (
+        <p
+          className={`mt-8 text-[15px] text-[var(--hs-ink-secondary)] ${centered ? "text-center" : ""}`}
+        >
+          Still have questions?{" "}
+          <Link
+            href="/contact"
+            className="font-semibold text-[var(--hs-steel-dark)] underline underline-offset-4 decoration-[var(--hs-border-strong)] hover:decoration-[var(--hs-steel-dark)] transition-colors"
+          >
+            Talk to a compliance engineer
+          </Link>{" "}
+          — we respond within 4 business hours.
+        </p>
+      ) : null}
     </section>
   );
 }

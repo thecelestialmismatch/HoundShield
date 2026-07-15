@@ -5,6 +5,20 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-15
+
+### Screenshot UI against `next start`, not `next dev` — cold compiles + networkidle wedge the pass
+**What:** A 20-page Playwright screenshot pass against the dev server timed out twice (7m, 10m):
+every route cold-compiles on first hit, `networkidle` never settles (analytics keep sockets open),
+and the killed run left the dev server wedged (curl timed out entirely; container restart cleared it).
+Against the production server (`npm run build && next start`) the same pass finished in ~3 minutes.
+**Rule:** For browser verification sweeps, run the build gate FIRST, then screenshot against
+`next start` with `waitUntil: 'domcontentloaded'` + a fixed settle wait. Dev-server screenshots are
+only for single-page spot checks. This also enforces the existing "never build while dev runs" rule
+by construction — the dev server is never up during the gate.
+
+---
+
 ## 2026-07-14
 
 ### A scoped `* { margin:0; padding:0 }` reset silently beats Tailwind utilities injected after the global sheet

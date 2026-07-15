@@ -3,9 +3,7 @@ import Link from 'next/link'
 import { Eye, Clock, FileText, Shield, Brain, ArrowRight } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
-import { FaqAccordion } from '@/components/ui/FaqAccordion'
-import { JsonLd } from '@/components/seo/JsonLd'
-import { faqPageSchema } from '@/lib/seo/structured-data'
+import { FaqSection } from '@/components/seo/FaqSection'
 import { featuresFaqs } from '@/lib/seo/faqs'
 
 /* ─────────────────────────────────────────────────────────────────
@@ -113,17 +111,14 @@ export default function FeaturesPage() {
           </div>
         </div>
 
-        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO). */}
+        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO), one shared component. */}
         <div className="section alt">
           <div className="container">
-            <div className="section-head">
-              <div className="eyebrow">FAQ</div>
-              <h2 className="display">Feature questions, answered</h2>
-            </div>
-            <div style={{ maxWidth: 720, margin: '0 auto' }}>
-              <JsonLd schema={faqPageSchema(featuresFaqs)} />
-              <FaqAccordion items={featuresFaqs} />
-            </div>
+            <FaqSection
+              items={featuresFaqs}
+              title="Feature questions, answered"
+              className="!py-0"
+            />
           </div>
         </div>
       </main>

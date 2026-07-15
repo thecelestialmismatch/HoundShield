@@ -6,6 +6,9 @@ import {
   howItWorksFaqs,
   brainAiFaqs,
   installFaqs,
+  homeFaqs,
+  reportFaqs,
+  contactFaqs,
   installSteps,
   type FaqItem,
 } from "../faqs";
@@ -17,6 +20,9 @@ const ALL_SETS: Record<string, FaqItem[]> = {
   howItWorksFaqs,
   brainAiFaqs,
   installFaqs,
+  homeFaqs,
+  reportFaqs,
+  contactFaqs,
 };
 
 const wordCount = (s: string) => s.trim().split(/\s+/).length;

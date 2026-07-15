@@ -4,9 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ScrollProgressBar } from "@/components/scroll-effects";
-import { Mail, CalendarCheck, Clock, Send, ChevronDown, CheckCircle2, ArrowRight } from "lucide-react";
+import { Mail, CalendarCheck, Clock, Send, CheckCircle2, ArrowRight } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqPageSchema } from "@/lib/seo/structured-data";
+import { contactFaqs } from "@/lib/seo/faqs";
 
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
@@ -18,22 +22,12 @@ function FadeIn({ children, className = "", delay = 0 }: { children: React.React
   );
 }
 
-const faqs = [
-  { q: "What is CMMC Level 2?", a: "CMMC Level 2 requires organizations to implement 110 security practices from NIST SP 800-171 to protect Controlled Unclassified Information (CUI). It is mandatory for defense contractors handling CUI and requires third-party assessment." },
-  { q: "How long does compliance take?", a: "Timelines vary based on your current posture. Most organizations achieve CMMC Level 2 readiness in 3-6 months with HoundShield. Our platform identifies gaps instantly and provides a prioritized remediation roadmap." },
-  { q: "Do I need a C3PAO assessment?", a: "Yes, CMMC Level 2 certification requires an assessment by a CMMC Third-Party Assessment Organization (C3PAO). HoundShield prepares you for this assessment by running continuous self-assessments aligned to official scoring methodology." },
-  { q: "What's included in the free tier?", a: "The free tier includes a baseline SPRS score, gap analysis for up to 25 NIST 800-171 controls, basic compliance reporting, and access to our AI compliance assistant. Upgrade to Pro for full 110-control coverage." },
-  { q: "Can I export compliance reports?", a: "Absolutely. Export audit-ready PDF and CSV reports including your System Security Plan (SSP), Plan of Action & Milestones (POA&M), and SPRS scoring worksheets -- all formatted for C3PAO review." },
-  { q: "Is my data secure?", a: "Prompt content never leaves your network. HoundShield scans locally: in the self-hosted Docker mode (Mode B), the CUI-safe deployment, nothing you scan is transmitted to us. The hosted trial runs on Vercel, which is not FedRAMP-authorized, so it is for non-CUI evaluation only. Audit logs are immutable and SHA-256 hash-chained, and we never train AI models on your data." },
-];
-
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", company: "", subject: "General", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // A $499 report buyer whose Stripe checkout is unconfigured is deflected here
   // via /contact?topic=assessment-report — tag the subject so the lead is triaged.
@@ -190,29 +184,12 @@ export default function ContactPage() {
             </div>
           </FadeIn>
 
-          {/* FAQ Accordion */}
+          {/* FAQ — shared accordion + FAQPage JSON-LD (AEO) */}
           <FadeIn delay={150}>
             <div>
-              <h2 className="text-xl font-bold mb-6">Frequently asked questions</h2>
-              <div className="space-y-3">
-                {faqs.map((f, i) => (
-                  <div key={i} className="border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl overflow-hidden hover:border-[var(--hs-border)] transition-colors duration-200">
-                    <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer">
-                      <span className="text-sm font-medium text-[var(--hs-ink)]">{f.q}</span>
-                      <motion.span animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                        <ChevronDown className="w-4 h-4 text-[var(--hs-ink-secondary)] flex-shrink-0" />
-                      </motion.span>
-                    </button>
-                    <AnimatePresence>
-                      {openFaq === i && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}>
-                          <p className="px-5 pb-4 text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{f.a}</p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
-              </div>
+              <h2 className="text-2xl font-bold mb-6">Frequently asked questions</h2>
+              <JsonLd schema={faqPageSchema(contactFaqs)} />
+              <FaqAccordion items={contactFaqs} />
             </div>
           </FadeIn>
         </div>

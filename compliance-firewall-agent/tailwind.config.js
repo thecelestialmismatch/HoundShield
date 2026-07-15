@@ -79,14 +79,14 @@ module.exports = {
       },
       fontFamily: {
         // These MUST reference the variables app/fonts.ts actually exposes
-        // (--font-body = DM Sans, --font-display = Fraunces). An undefined
+        // (--font-body and --font-display are both Geist). An undefined
         // var() here invalidates the whole font-family declaration and every
         // `font-sans` page silently renders in the browser default (Times) —
         // that shipped once; don't rename one side without the other.
         sans:      ["var(--font-body)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
         display:   ["var(--font-display)", "var(--font-body)", "ui-sans-serif", "system-ui", "sans-serif"],
-        editorial: ["var(--font-display)", "Georgia", "ui-serif", "serif"],
-        mono:      ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
+        editorial: ["var(--font-display)", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono:      ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "monospace"],
         grotesk:   ["Anton", "Impact", "ui-sans-serif", "system-ui", "sans-serif"],
         condiment: ["Condiment", "cursive"],
       },
