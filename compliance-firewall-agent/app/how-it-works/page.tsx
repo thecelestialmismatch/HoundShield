@@ -3,7 +3,8 @@ import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { Shield, Plug, FileText, Eye, ArrowRight } from 'lucide-react'
 import { JsonLd } from '@/components/seo/JsonLd'
-import { installSteps } from '@/lib/seo/faqs'
+import { FaqSection } from '@/components/seo/FaqSection'
+import { installSteps, howItWorksFaqs } from '@/lib/seo/faqs'
 import { howToSchema, breadcrumbSchema } from '@/lib/seo/structured-data'
 import type { Metadata } from 'next'
 
@@ -82,6 +83,17 @@ export default function HowItWorksPage() {
                 Get started free <ArrowRight />
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* FAQ — visible Q&A + FAQPage JSON-LD (AEO), one shared component. */}
+        <div className="section alt">
+          <div className="container">
+            <FaqSection
+              items={howItWorksFaqs}
+              title="Deployment questions, answered"
+              className="!py-0"
+            />
           </div>
         </div>
       </main>

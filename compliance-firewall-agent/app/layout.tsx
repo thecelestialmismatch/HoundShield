@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./hermes.css";
-import { displayFont, bodyFont } from "./fonts";
+import { displayFont, bodyFont, monoFont } from "./fonts";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -116,7 +116,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable}`}
+      className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -126,9 +126,9 @@ export default function RootLayout({
             indexing of every non-home page. Canonicals now come from Next.js
             metadata: the root `alternates.canonical` (homepage) plus per-page
             `alternates.canonical` on each route. */}
-        {/* JetBrains Mono preconnect — loaded via CSS @import */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* All three brand fonts (Geist / Geist Mono) self-host via next/font —
+            no third-party font CDN requests, ever. Zero data exfiltration
+            applies to our own site too. */}
         {/* Global JSON-LD: product + organization + website (FAQ schema is page-scoped) */}
         <JsonLd schema={globalJsonLd} />
       </head>

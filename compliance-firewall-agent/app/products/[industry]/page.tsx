@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Eye, Users, Zap, Plug, Shield, FileText, Lock, Heart, Briefcase, Globe, Landmark } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import {
   INDUSTRIES,
   getIndustry,
@@ -190,15 +191,13 @@ export default async function ProductPage({
             </div>
 
             <div className="section-head" style={{ margin: "48px auto 20px" }}>
+              <div className="eyebrow">FAQ</div>
               <h2 className="display">Common questions</h2>
             </div>
-            <div className="grid-2">
-              {data.faqs.map((f) => (
-                <div className="card" key={f.q}>
-                  <h3 className="faq-q">{f.q}</h3>
-                  <p>{f.a}</p>
-                </div>
-              ))}
+            <div style={{ maxWidth: 760, margin: "0 auto" }}>
+              <FaqAccordion
+                items={data.faqs.map((f) => ({ question: f.q, answer: f.a }))}
+              />
             </div>
 
             <div className="cta-band" style={{ marginTop: 48 }}>

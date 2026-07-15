@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
+import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import { ANSWERS, getAnswer, type Answer } from "../_answers";
 
 export function generateStaticParams() {
@@ -147,23 +148,14 @@ export default async function AnswerPage({
           </section>
         ))}
 
-        {/* FAQ */}
-        <h2 className="mt-12 font-[var(--font-display)] text-xl font-semibold text-[var(--hs-ink)]">
+        {/* FAQ — shared accordion, matches the FAQPage JSON-LD above */}
+        <h2 className="mt-12 font-[var(--font-display)] text-2xl font-semibold text-[var(--hs-ink)]">
           Frequently asked questions
         </h2>
-        <div className="mt-5 space-y-3">
-          {data.faqs.map((f) => (
-            <details
-              key={f.q}
-              className="group rounded-2xl border border-[var(--hs-border)] bg-[var(--hs-surface-1)] p-5"
-            >
-              <summary className="flex cursor-pointer list-none items-center justify-between text-base font-semibold text-[var(--hs-ink)]">
-                {f.q}
-                <span className="text-[var(--hs-steel-dark)] transition group-open:rotate-45">+</span>
-              </summary>
-              <p className="mt-3 text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{f.a}</p>
-            </details>
-          ))}
+        <div className="mt-5">
+          <FaqAccordion
+            items={data.faqs.map((f) => ({ question: f.q, answer: f.a }))}
+          />
         </div>
 
         {/* CTA */}
