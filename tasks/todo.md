@@ -2,6 +2,10 @@
 
 ## Active
 
+### 2026-07-15c — Mono → Geist Mono, third-party font CDN eliminated (same PR #204)
+- [x] "Evolve further": found the mono face was loaded via a runtime `@import` from the Google Fonts CDN — every visitor's browser called Google (IP leak; the basis of real GDPR rulings) on a site whose footer promises zero data exfiltration, AND Tailwind's `font-mono` never referenced it, so the site rendered two different monos. Now: **Geist Mono** self-hosted via next/font (`--font-mono` on the root html), all five stack definitions unified (globals, hermes, tailwind, lccStyles, HeroDemoDashboard — the last still had a stray serif fallback), CDN `@import` + preconnects deleted.
+- [x] Guard extended (font-brand-contract): fonts.ts must load Geist_Mono; six stack files may not reference old families, serif fallbacks, or ANY font CDN (googleapis/gstatic/typekit/bunny). Browser-verified: computed mono = "Geist Mono", external font requests across /, /pricing, /console = **zero**.
+
 ### 2026-07-15b — Brand typeface → Geist everywhere (founder call, same PR #204)
 - [x] Founder shared a base44.app ad ("I love this font, use it everywhere"). The ad face is a commercial-class neo-grotesque; closest open-licensed (OFL) production match is **Geist**, self-hosted at build time via next/font (zero external font requests, GDPR-clean). Swapped in ONE place — `app/fonts.ts` now loads Geist into both `--font-display` and `--font-body` — so hermes pages, v3 pages, dashboard, and command center all switch together (no split-brain). Fallback stacks de-serifed in globals.css, hermes.css, tailwind.config.js (font-editorial), lccStyles.ts.
 - [x] Guard: `app/__tests__/font-brand-contract.test.ts` — fonts.ts must load Geist for both roles; the four stack-definition files may not reference the old families or any serif fallback. It caught a stale comment on first run. `public/hermes-demo.html` + `_bootstrap.html` are byte-equality archives and stay untouched by design.

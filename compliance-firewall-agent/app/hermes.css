@@ -10,7 +10,7 @@
      3. Keyframes prefixed `hs-` (Tailwind also defines `ping`).
      4. Font stacks read the next/font variables loaded in
         app/fonts.ts (Geist for display AND body — founder call
-        2026-07-15 — plus JetBrains Mono for metrics/code).
+        2026-07-15 — plus Geist Mono for metrics/code).
      5. `:focus-within` added beside `:hover` on dropdowns for
         keyboard accessibility (zero visual change).
    Source of truth: HoundShield — HERMES Redesign Demo (Direction A & B).html
@@ -59,7 +59,7 @@
   --r-sm: 10px; --r: 16px; --r-lg: 24px;
   --f-disp: var(--font-display), 'Geist', system-ui, sans-serif;
   --f-body: var(--font-body), 'Geist', system-ui, sans-serif;
-  --f-mono: 'JetBrains Mono', monospace;
+  --f-mono: var(--font-mono), 'Geist Mono', ui-monospace, monospace;
   --maxw: 1200px;
   --ease: cubic-bezier(.22, .61, .36, 1);
 

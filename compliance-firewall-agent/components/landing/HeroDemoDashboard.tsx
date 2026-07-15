@@ -224,7 +224,7 @@ const DEMO_CSS = `
   --d-text:#E7EFF9; --d-mut:#93A7BE; --d-mut2:#5E7690;
   --d-steel:#7FB0D6; --d-sky:#A9D3E8; --d-orange:#F0894A; --d-green:#2FD08A;
   --d-red:#FF5C6C; --d-amber:#F0B84A; --d-violet:#A98BFF;
-  --d-disp:var(--font-display),'Fraunces',serif; --d-mono:'JetBrains Mono',monospace;
+  --d-disp:var(--font-display),system-ui,sans-serif; --d-mono:var(--font-mono),ui-monospace,monospace;
   background:linear-gradient(180deg,#0B1322,#080E19);
   border:1px solid rgba(127,176,214,.22); border-radius:20px;
   box-shadow:0 30px 70px rgba(6,14,26,.5), 0 0 0 1px rgba(127,176,214,.06);
