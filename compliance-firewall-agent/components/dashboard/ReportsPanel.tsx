@@ -191,12 +191,14 @@ export function ReportsPanel({ ent, founder = false, orgFallback, sampleMode = f
                         : 'Generate PDF'}
                   </button>
                   {state.phase === 'done' && (
-                    <p className="mono" style={{ marginTop: 8, fontSize: '.7rem', color: 'var(--ok)' }}>
+                    /* role=status: success is announced to screen readers,
+                       mirroring the role=alert on the error path. */
+                    <p className="mono" role="status" style={{ marginTop: 8, fontSize: '.7rem', color: 'var(--ok-text)' }}>
                       ✓ Downloaded {state.filename}
                     </p>
                   )}
                   {state.phase === 'error' && (
-                    <p style={{ marginTop: 8, fontSize: '.74rem', color: 'var(--bad)' }} role="alert">
+                    <p style={{ marginTop: 8, fontSize: '.74rem', color: 'var(--bad-text)' }} role="alert">
                       {state.message}
                     </p>
                   )}
@@ -207,7 +209,7 @@ export function ReportsPanel({ ent, founder = false, orgFallback, sampleMode = f
                     className="mono"
                     style={{
                       display: 'inline-block', marginTop: 12, fontSize: '.66rem', fontWeight: 700,
-                      color: 'var(--orange)', background: 'var(--orangebg)', borderRadius: 6, padding: '.2rem .5rem',
+                      color: 'var(--orange-text)', background: 'var(--orangebg)', borderRadius: 6, padding: '.2rem .5rem',
                     }}
                   >
                     <Lock style={{ width: 11, height: 11, display: 'inline', verticalAlign: -1.5, marginRight: 4 }} />

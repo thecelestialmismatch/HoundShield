@@ -22,9 +22,17 @@ vi.mock('@/components/dashboard/CustomerStatusPanel', () => ({
   CustomerStatusPanel: () => <div data-testid="status-panel">status panel</div>,
 }))
 vi.mock('@/components/WelcomeBanner', () => ({ WelcomeBanner: () => null }))
+// Sign-out talks to the auth provider + next/navigation — covered by its own
+// suite (SignOutButton.test.tsx); here we only assert presence/absence.
+vi.mock('@/components/dashboard/SignOutButton', () => ({
+  SignOutButton: ({ className }: { className?: string }) => (
+    <button type="button" className={className}>Sign out</button>
+  ),
+}))
 
 import { LiveCommandCenter, brainAnswer, escapeHtml } from '../LiveCommandCenter'
 import { getEntitlements } from '@/lib/billing/entitlements'
+import type { SprsInput } from '@/lib/customer/status'
 
 describe('brainAnswer — on-device keyword analyst', () => {
   it('answers identity', () => {
@@ -72,6 +80,61 @@ describe('brainAnswer — personalized + tier-aware (human, not monotone)', () =
     expect(pro).toMatch(/Growth/)
     const growth = brainAnswer('generate a PDF report', { ent: getEntitlements('growth') })[0]
     expect(growth).toMatch(/Reports/)
+  })
+})
+
+describe('brainAnswer — a signed-in operator gets THEIR data, never the sample org (data honesty)', () => {
+  const realSprs: SprsInput = {
+    score: 42,
+    completionPercent: 30,
+    totalControls: 110,
+    metCount: 25,
+    partialCount: 5,
+    unmetCount: 3,
+    assessedCount: 33,
+    topGaps: [
+      { controlId: '3.1.1', title: 'Limit system access', status: 'UNMET', deduction: 5, fix: 'Do the thing', hours: 4 },
+    ],
+  }
+
+  it('answers SPRS from the operator’s own assessment, not the hardcoded +78', () => {
+    const [html, src] = brainAnswer("what's my SPRS score?", { own: { sprs: realSprs } })
+    expect(html).toMatch(/\+42/)
+    expect(html).not.toMatch(/\+78/)
+    expect(html).toMatch(/3\.1\.1/)
+    expect(src).toBe('sprs · your assessment')
+  })
+
+  it('is honest when the signed-in operator has not assessed yet', () => {
+    const [html, src] = brainAnswer("what's my SPRS score?", { own: { sprs: null } })
+    expect(html).toMatch(/haven't answered any controls/i)
+    expect(html).not.toMatch(/\+78/)
+    expect(src).toBe('sprs · your assessment')
+  })
+
+  it('readiness is computed from real open/partial counts', () => {
+    const [html, src] = brainAnswer('am I CMMC ready?', { own: { sprs: realSprs } })
+    expect(html).toMatch(/3 open/)
+    expect(src).toBe('readiness · your assessment')
+  })
+
+  it('NEVER fabricates an incident determination — signed-in gets the truthful no-telemetry answer', () => {
+    const [html, src] = brainAnswer('draft my incident summary', { own: { sprs: realSprs } })
+    expect(html).not.toMatch(/No spill occurred|no reportable event/i)
+    expect(html).toMatch(/don't have live audit-chain data/i)
+    expect(src).toBe('incident · awaiting telemetry')
+  })
+
+  it('the anonymous demo incident answer is labeled a sample and issues no spill determination', () => {
+    const [html, src] = brainAnswer('draft my incident summary')
+    expect(html).toMatch(/not your data|sample/i)
+    expect(html).not.toMatch(/No spill occurred|no reportable event/i)
+    expect(src).toBe('incident · sample data')
+  })
+
+  it('anonymous demo posture answers are source-tagged as sample data', () => {
+    expect(brainAnswer("what's my SPRS score?")[1]).toBe('sprs · sample data')
+    expect(brainAnswer('what changed this week?')[1]).toBe('trend · sample data')
   })
 })
 
@@ -137,6 +200,59 @@ describe('LiveCommandCenter — exact-copy after-login dashboard', () => {
     fireEvent.click(screen.getAllByText('Copy')[0].closest('button')!)
     await screen.findByText('Copied')
     expect(writeText).toHaveBeenCalledWith('https://proxy.houndshield.com/v1')
+  })
+
+  it('Settings has NO fake-success chrome — Reveal/Edit stubs and fabricated keys are gone', () => {
+    render(<LiveCommandCenter />)
+    expect(screen.queryByText('Reveal')).toBeNull()
+    expect(screen.queryByText('Edit')).toBeNull()
+    // The fabricated masked credentials are gone; honest states shown instead.
+    expect(document.body.textContent).not.toMatch(/hs_live_•|sk-or-•/)
+    expect(screen.getByText(/keyless mode/)).toBeTruthy()
+  })
+
+  it('the active sidebar tab is exposed to assistive tech via aria-current', () => {
+    const { container } = render(<LiveCommandCenter />)
+    expect(container.querySelectorAll('[aria-current="page"]').length).toBe(1)
+    const settingsBtn = screen.getAllByText('Settings').find((el) => el.closest('.slink'))!.closest('button')!
+    fireEvent.click(settingsBtn)
+    expect(settingsBtn.getAttribute('aria-current')).toBe('page')
+    expect(container.querySelectorAll('[aria-current="page"]').length).toBe(1)
+  })
+
+  it('carries the persistent "Simulated preview" honesty affordance', () => {
+    render(<LiveCommandCenter />)
+    expect(screen.getByText('Simulated preview')).toBeTruthy()
+  })
+})
+
+describe('LiveCommandCenter — honest state for signed-in customers vs the demo org', () => {
+  const viewer = { company: 'Vector Defense', plan: 'Pro', initials: 'VD', tier: 'pro', firstName: 'Jordan' }
+
+  it('demo org shows the lived-in checklist; a real customer starts at step 1', () => {
+    const demo = render(<LiveCommandCenter />)
+    expect(demo.container.querySelectorAll('.steprow.done').length).toBe(2)
+    demo.unmount()
+    const real = render(<LiveCommandCenter viewer={viewer} />)
+    expect(real.container.querySelectorAll('.steprow.done').length).toBe(0)
+  })
+
+  it('a real customer’s scan meter starts at ZERO — never fabricated 57% usage', () => {
+    const { container } = render(<LiveCommandCenter viewer={viewer} />)
+    expect(container.querySelector('#lcc-useScan')?.textContent).toBe('0 / 50,000')
+  })
+
+  it('the demo org keeps the lived-in meter seed', () => {
+    const { container } = render(<LiveCommandCenter />)
+    expect(container.querySelector('#lcc-useScan')?.textContent).toBe('28,500 / 50,000')
+  })
+
+  it('sign-out exists for signed-in operators and not on the public demo', () => {
+    const demo = render(<LiveCommandCenter />)
+    expect(demo.queryByText('Sign out')).toBeNull()
+    demo.unmount()
+    render(<LiveCommandCenter viewer={viewer} />)
+    expect(screen.getByText('Sign out')).toBeTruthy()
   })
 })
 

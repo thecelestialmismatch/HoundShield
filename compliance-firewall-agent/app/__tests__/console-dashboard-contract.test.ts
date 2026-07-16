@@ -158,3 +158,77 @@ describe("/command-center unified onto the light palette", () => {
     expect(globals).toMatch(/\.cc-light \.bg-\\\[\\#0a0a0a\\\]/);
   });
 });
+
+describe("data honesty — simulated telemetry is labeled, seeds share one source of truth", () => {
+  const lcc = read("components/dashboard/LiveCommandCenter.tsx");
+  const charts = read("components/dashboard/OverviewCharts.tsx");
+
+  it("carries the persistent Simulated-preview affordance in the spine", () => {
+    expect(lcc).toMatch(/spine-sim/);
+    expect(lcc).toMatch(/Simulated preview/);
+  });
+
+  it("KPI seeds import the SAME constants the charts contract-test against (no drift)", () => {
+    expect(lcc).toMatch(/SCANS_24H, BLOCKED_TODAY \} from '@\/components\/dashboard\/OverviewCharts'/);
+    expect(lcc).toMatch(/let scan = SCANS_24H/);
+    expect(lcc).toMatch(/let blocked = BLOCKED_TODAY/);
+    expect(lcc).toMatch(/let quar = QUAR_SEED/);
+    // The old drifting literals must never come back.
+    expect(lcc).not.toMatch(/143,280|\b2218\b|\b142690\b/);
+  });
+
+  it("settings has no fake-success chrome (Reveal/Saved stubs + fabricated keys are gone)", () => {
+    expect(lcc).not.toMatch(/action="Reveal"|done="Saved"|done="Revealed"/);
+    expect(lcc).not.toMatch(/hs_live_•|sk-or-•/);
+  });
+
+  it("Brain AI never emits a spill determination and labels sample answers as sample", () => {
+    expect(lcc).not.toMatch(/No spill occurred/);
+    expect(lcc).toMatch(/incident · awaiting telemetry/);
+    expect(lcc).toMatch(/sprs · your assessment/);
+    expect(lcc).toMatch(/sprs · sample data/);
+  });
+
+  it("the overview charts label themselves as sample data", () => {
+    expect(charts).toMatch(/sample · \{fmt\(SCANS_24H\)\} prompts/);
+    expect(charts).toMatch(/Sample score/);
+  });
+
+  it("the assessment tab summary is React-owned real data (AssessSnapshot), not a hardcoded ring", () => {
+    expect(lcc).toMatch(/<AssessSnapshot live=\{isViewer\} \/>/);
+    expect(lcc).not.toMatch(/lcc-ring2|AI-ranked/);
+  });
+
+  it("a sign-out control exists in the console shell for signed-in operators", () => {
+    expect(lcc).toMatch(/SignOutButton/);
+  });
+});
+
+describe("console a11y guards — the fixes that regress silently", () => {
+  const lcc = read("components/dashboard/LiveCommandCenter.tsx");
+  const css = read("components/dashboard/lccStyles.ts");
+
+  it("active sidebar tab exposed via aria-current", () => {
+    expect(lcc).toMatch(/aria-current=\{tab === s\.id \? 'page' : undefined\}/);
+  });
+
+  it("Brain chat: labeled input + polite live-region log", () => {
+    expect(lcc).toMatch(/aria-label="Ask Brain AI"/);
+    expect(lcc).toMatch(/role="log" aria-live="polite"/);
+  });
+
+  it("closed mobile drawer leaves the tab order (visibility, not just transform)", () => {
+    expect(css).toMatch(/transform:translateX\(-100%\);visibility:hidden/);
+    expect(css).toMatch(/\.side\.open\{transform:none;visibility:visible/);
+  });
+
+  it("reduced motion silences the highest-frequency animations (bump, feed flash, pulse dots)", () => {
+    expect(css).toMatch(/\.hs-lcc \.bump,\.hs-lcc \.feed-row\.fresh,\.hs-lcc \.dot\{animation:none\}/);
+  });
+
+  it("small status text uses the AA text-grade tokens (incl. the mandated CUI warning)", () => {
+    expect(css).toMatch(/--ok-text:#067A54/);
+    expect(css).toMatch(/\.cui-note\{[^}]*color:var\(--warn-text\)/);
+    expect(css).toMatch(/\.live-tag\{[^}]*color:var\(--ok-text\)/);
+  });
+});

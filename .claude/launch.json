@@ -4,7 +4,23 @@
     {
       "name": "houndshield-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "compliance-firewall-agent"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "compliance-firewall-agent"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "houndshield-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "start",
+        "--prefix",
+        "compliance-firewall-agent"
+      ],
       "port": 3000
     }
   ]
