@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 
 function getStripe() {
   return new Stripe(getStripeSecretKey()!, {
-    apiVersion: '2026-02-25.clover',
+    apiVersion: '2026-06-24.dahlia',
   });
 }
 
