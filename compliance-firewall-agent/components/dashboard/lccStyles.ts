@@ -153,6 +153,12 @@ export const LCC_CSS = `
 .hs-lcc .kpi.a-ok{--accent:var(--ok)}
 .hs-lcc .kpi.a-warn{--accent:var(--warn)}
 .hs-lcc .kpi.a-orange{--accent:var(--orange)}
+/* KPI tiles are BUTTONS (click → data-source dialog): reset the UA button
+   chrome so the tile styling above wins, and give the affordance a focus ring. */
+.hs-lcc button.kpi{display:block;width:100%;text-align:left;font-family:var(--f);color:var(--text);cursor:pointer}
+.hs-lcc .kpi:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.hs-lcc .kpi-info{position:absolute;top:10px;right:10px;width:13px;height:13px;color:var(--mut2);opacity:.75}
+.hs-lcc .kpi:hover .kpi-info{color:var(--accent);opacity:1}
 .hs-lcc .kpi .l{font-size:.76rem;color:var(--mut2);display:flex;align-items:center;gap:.4rem}
 .hs-lcc .kpi .l svg{width:13px;height:13px;color:var(--accent)}
 .hs-lcc .kpi .n{font-family:var(--f-disp);font-size:1.9rem;font-weight:600;margin-top:.3rem;font-variant-numeric:tabular-nums}
@@ -275,6 +281,10 @@ export const LCC_CSS = `
 .hs-lcc .hero-tag .liv .dot{background:#c8f5df}
 .hs-lcc .hero-r{display:flex;align-items:stretch;gap:.7rem;z-index:1;flex-wrap:wrap}
 .hs-lcc .hero-metric{text-align:right;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:.55rem .85rem;min-width:92px}
+/* Hero metrics are buttons too (click → data-source dialog). */
+.hs-lcc button.hero-metric{font-family:var(--f);color:#fff;cursor:pointer;transition:border-color .15s,background .15s}
+.hs-lcc button.hero-metric:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.18)}
+.hs-lcc button.hero-metric:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .hs-lcc .hero-metric b{font-family:var(--f-disp);font-size:1.55rem;font-weight:600;display:block;line-height:1;font-variant-numeric:tabular-nums}
 .hs-lcc .hero-metric span{font-size:.64rem;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:.08em}
 @media (prefers-reduced-motion: reduce){.hs-lcc .hero-logo img{transition:none}.hs-lcc .hero-logo:hover img{transform:none}}
@@ -394,8 +404,48 @@ export const LCC_CSS = `
 .hs-lcc .ovc-risk-legend small{grid-column:1 / -1;font-size:.68rem;color:var(--mut2)}
 @media(max-width:640px){.hs-lcc .ovc-risk-legend{grid-template-columns:1fr}}
 
+/* ── Data provenance — "where does this number come from?" ──
+   Source chips: the existing panel-header labels (sample / demo / your
+   assessment) become real buttons that open the provenance dialog. A chip
+   rendered without a handler stays a plain span (no fake affordance). */
+.hs-lcc .src-chip{background:none;border:none;cursor:pointer;text-decoration:underline dotted color-mix(in srgb,currentColor 55%,transparent);text-underline-offset:3px;transition:color .15s}
+.hs-lcc .src-chip:hover{color:var(--brand)}
+.hs-lcc .live-tag.src-chip:hover{color:var(--ok-text);text-decoration-color:var(--ok-text)}
+.hs-lcc .src-chip:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+.hs-lcc .ops-src{font-family:var(--f-mono);font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut2);margin-left:auto}
+/* Feed rows open the feed's provenance on click. */
+.hs-lcc #feed .feed-row,.hs-lcc #feedFull .feed-row{cursor:pointer}
+.hs-lcc #feed .feed-row:hover,.hs-lcc #feedFull .feed-row:hover{background:var(--hover)}
+
+/* The provenance dialog itself — Steel & Cream, mobile-safe, one scroll. */
+.hs-lcc .prov-overlay{position:fixed;inset:0;z-index:80;background:rgba(15,30,46,.5);backdrop-filter:blur(3px);display:grid;place-items:center;padding:18px;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+.hs-lcc .prov-card{width:min(560px,100%);max-height:min(84dvh,720px);overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 24px 60px -24px rgba(15,30,46,.45);animation:lccFade .22s ease}
+.hs-lcc .prov-head{display:flex;align-items:flex-start;gap:.7rem;padding:16px 18px 12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--brand) 5%,transparent),transparent)}
+.hs-lcc .prov-ic{width:18px;height:18px;color:var(--brand);flex-shrink:0;margin-top:.2rem}
+.hs-lcc .prov-head-txt{flex:1;min-width:0}
+.hs-lcc .prov-head h2{font-family:var(--f-disp);font-size:1.08rem;font-weight:600;line-height:1.25}
+.hs-lcc .prov-kind{display:inline-block;margin-top:.35rem;font-family:var(--f-mono);font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.2rem .55rem}
+.hs-lcc .prov-kind.k-simulated{color:var(--orange-text);background:var(--orangebg);border:1px solid color-mix(in srgb,var(--orange) 30%,transparent)}
+.hs-lcc .prov-kind.k-on-device{color:var(--ok-text);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 28%,transparent)}
+.hs-lcc .prov-kind.k-account{color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);border:1px solid color-mix(in srgb,var(--brand) 30%,transparent)}
+.hs-lcc .prov-kind.k-product{color:var(--mut);background:var(--panel2);border:1px solid var(--line)}
+.hs-lcc .prov-close{flex-shrink:0;width:30px;height:30px;display:grid;place-items:center;background:none;border:1px solid var(--line);border-radius:8px;color:var(--mut);cursor:pointer;transition:all .15s}
+.hs-lcc .prov-close:hover{border-color:var(--brand);color:var(--brand)}
+.hs-lcc .prov-close:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.hs-lcc .prov-close svg{width:15px;height:15px}
+.hs-lcc .prov-blurb{padding:12px 18px 0;font-size:.8rem;line-height:1.5;color:var(--mut)}
+.hs-lcc .prov-rows{padding:6px 18px 4px;display:flex;flex-direction:column}
+.hs-lcc .prov-row{padding:.75rem 0;border-bottom:1px solid var(--line)}
+.hs-lcc .prov-row:last-child{border:none}
+.hs-lcc .prov-row h3{font-family:var(--f-mono);font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut2);margin-bottom:.3rem}
+.hs-lcc .prov-row p{font-size:.86rem;line-height:1.55;color:var(--text)}
+.hs-lcc .prov-live{background:color-mix(in srgb,var(--cream) 40%,transparent);border-radius:var(--r-sm);padding:.75rem .8rem;margin:.4rem 0;border-bottom:none}
+.hs-lcc .prov-live .btn{margin-top:.65rem}
+.hs-lcc .prov-foot{padding:10px 18px 16px;font-size:.72rem;line-height:1.5;color:var(--mut2);border-top:1px solid var(--line)}
+
 @media (prefers-reduced-motion: reduce){
   .hs-lcc .brand img,.hs-lcc .brain-mark{animation:none;transition:none}
+  .hs-lcc .prov-card{animation:none}
   .hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
   .hs-lcc .side,.hs-lcc .scrim{transition:none}
   .hs-lcc .atab.on{animation:none}
