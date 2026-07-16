@@ -29,7 +29,7 @@ const WHOLESALE_CENTS = 29900;  // $299 — RPO/MSP co-brand wholesale only
 
 function getStripe() {
   return new Stripe(getStripeSecretKey()!, {
-    apiVersion: '2026-02-25.clover',
+    apiVersion: '2026-06-24.dahlia',
   });
 }
 
