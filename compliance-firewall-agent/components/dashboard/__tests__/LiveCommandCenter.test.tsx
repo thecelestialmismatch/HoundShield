@@ -336,6 +336,84 @@ describe('LiveCommandCenter — founder: full access, no payment required', () =
   })
 })
 
+describe('LiveCommandCenter — data provenance: click any number to see where it comes from', () => {
+  it('every KPI tile is a button that opens the data-source dialog', () => {
+    render(<LiveCommandCenter />)
+    const tile = screen.getByText('Prompts scanned (24h)').closest('button')!
+    expect(tile.getAttribute('aria-haspopup')).toBe('dialog')
+    fireEvent.click(tile)
+    const dialog = screen.getByRole('dialog')
+    expect(dialog.textContent).toMatch(/Simulated demo data/)
+    expect(dialog.textContent).toMatch(/SCANS_24H/)
+  })
+
+  it('all four KPI tiles open their own entry (blocked, SPRS, quarantine)', () => {
+    render(<LiveCommandCenter />)
+    for (const [label, needle] of [
+      ['Blocked today', /BLOCKED_TODAY/],
+      ['Quarantine queue', /QUAR_SEED/],
+    ] as const) {
+      fireEvent.click(screen.getByText(label).closest('button')!)
+      expect(screen.getByRole('dialog').textContent).toMatch(needle)
+      fireEvent.keyDown(window, { key: 'Escape' })
+      expect(screen.queryByRole('dialog')).toBeNull()
+    }
+    // SPRS tile: points the operator at their real score's home.
+    const sprsTile = screen.getAllByText('SPRS score').map((el) => el.closest('button')).find(Boolean)!
+    fireEvent.click(sprsTile)
+    expect(screen.getByRole('dialog').textContent).toMatch(/CMMC Assessment tab/)
+  })
+
+  it('the "Simulated preview" pill opens the audit-chain provenance dialog', () => {
+    render(<LiveCommandCenter />)
+    fireEvent.click(screen.getByText('Simulated preview'))
+    const dialog = screen.getByRole('dialog')
+    expect(dialog.textContent).toMatch(/Evidence chain/)
+    expect(dialog.textContent).toMatch(/SHA-256/)
+  })
+
+  it('the dialog’s Open Settings CTA lands the operator on the Settings tab', () => {
+    const { container } = render(<LiveCommandCenter />)
+    fireEvent.click(screen.getByText('Prompts scanned (24h)').closest('button')!)
+    fireEvent.click(screen.getByText(/Open Settings · Proxy URL/))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    const settingsTab = Array.from(container.querySelectorAll('.atab')).find((t) => t.textContent?.includes('Plan & usage'))
+    expect(settingsTab?.className).toContain('on')
+  })
+
+  it('panel-header source chips open the matching chart provenance', () => {
+    render(<LiveCommandCenter />)
+    fireEvent.click(screen.getByText(/demo · prompts\/sec/).closest('button')!)
+    expect(screen.getByRole('dialog').textContent).toMatch(/random-walk/i)
+    fireEvent.keyDown(window, { key: 'Escape' })
+    fireEvent.click(screen.getByText(/sample · 142,690 prompts/).closest('button')!)
+    expect(screen.getByRole('dialog').textContent).toMatch(/HOURLY_SCANS/)
+  })
+
+  it('clicking a live-feed row explains the feed’s origin (delegated on innerHTML rows)', () => {
+    const { container } = render(<LiveCommandCenter />)
+    const row = container.querySelector('#feed .feed-row')!
+    fireEvent.click(row)
+    expect(screen.getByRole('dialog').textContent).toMatch(/pool of 16 illustrative events/)
+  })
+
+  it('signed-in operator: the gateway-scans meter chip reports THEIR account, not demo seeds', () => {
+    render(<LiveCommandCenter viewer={{ company: 'Vector', plan: 'Pro', initials: 'VD', tier: 'pro' }} />)
+    fireEvent.click(screen.getByText('AI gateway scans'))
+    const dialog = screen.getByRole('dialog')
+    expect(dialog.textContent).toMatch(/Your account/)
+    expect(dialog.textContent).toMatch(/nothing is simulated for your account/i)
+  })
+
+  it('hero capability chips disclose their product-fact basis', () => {
+    render(<LiveCommandCenter />)
+    fireEvent.click(screen.getByText('Engines').closest('button')!)
+    const dialog = screen.getByRole('dialog')
+    expect(dialog.textContent).toMatch(/Product fact/)
+    expect(dialog.textContent).toMatch(/16 detection pattern families/)
+  })
+})
+
 describe('LiveCommandCenter — subscription-aware + personalized', () => {
   const viewer = { company: 'Vector Defense', plan: 'Growth', initials: 'VD', tier: 'growth', firstName: 'Jordan' }
 

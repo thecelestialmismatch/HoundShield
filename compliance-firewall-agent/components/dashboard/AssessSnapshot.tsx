@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { ASSESSMENT_UPDATED_EVENT } from '@/lib/shieldready/events'
 import type { SprsInput } from '@/lib/customer/status'
+import { SourceChip } from './ProvenancePanel'
+import type { ProvenanceId } from './dataProvenance'
 
 /**
  * SPRS snapshot panels on the console's CMMC Assessment tab (score ring +
@@ -44,7 +46,7 @@ function ringBackground(score: number | null): string {
 
 const fmtScore = (n: number) => `${n >= 0 ? '+' : ''}${n}`
 
-export function AssessSnapshot({ live }: { live: boolean }) {
+export function AssessSnapshot({ live, onSource }: { live: boolean; onSource?: (id: ProvenanceId) => void }) {
   // undefined = computing (live mode only); null = no answers yet.
   const [sprs, setSprs] = useState<SprsInput | null | undefined>(live ? undefined : null)
 
@@ -77,7 +79,7 @@ export function AssessSnapshot({ live }: { live: boolean }) {
       <div className="panel">
         <div className="ph">
           <h3>SPRS score</h3>
-          <span className="mono">{live ? 'your assessment' : 'sample'}</span>
+          <SourceChip id="assessment" onSource={onSource} className="mono">{live ? 'your assessment' : 'sample'}</SourceChip>
         </div>
         <div className="sprs">
           <div className="ring" style={{ background: ringBackground(score) }}>
@@ -103,7 +105,7 @@ export function AssessSnapshot({ live }: { live: boolean }) {
       <div className="panel">
         <div className="ph">
           <h3>Fastest wins</h3>
-          <span className="mono">{live ? 'impact-ranked' : 'sample · impact-ranked'}</span>
+          <SourceChip id="assessment" onSource={onSource} className="mono">{live ? 'impact-ranked' : 'sample · impact-ranked'}</SourceChip>
         </div>
         {!live ? (
           SAMPLE_WINS.map((w) => (

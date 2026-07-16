@@ -2,6 +2,13 @@
 
 ## Active
 
+### 2026-07-17 — Console data provenance: click any number → see where it comes from (PR pending)
+- [x] Founder: "when we click on anything it should show the data where it is fetching from, not just numbers." Shipped: every figure on /console is now clickable and opens a provenance dialog — What this is · Where it comes from (named demo seed / this device's localStorage / subscription entitlements / product fact) · How it updates · How it becomes your data (with an Open Settings · Proxy URL CTA while simulated).
+- [x] Surfaces wired (19 registry entries): 4 KPI tiles (now real buttons with ⓘ), hero capability chips, status strip, evidence-chain spine ("Simulated preview" pill now opens the audit-chain provenance instead of silently jumping tabs), throughput, donut, engine bars, threat feed (header chip + any row via delegated listener), SPRS ring, all 4 overview charts, assessment snapshot + board header, Settings usage meters, Brain budget.
+- [x] Honesty mechanics: `resolveProvenance(id, live)` — signed-in viewers get the account/on-device variants ("nothing is simulated for your account"); simulated entries MUST name a go-live path (unit-enforced); `SourceChip` without a handler degrades to a plain span (never a dead button).
+- [x] A11y: dialog is role=dialog + aria-modal + labelled, Escape/backdrop/button close, focus moved in and restored; chips carry aria-haspopup.
+- [x] Guards: +40 tests (1227 total) — registry contract (no dead dialogs, no orphan entries, no cloud-scanning copy), dialog suite, click-flow integration tests, and a "data provenance" block in console-dashboard-contract. Browser-verified on `next start`: KPI dialog, spine dialog, Escape, Settings CTA, meter chip — 0 console errors. Doc: docs/DASHBOARD-DATA-PROVENANCE.md.
+
 ### 2026-07-16 — Console made honest for real customers + a11y overhaul (PR pending)
 - [ ] 🔴 **FOUNDER — payments REGRESSED `connected` → `malformed_key`.** `/api/health` now reads: key is set (107 chars) but doesn't start with `sk_` — that's the **publishable `pk_live_` key pasted into `STRIPE_SECRET_KEY`** (both are ~107 chars). Re-paste the SECRET key (Stripe → Developers → API keys → "Secret key") into Vercel Production scope → redeploy → health must read `payments: connected` again. `payments_webhook: missing_secret` also still open (GO-LIVE-STRIPE.md Step 2). Checkout was LIVE on 07-14; it is dead again until this is fixed.
 - [x] Multi-agent audit of /console (a11y + data-honesty finders; 4 finders + all verifies lost to session limit — findings verified by hand instead). 17 findings confirmed, all fixed:
