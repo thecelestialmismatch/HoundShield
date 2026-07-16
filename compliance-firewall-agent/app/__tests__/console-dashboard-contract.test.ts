@@ -195,12 +195,62 @@ describe("data honesty — simulated telemetry is labeled, seeds share one sourc
   });
 
   it("the assessment tab summary is React-owned real data (AssessSnapshot), not a hardcoded ring", () => {
-    expect(lcc).toMatch(/<AssessSnapshot live=\{isViewer\} \/>/);
+    expect(lcc).toMatch(/<AssessSnapshot live=\{isViewer\}/);
     expect(lcc).not.toMatch(/lcc-ring2|AI-ranked/);
   });
 
   it("a sign-out control exists in the console shell for signed-in operators", () => {
     expect(lcc).toMatch(/SignOutButton/);
+  });
+});
+
+describe("data provenance — click any number to see where it comes from", () => {
+  const lcc = read("components/dashboard/LiveCommandCenter.tsx");
+  const charts = read("components/dashboard/OverviewCharts.tsx");
+  const snap = read("components/dashboard/AssessSnapshot.tsx");
+  const panel = read("components/dashboard/ProvenancePanel.tsx");
+  const registry = read("components/dashboard/dataProvenance.ts");
+
+  it("the console renders the provenance dialog wired to viewer state + Settings", () => {
+    expect(lcc).toMatch(/import \{ SourceChip, ProvenancePanel \} from '\.\/ProvenancePanel'/);
+    expect(lcc).toMatch(/<ProvenancePanel[\s\S]{0,200}live=\{isViewer\}/);
+    expect(lcc).toMatch(/onOpenSettings=\{\(\) => setTab\('settings'\)\}/);
+  });
+
+  it("every KPI tile is a real button that opens its data source", () => {
+    for (const id of ["scans-24h", "blocked-today", "sprs-score", "quarantine"]) {
+      expect(lcc).toMatch(new RegExp(`button" className="kpi[^"]*" aria-haspopup="dialog" onClick=\\{\\(\\) => setProv\\('${id}'\\)\\}`));
+    }
+  });
+
+  it("the overview charts + assessment snapshot receive the provenance hook", () => {
+    expect(lcc).toMatch(/<OverviewCharts onSource=\{setProv\} \/>/);
+    expect(lcc).toMatch(/<AssessSnapshot live=\{isViewer\} onSource=\{setProv\} \/>/);
+    expect(charts).toMatch(/<SourceChip id="hourly-activity"/);
+    expect(snap).toMatch(/<SourceChip id="assessment"/);
+  });
+
+  it("the Simulated-preview pill opens the audit-chain provenance (not a silent tab jump)", () => {
+    expect(lcc).toMatch(/spine-sim"[\s\S]{0,120}setProv\('audit-chain'\)/);
+  });
+
+  it("the dialog is a labeled modal (role=dialog + aria-modal + Escape close)", () => {
+    expect(panel).toMatch(/role="dialog"/);
+    expect(panel).toMatch(/aria-modal="true"/);
+    expect(panel).toMatch(/aria-labelledby="prov-title"/);
+    expect(panel).toMatch(/e\.key === 'Escape'/);
+  });
+
+  it("a SourceChip without a handler degrades to a span — never a dead button", () => {
+    expect(panel).toMatch(/if \(!onSource\) return <span className=\{className\}>\{children\}<\/span>/);
+  });
+
+  it("the registry keeps the honesty ledger: simulated entries must name a path to live data", () => {
+    expect(registry).toMatch(/kind === 'simulated' \? e\.liveWhen : undefined/);
+    expect(registry).toMatch(/Settings → Proxy URL/);
+    // Live variants for account/on-device surfaces exist.
+    expect(registry).toMatch(/kindLive: 'account'/);
+    expect(registry).toMatch(/kindLive: 'on-device'/);
   });
 });
 

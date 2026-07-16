@@ -16,7 +16,15 @@
  *   status      — critical #C93A3F · high #C96A28 · medium #B08205 · low #3A6EA5
  * Identity is never colour-alone: every series carries a direct label, and
  * every mark has a native tooltip.
+ *
+ * Provenance: each panel's "sample" header label is a SourceChip — click it to
+ * see exactly where the data comes from. Without an onSource handler (e.g. a
+ * standalone embed) the labels stay plain spans, never dead buttons.
  */
+import { SourceChip } from './ProvenancePanel'
+import type { ProvenanceId } from './dataProvenance'
+
+type OnSource = ((id: ProvenanceId) => void) | undefined
 
 // ─── The one source of truth for the overview's numbers ──────────────────────
 
@@ -66,7 +74,7 @@ const pct = (n: number, total: number) => `${Math.round((n / total) * 100)}%`
 // ─── Panels ───────────────────────────────────────────────────────────────────
 
 /** 24 stacked bars: prompts per hour, with the blocked share in orange. */
-function HourlyActivity() {
+function HourlyActivity({ onSource }: { onSource?: OnSource }) {
   const W = 480
   const H = 120
   const max = Math.max(...HOURLY_SCANS)
@@ -75,7 +83,7 @@ function HourlyActivity() {
     <div className="panel">
       <div className="ph">
         <h3>Activity by hour · last 24h</h3>
-        <span className="mono">sample · {fmt(SCANS_24H)} prompts</span>
+        <SourceChip id="hourly-activity" onSource={onSource} className="mono">sample · {fmt(SCANS_24H)} prompts</SourceChip>
       </div>
       <p className="ph-sub">
         Prompts sent to AI tools, hour by hour — sample data until your proxy is
@@ -121,14 +129,14 @@ function HourlyActivity() {
 }
 
 /** Horizontal bars: which AI tools the prompts went to. */
-function Destinations() {
+function Destinations({ onSource }: { onSource?: OnSource }) {
   const total = DESTINATIONS.reduce((s, d) => s + d.count, 0)
   const max = Math.max(...DESTINATIONS.map((d) => d.count))
   return (
     <div className="panel">
       <div className="ph">
         <h3>Where prompts go</h3>
-        <span className="mono">sample · last 24h</span>
+        <SourceChip id="destinations" onSource={onSource} className="mono">sample · last 24h</SourceChip>
       </div>
       <p className="ph-sub">
         Which AI tools the prompts went to. Every one of them passes through
@@ -150,7 +158,7 @@ function Destinations() {
 }
 
 /** Single-series area chart: SPRS climbing toward the target line. */
-function SprsTrendChart() {
+function SprsTrendChart({ onSource }: { onSource?: OnSource }) {
   const W = 480
   const H = 110
   const MIN = 55
@@ -164,7 +172,7 @@ function SprsTrendChart() {
     <div className="panel">
       <div className="ph">
         <h3>SPRS score · 30 days</h3>
-        <span className="mono">sample · target {SPRS_TARGET} for CMMC L2</span>
+        <SourceChip id="sprs-trend" onSource={onSource} className="mono">sample · target {SPRS_TARGET} for CMMC L2</SourceChip>
       </div>
       <p className="ph-sub">
         The DoD supplier risk score, recalculated as controls get fixed. Higher
@@ -192,13 +200,13 @@ function SprsTrendChart() {
 }
 
 /** One stacked bar: how serious today's blocked prompts were. */
-function RiskMix() {
+function RiskMix({ onSource }: { onSource?: OnSource }) {
   const total = RISK_MIX.reduce((s, r) => s + r.count, 0)
   return (
     <div className="panel">
       <div className="ph">
         <h3>Risk mix · today&apos;s blocks</h3>
-        <span className="mono">sample · {fmt(total)} blocked</span>
+        <SourceChip id="risk-mix" onSource={onSource} className="mono">sample · {fmt(total)} blocked</SourceChip>
       </div>
       <p className="ph-sub">
         Not every block is equal. Critical means CUI or export-controlled data
@@ -229,16 +237,16 @@ function RiskMix() {
 }
 
 /** The four-panel analytics rows rendered on the Overview tab. */
-export function OverviewCharts() {
+export function OverviewCharts({ onSource }: { onSource?: (id: ProvenanceId) => void } = {}) {
   return (
     <>
       <div className="row r-3-2">
-        <HourlyActivity />
-        <Destinations />
+        <HourlyActivity onSource={onSource} />
+        <Destinations onSource={onSource} />
       </div>
       <div className="row r-3-2">
-        <SprsTrendChart />
-        <RiskMix />
+        <SprsTrendChart onSource={onSource} />
+        <RiskMix onSource={onSource} />
       </div>
     </>
   )
