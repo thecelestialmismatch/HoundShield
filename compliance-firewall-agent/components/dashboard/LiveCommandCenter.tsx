@@ -28,9 +28,11 @@ import dynamic from 'next/dynamic'
 import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
   Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
-  Check, Zap, Crown, ListChecks,
+  Check, Zap, Crown, ListChecks, Info,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
+import { SourceChip, ProvenancePanel } from './ProvenancePanel'
+import type { ProvenanceId } from './dataProvenance'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
 import { CustomerStatusPanel } from '@/components/dashboard/CustomerStatusPanel'
 import { PlanUnlocksBoard } from '@/components/dashboard/PlanUnlocksBoard'
@@ -245,6 +247,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   const [tab, setTab] = useState<TabId>('overview')
   const [sideOpen, setSideOpen] = useState(false)
   const [feedBadge, setFeedBadge] = useState(3)
+  // Data provenance: which surface's "where does this come from?" dialog is
+  // open. Every figure on the console is clickable and answers honestly.
+  const [prov, setProv] = useState<ProvenanceId | null>(null)
   // The 110-control board mounts the first time the assessment tab is opened
   // (tabs hide via CSS, so an eager mount would load it on every console visit).
   const [assessSeen, setAssessSeen] = useState(false)
@@ -461,6 +466,13 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       el.innerHTML = h
     }
     seed(feed, 7); seed(feedFull, 18)
+    // Feed rows are innerHTML-generated — a delegated click on either list
+    // opens the feed's provenance ("where do these events come from?").
+    const onFeedClick = (e: Event) => {
+      if ((e.target as HTMLElement).closest('.feed-row')) setProv('threat-feed')
+    }
+    feed?.addEventListener('click', onFeedClick)
+    feedFull?.addEventListener('click', onFeedClick)
     let quar = QUAR_SEED
     const kBlock = $('#lcc-kBlock'), kQuar = $('#lcc-kQuar')
     timers.push(setInterval(() => {
@@ -575,6 +587,8 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       sendBtn?.removeEventListener('click', onSend)
       bi?.removeEventListener('keydown', onKey)
       chipHandlers.forEach(({ el, fn }) => el.removeEventListener('click', fn))
+      feed?.removeEventListener('click', onFeedClick)
+      feedFull?.removeEventListener('click', onFeedClick)
       askRef.current = null
     }
   }, [])
@@ -692,13 +706,15 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               <span className="sep">·</span> verified <b id="lcc-chainAgo">2s</b> ago
             </span>
             {/* Honesty affordance (persistent, every tab): every number on this
-                surface is simulated until real proxy telemetry exists. Replaces
-                the old "on your hardware" claim, which wasn't true yet. */}
+                surface is simulated until real proxy telemetry exists. Opens
+                the audit-chain provenance dialog — what the chain is, where
+                these values come from, and the one-step path to live data. */}
             <button
               type="button"
               className="spine-sim"
-              onClick={() => setTab('settings')}
-              title="Sample telemetry — point your AI traffic at the proxy (Settings) to see your live data."
+              aria-haspopup="dialog"
+              onClick={() => setProv('audit-chain')}
+              title="See where this data comes from — and how to make it yours."
             >
               Simulated preview
             </button>
@@ -730,19 +746,21 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </div>
                 </div>
                 <div className="hero-r">
-                  <div className="hero-metric"><b>16/16</b><span>Engines</span></div>
-                  <div className="hero-metric"><b>&lt;10ms</b><span>Scan p50</span></div>
-                  <div className="hero-metric"><b>4</b><span>Regions</span></div>
+                  <button type="button" className="hero-metric" aria-haspopup="dialog" onClick={() => setProv('product-stats')}><b>16/16</b><span>Engines</span></button>
+                  <button type="button" className="hero-metric" aria-haspopup="dialog" onClick={() => setProv('product-stats')}><b>&lt;10ms</b><span>Scan p50</span></button>
+                  <button type="button" className="hero-metric" aria-haspopup="dialog" onClick={() => setProv('product-stats')}><b>4</b><span>Regions</span></button>
                 </div>
               </div>
 
-              <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago</div>
+              <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago <SourceChip id="system-status" onSource={setProv} className="ops-src">demo data</SourceChip></div>
 
+              {/* Each KPI tile is a button: click any number to see exactly
+                  where it comes from (the provenance dialog). */}
               <div className="kpis">
-                <div className="kpi a-ok"><div className="l"><Eye /> Prompts scanned (24h)</div><div className="n bump" id="lcc-kScan">{SCANS_24H.toLocaleString('en-US')}</div><div className="d up">▲ demo · ~46/min</div></div>
-                <div className="kpi a-bad"><div className="l"><Shield /> Blocked today</div><div className="n bump" id="lcc-kBlock" style={{ color: 'var(--bad)' }}>{BLOCKED_TODAY.toLocaleString('en-US')}</div><div className="d">CUI · secrets · PII · PHI</div></div>
-                <div className="kpi a-brand"><div className="l"><Gauge /> SPRS score</div><div className="n" id="lcc-kSprs" style={{ color: 'var(--brand)' }}>78</div><div className="d">sample posture · NIST 800-171</div></div>
-                <div className="kpi a-warn"><div className="l"><Flag /> Quarantine queue</div><div className="n bump" id="lcc-kQuar" style={{ color: 'var(--warn)' }}>{QUAR_SEED}</div><div className="d">awaiting human review</div></div>
+                <button type="button" className="kpi a-ok" aria-haspopup="dialog" onClick={() => setProv('scans-24h')}><Info className="kpi-info" aria-hidden /><div className="l"><Eye /> Prompts scanned (24h)</div><div className="n bump" id="lcc-kScan">{SCANS_24H.toLocaleString('en-US')}</div><div className="d up">▲ demo · ~46/min</div></button>
+                <button type="button" className="kpi a-bad" aria-haspopup="dialog" onClick={() => setProv('blocked-today')}><Info className="kpi-info" aria-hidden /><div className="l"><Shield /> Blocked today</div><div className="n bump" id="lcc-kBlock" style={{ color: 'var(--bad)' }}>{BLOCKED_TODAY.toLocaleString('en-US')}</div><div className="d">CUI · secrets · PII · PHI</div></button>
+                <button type="button" className="kpi a-brand" aria-haspopup="dialog" onClick={() => setProv('sprs-score')}><Info className="kpi-info" aria-hidden /><div className="l"><Gauge /> SPRS score</div><div className="n" id="lcc-kSprs" style={{ color: 'var(--brand)' }}>78</div><div className="d">sample posture · NIST 800-171</div></button>
+                <button type="button" className="kpi a-warn" aria-haspopup="dialog" onClick={() => setProv('quarantine')}><Info className="kpi-info" aria-hidden /><div className="l"><Flag /> Quarantine queue</div><div className="n bump" id="lcc-kQuar" style={{ color: 'var(--warn)' }}>{QUAR_SEED}</div><div className="d">awaiting human review</div></button>
               </div>
 
               {/* Brain AI quick-ask — the logo-forward, keyless analyst, one tap in. */}
@@ -764,15 +782,15 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               {/* Four small self-explanatory charts — hourly activity, AI
                   destinations, SPRS trend, risk mix. Numbers agree with the
                   KPI tiles above (contract-tested in OverviewCharts.test). */}
-              <OverviewCharts />
+              <OverviewCharts onSource={setProv} />
 
               <div className="row r-3-2">
                 <div className="panel">
-                  <div className="ph"><h3>Gateway throughput</h3><span className="live-tag"><span className="dot" /> demo · prompts/sec</span></div>
+                  <div className="ph"><h3>Gateway throughput</h3><SourceChip id="throughput" onSource={setProv} className="live-tag"><span className="dot" /> demo · prompts/sec</SourceChip></div>
                   <div className="pad"><canvas id="thru" ref={thruRef} height={340} width={1250} role="img" aria-label="Demo of the gateway throughput chart — prompts per second over the last 60 seconds" /></div>
                 </div>
                 <div className="panel">
-                  <div className="ph"><h3>Detection mix · today</h3><span className="mono">sample</span></div>
+                  <div className="ph"><h3>Detection mix · today</h3><SourceChip id="detection-mix" onSource={setProv} className="mono">sample</SourceChip></div>
                   <div className="donut-wrap">
                     <div className="donut" id="lcc-donut"><div className="c"><b id="lcc-donutTot">2,233</b><span>blocked</span></div></div>
                     <div className="legend">
@@ -787,11 +805,11 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
 
               <div className="row r-2-1">
                 <div className="panel">
-                  <div className="ph"><h3>Live threat feed</h3><span className="live-tag"><span className="dot" /> demo stream</span></div>
+                  <div className="ph"><h3>Live threat feed</h3><SourceChip id="threat-feed" onSource={setProv} className="live-tag"><span className="dot" /> demo stream</SourceChip></div>
                   <div id="feed" ref={feedRef} />
                 </div>
                 <div className="panel">
-                  <div className="ph"><h3>SPRS posture</h3><span className="mono">NIST 800-171</span></div>
+                  <div className="ph"><h3>SPRS posture</h3><SourceChip id="sprs-posture" onSource={setProv} className="mono">NIST 800-171 · sample</SourceChip></div>
                   <div className="sprs">
                     <div className="ring" id="lcc-ring"><b className="ringn">78</b><small>of 110</small></div>
                     <div className="cap"><b>78 / 110</b> implemented · target 88 for conditional CMMC L2. 14 open · 8 in progress.</div>
@@ -813,7 +831,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               </div>
 
               <div className="panel" style={{ marginTop: 16 }}>
-                <div className="ph"><h3>Detections by engine · last hour</h3><span className="live-tag"><span className="dot" /> demo</span></div>
+                <div className="ph"><h3>Detections by engine · last hour</h3><SourceChip id="engine-bars" onSource={setProv} className="live-tag"><span className="dot" /> demo</SourceChip></div>
                 <div className="pad">
                   <div className="eng" data-base="61"><span>CUI</span><div className="bar"><i style={{ width: '61%' }} /></div><b>61</b></div>
                   <div className="eng" data-base="48"><span>Secrets</span><div className="bar"><i style={{ width: '48%' }} /></div><b>48</b></div>
@@ -829,7 +847,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
             <div className={tabClass('feed')}>
               <div className="ops"><span className="dot" /> <b>Demo stream</b> <span className="sep">—</span> in production, every AI prompt is inspected on your hardware before it leaves the network</div>
               <div className="panel">
-                <div className="ph"><h3>Intercepted prompts</h3><span className="live-tag"><span className="dot" /> demo · last 60</span></div>
+                <div className="ph"><h3>Intercepted prompts</h3><SourceChip id="threat-feed" onSource={setProv} className="live-tag"><span className="dot" /> demo · last 60</SourceChip></div>
                 <div id="feedFull" ref={feedFullRef} />
               </div>
             </div>
@@ -840,9 +858,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 labeled sample data on the public demo) — the old hardcoded
                 summary contradicted the board it sat on. */}
             <div className={tabClass('assess')}>
-              <AssessSnapshot live={isViewer} />
+              <AssessSnapshot live={isViewer} onSource={setProv} />
               <div className="panel" style={{ marginTop: 16 }}>
-                <div className="ph"><h3>Full 110-control assessment</h3><span className="mono">answers save locally · NIST 800-171 Rev 2</span></div>
+                <div className="ph"><h3>Full 110-control assessment</h3><SourceChip id="assessment" onSource={setProv} className="mono">answers save locally · NIST 800-171 Rev 2</SourceChip></div>
                 {/* cc-light re-themes the board's dark utilities onto this light
                     shell — same remap layer the command-center already uses. */}
                 {assessSeen && (
@@ -895,7 +913,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 </div>
                 {/* Brain-query budget — the metered-usage model, made visible. */}
                 <div className="brain-budget">
-                  <span className="bb-label"><Zap /> Brain AI · {ent.name} plan</span>
+                  <SourceChip id="usage-brain" onSource={setProv} className="bb-label"><Zap /> Brain AI · {ent.name} plan</SourceChip>
                   <div className="bb-meter"><i id="lcc-brainBar" style={{ width: `${ent.brainQueries === UNLIMITED ? 6 : usagePercent(brainUsed, ent.brainQueries)}%` }} /></div>
                   <span className="bb-count" id="lcc-brainUse">{ent.brainQueries === UNLIMITED ? 'Unlimited queries' : `${formatLimit(ent.brainQueries)} queries left this month`}</span>
                 </div>
@@ -943,9 +961,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   <div className="ph"><h3>Plan &amp; usage</h3><span className="planbadge"><Crown /> {viewer?.isFounder ? 'Founder' : ent.name}</span></div>
                   <div className="pad">
                     <p className="plan-tag">{viewer?.isFounder ? 'Founder account — full access to everything, no payment required.' : `${ent.tagline}${ent.priceMonthly !== null ? ` · $${ent.priceMonthly}/mo` : ' · custom pricing'}`}</p>
-                    <UsageMeter label="AI gateway scans" id="lcc-useScan" value={`${seedScans.toLocaleString()} / ${formatLimit(ent.gatewayScans)}`} barId="lcc-useBar" pct={ent.gatewayScans === UNLIMITED ? 6 : usagePercent(seedScans, ent.gatewayScans)} />
-                    <UsageMeter label="Brain AI queries" value={ent.brainQueries === UNLIMITED ? 'Unlimited' : `${brainUsed.toLocaleString()} / ${formatLimit(ent.brainQueries)}`} pct={ent.brainQueries === UNLIMITED ? 6 : usagePercent(brainUsed, ent.brainQueries)} />
-                    <UsageMeter label="Team seats" value={`${seedSeats} / ${formatLimit(ent.seats)}`} pct={ent.seats === UNLIMITED ? 8 : usagePercent(seedSeats, ent.seats)} />
+                    <UsageMeter label="AI gateway scans" sourceId="usage-scans" onSource={setProv} id="lcc-useScan" value={`${seedScans.toLocaleString()} / ${formatLimit(ent.gatewayScans)}`} barId="lcc-useBar" pct={ent.gatewayScans === UNLIMITED ? 6 : usagePercent(seedScans, ent.gatewayScans)} />
+                    <UsageMeter label="Brain AI queries" sourceId="usage-brain" onSource={setProv} value={ent.brainQueries === UNLIMITED ? 'Unlimited' : `${brainUsed.toLocaleString()} / ${formatLimit(ent.brainQueries)}`} pct={ent.brainQueries === UNLIMITED ? 6 : usagePercent(brainUsed, ent.brainQueries)} />
+                    <UsageMeter label="Team seats" sourceId="usage-seats" onSource={setProv} value={`${seedSeats} / ${formatLimit(ent.seats)}`} pct={ent.seats === UNLIMITED ? 8 : usagePercent(seedSeats, ent.seats)} />
                     <div className="usage-row" style={{ marginTop: '1rem' }}><span>Audit-log retention</span><b>{ent.retentionDays >= 365 ? `${Math.round(ent.retentionDays / 365)} yr` : `${ent.retentionDays} days`}</b></div>
                     {isViewer && <p className="note">Scan usage fills from your own traffic once the proxy is connected — nothing here is simulated for your account.</p>}
                     {viewer?.isFounder ? (
@@ -981,16 +999,32 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
           </div>
         </div>
       </div>
+
+      {/* "Where does this number come from?" — opened by any KPI tile, panel
+          source chip, hero metric, feed row or the Simulated-preview pill. */}
+      <ProvenancePanel
+        id={prov}
+        live={isViewer}
+        onClose={() => setProv(null)}
+        onOpenSettings={() => setTab('settings')}
+      />
     </div>
   )
 }
 
 /** One labelled usage meter (value + fill bar). Optional ids let the live effect
- *  drive the number/width imperatively (gateway scans, Brain queries). */
-function UsageMeter({ label, value, pct, id, barId }: { label: string; value: string; pct: number; id?: string; barId?: string }) {
+ *  drive the number/width imperatively (gateway scans, Brain queries). With a
+ *  sourceId + onSource, the label opens the meter's data-source dialog. */
+function UsageMeter({ label, value, pct, id, barId, sourceId, onSource }: {
+  label: string; value: string; pct: number; id?: string; barId?: string
+  sourceId?: ProvenanceId; onSource?: (id: ProvenanceId) => void
+}) {
   return (
     <div className="usage-block">
-      <div className="usage-row"><span>{label}</span><b id={id}>{value}</b></div>
+      <div className="usage-row">
+        {sourceId ? <SourceChip id={sourceId} onSource={onSource}>{label}</SourceChip> : <span>{label}</span>}
+        <b id={id}>{value}</b>
+      </div>
       <div className="usebar"><i id={barId} style={{ width: `${pct}%` }} /></div>
     </div>
   )
