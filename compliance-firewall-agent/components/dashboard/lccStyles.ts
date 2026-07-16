@@ -36,6 +36,11 @@ export const LCC_CSS = `
   --bad:#E5484D; --badbg:rgba(229,72,77,.12);
   --warn:#D9870B; --warnbg:rgba(217,135,11,.12);
   --orange:#E07B39; --orangebg:rgba(224,123,57,.12);
+  /* Text-grade status companions: the base hues sit ~2.5–3.9:1 on their tints —
+     fine for bars/icons/large numbers, below AA for small text. Small status
+     TEXT always uses these ≥4.5:1 darks (worst offender was the mandatory
+     "Do not enter CUI" warning at ~2.5:1). */
+  --ok-text:#067A54; --bad-text:#B32732; --warn-text:#8A5200; --orange-text:#9A4B12;
   --f-disp:var(--font-display),system-ui,sans-serif;
   --f:var(--font-body),system-ui,-apple-system,'Segoe UI',sans-serif;
   --f-mono:var(--font-mono),ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -64,7 +69,7 @@ export const LCC_CSS = `
 .hs-lcc .slink:hover{background:var(--hover);color:var(--text)}
 .hs-lcc .slink.on{background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand);font-weight:600}
 .hs-lcc .slink.on::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--brand),var(--orange))}
-.hs-lcc .slink .pp{margin-left:auto;font-family:var(--f-mono);font-size:.62rem;font-weight:700;background:var(--badbg);color:var(--bad);padding:.05rem .35rem;border-radius:5px}
+.hs-lcc .slink .pp{margin-left:auto;font-family:var(--f-mono);font-size:.62rem;font-weight:700;background:var(--badbg);color:var(--bad-text);padding:.05rem .35rem;border-radius:5px}
 .hs-lcc .slink:focus-visible,.hs-lcc .btn:focus-visible,.hs-lcc .chips button:focus-visible,.hs-lcc .bchips button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hs-lcc .side-foot{margin-top:auto;padding:.7rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:.6rem}
 .hs-lcc .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--orange));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.82rem;flex-shrink:0}
@@ -85,7 +90,7 @@ export const LCC_CSS = `
 .hs-lcc .top-brand{display:none;align-items:center;flex-shrink:0}
 .hs-lcc .top-right{display:flex;align-items:center;gap:.8rem}
 .hs-lcc .clock{font-family:var(--f-mono);font-size:.82rem;color:var(--mut);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.4rem .7rem}
-.hs-lcc .statpill{display:inline-flex;align-items:center;gap:.45rem;font-size:.76rem;font-weight:600;color:var(--ok);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 28%,transparent);border-radius:999px;padding:.35rem .7rem}
+.hs-lcc .statpill{display:inline-flex;align-items:center;gap:.45rem;font-size:.76rem;font-weight:600;color:var(--ok-text);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 28%,transparent);border-radius:999px;padding:.35rem .7rem}
 .hs-lcc .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:lccPulse 1.8s infinite}
 .hs-lcc .dot.b{background:var(--brand)}
 @keyframes lccPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
@@ -109,7 +114,11 @@ export const LCC_CSS = `
 .hs-lcc .spine-txt{flex:1;min-width:0}
 .hs-lcc .spine-txt b{color:var(--text);font-weight:600}
 .hs-lcc .spine-txt .sep{color:var(--mut2);margin:0 .1rem}
-.hs-lcc .spine-boundary{font-family:var(--f-mono);font-size:.72rem;color:var(--ok);background:var(--okbg);border-radius:6px;padding:.05rem .4rem}
+/* Simulated-preview pill — the persistent honesty affordance in the spine.
+   A real button (opens Settings → proxy URL), orange-tinted so it reads as
+   "heads-up", with AA text on its tint. */
+.hs-lcc .spine-sim{flex-shrink:0;font-family:var(--f-mono);font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--orange-text);background:var(--orangebg);border:1px solid color-mix(in srgb,var(--orange) 30%,transparent);border-radius:999px;padding:.22rem .6rem;cursor:pointer;transition:border-color .15s}
+.hs-lcc .spine-sim:hover{border-color:var(--orange)}
 .hs-lcc .spine-cta{flex-shrink:0}
 
 /* Doberman mark on the Brain surfaces (Overview quick-ask card + Brain header). */
@@ -117,8 +126,10 @@ export const LCC_CSS = `
 .hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
 .hs-lcc .brain-mark.sm{height:20px;vertical-align:-4px;display:inline-block;margin-right:.4rem}
 
-/* CUI warning — compliance requirement: Brain AI routes to a commercial cloud. */
-.hs-lcc .cui-note{display:flex;align-items:center;gap:.45rem;padding:.5rem 18px;font-size:.76rem;color:var(--warn);background:var(--warnbg);border-bottom:1px solid var(--line)}
+/* CUI warning — compliance requirement: Brain AI routes to a commercial cloud.
+   warn-text (not the base hue): the mandated warning was the least readable
+   text on the tab at ~2.5:1. */
+.hs-lcc .cui-note{display:flex;align-items:center;gap:.45rem;padding:.5rem 18px;font-size:.76rem;color:var(--warn-text);background:var(--warnbg);border-bottom:1px solid var(--line)}
 .hs-lcc .cui-note svg{width:14px;height:14px;flex-shrink:0}
 .hs-lcc .bub.b{border-left:3px solid var(--brand)}
 
@@ -146,7 +157,7 @@ export const LCC_CSS = `
 .hs-lcc .kpi .l svg{width:13px;height:13px;color:var(--accent)}
 .hs-lcc .kpi .n{font-family:var(--f-disp);font-size:1.9rem;font-weight:600;margin-top:.3rem;font-variant-numeric:tabular-nums}
 .hs-lcc .kpi .d{font-size:.73rem;margin-top:.15rem;color:var(--mut)}
-.hs-lcc .kpi .d.up{color:var(--ok)}.hs-lcc .kpi .d.dn{color:var(--bad)}
+.hs-lcc .kpi .d.up{color:var(--ok-text)}.hs-lcc .kpi .d.dn{color:var(--bad-text)}
 .hs-lcc .bump{animation:lccBump .45s ease}@keyframes lccBump{0%{transform:translateY(2px);opacity:.55}100%{transform:none;opacity:1}}
 
 .hs-lcc .row{display:grid;gap:16px;margin-bottom:16px}
@@ -156,7 +167,7 @@ export const LCC_CSS = `
 .hs-lcc .ph{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,color-mix(in srgb,var(--brand) 4%,transparent),transparent)}
 .hs-lcc .ph h3{font-size:.98rem;font-weight:600}
 .hs-lcc .ph .mono{font-size:.7rem;color:var(--mut2)}
-.hs-lcc .live-tag{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-mono);font-size:.66rem;font-weight:700;color:var(--ok);text-transform:uppercase;letter-spacing:.08em}
+.hs-lcc .live-tag{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-mono);font-size:.66rem;font-weight:700;color:var(--ok-text);text-transform:uppercase;letter-spacing:.08em}
 .hs-lcc .pad{padding:16px 18px}
 
 .hs-lcc #thru{width:100%;height:170px;display:block}
@@ -175,7 +186,7 @@ export const LCC_CSS = `
 .hs-lcc .feed-row{display:flex;align-items:center;gap:.7rem;padding:.6rem 18px;border-bottom:1px solid var(--line);font-size:.83rem}
 .hs-lcc .feed-row:last-child{border:none}
 .hs-lcc .tag{font-family:var(--f-mono);font-size:.64rem;font-weight:700;padding:.18rem .45rem;border-radius:5px;width:66px;text-align:center;flex-shrink:0}
-.hs-lcc .tag.block{background:var(--badbg);color:var(--bad)}.hs-lcc .tag.pass{background:var(--okbg);color:var(--ok)}.hs-lcc .tag.quar{background:var(--warnbg);color:var(--warn)}
+.hs-lcc .tag.block{background:var(--badbg);color:var(--bad-text)}.hs-lcc .tag.pass{background:var(--okbg);color:var(--ok-text)}.hs-lcc .tag.quar{background:var(--warnbg);color:var(--warn-text)}
 .hs-lcc .feed-row .what{flex:1;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hs-lcc .feed-row .eng{font-family:var(--f-mono);font-size:.68rem;color:var(--mut2)}
 .hs-lcc .feed-row .lat{font-family:var(--f-mono);font-size:.7rem;color:var(--mut2);width:42px;text-align:right}
@@ -197,7 +208,7 @@ export const LCC_CSS = `
 .hs-lcc .crow{display:flex;align-items:center;justify-content:space-between;padding:.6rem 18px;border-bottom:1px solid var(--line);font-size:.84rem}
 .hs-lcc .crow:last-child{border:none}
 .hs-lcc .st{font-family:var(--f-mono);font-size:.66rem;font-weight:700;padding:.15rem .45rem;border-radius:5px}
-.hs-lcc .st.met{background:var(--okbg);color:var(--ok)}.hs-lcc .st.part{background:var(--warnbg);color:var(--warn)}.hs-lcc .st.gap{background:var(--badbg);color:var(--bad)}
+.hs-lcc .st.met{background:var(--okbg);color:var(--ok-text)}.hs-lcc .st.part{background:var(--warnbg);color:var(--warn-text)}.hs-lcc .st.gap{background:var(--badbg);color:var(--bad-text)}
 
 .hs-lcc .btn{display:inline-flex;align-items:center;gap:.45rem;font-weight:600;font-size:.85rem;padding:.6rem 1rem;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;transition:all .18s;font-family:var(--f)}
 .hs-lcc .btn svg{width:15px;height:15px}
@@ -215,6 +226,8 @@ export const LCC_CSS = `
 .hs-lcc .gw{display:flex;align-items:center;justify-content:space-between;gap:.6rem;background:var(--panel2);border:1px dashed var(--line2);border-radius:10px;padding:.65rem .85rem;font-family:var(--f-mono);font-size:.8rem}
 .hs-lcc .gw span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hs-lcc .gw button{border:none;background:var(--brand);color:#fff;border-radius:7px;padding:.32rem .6rem;font-size:.7rem;font-weight:700;cursor:pointer;flex-shrink:0}
+/* Static state tag for honest not-configured credential rows (no fake buttons). */
+.hs-lcc .gw-tag{flex-shrink:0;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut2);border:1px solid var(--line);border-radius:6px;padding:.14rem .4rem}
 .hs-lcc .usebar{height:8px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:.35rem}
 .hs-lcc .usebar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--orange));border-radius:99px}
 
@@ -266,11 +279,14 @@ export const LCC_CSS = `
 .hs-lcc .hero-metric span{font-size:.64rem;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:.08em}
 @media (prefers-reduced-motion: reduce){.hs-lcc .hero-logo img{transition:none}.hs-lcc .hero-logo:hover img{transform:none}}
 
-/* ── Tablet & below: sidebar becomes an off-canvas drawer over a scrim ── */
+/* ── Tablet & below: sidebar becomes an off-canvas drawer over a scrim.
+   visibility (delayed until the slide-out finishes) removes the CLOSED drawer
+   from the tab order and the accessibility tree — transform alone left ~11
+   invisible controls keyboard-focusable off-screen. ── */
 @media(max-width:1000px){
   .hs-lcc .shell{grid-template-columns:1fr}
-  .hs-lcc .side{position:fixed;left:0;top:0;bottom:0;z-index:60;width:min(84vw,300px);height:100dvh;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 40px rgba(15,30,46,.22);padding-bottom:calc(16px + env(safe-area-inset-bottom))}
-  .hs-lcc .side.open{transform:none}
+  .hs-lcc .side{position:fixed;left:0;top:0;bottom:0;z-index:60;width:min(84vw,300px);height:100dvh;transform:translateX(-100%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s;box-shadow:0 0 40px rgba(15,30,46,.22);padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+  .hs-lcc .side.open{transform:none;visibility:visible;transition:transform .25s ease,visibility 0s 0s}
   .hs-lcc .kpis{grid-template-columns:1fr 1fr}
   .hs-lcc .r-2-1,.hs-lcc .r-3-2{grid-template-columns:1fr}
   .hs-lcc .cards3{grid-template-columns:1fr 1fr}
@@ -323,7 +339,7 @@ export const LCC_CSS = `
 .hs-lcc .usage-block{margin-bottom:1rem}
 .hs-lcc .usage-row{display:flex;justify-content:space-between;font-size:.86rem;color:var(--mut)}
 .hs-lcc .usage-row b{color:var(--text);font-family:var(--f-mono)}
-.hs-lcc .topplan{display:flex;align-items:center;gap:.45rem;margin-top:16px;font-size:.82rem;font-weight:600;color:var(--ok);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 26%,transparent);border-radius:var(--r-sm);padding:.6rem .75rem}
+.hs-lcc .topplan{display:flex;align-items:center;gap:.45rem;margin-top:16px;font-size:.82rem;font-weight:600;color:var(--ok-text);background:var(--okbg);border:1px solid color-mix(in srgb,var(--ok) 26%,transparent);border-radius:var(--r-sm);padding:.6rem .75rem}
 .hs-lcc .topplan svg{width:15px;height:15px}
 
 /* ── Feature grid (what your plan unlocks) ── */
@@ -336,8 +352,8 @@ export const LCC_CSS = `
 .hs-lcc .feat-name{flex:1;font-size:.82rem;font-weight:500;color:var(--text)}
 .hs-lcc .feat.off .feat-name{color:var(--mut)}
 .hs-lcc .feat-tag{font-family:var(--f-mono);font-size:.62rem;font-weight:700;padding:.1rem .4rem;border-radius:5px}
-.hs-lcc .feat-tag.inc{color:var(--ok);background:var(--okbg)}
-.hs-lcc .feat-tag.lock{color:var(--orange);background:var(--orangebg)}
+.hs-lcc .feat-tag.inc{color:var(--ok-text);background:var(--okbg)}
+.hs-lcc .feat-tag.lock{color:var(--orange-text);background:var(--orangebg)}
 
 /* ── Brain AI budget meter + typing indicator ── */
 .hs-lcc .brain-budget{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:.55rem .8rem;background:var(--panel2);border:1px solid var(--line);border-radius:var(--r-sm);margin:0 0 .7rem}
@@ -385,5 +401,8 @@ export const LCC_CSS = `
   .hs-lcc .atab.on{animation:none}
   .hs-lcc .bub.typing .tdot{animation:none}
   .hs-lcc .bb-meter i{transition:none}
+  /* The highest-frequency motion: KPI bump (re-added every ~1.2s), feed-row
+     flash (every 2.1s), and the infinite pulsing live dots. */
+  .hs-lcc .bump,.hs-lcc .feed-row.fresh,.hs-lcc .dot{animation:none}
 }
 `
