@@ -64,7 +64,7 @@ function providerEndpoint(provider: Provider): string {
 
 const MessageSchema = z.object({
   role: z.string(),
-  content: z.union([z.string(), z.array(z.record(z.unknown()))]),
+  content: z.union([z.string(), z.array(z.record(z.string(), z.unknown()))]),
 });
 
 const ChatRequestSchema = z.object({
@@ -148,7 +148,7 @@ app.post("/v1/chat/completions", async (req: Request, res: Response) => {
   const parsed = ChatRequestSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({
-      error: { message: "Invalid request body", details: parsed.error.errors },
+      error: { message: "Invalid request body", details: parsed.error.issues },
     });
     return;
   }
@@ -238,7 +238,7 @@ app.put("/v1/policy/:orgId", requireAdmin, (req: Request, res: Response) => {
   const orgId = req.params.orgId as string;
   const parsed = OrgPolicyUpdateSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ error: { message: "Invalid policy", details: parsed.error.errors } });
+    res.status(400).json({ error: { message: "Invalid policy", details: parsed.error.issues } });
     return;
   }
   const existing = getOrgPolicyRow(orgId) ?? { ...DEFAULT_POLICY, org_id: orgId };
