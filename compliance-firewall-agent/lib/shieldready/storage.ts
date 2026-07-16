@@ -12,6 +12,7 @@
  */
 
 import { z } from 'zod';
+import { ASSESSMENT_UPDATED_EVENT } from './events';
 import type {
   Organization,
   AssessmentResponse,
@@ -120,6 +121,21 @@ export function createOrganization(data: {
 }
 
 // ─── Assessment Responses ────────────────────────────────────────────────────
+
+// The browser's own 'storage' event never fires in the tab that wrote, so
+// same-page listeners (the console's SPRS snapshot) need this custom event to
+// recompute without polling. Name lives in ./events so subscribers stay light.
+export { ASSESSMENT_UPDATED_EVENT };
+
+function announceAssessmentChange(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.dispatchEvent(new CustomEvent(ASSESSMENT_UPDATED_EVENT));
+  } catch {
+    // Non-DOM test environments — persistence already succeeded.
+  }
+}
+
 export function getAssessmentResponses(): AssessmentResponse[] {
   return safeReadArray(KEYS.ASSESSMENT, responseSchema);
 }
@@ -133,10 +149,12 @@ export function saveAssessmentResponse(response: AssessmentResponse): void {
     responses.push(response);
   }
   safeWrite(KEYS.ASSESSMENT, responses);
+  announceAssessmentChange();
 }
 
 export function saveAllAssessmentResponses(responses: AssessmentResponse[]): void {
   safeWrite(KEYS.ASSESSMENT, responses);
+  announceAssessmentChange();
 }
 
 export function getResponseForControl(controlId: string): AssessmentResponse | null {
@@ -184,12 +202,14 @@ export function logActivity(action: string, controlId?: string): void {
 export function clearAll(): void {
   if (typeof window === 'undefined') return;
   Object.values(KEYS).forEach((key) => localStorage.removeItem(key));
+  announceAssessmentChange();
 }
 
 export function clearAssessment(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(KEYS.ASSESSMENT);
   localStorage.removeItem(KEYS.ACTIVITY);
+  announceAssessmentChange();
 }
 
 // ─── Stats (quick summary without full scoring engine) ───────────────────────

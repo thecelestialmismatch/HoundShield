@@ -75,11 +75,12 @@ function HourlyActivity() {
     <div className="panel">
       <div className="ph">
         <h3>Activity by hour · last 24h</h3>
-        <span className="mono">{fmt(SCANS_24H)} prompts</span>
+        <span className="mono">sample · {fmt(SCANS_24H)} prompts</span>
       </div>
       <p className="ph-sub">
-        Every prompt your team sent to AI tools, hour by hour. The orange tip of
-        each bar is what HoundShield stopped before it left your network.
+        Prompts sent to AI tools, hour by hour — sample data until your proxy is
+        connected. The orange tip of each bar is what HoundShield stops before
+        it leaves the network.
       </p>
       <div className="pad" style={{ paddingTop: 6 }}>
         <svg viewBox={`0 0 ${W} ${H + 14}`} className="ovc-svg" role="img"
@@ -127,10 +128,10 @@ function Destinations() {
     <div className="panel">
       <div className="ph">
         <h3>Where prompts go</h3>
-        <span className="mono">last 24h</span>
+        <span className="mono">sample · last 24h</span>
       </div>
       <p className="ph-sub">
-        The AI tools your team actually uses. Every one of them passes through
+        Which AI tools the prompts went to. Every one of them passes through
         the same local gateway — nothing is scanned in the cloud.
       </p>
       <div className="pad" style={{ paddingTop: 6 }}>
@@ -163,12 +164,12 @@ function SprsTrendChart() {
     <div className="panel">
       <div className="ph">
         <h3>SPRS score · 30 days</h3>
-        <span className="mono">target {SPRS_TARGET} for CMMC L2</span>
+        <span className="mono">sample · target {SPRS_TARGET} for CMMC L2</span>
       </div>
       <p className="ph-sub">
-        Your DoD supplier risk score, recalculated as controls get fixed. Higher
+        The DoD supplier risk score, recalculated as controls get fixed. Higher
         is better; the dashed line is the score a conditional CMMC Level&nbsp;2
-        typically needs.
+        typically needs. (Your real score lives on the CMMC Assessment tab.)
       </p>
       <div className="pad" style={{ paddingTop: 6 }}>
         <svg viewBox={`0 0 ${W} ${H}`} className="ovc-svg" role="img"
@@ -182,7 +183,7 @@ function SprsTrendChart() {
           <text x={x(SPRS_TREND.length - 1) - 8} y={y(last) - 8} textAnchor="end" className="ovc-num">{last}</text>
         </svg>
         <div className="ovc-legend">
-          <span><i style={{ background: '#3A6EA5' }} /> Your score (+{last - first} this month)</span>
+          <span><i style={{ background: '#3A6EA5' }} /> Sample score (+{last - first} this month)</span>
           <span><i className="ovc-dash" /> CMMC L2 target</span>
         </div>
       </div>
@@ -197,7 +198,7 @@ function RiskMix() {
     <div className="panel">
       <div className="ph">
         <h3>Risk mix · today&apos;s blocks</h3>
-        <span className="mono">{fmt(total)} blocked</span>
+        <span className="mono">sample · {fmt(total)} blocked</span>
       </div>
       <p className="ph-sub">
         Not every block is equal. Critical means CUI or export-controlled data
