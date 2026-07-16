@@ -148,7 +148,7 @@ export function CustomerStatusPanel() {
   if (!loaded) {
     return (
       <div className="mb-6 flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 text-sm text-white/60">
-        <Loader2 className="h-4 w-4 animate-spin text-brand-400" aria-hidden />
+        <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none text-brand-400" aria-hidden />
         Assessing where you stand…
       </div>
     );
