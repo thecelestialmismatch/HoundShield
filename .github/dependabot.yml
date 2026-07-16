@@ -11,6 +11,13 @@ updates:
     groups:
       minor-and-patch:
         update-types: ["minor", "patch"]
+    ignore:
+      # Tailwind 4 is a ground-up rework (PostCSS plugin moved to
+      # @tailwindcss/postcss, config-in-CSS); the app is built on the v3
+      # config. The v4 bump (#201) broke every `next build`. Majors here are a
+      # deliberate migration, not a routine bump.
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "npm"
     directory: "/proxy"
