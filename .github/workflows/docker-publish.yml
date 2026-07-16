@@ -35,7 +35,7 @@ jobs:
 
       # Build on every trigger so a broken Dockerfile fails CI immediately.
       - name: Build image (no push)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./proxy
           file: ./proxy/Dockerfile
@@ -53,7 +53,7 @@ jobs:
 
       - name: Push houndshield/proxy:latest
         if: github.event_name != 'pull_request' && env.DOCKERHUB_USERNAME != ''
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./proxy
           file: ./proxy/Dockerfile
