@@ -45,6 +45,7 @@ describe("every public page ends in the cream FooterV3", () => {
     "app/page.tsx",
     "app/features/page.tsx",
     "app/how-it-works/page.tsx",
+    "app/faq/page.tsx",
     "app/pricing/page.tsx",
     "app/partners/page.tsx",
     "app/hipaa/page.tsx",
