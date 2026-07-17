@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getStripeSecretKey, getStripeWebhookSecret } from '@/lib/stripe/env';
+import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { createServiceClient } from '@/lib/supabase/client';
 import { upgradeEmail } from '@/lib/email/templates/upgrade';
 import { canceledEmail } from '@/lib/email/templates/canceled';
@@ -151,7 +152,7 @@ async function handleReportOrder(
 
 function getStripe() {
   return new Stripe(getStripeSecretKey()!, {
-    apiVersion: '2026-06-24.dahlia',
+    apiVersion: STRIPE_API_VERSION,
   });
 }
 

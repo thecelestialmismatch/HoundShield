@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getStripeSecretKey } from '@/lib/stripe/env';
+import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
 
 /**
@@ -29,7 +30,7 @@ const WHOLESALE_CENTS = 29900;  // $299 — RPO/MSP co-brand wholesale only
 
 function getStripe() {
   return new Stripe(getStripeSecretKey()!, {
-    apiVersion: '2026-06-24.dahlia',
+    apiVersion: STRIPE_API_VERSION,
   });
 }
 
