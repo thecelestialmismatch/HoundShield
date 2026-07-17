@@ -8,7 +8,7 @@ import { NAV_TRUST_BADGE } from '@/lib/site/metrics'
 import {
   Menu, ChevronDown, ArrowRight,
   Lock, Heart, Shield, Briefcase, Globe, Landmark,
-  Eye, Zap, FileCheck, Activity, Users, Plug, Terminal,
+  Eye, Zap, FileCheck, Activity, Users, Plug, Terminal, HelpCircle,
 } from 'lucide-react'
 
 /* ──────────────────────────────────────────────────────────────────
@@ -59,8 +59,9 @@ const PARTNERS: MenuItem[] = [
 ]
 
 const DOCS: MenuItem[] = [
-  { icon: Zap,      label: 'Quickstart',    body: 'One URL change → full compliance.',      href: '/docs#quickstart' },
-  { icon: Terminal, label: 'API Reference', body: 'Gateway, classifier & audit endpoints.', href: '/docs#api' },
+  { icon: Zap,        label: 'Quickstart',    body: 'One URL change → full compliance.',        href: '/docs#quickstart' },
+  { icon: Terminal,   label: 'API Reference', body: 'Gateway, classifier & audit endpoints.',   href: '/docs#api' },
+  { icon: HelpCircle, label: 'FAQ',           body: 'Searchable answers — pricing, HIPAA, CUI.', href: '/faq' },
 ]
 
 // Pricing rows — sourced from the pricing single source of truth.
