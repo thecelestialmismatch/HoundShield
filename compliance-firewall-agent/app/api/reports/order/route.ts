@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getStripeSecretKey } from '@/lib/stripe/env';
+import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
 import { buildOrderView, type OrderRowLike } from '@/lib/reports/order-view';
 
@@ -25,7 +26,7 @@ export const dynamic = 'force-dynamic';
 
 function getStripe() {
   return new Stripe(getStripeSecretKey()!, {
-    apiVersion: '2026-06-24.dahlia',
+    apiVersion: STRIPE_API_VERSION,
   });
 }
 
