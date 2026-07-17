@@ -2,6 +2,22 @@
 
 _Last updated 2026-07-17. Written for the founder — no code required. Follow top to bottom._
 
+> **2026-07-17 (later) — buyers can pay again, via the fallback rail.**
+> The site's $499 buttons no longer error while `STRIPE_SECRET_KEY` is broken:
+> when dynamic checkout can't run, the button now sends the buyer to the
+> Stripe-hosted **Payment Link** for the same $499 price —
+> `https://buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00` (verified **active** against
+> the live account by API on 2026-07-17; the 07-12 "expired" note is outdated).
+> That page is hosted and billed by Stripe, so no Vercel env var can take it
+> down. You can also paste that URL directly into outreach emails.
+>
+> **This does NOT replace Step 1 or Step 2 below.** The fallback rail has no
+> promo codes and skips the /report/thank-you flow, wholesale ($299) still
+> needs the real key — and above all, until `STRIPE_WEBHOOK_SECRET` lands
+> (Step 2), a sale on EITHER rail is charged but never recorded in
+> `report_orders` and no founder sale-alert email goes out. Watch the Stripe
+> dashboard (or its merchant receipt emails) for sales until Step 2 is done.
+
 > **2026-07-17 update — checkout is DOWN again, and it's a one-paste fix.**
 > `/api/health` reads `payments: malformed_key`: the value in `STRIPE_SECRET_KEY`
 > is set (107 characters) but starts with `pk_` — that's the **publishable** key,
