@@ -292,6 +292,42 @@ describe("POST /api/stripe/webhook — report order (mode: payment)", () => {
     );
   });
 
+  it("records a payment-link (fallback rail) sale — no metadata, vertical from client_reference_id", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_report_plink",
+      data: {
+        object: {
+          id: "cs_report_plink",
+          mode: "payment",
+          payment_intent: "pi_plink",
+          customer: null,
+          customer_details: { email: "rachel@clinic.com", name: "Rachel H" },
+          amount_total: 49900,
+          currency: "usd",
+          // Payment Links created in the dashboard carry no metadata; the
+          // fallback rail encodes the vertical in client_reference_id.
+          metadata: {},
+          client_reference_id: "report-healthcare",
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockSubscriptionsRetrieve).not.toHaveBeenCalled();
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        stripe_session_id: "cs_report_plink",
+        email: "rachel@clinic.com",
+        vertical: "healthcare",
+        is_wholesale: false,
+        status: "paid",
+      }),
+      expect.any(Object)
+    );
+  });
+
   it("flags wholesale ($299 co-brand) orders", async () => {
     mockConstructEvent.mockReturnValueOnce({
       type: "checkout.session.completed",

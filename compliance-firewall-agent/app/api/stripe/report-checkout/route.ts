@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { getStripeSecretKey } from '@/lib/stripe/env';
 import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
+import { REPORT_VERTICALS, reportPaymentLinkUrl } from '@/lib/stripe/report-payment-link';
 
 /**
  * POST /api/stripe/report-checkout
@@ -19,22 +20,32 @@ import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client
  * RPO/MSP co-brand wholesale is $299 — passed via `partner_ref` + `wholesale`.
  *
  * Env:
- *   STRIPE_SECRET_KEY        (required)
+ *   STRIPE_SECRET_KEY        (required for dynamic checkout — see fallback)
  *   STRIPE_REPORT_PRICE_ID   (optional — if set, uses the configured one-time
  *                             price; otherwise builds an inline $499 price so
  *                             the product sells before the dashboard SKU exists)
+ *
+ * Fallback rail: when the key is missing/unusable or the Stripe call fails,
+ * RETAIL buyers get the Stripe-hosted Payment Link for the same $499 price
+ * (lib/stripe/report-payment-link.ts) instead of an error — a bad env paste
+ * must never turn a buyer away. Wholesale ($299) cannot be served by the
+ * $499 link, so it keeps the honest error.
  */
 
 const RETAIL_CENTS = 49900;     // $499 — never lower (anchors value)
 const WHOLESALE_CENTS = 29900;  // $299 — RPO/MSP co-brand wholesale only
 
-function getStripe() {
-  return new Stripe(getStripeSecretKey()!, {
-    apiVersion: STRIPE_API_VERSION,
-  });
+/**
+ * A key that cannot possibly authenticate (the classic pastes: publishable
+ * `pk_`, webhook `whsec_`) would only fail the Stripe call downstream — treat
+ * it like a missing key and go straight to the fallback rail.
+ */
+function usableSecretKey(): string | null {
+  const key = getStripeSecretKey();
+  return key && (key.startsWith('sk_') || key.startsWith('rk_')) ? key : null;
 }
 
-const VALID_VERTICALS = new Set(['defense', 'healthcare', 'legal']);
+const VALID_VERTICALS = new Set<string>(REPORT_VERTICALS);
 
 /**
  * Wholesale ($299) is only valid for a real, approved partner (audit H3).
@@ -65,13 +76,6 @@ async function isApprovedPartner(partnerRef: string | undefined): Promise<boolea
 
 export async function POST(request: NextRequest) {
   try {
-    if (!getStripeSecretKey()) {
-      return NextResponse.json(
-        { error: 'Stripe not configured. Set STRIPE_SECRET_KEY in environment.' },
-        { status: 503 }
-      );
-    }
-
     const body = await request.json().catch(() => ({}));
     const {
       vertical,
@@ -88,7 +92,27 @@ export async function POST(request: NextRequest) {
     const cleanVertical =
       typeof vertical === 'string' && VALID_VERTICALS.has(vertical) ? vertical : '';
 
-    const stripe = getStripe();
+    const key = usableSecretKey();
+    if (!key) {
+      // Missing key OR an unusable paste (pk_/whsec_ in the secret slot).
+      // Retail buyers go to the Stripe-hosted Payment Link — the same $499
+      // price billed by the same account, immune to this app's env state.
+      if (!isWholesale) {
+        console.error(
+          '[Stripe Report Checkout] STRIPE_SECRET_KEY missing or unusable — serving the payment-link fallback rail'
+        );
+        return NextResponse.json({
+          url: reportPaymentLinkUrl(cleanVertical),
+          rail: 'payment_link',
+        });
+      }
+      return NextResponse.json(
+        { error: 'Stripe not configured. Set STRIPE_SECRET_KEY in environment.' },
+        { status: 503 }
+      );
+    }
+
+    const stripe = new Stripe(key, { apiVersion: STRIPE_API_VERSION });
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://houndshield.com';
 
     const configuredPriceId = process.env.STRIPE_REPORT_PRICE_ID;
@@ -112,21 +136,39 @@ export async function POST(request: NextRequest) {
             },
           };
 
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      line_items: [lineItem],
-      success_url: `${appUrl}/report/thank-you?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/pricing?report_canceled=true`,
-      billing_address_collection: 'auto',
-      allow_promotion_codes: true,
-      // Stripe collects the email; webhook reads it for fulfillment.
-      metadata: {
-        product: 'cmmc_ai_risk_report',
-        vertical: cleanVertical,
-        partner_ref: partner_ref ?? '',
-        wholesale: isWholesale ? 'true' : 'false',
-      },
-    });
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [lineItem],
+        success_url: `${appUrl}/report/thank-you?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${appUrl}/pricing?report_canceled=true`,
+        billing_address_collection: 'auto',
+        allow_promotion_codes: true,
+        // Stripe collects the email; webhook reads it for fulfillment.
+        metadata: {
+          product: 'cmmc_ai_risk_report',
+          vertical: cleanVertical,
+          partner_ref: partner_ref ?? '',
+          wholesale: isWholesale ? 'true' : 'false',
+        },
+      });
+    } catch (err) {
+      // A plausibly-usable key still failed (revoked key, Stripe outage…).
+      // Same rescue: retail rides the payment link; wholesale stays an
+      // honest error rather than silently upcharging $299 → $499.
+      console.error('[Stripe Report Checkout] session create failed:', err);
+      if (!isWholesale) {
+        return NextResponse.json({
+          url: reportPaymentLinkUrl(cleanVertical),
+          rail: 'payment_link',
+        });
+      }
+      return NextResponse.json(
+        { error: 'Failed to create report checkout session' },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
