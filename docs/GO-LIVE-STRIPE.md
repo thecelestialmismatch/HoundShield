@@ -1,6 +1,23 @@
 # Go Live: take money for the $499 report
 
-_Last updated 2026-07-14. Written for the founder — no code required. Follow top to bottom._
+_Last updated 2026-07-17. Written for the founder — no code required. Follow top to bottom._
+
+> **2026-07-17 update — checkout is DOWN again, and it's a one-paste fix.**
+> `/api/health` reads `payments: malformed_key`: the value in `STRIPE_SECRET_KEY`
+> is set (107 characters) but starts with `pk_` — that's the **publishable** key,
+> not the secret key. Stripe shows the two side by side and they look identical
+> in length; the publishable one is visible by default, the **Secret key is the
+> one hidden behind the "Reveal" button**. The fix:
+> Stripe → **Developers → API keys** → row named **"Secret key"** → **Reveal** →
+> copy → Vercel project **compliance-firewall-agent** → Settings → Environment
+> Variables → `STRIPE_SECRET_KEY` (Production ticked) → paste → **check it starts
+> with `sk_live_`** → Save → Redeploy. Health must read `payments: connected`.
+> While you're in there, do Step 2 (the webhook secret) in the same sitting —
+> health also still reads `payments_webhook: missing_secret`.
+>
+> Ground truth from the Stripe account itself (checked via API 2026-07-17): the
+> $499 report price is live and active, and the account has **zero charges ever**
+> — nobody has been able to pay yet. These two variables are the entire gap.
 
 > **2026-07-14 update — the paste keeps "coming out empty":**
 > 1. **Check you are in the right project.** Your Vercel team has TWO projects:
@@ -33,19 +50,24 @@ connecting Stripe. This is a dashboard task, not a coding task.
 
 ## Where you are right now
 
-**✅ STEP 1 IS DONE — verified live on 2026-07-14.**
-`https://www.houndshield.com/api/health` reports:
+**⚠️ STEP 1 REGRESSED on ~2026-07-16 — redo it with the SECRET key.**
+It *was* green on 2026-07-14 (the full buyer flow reached a live
+`checkout.stripe.com` page showing "CMMC AI Risk Assessment Report — $499.00"),
+so everything downstream is proven to work. Then the key was re-pasted and the
+**publishable `pk_live_` key** landed in `STRIPE_SECRET_KEY` — both keys are the
+same length, so the mistake is invisible unless you check the prefix. Health now
+reads:
 
 ```json
-"payments": "connected"
+"payments": "malformed_key"
 ```
 
-And it's not just the key landing: the real buyer flow was exercised end-to-end
-in a browser — `/pricing` → the $499 CTA → a **live Stripe Checkout page**
-(`checkout.stripe.com`, `cs_live_…`) showing "CMMC AI Risk Assessment Report —
-$499.00". A customer can pay you right now.
+The `payments_hint` field on `https://www.houndshield.com/api/health` now names
+this exact mistake and the fix. Rule of thumb forever: **the value you paste
+into `STRIPE_SECRET_KEY` must start with `sk_live_` — look at the first eight
+characters before you hit Save.**
 
-**That makes Step 2 (the webhook) the urgent one.** Until
+**Step 2 (the webhook) is equally urgent and still open.** Until
 `STRIPE_WEBHOOK_SECRET` is set, a card can be charged but the order is never
 recorded and no "go fulfill this" alert is sent — you'd only find out from
 Stripe's own dashboard. The health endpoint now reports this too:
@@ -161,8 +183,10 @@ You do **not** need Stripe live to close your first customer. If someone says ye
 - Send a **manual invoice** for $499.
 
 Get the yes first. The outreach emails to send are in
-`scratchpad/outreach-pack.md`. Start with Healthcare or Legal (fastest close, no
-FedRAMP blocker).
+`docs/OUTREACH-PACK.md` (direct cold emails: healthcare / legal / defense, plus
+the how-to-send steps) and `docs/EMAIL-SEQUENCES.md` (the RPO/MSP partner
+3-touch sequence). Start with Healthcare or Legal (fastest close, no FedRAMP
+blocker).
 
 ---
 

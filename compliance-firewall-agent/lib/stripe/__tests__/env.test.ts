@@ -89,19 +89,51 @@ describe('stripeKeyDiagnostic — value-free operator diagnosis for /api/health'
     expect(d.hint).toMatch(/auto-cleaned/);
   });
 
-  it('malformed: set but not a Stripe secret — hint explains without echoing the value', () => {
+  it('malformed: the PUBLISHABLE key pasted into the secret slot is named exactly (the 2026-07-16 outage)', () => {
     process.env.STRIPE_SECRET_KEY = 'pk_live_this_is_the_wrong_key';
     const d = stripeKeyDiagnostic();
     expect(d.status).toBe('malformed_key');
-    expect(d.hint).toMatch(/does not start with "sk_"/);
+    // Must say it IS the publishable key and point at the Reveal button —
+    // not just the generic "not a secret key".
+    expect(d.hint).toMatch(/PUBLISHABLE key/);
+    expect(d.hint).toMatch(/Reveal/);
+    expect(d.hint).toMatch(/sk_live_/);
     // The diagnostic must NEVER leak the configured value.
     expect(d.hint).not.toContain('pk_live');
     expect(d.hint).not.toContain('wrong_key');
   });
 
-  it('restricted keys (rk_) also count as connected', () => {
+  it('malformed: a whsec_ value in the key slot is called out as a swap', () => {
+    process.env.STRIPE_SECRET_KEY = 'whsec_pasted_in_the_wrong_slot';
+    const d = stripeKeyDiagnostic();
+    expect(d.status).toBe('malformed_key');
+    expect(d.hint).toMatch(/STRIPE_WEBHOOK_SECRET/);
+    expect(d.hint).not.toContain('wrong_slot');
+  });
+
+  it('malformed: any other non-key value still gets the generic shape hint', () => {
+    process.env.STRIPE_SECRET_KEY = 'price_1TBZ7XQK7cyCnCHkJfZtFe12';
+    const d = stripeKeyDiagnostic();
+    expect(d.status).toBe('malformed_key');
+    expect(d.hint).toMatch(/does not start with "sk_"/);
+    expect(d.hint).not.toContain('price_1TBZ');
+  });
+
+  it('connected but LOUD when the key is TEST mode — real cards would silently decline', () => {
+    process.env.STRIPE_SECRET_KEY = 'sk_test_a1b2c3d4e5f6';
+    const d = stripeKeyDiagnostic();
+    expect(d.status).toBe('connected');
+    expect(d.hint).toMatch(/TEST-mode/);
+    expect(d.hint).toMatch(/declined/);
+  });
+
+  it('restricted keys (rk_) also count as connected — live silently, test with the warning', () => {
     process.env.STRIPE_SECRET_KEY = 'rk_live_restricted123';
-    expect(stripeKeyDiagnostic().status).toBe('connected');
+    expect(stripeKeyDiagnostic()).toEqual({ status: 'connected' });
+    process.env.STRIPE_SECRET_KEY = 'rk_test_restricted123';
+    const d = stripeKeyDiagnostic();
+    expect(d.status).toBe('connected');
+    expect(d.hint).toMatch(/TEST-mode/);
   });
 });
 
@@ -124,12 +156,29 @@ describe('stripeWebhookDiagnostic — a live key without the webhook loses order
     expect(stripeWebhookDiagnostic()).toEqual({ status: 'configured' });
   });
 
-  it('malformed: set but not whsec_ — hint never echoes the value', () => {
+  it('malformed: an API secret key in the webhook slot is named as the wrong kind of secret', () => {
     process.env.STRIPE_WEBHOOK_SECRET = 'sk_live_pasted_the_wrong_secret';
     const d = stripeWebhookDiagnostic();
     expect(d.status).toBe('malformed_secret');
-    expect(d.hint).toMatch(/does not start with "whsec_"/);
+    expect(d.hint).toMatch(/API secret key/);
+    expect(d.hint).toMatch(/whsec_/);
     expect(d.hint).not.toContain('sk_live');
     expect(d.hint).not.toContain('wrong_secret');
+  });
+
+  it('malformed: a publishable key in the webhook slot is named too', () => {
+    process.env.STRIPE_WEBHOOK_SECRET = 'pk_live_definitely_not_a_signing_secret';
+    const d = stripeWebhookDiagnostic();
+    expect(d.status).toBe('malformed_secret');
+    expect(d.hint).toMatch(/publishable API key/);
+    expect(d.hint).not.toContain('pk_live');
+  });
+
+  it('malformed: any other non-whsec value still gets the generic shape hint', () => {
+    process.env.STRIPE_WEBHOOK_SECRET = 'we_1AbCdEndpointIdNotSecret';
+    const d = stripeWebhookDiagnostic();
+    expect(d.status).toBe('malformed_secret');
+    expect(d.hint).toMatch(/does not start with "whsec_"/);
+    expect(d.hint).not.toContain('we_1AbCd');
   });
 });
