@@ -2,9 +2,11 @@
  * Tests for POST /api/stripe/report-checkout — the $499 one-time
  * CMMC AI Risk Assessment Report (Stage 1 primary product).
  *
- * Validates: config guard, retail price anchoring at $499, wholesale gating
- * (only with a partner_ref), vertical sanitization, and use of the configured
- * SKU when present.
+ * Validates: retail price anchoring at $499, wholesale gating (only with a
+ * verified partner_ref), vertical sanitization, use of the configured SKU
+ * when present, and the payment-link fallback rail — a missing/unusable
+ * STRIPE_SECRET_KEY or a failing Stripe call must hand retail buyers the
+ * Stripe-hosted Payment Link, never an error.
  */
 
 const mockSessionsCreate = vi.fn();
@@ -66,9 +68,55 @@ describe("POST /api/stripe/report-checkout", () => {
     delete process.env.STRIPE_REPORT_PRICE_ID;
   });
 
-  it("returns 503 when STRIPE_SECRET_KEY is missing", async () => {
+  // ── Payment-link fallback rail ──────────────────────────────────────────
+  // A bad env paste must never turn a $499 buyer away. Missing key, an
+  // unusable paste (pk_/whsec_), or a failing Stripe call all hand retail
+  // buyers the Stripe-hosted Payment Link.
+
+  it("serves the payment link (not an error) when STRIPE_SECRET_KEY is missing", async () => {
     const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.url).toMatch(/^https:\/\/buy\.stripe\.com\//);
+    expect(data.rail).toBe("payment_link");
+    expect(mockSessionsCreate).not.toHaveBeenCalled();
+  });
+
+  it("serves the payment link without attempting Stripe when the key is a pk_ paste", async () => {
+    // The exact 2026-07-16 outage: publishable key in the secret slot.
+    process.env.STRIPE_SECRET_KEY = "pk_live_paste_mistake";
+    const res = await POST(makeRequest({ vertical: "healthcare" }));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.url).toContain("client_reference_id=report-healthcare");
+    expect(mockSessionsCreate).not.toHaveBeenCalled();
+  });
+
+  it("rescues retail buyers with the payment link when the Stripe call fails", async () => {
+    process.env.STRIPE_SECRET_KEY = "sk_test";
+    mockSessionsCreate.mockRejectedValueOnce(new Error("Invalid API Key provided"));
+    const res = await POST(makeRequest({ vertical: "defense" }));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.url).toMatch(/^https:\/\/buy\.stripe\.com\//);
+    expect(data.url).toContain("client_reference_id=report-defense");
+    expect(data.rail).toBe("payment_link");
+  });
+
+  it("does NOT downgrade verified $299 wholesale to the $499 link — missing key stays 503", async () => {
+    mockIsConfigured.mockReturnValue(true);
+    mockPartnerLookup.mockResolvedValue({ data: { id: APPROVED_UUID, status: "approved" } });
+    const res = await POST(makeRequest({ wholesale: true, partner_ref: APPROVED_UUID }));
     expect(res.status).toBe(503);
+  });
+
+  it("does NOT downgrade verified $299 wholesale to the $499 link — Stripe failure stays 500", async () => {
+    process.env.STRIPE_SECRET_KEY = "sk_test";
+    mockIsConfigured.mockReturnValue(true);
+    mockPartnerLookup.mockResolvedValue({ data: { id: APPROVED_UUID, status: "approved" } });
+    mockSessionsCreate.mockRejectedValueOnce(new Error("boom"));
+    const res = await POST(makeRequest({ wholesale: true, partner_ref: APPROVED_UUID }));
+    expect(res.status).toBe(500);
   });
 
   it("creates a one-time payment session at $499 retail", async () => {
