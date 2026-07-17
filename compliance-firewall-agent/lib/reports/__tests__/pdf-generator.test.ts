@@ -1,4 +1,5 @@
-import { generateCompliancePDF, type ReportData, type BlockEventEvidence } from "../pdf-generator";
+import { generateCompliancePDF, buildComplianceDoc, type ReportData, type BlockEventEvidence } from "../pdf-generator";
+import { jsPDF } from "jspdf";
 
 // jsPDF uses browser APIs. Provide minimal stubs for Node.js test environment.
 vi.mock("jspdf", () => {
@@ -237,5 +238,97 @@ describe("generateCompliancePDF date handling", () => {
         })
       )
     ).not.toThrow();
+  });
+});
+
+// ── buildComplianceDoc / generateCompliancePDF refactor parity ─────────────────
+
+describe("buildComplianceDoc", () => {
+  it("is the shared builder generateCompliancePDF wraps (returns the mock doc)", () => {
+    const doc = buildComplianceDoc(makeReport());
+    expect(doc).toBeTruthy();
+    expect(typeof (doc as unknown as { output: unknown }).output).toBe("function");
+  });
+
+  it("generateCompliancePDF still returns a Buffer from the same builder", () => {
+    const buf = generateCompliancePDF(makeReport());
+    expect(Buffer.isBuffer(buf)).toBe(true);
+  });
+});
+
+// ── Snapshot (preview) mode — compliance-copy honesty contract ────────────────
+//
+// A snapshot is an unsigned, browser-generated preview of the user's OWN data.
+// It must NOT carry the signed report's tamper-evident / Merkle / C3PAO /
+// "audit evidence" assurances — that would be a false claim stapled to real
+// data. We assert on the exact AFFIRMATIVE phrases (honest negations legitimately
+// mention "tamper-evident" etc., so blunt substring-absence would misfire).
+
+describe("generateCompliancePDF snapshot honesty", () => {
+  const SIGNED_ONLY_CLAIMS = [
+    "Tamper-evident | Cryptographically anchored | CMMC Level 2",
+    "Merkle Root (tamper-evident chain):",
+    "immutably logged using cryptographic seed",
+    "audit artifact suitable for CMMC Level 2 self-assessment",
+    "submission and C3PAO review preparation",
+    "constitutes audit evidence of a technical control enforced",
+    "Tamper-evident audit trail",
+  ];
+  const SNAPSHOT_CLAIMS = [
+    "PREVIEW SNAPSHOT — not a signed assessment",
+    "never transmitted to any server",
+    "Local browser preview",
+  ];
+
+  function drawnStrings(data: ReportData): string[] {
+    vi.clearAllMocks();
+    generateCompliancePDF(data);
+    const mockCtor = vi.mocked(jsPDF);
+    const doc = mockCtor.mock.results.at(-1)!.value as {
+      text: { mock: { calls: unknown[][] } };
+      splitTextToSize: { mock: { calls: unknown[][] } };
+    };
+    const fromText = doc.text.mock.calls.map((c) => c[0]);
+    const fromSplit = doc.splitTextToSize.mock.calls.map((c) => c[0]);
+    return [...fromText, ...fromSplit].filter((s): s is string => typeof s === "string");
+  }
+
+  const BLOCK: BlockEventEvidence = {
+    timestamp: "2026-07-18T14:00:00Z",
+    action: "BLOCKED",
+    risk_level: "CRITICAL",
+    pattern_name: "CUI marking",
+    nist_control: "SC.L2-3.13.1",
+    control_name: "Monitor and control communications at system boundaries",
+    sprs_impact: -5,
+    dcsa_reportable: true,
+  };
+
+  it("SIGNED report DOES carry the tamper-evident / C3PAO assurances (control)", () => {
+    const strings = drawnStrings(makeReport({ block_events: [BLOCK] }));
+    for (const claim of SIGNED_ONLY_CLAIMS) {
+      expect(strings.some((s) => s.includes(claim)), `signed must include: ${claim}`).toBe(true);
+    }
+  });
+
+  it("SNAPSHOT strips every signed-only assurance", () => {
+    const strings = drawnStrings(makeReport({ snapshot: true, demo: false, block_events: [BLOCK] }));
+    for (const claim of SIGNED_ONLY_CLAIMS) {
+      expect(strings.some((s) => s.includes(claim)), `snapshot must NOT include: ${claim}`).toBe(false);
+    }
+  });
+
+  it("SNAPSHOT adds the honest preview language", () => {
+    const strings = drawnStrings(makeReport({ snapshot: true, block_events: [BLOCK] }));
+    for (const claim of SNAPSHOT_CLAIMS) {
+      expect(strings.some((s) => s.includes(claim)), `snapshot must include: ${claim}`).toBe(true);
+    }
+  });
+
+  it("SNAPSHOT never prints a fabricated Merkle root in the footer", () => {
+    const strings = drawnStrings(
+      makeReport({ snapshot: true, integrity: { merkle_root: null, events_with_seeds: 0, events_without_seeds: 3 } })
+    );
+    expect(strings.some((s) => /Merkle Root:/.test(s))).toBe(false);
   });
 });
