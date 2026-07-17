@@ -27,8 +27,11 @@
 4. **Reply → book a 20-minute call.** Run the demo script
    (`docs/DEMO-SCRIPT.md`) — it always ends on the PDF.
 5. **Yes → invoice.** If `/api/health` shows `payments: connected`, send them
-   `houndshield.com/pricing` (the $499 button). If Stripe is down, send a
-   manual Stripe invoice or payment link the same hour — never make a yes wait.
+   `houndshield.com/pricing` (the $499 button). If the site key is broken, the
+   button now falls back to the Stripe-hosted payment link automatically — or
+   send that link directly: `https://buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00`
+   (verified active 2026-07-17; billed by Stripe, works even when site checkout
+   is down). A manual Stripe invoice also works — never make a yes wait.
 6. **Track it.** One spreadsheet row per contact: name, org, vertical, sent,
    reply, call, outcome. 40 sends with zero replies = change the subject line
    and the first sentence, not the offer.

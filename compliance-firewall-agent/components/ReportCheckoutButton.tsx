@@ -7,9 +7,11 @@ import { ArrowRight, Loader2 } from "lucide-react";
 /**
  * Initiates Stripe checkout for the one-time $499 CMMC AI Risk Assessment
  * Report via the canonical no-auth rail (`/api/stripe/report-checkout`).
- * A $499 PO is an impulse buy — no signup gate. Handles the two real
- * responses: a checkout URL (redirect) and 503 (not yet configured →
- * route to contact so the lead isn't lost).
+ * A $499 PO is an impulse buy — no signup gate. The server answers with a
+ * URL even while STRIPE_SECRET_KEY is broken (it falls back to the
+ * Stripe-hosted Payment Link), so the redirect below is the whole happy
+ * path. 503 → /contact remains only as the final net (wholesale, or the
+ * fallback rail itself unavailable) so a lead is never silently dropped.
  */
 export function ReportCheckoutButton({
   className,

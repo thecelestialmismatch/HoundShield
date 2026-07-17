@@ -6,6 +6,7 @@ import { createServiceClient } from '@/lib/supabase/client';
 import { upgradeEmail } from '@/lib/email/templates/upgrade';
 import { canceledEmail } from '@/lib/email/templates/canceled';
 import { reportOrderEmail } from '@/lib/email/templates/report-order';
+import { verticalFromClientReference } from '@/lib/stripe/report-payment-link';
 
 type ServiceClient = ReturnType<typeof createServiceClient>;
 
@@ -69,6 +70,10 @@ async function handleReportOrder(
   const fullName = session.customer_details?.name ?? '';
   const meta = session.metadata ?? {};
   const isWholesale = meta.wholesale === 'true';
+  // Payment-link sales (the fallback rail) carry no metadata — the vertical,
+  // when known, rides in client_reference_id (lib/stripe/report-payment-link.ts).
+  const vertical =
+    meta.vertical || verticalFromClientReference(session.client_reference_id) || null;
 
   // Reconcile the purchase to an existing account by email, if one exists, so
   // the buyer sees their order once they sign in (migration 017 adds user_id).
@@ -100,7 +105,7 @@ async function handleReportOrder(
     {
       email,
       full_name: fullName || null,
-      vertical: meta.vertical || null,
+      vertical,
       stripe_session_id: session.id,
       stripe_payment_intent_id: (session.payment_intent as string) ?? null,
       stripe_customer_id: (session.customer as string) ?? null,
