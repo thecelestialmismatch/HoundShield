@@ -67,10 +67,13 @@ export default function AssessmentPage() {
         <p className="flex items-center gap-1.5 text-sm text-[var(--hs-ink-tertiary)]">
           <Clock className="h-4 w-4" aria-hidden /> Most reports delivered within days of intake.
         </p>
-        <p className="mt-3 text-sm">
+        <p className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
           <a href="/api/reports/sample" className="text-brand-700 hover:text-brand-700 font-medium">
             See a sample report (PDF) &rarr;
           </a>
+          <Link href="/demo#snapshot" className="text-brand-700 hover:text-brand-700 font-medium">
+            Prove it on your own prompt — free instant snapshot &rarr;
+          </Link>
         </p>
 
         {/* What's included */}

@@ -25,7 +25,12 @@
    their EHR vendor, a recent post, their practice size). Do not automate;
    10 real emails beat 200 template blasts to spam.
 4. **Reply → book a 20-minute call.** Run the demo script
-   (`docs/DEMO-SCRIPT.md`) — it always ends on the PDF.
+   (`docs/DEMO-SCRIPT.md`) — it always ends on the PDF. A prospect who won't
+   book yet can **prove it themselves**: `houndshield.com/demo#snapshot` — they
+   paste a real prompt, the scan and preview gap-report PDF run **in their own
+   browser** (nothing is transmitted), and they see their own NIST-mapped
+   exposure. Drop that link in the first email or the follow-up; it does the
+   demo's "ends on the PDF" moment without a meeting.
 5. **Yes → invoice.** If `/api/health` shows `payments: connected`, send them
    `houndshield.com/pricing` (the $499 button). If the site key is broken, the
    button now falls back to the Stripe-hosted payment link automatically — or
