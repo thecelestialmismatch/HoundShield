@@ -14,9 +14,37 @@
  * FAQPage schema (no cross-URL duplication).
  */
 
+/** An actionable "learn more" link rendered under an answer (never in the
+ *  FAQPage schema text — snippet purity is preserved). Always site-internal. */
+export interface FaqLink {
+  label: string;
+  href: string;
+}
+
 export interface FaqItem {
   question: string;
   answer: string;
+  /** Optional cross-links surfaced as chips beneath the answer. */
+  links?: FaqLink[];
+}
+
+/**
+ * Deterministic, URL-safe slug for a question — the anchor target used for
+ * deep-linkable / shareable FAQ answers (`/pricing#faq-<slug>`). Stable as
+ * long as the question wording is (the AEO test freezes both wording and
+ * cross-set uniqueness, so slugs are unique across the whole site).
+ */
+export function faqSlug(question: string): string {
+  return (
+    "faq-" +
+    question
+      .toLowerCase()
+      .replace(/['’"]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60)
+      .replace(/-+$/g, "")
+  );
 }
 
 /** /hipaa — PHI and healthcare-specific. */
@@ -30,6 +58,7 @@ export const hipaaFaqs: FaqItem[] = [
     question: "How does HoundShield protect PHI in AI tools?",
     answer:
       "HoundShield scans every AI prompt for the 18 HIPAA Safe Harbor identifiers — names, dates, MRNs, account numbers, biometric data, and more — in under 10ms. Prompts containing PHI are blocked or quarantined before they reach ChatGPT, Copilot, or Claude, and every detection is written to an immutable audit log.",
+    links: [{ label: "Healthcare deployment", href: "/products/healthcare" }],
   },
   {
     question: "What are the 18 HIPAA identifiers?",
@@ -49,6 +78,7 @@ export const pricingFaqs: FaqItem[] = [
     question: "How much does the CMMC AI Risk Assessment Report cost?",
     answer:
       "The CMMC AI Risk Assessment Report costs $499, one time — no subscription and no signup required. We run HoundShield's proxy across 14 days of your real AI traffic and deliver a SHA-256-signed PDF that scores every prompt event against NIST 800-171, the evidence a C3PAO assessor asks for.",
+    links: [{ label: "See the $499 report", href: "/assessment" }],
   },
   {
     question: "How much does a HoundShield subscription cost?",
@@ -64,6 +94,7 @@ export const pricingFaqs: FaqItem[] = [
     question: "Is there a free version of HoundShield?",
     answer:
       "Yes. HoundShield's free tier includes the full 110-control CMMC self-assessment, a live SPRS calculator, and scanning for up to 1,000 prompts per month — no credit card required. Paid plans add the AI gateway at scale, PDF evidence exports, more seats, and email and Slack alerts.",
+    links: [{ label: "Start free", href: "/signup" }],
   },
   {
     question: "Do I need the Enterprise plan for a CMMC assessment?",
@@ -83,6 +114,10 @@ export const homeFaqs: FaqItem[] = [
     question: "What is HoundShield?",
     answer:
       "HoundShield is a local-only AI compliance firewall. It sits between your team and tools like ChatGPT, Copilot, and Claude, scans every prompt on your own hardware in under 10 milliseconds, blocks CUI, PHI, and PII before anything leaves your network, and writes tamper-evident audit evidence mapped to NIST 800-171.",
+    links: [
+      { label: "How it works", href: "/how-it-works" },
+      { label: "See features", href: "/features" },
+    ],
   },
   {
     question: "How does HoundShield stop employees pasting CUI into ChatGPT?",
@@ -98,6 +133,10 @@ export const homeFaqs: FaqItem[] = [
     question: "Who is HoundShield for?",
     answer:
       "HoundShield is built for regulated teams that use AI: defense contractors preparing for CMMC Level 2, healthcare organizations protecting PHI under HIPAA, and law firms guarding privileged communications. If your staff use ChatGPT, Copilot, or Claude and an auditor will ever ask for evidence, HoundShield is for you.",
+    links: [
+      { label: "Healthcare", href: "/products/healthcare" },
+      { label: "Defense", href: "/products/defense" },
+    ],
   },
   {
     question: "How quickly can we get started with HoundShield?",
@@ -112,6 +151,10 @@ export const reportFaqs: FaqItem[] = [
     question: "What is the CMMC AI Risk Assessment Report?",
     answer:
       "It is a one-time $499 engagement. HoundShield's proxy runs locally in your environment for 14 days, scoring every AI prompt event against NIST 800-171 Rev 2. You receive a SHA-256-signed PDF documenting what your team sent to AI tools, which controls it implicates, and the remediation sequence.",
+    links: [
+      { label: "Compare plans", href: "/pricing" },
+      { label: "How it works", href: "/how-it-works" },
+    ],
   },
   {
     question: "How long does the $499 assessment take?",
@@ -146,6 +189,10 @@ export const contactFaqs: FaqItem[] = [
     question: "How long does CMMC compliance take with HoundShield?",
     answer:
       "Timelines vary based on your current posture, but most organizations reach CMMC Level 2 readiness in three to six months with HoundShield. The platform identifies gaps across all 110 controls instantly, provides a prioritized remediation roadmap, and tracks your SPRS score as each practice is closed.",
+    links: [
+      { label: "Start with the $499 report", href: "/assessment" },
+      { label: "Compare plans", href: "/pricing" },
+    ],
   },
   {
     question: "Do I need a C3PAO assessment for CMMC Level 2?",
@@ -185,6 +232,7 @@ export const featuresFaqs: FaqItem[] = [
     question: "What is SPRS scoring and does HoundShield calculate it?",
     answer:
       "SPRS (Supplier Performance Risk System) scoring rates a contractor's NIST 800-171 implementation from -203 to +110. HoundShield automatically calculates your SPRS score across all 110 controls, shows which controls are met or missing, and produces the documentation you file in SPRS for a CMMC Level 2 self-assessment.",
+    links: [{ label: "Get the $499 report", href: "/assessment" }],
   },
   {
     question: "Which AI models does HoundShield support?",
@@ -204,6 +252,7 @@ export const howItWorksFaqs: FaqItem[] = [
     question: "Which HoundShield mode is CUI-safe for defense contractors?",
     answer:
       "The self-hosted Docker mode is CUI-safe because all scanning happens inside your control boundary and no prompt content leaves your network. For the strictest environments, air-gapped mode runs with zero outbound connectivity. Cloud mode is for demos and non-CUI workloads only, never for Controlled Unclassified Information.",
+    links: [{ label: "Security & data boundary", href: "/security" }],
   },
   {
     question: "Do employees need to install anything to use HoundShield?",
@@ -218,6 +267,7 @@ export const brainAiFaqs: FaqItem[] = [
     question: "What is Brain AI in HoundShield?",
     answer:
       "Brain AI is HoundShield's built-in compliance copilot. It answers CMMC, HIPAA, and SOC 2 questions, explains your SPRS score and missing controls, and guides remediation — all grounded in the 110 NIST 800-171 controls. It runs on the HERMES agent architecture inside your HoundShield deployment.",
+    links: [{ label: "See features", href: "/features" }],
   },
   {
     question: "Does Brain AI work without an API key?",
@@ -263,5 +313,69 @@ export const installSteps: HowToStep[] = [
   {
     name: "Send a test prompt and verify the audit log",
     text: "Send a prompt that contains test CUI or PHI and confirm it is blocked and recorded in your tamper-evident audit trail. Once verified, your team's AI usage is compliant.",
+  },
+];
+
+/**
+ * Consolidated /faq hub grouping.
+ *
+ * Each group reuses an EXISTING page dataset verbatim — no new questions are
+ * authored here, so cross-set question uniqueness (and therefore deep-link
+ * slug uniqueness) is preserved. The hub renders these visibly for UX/AEO
+ * value but deliberately does NOT emit its own FAQPage JSON-LD: every Q&A
+ * already carries FAQPage schema on its origin page, and re-emitting it here
+ * would create cross-URL structured-data duplication.
+ */
+export interface FaqGroup {
+  /** Stable anchor id for the category jump-nav (`/faq#<id>`). */
+  id: string;
+  title: string;
+  /** One-line description shown under the category heading. */
+  blurb: string;
+  items: FaqItem[];
+}
+
+export const faqHubGroups: FaqGroup[] = [
+  {
+    id: "basics",
+    title: "HoundShield basics",
+    blurb: "What HoundShield is, who it's for, and how fast you can start.",
+    items: homeFaqs,
+  },
+  {
+    id: "pricing",
+    title: "Pricing & the $499 report",
+    blurb: "The one-time $499 CMMC AI Risk Assessment Report, plans, and the free tier.",
+    items: [...pricingFaqs, ...reportFaqs],
+  },
+  {
+    id: "cmmc",
+    title: "CMMC & getting certified",
+    blurb: "Level 2, C3PAO assessments, timelines, and what evidence you can export.",
+    items: contactFaqs,
+  },
+  {
+    id: "hipaa",
+    title: "HIPAA & healthcare",
+    blurb: "Using ChatGPT with PHI, the 18 identifiers, and staying HIPAA-safe.",
+    items: hipaaFaqs,
+  },
+  {
+    id: "deployment",
+    title: "Deployment & security",
+    blurb: "Cloud, self-hosted Docker, and air-gapped modes — and which is CUI-safe.",
+    items: [...howItWorksFaqs, ...installFaqs],
+  },
+  {
+    id: "features",
+    title: "Features & scanning",
+    blurb: "Detection speed, audit logs, SPRS scoring, and supported AI models.",
+    items: featuresFaqs,
+  },
+  {
+    id: "brain-ai",
+    title: "Brain AI copilot",
+    blurb: "The built-in compliance copilot — how it works and whether it's CUI-safe.",
+    items: brainAiFaqs,
   },
 ];
