@@ -73,10 +73,37 @@ export function stripeKeyDiagnostic(): StripeKeyDiagnostic {
     };
   }
   if (key.startsWith('sk_') || key.startsWith('rk_')) {
-    // Usable. Mention silently-repaired paste artifacts so the operator knows.
+    // Usable — but a TEST-mode key silently sells nothing: checkout runs in
+    // test mode and real customer cards are declined. Say so loudly.
+    if (key.startsWith('sk_test_') || key.startsWith('rk_test_')) {
+      return {
+        status: 'connected',
+        hint:
+          'This is a TEST-mode key (sk_test_) — checkout will open but every real card will be declined. Fine for the Step-4 dry run; swap in the live "sk_live_" key before selling.',
+      };
+    }
+    // Mention silently-repaired paste artifacts so the operator knows.
     return raw.trim() === key
       ? { status: 'connected' }
       : { status: 'connected', hint: 'Key contained quotes/whitespace from the paste — auto-cleaned, no action needed.' };
+  }
+  // The exact failure that took checkout down on 2026-07-16: the PUBLISHABLE
+  // key pasted into the secret slot. Stripe shows the two keys side by side,
+  // both ~107 characters — the publishable one is visible by default, the
+  // secret one hides behind "Reveal". Name the mistake precisely.
+  if (key.startsWith('pk_')) {
+    return {
+      status: 'malformed_key',
+      hint:
+        'STRIPE_SECRET_KEY contains your PUBLISHABLE key (it starts with "pk_"). Stripe shows two look-alike keys — the publishable one is visible by default; the Secret key is the one behind the "Reveal" button (starts with "sk_live_"). Stripe → Developers → API keys → Secret key → Reveal → copy THAT into Vercel (Production box ticked) → redeploy. Check the value starts with "sk_" before saving.',
+    };
+  }
+  if (key.startsWith('whsec_')) {
+    return {
+      status: 'malformed_key',
+      hint:
+        'STRIPE_SECRET_KEY contains a webhook signing secret (it starts with "whsec_") — that value belongs in STRIPE_WEBHOOK_SECRET. The two variables are swapped or mis-pasted: STRIPE_SECRET_KEY takes the API Secret key ("sk_live_…") from Stripe → Developers → API keys.',
+    };
   }
   return {
     status: 'malformed_key',
@@ -115,6 +142,15 @@ export function stripeWebhookDiagnostic(): StripeWebhookDiagnostic {
   }
   if (secret.startsWith('whsec_')) {
     return { status: 'configured' };
+  }
+  // Mirror of the pk_-in-the-key-slot failure: an API key pasted into the
+  // webhook slot. Name which key landed here so the operator can un-swap.
+  if (secret.startsWith('sk_') || secret.startsWith('rk_') || secret.startsWith('pk_')) {
+    const kind = secret.startsWith('pk_') ? 'publishable API key ("pk_")' : 'API secret key ("sk_"/"rk_")';
+    return {
+      status: 'malformed_secret',
+      hint: `STRIPE_WEBHOOK_SECRET contains a ${kind} — the wrong kind of secret. The webhook signing secret starts with "whsec_" and lives in Stripe → Developers → Webhooks → your endpoint → Signing secret → Reveal. API keys never go in this variable.`,
+    };
   }
   return {
     status: 'malformed_secret',
