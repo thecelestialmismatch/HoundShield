@@ -5,6 +5,7 @@ import Link from "next/link";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { ScrollProgressBar } from "@/components/scroll-effects";
+import { InstantSnapshot } from "@/components/InstantSnapshot";
 import {
     ShieldCheck, AlertTriangle, Lock, ArrowRight, CheckCircle2,
     Key, Mail, CreditCard, Globe, Database, Fingerprint,
@@ -337,6 +338,11 @@ export default function FreeDemoPage() {
                             Paste any prompt, code, or message your team sends to AI tools like ChatGPT, Claude, or Copilot.
                             Our scanner instantly checks for <strong className="text-[var(--hs-ink-secondary)]">9 categories</strong> of sensitive data leaks — and tells you exactly how to fix them.
                         </p>
+                    </div>
+
+                    {/* ═══ INSTANT AI RISK SNAPSHOT (the money-path climax — ends on the PDF) ═══ */}
+                    <div className="mb-12">
+                        <InstantSnapshot />
                     </div>
 
                     {/* ═══ HOW TO USE (Step-by-step) ═══ */}

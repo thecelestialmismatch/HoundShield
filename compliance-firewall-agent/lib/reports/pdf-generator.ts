@@ -40,6 +40,16 @@ export interface ReportData {
   generated_at: string;
   organization?: string;
   demo?: boolean;
+  /**
+   * Preview snapshot mode. When true, the report is an unsigned, locally-generated
+   * preview built from a single paste in the visitor's browser — NOT the signed
+   * 14-day assessment. Every tamper-evident / Merkle / C3PAO / "audit evidence"
+   * claim is stripped and replaced with honest preview language, because a false
+   * assurance stapled to the user's OWN data is a compliance-copy liability (the
+   * data-honesty doctrine). The synthetic `demo` sample keeps the full attestation
+   * — it is explicitly a sample of the real deliverable; a snapshot is not.
+   */
+  snapshot?: boolean;
   /** SPRS score before and after HoundShield deployment */
   sprs_score?: { current: number; baseline: number };
   /** Per-event CMMC control evidence (for audit PDF section) */
@@ -121,6 +131,17 @@ function statBox(doc: jsPDF, x: number, y: number, w: number, label: string, val
  * Returns a Buffer compatible with NextResponse.
  */
 export function generateCompliancePDF(data: ReportData): Buffer {
+  return Buffer.from(buildComplianceDoc(data).output("arraybuffer"));
+}
+
+/**
+ * Builds the jsPDF document. Shared by the server buffer path
+ * (`generateCompliancePDF`) and the browser download path
+ * (`saveComplianceReport` in `lib/reports/download`). Extracted so the same
+ * layout serves both without a Node `Buffer` dependency in the client bundle.
+ */
+export function buildComplianceDoc(data: ReportData): jsPDF {
+  const isSnapshot = data.snapshot === true;
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const orgName = data.organization ?? "Defense Contractor";
   const period = `${formatDate(data.summary.period.start)} – ${formatDate(data.summary.period.end)}`;
@@ -145,10 +166,22 @@ export function generateCompliancePDF(data: ReportData): Buffer {
   doc.text("HoundShield", MARGIN, 35);
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  doc.text("AI Compliance Firewall — Audit Report", MARGIN, 42);
+  doc.text(
+    isSnapshot
+      ? "AI Compliance Firewall — Risk Snapshot (Preview)"
+      : "AI Compliance Firewall — Audit Report",
+    MARGIN,
+    42
+  );
   doc.setFontSize(8.5);
   doc.setTextColor("#BFDBFE");
-  doc.text("Tamper-evident | Cryptographically anchored | CMMC Level 2", MARGIN, 50);
+  doc.text(
+    isSnapshot
+      ? "Local browser preview  |  Generated from a single paste  |  Not a signed assessment"
+      : "Tamper-evident | Cryptographically anchored | CMMC Level 2",
+    MARGIN,
+    50
+  );
 
   // Organization + period block
   doc.setFont("helvetica", "normal");
@@ -173,7 +206,13 @@ export function generateCompliancePDF(data: ReportData): Buffer {
   doc.setFont("helvetica", "bold");
   doc.text("Report Type", MARGIN, y);
   doc.setFont("helvetica", "normal");
-  doc.text("CMMC Level 2 Compliance — AI Gateway Audit", MARGIN + 40, y);
+  doc.text(
+    isSnapshot
+      ? "AI Risk Snapshot (Preview) — not the signed 14-day report"
+      : "CMMC Level 2 Compliance — AI Gateway Audit",
+    MARGIN + 40,
+    y
+  );
 
   // Compliance score bar
   y += 20;
@@ -233,18 +272,56 @@ export function generateCompliancePDF(data: ReportData): Buffer {
   doc.setFontSize(8.5);
   doc.setTextColor(DARK_GREY);
   doc.setFont("helvetica", "bold");
-  doc.text("Merkle Root (tamper-evident chain):", MARGIN, y);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(MID_GREY);
-  doc.text(data.integrity.merkle_root ?? "N/A (demo mode)", MARGIN, y + 5);
-  doc.setFontSize(7.5);
-  doc.text(
-    `${data.integrity.events_with_seeds} events cryptographically anchored  |  ${data.integrity.events_without_seeds} without seed`,
-    MARGIN,
-    y + 11
-  );
+  if (isSnapshot) {
+    doc.text("Integrity:", MARGIN, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(MID_GREY);
+    doc.text(
+      "No cryptographic audit chain — this preview is generated locally in your browser and is not signed.",
+      MARGIN,
+      y + 5
+    );
+    doc.setFontSize(7.5);
+    doc.text(
+      "The $499 14-day report carries a SHA-256 Merkle root your assessor can verify.",
+      MARGIN,
+      y + 11
+    );
+  } else {
+    doc.text("Merkle Root (tamper-evident chain):", MARGIN, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(MID_GREY);
+    doc.text(data.integrity.merkle_root ?? "N/A (demo mode)", MARGIN, y + 5);
+    doc.setFontSize(7.5);
+    doc.text(
+      `${data.integrity.events_with_seeds} events cryptographically anchored  |  ${data.integrity.events_without_seeds} without seed`,
+      MARGIN,
+      y + 11
+    );
+  }
 
-  if (data.demo) {
+  if (isSnapshot) {
+    y += 20;
+    doc.setFillColor("#FEE2E2");
+    doc.roundedRect(MARGIN, y, CONTENT_W, 16, 2, 2, "F");
+    doc.setFontSize(8);
+    doc.setTextColor(RED);
+    doc.setFont("helvetica", "bold");
+    doc.text("PREVIEW SNAPSHOT — not a signed assessment", MARGIN + 5, y + 6);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(DARK_GREY);
+    doc.text(
+      "Generated locally in your browser from a single paste. This is NOT the tamper-evident, C3PAO-ready 14-day",
+      MARGIN + 5,
+      y + 10.5
+    );
+    doc.text(
+      "signed report. Findings below are illustrative — the signed report is the artifact an assessor accepts.",
+      MARGIN + 5,
+      y + 13.5
+    );
+  } else if (data.demo) {
     y += 20;
     doc.setFillColor("#FEF3C7");
     doc.roundedRect(MARGIN, y, CONTENT_W, 10, 2, 2, "F");
@@ -376,17 +453,31 @@ export function generateCompliancePDF(data: ReportData): Buffer {
 
   doc.setFontSize(8.5);
   doc.setTextColor(MID_GREY);
-  doc.text(
-    "Each row below constitutes audit evidence of a technical control enforced by the HoundShield AI gateway.",
-    MARGIN,
-    y
-  );
-  y += 5;
-  doc.text(
-    "Per DoD CMMC Assessment Process (CAP) v2.0, these events satisfy practice AC.L2-3.1.3 (CUI flow control).",
-    MARGIN,
-    y
-  );
+  if (isSnapshot) {
+    doc.text(
+      "Each row is a finding in the text you pasted and the NIST 800-171 control it maps to.",
+      MARGIN,
+      y
+    );
+    y += 5;
+    doc.text(
+      "In production HoundShield blocks these at the boundary and logs them as evidence; this preview only detects.",
+      MARGIN,
+      y
+    );
+  } else {
+    doc.text(
+      "Each row below constitutes audit evidence of a technical control enforced by the HoundShield AI gateway.",
+      MARGIN,
+      y
+    );
+    y += 5;
+    doc.text(
+      "Per DoD CMMC Assessment Process (CAP) v2.0, these events satisfy practice AC.L2-3.1.3 (CUI flow control).",
+      MARGIN,
+      y
+    );
+  }
   y += 8;
 
   const blockEvents = data.block_events ?? [];
@@ -395,7 +486,13 @@ export function generateCompliancePDF(data: ReportData): Buffer {
     doc.setFontSize(9);
     doc.setTextColor(GREEN);
     doc.setFont("helvetica", "bold");
-    doc.text("No CUI exfiltration events detected in this period.", MARGIN, y);
+    doc.text(
+      isSnapshot
+        ? "No sensitive data detected in the text you pasted."
+        : "No CUI exfiltration events detected in this period.",
+      MARGIN,
+      y
+    );
     doc.setFont("helvetica", "normal");
     y += 8;
   } else {
@@ -408,7 +505,9 @@ export function generateCompliancePDF(data: ReportData): Buffer {
       doc.setFont("helvetica", "bold");
       doc.setTextColor(RED);
       doc.text(
-        `  ⚠  ${dcsa.length} DCSA-REPORTABLE EVENT${dcsa.length > 1 ? "S" : ""} — CRITICAL CUI exfiltration attempts blocked`,
+        isSnapshot
+          ? `  ⚠  ${dcsa.length} CRITICAL finding${dcsa.length > 1 ? "s" : ""} — would be DCSA-reportable if sent to a public AI tool`
+          : `  ⚠  ${dcsa.length} DCSA-REPORTABLE EVENT${dcsa.length > 1 ? "S" : ""} — CRITICAL CUI exfiltration attempts blocked`,
         MARGIN + 3,
         y + 6.5
       );
@@ -451,7 +550,9 @@ export function generateCompliancePDF(data: ReportData): Buffer {
       doc.setTextColor(DARK_GREY);
       doc.setFont("helvetica", "bold");
       doc.text(
-        `Total SPRS impact prevented by HoundShield: ${totalSprsImpact < 0 ? totalSprsImpact : "+" + totalSprsImpact} points`,
+        isSnapshot
+          ? `Estimated SPRS exposure from these findings: ${totalSprsImpact < 0 ? totalSprsImpact : "+" + totalSprsImpact} points`
+          : `Total SPRS impact prevented by HoundShield: ${totalSprsImpact < 0 ? totalSprsImpact : "+" + totalSprsImpact} points`,
         MARGIN,
         y
       );
@@ -464,11 +565,14 @@ export function generateCompliancePDF(data: ReportData): Buffer {
   doc.setFontSize(7.5);
   doc.setTextColor(MID_GREY);
   doc.setFont("helvetica", "italic");
-  const evidenceNote =
-    "This section constitutes audit evidence for CMMC Level 2 practice AC.L2-3.1.3 " +
-    "(Control the flow of CUI in accordance with approved authorizations). " +
-    "Additional practices covered: AU.L2-3.3.1 (audit log generation) and SI.L2-3.14.1 " +
-    "(identify and report system flaws).";
+  const evidenceNote = isSnapshot
+    ? "This preview maps findings to NIST 800-171 controls for illustration only. It is not audit evidence " +
+      "and it is not tamper-evident. The $499 14-day report — generated by running the proxy in your own " +
+      "environment — is the signed artifact a C3PAO accepts."
+    : "This section constitutes audit evidence for CMMC Level 2 practice AC.L2-3.1.3 " +
+      "(Control the flow of CUI in accordance with approved authorizations). " +
+      "Additional practices covered: AU.L2-3.3.1 (audit log generation) and SI.L2-3.14.1 " +
+      "(identify and report system flaws).";
   const splitNote = doc.splitTextToSize(evidenceNote, CONTENT_W);
   doc.text(splitNote, MARGIN, y);
   doc.setFont("helvetica", "normal");
@@ -495,19 +599,30 @@ export function generateCompliancePDF(data: ReportData): Buffer {
   });
 
   y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
-  y = sectionTitle(doc, y, "Audit Trail Attestation");
+  y = sectionTitle(doc, y, isSnapshot ? "How this preview was generated" : "Audit Trail Attestation");
 
   doc.setFontSize(9);
   doc.setTextColor(DARK_GREY);
-  const attestation = [
-    "This report was generated by HoundShield, an AI compliance firewall operating under CMMC Level 2",
-    "requirements. All events recorded herein have been immutably logged using cryptographic seed",
-    "anchors (SHA-256 Merkle tree). The Merkle Root on the cover page can be independently verified",
-    "against the HoundShield audit ledger to confirm this report has not been tampered with.",
-    "",
-    "This document constitutes an audit artifact suitable for CMMC Level 2 self-assessment",
-    "submission and C3PAO review preparation. Data generated at: " + data.generated_at,
-  ];
+  const attestation = isSnapshot
+    ? [
+        "This snapshot was generated entirely inside your web browser from text you pasted. The text was",
+        "scanned locally by HoundShield's detection engines and was never transmitted to any server.",
+        "",
+        "It is a PREVIEW, not a signed assessment: it has no cryptographic audit chain, it is not",
+        "tamper-evident, and it is not a CMMC or C3PAO evidence artifact. Do not submit it to an assessor.",
+        "",
+        "The $499 CMMC AI Risk Assessment Report runs the HoundShield proxy inside your own environment",
+        "for 14 days and delivers a SHA-256-signed PDF your assessor accepts. Generated at: " + data.generated_at,
+      ]
+    : [
+        "This report was generated by HoundShield, an AI compliance firewall operating under CMMC Level 2",
+        "requirements. All events recorded herein have been immutably logged using cryptographic seed",
+        "anchors (SHA-256 Merkle tree). The Merkle Root on the cover page can be independently verified",
+        "against the HoundShield audit ledger to confirm this report has not been tampered with.",
+        "",
+        "This document constitutes an audit artifact suitable for CMMC Level 2 self-assessment",
+        "submission and C3PAO review preparation. Data generated at: " + data.generated_at,
+      ];
   attestation.forEach((line) => {
     doc.text(line, MARGIN, y);
     y += 5.5;
@@ -524,10 +639,12 @@ export function generateCompliancePDF(data: ReportData): Buffer {
       doc.setFontSize(7.5);
       doc.setTextColor(MID_GREY);
       doc.setFont("helvetica", "normal");
-  const footerText = `Generated by HoundShield  |  Merkle Root: ${data.integrity.merkle_root ?? "N/A"}  |  Tamper-evident audit trail`;
+  const footerText = isSnapshot
+        ? "Generated by HoundShield  |  Local browser preview — not tamper-evident  |  The signed 14-day report carries the Merkle root"
+        : `Generated by HoundShield  |  Merkle Root: ${data.integrity.merkle_root ?? "N/A"}  |  Tamper-evident audit trail`;
       doc.text(footerText, PAGE_W / 2, 285, { align: "center" });
     }
   }
 
-  return Buffer.from(doc.output("arraybuffer"));
+  return doc;
 }

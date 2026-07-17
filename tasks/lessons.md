@@ -5,6 +5,43 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-18
+
+### A client-side "prove it yourself" tool must import only the local engines — never the cloud scanner
+**What:** The Instant Snapshot scans pasted prompts in the browser. `lib/reports/` holds both the
+pure-regex engines (`BUILTIN/CMMC/HIPAA` patterns) and cloud scanners (`risk-engine.ts`,
+`gemini-scanner.ts` → Gemini). Pulling a cloud scanner into a `"use client"` component would ship a
+network call into the bundle and silently break the entire "nothing leaves your network" promise the
+tool exists to prove.
+**Root cause:** Co-located modules make the wrong import one autocomplete away; a green build says
+nothing about whether the boundary held.
+**Rule:** On any client-side scan path, import ONLY the regex engines. Findings carry the pattern
+NAME + classification, never the matched substring (`blockEventFromFinding`). Any server-bound
+endpoint for it takes a `.strict()` counts-only schema with NO field for prompt text — a smuggling
+attempt must 400, not forward. Guard-test both: component asserts no raw substrings render; route
+asserts `inputText` is rejected.
+
+### An honest preview needs a `snapshot` flag, not a second PDF generator
+**What:** The snapshot PDF and the signed 14-day report share `buildComplianceDoc()`. A preview
+cannot claim tamper-evidence, a Merkle audit chain, an SPRS score, or C3PAO-readiness — but forking
+the generator would drift the two artifacts apart over time.
+**Rule:** Branch honesty claims on a single `ReportData.snapshot` flag inside the one generator;
+unit-test it as two disjoint claim sets (`SIGNED_ONLY_CLAIMS` absent in snapshot, `SNAPSHOT_CLAIMS`
+present). One code path, two honest documents — the #205 data-honesty doctrine applied to PDFs.
+
+### Verify a React controlled input by REAL keystrokes, not synthetic events or JS-set values
+**What:** Live-verifying the snapshot on the dev server, `computer type` on a cold-hydrated textarea
+and a native-setter + `dispatchEvent(new Event('input'))` both left the controlled `<textarea>` at
+value 0 — React state never updated, Scan stayed disabled. It looked like a product bug; it was
+sandbox/hydration friction. After a fresh navigate (warm hydration), real `computer type` populated
+the field and the whole flow (scan → findings → PDF → CTA) worked.
+**Rule:** For controlled inputs in the in-app browser, drive with real keystrokes after warm
+hydration and confirm via `.value`; don't trust JS-set values or synthetic input events (same gotcha
+class as the FAQ deep-link scroll). Unit tests already prove the logic — browser checks are for
+render + no-leak + no console errors, not for re-proving state wiring.
+
+---
+
 ## 2026-07-15
 
 ### Screenshot UI against `next start`, not `next dev` — cold compiles + networkidle wedge the pass
