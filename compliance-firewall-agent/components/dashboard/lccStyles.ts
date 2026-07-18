@@ -17,11 +17,16 @@
  */
 export const LCC_CSS = `
 .hs-lcc{
-  /* Same light Steel & Cream palette as the marketing site (mapped onto the
-     site's --hs-* tokens, with fallbacks so the console is self-sufficient). */
-  --bg: var(--hs-surface-1, #F5F8FB);
+  /* AURORA skin (2026-07-18 redesign): the console shares the marketing hero's
+     soft slate-blue → pale-sage gradient stage + pastel accent set, so the
+     after-login dashboard and the hero window read as one family. Falls back to
+     a flat wash so the console is self-sufficient if the site tokens are absent. */
+  --bg: var(--hs-aurora-bg, linear-gradient(155deg,#C9D1DB 0%,#D3D8D5 44%,#DFE6D2 100%));
   --panel: var(--hs-surface-0, #FFFFFF);
-  --panel2: var(--hs-surface-1, #F5F8FB);
+  --panel2: var(--hs-aurora-glass, rgba(255,255,255,.66));
+  /* Pastel data-viz accents (shared with the hero window). */
+  --lime: var(--hs-lime, #B6D94E); --peach: var(--hs-peach, #F0B880); --peri: var(--hs-peri, #A9C7EE);
+  --soft: 0 2px 12px rgba(56,78,112,.07); --soft-lg: 0 18px 44px rgba(56,78,112,.16);
   --hover: var(--hs-mist-md, rgba(129,166,198,.10));
   --line: var(--hs-border-ink, rgba(15,30,46,.10));
   --line2: var(--hs-border, rgba(129,166,198,.30));
@@ -44,8 +49,8 @@ export const LCC_CSS = `
   --f-disp:var(--font-display),system-ui,sans-serif;
   --f:var(--font-body),system-ui,-apple-system,'Segoe UI',sans-serif;
   --f-mono:var(--font-mono),ui-monospace,SFMono-Regular,Menlo,monospace;
-  --r:14px; --r-sm:10px;
-  font-family:var(--f);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
+  --r:16px; --r-sm:10px;
+  font-family:var(--f);background:var(--bg);background-attachment:fixed;color:var(--text);-webkit-font-smoothing:antialiased;
 }
 /* Scoped reset. :where() keeps it at ZERO specificity so the Tailwind-styled
    panels embedded in the shell (WelcomeBanner, CustomerStatusPanel,
@@ -57,7 +62,7 @@ export const LCC_CSS = `
 .hs-lcc .mono{font-family:var(--f-mono)}
 .hs-lcc .shell{display:grid;grid-template-columns:248px 1fr;min-height:100dvh}
 
-.hs-lcc .side{background:var(--panel2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100dvh;overflow-y:auto}
+.hs-lcc .side{background:var(--panel2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100dvh;overflow-y:auto}
 .hs-lcc .brand{display:flex;align-items:center;gap:.55rem;padding:.4rem .5rem 1.1rem}
 .hs-lcc .brand img{height:30px;width:auto;mix-blend-mode:multiply;transition:transform .3s cubic-bezier(.22,.61,.36,1);transform-origin:center;animation:hs-logo-idle 4.5s ease-in-out infinite}
 .hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brand:active img,.hs-lcc .brand img:active{animation:none;transform:rotate(-8deg) scale(1.08)}
@@ -99,7 +104,7 @@ export const LCC_CSS = `
 .hs-lcc .atab{display:none}.hs-lcc .atab.on{display:block;animation:lccFade .35s ease}
 @keyframes lccFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-.hs-lcc .ops{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.7rem 16px;font-size:.84rem;color:var(--mut);margin-bottom:18px;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .ops{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.7rem 16px;font-size:.84rem;color:var(--mut);margin-bottom:18px;box-shadow:var(--soft)}
 .hs-lcc .ops b{color:var(--text);font-family:var(--f-mono);font-weight:600}
 .hs-lcc .ops .sep{color:var(--mut2)}
 
@@ -146,7 +151,7 @@ export const LCC_CSS = `
 /* KPI tiles — each carries its own accent hue as a gradient hairline + icon
    tint, so status reads in colour before you read a single number. */
 .hs-lcc .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
-.hs-lcc .kpi{--accent:var(--brand);position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:border-color .2s,box-shadow .2s;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .kpi{--accent:var(--brand);position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:border-color .2s,box-shadow .2s;box-shadow:var(--soft)}
 .hs-lcc .kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 8%,transparent))}
 .hs-lcc .kpi:hover{border-color:color-mix(in srgb,var(--accent) 40%,transparent);box-shadow:0 8px 24px -14px color-mix(in srgb,var(--accent) 60%,transparent)}
 .hs-lcc .kpi.a-bad{--accent:var(--bad)}
@@ -169,7 +174,7 @@ export const LCC_CSS = `
 .hs-lcc .row{display:grid;gap:16px;margin-bottom:16px}
 .hs-lcc .r-2-1{grid-template-columns:1.55fr 1fr}
 .hs-lcc .r-3-2{grid-template-columns:1.45fr 1fr}
-.hs-lcc .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--soft)}
 .hs-lcc .ph{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,color-mix(in srgb,var(--brand) 4%,transparent),transparent)}
 .hs-lcc .ph h3{font-size:.98rem;font-weight:600}
 .hs-lcc .ph .mono{font-size:.7rem;color:var(--mut2)}
@@ -201,7 +206,7 @@ export const LCC_CSS = `
 
 .hs-lcc .eng{display:grid;grid-template-columns:92px 1fr 40px;align-items:center;gap:12px;padding:.4rem 0;font-size:.82rem;color:var(--mut)}
 .hs-lcc .bar{height:8px;border-radius:99px;background:var(--track);overflow:hidden}
-.hs-lcc .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--bright),var(--orange));border-radius:99px;transition:width .8s ease}
+.hs-lcc .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--peri),var(--lime));border-radius:99px;transition:width .8s ease}
 .hs-lcc .eng b{text-align:right;font-family:var(--f-mono);color:var(--text);font-weight:600}
 
 .hs-lcc .sprs{display:flex;flex-direction:column;align-items:center;padding:18px}
@@ -223,7 +228,7 @@ export const LCC_CSS = `
 .hs-lcc .btn-sm{padding:.4rem .7rem;font-size:.78rem}
 
 .hs-lcc .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.hs-lcc .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:all .2s;box-shadow:0 1px 2px rgba(15,30,46,.04)}
+.hs-lcc .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:all .2s;box-shadow:var(--soft)}
 .hs-lcc .card:hover{border-color:var(--line2);transform:translateY(-3px);box-shadow:0 12px 28px -18px rgba(15,30,46,.35)}
 .hs-lcc .card .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--brand);margin-bottom:.8rem}
 .hs-lcc .card .ic svg{width:19px;height:19px}
@@ -235,7 +240,7 @@ export const LCC_CSS = `
 /* Static state tag for honest not-configured credential rows (no fake buttons). */
 .hs-lcc .gw-tag{flex-shrink:0;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut2);border:1px solid var(--line);border-radius:6px;padding:.14rem .4rem}
 .hs-lcc .usebar{height:8px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:.35rem}
-.hs-lcc .usebar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--orange));border-radius:99px}
+.hs-lcc .usebar i{display:block;height:100%;background:linear-gradient(90deg,var(--peri),var(--lime));border-radius:99px}
 
 /* Brain AI — the flagship surface: warm cream halo, the Doberman mark on the
    panel and on every analyst reply, quick-ask card on the Overview tab. */
