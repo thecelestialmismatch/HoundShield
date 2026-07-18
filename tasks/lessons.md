@@ -7,6 +7,17 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ## 2026-07-18
 
+### Shipped a failing test by trusting truncated `tail` output → red CI on main
+**What:** The Control Map PR merged, then every CI run went red. Cause: `ControlMap.test.tsx`
+used `getByText('72%')`, but 72% renders twice by design (overall ring + CMMC framework
+rollup), so Testing Library throws on the multiple match. Locally I'd run vitest with
+`| tail -8`, saw "27 passed", and committed — the failing line was above the tail window.
+**Root cause:** verified the suite from a truncated view, never checked the explicit
+failed-count, so a real failure scrolled off-screen.
+**Rule:** after any `vitest`/`npm test`, assert on the SUMMARY LINE — grep for `Tests .*failed`
+or confirm `failed (0)` — never conclude green from a truncated `tail`. For a targeted file,
+run it un-truncated. Duplicate-by-design text ⇒ `getAllByText`, never `getByText`.
+
 ### "Rearrange the sections" survives a contract-locked file when order is CSS, not DOM
 **What:** The founder wanted the console's Overview sections reorderable/hideable, but
 `LiveCommandCenter.tsx` is pinned by ~40 structure assertions (many use proximity like

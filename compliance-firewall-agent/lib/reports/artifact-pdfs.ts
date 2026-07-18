@@ -8,6 +8,15 @@ import type {
 } from "@/lib/shieldready/types";
 import { CONTROL_FAMILIES } from "@/lib/shieldready/controls/families";
 import { getRemediationPriorities } from "@/lib/shieldready/scoring";
+import {
+  coverBanner,
+  sectionTitle as brandSectionTitle,
+  stampChrome,
+  paragraph,
+  disclaimer as brandDisclaimer,
+  reportId,
+  STEEL,
+} from "./pdf-brand";
 
 /**
  * The three downloadable compliance artifacts on the console Reports tab:
@@ -52,14 +61,14 @@ export const ARTIFACT_META: Record<ArtifactType, { title: string; filePrefix: st
   evidence: { title: "C3PAO Evidence Pack", filePrefix: "Evidence" },
 };
 
-// ─── Palette (matches lib/reports/pdf-generator.ts) ──────────────────────────
-const BRAND = "#2563EB";
-const DARK_GREY = "#374151";
-const MID_GREY = "#6B7280";
-const LIGHT_GREY = "#F3F4F6";
-const RED = "#DC2626";
-const GREEN = "#059669";
-const AMBER = "#D97706";
+// ─── Palette — HoundShield steel (shared with lib/reports/pdf-brand.ts) ──────
+const BRAND = STEEL; // #2B4F6B — replaces the old generic #2563EB blue
+const DARK_GREY = "#334155";
+const MID_GREY = "#64748B";
+const LIGHT_GREY = "#EDF1F6";
+const RED = "#B91C1C";
+const GREEN = "#047857";
+const AMBER = "#B45309";
 
 const PAGE_W = 210; // A4 mm
 const MARGIN = 18;
@@ -133,41 +142,49 @@ function formatDate(iso: string): string {
   }
 }
 
-function coverPage(doc: jsPDF, type: ArtifactType, input: ArtifactInput): number {
-  doc.setFillColor(BRAND);
-  doc.rect(0, 0, PAGE_W, 52, "F");
-  doc.setFontSize(22);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor("#FFFFFF");
-  doc.text("HoundShield", MARGIN, 24);
-  doc.setFontSize(13);
-  doc.text(ARTIFACT_META[type].title, MARGIN, 34);
-  doc.setFontSize(8.5);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor("#BFDBFE");
-  doc.text("NIST SP 800-171 Rev 2 · CMMC Level 2 self-assessment artifact", MARGIN, 44);
+/** One-paragraph executive summary explaining what each artifact is + how to use it. */
+const ABOUT_TEXT: Record<ArtifactType, (org: string) => string> = {
+  ssp: (org) =>
+    `This System Security Plan documents how ${org} implements each of the 110 NIST SP 800-171 ` +
+    `Rev 2 security requirements that scope CMMC Level 2. For every control it records the current ` +
+    `implementation status and the SPRS point weight at stake, giving your team and a prospective ` +
+    `C3PAO one current picture of your control posture. Read it alongside the POA&M, which tracks ` +
+    `every requirement not yet fully met.`,
+  poam: (org) =>
+    `This Plan of Action & Milestones lists every NIST SP 800-171 Rev 2 requirement that ${org} has ` +
+    `not yet fully met, ordered by risk so the highest-impact gaps surface first. Each item states ` +
+    `the weakness, its SPRS impact, the planned remediation and an effort estimate — the working ` +
+    `backlog that moves your SPRS score toward the posture a CMMC Level 2 assessment expects.`,
+  evidence: (org) =>
+    `This Evidence Pack maps each implemented control to the specific artifacts a C3PAO assessor will ` +
+    `ask to see, so ${org} can assemble the assessment package before the formal review rather than ` +
+    `during it. Controls marked Met are ready for evidence collection; use the register below as your ` +
+    `assessor-preparation checklist.`,
+};
 
-  let y = 66;
-  const kv = (k: string, v: string) => {
-    doc.setFontSize(10);
-    doc.setTextColor(DARK_GREY);
-    doc.setFont("helvetica", "bold");
-    doc.text(k, MARGIN, y);
-    doc.setFont("helvetica", "normal");
-    doc.text(v, MARGIN + 42, y);
-    y += 7;
-  };
-  kv("Organization", input.orgName);
-  kv("Generated", formatDate(input.generatedAt));
-  kv("CMMC Level", String(input.cmmcLevel));
-  // ASCII hyphen only — U+2212 MINUS is outside jsPDF's WinAnsi font encoding
-  // and prints as a stray quote character.
-  kv("SPRS Score", `${input.sprs.total} (range -203 to +110)`);
-  kv(
-    "Assessment",
-    `${input.sprs.metCount} met · ${input.sprs.partialCount} partial · ${input.sprs.unmetCount} unmet · ${input.controls.length - input.sprs.assessedCount} not assessed`,
-  );
-  return y + 4;
+function coverPage(doc: jsPDF, type: ArtifactType, input: ArtifactInput): number {
+  const meta: Array<[string, string]> = [
+    ["Organization", input.orgName],
+    ["Framework", `NIST SP 800-171 Rev 2 · CMMC Level ${input.cmmcLevel}`],
+    // ASCII hyphen only — U+2212 MINUS is outside jsPDF's WinAnsi font encoding.
+    ["SPRS Score", `${input.sprs.total}  (range -203 to +110)`],
+    [
+      "Assessment",
+      `${input.sprs.metCount} met · ${input.sprs.partialCount} partial · ${input.sprs.unmetCount} unmet · ${input.controls.length - input.sprs.assessedCount} not assessed`,
+    ],
+    ["Prepared", formatDate(input.generatedAt)],
+    ["Report ID", reportId(ARTIFACT_META[type].filePrefix, input.orgName, input.generatedAt)],
+  ];
+  let y = coverBanner(doc, {
+    title: ARTIFACT_META[type].title,
+    subtitle: "NIST SP 800-171 Rev 2 · CMMC Level 2 self-assessment",
+    org: input.orgName,
+    meta,
+    tag: "Confidential",
+  });
+  y = brandSectionTitle(doc, y + 2, "About this report");
+  y = paragraph(doc, y, ABOUT_TEXT[type](input.orgName));
+  return y + 2;
 }
 
 function familyTable(doc: jsPDF, y: number, input: ArtifactInput): number {
@@ -187,41 +204,19 @@ function familyTable(doc: jsPDF, y: number, input: ArtifactInput): number {
   return (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
 }
 
+const DISCLAIMER_TEXT =
+  "This artifact is generated by HoundShield from your organization's own self-assessment data for " +
+  "internal planning and C3PAO preparation. It does not constitute an official CMMC assessment or DoD " +
+  "certification. Official SPRS scores must be submitted via https://www.sprs.csd.disa.mil/.";
+
+// Local wrappers keep every call site below unchanged while delegating to the
+// shared premium brand layer (steel lockup, section tabs, disclaimer card).
 function sectionTitle(doc: jsPDF, y: number, text: string): number {
-  doc.setFontSize(13);
-  doc.setTextColor(BRAND);
-  doc.setFont("helvetica", "bold");
-  doc.text(text, MARGIN, y);
-  doc.setDrawColor(BRAND);
-  doc.line(MARGIN, y + 1.5, PAGE_W - MARGIN, y + 1.5);
-  doc.setFont("helvetica", "normal");
-  return y + 8;
+  return brandSectionTitle(doc, y, text);
 }
 
 function disclaimer(doc: jsPDF, y: number): void {
-  const text =
-    "This artifact is generated by HoundShield from your organization's own self-assessment data for " +
-    "internal planning and C3PAO preparation. It does not constitute an official CMMC assessment or DoD " +
-    "certification. Official SPRS scores must be submitted via https://www.sprs.csd.disa.mil/.";
-  doc.setFontSize(7.5);
-  doc.setTextColor(MID_GREY);
-  doc.setFont("helvetica", "italic");
-  doc.text(doc.splitTextToSize(text, CONTENT_W), MARGIN, y);
-  doc.setFont("helvetica", "normal");
-}
-
-function stampHeaders(doc: jsPDF, input: ArtifactInput, title: string): void {
-  const pages = doc.getNumberOfPages();
-  for (let i = 2; i <= pages; i++) {
-    doc.setPage(i);
-    doc.setFontSize(8);
-    doc.setTextColor(MID_GREY);
-    doc.text(`HoundShield — ${title}`, MARGIN, 10);
-    doc.text(input.orgName, PAGE_W / 2, 10, { align: "center" });
-    doc.text(`Page ${i} of ${pages}`, PAGE_W - MARGIN, 10, { align: "right" });
-    doc.setDrawColor(LIGHT_GREY);
-    doc.line(MARGIN, 12, PAGE_W - MARGIN, 12);
-  }
+  brandDisclaimer(doc, y, DISCLAIMER_TEXT);
 }
 
 // ─── The generator ────────────────────────────────────────────────────────────
@@ -328,9 +323,14 @@ export function generateArtifactPdf(type: ArtifactType, input: ArtifactInput): G
     doc.text(doc.splitTextToSize(attestation, CONTENT_W), MARGIN, y);
   }
 
-  // Disclaimer on the final page, headers on every page after the cover.
-  disclaimer(doc, 280);
-  stampHeaders(doc, input, ARTIFACT_META[type].title);
+  // Disclaimer on the final page; running header + website/confidentiality
+  // footer stamped on every page by the shared brand layer.
+  disclaimer(doc, 262);
+  stampChrome(doc, {
+    title: ARTIFACT_META[type].title,
+    org: input.orgName,
+    generatedAt: input.generatedAt,
+  });
 
   return {
     bytes: doc.output("arraybuffer"),

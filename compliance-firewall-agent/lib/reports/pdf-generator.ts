@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { drawBadge, STEEL, SKY, SKY_SOFT, SITE } from "./pdf-brand";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -58,14 +59,14 @@ export interface ReportData {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const BRAND = "#2563EB"; // brand-600
-const BLACK = "#000000";
-const DARK_GREY = "#374151";
-const MID_GREY = "#6B7280";
-const LIGHT_GREY = "#F3F4F6";
-const RED = "#DC2626";
-const GREEN = "#059669";
-const AMBER = "#D97706";
+const BRAND = STEEL; // #2B4F6B — HoundShield steel (was generic #2563EB blue)
+const BLACK = "#0B1622";
+const DARK_GREY = "#334155";
+const MID_GREY = "#64748B";
+const LIGHT_GREY = "#EDF1F6";
+const RED = "#B91C1C";
+const GREEN = "#047857";
+const AMBER = "#B45309";
 
 const PAGE_W = 210; // A4 mm
 const MARGIN = 20;
@@ -89,14 +90,25 @@ function addPageHeader(doc: jsPDF, pageNum: number, orgName: string, generatedAt
   const totalPages = (doc as unknown as { internal: { getNumberOfPages: () => number } })
     .internal.getNumberOfPages();
   doc.setFontSize(8);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(BRAND);
+  doc.text("HOUNDSHIELD", MARGIN, 10);
+  doc.setFont("helvetica", "normal");
   doc.setTextColor(MID_GREY);
-  doc.text("HoundShield — AI Compliance Firewall", MARGIN, 10);
   doc.text(orgName, PAGE_W / 2, 10, { align: "center" });
   doc.text(`Page ${pageNum} of ${totalPages}`, PAGE_W - MARGIN, 10, { align: "right" });
   doc.setDrawColor(LIGHT_GREY);
   doc.line(MARGIN, 12, PAGE_W - MARGIN, 12);
-  doc.text(`Generated: ${formatDate(generatedAt)}`, MARGIN, 285);
+  // Footer: site URL · confidentiality · generated date
   doc.line(MARGIN, 283, PAGE_W - MARGIN, 283);
+  doc.setFontSize(7.5);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(BRAND);
+  doc.text(SITE, MARGIN, 287);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(MID_GREY);
+  doc.text(`Confidential · Prepared for ${orgName}`, PAGE_W / 2, 287, { align: "center" });
+  doc.text(`Generated ${formatDate(generatedAt)}`, PAGE_W - MARGIN, 287, { align: "right" });
 }
 
 function sectionTitle(doc: jsPDF, y: number, text: string): number {
@@ -151,21 +163,26 @@ export function buildComplianceDoc(data: ReportData): jsPDF {
   doc.setFillColor(BRAND);
   doc.rect(0, 0, PAGE_W, 55, "F");
 
-  // CONFIDENTIAL badge
-  doc.setFillColor("#DBEAFE");
-  doc.roundedRect(MARGIN, 12, 38, 7, 1.5, 1.5, "F");
+  // Accent rule at the band foot
+  doc.setFillColor(SKY);
+  doc.rect(0, 55, PAGE_W, 1.2, "F");
+
+  // CONFIDENTIAL badge (top-right)
+  doc.setFillColor(SKY_SOFT);
+  doc.roundedRect(PAGE_W - MARGIN - 38, 12, 38, 7, 1.5, 1.5, "F");
   doc.setFontSize(7);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(BRAND);
-  doc.text("CONFIDENTIAL", MARGIN + 19, 17, { align: "center" });
+  doc.text("CONFIDENTIAL", PAGE_W - MARGIN - 19, 17, { align: "center" });
 
-  // Product name
+  // Brand lockup: shield mark + wordmark
+  drawBadge(doc as unknown as jsPDF & Record<string, unknown>, MARGIN, 11, 14, true);
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
   doc.setTextColor("#FFFFFF");
-  doc.text("HoundShield", MARGIN, 35);
+  doc.text("HOUNDSHIELD", MARGIN + 19, 22);
   doc.setFontSize(11);
-  doc.setFont("helvetica", "normal");
+  doc.setFont("helvetica", "bold");
   doc.text(
     isSnapshot
       ? "AI Compliance Firewall — Risk Snapshot (Preview)"
@@ -174,11 +191,12 @@ export function buildComplianceDoc(data: ReportData): jsPDF {
     42
   );
   doc.setFontSize(8.5);
-  doc.setTextColor("#BFDBFE");
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(SKY);
   doc.text(
     isSnapshot
-      ? "Local browser preview  |  Generated from a single paste  |  Not a signed assessment"
-      : "Tamper-evident | Cryptographically anchored | CMMC Level 2",
+      ? `Local browser preview  |  Generated from a single paste  |  Not a signed assessment  |  ${SITE}`
+      : `Tamper-evident | Cryptographically anchored | CMMC Level 2  |  ${SITE}`,
     MARGIN,
     50
   );
