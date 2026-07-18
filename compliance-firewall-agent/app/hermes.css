@@ -73,7 +73,9 @@
   --orange: #E07B39; --orange-bright: #F09A5B; --orange-bg: rgba(224, 123, 57, .12);
   --cta: #5A86A8; --cta-text: #FFFFFF; --cta-hover: #456C8C;
   --accent-warm: #F3E3D0; --halo: rgba(129, 166, 198, .22);
-  --hero-from: #F4F8FC; --hero-to: #FFFFFF;
+  /* Aurora hero — the soft slate-blue → pale-sage gradient the product
+     window floats on (matches the after-login console skin). */
+  --hero-from: #CDD4DD; --hero-to: #DFE6D2;
   --nav-bg: rgba(250, 252, 255, .82); --nav-line: rgba(15, 30, 46, .08);
   --logo-ink: #0F1E2E;
   --pop: #0E1622; --pop-text: #E8F0F8; --pop-line: rgba(255, 255, 255, .08); --pop-mut: #90A6BC;
@@ -185,8 +187,11 @@
 .hermes .bar i { transition: width .8s var(--ease); }
 
 /* ---------- HERO ---------- */
-.hermes .hero { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--hero-from), var(--hero-to)); }
-.hermes .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 60% at 78% 18%, var(--halo), transparent 70%); pointer-events: none; }
+.hermes .hero { position: relative; overflow: hidden; background: var(--hs-aurora-bg, linear-gradient(155deg, var(--hero-from), #D3D8D5 44%, var(--hero-to))); }
+.hermes .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(58% 55% at 82% 12%, rgba(255,255,255,.55), transparent 70%), radial-gradient(50% 50% at 12% 92%, rgba(210,224,196,.5), transparent 72%); pointer-events: none; }
+/* Hero copy sits on the (darker) aurora wash — nudge the faint trust row up
+   to AA-grade ink so it stays legible against the gradient. */
+.hermes .hero .hero-trust span { color: var(--text-2); }
 .hermes .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding: 72px 0 84px; }
 .hermes .hero .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .4rem .8rem; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); font-size: .78rem; font-weight: 600; color: var(--text-2); margin-bottom: 1.4rem; }
 .hermes .hero .pill .live-dot { width: 6px; height: 6px; }
