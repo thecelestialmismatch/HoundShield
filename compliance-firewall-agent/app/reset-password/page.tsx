@@ -1,10 +1,12 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Lock, Eye, EyeOff, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
-import { authClient } from "@/lib/auth/auth-client";
+import { Lock, Eye, EyeOff, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { authClient, isBetterAuthClientEnabled } from "@/lib/auth/auth-client";
+import { createClient } from "@/lib/supabase/browser";
+import { resetView } from "@/lib/auth/reset-password-state";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 
@@ -18,14 +20,29 @@ function ResetPasswordInner() {
   const params = useSearchParams();
   const token = params.get("token") ?? "";
   const tokenError = params.get("error"); // e.g. INVALID_TOKEN
+  const betterAuth = isBetterAuthClientEnabled();
 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
+  // Supabase mode: null while we confirm the recovery session /auth/callback set.
+  const [sessionReady, setSessionReady] = useState<boolean | null>(betterAuth ? true : null);
 
-  const invalid = !token || tokenError;
+  useEffect(() => {
+    if (betterAuth) return;
+    // The recovery link came through /auth/callback, which exchanged the code
+    // into a session before forwarding here. Confirm that session exists so we
+    // show the form (not "expired") and can updateUser against it.
+    const supabase = createClient();
+    supabase.auth
+      .getSession()
+      .then(({ data }) => setSessionReady(!!data.session))
+      .catch(() => setSessionReady(false));
+  }, [betterAuth]);
+
+  const view = resetView({ betterAuth, token, tokenError, sessionReady });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +53,9 @@ function ResetPasswordInner() {
     }
     setLoading(true);
     try {
-      const { error: resetError } = await authClient.resetPassword({ newPassword: password, token });
+      const resetError = betterAuth
+        ? (await authClient.resetPassword({ newPassword: password, token })).error
+        : (await createClient().auth.updateUser({ password })).error;
       if (resetError) {
         setError(resetError.message || "This reset link is invalid or has expired.");
         setLoading(false);
@@ -73,7 +92,12 @@ function ResetPasswordInner() {
               Go to login
             </Link>
           </div>
-        ) : invalid ? (
+        ) : view === "loading" ? (
+          <div className="text-center space-y-4 py-8">
+            <Loader2 className="w-6 h-6 text-[var(--hs-ink-secondary)] animate-spin mx-auto" />
+            <p className="text-sm text-[var(--hs-ink-secondary)]">Verifying your reset link…</p>
+          </div>
+        ) : view === "invalid" ? (
           <div className="text-center space-y-4">
             <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto">
               <AlertCircle className="w-6 h-6 text-red-500" />
