@@ -18,9 +18,10 @@
  * and the window is explicitly badged "Live demo".
  */
 
-import { useEffect, useState } from 'react'
-import { Activity, Shield, Gauge, AlertTriangle, Search, Settings, Plus } from 'lucide-react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { Activity, Shield, Gauge, AlertTriangle, Search, Settings, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Logo } from '@/components/Logo'
+import { DESIGN_THEMES, heroThemeVars } from '@/lib/dashboard/design-themes'
 
 type Row = { verdict: 'BLOCKED' | 'PASSED' | 'QUAR'; label: string; detail: string; lat: string }
 
@@ -76,6 +77,36 @@ export function HeroDemoDashboard() {
     Array.from({ length: FEED }, (_, i) => SCRIPT[i % SCRIPT.length]),
   )
 
+  // ── Design carousel ──
+  // The window cycles LIVE through every registered design (light → dark →
+  // light), the charts still ticking. It auto-advances (paused while the cursor
+  // is over the window, so a visitor can dwell) and is fully controllable via
+  // the ‹ › nav + dot rail. Reduced-motion holds a single design (manual only).
+  const [themeIdx, setThemeIdx] = useState(0)
+  const activeTheme = DESIGN_THEMES[themeIdx]
+  const pausedRef = useRef(false)
+  const winRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const reduce = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (reduce) return
+    const id = setInterval(() => {
+      if (!pausedRef.current) setThemeIdx((i) => (i + 1) % DESIGN_THEMES.length)
+    }, 4600)
+    return () => clearInterval(id)
+  }, [])
+
+  // Re-trigger the one-shot swap animation on every design change.
+  useEffect(() => {
+    const el = winRef.current
+    if (!el) return
+    el.classList.remove('swap')
+    void el.offsetWidth
+    el.classList.add('swap')
+  }, [themeIdx])
+
+  const goTheme = (dir: number) => setThemeIdx((i) => (i + dir + DESIGN_THEMES.length) % DESIGN_THEMES.length)
+
   useEffect(() => {
     let step = 0
     const id = setInterval(() => {
@@ -117,14 +148,50 @@ export function HeroDemoDashboard() {
   const coverage = clamp(Math.round((sprs / 110) * 100 + 12), 60, 99)
 
   return (
-    <div className="hs-demo" aria-label="HoundShield live dashboard demonstration">
+    <div
+      className="hs-demo"
+      style={heroThemeVars(activeTheme) as CSSProperties}
+      onMouseEnter={() => { pausedRef.current = true }}
+      onMouseLeave={() => { pausedRef.current = false }}
+      aria-label="HoundShield live dashboard demonstration"
+    >
       <style dangerouslySetInnerHTML={{ __html: DEMO_CSS }} />
 
       {/* Glass "ghost" cards stacked behind the window (aurora depth). */}
       <div className="hd-ghost g1" aria-hidden="true" />
       <div className="hd-ghost g2" aria-hidden="true" />
 
-      <div className="hd-window">
+      {/* Design carousel control — the dashboard wears many looks; cycle them
+          live or pick one. Free for everyone in the after-login console too. */}
+      <div className="hd-switch" role="group" aria-label="Dashboard design switcher">
+        <div className="hd-switch-row">
+          <button type="button" className="hd-switch-nav" onClick={() => goTheme(-1)} aria-label="Previous design">
+            <ChevronLeft />
+          </button>
+          <span className="hd-switch-mid" aria-live="polite">
+            <span className="hd-switch-name">{activeTheme.name}</span>
+            <span className="hd-switch-mode">{activeTheme.mode}</span>
+          </span>
+          <button type="button" className="hd-switch-nav" onClick={() => goTheme(1)} aria-label="Next design">
+            <ChevronRight />
+          </button>
+        </div>
+        <div className="hd-dots" role="tablist" aria-label="Dashboard designs">
+          {DESIGN_THEMES.map((t, i) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={i === themeIdx}
+              aria-label={`${t.name} design`}
+              className={`hd-dot${i === themeIdx ? ' on' : ''}`}
+              onClick={() => setThemeIdx(i)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="hd-window" ref={winRef}>
         {/* Title bar */}
         <div className="hd-bar">
           <div className="hd-brand-row">
@@ -277,15 +344,33 @@ const DEMO_CSS = `
   background:var(--a-stage);
   box-shadow:0 40px 90px rgba(56,78,112,.28), inset 0 1px 0 rgba(255,255,255,.5);
   color:var(--a-ink); font-family:var(--font-body),system-ui,sans-serif;
+  transition:background .6s ease, color .35s ease;
 }
 .hs-demo *{box-sizing:border-box}
+
+/* Design switcher (carousel control) — theme-aware, sits over the ghost cards */
+.hs-demo .hd-switch{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;gap:.4rem;margin-bottom:14px}
+.hs-demo .hd-switch-row{display:inline-flex;align-items:center;gap:.3rem;background:color-mix(in srgb,var(--a-card) 84%,transparent);border:1px solid var(--a-line);border-radius:99px;padding:.26rem .32rem;box-shadow:0 8px 22px rgba(56,78,112,.16);backdrop-filter:blur(6px)}
+.hs-demo .hd-switch-nav{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:transparent;border:none;color:var(--a-mut);cursor:pointer;transition:background .15s,color .15s}
+.hs-demo .hd-switch-nav:hover{background:color-mix(in srgb,var(--a-steel) 20%,transparent);color:var(--a-ink)}
+.hs-demo .hd-switch-nav svg{width:15px;height:15px}
+.hs-demo .hd-switch-mid{display:inline-flex;align-items:baseline;gap:.4rem;padding:0 .3rem;min-width:120px;justify-content:center}
+.hs-demo .hd-switch-name{font-family:var(--a-disp);font-weight:700;font-size:.82rem;color:var(--a-ink);letter-spacing:-.01em}
+.hs-demo .hd-switch-mode{font-family:var(--a-mono);font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--a-mut2)}
+.hs-demo .hd-dots{display:flex;align-items:center;gap:.34rem}
+.hs-demo .hd-dot{width:7px;height:7px;border-radius:50%;border:none;padding:0;cursor:pointer;background:color-mix(in srgb,var(--a-ink) 22%,transparent);transition:transform .2s,background .2s}
+.hs-demo .hd-dot.on{background:var(--a-action);transform:scale(1.4)}
+.hs-demo .hd-dot:hover{background:color-mix(in srgb,var(--a-action) 60%,transparent)}
+@keyframes hdSwap{0%{opacity:.5;transform:translateY(7px) scale(.99)}100%{opacity:1;transform:none}}
 
 /* Glass ghost cards peeking above the window */
 .hs-demo .hd-ghost{position:absolute;left:50%;transform:translateX(-50%);border-radius:20px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.5);box-shadow:0 10px 30px rgba(56,78,112,.10)}
 .hs-demo .hd-ghost.g1{top:8px;width:82%;height:60px}
 .hs-demo .hd-ghost.g2{top:17px;width:91%;height:60px;background:rgba(255,255,255,.28)}
 
-.hs-demo .hd-window{position:relative;border-radius:22px;overflow:hidden;background:var(--a-win);box-shadow:0 24px 60px rgba(56,78,112,.22), 0 2px 0 rgba(255,255,255,.6)}
+.hs-demo .hd-window{position:relative;border-radius:22px;overflow:hidden;background:var(--a-win);box-shadow:0 24px 60px rgba(56,78,112,.22), 0 2px 0 rgba(255,255,255,.6);transition:background .5s ease,box-shadow .5s ease}
+.hs-demo .hd-window.swap{animation:hdSwap .5s cubic-bezier(.22,.61,.36,1)}
+.hs-demo .hd-card,.hs-demo .hd-kpi,.hs-demo .hd-gauge,.hs-demo .hd-bar,.hs-demo .hd-row,.hs-demo .hd-donut-c{transition:background .5s ease,border-color .5s ease,color .35s ease}
 
 /* Title bar */
 .hs-demo .hd-bar{display:flex;align-items:center;gap:.6rem;padding:.8rem 1rem;background:var(--a-bar);border-bottom:1px solid var(--a-line)}
@@ -364,5 +449,5 @@ const DEMO_CSS = `
 .hs-demo .hd-lat{font-family:var(--a-mono);font-size:.58rem;color:var(--a-mut2)}
 
 @media (max-width:560px){ .hs-demo{padding:20px 12px 14px} .hs-demo .hd-kpis{grid-template-columns:1fr 1fr} .hs-demo .hd-grid,.hs-demo .hd-grid-even{grid-template-columns:1fr} }
-@media (prefers-reduced-motion:reduce){ .hs-demo .hd-live i,.hs-demo .hd-ph .live i,.hs-demo .hd-row{animation:none} }
+@media (prefers-reduced-motion:reduce){ .hs-demo .hd-live i,.hs-demo .hd-ph .live i,.hs-demo .hd-row,.hs-demo .hd-window.swap{animation:none} .hs-demo,.hs-demo .hd-window{transition:none} }
 `
