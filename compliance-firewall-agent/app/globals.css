@@ -71,6 +71,24 @@
   --hs-warn:            #D97706;
   --hs-warn-bg:         #FFFBEB;
 
+  /* ── Aurora skin (soft SubTracker-inspired dashboard language) ──────
+     The single source of truth shared by BOTH the marketing hero demo
+     window and the after-login console, so the two surfaces read as one
+     family: a cool slate-blue → pale-sage gradient stage, glass panels,
+     and a pastel lime / peach / periwinkle accent set for data-viz.
+     Introduced 2026-07-18 (founder-directed dashboard + hero redesign). */
+  --hs-aurora-1:        #C9D1DB;   /* cool slate-blue (top-left) */
+  --hs-aurora-2:        #D3D8D5;   /* neutral mid */
+  --hs-aurora-3:        #DFE6D2;   /* pale sage (bottom-right) */
+  --hs-aurora-bg:       linear-gradient(155deg, #C9D1DB 0%, #D3D8D5 44%, #DFE6D2 100%);
+  --hs-aurora-glass:    rgba(255, 255, 255, 0.66);
+  --hs-lime:            #B6D94E;   --hs-lime-soft:  #D7EC95;
+  --hs-peach:           #F0B880;   --hs-peach-soft: #F8DDC0;
+  --hs-peri:            #A9C7EE;   --hs-peri-soft:  #D8E3F7;
+  --hs-action:          #2F6BF0;   --hs-action-hover: #245FE0;   /* vivid CTA blue */
+  --hs-delta:           #37A05A;   /* positive-trend green */
+  --hs-aurora-shadow:   0 30px 70px rgba(56, 78, 112, 0.20), 0 6px 18px rgba(56, 78, 112, 0.10);
+
   /* ── Typography ───────────────────────────────────── */
   --font-display:       'Geist', system-ui, sans-serif;
   --font-body:          'Geist', system-ui, sans-serif;

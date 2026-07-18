@@ -7,6 +7,36 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ## 2026-07-18
 
+### Reskin CSS-variable-driven surfaces at the token layer — don't rewrite the tested markup
+**What:** The `/console` dashboard needed a full visual reskin, but its markup is
+locked by ~40 contract assertions (evidence-chain spine, KPI provenance dialogs,
+CUI warning, panel captions, logo-hover tilt). A naive "rewrite the dashboard"
+would have detonated the suite.
+**Root cause:** `LiveCommandCenter` is entirely driven by CSS custom properties
+(`--bg`, `--panel`, `--line`, accent tokens). The whole look flows from the token
+block at the top of `lccStyles.ts` + a handful of literal-hex spots in the effect.
+**Rule:** To restyle a token-driven surface, change the tokens + the few literal
+paints (donut/ring conic, canvas strokeStyle) and leave the markup alone. One
+new shared token block in `globals.css` reskinned both the hero and the console
+without touching a single contract-locked string. Verify with a screenshot, not
+just green tests — tests prove structure held, the screenshot proves it's pretty.
+
+### A shared visual language belongs in ONE token block, not copied into each surface
+**What:** "Make the hero and the dashboard look the same" is a drift trap if each
+surface hard-codes its own gradient/accents.
+**Rule:** Define the shared skin (gradient, glass, pastel accents, CTA) once in
+`globals.css :root` (`--hs-aurora-*`); every surface references the vars with a
+literal fallback so it's still self-sufficient. Lock "defined once + referenced by
+both" in a contract test so a future edit to one surface can't silently fork the look.
+
+### A "circular badge wrapper" around <Logo> breaks the shared logo-hover tilt contract
+**What:** Wrapping `<Logo>` in `<span class="hd-badge">` for the SubTracker-style
+brand badge failed `logo-motion-contract` — it asserts `<Logo>` is the DIRECT child
+of the `group/brand` element (the hover-tilt is bound through `group-hover/brand`).
+**Rule:** Put `group/brand` (and any wrapper class like the badge) on the SAME
+element that directly precedes `<Logo>`, e.g. `<span class="hd-brand hd-badge group/brand"><Logo/></span>`.
+Never insert a node between the `group/brand` element and `<Logo>`.
+
 ### A client-side "prove it yourself" tool must import only the local engines — never the cloud scanner
 **What:** The Instant Snapshot scans pasted prompts in the browser. `lib/reports/` holds both the
 pure-regex engines (`BUILTIN/CMMC/HIPAA` patterns) and cloud scanners (`risk-engine.ts`,
