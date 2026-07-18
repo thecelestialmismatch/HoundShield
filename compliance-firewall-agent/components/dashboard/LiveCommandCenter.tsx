@@ -21,16 +21,18 @@
  *  - First-run checklist that ends on the PDF (activation driver).
  *  - Colour-coded KPI accents so status reads before a single number does.
  */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
   Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
-  Check, Zap, Crown, ListChecks, Info,
+  Check, Zap, Crown, ListChecks, Info, Palette, SlidersHorizontal, ArrowUp, ArrowDown, EyeOff, RotateCcw, Check as CheckIcon,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
+import { DESIGN_THEMES, getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
+import { useDashboardPrefs, OVERVIEW_SECTIONS, type DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
 import { SourceChip, ProvenancePanel } from './ProvenancePanel'
 import type { ProvenanceId } from './dataProvenance'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
@@ -254,6 +256,18 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   // (tabs hide via CSS, so an eager mount would load it on every console visit).
   const [assessSeen, setAssessSeen] = useState(false)
 
+  // ── Personalization (free for everyone, per-device) ──
+  // Design theme + Overview section order/visibility. Persisted to localStorage
+  // with NO entitlement check — this is a comfort/accessibility feature, not a
+  // paid capability (founder direction, 2026-07-18). The active theme retint the
+  // whole console; the effect below reads it via themeRef for the canvas/donut.
+  const prefs = useDashboardPrefs()
+  const activeTheme = getThemeById(prefs.themeId)
+  const themeRef = useRef(activeTheme)
+  themeRef.current = activeTheme
+  const [appearOpen, setAppearOpen] = useState(false)
+  const [customizing, setCustomizing] = useState(false)
+
   // ── Subscription context ─────────────────────────────────────────────────
   // The signed-in plan drives every entitlement in the dashboard (usage caps,
   // seats, retention, which features are unlocked). The public demo has no
@@ -287,6 +301,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   // Lets the Overview Brain card fire a real analyst question — assigned inside
   // the effect (where `ask` closes over the DOM), read on click after mount.
   const askRef = useRef<((q: string) => void) | null>(null)
+  // Repaints the imperatively-drawn marks (canvas + donut + legend) — called when
+  // the design theme changes so those surfaces retint with the CSS-var surfaces.
+  const redrawRef = useRef<(() => void) | null>(null)
   // Entitlements read imperatively inside the mount-once effect.
   const entRef = useRef(ent)
   // Name is HTML-escaped for the Brain-output path (rendered via innerHTML).
@@ -374,7 +391,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
     const fillRing = (sel: string) => {
       const r = $(sel); if (!r) return
       const pct = ((78 / 110) * 100).toFixed(0)
-      r.style.background = `conic-gradient(var(--lime) ${pct}%, rgba(15,30,46,.08) 0)`
+      r.style.background = `conic-gradient(var(--lime) ${pct}%, var(--track) 0)`
     }
     // Overview demo ring only — the assessment tab's ring is React-owned
     // (AssessSnapshot) and computes from the operator's real answers.
@@ -392,8 +409,11 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
     // resolved colour. Feeding that to the 2D context silently drew nothing —
     // the throughput chart came up blank. These match the Steel & Cream palette
     // (--hs-steel-dark / orange), exactly like the donut's hard-coded hexes.
-    const brandc = () => '#5A86A8'
-    const orangec = () => '#E07B39'
+    // Read from the ACTIVE design theme (themeRef) so a theme switch retints the
+    // canvas + donut too — not just the CSS-var surfaces. Literal-string return
+    // (never `var(--…)`) because a 2D context can't resolve a custom property.
+    const brandc = () => themeRef.current.viz.stroke
+    const orangec = () => themeRef.current.viz.accent
     const drawChart = () => {
       if (!cv) return
       const w = cv.clientWidth; if (w < 10) return
@@ -401,7 +421,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       cv.width = w * dpr; cv.height = h * dpr
       const x = cv.getContext('2d'); if (!x) return
       x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h)
-      x.strokeStyle = 'rgba(15,30,46,.06)'; x.lineWidth = 1
+      x.strokeStyle = themeRef.current.viz.grid; x.lineWidth = 1
       for (let g = 1; g < 4; g++) { const gy = (h / 4) * g; x.beginPath(); x.moveTo(0, gy); x.lineTo(w, gy); x.stroke() }
       const c = brandc(), max = 80, n = series.length, step = w / (n - 1)
       x.beginPath(); x.moveTo(0, h)
@@ -430,15 +450,23 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       const p = mix.map((v) => (v / t) * 100)
       const a = p[0], b = a + p[1], c2 = b + p[2]
       const donut = $('#lcc-donut')
-      // Aurora pastel sweep — CUI lime · Secrets peach · PII periwinkle · PHI steel
-      // (identical mapping to the marketing hero donut; identity is label + %,
-      // never colour alone). Literal hexes: the string is assigned to a live
-      // style, but keeping hexes matches the canvas/donut hard-coded pattern.
-      if (donut) donut.style.background = `conic-gradient(#B6D94E 0 ${a}%,#F0B880 ${a}% ${b}%,#A9C7EE ${b}% ${c2}%,#81A6C6 ${c2}% 100%)`
+      // Detection sweep — CUI · Secrets · PII · PHI — painted from the ACTIVE
+      // design theme's donut palette (aurora default = lime · peach · peri ·
+      // steel; a dark/warm/etc. theme retints it in lockstep with the hero). The
+      // legend dots are repainted from the same array so colour + label never
+      // disagree. Identity is always label + %, never colour alone.
+      const dz = themeRef.current.viz.donut
+      if (donut) donut.style.background = `conic-gradient(${dz[0]} 0 ${a}%,${dz[1]} ${a}% ${b}%,${dz[2]} ${b}% ${c2}%,${dz[3]} ${c2}% 100%)`
       const set = (sel: string, val: string) => { const el = $(sel); if (el) el.textContent = val }
       set('#lcc-lgCui', Math.round(p[0]) + '%'); set('#lcc-lgSec', Math.round(p[1]) + '%')
       set('#lcc-lgPii', Math.round(p[2]) + '%'); set('#lcc-lgPhi', Math.round(p[3]) + '%')
+      paintLegend()
       if (donutTot) donutTot.textContent = blocked.toLocaleString()
+    }
+    // Repaint the four static legend swatches to the active theme's donut colours.
+    const paintLegend = () => {
+      const dz = themeRef.current.viz.donut
+      root.querySelectorAll<HTMLElement>('.legend i').forEach((el, i) => { if (dz[i]) el.style.background = dz[i] })
     }
     timers.push(setInterval(() => { for (let i = 0; i < 4; i++) mix[i] = Math.max(8, mix[i] + Math.round((Math.random() - 0.5) * 4)); drawDonut() }, 3000))
 
@@ -583,6 +611,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
 
     /* ---- kick everything off ---- */
     drawChart(); drawDonut()
+    // Expose a repaint so a design-theme switch retints the canvas/donut/legend
+    // (the CSS-var surfaces retint on their own).
+    redrawRef.current = () => { drawChart(); drawDonut() }
 
     return () => {
       timers.forEach(clearInterval)
@@ -594,8 +625,25 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       feed?.removeEventListener('click', onFeedClick)
       feedFull?.removeEventListener('click', onFeedClick)
       askRef.current = null
+      redrawRef.current = null
     }
   }, [])
+
+  // Retint the imperatively-painted marks when the design theme changes (the
+  // var-driven surfaces retint automatically via the inline style on the root).
+  useEffect(() => { redrawRef.current?.() }, [prefs.themeId])
+
+  // Close the appearance menu on Escape or an outside click.
+  useEffect(() => {
+    if (!appearOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setAppearOpen(false) }
+    const onClick = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.appear')) setAppearOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    document.addEventListener('click', onClick)
+    return () => { window.removeEventListener('keydown', onKey); document.removeEventListener('click', onClick) }
+  }, [appearOpen])
 
   // reset the unread badge when the operator opens the feed tab
   useEffect(() => { if (tab === 'feed') bumpBadge(0) }, [tab])
@@ -621,7 +669,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   const tabClass = (id: TabId) => (tab === id ? 'atab on' : 'atab')
 
   return (
-    <div className="hs-lcc" ref={rootRef}>
+    <div className="hs-lcc" ref={rootRef} data-theme={activeTheme.id} data-mode={activeTheme.mode} style={consoleThemeVars(activeTheme) as CSSProperties}>
       <style dangerouslySetInnerHTML={{ __html: LCC_CSS }} />
       <div className="shell">
         {/* ── Sidebar ── */}
@@ -690,6 +738,47 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               <div style={{ minWidth: 0 }}><div className="crumb">HoundShield · Command Center</div><h1>{TAB_TITLES[tab]}</h1></div>
             </div>
             <div className="top-right">
+              {/* Personalize — free for everyone, saved per-device: switch the
+                  design and rearrange/hide sections. Mirrors the reference
+                  header's design + settings controls. */}
+              <div className="appear">
+                <button type="button" className="top-ico" aria-haspopup="menu" aria-expanded={appearOpen} aria-label="Change dashboard design" title="Change design" onClick={() => setAppearOpen((o) => !o)}>
+                  <Palette />
+                </button>
+                {appearOpen && (
+                  <div className="appear-menu" role="menu" aria-label="Dashboard design">
+                    <div className="appear-h">Design <span>· free for everyone</span></div>
+                    {DESIGN_THEMES.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={t.id === prefs.themeId}
+                        className={`appear-opt${t.id === prefs.themeId ? ' on' : ''}`}
+                        onClick={() => { prefs.setTheme(t.id); setAppearOpen(false) }}
+                      >
+                        <span className="appear-sw" aria-hidden>{t.swatch.map((c, i) => <i key={i} style={{ background: c }} />)}</span>
+                        <span className="appear-name">{t.name}<small>{t.blurb}</small></span>
+                        {t.id === prefs.themeId && <CheckIcon className="appear-ck" aria-hidden />}
+                      </button>
+                    ))}
+                    <div className="appear-foot">Saved on this device — nothing leaves your browser.</div>
+                  </div>
+                )}
+              </div>
+              <button
+                type="button"
+                className={`top-ico${customizing ? ' on' : ''}`}
+                aria-pressed={customizing}
+                aria-label="Customize layout"
+                title="Rearrange your sections"
+                onClick={() => { setCustomizing((c) => !c); setTab('overview') }}
+              >
+                <SlidersHorizontal />
+              </button>
+              <button type="button" className="top-ico" aria-label="Settings" title="Settings" onClick={() => { setTab('settings'); setSideOpen(false) }}>
+                <Cog />
+              </button>
               {/* Ticking decor (clock, p50 jitter) is aria-hidden: the values are
                   simulated and mutate every second — pure churn for a reader. */}
               <span className="clock" id="lcc-clock" aria-hidden="true">--:--:--</span>
@@ -758,6 +847,19 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
 
               <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago <SourceChip id="system-status" onSource={setProv} className="ops-src">demo data</SourceChip></div>
 
+              {/* Customize mode — free for everyone, saved per-device: reorder
+                  or hide the sections below (order/visibility via useDashboardPrefs). */}
+              {customizing && (
+                <div className="custz">
+                  <SlidersHorizontal className="custz-ic" aria-hidden />
+                  <span>Customize mode — reorder or hide sections. Saved on this device, free for everyone.</span>
+                  <button type="button" className="custz-btn ghost" onClick={prefs.reset}><RotateCcw aria-hidden /> Reset</button>
+                  <button type="button" className="custz-btn" onClick={() => setCustomizing(false)}>Done</button>
+                </div>
+              )}
+
+              <div className={`ovsections${customizing ? ' editing' : ''}`}>
+                <Section id="kpis" prefs={prefs} editing={customizing}>
               {/* Each KPI tile is a button: click any number to see exactly
                   where it comes from (the provenance dialog). */}
               <div className="kpis">
@@ -766,9 +868,11 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 <button type="button" className="kpi a-brand" aria-haspopup="dialog" onClick={() => setProv('sprs-score')}><Info className="kpi-info" aria-hidden /><div className="l"><Gauge /> SPRS score</div><div className="n" id="lcc-kSprs" style={{ color: 'var(--brand)' }}>78</div><div className="d">sample posture · NIST 800-171</div></button>
                 <button type="button" className="kpi a-warn" aria-haspopup="dialog" onClick={() => setProv('quarantine')}><Info className="kpi-info" aria-hidden /><div className="l"><Flag /> Quarantine queue</div><div className="n bump" id="lcc-kQuar" style={{ color: 'var(--warn)' }}>{QUAR_SEED}</div><div className="d">awaiting human review</div></button>
               </div>
+                </Section>
 
+                <Section id="brain" prefs={prefs} editing={customizing}>
               {/* Brain AI quick-ask — the logo-forward, keyless analyst, one tap in. */}
-              <div className="panel" style={{ marginBottom: 16 }}>
+              <div className="panel">
                 <div className="braincard">
                   <Image className="brain-mark" src="/houndshield-logo.png" alt="HoundShield Brain AI" width={38} height={48} />
                   <div className="bc-copy">
@@ -782,12 +886,16 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </div>
                 </div>
               </div>
+                </Section>
 
+                <Section id="charts" prefs={prefs} editing={customizing}>
               {/* Four small self-explanatory charts — hourly activity, AI
                   destinations, SPRS trend, risk mix. Numbers agree with the
                   KPI tiles above (contract-tested in OverviewCharts.test). */}
               <OverviewCharts onSource={setProv} />
+                </Section>
 
+                <Section id="throughput" prefs={prefs} editing={customizing}>
               <div className="row r-3-2">
                 <div className="panel">
                   <div className="ph"><h3>Gateway throughput</h3><SourceChip id="throughput" onSource={setProv} className="live-tag"><span className="dot" /> demo · prompts/sec</SourceChip></div>
@@ -806,7 +914,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </div>
                 </div>
               </div>
+                </Section>
 
+                <Section id="feed" prefs={prefs} editing={customizing}>
               <div className="row r-2-1">
                 <div className="panel">
                   <div className="ph"><h3>Live threat feed</h3><SourceChip id="threat-feed" onSource={setProv} className="live-tag"><span className="dot" /> demo stream</SourceChip></div>
@@ -821,7 +931,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   </div>
                 </div>
               </div>
+                </Section>
 
+                <Section id="checklist" prefs={prefs} editing={customizing}>
               {/* First-run checklist — activation driver that ends on the PDF.
                   A real customer starts at step 1 (nothing is pre-completed for
                   them); only the sample org shows the lived-in ✓s. */}
@@ -833,8 +945,10 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   <StepRow n="3" title="Generate a sample audit PDF" detail="SSP + POA&M + evidence pack, SHA-256 signed." onClick={() => setTab('reports')} cta="Generate PDF" />
                 </div>
               </div>
+                </Section>
 
-              <div className="panel" style={{ marginTop: 16 }}>
+                <Section id="engines" prefs={prefs} editing={customizing}>
+              <div className="panel">
                 <div className="ph"><h3>Detections by engine · last hour</h3><SourceChip id="engine-bars" onSource={setProv} className="live-tag"><span className="dot" /> demo</SourceChip></div>
                 <div className="pad">
                   <div className="eng" data-base="61"><span>CUI</span><div className="bar"><i style={{ width: '61%' }} /></div><b>61</b></div>
@@ -844,6 +958,8 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   <div className="eng" data-base="35"><span>Source / IP</span><div className="bar"><i style={{ width: '35%' }} /></div><b>35</b></div>
                   <div className="eng" data-base="19"><span>CAGE / contract</span><div className="bar"><i style={{ width: '19%' }} /></div><b>19</b></div>
                 </div>
+              </div>
+                </Section>
               </div>
             </div>
 
@@ -1031,6 +1147,42 @@ function UsageMeter({ label, value, pct, id, barId, sourceId, onSource }: {
       </div>
       <div className="usebar"><i id={barId} style={{ width: `${pct}%` }} /></div>
     </div>
+  )
+}
+
+/** One reorderable / hideable Overview section. In normal view it just applies
+ *  the user's saved display order (CSS `order`) and drops itself if hidden; in
+ *  Customize mode it wears a control strip (move up / down / hide-show). The JSX
+ *  SOURCE order is unchanged — only the rendered visual order moves — so every
+ *  structure contract test that reads this file keeps matching. */
+function Section({ id, prefs, editing, children }: {
+  id: string
+  prefs: DashboardPrefs
+  editing: boolean
+  children: React.ReactNode
+}) {
+  const hidden = prefs.isHidden(id)
+  // Hidden sections vanish entirely in normal view; in edit mode they stay
+  // (dimmed) so the operator can bring them back.
+  if (hidden && !editing) return null
+  const meta = OVERVIEW_SECTIONS.find((s) => s.id === id)
+  const label = meta?.label ?? id
+  return (
+    <section className={`ovsec${hidden ? ' is-hidden' : ''}`} data-sec={id} style={{ order: prefs.orderOf(id) }} aria-label={label}>
+      {editing && (
+        <div className="secz">
+          <span className="secz-name">{label}{hidden && <em> · hidden</em>}</span>
+          <div className="secz-btns">
+            <button type="button" aria-label={`Move ${label} up`} onClick={() => prefs.move(id, -1)}><ArrowUp aria-hidden /></button>
+            <button type="button" aria-label={`Move ${label} down`} onClick={() => prefs.move(id, 1)}><ArrowDown aria-hidden /></button>
+            <button type="button" aria-label={hidden ? `Show ${label}` : `Hide ${label}`} onClick={() => prefs.toggleHidden(id)}>
+              {hidden ? <Eye aria-hidden /> : <EyeOff aria-hidden />}
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="ovsec-body">{children}</div>
+    </section>
   )
 }
 
