@@ -7,6 +7,42 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ## 2026-07-18
 
+### "Rearrange the sections" survives a contract-locked file when order is CSS, not DOM
+**What:** The founder wanted the console's Overview sections reorderable/hideable, but
+`LiveCommandCenter.tsx` is pinned by ~40 structure assertions (many use proximity like
+`hero[\s\S]{0,400}plan-chip`) AND one test asserts the literal `<OverviewCharts onSource={setProv} />`.
+A DOM reorder (mapping over a user-ordered array, or moving nodes) risks changing the file's
+text order and detonating those greps.
+**Root cause:** Contract tests read the FILE SOURCE, not the rendered DOM. Source order is the
+thing under test; visual order is free.
+**Rule:** For "let the user rearrange", wrap each section in place and drive `style={{ order }}`
++ visibility from a persisted prefs array on a `display:flex;flex-direction:column` container.
+The JSX stays in written order (every substring/proximity assertion still matches) while the user
+sees their own order. Hidden = `return null` in normal view (removed from flex flow), dimmed in edit
+mode. Neutralize the wrapped sections' own margins so the container `gap` owns spacing.
+
+### A runtime theme is inline-vars over file defaults — and the JS-painted marks need their own hook
+**What:** Six switchable designs had to retint BOTH the hero and the console without changing the
+CSS files (whose default tokens are contract-pinned: `--bg: var(--hs-aurora-bg…`, the donut literal,
+etc.). Naively editing the stylesheet defaults would fork the "default == launch skin" guarantee.
+**Root cause:** Two kinds of surface: CSS-var-driven (retint for free when you override the vars) and
+imperatively-painted (canvas `strokeStyle`, conic-gradient donut string) which can't read a `var()`.
+**Rule:** Apply a theme as an INLINE style map of the local token names on the surface root — file
+defaults stay, contract greps stay green, and the override wins. For the JS-painted marks, read the
+active theme from a `themeRef` (updated every render) inside the paint fns, and expose a `redrawRef`
+the theme-change `useEffect([themeId])` calls to repaint. Also var-ize any hardcoded near-white
+(`.top` bg, spine `#fff`) or a "dark mode" leaves light patches. Keep one theme (the default) exactly
+equal to the baked tokens so the initial render is byte-unchanged; update the one contract assertion
+you genuinely moved (donut literal → registry) rather than weakening it.
+
+### Free-for-everyone means NO entitlement import near the feature — say it, and test it
+**What:** Personalization (theme + layout) had to be ungated. Easy to reflexively wrap it in the same
+`hasFeature(ent, …)` gate every other console capability uses.
+**Rule:** Comfort/accessibility features (theme, layout, density) are ungated by policy — persist to
+localStorage, no server, no entitlement read. Make the intent visible in the UI ("free for everyone")
+and pin it: a contract test that the customize banner says so and the controls read `prefs.*` directly,
+never `hasFeature`. Don't confuse "personalization" with "a paid capability".
+
 ### Reskin CSS-variable-driven surfaces at the token layer — don't rewrite the tested markup
 **What:** The `/console` dashboard needed a full visual reskin, but its markup is
 locked by ~40 contract assertions (evidence-chain spine, KPI provenance dialogs,

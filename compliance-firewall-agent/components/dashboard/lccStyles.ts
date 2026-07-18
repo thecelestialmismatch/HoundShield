@@ -89,7 +89,7 @@ export const LCC_CSS = `
 @media(min-width:1001px){.hs-lcc .scrim{display:none}}
 
 .hs-lcc .main{min-width:0}
-.hs-lcc .top{position:sticky;top:0;z-index:20;background:rgba(250,252,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.hs-lcc .top{position:sticky;top:0;z-index:20;background:var(--topbar,rgba(250,252,255,.82));backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .hs-lcc .top h1{font-family:var(--f-disp);font-size:1.4rem;font-weight:600}
 .hs-lcc .top .crumb{font-size:.74rem;color:var(--mut2)}
 .hs-lcc .top-brand{display:none;align-items:center;flex-shrink:0}
@@ -99,6 +99,54 @@ export const LCC_CSS = `
 .hs-lcc .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:lccPulse 1.8s infinite}
 .hs-lcc .dot.b{background:var(--brand)}
 @keyframes lccPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+/* Smooth the design-theme swap on the var-driven surfaces (reduced-motion opts
+   out at the bottom of this sheet). The stage gradient behind them just snaps. */
+.hs-lcc .panel,.hs-lcc .kpi,.hs-lcc .top,.hs-lcc .side,.hs-lcc .spine,.hs-lcc .ops,.hs-lcc .clock,.hs-lcc .statpill,.hs-lcc .braincard,.hs-lcc .hero{transition:background .45s ease,border-color .45s ease,color .35s ease}
+
+/* ── Top-bar personalize controls (design switch · customize · settings) ── */
+.hs-lcc .top-ico{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);color:var(--mut);cursor:pointer;transition:all .15s}
+.hs-lcc .top-ico:hover{border-color:var(--brand);color:var(--brand)}
+.hs-lcc .top-ico.on{background:color-mix(in srgb,var(--brand) 14%,transparent);border-color:var(--brand);color:var(--brand)}
+.hs-lcc .top-ico svg{width:17px;height:17px}
+.hs-lcc .top-ico:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.hs-lcc .appear{position:relative;display:inline-flex}
+.hs-lcc .appear-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:40;width:288px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--soft-lg);padding:8px;animation:lccFade .18s ease}
+.hs-lcc .appear-h{font-family:var(--f-mono);font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut2);padding:.35rem .5rem .4rem}
+.hs-lcc .appear-h span{font-weight:600;letter-spacing:.02em;text-transform:none}
+.hs-lcc .appear-opt{display:flex;align-items:center;gap:.6rem;width:100%;text-align:left;padding:.5rem .55rem;border-radius:10px;background:none;border:none;cursor:pointer;color:var(--text);font-family:var(--f);transition:background .14s}
+.hs-lcc .appear-opt:hover{background:var(--hover)}
+.hs-lcc .appear-opt.on{background:color-mix(in srgb,var(--brand) 12%,transparent)}
+.hs-lcc .appear-opt:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+.hs-lcc .appear-sw{display:inline-flex;gap:3px;flex-shrink:0}
+.hs-lcc .appear-sw i{width:11px;height:22px;border-radius:4px}
+.hs-lcc .appear-name{display:flex;flex-direction:column;line-height:1.2;min-width:0;flex:1;font-size:.86rem;font-weight:600}
+.hs-lcc .appear-name small{font-size:.68rem;font-weight:400;color:var(--mut2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hs-lcc .appear-ck{width:16px;height:16px;color:var(--brand);flex-shrink:0}
+.hs-lcc .appear-foot{font-size:.66rem;color:var(--mut2);padding:.45rem .55rem .2rem;border-top:1px solid var(--line);margin-top:.35rem}
+
+/* ── Customize layout (reorder / hide Overview sections — free for everyone) ── */
+.hs-lcc .custz{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;background:color-mix(in srgb,var(--brand) 8%,var(--panel));border:1px dashed color-mix(in srgb,var(--brand) 45%,transparent);border-radius:var(--r);padding:.7rem 16px;margin-bottom:16px;font-size:.82rem;color:var(--mut)}
+.hs-lcc .custz-ic{width:16px;height:16px;color:var(--brand);flex-shrink:0}
+.hs-lcc .custz span{flex:1;min-width:160px}
+.hs-lcc .custz-btn{font-family:var(--f);font-size:.76rem;font-weight:600;padding:.4rem .8rem;border-radius:8px;border:1px solid transparent;background:var(--brand);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem}
+.hs-lcc .custz-btn.ghost{background:transparent;border-color:var(--line);color:var(--mut)}
+.hs-lcc .custz-btn.ghost:hover{border-color:var(--brand);color:var(--brand)}
+.hs-lcc .custz-btn svg{width:13px;height:13px}
+.hs-lcc .ovsections{display:flex;flex-direction:column;gap:16px}
+.hs-lcc .ovsec{min-width:0}
+.hs-lcc .ovsec-body>.kpis{margin-bottom:0}
+.hs-lcc .ovsec-body>.row:last-child{margin-bottom:0}
+.hs-lcc .ovsections.editing .ovsec{outline:1px dashed color-mix(in srgb,var(--brand) 35%,transparent);outline-offset:6px;border-radius:var(--r)}
+.hs-lcc .ovsec.is-hidden .ovsec-body{opacity:.42;filter:grayscale(.4)}
+.hs-lcc .secz{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.5rem}
+.hs-lcc .secz-name{font-family:var(--f-mono);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut2)}
+.hs-lcc .secz-name em{font-style:normal;color:var(--warn-text)}
+.hs-lcc .secz-btns{display:inline-flex;gap:.3rem}
+.hs-lcc .secz-btns button{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);color:var(--mut);cursor:pointer;transition:all .14s}
+.hs-lcc .secz-btns button:hover{border-color:var(--brand);color:var(--brand)}
+.hs-lcc .secz-btns button:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+.hs-lcc .secz-btns svg{width:14px;height:14px}
 
 .hs-lcc .body{padding:24px 26px 60px}
 .hs-lcc .atab{display:none}.hs-lcc .atab.on{display:block;animation:lccFade .35s ease}
@@ -113,7 +161,7 @@ export const LCC_CSS = `
    built on the customer's own hardware, one click from the $499 PDF. */
 .hs-lcc .spine{position:sticky;top:63px;z-index:19;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
   padding:.5rem 26px;border-bottom:1px solid var(--line);
-  background:linear-gradient(90deg,color-mix(in srgb,var(--cream) 55%,#fff),var(--panel) 70%);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--cream) 55%,var(--panel)),var(--panel) 70%);
   font-size:.8rem;color:var(--mut)}
 .hs-lcc .spine-ic{width:16px;height:16px;color:var(--ok);flex-shrink:0}
 .hs-lcc .spine-txt{flex:1;min-width:0}
@@ -245,7 +293,7 @@ export const LCC_CSS = `
 /* Brain AI — the flagship surface: warm cream halo, the Doberman mark on the
    panel and on every analyst reply, quick-ask card on the Overview tab. */
 .hs-lcc .brainhead{display:flex;align-items:center;gap:.5rem}
-.hs-lcc .braincard{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:16px 18px;background:linear-gradient(135deg,color-mix(in srgb,var(--cream) 60%,#fff),var(--panel) 65%)}
+.hs-lcc .braincard{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:16px 18px;background:linear-gradient(135deg,color-mix(in srgb,var(--cream) 60%,var(--panel)),var(--panel) 65%)}
 .hs-lcc .braincard .bc-copy{flex:1;min-width:220px}
 .hs-lcc .braincard h3{font-family:var(--f-disp);font-size:1.05rem;font-weight:600}
 .hs-lcc .braincard p{font-size:.8rem;color:var(--mut);margin-top:.15rem;line-height:1.45}
@@ -450,7 +498,8 @@ export const LCC_CSS = `
 
 @media (prefers-reduced-motion: reduce){
   .hs-lcc .brand img,.hs-lcc .brain-mark{animation:none;transition:none}
-  .hs-lcc .prov-card{animation:none}
+  .hs-lcc .prov-card,.hs-lcc .appear-menu{animation:none}
+  .hs-lcc .panel,.hs-lcc .kpi,.hs-lcc .top,.hs-lcc .side,.hs-lcc .spine,.hs-lcc .ops,.hs-lcc .clock,.hs-lcc .statpill,.hs-lcc .braincard,.hs-lcc .hero{transition:none}
   .hs-lcc .brand:hover img,.hs-lcc .brand img:hover,.hs-lcc .brain-mark:hover{animation:none;transform:rotate(-8deg) scale(1.08)}
   .hs-lcc .side,.hs-lcc .scrim{transition:none}
   .hs-lcc .atab.on{animation:none}

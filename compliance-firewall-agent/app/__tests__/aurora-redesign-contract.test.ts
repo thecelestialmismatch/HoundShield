@@ -79,9 +79,18 @@ describe("console — shares the aurora gradient + pastel data-viz", () => {
     expect(css).toMatch(/\.hs-lcc \.panel\{[^}]*box-shadow:var\(--soft\)/);
     expect(css).toMatch(/\.hs-lcc \.kpi\{[^}]*box-shadow:var\(--soft\)/);
   });
-  it("bars + rings use the pastel accents; donut uses the pastel sweep", () => {
+  it("bars + rings use the pastel accents; donut paints from the shared registry", () => {
     expect(css).toMatch(/\.hs-lcc \.bar i\{[^}]*var\(--peri\)[^}]*var\(--lime\)/);
-    expect(lcc).toContain("conic-gradient(#B6D94E 0");
+    // SPRS ring still fills with the themed --lime var.
     expect(lcc).toMatch(/conic-gradient\(var\(--lime\)/);
+    // The detection donut now paints from the ACTIVE design theme's palette so a
+    // theme switch retints it in lockstep with the hero (single source of truth).
+    expect(lcc).toMatch(/themeRef\.current\.viz\.donut/);
+    // …and the DEFAULT (aurora) theme's donut is still the exact pastel set both
+    // surfaces launched with — the "same family" guarantee, now single-sourced.
+    const themes = read("lib/dashboard/design-themes.ts");
+    expect(themes).toMatch(
+      /id:\s*'aurora'[\s\S]*?donut:\s*\['#B6D94E', '#F0B880', '#A9C7EE', '#81A6C6'\]/,
+    );
   });
 });
