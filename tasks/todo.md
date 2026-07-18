@@ -2,6 +2,11 @@
 
 ## Active
 
+### 2026-07-18 — Auth reset fix + real API docs (this session, cont.)
+- [x] **Password reset fixed** (PR #224 merged → live): Supabase reset links landed on `/auth/callback?redirect=/console` (logged in, skipped the password step) and `/reset-password` was Better-Auth-only. Now lands on the set-password page and supports both providers via a unit-tested `resetView` helper. Docs: `docs/auth-password-reset.md` (+ GitHub-OAuth enable steps + "name before login" explainer).
+- [x] **/docs rebuilt into a real API reference** (this branch → PR): the old page pointed EVERY sidebar link at one `#sdk` anchor and shipped one JS snippet ("buttons don't work / nobody can use the API"). Now: working per-endpoint anchors, tabbed cURL/JS/Python samples with copy buttons, Authentication + "what gets detected" sections — documenting the REAL proxy endpoints (`/v1/chat/completions`, `/health`, `/v1/stats`, `/v1/events`, `/v1/quarantine`(+review), `/v1/policy`). Data-driven (`app/docs/api-data.ts`) + 9 integrity tests (no dead links, all 3 langs).
+- [ ] **Founder actions:** GitHub OAuth App + enable in Supabase (steps in `docs/auth-password-reset.md`); verify "name before login" in incognito.
+
 ### 2026-07-18 — Control Map MSP dashboard + premium PDF redesign (this session)
 - [x] **Control Map** (`/control-map`, PR #221 merged → live): multi-client CMMC command surface for RPO/MSP partners (channel #1), recreating the founder's reference design in the dark-steel system. Live "All Clients" selector re-scopes every KPI/framework/control via a deterministic per-client projection; all headline numbers (72% · 28 · 36 · 4) are real aggregations locked by tests; 14 controls mapped to accurate CMMC L2 → NIST 800-171 Rev 2 IDs. SSR-safe (pure SVG), mobile-first. Docs: `docs/control-map.md`.
 - [x] **Fixed red CI on main** (PR #222 merged): the merged dashboard test used `getByText('72%')` but 72% renders twice (ring + framework rollup) → multiple-match throw. Switched to `getAllByText`. Root cause logged in lessons.
