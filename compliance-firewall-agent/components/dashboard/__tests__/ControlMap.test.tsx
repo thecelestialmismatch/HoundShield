@@ -11,9 +11,11 @@ import { ControlMap } from '../control-map/ControlMap';
 describe('ControlMap', () => {
   it('renders the portfolio headline KPIs', () => {
     render(<ControlMap />);
-    // Dashboard title + overall progress ring value
+    // Dashboard title
     expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
-    expect(screen.getByText('72%')).toBeInTheDocument();
+    // 72% appears twice by design — the overall-progress ring AND the CMMC 2.0
+    // framework rollup — so assert on the set, not a single node.
+    expect(screen.getAllByText('72%').length).toBeGreaterThanOrEqual(1);
     // 28 clients KPI
     expect(screen.getByText('28')).toBeInTheDocument();
     // 36 assessments KPI
