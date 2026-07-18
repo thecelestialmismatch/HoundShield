@@ -39,8 +39,14 @@ export default function ForgotPasswordPage() {
     const supabase = createClient();
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      // Unified post-auth landing target with the rest of the auth flows.
-      redirectTo: `${window.location.origin}/auth/callback?redirect=/console`,
+      // Land on /reset-password to actually SET a new password. /auth/callback
+      // exchanges the recovery code into a session, then forwards here — it must
+      // NOT drop the user on /console (that logged them in and skipped the
+      // password step entirely, the "reset link goes straight to the homepage"
+      // bug). /reset-password reads that recovery session and updates the password.
+      redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(
+        "/reset-password",
+      )}`,
     });
 
     if (resetError) {
