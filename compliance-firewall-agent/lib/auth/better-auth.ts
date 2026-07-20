@@ -1,9 +1,14 @@
 import "server-only";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
+import { twoFactor } from "better-auth/plugins";
 import { Pool } from "pg";
 import { isBetterAuthEnabled, betterAuthBaseUrl } from "./auth-config";
-import { sendPasswordResetEmail, sendVerificationEmail } from "./auth-emails";
+import {
+  sendPasswordResetEmail,
+  sendTwoFactorCodeEmail,
+  sendVerificationEmail,
+} from "./auth-emails";
 
 // Re-export the gating helpers so existing importers of this server module keep
 // working; the pure implementations live in auth-config (test/edge-safe).
@@ -77,8 +82,24 @@ function buildAuth() {
       expiresIn: 60 * 60 * 24 * 7, // 7 days
       updateAge: 60 * 60 * 24, // refresh once per day
     },
-    // nextCookies() MUST be last so Set-Cookie is emitted from server actions.
-    plugins: [nextCookies()],
+    // Email 2FA (opt-in per user from /console/security). Only the email-OTP
+    // factor is surfaced in the UI; skipVerificationOnEnable stays false so
+    // 2FA turns on ONLY after the user proves the email loop works by entering
+    // a code — never lock an account behind an unverified factor.
+    // Schema: migration 026 ("twoFactor" table + user."twoFactorEnabled").
+    plugins: [
+      twoFactor({
+        issuer: "HoundShield",
+        otpOptions: {
+          period: 5, // minutes a code stays valid
+          sendOTP: async ({ user, otp }) => {
+            await sendTwoFactorCodeEmail(user.email, otp);
+          },
+        },
+      }),
+      // nextCookies() MUST be last so Set-Cookie is emitted from server actions.
+      nextCookies(),
+    ],
   });
 }
 

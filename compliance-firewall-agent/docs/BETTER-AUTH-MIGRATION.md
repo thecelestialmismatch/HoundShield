@@ -88,8 +88,9 @@ one callback per app.) **Regenerate the client secret** that was shared in chat.
 
 1. Put `DATABASE_URL` + `BETTER_AUTH_SECRET` in `.env.local`.
 2. Apply the schema: `psql "$DATABASE_URL" -f supabase/migrations/024_better_auth_core.sql`
-   (or `npx supabase db push`). Optionally regenerate the exact schema with
-   `npx @better-auth/cli generate` and diff.
+   **and** `-f supabase/migrations/026_two_factor.sql` (email 2FA tables — see
+   `docs/auth-email-2fa.md`), or `npx supabase db push`. Optionally regenerate
+   the exact schema with `npx @better-auth/cli generate` and diff.
 3. Set `AUTH_PROVIDER=better-auth` **and** `NEXT_PUBLIC_AUTH_PROVIDER=better-auth`.
 4. `npm run dev` → sign up with email/password, then GitHub. Confirm `/console`
    loads and `/command-center` is protected (logged-out → `/login`).

@@ -1,6 +1,7 @@
 "use client";
 
 import { createAuthClient } from "better-auth/react";
+import { twoFactorClient } from "better-auth/client/plugins";
 
 /**
  * Better Auth browser client. baseURL is inferred from the current origin
@@ -10,8 +11,14 @@ import { createAuthClient } from "better-auth/react";
  * Gate: components should call these only when Better Auth is the active
  * provider — check `isBetterAuthClientEnabled()` (reads the public flag). When
  * false the app is still on Supabase Auth.
+ *
+ * twoFactorClient: no onTwoFactorRedirect — the login page detects the
+ * `twoFactorRedirect` flag on the signIn response itself and swaps to its
+ * code-entry step in place (no full page reload).
  */
-export const authClient = createAuthClient();
+export const authClient = createAuthClient({
+  plugins: [twoFactorClient()],
+});
 
 export const { signIn, signUp, signOut, useSession } = authClient;
 
