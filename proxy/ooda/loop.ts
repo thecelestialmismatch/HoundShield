@@ -11,7 +11,7 @@
 import type { Response } from "express";
 import fetch from "node-fetch";
 
-import { scanMessages } from "../scanner.js";
+import { scanMessages, scanString } from "../scanner.js";
 import { logEvent } from "../storage.js";
 import { enqueueEvent } from "../webhook.js";
 
@@ -58,6 +58,38 @@ export function toolCallArgText(
     }
   }
   return args.join("\n");
+}
+
+/**
+ * Response-path tool-argument gate: scans tool_calls arguments in a
+ * non-streaming upstream response and surfaces findings via headers + local
+ * log. Never blocks or mutates the response, and never emits matched text —
+ * pattern names only.
+ * ponytail: headers + console.warn only; wire into logEvent/quarantine when a
+ * response-path policy exists.
+ */
+function surfaceResponseToolCallFindings(body: unknown, res: Response): void {
+  const choices = (body as { choices?: Array<{ message?: unknown }> } | null)
+    ?.choices;
+  if (!Array.isArray(choices)) return;
+
+  const messages = choices.flatMap((c) =>
+    c?.message && typeof c.message === "object"
+      ? [c.message as { role: string; content: unknown }]
+      : []
+  );
+  const argText = toolCallArgText(messages);
+  if (!argText) return;
+
+  const scan = scanString(argText);
+  if (scan.entities.length === 0) return;
+
+  const patterns = [...new Set(scan.entities.map((e) => e.pattern_name))].join(",");
+  res.setHeader("X-HoundShield-Response-Risk", scan.risk_level);
+  res.setHeader("X-HoundShield-Response-Patterns", patterns);
+  console.warn(
+    `[houndshield] upstream tool_call arguments matched: ${patterns} (risk: ${scan.risk_level})`
+  );
 }
 
 // ── Main OODA loop ─────────────────────────────────────────────────────────
@@ -169,6 +201,7 @@ export async function runOODALoop(
         upstreamBody = "[streaming]";
       } else {
         upstreamBody = await upstreamRes.json();
+        surfaceResponseToolCallFindings(upstreamBody, res);
         res.status(upstreamStatus).json(upstreamBody);
       }
     } catch (err) {
