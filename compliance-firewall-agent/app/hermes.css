@@ -306,6 +306,11 @@
 
 /* ---------- DOCS ---------- */
 .hermes .docs-wrap { display: grid; grid-template-columns: 230px 1fr; gap: 36px; align-items: start; }
+/* min-width:0 is load-bearing: grid items default to min-width:auto, so the
+   1fr track inherits the min-content of the longest <pre> code line (~1000px)
+   and the whole page overflows sideways. This lets the code blocks scroll
+   inside themselves instead. */
+.hermes .docs-wrap > * { min-width: 0; }
 .hermes .docs-side { position: sticky; top: 90px; display: flex; flex-direction: column; gap: .2rem; }
 .hermes .docs-side .gh { font-family: var(--f-mono); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); margin: 1rem 0 .3rem; }
 .hermes .docs-side a { padding: .45rem .7rem; border-radius: 8px; font-size: .88rem; color: var(--text-2); cursor: pointer; }
@@ -362,6 +367,8 @@
   .hermes .hero-grid { grid-template-columns: 1fr; gap: 30px; padding: 48px 0 56px; }
   .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr 1fr; }
   .hermes .docs-wrap { grid-template-columns: 1fr; }
+  /* stacked layout: a sticky 300px-tall nav would sit over the content */
+  .hermes .docs-side { position: static; }
 }
 @media (max-width: 560px) {
   .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr; }

@@ -111,11 +111,13 @@ export default function StatusPage() {
         {data && (
           <ul className="divide-y divide-[var(--hs-border-subtle)] rounded-2xl border border-[var(--hs-border)] bg-white">
             {Object.entries(data.services).map(([key, value]) => (
-              <li key={key} className="flex items-center justify-between px-5 py-4">
+              // flex-wrap: long live health strings ("not configured …") must
+              // wrap under the label on phones instead of widening the page
+              <li key={key} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-5 py-4">
                 <span className="text-sm font-medium text-[var(--hs-ink)]">
                   {LABELS[key] ?? key}
                 </span>
-                <span className="flex items-center gap-2 text-sm text-[var(--hs-ink-secondary)]">
+                <span className="flex min-w-0 max-w-full flex-wrap items-center gap-2 text-sm text-[var(--hs-ink-secondary)]">
                   {value.replace(/_/g, " ")}
                   <StatusDot ok={OPERATIONAL.has(value)} />
                 </span>

@@ -2,6 +2,9 @@
 
 ## Active
 
+### 2026-07-18 — Site-wide mobile pass (this session, cont.)
+- [x] **Mobile overflow audit + fixes** (this branch → PR): drove the real production build in headless Chromium at 390×844 + 360×800 across 31 routes; found exactly 3 root causes of "site looks broken on mobile": (1) `/docs` — grid items default `min-width:auto`, so the 1fr track inherited the longest `<pre>` code line (~1028px) → whole page 679px overflow; fixed with `.docs-wrap > * { min-width: 0 }` + static (non-sticky) sidebar when stacked. (2) `/agents` — `.orb` decorations are absolute but the wrapper wasn't `relative`, so `overflow-x-hidden` clipped nothing (200px bleed); one-word fix mirroring `/about`. (3) `/status` — non-wrapping `justify-between` rows + long live health strings (150px overflow); `flex-wrap` + `min-w-0 max-w-full` on the value span. Re-audit: **CLEAN — zero overflow, 31 routes × 2 viewports**. tsc 0 · lint clean · 1422/1422 · build 251/251. → **next: email 2FA.**
+
 ### 2026-07-18 — 2nd dashboard: Compliance ROI console (this session, cont.)
 - [x] **Compliance ROI dashboard** (`/roi`, PR #226 → draft): the 2nd founder-reference ("AI Cash Flow") rebuilt in dark-steel — gradient stat tiles, per-category savings bars, pure-SVG cumulative-savings trend line, mobile bottom tab bar. Live 90d/6m/12m period toggle re-resolves a tested pure model (`lib/dashboard/roi-model.ts`, 20 tests). Clearly a **modeled sample estimate** with transparent per-category remediation-cost assumptions on the page (no fabricated live telemetry). Funnels to the $499 report; the ROI number is the RPO/MSP + buyer justification. tsc 0 · lint clean · 1422/1422 · build 251/251. → **next action: after #226 merges, reset from main → site-wide mobile pass, then email 2FA.**
 

@@ -321,7 +321,10 @@ export default function AgentsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)] overflow-x-hidden">
+    // `relative` is load-bearing: the .orb children are absolute — without a
+    // positioned ancestor they escape this wrapper and overflow-x-hidden clips
+    // nothing (200px right-bleed on phones). Mirrors /about.
+    <div className="relative min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)] overflow-x-hidden">
       {/* Floating Orbs */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
