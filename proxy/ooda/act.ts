@@ -42,7 +42,8 @@ export function redactMessages(
       redacted = redacted.replace(re, `[REDACTED-${pattern.category}]`);
     }
 
-    return { role: msg.role, content: redacted };
+    // Spread keeps tool_calls / tool_call_id / name intact on redacted messages
+    return { ...msg, content: redacted };
   });
 }
 

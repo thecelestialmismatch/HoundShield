@@ -34,6 +34,32 @@ import type {
   ActionResult,
 } from "./types.js";
 
+// ── Tool-call argument extraction ──────────────────────────────────────────
+
+/**
+ * Collects every tool_calls[].function.arguments string from an
+ * OpenAI-format messages array. Arguments are prompt-derived text and must
+ * be gated like any other content — on the request path (resent history)
+ * and the response path (model output).
+ */
+export function toolCallArgText(
+  messages: ReadonlyArray<{ role: string; content: unknown }>
+): string {
+  const args: string[] = [];
+  for (const msg of messages) {
+    const calls = (msg as {
+      tool_calls?: Array<{ function?: { arguments?: unknown } }>;
+    }).tool_calls;
+    if (!Array.isArray(calls)) continue;
+    for (const call of calls) {
+      if (typeof call.function?.arguments === "string") {
+        args.push(call.function.arguments);
+      }
+    }
+  }
+  return args.join("\n");
+}
+
 // ── Main OODA loop ─────────────────────────────────────────────────────────
 
 export async function runOODALoop(
@@ -46,8 +72,14 @@ export async function runOODALoop(
   const observation = observe(ctx, loopStart);
 
   // ── Phase 2: Scan + Orient ───────────────────────────────────────────────
+  // Tool-call arguments in resent history scan alongside message content.
+  // ponytail: REDACT rewrites content only, not JSON args — BLOCK/QUARANTINE
+  // still stop forwarding; add JSON-aware redaction if REDACT policy widens.
+  const requestArgText = toolCallArgText(ctx.messages);
   const scanResult = scanMessages(
-    ctx.messages as Array<{ role: string; content: unknown }>
+    requestArgText
+      ? [...ctx.messages, { role: "tool", content: requestArgText }]
+      : (ctx.messages as Array<{ role: string; content: unknown }>)
   );
 
   const orgBaseline = getBaseline(ctx.org_id, "org", loopStart);
