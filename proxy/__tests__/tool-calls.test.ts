@@ -277,3 +277,52 @@ describe("upstream forward", () => {
     expect(state.status).toBe(200);
   });
 });
+
+// ── Response-path tool-argument gate ────────────────────────────────────────
+
+describe("response-path tool-argument gate", () => {
+  it("flags CUI in upstream tool_call arguments via name-only headers", async () => {
+    fetchMock.mockResolvedValueOnce({
+      status: 200,
+      json: async () => ({
+        id: "chatcmpl-resp",
+        choices: [
+          {
+            message: {
+              role: "assistant",
+              content: null,
+              tool_calls: [
+                {
+                  id: "call_9",
+                  type: "function",
+                  function: {
+                    name: "save_note",
+                    arguments: '{"note":"CAGE code 9ZYX8"}',
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }),
+      body: null,
+    });
+    const ctx = makeCtx();
+    const { res, headers, state } = stubRes();
+    await runOODALoop(ctx, res);
+
+    expect(state.status).toBe(200); // surfaced, never blocked
+    expect(headers["X-HoundShield-Response-Risk"]).toBe("CRITICAL");
+    expect(headers["X-HoundShield-Response-Patterns"]).toBe("CAGE code");
+    // Name-only contract: matched substring never appears in headers
+    expect(JSON.stringify(headers)).not.toContain("9ZYX8");
+  });
+
+  it("sets no response-gate headers when arguments are clean", async () => {
+    const ctx = makeCtx();
+    const { res, headers } = stubRes();
+    await runOODALoop(ctx, res);
+    expect(headers).not.toHaveProperty("X-HoundShield-Response-Risk");
+    expect(headers).not.toHaveProperty("X-HoundShield-Response-Patterns");
+  });
+});
