@@ -19,6 +19,7 @@ import express, { type Request, type Response, type NextFunction } from "express
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
+import { ChatRequestSchema } from "./schema.js";
 import { queryEvents, getStats } from "./storage.js";
 import { setWebhookLicenseKey, flushWebhook } from "./webhook.js";
 import { validateLicense } from "./license.js";
@@ -61,19 +62,7 @@ function providerEndpoint(provider: Provider): string {
 }
 
 // ── Request schema ──────────────────────────────────────────────────────────
-
-const MessageSchema = z.object({
-  role: z.string(),
-  content: z.union([z.string(), z.array(z.record(z.string(), z.unknown()))]),
-});
-
-const ChatRequestSchema = z.object({
-  model: z.string().optional(),
-  messages: z.array(MessageSchema),
-  stream: z.boolean().optional(),
-  temperature: z.number().optional(),
-  max_tokens: z.number().optional(),
-});
+// Lives in schema.ts so tests can import it without starting the listener.
 
 const OrgPolicyUpdateSchema = z.object({
   warn_before_block: z.boolean().optional(),
