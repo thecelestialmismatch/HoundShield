@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { buildPasswordResetEmail, buildVerificationEmail } from "../auth-emails";
+import {
+  buildPasswordResetEmail,
+  buildTwoFactorCodeEmail,
+  buildVerificationEmail,
+} from "../auth-emails";
 
 /**
  * Auth email content is pinned so a template edit can't silently ship a broken
@@ -32,5 +36,26 @@ describe("verification email", () => {
     expect(mail.subject).toMatch(/verify your houndshield email/i);
     expect(mail.html).toContain(`href="${url}"`);
     expect(mail.text).toContain(url);
+  });
+});
+
+describe("two-factor sign-in code email", () => {
+  const code = "482913";
+  const mail = buildTwoFactorCodeEmail(code);
+
+  it("shows the code in html and text — but NEVER in the subject", () => {
+    expect(mail.html).toContain(code);
+    expect(mail.text).toContain(code);
+    // Lock-screen previews show subjects; a code there defeats the factor.
+    expect(mail.subject).not.toContain(code);
+  });
+  it("states expiry and single use, and warns about unrequested codes", () => {
+    expect(mail.text.toLowerCase()).toMatch(/expires/);
+    expect(mail.text.toLowerCase()).toMatch(/once/);
+    expect(mail.text.toLowerCase()).toMatch(/didn't try to sign in/);
+  });
+  it("is HoundShield-branded and says we never ask for the code", () => {
+    expect(mail.html).toMatch(/Hound<span[^>]*>Shield/);
+    expect(mail.html.toLowerCase()).toContain("never ask you for this code");
   });
 });
