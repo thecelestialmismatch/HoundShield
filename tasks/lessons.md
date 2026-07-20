@@ -7,6 +7,11 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ## 2026-07-18
 
+- **Killed my own shell twice with `pkill -f "next start"`** → `pkill -f` matches any process whose full cmdline contains the pattern — including the harness session process (its cmdline embeds instruction text with those words), so the signal took down the tool shell (exit 144) → rule: never `pkill`/`pgrep -f` with broad substrings; find the exact PID (`ss -ltnp` by port, `/proc/<pid>/cwd`, or a PID file written in the same `{ }` group) and `kill <pid>`.
+- **Declared a stale audit result as current** → the patched audit script only rewrote `result.json` when findings existed, so a clean run left the previous failure file on disk; the giveaway was the offender's class string predating the fix → rule: verdicts come from the live run's stdout summary line, and any results file must be deleted before the run or written unconditionally.
+- **Two JSX syntax errors from comments before the root element** → `{/* … */}` directly inside `return (` (or a `.map(… => (`) before the element is an expression, not a comment slot → rule: annotate JSX roots with `//` line comments between `(` and the element, or put the comment inside the element.
+
+
 ### Shipped a failing test by trusting truncated `tail` output → red CI on main
 **What:** The Control Map PR merged, then every CI run went red. Cause: `ControlMap.test.tsx`
 used `getByText('72%')`, but 72% renders twice by design (overall ring + CMMC framework

@@ -1,13 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ScrollProgressBar } from '@/components/scroll-effects';
-import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle, ShieldCheck } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
 import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
+import {
+  needsSecondFactor,
+  normalizeOtpInput,
+  isCompleteOtp,
+  resendWaitSeconds,
+  otpErrorMessage,
+  OTP_LENGTH,
+} from '@/lib/auth/two-factor-state';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
 
@@ -33,6 +41,40 @@ export default function LoginPage() {
   );
   const [loading, setLoading] = useState(false);
 
+  // Email 2FA (Better Auth only): after a correct password on a 2FA-enabled
+  // account, the page swaps to a code-entry step in place — no redirect.
+  const [step, setStep] = useState<'credentials' | 'code'>('credentials');
+  const [otp, setOtp] = useState('');
+  const [trustDevice, setTrustDevice] = useState(false);
+  const [lastSentAt, setLastSentAt] = useState<number | null>(null);
+  const [resendWait, setResendWait] = useState(0);
+
+  // Tick the resend cooldown down once a second while it's running.
+  useEffect(() => {
+    if (resendWait <= 0) return;
+    const id = setInterval(() => {
+      setResendWait(resendWaitSeconds(lastSentAt, Date.now()));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [resendWait, lastSentAt]);
+
+  const sendCode = async (): Promise<boolean> => {
+    try {
+      const { error: sendError } = await authClient.twoFactor.sendOtp();
+      if (sendError) {
+        setError(otpErrorMessage(sendError.code, sendError.message));
+        return false;
+      }
+    } catch {
+      setError("We couldn't send the code. Please try again in a moment.");
+      return false;
+    }
+    const now = Date.now();
+    setLastSentAt(now);
+    setResendWait(resendWaitSeconds(now, now));
+    return true;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -41,9 +83,17 @@ export default function LoginPage() {
     // Better Auth path (self-hosted) when active; Supabase otherwise.
     if (isBetterAuthClientEnabled()) {
       try {
-        const { error: baError } = await authClient.signIn.email({ email, password });
+        const { data, error: baError } = await authClient.signIn.email({ email, password });
         if (baError) {
           setError(baError.message || 'Invalid email or password.');
+          setLoading(false);
+          return;
+        }
+        // Password accepted but the account has 2FA on → email a code and
+        // show the verification step instead of entering the console.
+        if (needsSecondFactor(data)) {
+          await sendCode();
+          setStep('code');
           setLoading(false);
           return;
         }
@@ -78,6 +128,40 @@ export default function LoginPage() {
 
     router.push(redirect);
     router.refresh();
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isCompleteOtp(otp)) {
+      setError(`Enter the ${OTP_LENGTH}-digit code from your email.`);
+      return;
+    }
+    setError('');
+    setLoading(true);
+    try {
+      const { error: verifyError } = await authClient.twoFactor.verifyOtp({
+        code: otp,
+        trustDevice,
+      });
+      if (verifyError) {
+        setError(otpErrorMessage(verifyError.code, verifyError.message));
+        setLoading(false);
+        return;
+      }
+    } catch {
+      setError("We couldn't verify the code. Please try again in a moment.");
+      setLoading(false);
+      return;
+    }
+    router.push(redirect);
+    router.refresh();
+  };
+
+  const handleResend = async () => {
+    if (resendWaitSeconds(lastSentAt, Date.now()) > 0) return;
+    setError('');
+    setOtp('');
+    await sendCode();
   };
 
   const handleOAuthLogin = async (provider: 'google' | 'github') => {
@@ -117,9 +201,13 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="bg-white backdrop-blur-sm border border-[var(--hs-border)] rounded-2xl p-8 shadow-xl shadow-[var(--shadow-card)]">
-          <h1 className="text-xl font-bold text-[var(--hs-ink)] text-center mb-1">Welcome back</h1>
+          <h1 className="text-xl font-bold text-[var(--hs-ink)] text-center mb-1">
+            {step === 'code' ? 'Check your email' : 'Welcome back'}
+          </h1>
           <p className="text-[var(--hs-ink-secondary)] text-sm text-center mb-6">
-            Sign in to your Command Center
+            {step === 'code'
+              ? `We sent a ${OTP_LENGTH}-digit code to ${email}`
+              : 'Sign in to your Command Center'}
           </p>
 
           {error && (
@@ -133,6 +221,76 @@ export default function LoginPage() {
             </motion.div>
           )}
 
+          {step === 'code' ? (
+            <form onSubmit={handleVerifyOtp} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">
+                  Sign-in code
+                </label>
+                <div className="relative">
+                  <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    value={otp}
+                    onChange={(e) => setOtp(normalizeOtpInput(e.target.value))}
+                    placeholder="000000"
+                    autoFocus
+                    required
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] text-lg font-mono tracking-[0.4em] placeholder:text-[var(--hs-ink-tertiary)] placeholder:tracking-[0.4em] focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
+                  />
+                </div>
+              </div>
+
+              <label className="flex items-center gap-2 text-sm text-[var(--hs-ink-secondary)] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={trustDevice}
+                  onChange={(e) => setTrustDevice(e.target.checked)}
+                  className="h-4 w-4 rounded border-[var(--hs-border)] accent-[var(--hs-steel-dark)]"
+                />
+                Trust this device for 30 days
+              </label>
+
+              <button
+                type="submit"
+                disabled={loading || !isCompleteOtp(otp)}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-700 text-white text-sm font-semibold hover:bg-brand-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                {loading ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    Verify <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center justify-between text-xs">
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={resendWait > 0}
+                  className="font-medium text-brand-700 hover:text-brand-800 disabled:text-[var(--hs-ink-tertiary)] disabled:cursor-not-allowed"
+                >
+                  {resendWait > 0 ? `Resend code in ${resendWait}s` : 'Resend code'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStep('credentials');
+                    setOtp('');
+                    setError('');
+                  }}
+                  className="font-medium text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)]"
+                >
+                  Back to password
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email */}
             <div>
@@ -230,6 +388,8 @@ export default function LoginPage() {
             </button>
 
           </div>
+            </>
+          )}
         </div>
 
         {/* Sign up link */}

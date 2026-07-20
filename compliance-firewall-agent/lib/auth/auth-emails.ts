@@ -54,6 +54,38 @@ export function buildPasswordResetEmail(url: string): EmailContent {
   };
 }
 
+/**
+ * Sign-in code email (email 2FA). Code-style layout — a large monospace code
+ * instead of a button/link, since the user types it into the login screen.
+ * Keep the code out of the subject line so it never shows in lock-screen
+ * previews.
+ */
+export function buildTwoFactorCodeEmail(code: string): EmailContent {
+  const html = `<!doctype html><html><body style="margin:0;background:#F5F8FB;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0F1E2E">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#fff;border:1px solid rgba(15,30,46,.10);border-radius:14px;overflow:hidden">
+        <tr><td style="padding:22px 28px;border-bottom:1px solid rgba(15,30,46,.08);font-weight:700;font-size:18px">Hound<span style="color:${BRAND}">Shield</span></td></tr>
+        <tr><td style="padding:28px">
+          <h1 style="margin:0 0 12px;font-size:20px">Your sign-in code</h1>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#3D5166">Enter this code to finish signing in. It expires in 5 minutes and works once.</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px 0"><tr><td style="border-radius:10px;background:#F0F5FA;border:1px solid rgba(15,30,46,.10)">
+            <span style="display:inline-block;padding:14px 26px;font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:26px;font-weight:700;letter-spacing:8px;color:#0F1E2E">${code}</span>
+          </td></tr></table>
+          <p style="margin:16px 0 0;font-size:12px;color:#6B8299">If you didn't try to sign in, someone may have your password — reset it now.</p>
+        </td></tr>
+        <tr><td style="padding:16px 28px;border-top:1px solid rgba(15,30,46,.08);font-size:11px;color:#6B8299">HoundShield — local-only AI compliance firewall. HoundShield will never ask you for this code.</td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+  return {
+    subject: "Your HoundShield sign-in code",
+    html,
+    text: `Your HoundShield sign-in code: ${code}\n\nEnter it to finish signing in. Expires in 5 minutes, works once.\n\nIf you didn't try to sign in, reset your password now.`,
+  };
+}
+
 export function buildVerificationEmail(url: string): EmailContent {
   return {
     subject: "Verify your HoundShield email",
@@ -88,4 +120,8 @@ export async function sendPasswordResetEmail(to: string, url: string): Promise<v
 
 export async function sendVerificationEmail(to: string, url: string): Promise<void> {
   await send(to, buildVerificationEmail(url));
+}
+
+export async function sendTwoFactorCodeEmail(to: string, code: string): Promise<void> {
+  await send(to, buildTwoFactorCodeEmail(code));
 }
