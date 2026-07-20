@@ -2,6 +2,9 @@
 
 ## Active
 
+### 2026-07-18 — 2nd dashboard: Compliance ROI console (this session, cont.)
+- [x] **Compliance ROI dashboard** (`/roi`, PR #226 → draft): the 2nd founder-reference ("AI Cash Flow") rebuilt in dark-steel — gradient stat tiles, per-category savings bars, pure-SVG cumulative-savings trend line, mobile bottom tab bar. Live 90d/6m/12m period toggle re-resolves a tested pure model (`lib/dashboard/roi-model.ts`, 20 tests). Clearly a **modeled sample estimate** with transparent per-category remediation-cost assumptions on the page (no fabricated live telemetry). Funnels to the $499 report; the ROI number is the RPO/MSP + buyer justification. tsc 0 · lint clean · 1422/1422 · build 251/251. → **next action: after #226 merges, reset from main → site-wide mobile pass, then email 2FA.**
+
 ### 2026-07-18 — Auth reset fix + real API docs (this session, cont.)
 - [x] **Password reset fixed** (PR #224 merged → live): Supabase reset links landed on `/auth/callback?redirect=/console` (logged in, skipped the password step) and `/reset-password` was Better-Auth-only. Now lands on the set-password page and supports both providers via a unit-tested `resetView` helper. Docs: `docs/auth-password-reset.md` (+ GitHub-OAuth enable steps + "name before login" explainer).
 - [x] **/docs rebuilt into a real API reference** (this branch → PR): the old page pointed EVERY sidebar link at one `#sdk` anchor and shipped one JS snippet ("buttons don't work / nobody can use the API"). Now: working per-endpoint anchors, tabbed cURL/JS/Python samples with copy buttons, Authentication + "what gets detected" sections — documenting the REAL proxy endpoints (`/v1/chat/completions`, `/health`, `/v1/stats`, `/v1/events`, `/v1/quarantine`(+review), `/v1/policy`). Data-driven (`app/docs/api-data.ts`) + 9 integrity tests (no dead links, all 3 langs).
