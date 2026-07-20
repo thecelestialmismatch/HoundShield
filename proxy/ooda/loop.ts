@@ -11,7 +11,7 @@
 import type { Response } from "express";
 import fetch from "node-fetch";
 
-import { scanMessages } from "../scanner.js";
+import { scanMessages, scanString } from "../scanner.js";
 import { logEvent } from "../storage.js";
 import { enqueueEvent } from "../webhook.js";
 
@@ -34,6 +34,64 @@ import type {
   ActionResult,
 } from "./types.js";
 
+// ── Tool-call argument extraction ──────────────────────────────────────────
+
+/**
+ * Collects every tool_calls[].function.arguments string from an
+ * OpenAI-format messages array. Arguments are prompt-derived text and must
+ * be gated like any other content — on the request path (resent history)
+ * and the response path (model output).
+ */
+export function toolCallArgText(
+  messages: ReadonlyArray<{ role: string; content: unknown }>
+): string {
+  const args: string[] = [];
+  for (const msg of messages) {
+    const calls = (msg as {
+      tool_calls?: Array<{ function?: { arguments?: unknown } }>;
+    }).tool_calls;
+    if (!Array.isArray(calls)) continue;
+    for (const call of calls) {
+      if (typeof call.function?.arguments === "string") {
+        args.push(call.function.arguments);
+      }
+    }
+  }
+  return args.join("\n");
+}
+
+/**
+ * Response-path tool-argument gate: scans tool_calls arguments in a
+ * non-streaming upstream response and surfaces findings via headers + local
+ * log. Never blocks or mutates the response, and never emits matched text —
+ * pattern names only.
+ * ponytail: headers + console.warn only; wire into logEvent/quarantine when a
+ * response-path policy exists.
+ */
+function surfaceResponseToolCallFindings(body: unknown, res: Response): void {
+  const choices = (body as { choices?: Array<{ message?: unknown }> } | null)
+    ?.choices;
+  if (!Array.isArray(choices)) return;
+
+  const messages = choices.flatMap((c) =>
+    c?.message && typeof c.message === "object"
+      ? [c.message as { role: string; content: unknown }]
+      : []
+  );
+  const argText = toolCallArgText(messages);
+  if (!argText) return;
+
+  const scan = scanString(argText);
+  if (scan.entities.length === 0) return;
+
+  const patterns = [...new Set(scan.entities.map((e) => e.pattern_name))].join(",");
+  res.setHeader("X-HoundShield-Response-Risk", scan.risk_level);
+  res.setHeader("X-HoundShield-Response-Patterns", patterns);
+  console.warn(
+    `[houndshield] upstream tool_call arguments matched: ${patterns} (risk: ${scan.risk_level})`
+  );
+}
+
 // ── Main OODA loop ─────────────────────────────────────────────────────────
 
 export async function runOODALoop(
@@ -46,8 +104,14 @@ export async function runOODALoop(
   const observation = observe(ctx, loopStart);
 
   // ── Phase 2: Scan + Orient ───────────────────────────────────────────────
+  // Tool-call arguments in resent history scan alongside message content.
+  // ponytail: REDACT rewrites content only, not JSON args — BLOCK/QUARANTINE
+  // still stop forwarding; add JSON-aware redaction if REDACT policy widens.
+  const requestArgText = toolCallArgText(ctx.messages);
   const scanResult = scanMessages(
-    ctx.messages as Array<{ role: string; content: unknown }>
+    requestArgText
+      ? [...ctx.messages, { role: "tool", content: requestArgText }]
+      : (ctx.messages as Array<{ role: string; content: unknown }>)
   );
 
   const orgBaseline = getBaseline(ctx.org_id, "org", loopStart);
@@ -137,6 +201,7 @@ export async function runOODALoop(
         upstreamBody = "[streaming]";
       } else {
         upstreamBody = await upstreamRes.json();
+        surfaceResponseToolCallFindings(upstreamBody, res);
         res.status(upstreamStatus).json(upstreamBody);
       }
     } catch (err) {
