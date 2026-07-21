@@ -8,7 +8,7 @@ import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
 import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
-import { interpretSignUp, validateSignUpInput } from '@/lib/auth/signup-result';
+import { interpretSignUp, signUpErrorMessage, validateSignUpInput } from '@/lib/auth/signup-result';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
 
@@ -40,11 +40,7 @@ export default function SignupPage() {
       try {
         const { error: baError } = await authClient.signUp.email({ email, password, name });
         if (baError) {
-          if (/exist|already/i.test(baError.message || '')) {
-            setError('That email is already registered. Sign in instead.');
-          } else {
-            setError(baError.message || 'Could not create your account.');
-          }
+          setError(signUpErrorMessage(baError));
           setLoading(false);
           return;
         }
