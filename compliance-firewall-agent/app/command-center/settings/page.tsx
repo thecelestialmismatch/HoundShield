@@ -175,8 +175,9 @@ export default function SettingsPage() {
       if (error) throw error;
       setNewPassword('');
       setToast({ message: 'Password changed successfully', type: 'success' });
-    } catch {
-      setToast({ message: 'Failed to change password', type: 'error' });
+    } catch (err) {
+      const detail = err instanceof Error && err.message ? `: ${err.message}` : '';
+      setToast({ message: `Failed to change password${detail}`, type: 'error' });
     } finally {
       setSaving(false);
     }
