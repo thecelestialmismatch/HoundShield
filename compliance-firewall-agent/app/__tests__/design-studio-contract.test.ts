@@ -3,15 +3,15 @@ import { readFileSync } from 'fs'
 import path from 'path'
 
 /**
- * Design Studio contract (2026-07-18, founder-directed follow-up to Aurora).
+ * Design Studio contract (2026-07-18; hero narrowed 2026-07-21).
  *
- * The founder asked for the dashboard to wear MANY designs, live: the hero
- * should cycle through them (light → dark → light, charts still moving) and the
- * after-login console should let ANY user (no paywall) switch design and
- * rearrange/hide their sections. These tests pin that architecture:
+ * ONE registry (lib/dashboard/design-themes) still feeds BOTH surfaces, but the
+ * founder later removed the hero's design switcher: the marketing hero now wears
+ * ONLY Aurora (the signature skin), no carousel. The after-login console keeps
+ * the full, paywall-free design picker + customize/reorder. These tests pin:
  *
  *  1. ONE registry (lib/dashboard/design-themes) feeds BOTH surfaces.
- *  2. The hero is a live, controllable carousel.
+ *  2. The hero renders Aurora only — no design switcher (2026-07-21).
  *  3. The console applies the theme + paints its canvas/donut from it, exposes a
  *     design picker + a customize/reorder mode, and both are FREE for everyone.
  */
@@ -30,22 +30,16 @@ describe('one registry, both surfaces', () => {
   })
 })
 
-describe('hero — live, controllable design carousel', () => {
+describe('hero — Aurora only, no design switcher (2026-07-21)', () => {
   const hero = read('components/landing/HeroDemoDashboard.tsx')
-  it('applies the active theme to the window root', () => {
+  it('still consumes the shared registry, pinned to Aurora (index 0)', () => {
     expect(hero).toMatch(/style=\{heroThemeVars\(activeTheme\)/)
+    expect(hero).toMatch(/const activeTheme = DESIGN_THEMES\[0\]/)
   })
-  it('auto-advances through designs, but not under reduced motion', () => {
-    expect(hero).toMatch(/setThemeIdx\(\(i\) => \(i \+ 1\) % DESIGN_THEMES\.length\)/)
-    expect(hero).toMatch(/prefers-reduced-motion/)
-    // paused while the cursor dwells on the window
-    expect(hero).toContain('pausedRef')
-  })
-  it('is user-controllable: prev/next nav + a dot rail', () => {
-    expect(hero).toContain('hd-switch')
-    expect(hero).toContain('goTheme')
-    expect(hero).toMatch(/hd-dot/)
-    expect(hero).toMatch(/DESIGN_THEMES\.map/)
+  it('has NO switcher — no carousel control, no cycling state', () => {
+    for (const token of ['hd-switch', 'hd-dot', 'goTheme', 'setThemeIdx', 'themeIdx', 'pausedRef']) {
+      expect(hero).not.toContain(token)
+    }
   })
 })
 
