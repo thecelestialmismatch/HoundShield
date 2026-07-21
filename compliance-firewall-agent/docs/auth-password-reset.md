@@ -37,8 +37,23 @@ The branch decision is a pure, unit-tested function:
 `lib/auth/reset-password-state.ts` (`resetView`) — guarded by
 `lib/auth/__tests__/reset-password-state.test.ts`.
 
-**No new config required:** the reset link reuses `/auth/callback`, which is
-already on the Supabase redirect-URL allowlist for OAuth.
+**Config required (founder, one-time — this is the live blocker):** the reset
+link redirects through `/auth/callback`, so that URL MUST be in **Supabase →
+Authentication → URL Configuration → Redirect URLs**. If it is not, Supabase
+ignores the `redirect_to` and falls back to the **Site URL** — the user lands on
+the homepage. That is exactly the "reset link goes straight to the homepage"
+symptom (reported again 2026-07-21); landing on `/` (not `/login?error`) is the
+tell that Supabase never honored the redirect, i.e. an allowlist miss, not a code
+bug. Add wildcard entries covering every host the app is served on:
+
+- `https://houndshield.com/**`
+- `https://www.houndshield.com/**`
+- `http://localhost:3000/**` (local dev)
+
+Use `/**`, not a bare `.../auth/callback`, because the reset link carries a
+`?redirect=%2Freset-password` query string a bare entry can fail to match. Set
+**Site URL** to the canonical host (e.g. `https://www.houndshield.com`). Same
+allowlist gates Google/GitHub OAuth, so this one change also unblocks those.
 
 ## GitHub OAuth — code is correct; enable it in the dashboards
 

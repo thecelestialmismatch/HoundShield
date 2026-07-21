@@ -18,6 +18,7 @@ import {
 } from '@/lib/auth/two-factor-state';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
+import { PasswordlessSignIn } from './PasswordlessSignIn';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,6 +41,8 @@ export default function LoginPage() {
       : '',
   );
   const [loading, setLoading] = useState(false);
+  // Supabase passwordless (email code / magic link) — swaps in over the password form.
+  const [passwordless, setPasswordless] = useState(false);
 
   // Email 2FA (Better Auth only): after a correct password on a 2FA-enabled
   // account, the page swaps to a code-entry step in place — no redirect.
@@ -289,6 +292,15 @@ export default function LoginPage() {
                 </button>
               </div>
             </form>
+          ) : passwordless ? (
+            <PasswordlessSignIn
+              redirect={redirect}
+              initialEmail={email}
+              onBack={() => {
+                setPasswordless(false);
+                setError('');
+              }}
+            />
           ) : (
             <>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -352,6 +364,20 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+
+          {/* Passwordless option — Supabase only (Better Auth path uses password + 2FA). */}
+          {!isBetterAuthClientEnabled() && (
+            <button
+              type="button"
+              onClick={() => {
+                setPasswordless(true);
+                setError('');
+              }}
+              className="mt-3 w-full text-center text-xs font-medium text-brand-700 hover:text-brand-800"
+            >
+              Email me a sign-in code or magic link instead
+            </button>
+          )}
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-5">
