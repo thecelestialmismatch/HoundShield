@@ -57,7 +57,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          # better-sqlite3@13 requires Node >=22 (its native binding won't load
+          # on 20 → vitest workers crash). Match the proxy's engines field.
+          node-version: "22"
           cache: "npm"
           cache-dependency-path: proxy/package-lock.json
 

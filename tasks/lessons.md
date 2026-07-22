@@ -5,6 +5,23 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-22
+
+### A tested backend with no UI caller is dead code — grep for the caller before trusting "the funnel works"
+**What:** The RPO/MSP application backend was fully built and tested for months — `/api/partners/apply`
+(zod-validated insert into `partner_applications`, founder alert, branded `partner-welcome` email, mig
+005 with RLS). But EVERY partner CTA on `/partners` and `/partners/kit` linked to the generic `/contact`
+form. So the entire structured channel #1 funnel (the Stage-1 ≥1-RPO goal) never ran: no row in
+`partner_applications`, no founder alert, no warm welcome email. Green route tests said nothing, because
+tests call the route directly — they never exercise the missing UI edge.
+**Root cause:** Route-level tests prove the handler works; they do NOT prove anything reaches the handler.
+"The apply endpoint is built and tested" was mistaken for "an RPO can apply."
+**Rule:** A capability is incomplete until a caller invokes it in the real flow. When a backend exists,
+`grep -rn "<route path>"` across `app/` + `components/` for a UI caller before calling the funnel done;
+if the only hits are the route file and its tests, the thread is dangling. Ship the caller in the same
+arc (continues the 2026-07-04 "capability with no caller" lesson) and add a source-level contract guard
+that the CTAs point at the real destination, not a generic fallback.
+
 ## 2026-07-18
 
 - **Killed my own shell twice with `pkill -f "next start"`** → `pkill -f` matches any process whose full cmdline contains the pattern — including the harness session process (its cmdline embeds instruction text with those words), so the signal took down the tool shell (exit 144) → rule: never `pkill`/`pgrep -f` with broad substrings; find the exact PID (`ss -ltnp` by port, `/proc/<pid>/cwd`, or a PID file written in the same `{ }` group) and `kill <pid>`.

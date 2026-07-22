@@ -202,10 +202,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // RPO/MSP partner kit (co-branded $499 report resale program)
+  // RPO/MSP partner kit + application (co-branded $499 report resale program)
   const partnerKitPage: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/partners/kit`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/partners/apply`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.75,
