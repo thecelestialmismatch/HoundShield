@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
-import { createClient } from "@/lib/supabase/browser";
 import { authClient, isBetterAuthClientEnabled } from "@/lib/auth/auth-client";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
@@ -36,23 +35,25 @@ export default function ForgotPasswordPage() {
       return;
     }
 
-    const supabase = createClient();
-
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      // Land on /reset-password to actually SET a new password. /auth/callback
-      // exchanges the recovery code into a session, then forwards here — it must
-      // NOT drop the user on /console (that logged them in and skipped the
-      // password step entirely, the "reset link goes straight to the homepage"
-      // bug). /reset-password reads that recovery session and updates the password.
-      redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(
-        "/reset-password",
-      )}`,
-    });
-
-    if (resetError) {
-      setError(resetError.message);
-    } else {
-      setSent(true);
+    // Supabase path: send via our own /api/auth/reset-password, which mints the
+    // recovery link server-side and emails a BRANDED link pointing at
+    // /auth/confirm (same-origin → immune to the Supabase Redirect-URL allow-list
+    // "lands on the homepage" fallback, and no Supabase email template / SMTP
+    // config required). The route is enumeration-safe (always 200 for a
+    // well-formed email), so we show "check your email" on any ok response.
+    try {
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setSent(true);
+      } else {
+        setError("We couldn't send the reset link. Please check the email and try again.");
+      }
+    } catch {
+      setError("We couldn't reach the reset service. Please try again in a moment.");
     }
     setLoading(false);
   };
