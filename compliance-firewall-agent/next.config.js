@@ -29,10 +29,9 @@ const nextConfig = {
     ],
   },
 
-  // Ignore ESLint errors to allow build to test UI
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // Next 16 removed `next build` linting and the `eslint` config key — lint runs
+  // as its own CI step (`npm run lint` → eslint.config.mjs). TS errors are still
+  // ignored at build so a type slip can't block a deploy (CI's tsc step gates that).
   typescript: {
     ignoreBuildErrors: true,
   },
