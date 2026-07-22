@@ -123,6 +123,64 @@ from Supabase's shared sender and is rate-limited to a few per hour.
 > confirm the email is HoundShield-branded → click → land on `/reset-password`
 > (never `/`) → set password → sign in.
 
+### The zero-dashboard-dependency upgrade — reset works with NO founder config
+
+Steps A–C above make the **default Supabase-template** flow correct, but they
+still require the founder to touch the dashboard. This iteration removes that
+dependency entirely: the app now mints the recovery link **and** sends the email
+itself, so a working reset needs zero Supabase-dashboard changes.
+
+- **New route `app/api/auth/reset-password/route.ts`** — calls
+  `supabase.auth.admin.generateLink({ type: 'recovery', email })`. `generateLink`
+  returns `data.properties.hashed_token` **without sending any Supabase email**.
+  The route builds `/auth/confirm?token_hash=…&type=recovery&next=/reset-password`
+  and sends it through the app's **Resend** integration
+  (`sendPasswordResetEmail` — the same branded shell used for $499 sale alerts).
+- **New helper `lib/auth/recovery-link.ts`** — `recoveryRequestSchema` (trim +
+  lowercase + `.email()`) and the pure `buildRecoveryConfirmUrl(base, tokenHash)`.
+  Guarded by `lib/auth/__tests__/recovery-link.test.ts`.
+- **`app/forgot-password/page.tsx` (Supabase path)** now `POST`s to
+  `/api/auth/reset-password` instead of the client `resetPasswordForEmail`, so the
+  send goes through our route, not Supabase's mailer.
+
+**Why this needs none of A–C for reset:**
+
+- **No Redirect-URL allowlist (A):** the link targets `/auth/confirm`, a
+  same-origin **app route** that runs `verifyOtp` directly. It never passes
+  through GoTrue's `redirect_to` machinery, so there is nothing to allowlist and
+  nothing that can fall back to the homepage.
+- **No template (B) / no SMTP (C):** the email is authored by the app and sent
+  from Resend (`noreply@houndshield.com`), so it is HoundShield-branded by
+  construction and never uses Supabase's template or shared sender.
+
+**Security properties:**
+
+- **Enumeration-safe** — always answers `200 { ok: true }` for a well-formed
+  email; a non-existent account errors inside `generateLink` and is swallowed
+  (no send). Only a malformed body returns `400`.
+- **No timing oracle** — the Resend send runs in `after()` (off the response
+  path), so an existing account does not return slower than a non-existent one.
+  Regression-guarded in `route.test.ts` (a never-settling send must not delay the
+  `200`).
+- **Anti email-bomb** — middleware rate-limits the route to
+  `PASSWORD_RESET_RATE_LIMIT_MAX = 5` requests/min per IP.
+
+**Requirements (Vercel prod env):** `SUPABASE_SERVICE_ROLE_KEY` (for
+`generateLink`) and `RESEND_API_KEY` (the sender) must be set — both already are
+for existing features, but confirm them: **every** misconfiguration here fails
+*silently* (still `200 { ok: true }`, no email), i.e. it reproduces the exact
+"nothing happening" symptom. `NEXT_PUBLIC_APP_URL` should also be set to the
+canonical host so the link origin never falls back to a preview URL (absent it,
+the route uses the request origin). If Supabase is unconfigured the route stays
+enumeration-safe and sends nothing. The route logs its outcome server-side
+(`recovery link dispatched` / `no recovery link minted` / `Supabase not
+configured`) so a "nothing happening" report is a one-look diagnosis in the
+Vercel function logs.
+
+**Steps A–C are now optional for password reset.** Step **A (allowlist)** is still
+required for **OAuth** (Google/GitHub use `/auth/callback`). B and C only matter
+if you ever fall back to Supabase's default recovery template.
+
 ## GitHub OAuth — code is correct; enable it in the dashboards
 
 The button wiring is standard and correct
