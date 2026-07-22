@@ -48,7 +48,7 @@ export default function PartnersPage() {
                   (C3PAOs are excluded — assessors can&apos;t refer tools to clients they assess.)
                 </p>
               </div>
-              <Link className="btn btn-primary" href="/contact">
+              <Link className="btn btn-primary" href="/partners/apply">
                 Become a partner <ArrowRight />
               </Link>
             </div>
@@ -81,7 +81,7 @@ export default function PartnersPage() {
             </div>
 
             <div style={{ textAlign: 'center', marginTop: 40 }}>
-              <Link className="btn btn-primary" href="/contact">
+              <Link className="btn btn-primary" href="/partners/apply">
                 Apply to partner program <ArrowRight />
               </Link>
             </div>

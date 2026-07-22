@@ -160,7 +160,7 @@ export default function PartnerKitPage() {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              href="/contact"
+              href="/partners/apply"
               className="inline-flex items-center gap-2 rounded-xl bg-[var(--hs-steel-dark)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--hs-steel)]"
             >
               Request the partner kit <ArrowRight className="h-4 w-4" />
