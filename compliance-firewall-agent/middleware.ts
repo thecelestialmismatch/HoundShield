@@ -36,6 +36,7 @@ const MAX_ENTRIES = 10_000;
 const SCAN_RATE_LIMIT_MAX = 15;
 const GATEWAY_RATE_LIMIT_MAX = 120; // gateway endpoints need higher headroom
 const CHECKOUT_RATE_LIMIT_MAX = 10; // unauthenticated Stripe checkout creation
+const PASSWORD_RESET_RATE_LIMIT_MAX = 5; // unauthenticated reset send — anti email-bomb
 
 /** Removes all expired entries from the map. O(n) sweep. */
 function evictExpired(): void {
@@ -165,7 +166,11 @@ export async function middleware(request: NextRequest) {
         // can't exhaust the shared Stripe API rate limit (audit M6).
         : pathname === '/api/stripe/report-checkout'
           ? CHECKOUT_RATE_LIMIT_MAX
-          : RATE_LIMIT_MAX_REQUESTS;
+          // Unauthenticated password-reset send — tight bucket so it can't be
+          // used to email-bomb an address or burn Resend/Supabase quota.
+          : pathname === '/api/auth/reset-password'
+            ? PASSWORD_RESET_RATE_LIMIT_MAX
+            : RATE_LIMIT_MAX_REQUESTS;
 
     if (isRateLimited(ip, maxRequests)) {
       return NextResponse.json(
