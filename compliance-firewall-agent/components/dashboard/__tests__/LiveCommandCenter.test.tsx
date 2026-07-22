@@ -1,5 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
+import { readFileSync } from 'fs'
+import path from 'path'
 
 vi.mock('next/image', () => ({
   // eslint-disable-next-line @next/next/no-img-element
@@ -445,5 +447,78 @@ describe('LiveCommandCenter — subscription-aware + personalized', () => {
     const onprem = feats.find((f) => f.textContent?.includes('On-prem'))
     expect(onprem?.className).toContain('off')
     expect(onprem?.textContent).toMatch(/Enterprise\+/)
+  })
+})
+
+/**
+ * Redesign contract (founder-directed, "every button works and has meaning, not
+ * generic"). Pins the two things the redesign changed:
+ *  1. Every Brain control is a first-class React handler — the old imperative
+ *     querySelectorAll/addEventListener wiring (the "nothing works" smell) is
+ *     gone, and the chips/Send actually fire the analyst.
+ *  2. A signed-in operator lands on THEIR product (an activation anchor with
+ *     real next actions + honest "sample preview" framing), never a simulated
+ *     demo wearing their name.
+ */
+describe('LiveCommandCenter — redesign: every control is a real React handler (no dead/DOM-wired buttons)', () => {
+  const LCC_SRC = readFileSync(path.resolve(__dirname, '../LiveCommandCenter.tsx'), 'utf8')
+
+  it('Brain-tab starter chips fire the analyst via React onClick', () => {
+    const { container } = render(<LiveCommandCenter />)
+    // "Who are you?" is unique to the Brain-tab chips (not the Overview quick-ask card).
+    fireEvent.click(screen.getByText('Who are you?'))
+    expect(container.querySelector('.blog .bub.u')?.textContent).toContain('Who are you?')
+  })
+
+  it('the Send button fires the analyst with the typed question (React-wired, reads the input)', () => {
+    const { container } = render(<LiveCommandCenter />)
+    const input = document.getElementById('lcc-bi') as HTMLInputElement
+    input.value = 'is my proxy connected'
+    fireEvent.click(document.getElementById('lcc-bsend')!)
+    const userBubbles = Array.from(container.querySelectorAll('.blog .bub.u'))
+    expect(userBubbles.some((b) => b.textContent?.includes('is my proxy connected'))).toBe(true)
+  })
+
+  it('the old imperative Brain wiring is gone (DOM listeners over React nodes)', () => {
+    expect(LCC_SRC).not.toContain("querySelectorAll('.chips button')")
+    expect(LCC_SRC).not.toMatch(/addEventListener\('click', onSend\)/)
+    // …replaced by React-owned controls.
+    expect(LCC_SRC).toMatch(/BRAIN_TAB_CHIPS\.map/)
+    expect(LCC_SRC).toMatch(/id="lcc-bsend" onClick=/)
+  })
+})
+
+describe('LiveCommandCenter — redesign: signed-in operators land on THEIR product, not a demo with their name', () => {
+  const viewer = { company: 'Vector Defense', plan: 'Pro', initials: 'VD', tier: 'pro', firstName: 'Jordan' }
+
+  it('anonymous visitors see the public demo — no activation anchor', () => {
+    render(<LiveCommandCenter />)
+    expect(screen.queryByText('Connect your proxy to go live')).toBeNull()
+  })
+
+  it('a signed-in operator gets the activation anchor (real state + real next actions)', () => {
+    render(<LiveCommandCenter viewer={viewer} />)
+    expect(screen.getByText('Connect your proxy to go live')).toBeTruthy()
+    expect(screen.getByText(/Proxy · not connected/)).toBeTruthy()
+  })
+
+  it('the activation "Get your proxy URL" CTA lands the operator on Settings (a real destination)', () => {
+    const { container } = render(<LiveCommandCenter viewer={viewer} />)
+    fireEvent.click(screen.getByText('Get your proxy URL').closest('button')!)
+    const settingsTab = Array.from(container.querySelectorAll('.atab')).find((t) => t.textContent?.includes('Plan & usage'))
+    expect(settingsTab?.className).toContain('on')
+  })
+
+  it('the activation "Start your assessment" CTA opens the real 110-control board', () => {
+    render(<LiveCommandCenter viewer={viewer} />)
+    fireEvent.click(screen.getByText('Start your assessment').closest('button')!)
+    expect(screen.getByTestId('assessment-board')).toBeTruthy()
+  })
+
+  it("the signed-in hero band reads 'Sample preview' (honest), never 'Live demo'", () => {
+    const { container } = render(<LiveCommandCenter viewer={viewer} />)
+    const liv = container.querySelector('.hero .liv')
+    expect(liv?.textContent).toMatch(/Sample preview/)
+    expect(liv?.textContent).not.toMatch(/Live demo/)
   })
 })
