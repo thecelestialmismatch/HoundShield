@@ -245,6 +245,19 @@ const BRAIN_QUICK: string[] = [
   'What is a DFARS 7012 spill?',
 ]
 
+// Brain-tab starter chips. React-owned (mapped with real onClick handlers), not
+// the old imperative DOM-listener wiring — every button here is a first-class
+// React handler, which is what the no-dead-buttons guard verifies.
+const BRAIN_TAB_CHIPS: string[] = [
+  'Who are you?',
+  "What's my SPRS score?",
+  'What changed this week?',
+  'Am I CMMC ready?',
+  "What's on my plan?",
+  'What is a DFARS 7012 spill?',
+  'Draft my incident summary',
+]
+
 export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {}) {
   const [tab, setTab] = useState<TabId>('overview')
   const [sideOpen, setSideOpen] = useState(false)
@@ -597,17 +610,11 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
         })()
       }, 480)
     }
+    // Send / Enter / starter chips are wired as REACT handlers in the Brain-tab
+    // markup (they call askRef.current). No imperative addEventListener over
+    // React-rendered nodes — that split ownership was the "nothing works" smell
+    // and left the chips invisible to the no-dead-buttons guard.
     askRef.current = ask
-    const onSend = () => ask(bi?.value || '')
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Enter') ask(bi?.value || '') }
-    const sendBtn = $('#lcc-bsend')
-    sendBtn?.addEventListener('click', onSend)
-    bi?.addEventListener('keydown', onKey)
-    const chipHandlers: { el: Element; fn: () => void }[] = []
-    root.querySelectorAll('.chips button').forEach((c) => {
-      const fn = () => ask(c.textContent || '')
-      c.addEventListener('click', fn); chipHandlers.push({ el: c, fn })
-    })
 
     /* ---- kick everything off ---- */
     drawChart(); drawDonut()
@@ -619,9 +626,6 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
       timers.forEach(clearInterval)
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener('resize', drawChart)
-      sendBtn?.removeEventListener('click', onSend)
-      bi?.removeEventListener('keydown', onKey)
-      chipHandlers.forEach(({ el, fn }) => el.removeEventListener('click', fn))
       feed?.removeEventListener('click', onFeedClick)
       feedFull?.removeEventListener('click', onFeedClick)
       askRef.current = null
@@ -833,7 +837,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                     <div className="hero-org">{name ? `Welcome back, ${name}` : (viewer?.company ?? 'Acme Defense')}</div>
                     <div className="hero-tag">
                       <span>HoundShield AI Compliance Command Center</span>
-                      <span className="liv"><span className="dot" /> Live demo</span>
+                      <span className="liv"><span className="dot" /> {isViewer ? 'Sample preview' : 'Live demo'}</span>
                       <span className="plan-chip"><Crown /> {viewer?.isFounder ? 'Founder access' : `${ent.name} plan`}</span>
                     </div>
                   </div>
@@ -844,6 +848,16 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                   <button type="button" className="hero-metric" aria-haspopup="dialog" onClick={() => setProv('product-stats')}><b>4</b><span>Regions</span></button>
                 </div>
               </div>
+
+              {/* Signed-in activation anchor — the "make this real" surface. A
+                  logged-in operator lands on a Command Center with no live
+                  telemetry yet, so we say so plainly and hand them the two real
+                  next actions instead of dressing the sample panels as their
+                  data. Anonymous visitors don't see it (they're just exploring
+                  the public demo). */}
+              {isViewer && (
+                <ActivationStrip onSettings={() => setTab('settings')} onAssess={() => setTab('assess')} />
+              )}
 
               <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago <SourceChip id="system-status" onSource={setProv} className="ops-src">demo data</SourceChip></div>
 
@@ -1046,15 +1060,21 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                     <div className="bub b" dangerouslySetInnerHTML={{ __html: `${name ? `Hi <b>${escapeHtml(name)}</b> — I'm` : "I'm"} <b>Brain AI</b>, ${escapeHtml(orgName)}'s on-device compliance analyst. Ask me about your CMMC posture, your SPRS score, a NIST control, your plan &amp; usage, or what HoundShield does — I answer right here in your browser, from your own on-device data.<span class="src">on-device analyst · no API key required</span>` }} />
                   </div>
                   <div className="chips">
-                    <button type="button">Who are you?</button>
-                    <button type="button">What&apos;s my SPRS score?</button>
-                    <button type="button">What changed this week?</button>
-                    <button type="button">Am I CMMC ready?</button>
-                    <button type="button">What&apos;s on my plan?</button>
-                    <button type="button">What is a DFARS 7012 spill?</button>
-                    <button type="button">Draft my incident summary</button>
+                    {BRAIN_TAB_CHIPS.map((q) => (
+                      <button key={q} type="button" onClick={() => askRef.current?.(q)}>{q}</button>
+                    ))}
                   </div>
-                  <div className="bin"><input id="lcc-bi" ref={inputRef} aria-label="Ask Brain AI" placeholder={name ? `Ask Brain AI, ${name}…` : 'Ask Brain AI…'} autoComplete="off" /><button type="button" className="btn btn-p btn-sm" id="lcc-bsend">Send</button></div>
+                  <div className="bin">
+                    <input
+                      id="lcc-bi"
+                      ref={inputRef}
+                      aria-label="Ask Brain AI"
+                      placeholder={name ? `Ask Brain AI, ${name}…` : 'Ask Brain AI…'}
+                      autoComplete="off"
+                      onKeyDown={(e) => { if (e.key === 'Enter') askRef.current?.(inputRef.current?.value ?? '') }}
+                    />
+                    <button type="button" className="btn btn-p btn-sm" id="lcc-bsend" onClick={() => askRef.current?.(inputRef.current?.value ?? '')}>Send</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1183,6 +1203,37 @@ function Section({ id, prefs, editing, children }: {
       )}
       <div className="ovsec-body">{children}</div>
     </section>
+  )
+}
+
+/** Signed-in activation anchor. A real customer (and the founder) logs into a
+ *  Command Center with no live telemetry yet, so instead of passing the
+ *  simulated panels off as "their" data we state it plainly and surface the two
+ *  real next actions — connect the proxy, run the assessment. The sample
+ *  panels below stay (clearly labeled) as a preview of what fills in once the
+ *  proxy is live. Honest state, real destinations — no decorative dead-ends. */
+function ActivationStrip({ onSettings, onAssess }: { onSettings: () => void; onAssess: () => void }) {
+  return (
+    <div className="activate">
+      <div className="activate-ic" aria-hidden><Activity /></div>
+      <div className="activate-body">
+        <b>Connect your proxy to go live</b>
+        <span>
+          The panels below are a sample of your Command Center. Point your team&apos;s AI traffic at your
+          HoundShield proxy and they fill with your own live scans, blocks and SHA-256 audit chain —
+          on your hardware, nothing sent to us.
+        </span>
+        <div className="activate-state">
+          <span className="ast off"><span className="ast-dot" /> Proxy · not connected</span>
+          <span className="ast"><span className="ast-dot" /> Assessment · saved on this device</span>
+          <span className="ast"><span className="ast-dot" /> Reports · ready when you are</span>
+        </div>
+      </div>
+      <div className="activate-cta">
+        <button type="button" className="btn btn-p btn-sm" onClick={onSettings}><Zap /> Get your proxy URL</button>
+        <button type="button" className="btn btn-g btn-sm" onClick={onAssess}>Start your assessment <ArrowRight /></button>
+      </div>
+    </div>
   )
 }
 
