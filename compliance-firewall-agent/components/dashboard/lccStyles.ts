@@ -156,6 +156,25 @@ export const LCC_CSS = `
 .hs-lcc .ops b{color:var(--text);font-family:var(--f-mono);font-weight:600}
 .hs-lcc .ops .sep{color:var(--mut2)}
 
+/* ── Signed-in activation anchor — the "make this real" surface for logged-in
+   operators. A warm cream→panel wash (call-to-action, never an error state):
+   states the panels below are a sample and hands over the two real next
+   actions. Only rendered when a viewer is present (see LiveCommandCenter). ── */
+.hs-lcc .activate{display:flex;align-items:flex-start;gap:1rem;flex-wrap:wrap;background:linear-gradient(120deg,color-mix(in srgb,var(--cream) 58%,var(--panel)),var(--panel) 72%);border:1px solid color-mix(in srgb,var(--orange) 26%,var(--line));border-radius:var(--r);padding:16px 18px;margin-bottom:16px;box-shadow:var(--soft)}
+.hs-lcc .activate-ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--orange-text)}
+.hs-lcc .activate-ic svg{width:19px;height:19px}
+.hs-lcc .activate-body{flex:1;min-width:220px;display:flex;flex-direction:column;gap:.25rem}
+.hs-lcc .activate-body b{font-family:var(--f-disp);font-size:1.05rem;font-weight:600;color:var(--text)}
+.hs-lcc .activate-body>span{font-size:.82rem;line-height:1.5;color:var(--mut)}
+.hs-lcc .activate-state{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+.hs-lcc .ast{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-mono);font-size:.68rem;font-weight:700;color:var(--mut);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:.2rem .55rem}
+.hs-lcc .ast-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex-shrink:0}
+.hs-lcc .ast.off{color:var(--warn-text)}
+.hs-lcc .ast.off .ast-dot{background:var(--warn)}
+.hs-lcc .activate-cta{display:flex;flex-direction:column;gap:.5rem;flex-shrink:0}
+.hs-lcc .activate-cta .btn{justify-content:center;white-space:nowrap}
+@media(max-width:640px){.hs-lcc .activate-cta{flex-direction:row;flex-wrap:wrap;width:100%}.hs-lcc .activate-cta .btn{flex:1}}
+
 /* ── Evidence-chain spine — the persistent, uncopyable differentiator ──
    A cream-tinted strip under the top bar: the live SHA-256 audit chain being
    built on the customer's own hardware, one click from the $499 PDF. */
