@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "dev:ws": "tsx server.ts",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "start:ws": "NODE_ENV=production node server.ts",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:components": "vitest run",
