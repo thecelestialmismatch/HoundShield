@@ -35,6 +35,17 @@ const SECTION_IDS = OVERVIEW_SECTIONS.map((s) => s.id)
 const THEME_KEY = 'hs.console.theme'
 const LAYOUT_KEY = 'hs.console.layout'
 
+/**
+ * Default hidden set for a SIGNED-IN operator: the simulated telemetry panels
+ * (KPI tiles, charts, throughput/detection-mix, threat feed, engine bars) start
+ * hidden so a logged-in user lands on a stripped, real dashboard — their next
+ * actions (Ask Brain AI + the activation checklist that ends on the PDF), not a
+ * wall of demo numbers. Anything here can be brought back via Customize. The
+ * anonymous public demo passes NOTHING (keeps every panel — it's a marketing
+ * preview). Founder direction 2026-07-23: "strip it way down."
+ */
+export const SIGNED_IN_STRIPPED_HIDDEN = ['kpis', 'charts', 'throughput', 'feed', 'engines']
+
 interface StoredLayout {
   order: string[]
   hidden: string[]
@@ -71,10 +82,13 @@ export interface DashboardPrefs {
   reset: () => void
 }
 
-export function useDashboardPrefs(): DashboardPrefs {
+export function useDashboardPrefs(defaultHidden: string[] = []): DashboardPrefs {
   const [themeId, setThemeId] = useState<string>(DEFAULT_THEME_ID)
   const [order, setOrder] = useState<string[]>(SECTION_IDS)
-  const [hidden, setHidden] = useState<string[]>([])
+  // Initial hidden = the caller's default (stripped set for signed-in operators,
+  // [] for the public demo). Same on server and client because it derives from a
+  // prop, so no hydration mismatch; a stored per-device layout overrides on mount.
+  const [hidden, setHidden] = useState<string[]>(() => normalizeHidden(defaultHidden))
   const [ready, setReady] = useState(false)
 
   // Hydrate once on mount.
@@ -126,10 +140,13 @@ export function useDashboardPrefs(): DashboardPrefs {
   }, [order, persistLayout])
 
   const reset = useCallback(() => {
+    // Reset returns to the caller's baseline (the stripped default for a
+    // signed-in operator, empty for the demo) — not a blanket "show everything".
+    const base = normalizeHidden(defaultHidden)
     setOrder(SECTION_IDS)
-    setHidden([])
-    persistLayout(SECTION_IDS, [])
-  }, [persistLayout])
+    setHidden(base)
+    persistLayout(SECTION_IDS, base)
+  }, [persistLayout, defaultHidden])
 
   const orderOf = useCallback((id: string) => {
     const i = order.indexOf(id)

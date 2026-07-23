@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { act, renderHook } from '@testing-library/react'
-import { useDashboardPrefs, OVERVIEW_SECTIONS } from '../use-dashboard-prefs'
+import { useDashboardPrefs, OVERVIEW_SECTIONS, SIGNED_IN_STRIPPED_HIDDEN } from '../use-dashboard-prefs'
 
 const IDS = OVERVIEW_SECTIONS.map((s) => s.id)
 const THEME_KEY = 'hs.console.theme'
@@ -15,6 +15,32 @@ describe('useDashboardPrefs — free, per-device console personalization', () =>
     expect(result.current.order).toEqual(IDS)
     expect(result.current.hidden).toEqual([])
     expect(result.current.ready).toBe(true)
+  })
+
+  it('a signed-in default hidden-set strips telemetry but keeps the real actions', () => {
+    const { result } = renderHook(() => useDashboardPrefs(SIGNED_IN_STRIPPED_HIDDEN))
+    // The simulated panels start hidden…
+    for (const id of ['kpis', 'charts', 'throughput', 'feed', 'engines']) {
+      expect(result.current.isHidden(id)).toBe(true)
+    }
+    // …while the real next-actions stay visible.
+    expect(result.current.isHidden('brain')).toBe(false)
+    expect(result.current.isHidden('checklist')).toBe(false)
+  })
+
+  it('reset with a signed-in default returns to the stripped baseline, not "show all"', () => {
+    const { result } = renderHook(() => useDashboardPrefs(SIGNED_IN_STRIPPED_HIDDEN))
+    act(() => result.current.toggleHidden('kpis')) // operator un-hides one panel
+    expect(result.current.isHidden('kpis')).toBe(false)
+    act(() => result.current.reset())
+    expect(result.current.hidden).toEqual(SIGNED_IN_STRIPPED_HIDDEN)
+  })
+
+  it('a stored per-device layout still overrides the signed-in default', () => {
+    localStorage.setItem(LAYOUT_KEY, JSON.stringify({ order: IDS, hidden: ['brain'] }))
+    const { result } = renderHook(() => useDashboardPrefs(SIGNED_IN_STRIPPED_HIDDEN))
+    // The operator's own saved choice wins over the stripped default.
+    expect(result.current.hidden).toEqual(['brain'])
   })
 
   it('persists a theme choice and resolves unknown ids to the default', () => {

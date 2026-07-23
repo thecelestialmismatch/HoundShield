@@ -11,6 +11,7 @@ import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
 import { interpretSignUp, signUpErrorMessage, validateSignUpInput } from '@/lib/auth/signup-result';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
+import { AuthTabs } from '@/components/auth/AuthTabs';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -175,18 +176,18 @@ export default function SignupPage() {
             </motion.div>
           )}
 
+          <AuthTabs active="signup" />
           <form onSubmit={handleSignup} className="space-y-4">
-            {/* Name */}
+            {/* Display name (optional) */}
             <div>
-              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Full Name</label>
+              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Display name (optional)</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="John Doe"
-                  required
+                  placeholder="Jane Smith"
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[var(--hs-border)] text-[var(--hs-ink)] text-sm placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-300 transition-all"
                 />
               </div>
@@ -194,7 +195,7 @@ export default function SignupPage() {
 
             {/* Email */}
             <div>
-              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Work Email</label>
+              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Work email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
                 <input
@@ -283,20 +284,12 @@ export default function SignupPage() {
           </div>
 
           <p className="text-[10px] text-[var(--hs-ink-secondary)] text-center mt-4">
-            By creating an account, you agree to our{' '}
-            <Link href="/terms" className="text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] underline">Terms</Link>
+            By continuing you agree to our{' '}
+            <Link href="/terms" className="text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] underline">Terms of Service</Link>
             {' '}and{' '}
             <Link href="/privacy" className="text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] underline">Privacy Policy</Link>
           </p>
         </div>
-
-        {/* Login link */}
-        <p className="text-center text-sm text-[var(--hs-ink-secondary)] mt-6">
-          Already have an account?{' '}
-          <Link href="/login" className="text-brand-700 hover:text-brand-800 font-semibold">
-            Sign in
-          </Link>
-        </p>
       </motion.div>
     </div>
   );
