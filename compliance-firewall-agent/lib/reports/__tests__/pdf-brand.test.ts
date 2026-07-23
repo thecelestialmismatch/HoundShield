@@ -5,8 +5,9 @@
  * to end: every helper must render onto a page without throwing and the pure
  * helpers must produce stable, official-looking output.
  */
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { jsPDF } from "jspdf";
+import { LOGO_PNG_DATA_URI } from "../logo-data";
 import {
   reportId,
   formatDate,
@@ -53,6 +54,22 @@ describe("drawing helpers render without throwing (real jsPDF)", () => {
     const d = doc();
     expect(() => drawBadge(d, 18, 12, 14, true)).not.toThrow();
     expect(() => drawBadge(d, 18, 40, 10, false)).not.toThrow();
+  });
+
+  it("drawBadge embeds the real logo via addImage (not the vector fallback)", () => {
+    const d = doc();
+    const spy = vi.spyOn(d as unknown as { addImage: (...a: unknown[]) => unknown }, "addImage");
+    drawBadge(d, 18, 12, 14, true);
+    expect(spy).toHaveBeenCalledTimes(1);
+    // The first argument is the compiled-in brand mark, a base64 PNG data URI.
+    expect(spy.mock.calls[0][0]).toBe(LOGO_PNG_DATA_URI);
+    expect(String(spy.mock.calls[0][0])).toMatch(/^data:image\/png;base64,/);
+  });
+
+  it("LOGO_PNG_DATA_URI is a non-trivial embedded PNG", () => {
+    expect(LOGO_PNG_DATA_URI.startsWith("data:image/png;base64,")).toBe(true);
+    // ~35 KB PNG → ~46 KB base64; guard against an empty/placeholder regen.
+    expect(LOGO_PNG_DATA_URI.length).toBeGreaterThan(10_000);
   });
 
   it("coverBanner returns a Y below the banner", () => {

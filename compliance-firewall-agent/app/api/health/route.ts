@@ -3,6 +3,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { isLlmConfigured } from "@/lib/agent/provider";
 import { cached } from "@/lib/cache/swr-cache";
 import { stripeKeyDiagnostic, stripeWebhookDiagnostic } from "@/lib/stripe/env";
+import { passwordResetDiagnostic } from "@/lib/auth/reset-diagnostics";
 
 /**
  * GET /api/health
@@ -25,6 +26,9 @@ function computeServices(): Services {
   // contains any part of the configured value (shape + length only).
   const payments = stripeKeyDiagnostic();
   const webhook = stripeWebhookDiagnostic();
+  // Password-reset readiness: the send route is enumeration-safe (always 200),
+  // so every config failure is otherwise invisible. Value-free (shape/host only).
+  const reset = passwordResetDiagnostic();
   return {
     database: isSupabaseConfigured() ? "connected" : "demo_mode",
     ai_router: isLlmConfigured() ? "connected" : "missing_key",
@@ -32,6 +36,11 @@ function computeServices(): Services {
     ...(payments.hint ? { payments_hint: payments.hint } : {}),
     payments_webhook: webhook.status,
     ...(webhook.hint ? { payments_webhook_hint: webhook.hint } : {}),
+    reset_service_role: reset.service_role,
+    reset_resend: reset.resend,
+    reset_app_url: reset.app_url,
+    ...(reset.app_url_hint ? { reset_app_url_hint: reset.app_url_hint } : {}),
+    reset_sender_domain: reset.sender_domain,
     classifier: "operational",
     quarantine: "operational",
     audit_chain: "operational",

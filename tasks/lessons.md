@@ -5,6 +5,31 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-23
+
+### A bug that's been "fixed" 4+ times and stays broken is invisible config, not code — make the failure observable
+**What:** "Still no password reset" recurred across many sessions despite repeated code fixes (#224,
+#231, #237). A fresh end-to-end trace found the code chain is correct and unit-tested — the real
+blockers are operational (missing `SUPABASE_SERVICE_ROLE_KEY`, a stale `NEXT_PUBLIC_APP_URL`, an
+unverified Resend domain, a `gaurav@houndshield.com` mailbox that never existed), and the route is
+enumeration-safe so it ALWAYS returns 200 and the UI ALWAYS says "check your email". Every failure was
+invisible, so each session re-fixed the code — the one place the bug wasn't.
+**Root cause:** Chasing the code because that's what we can edit, when the signal (which env/knob is
+wrong) was never surfaced. Silent-by-design (enumeration safety) hid the diagnosis from the operator.
+**Rule:** When a fix doesn't stick, stop re-writing the code and make the failure OBSERVABLE first. For
+a silent/enumeration-safe path, add a value-free readiness probe (here: `reset_*` on `/api/health`,
+shape/host only, never a secret) so the operator sees the exact bad knob in one glance. Then the fix is
+a named config change, not another code round. Diagnosability beats another patch.
+
+### Verify a redesign against the founder's own reference AND the live source before assuming it's missing
+**What:** "Make the login page look like this [reference]." The reference's signature was a Sign in /
+Sign up segmented toggle. The existing `/login` already had the real logo, eye-toggle, forgot-password,
+and OAuth — the ONLY missing piece vs the reference was the toggle. Rewriting the page wholesale would
+have risked the working password/OTP/2FA/OAuth handlers.
+**Rule:** Diff the reference against the current UI and add only the delta (a shared `AuthTabs` toggle +
+label/ToS polish), never rip-and-replace a page whose auth handlers are tested and working. Keep every
+working sign-in method (additive over destructive) even if the reference screenshot shows fewer.
+
 ## 2026-07-22
 
 ### A tested backend with no UI caller is dead code — grep for the caller before trusting "the funnel works"

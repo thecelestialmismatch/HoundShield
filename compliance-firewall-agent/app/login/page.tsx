@@ -18,6 +18,7 @@ import {
 } from '@/lib/auth/two-factor-state';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
+import { AuthTabs } from '@/components/auth/AuthTabs';
 import { PasswordlessSignIn } from './PasswordlessSignIn';
 
 export default function LoginPage() {
@@ -29,6 +30,12 @@ export default function LoginPage() {
     rawRedirect && rawRedirect.startsWith('/') && !rawRedirect.startsWith('//')
       ? rawRedirect
       : '/console';
+  // Same-origin redirect target carried across the Sign in / Sign up toggle
+  // (undefined when there is no explicit redirect, so the links stay clean).
+  const redirectParam =
+    rawRedirect && rawRedirect.startsWith('/') && !rawRedirect.startsWith('//')
+      ? rawRedirect
+      : undefined;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -303,10 +310,11 @@ export default function LoginPage() {
             />
           ) : (
             <>
+          <AuthTabs active="signin" redirect={redirectParam} />
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email */}
             <div>
-              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Email</label>
+              <label className="block text-xs font-medium text-[var(--hs-ink-secondary)] mb-1.5 uppercase tracking-wider">Work email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--hs-ink-secondary)]" />
                 <input
@@ -414,17 +422,17 @@ export default function LoginPage() {
             </button>
 
           </div>
+
+          {/* Terms */}
+          <p className="text-[10px] text-[var(--hs-ink-secondary)] text-center mt-4">
+            By continuing you agree to our{' '}
+            <Link href="/terms" className="text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] underline">Terms of Service</Link>
+            {' '}and{' '}
+            <Link href="/privacy" className="text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] underline">Privacy Policy</Link>
+          </p>
             </>
           )}
         </div>
-
-        {/* Sign up link */}
-        <p className="text-center text-sm text-[var(--hs-ink-secondary)] mt-6">
-          Don&apos;t have an account?{' '}
-          <Link href="/signup" className="text-brand-700 hover:text-brand-800 font-semibold">
-            Sign up free
-          </Link>
-        </p>
       </motion.div>
     </div>
   );

@@ -87,6 +87,13 @@ export default function ForgotPasswordPage() {
               <br />
               Click the link in the email to reset your password.
             </p>
+            <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
+              Didn&apos;t get it? Check your spam folder, or{" "}
+              <Link href="/contact" className="text-brand-700 hover:text-brand-800 underline">
+                contact support
+              </Link>
+              .
+            </p>
             <Link
               href="/login"
               className="inline-flex items-center gap-1.5 text-sm text-brand-700 hover:text-brand-700 transition-colors mt-4"

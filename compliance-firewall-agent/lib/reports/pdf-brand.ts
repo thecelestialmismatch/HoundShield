@@ -13,6 +13,7 @@
  * bigger mock surface.
  */
 import type { jsPDF } from "jspdf";
+import { LOGO_PNG_DATA_URI } from "./logo-data";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Doc = jsPDF & Record<string, any>;
@@ -62,10 +63,28 @@ function setLineWidth(doc: Doc, w: number) {
 }
 
 /**
- * The HoundShield mark: a steel shield badge with a white "HS" monogram. Drawn
- * from primitives (no embedded image) so it is weightless and works in Node.
+ * The HoundShield mark. Preferred: the real logo (doberman shield) embedded as a
+ * base64 PNG and seated in a white chip so it reads on any band colour — this is
+ * the founder's actual brand, not a placeholder. Fallback (when `doc.addImage`
+ * is unavailable, e.g. the unit-test jsPDF mock): a hand-drawn steel shield with
+ * an "HS" monogram, so the helpers still render everywhere with no bigger mock.
+ * The `size` box is square; the mark centres within it.
  */
 export function drawBadge(doc: Doc, x: number, y: number, size = 14, onDark = true) {
+  if (typeof doc.addImage === "function") {
+    try {
+      const pad = size * 0.14;
+      // White chip behind the mark — required on the dark cover band (the logo is
+      // dark-on-transparent), harmless on a light surface.
+      doc.setFillColor(WHITE);
+      doc.roundedRect(x - pad, y - pad, size + pad * 2, size + pad * 2, 2.4, 2.4, "F");
+      doc.addImage(LOGO_PNG_DATA_URI, "PNG", x, y, size, size);
+      return;
+    } catch {
+      // Any image failure falls through to the always-safe vector shield below.
+    }
+  }
+
   const bg = onDark ? SKY : STEEL;
   const fg = onDark ? STEEL_DEEP : WHITE;
   // Shield: rounded-top rectangle + a pointed base via a triangle when available.
