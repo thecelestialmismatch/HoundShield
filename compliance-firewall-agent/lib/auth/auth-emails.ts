@@ -11,6 +11,8 @@ import { Resend } from "resend";
  */
 
 const FROM = "HoundShield <noreply@houndshield.com>";
+/** The domain reset/verification email is sent FROM — must be verified in Resend. */
+export const RESET_SENDER_DOMAIN = FROM.match(/@([^>\s]+)/)?.[1] ?? "houndshield.com";
 const BRAND = "#5A86A8"; // --hs-steel-dark
 
 export interface EmailContent {

@@ -11,6 +11,7 @@ vi.mock("jspdf", () => {
     setDrawColor: vi.fn().mockReturnThis(),
     rect: vi.fn().mockReturnThis(),
     roundedRect: vi.fn().mockReturnThis(),
+    addImage: vi.fn().mockReturnThis(),
     line: vi.fn().mockReturnThis(),
     text: vi.fn().mockReturnThis(),
     addPage: vi.fn().mockReturnThis(),

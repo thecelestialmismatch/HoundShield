@@ -258,6 +258,27 @@ describe('LiveCommandCenter — honest state for signed-in customers vs the demo
   })
 })
 
+describe('LiveCommandCenter — signed-in strip-down (founder: "strip it way down")', () => {
+  const viewer = { company: 'Vector Defense', plan: 'Pro', initials: 'VD', tier: 'pro', firstName: 'Jordan' }
+
+  it('a signed-in operator lands on a stripped Overview — simulated telemetry hidden by default', () => {
+    render(<LiveCommandCenter viewer={viewer} />)
+    // The demo telemetry panels start hidden for a logged-in user…
+    expect(screen.queryByText('Prompts scanned (24h)')).toBeNull()
+    expect(screen.queryByText('Gateway throughput')).toBeNull()
+    expect(screen.queryByText('Live threat feed')).toBeNull()
+    expect(screen.queryByText('Detections by engine · last hour')).toBeNull()
+    // …while the real next action — the activation checklist that ends on the PDF — stays.
+    expect(screen.getByText('Get to your first C3PAO-ready PDF')).toBeTruthy()
+  })
+
+  it('the public demo still shows every panel (marketing preview)', () => {
+    render(<LiveCommandCenter />)
+    expect(screen.getByText('Prompts scanned (24h)')).toBeTruthy()
+    expect(screen.getByText('Gateway throughput')).toBeTruthy()
+  })
+})
+
 describe('LiveCommandCenter — guide + paywall behind sidebar buttons (founder direction)', () => {
   const clickSidebar = (label: string) => {
     const btn = screen.getAllByText(label).find((el) => el.closest('.slink'))!.closest('button')!
