@@ -32,7 +32,7 @@ import {
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
 import { DESIGN_THEMES, getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
-import { useDashboardPrefs, OVERVIEW_SECTIONS, type DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
+import { useDashboardPrefs, OVERVIEW_SECTIONS, SIGNED_IN_STRIPPED_HIDDEN, type DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
 import { SourceChip, ProvenancePanel } from './ProvenancePanel'
 import type { ProvenanceId } from './dataProvenance'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
@@ -274,7 +274,10 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   // with NO entitlement check — this is a comfort/accessibility feature, not a
   // paid capability (founder direction, 2026-07-18). The active theme retint the
   // whole console; the effect below reads it via themeRef for the canvas/donut.
-  const prefs = useDashboardPrefs()
+  // Signed-in operators land on a stripped Overview (simulated telemetry hidden
+  // by default → they see their real next actions, not demo numbers); the public
+  // demo keeps every panel. Founder direction 2026-07-23: "strip it way down."
+  const prefs = useDashboardPrefs(viewer ? SIGNED_IN_STRIPPED_HIDDEN : undefined)
   const activeTheme = getThemeById(prefs.themeId)
   const themeRef = useRef(activeTheme)
   themeRef.current = activeTheme
