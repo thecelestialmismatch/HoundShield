@@ -61,8 +61,8 @@ export default function BrainAiPage() {
             audit evidence &mdash; continuously, and entirely inside your own network.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/signup" className="btn-primary">
-              Start free
+            <Link href="/pricing" className="btn-primary">
+              Get the $499 report
             </Link>
             <Link href="/how-it-works" className="btn-ghost px-6 py-3">
               See how it works
@@ -143,7 +143,7 @@ export default function BrainAiPage() {
             No credit card required. See your SPRS score across all 110 controls in under
             30 minutes.
           </p>
-          <Link href="/signup" className="btn-primary">
+          <Link href="/pricing" className="btn-primary">
             Get started free
           </Link>
         </div>
