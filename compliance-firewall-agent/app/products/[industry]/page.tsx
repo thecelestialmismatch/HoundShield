@@ -128,7 +128,7 @@ export default async function ProductPage({
             <p className="prod-sub">{data.sub}</p>
             <div className="hero-actions">
               <Link className="btn btn-primary" href={data.primaryCtaHref}>
-                {data.comingSoon ? "Join the waitlist" : "Start free"} <ArrowRight />
+                {data.comingSoon ? "Join the waitlist" : "Get the $499 report"} <ArrowRight />
               </Link>
               <Link className="btn btn-ghost" href="/pricing">See pricing</Link>
             </div>

@@ -127,7 +127,7 @@ export default function HIPAAPage() {
             className="text-[clamp(16px,2vw,20px)] text-[var(--hs-ink-secondary)] max-w-[640px] mx-auto mb-10 leading-relaxed"
           >
             Stop PHI from leaking into ChatGPT, Microsoft Copilot, and Claude.
-            Start free — and run self-hosted (Mode&nbsp;B) for live PHI.
+            Get the $499 report — and run self-hosted (Mode&nbsp;B) for live PHI.
           </motion.p>
 
           <motion.div
