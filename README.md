@@ -6,19 +6,19 @@
 
 **The local-only AI compliance firewall.**
 
-Scan every AI prompt for CUI, PII, PHI, and secrets in **&lt;10&nbsp;ms** — on your own network. Nothing leaves the building.
+Scan every AI prompt for PHI, CUI, PII and secrets — on your own hardware.
+Nothing leaves the building.
 
 <br/>
 
 [![CI](https://github.com/thecelestialmismatch/HoundShield/actions/workflows/ci.yml/badge.svg)](https://github.com/thecelestialmismatch/HoundShield/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-0F172A?style=flat-square)](LICENSE)
-![Next.js](https://img.shields.io/badge/Next.js-15-0F172A?style=flat-square&logo=nextdotjs&logoColor=white)
-![React](https://img.shields.io/badge/React-19-0F172A?style=flat-square&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-strict-0F172A?style=flat-square&logo=typescript&logoColor=3178C6)
+![tests](https://img.shields.io/badge/tests-1531_passing-3FB950?style=flat-square)
+![proxy](https://img.shields.io/badge/proxy_tests-61_passing-3FB950?style=flat-square)
+![latency](https://img.shields.io/badge/scan_p99-0.49ms-C8A24B?style=flat-square)
 ![NIST 800-171](https://img.shields.io/badge/NIST_800--171-110_controls-C8A24B?style=flat-square)
-![CMMC](https://img.shields.io/badge/CMMC-Level_2-C8A24B?style=flat-square)
 
-[**Website**](https://www.houndshield.com) · [**Pricing**](https://www.houndshield.com/pricing) · [**Compare**](https://www.houndshield.com/compare) · [**Contributing**](CONTRIBUTING.md) · [**Report a Vulnerability**](SECURITY.md)
+[**Website**](https://www.houndshield.com) · [**Try the scanner**](https://www.houndshield.com/demo#snapshot) · [**Testing guide**](docs/TESTING-GUIDE.md) · [**Roadmap**](docs/ROADMAP-12-MONTH.md) · [**Security**](SECURITY.md)
 
 </div>
 
@@ -26,137 +26,138 @@ Scan every AI prompt for CUI, PII, PHI, and secrets in **&lt;10&nbsp;ms** — on
 
 ## Why HoundShield
 
-Every cloud AI data-loss tool — Nightfall, Strac, Microsoft Purview — scans your prompts by **first sending them to the vendor's servers.** For a defense contractor, that transmission is itself a **DFARS 252.204-7012 CUI spill.** You cannot scan Controlled Unclassified Information for compliance by violating compliance.
+Every cloud AI data-loss tool — Nightfall, Strac, Microsoft Purview — scans your prompts
+by **first sending them to the vendor's servers.** In a regulated environment that
+transmission is itself the disclosure you were trying to prevent: a DFARS 252.204-7012
+CUI spill for a defense contractor, an undocumented PHI disclosure under the HIPAA
+Privacy Rule for a clinic.
 
-HoundShield runs the scan **locally.** Prompt content never leaves the customer network. That is the entire pitch — and the only architecture that is honest about CUI.
+You cannot scan regulated data for compliance by violating compliance.
 
-> Built for **Jordan** — the IT Security Manager at a 50–250 person DoD contractor staring down the **CMMC Level 2 deadline of November 10, 2026.** ~80,000 contractors need it. A few hundred are certified today. The clock is the product.
+HoundShield scans locally. In self-hosted mode there is no "us" in the data path.
 
----
+## Verified numbers
 
-## What it does
+Not marketing figures — reproduce every one with the commands in
+[docs/TESTING-GUIDE.md](docs/TESTING-GUIDE.md).
 
-| Capability | Detail |
-| :--- | :--- |
-| 🛡️ **16 detection engines** | CUI, PII, PHI, and secret patterns scanned inline on every prompt |
-| ⚡ **&lt;10&nbsp;ms local scan** | Pattern matching runs on-prem — no round trip to a vendor cloud |
-| 📊 **SPRS scoring** | Live score across all **110 NIST 800-171 Rev 2** controls |
-| 🔗 **Tamper-evident audit** | SHA-256 hash-chained log — every decision provable, nothing editable after the fact |
-| 📄 **C3PAO-ready PDF** | One-click assessment export your assessor can actually use |
-| 🚫 **Inline policy** | Block, redact, or warn — enforced before the prompt reaches the model |
+| Claim | Measured | Reproduce with |
+|---|---|---|
+| Scan latency | **p99 0.492 ms** (budget 10 ms) · mean 0.105 ms over 2,000 cold scans | `cd proxy && npm run bench` |
+| Detection coverage | **90 patterns** (53 builtin · 17 CMMC · 20 HIPAA) across **16 engines** | `lib/detection/engines.ts` |
+| App test suite | **1,531 passing** / 124 files | `cd compliance-firewall-agent && ./node_modules/.bin/vitest run` |
+| Proxy test suite | **61 passing** | `cd proxy && npx vitest run` |
 
----
+Engine and pattern counts shown in the UI are **computed from the shipped registries**, so
+a marketing claim cannot silently drift from the code.
 
-## How it works
+## Deployment modes — read before claiming compliance
 
-```mermaid
-flowchart LR
-    A[Employee] -->|prompt| B(AI tool · ChatGPT · Claude · Copilot)
-    B -->|HTTPS| C{{HoundShield Proxy<br/>local · on-prem}}
-    C -->|16-engine scan · &lt;10ms| D[/Classifier/]
-    D -->|clean| E[(LLM provider)]
-    D -->|CUI / PII / PHI / secret| F[Block · redact · audit · alert]
-    C -.->|prompt content never leaves the network| C
-```
+| Mode | Runs on | CUI/PHI-safe? | Use for |
+|---|---|---|---|
+| **A — Hosted** | Vercel | ❌ **No** — not FedRAMP-authorized | Demo, non-CUI evaluation |
+| **B — Self-hosted** | Your infrastructure (Docker) | ✅ Data never leaves your boundary | CUI and PHI workloads |
+| **C — Air-gapped** | Your isolated network | ✅ | IL-5+, enterprise |
 
-The proxy sits between your people and whatever model they use. It inspects the request locally, applies policy, writes a hash-chained audit entry, and only then — if the content is clean — forwards it. Detection happens where your data already lives.
+**Only Modes B and C are CUI-safe.** The marketing and dashboard plane runs on Vercel —
+fine for a website, not fine for a regulated data path. The site says so too.
 
----
+## Regulatory status (updated 2026-07-28)
 
-## Deployment modes
+**CMMC Phase 2 was suspended on 13 July 2026** by the Department of War. The 10 November
+2026 third-party (C3PAO) certification gate no longer applies; Phases 3–4 are frozen
+pending a 60-day review.
 
-| Mode | Hosting | CUI-safe? | Use it for |
-| :--- | :--- | :---: | :--- |
-| **A** | Vercel-hosted ([houndshield.com](https://www.houndshield.com)) | ❌ **No — demo only** | Evaluation and sales demos. **Never send real CUI through Mode A.** |
-| **B** | Self-hosted Docker | ✅ Yes | Production defense workloads on your own network |
-| **C** | Air-gapped | ✅ Yes (IL-5+) | Classified or fully disconnected environments |
+**What did not change:** DFARS 252.204-7012, the 110 NIST SP 800-171 Rev 2 controls, and
+**annual SPRS self-attestation** all remain in force. With no assessor in the loop, that
+score is the contractor's own representation to the government — and DOJ's Civil
+Cyber-Fraud Initiative has settled 15 False Claims Act cases over exactly that.
 
-> **Mode A is a hosted demo and is not CUI-safe.** It exists so buyers can try the product. Production CUI handling requires Mode B (self-hosted) or Mode C (air-gapped).
-
----
-
-## Quick start
-
-**Mode B — the proxy (the actual product):**
+## Quickstart
 
 ```bash
-cd proxy
-cp .env.example .env        # set your license + upstream config
-docker compose up -d        # HTTPS intercept proxy comes up locally
+git clone https://github.com/thecelestialmismatch/HoundShield.git
+cd HoundShield
+
+# The product — the local scanning proxy
+cd proxy && npm install && npm run dev
+
+# The web plane — marketing, checkout, evidence export
+cd ../compliance-firewall-agent && npm install && npm run dev
 ```
 
-**The dashboard / control center:**
+Point your AI client's base URL at the proxy and send a prompt; anything sensitive is
+flagged before it leaves the machine.
+
+> **Docker (Mode B):** `proxy/Dockerfile` builds today, but `houndshield/proxy:latest` is
+> **not yet published**. Publishing needs the `DOCKERHUB_USERNAME` / `DOCKERHUB_TOKEN`
+> repo secrets plus a `proxy-v*` tag — `.github/workflows/docker-publish.yml` does the rest.
+
+## Repository map
+
+```
+compliance-firewall-agent/   Next.js 15 · React 19 — marketing, checkout, dashboard
+  app/                       App Router — public pages, /console, 59 API routes
+  lib/classifier/            90 detection patterns (builtin · CMMC · HIPAA)
+  lib/detection/engines.ts   Single source of truth for engine + pattern counts
+  lib/reports/               PDF generation + SHA-256 evidence chain
+  lib/billing/               Entitlements + PURCHASABLE_OFFER (what is actually for sale)
+
+proxy/                       Node.js HTTPS intercept — THE PRODUCT
+  patterns/index.ts          33 standalone patterns (extend, never replace)
+  scanner.ts                 The hot path — benchmarked on every CI run
+  ooda/                      Observe/orient/decide loop + SQLite audit store
+
+docs/                        STRIPE-FIX · TESTING-GUIDE · ROADMAP-12-MONTH ·
+                             SECURITY-ROTATION · OUTREACH-HEALTHCARE
+```
+
+## Testing
 
 ```bash
-cd compliance-firewall-agent
-npm install
-npm run dev                 # http://localhost:3000
+cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 1531 tests
+cd proxy && npx vitest run                                       # 61 tests
+cd proxy && npm run bench                                        # p99 < 10ms gate
+cd compliance-firewall-agent && npm run build                    # must pass pre-deploy
+curl -s https://www.houndshield.com/api/health                   # live smoke test
 ```
 
-**Verify before shipping:**
+Two traps that cost real debugging time — **both exit 0 while failing**:
+
+- Never pass `--reporter=basic` to vitest (fails with `ERR_LOAD_URL`).
+- Never run `npx vitest` from the repo root — it loads the *parent* repo's config and
+  tests nothing. Always `cd` into the package first.
+
+**Read the last lines of output. Never trust an exit code from a piped command.**
+
+Proxy tests failing with `NODE_MODULE_VERSION` is a stale native binary, not a code bug:
 
 ```bash
-cd compliance-firewall-agent
-npm run build               # must pass
-npm test                    # 400+ tests, must stay green
+cd proxy && npm rebuild better-sqlite3
 ```
-
----
-
-## Tech stack
-
-**Application** — Next.js 15 · React 19 · TypeScript (strict) · Tailwind CSS · Framer Motion · Recharts · Supabase (auth + Postgres) · Stripe.
-
-**Proxy** — Node.js HTTPS intercept · deterministic pattern scanner (16 engines) · OODA-loop rate/anomaly tracker · Docker / docker-compose · air-gap-capable.
-
----
-
-## Compliance coverage
-
-- **NIST SP 800-171 Rev 2** — all 110 controls, mapped and scored
-- **CMMC Level 2** — readiness and SPRS self-assessment support
-- **DFARS 252.204-7012** — local-only architecture avoids the scan-time CUI spill
-- **HIPAA** — PHI detection patterns
-- **SOC 2** — control mapping
-
-> HoundShield is **compliance tooling, not a certification.** C3PAOs assess; HoundShield prepares the evidence, the score, and the audit trail.
-
----
-
-## Project structure
-
-```
-compliance-firewall-agent/   Next.js app — dashboard, API, Brain AI, classifier
-proxy/                       HTTPS intercept proxy (the product)
-  patterns/                  16 CUI/PII/PHI/secret detection engines (extend, never reduce)
-  ooda/                      observe → orient → decide → act rate engine
-supabase/                    database migrations
-docs/                        PRD, roadmap, setup, compliance references
-```
-
-CI enforces a hard floor: the **Compliance Pattern Guard** fails any change that drops the engine below 16 patterns. The compliance engine is never silently degraded.
-
----
 
 ## Pricing
 
-Free → **Pro** → **Growth** → **Enterprise** → **Agency**. Current tiers and pricing live at **[houndshield.com/pricing](https://www.houndshield.com/pricing)**.
+**One offer: a $499 one-time AI Risk Assessment Report.** No subscription, no per-seat
+licence, no contract. $499 sits below most corporate-card and signature thresholds, so it
+does not need procurement approval. The in-browser scanner at `/demo` is free and needs
+no account.
 
----
+## Status — honest
 
-## Contributing & security
+**Working:** the scanner, 16 detection engines, the SHA-256 audit chain, the PDF
+generator, the in-browser demo, auth, both test suites, the production build.
 
-- **Contributing** — see [CONTRIBUTING.md](CONTRIBUTING.md). Builds must pass and the pattern count must never drop below 16.
-- **Security** — found a vulnerability? **Do not open a public issue.** Follow the disclosure process in [SECURITY.md](SECURITY.md).
-- **Code of Conduct** — [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+**Broken or missing:**
+- **Checkout** — `/api/health` reports `payments: malformed_key`. Fix: [docs/STRIPE-FIX.md](docs/STRIPE-FIX.md)
+- **Distribution** — `houndshield/proxy:latest` unpublished, so a customer cannot install Mode B
+- **Zero paying customers** — the real gap, and not an engineering one
 
----
+## Contributing
+
+Both test suites and `npm run build` must pass before a commit. Never push to `main`
+directly. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
 ## License
 
-[MIT](LICENSE) © HoundShield.com
-
-<div align="center">
-<br/>
-<strong>Scan locally. Spill nothing.</strong>
-</div>
+MIT — see [LICENSE](LICENSE).
