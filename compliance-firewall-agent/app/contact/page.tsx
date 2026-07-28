@@ -7,9 +7,7 @@ import { ScrollProgressBar } from "@/components/scroll-effects";
 import { Mail, CalendarCheck, Clock, Send, CheckCircle2, ArrowRight } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
-import { FaqAccordion } from "@/components/ui/FaqAccordion";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { faqPageSchema } from "@/lib/seo/structured-data";
+import { FaqSection } from "@/components/seo/FaqSection";
 import { contactFaqs } from "@/lib/seo/faqs";
 
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -184,13 +182,18 @@ export default function ContactPage() {
             </div>
           </FadeIn>
 
-          {/* FAQ — shared accordion + FAQPage JSON-LD (AEO) */}
+          {/* FAQ — the ONE shared FAQ surface (heading + accordion + schema).
+              Previously this page hand-rolled the heading and JSON-LD around a
+              bare FaqAccordion, so /contact drifted from every other page.
+              FaqSection is the single component; use it everywhere.
+              contactCta is off because this IS the contact page. */}
           <FadeIn delay={150}>
-            <div>
-              <h2 className="text-2xl font-bold mb-6">Frequently asked questions</h2>
-              <JsonLd schema={faqPageSchema(contactFaqs)} />
-              <FaqAccordion items={contactFaqs} />
-            </div>
+            <FaqSection
+              items={contactFaqs}
+              align="left"
+              contactCta={false}
+              className="!max-w-none !mx-0 !px-0 !py-0"
+            />
           </FadeIn>
         </div>
       </section>

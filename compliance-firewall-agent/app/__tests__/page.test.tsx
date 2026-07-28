@@ -25,6 +25,7 @@ vi.mock('@/components/ModeBNotice',     () => ({
 }))
 
 import HomePage from '../page'
+import { ENGINE_COUNT } from '@/lib/detection/engines'
 
 /* ──────────────────────────────────────────────────────────────────
  * Homepage contract — HERMES demo parity (Direction A · Steel & Cream).
@@ -45,22 +46,25 @@ describe('HomePage — HERMES demo parity', () => {
   })
 
   // ── Hero ─────────────────────────────────────────────────────────
-  it('H1 uses the demo copy: Stop your team from leaking CUI to ChatGPT', () => {
+  // Contract changed 2026-07-28: DoD suspended CMMC Phase 2 on 2026-07-13,
+  // removing the Nov 10 deadline the old CUI-first copy leaned on. The hero
+  // now leads with evidence ("prove what was pasted"), which sells to both a
+  // healthcare privacy officer and a contractor facing FCA/SPRS exposure.
+  it('H1 leads with the evidence promise, not the suspended CMMC deadline', () => {
     render(<HomePage />)
     const h1 = screen.getByRole('heading', { level: 1 })
-    expect(h1.textContent).toMatch(/Stop your team from leaking/i)
-    expect(h1.textContent).toContain('CUI')
+    expect(h1.textContent).toMatch(/Prove what your team pasted into/i)
     expect(h1.textContent).toContain('ChatGPT')
   })
 
-  it('hero pill carries the demo framework line', () => {
+  it('hero pill leads with HIPAA and NIST, not a CMMC certification date', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Local-only · CMMC Level 2 · HIPAA · SOC 2/i)).toBeTruthy()
+    expect(screen.getByText(/Local-only · HIPAA · NIST 800-171 · SOC 2/i)).toBeTruthy()
   })
 
-  it('hero sub ends on the demo emphasis "on your hardware"', () => {
+  it('hero sub keeps the local-scan emphasis "on your own hardware"', () => {
     const { container } = render(<HomePage />)
-    expect(container.textContent).toMatch(/scanned on your hardware/i)
+    expect(container.textContent).toMatch(/on your own hardware/i)
   })
 
   it('renders the live demo dashboard in the hero', () => {
@@ -69,21 +73,30 @@ describe('HomePage — HERMES demo parity', () => {
     expect(screen.getByText('Live prompt scans')).toBeTruthy()
   })
 
-  it('hero trust row lists the four demo checks', () => {
+  it('hero trust row makes no free-tier promise (single $499 offer)', () => {
     const { container } = render(<HomePage />)
-    for (const t of ['One URL change', 'Local-only', 'Free to start', 'C3PAO-ready']) {
+    for (const t of ['One URL change', 'Runs on your hardware', 'Nothing transmitted', 'Audit-ready PDF']) {
       expect(container.textContent).toContain(t)
     }
+    // The free tier was removed from /pricing; the hero must not re-promise it.
+    expect(container.textContent).not.toContain('Free to start')
   })
 
   // ── Stat row ─────────────────────────────────────────────────────
-  it('stat row renders the four demo stats', () => {
+  it('stat row renders counts derived from the shipped detection registry', () => {
     render(<HomePage />)
-    expect(screen.getByText('16')).toBeTruthy()
-    expect(screen.getByText('~80,000')).toBeTruthy()
+    expect(screen.getByText(String(ENGINE_COUNT))).toBeTruthy()
     expect(screen.getByText('110')).toBeTruthy()
     expect(screen.getByText('<10ms')).toBeTruthy()
     expect(screen.getByText('NIST 800-171 controls')).toBeTruthy()
+  })
+
+  it('replaces the unverifiable "~80,000 contractors" stat with a sourced figure', () => {
+    const { container } = render(<HomePage />)
+    expect(container.textContent).not.toContain('~80,000')
+    // Netskope Threat Labs 2025: 89% of healthcare genAI data policy
+    // violations involve regulated data (vs 31% cross-industry).
+    expect(screen.getByText('89%')).toBeTruthy()
   })
 
   // ── Compliance gate (deliberate addition to the demo) ────────────
@@ -118,7 +131,7 @@ describe('HomePage — HERMES demo parity', () => {
       'AI-Powered Gap Analysis',
       'SSP & POA&M Export',
       'AI Prompt Interception',
-      '16 Detection Engines',
+      `${ENGINE_COUNT} Detection Engines`,
       'Live Threat Dashboard',
     ]) {
       expect(screen.getByText(title)).toBeTruthy()
@@ -139,10 +152,13 @@ describe('HomePage — HERMES demo parity', () => {
     expect(screen.getByText(/see your SPRS score in under 30 minutes/i)).toBeTruthy()
   })
 
-  it('primary CTAs link to /signup', () => {
+  it('hero CTAs drive to the self-serve proof and the paid report, not a dead free tier', () => {
     render(<HomePage />)
-    const signupLinks = Array.from(document.querySelectorAll('a[href="/signup"]'))
-    expect(signupLinks.length).toBeGreaterThanOrEqual(2) // hero + CTA band
+    // The in-browser snapshot is the strongest proof we own: a buyer can
+    // verify the local-scan claim in 30s with zero trust required.
+    expect(document.querySelector('a[href="/demo#snapshot"]')).toBeTruthy()
+    // And the only thing we sell is reachable from the hero.
+    expect(document.querySelector('a[href="/pricing"]')).toBeTruthy()
   })
 
   // ── Guardrails (NEVER-DO list) ───────────────────────────────────
@@ -162,7 +178,7 @@ describe('HomePage — HERMES demo parity', () => {
     const { container } = render(<HomePage />)
     const text = container.textContent ?? ''
     const order = [
-      'Stop your team from leaking',
+      'Prove what your team pasted into',
       'Detection engines',
       'Cloud DLP scans your CUI in their cloud',
       'Everything you need for CMMC Level 2',

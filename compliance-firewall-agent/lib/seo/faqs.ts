@@ -75,31 +75,31 @@ export const hipaaFaqs: FaqItem[] = [
 /** /pricing — cost and plan questions ("how much does X cost"). */
 export const pricingFaqs: FaqItem[] = [
   {
-    question: "How much does the CMMC AI Risk Assessment Report cost?",
+    question: "How much does the AI Risk Assessment Report cost?",
     answer:
-      "The CMMC AI Risk Assessment Report costs $499, one time — no subscription and no signup required. We run HoundShield's proxy across 14 days of your real AI traffic and deliver a SHA-256-signed PDF that scores every prompt event against NIST 800-171, the evidence a C3PAO assessor asks for.",
-    links: [{ label: "See the $499 report", href: "/assessment" }],
+      "$499, one time. No subscription, no per-seat licence, no signup required. We run HoundShield's proxy across 14 days of your real AI traffic and deliver a SHA-256-signed PDF that scores every prompt event against NIST 800-171 and HIPAA.",
+    links: [{ label: "See what the report covers", href: "/assessment" }],
   },
   {
-    question: "How much does a HoundShield subscription cost?",
+    question: "Is there a subscription?",
     answer:
-      "HoundShield subscriptions start free for self-assessment, then scale by coverage: Pro at $199/month adds the AI gateway with 50,000 scans, Growth at $499/month adds unlimited scans plus C3PAO-ready PDF evidence, and Enterprise at $999/month adds on-prem or air-gapped deployment. Annual billing saves 20% on every paid plan.",
+      "No. HoundShield sells exactly one thing: the $499 one-time report. We would rather prove the report is worth paying for than sell you a plan you have to remember to cancel. If continuous monitoring is what you need, tell us — that decides whether we build it.",
   },
   {
-    question: "What's the difference between the $499 report and the $499/month plan?",
+    question: "Why $499 specifically?",
     answer:
-      "The $499 report is a one-time engagement: a 14-day scan of your AI traffic and a signed PDF deliverable, with no ongoing commitment. Growth at $499 per month is continuous coverage — unlimited live scanning, alerts, and fresh evidence exports every month. Most teams start with the report, then subscribe to stay covered.",
+      "Because it sits below most corporate-card and signature thresholds, so it does not need procurement approval, a security review or a legal redline. A compliance officer can expense it and have evidence in two weeks. A recurring subscription, counter-intuitively, triggers more scrutiny than a larger one-time charge, because recurring spend needs a budget owner.",
   },
   {
-    question: "Is there a free version of HoundShield?",
+    question: "Can I try it before paying?",
     answer:
-      "Yes. HoundShield's free tier includes the full 110-control CMMC self-assessment, a live SPRS calculator, and scanning for up to 1,000 prompts per month — no credit card required. Paid plans add the AI gateway at scale, PDF evidence exports, more seats, and email and Slack alerts.",
-    links: [{ label: "Start free", href: "/signup" }],
+      "Yes, and without an account. Paste a prompt into the scanner at /demo and it is analysed entirely in your browser, on your own device — the same detection engines that ship in the product. You get on-screen findings and a preview PDF. Nothing you paste is transmitted to us, which is exactly the property you are buying.",
+    links: [{ label: "Try the free in-browser scan", href: "/demo#snapshot" }],
   },
   {
-    question: "Do I need the Enterprise plan for a CMMC assessment?",
+    question: "Do I need this if CMMC Phase 2 is suspended?",
     answer:
-      "Not necessarily. The 110-control self-assessment is free, and Growth at $499/month adds unlimited scanning plus the C3PAO-ready PDF evidence most contractors need for a Level 2 assessment. Choose Enterprise at $999/month when you need on-prem or air-gapped deployment, white-label PDFs, or a custom SLA.",
+      "The certification gate was paused on 13 July 2026; the underlying obligation was not. You must still implement NIST SP 800-171 Rev 2 and still submit an annual SPRS self-assessment. With no third-party assessor in the loop, that score is your own representation to the government — and DOJ has settled fifteen False Claims Act cases over exactly that, including $4.6M from MORSECORP and $507,144 from LOGZONE. Evidence matters more now, not less.",
   },
   {
     question: "Does HoundShield offer annual billing?",
@@ -141,7 +141,7 @@ export const homeFaqs: FaqItem[] = [
   {
     question: "How quickly can we get started with HoundShield?",
     answer:
-      "Most teams deploy in under 15 minutes: run the Docker gateway, point your AI tools' base URL at it, and verify a test prompt in the audit log. The free tier needs no credit card, and the $499 assessment report delivers signed evidence within days of intake.",
+      "Most teams deploy in under 15 minutes: run the Docker gateway, point your AI tools' base URL at it, and verify a test prompt in the audit log. The in-browser scanner at /demo needs no account at all, and the $499 assessment report delivers signed evidence within days of intake.",
   },
 ];
 
@@ -181,33 +181,38 @@ export const reportFaqs: FaqItem[] = [
 /** /contact — the pre-sales questions people ask before writing to us. */
 export const contactFaqs: FaqItem[] = [
   {
-    question: "What is CMMC Level 2 certification?",
+    question: "Is CMMC Level 2 certification still required?",
     answer:
-      "CMMC Level 2 requires organizations to implement 110 security practices from NIST SP 800-171 to protect Controlled Unclassified Information (CUI). It is mandatory for defense contractors handling CUI and, for most contracts, requires an assessment by an accredited third-party organization rather than a self-attestation alone.",
+      "Not right now. On 13 July 2026 the Department of War suspended CMMC Phase 2, which would have made third-party (C3PAO) certification a condition of award from 10 November 2026; Phases 3 and 4 are frozen pending a 60-day review. What did NOT change: DFARS 252.204-7012 still applies, you must still implement the 110 NIST SP 800-171 Rev 2 controls, and your annual SPRS self-assessment score is still mandatory. The certificate was paused. The obligation was not.",
   },
   {
-    question: "How long does CMMC compliance take with HoundShield?",
+    question: "If certification is suspended, why do I still need evidence?",
     answer:
-      "Timelines vary based on your current posture, but most organizations reach CMMC Level 2 readiness in three to six months with HoundShield. The platform identifies gaps across all 110 controls instantly, provides a prioritized remediation roadmap, and tracks your SPRS score as each practice is closed.",
+      "Because self-attestation is now the only gate, and it is the one the Justice Department prosecutes. Under its Civil Cyber-Fraud Initiative, DOJ has settled fifteen False Claims Act cases — MORSECORP paid $4.6M for an inflated SPRS score, LOGZONE $507,144 for certifying a perfect 110 with controls unimplemented. With no assessor in the loop, the score you submit is your own representation to the government. HoundShield produces the evidence behind it.",
     links: [
-      { label: "Start with the $499 report", href: "/assessment" },
-      { label: "Compare plans", href: "/pricing" },
+      { label: "Get the $499 report", href: "/pricing" },
+      { label: "See how it works", href: "/how-it-works" },
     ],
   },
   {
-    question: "Do I need a C3PAO assessment for CMMC Level 2?",
+    question: "How long does it take to get evidence with HoundShield?",
     answer:
-      "Yes — CMMC Level 2 certification for contracts involving CUI requires an assessment by a CMMC Third-Party Assessment Organization (C3PAO). HoundShield prepares you for that assessment by running continuous self-assessments aligned to the official scoring methodology and packaging the evidence an assessor will ask to see.",
+      "The $499 AI Risk Assessment Report is a 14-day run: deploy the gateway, let it observe real AI usage, and receive a signed PDF mapped to NIST 800-171. You can see the scan engine work in seconds — paste a prompt into our in-browser demo and it is analysed on your own device, with nothing transmitted.",
+    links: [
+      { label: "Try the live scan", href: "/demo#snapshot" },
+      { label: "Get the $499 report", href: "/pricing" },
+    ],
   },
   {
-    question: "What's included in HoundShield's free tier?",
+    question: "What does HoundShield cost?",
     answer:
-      "The free tier includes the full 110-control CMMC self-assessment in read-only mode, a live SPRS score calculator, scanning for up to 1,000 prompts per month, and community support. Upgrading to Pro adds the AI gateway at scale, editable assessments, and SSP and POA&M generation.",
+      "One price: $499, one time, for the AI Risk Assessment Report. There is no subscription, no per-seat licence and no contract. At $499 it sits below most corporate-card and signature thresholds, so it does not need procurement approval. The in-browser prompt scan at /demo is free and needs no account.",
+    links: [{ label: "Pricing", href: "/pricing" }],
   },
   {
     question: "Can I export compliance reports from HoundShield?",
     answer:
-      "Yes. Growth and Enterprise plans export audit-ready PDF reports — your System Security Plan (SSP), Plan of Action & Milestones (POA&M), and C3PAO evidence packages — while every paid plan exports JSON compliance reports. All artifacts are formatted for assessor review and carry SHA-256-signed evidence.",
+      "Yes. The $499 AI Risk Assessment Report is delivered as an audit-ready PDF mapped to NIST 800-171, alongside your System Security Plan (SSP) and Plan of Action & Milestones (POA&M). Every artifact carries SHA-256-signed, hash-chained evidence so an assessor — or an investigator — can verify it was not altered after the fact.",
   },
   {
     question: "Is my data secure with HoundShield?",
@@ -345,7 +350,7 @@ export const faqHubGroups: FaqGroup[] = [
   {
     id: "pricing",
     title: "Pricing & the $499 report",
-    blurb: "The one-time $499 CMMC AI Risk Assessment Report, plans, and the free tier.",
+    blurb: "The one-time $499 AI Risk Assessment Report — the only thing we sell.",
     items: [...pricingFaqs, ...reportFaqs],
   },
   {

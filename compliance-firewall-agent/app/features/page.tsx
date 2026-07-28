@@ -5,26 +5,21 @@ import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { FaqSection } from '@/components/seo/FaqSection'
 import { featuresFaqs } from '@/lib/seo/faqs'
+import { ENGINES, ENGINE_COUNT, PATTERN_COUNT } from '@/lib/detection/engines'
 
 /* ─────────────────────────────────────────────────────────────────
- * /features — verbatim port of the HERMES demo features view
- * (Direction A): 3 capability cards → "The 16 detection engines"
- * panel → 3 chip cards → pricing CTA. Styling in app/hermes.css.
+ * /features — 3 capability cards → the detection-engines panel →
+ * 3 chip cards → pricing CTA. Styling in app/hermes.css.
+ * Engine list and counts come from lib/detection/engines — never
+ * retype the number here, it drifts.
  * ───────────────────────────────────────────────────────────────── */
 
 export const metadata: Metadata = {
   title: 'Features — Everything Inside the Firewall Engine',
   description:
-    'Sixteen detection engines, 110 mapped NIST 800-171 controls and tamper-evident evidence — all running on your hardware in under 10ms.',
+    'Sixteen detection engines built from 90 shipped patterns, 110 mapped NIST 800-171 controls and tamper-evident evidence — all running on your hardware in under 10ms.',
   alternates: { canonical: 'https://houndshield.com/features' },
 }
-
-const ENGINES = [
-  'CUI markings', 'CAGE codes', 'Contract / DoDAAC #', 'Clearance levels',
-  'ITAR / EAR terms', 'Export-control', 'SSN / PII', 'PHI · MRN',
-  'ICD / diagnosis', 'API keys / secrets', 'AWS / cloud keys', 'JWT / tokens',
-  'PCI / card data', 'Source code', 'Trade-secret IP', 'IP / network data',
-]
 
 export default function FeaturesPage() {
   return (
@@ -72,8 +67,8 @@ export default function FeaturesPage() {
 
             <div className="panel" style={{ marginBottom: 40 }} id="engines">
               <div className="panel-h">
-                <h3>The 16 detection engines</h3>
-                <span className="mono">CUI · PII · IP · PHI</span>
+                <h3>The {ENGINE_COUNT} detection engines</h3>
+                <span className="mono">{PATTERN_COUNT} patterns · CUI · PII · IP · PHI</span>
               </div>
               <div style={{ padding: 20, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
                 {ENGINES.map((e) => (

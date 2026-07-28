@@ -44,7 +44,11 @@ describe('ReportsPanel — the three PDF buttons are real, gated, and founder-fr
     const onGoToPlan = vi.fn();
     render(<ReportsPanel ent={getEntitlements('free')} onGoToPlan={onGoToPlan} />);
 
-    expect(screen.getAllByText(/Available on Growth — \$499\/mo/)).toHaveLength(3);
+    // The lock must name something the user can actually buy. /pricing sells
+    // only the $499 one-time report, so pointing at a "Growth $499/mo" tier
+    // sent people hunting for a checkout that does not exist.
+    expect(screen.getAllByText(/\$499 AI Risk Assessment Report/)).toHaveLength(3);
+    expect(screen.queryByText(/\$499\/mo/)).toBeNull();
     expect(screen.queryByRole('button', { name: /Generate PDF/i })).toBeNull();
 
     fireEvent.click(screen.getAllByRole('button', { name: /See unlock options/i })[0]);
