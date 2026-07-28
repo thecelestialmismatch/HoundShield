@@ -264,6 +264,13 @@ export const PURCHASABLE_OFFER = {
   href: '/pricing',
   /** Ready-to-render upsell line. */
   label: 'Available with the $499 AI Risk Assessment Report',
+  /** Global nav / marketing CTA. Was "Start free → /signup", which promised a
+   *  free tier /pricing no longer sells. */
+  ctaLabel: 'Get the $499 report',
+  /** Zero-commitment CTA: the in-browser scan needs no account and proves the
+   *  local-only claim in ~30s. The correct top-of-funnel ask. */
+  tryHref: '/demo#snapshot',
+  tryLabel: 'Try the free scan',
 } as const;
 
 export function tierThatUnlocks(key: FeatureKey): Entitlements | null {

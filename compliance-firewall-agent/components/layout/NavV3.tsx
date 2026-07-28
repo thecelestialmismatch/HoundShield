@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getPlan, formatUSD } from '@/lib/pricing/plans'
 import { NAV_TRUST_BADGE } from '@/lib/site/metrics'
+import { PURCHASABLE_OFFER } from '@/lib/billing/entitlements'
 import {
   Menu, ChevronDown, ArrowRight,
   Lock, Heart, Shield, Briefcase, Globe, Landmark,
@@ -208,8 +209,12 @@ export function NavV3() {
               <span>{NAV_TRUST_BADGE}</span>
             </div>
             <Link className="btn btn-ghost btn-sm" href="/login" onClick={close}>Sign in</Link>
-            <Link className="btn btn-primary btn-sm" href="/signup" onClick={close}>
-              Start free <ArrowRight />
+            {/* The global CTA sells the one thing that has a checkout. It used
+                to read "Start free → /signup", promising a tier /pricing no
+                longer offers. Copy comes from PURCHASABLE_OFFER so it cannot
+                drift from what is actually for sale. */}
+            <Link className="btn btn-primary btn-sm" href={PURCHASABLE_OFFER.href} onClick={close}>
+              {PURCHASABLE_OFFER.ctaLabel} <ArrowRight />
             </Link>
             <button
               type="button"
