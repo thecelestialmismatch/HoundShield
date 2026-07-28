@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getPlan, formatUSD } from "@/lib/pricing/plans";
 import { NAV_TRUST_BADGE } from "@/lib/site/metrics";
+import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
 import {
   Menu, X, ChevronRight, ChevronDown, Sun, Moon,
   Lock, HeartPulse, Shield, Briefcase, Globe, Landmark,
@@ -239,8 +240,8 @@ function ProductsMenu({ isDark }: { isDark: boolean }) {
 
             <div className="px-5 py-3 border-t border-white/[0.06] flex items-center justify-between bg-white/[0.01]">
               <span className="text-[11px] text-slate-600 font-mono">SOC 2 · HIPAA · CMMC L2 · 16 detection engines · &lt;10ms</span>
-              <Link href="/signup" onClick={() => setOpen(false)} className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">
-                Start free — all frameworks included <ArrowRight className="w-3 h-3" />
+              <Link href={PURCHASABLE_OFFER.tryHref} onClick={() => setOpen(false)} className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">
+                {PURCHASABLE_OFFER.tryLabel} — no account needed <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
           </motion.div>

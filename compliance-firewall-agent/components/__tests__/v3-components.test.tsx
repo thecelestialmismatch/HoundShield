@@ -254,10 +254,10 @@ describe('NavV3', () => {
     expect(screen.getByRole('navigation', { name: 'Main navigation' }).getAttribute('data-mobile-open')).toBe('true')
   })
 
-  it('shows Start free CTA link', () => {
+  it('shows the purchasable CTA link, pointed at the live checkout', () => {
     render(<NavV3 />)
-    const links = screen.getAllByText('Start free')
-    expect(links.length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText(/Get the \$499 report/i).length).toBeGreaterThanOrEqual(1)
+    expect(document.querySelector('a[href="/pricing"]')).toBeTruthy()
   })
 
   it('logo image uses the demo brand-mark class (no logo-img idle/filter treatment)', () => {

@@ -72,9 +72,12 @@ describe('NavV3 — exact-copy of the Direction-A demo nav', () => {
     expect(brandText!.querySelector('b')?.textContent).toBe('Shield')
   })
 
-  it('still renders the Start free CTA and nav landmark', () => {
+  it('renders the purchasable CTA and nav landmark', () => {
     render(<NavV3 />)
     expect(screen.getByRole('navigation')).toBeTruthy()
-    expect(screen.getAllByText(/Start free/i).length).toBeGreaterThanOrEqual(1)
+    // The nav CTA must name something buyable. "Start free → /signup" promised
+    // a tier /pricing no longer sells.
+    expect(screen.getAllByText(/Get the \$499 report/i).length).toBeGreaterThanOrEqual(1)
+    expect(screen.queryByText(/Start free/i)).toBeNull()
   })
 })
