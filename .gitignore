@@ -148,3 +148,9 @@ compass_artifact_*.md
 
 # Skill scratch files under docs/
 /docs/*.skill
+
+# Local-only archive — moved to ~/HoundShield-Local-Archive, never pushed again.
+# brain/ was a 47MB duplicate of the knowledge base; legacy/ was 43MB of dead
+# code with zero imports (already excluded from tsconfig). Neither is the product.
+brain/
+compliance-firewall-agent/legacy/
