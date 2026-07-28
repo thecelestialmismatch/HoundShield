@@ -5,6 +5,58 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-28
+
+### The compass was one day stale on the fact the whole company was built around
+**What:** The entire go-to-market sold against "CMMC Phase 2 enforcement, 10 Nov 2026."
+The DoD suspended Phase 2 on **2026-07-13**. `primer.md` recorded "confirmed unchanged
+2026-07-12" — we checked one day early and then trusted that check for two weeks while
+continuing to write copy, FAQs and schema against a deadline that no longer existed.
+**Root cause:** a verified external fact was cached with a date but no expiry. Nothing
+distinguished "checked recently" from "still true," and no step re-checked it before
+citing it.
+**Rule:** any external fact the business depends on (a regulatory date, a competitor's
+pricing, a market stat) gets **re-verified at the moment it is used in customer-facing
+copy**, not once and cached. When a fact is load-bearing, cite the source and the
+check-date next to it — and treat anything older than a week as unverified.
+
+### A "pre-existing CI failure" was a stale binary, not broken code
+**What:** 17 proxy tests had been failing for weeks, logged in memory as a "pre-existing
+dep-bump vitest worker crash" and routed around. The actual error was
+`NODE_MODULE_VERSION 137 vs 127` — the `better-sqlite3` native binary was compiled
+against a different Node version. `npm rebuild better-sqlite3` → **61 passing**, zero
+code changed.
+**Root cause:** the failure was labelled from its symptom ("vitest crashes") and filed as
+known-broken, so nobody read the actual error text, which named the fix explicitly.
+**Rule:** never file a failure as "pre-existing/known" without pasting the **exact error
+line**. An error that names its own remedy has not been read. "Known broken" is where
+five-minute fixes go to hide for a month.
+
+### Three commands in this repo report success while failing
+**What:** During one session, three separate runs reported green while doing nothing:
+`vitest --reporter=basic` (crashes with `ERR_LOAD_URL`, exits 0), `npx vitest` from the
+repo root (loads the PARENT config, `MODULE_NOT_FOUND`, exits 0), and any piped command
+(`cmd | tail` returns *tail's* status). Twice this produced a "tests pass" claim for a run
+that never executed.
+**Root cause:** trusting exit codes, plus a shell whose cwd resets between calls so an
+earlier `cd` silently does not apply.
+**Rule:** **read the last lines of output; never trust an exit code from a piped
+command.** Always run the project's own binary from the project's own directory
+(`cd compliance-firewall-agent && ./node_modules/.bin/vitest run`). Encoded as GATE 2 in
+the `/houndshield` and `/gauravceo` skills so it cannot be forgotten.
+
+### "Fix the false claim" — except the claim was true
+**What:** Reported that "16 detection engines" matched nothing in the codebase, based on
+counting the proxy registry (33 patterns). It was wrong: `ENGINES` in
+`app/features/page.tsx` has exactly 16 entries. The number was correct; it was merely
+duplicated as a literal in four places while the list lived elsewhere.
+**Root cause:** verified the claim against the first plausible source found, then
+generalised to "matches nothing" without checking the surface that actually renders it.
+**Rule:** before calling a claim false, find the code that **produces the rendered
+string**, not merely a related number. A near-miss between two real numbers is usually a
+naming difference, not a lie. The fix that followed was smaller and better for it: derive
+the count from the array so it can never drift.
+
 ## 2026-07-23
 
 ### A bug that's been "fixed" 4+ times and stays broken is invisible config, not code — make the failure observable
