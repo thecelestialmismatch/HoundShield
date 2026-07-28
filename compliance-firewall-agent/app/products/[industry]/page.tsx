@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Eye, Users, Zap, Plug, Shield, FileText, Lock, Heart, Briefcase, Globe, Landmark } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
-import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { JsonLd } from "@/components/seo/JsonLd";
 import {
   INDUSTRIES,
   getIndustry,
@@ -66,18 +67,6 @@ const HEAD_ICONS: Record<string, React.ElementType> = {
 
 const STEP_ICONS = [Plug, Shield, FileText];
 
-function faqJsonLd(data: Industry) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: data.faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-}
-
 function speakableJsonLd(data: Industry) {
   return {
     "@context": "https://schema.org",
@@ -105,14 +94,7 @@ export default async function ProductPage({
   return (
     <div className="hermes" style={{ minHeight: "100vh" }}>
       <NavV3 />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(data)) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableJsonLd(data)) }}
-      />
+      <JsonLd schema={speakableJsonLd(data)} />
 
       <main className="page">
         <div className="section">
@@ -190,15 +172,16 @@ export default async function ProductPage({
               ))}
             </div>
 
-            <div className="section-head" style={{ margin: "48px auto 20px" }}>
-              <div className="eyebrow">FAQ</div>
-              <h2 className="display">Common questions</h2>
-            </div>
-            <div style={{ maxWidth: 760, margin: "0 auto" }}>
-              <FaqAccordion
-                items={data.faqs.map((f) => ({ question: f.q, answer: f.a }))}
-              />
-            </div>
+            {/* FAQ — the ONE shared surface. The hermes section-head + bare
+                accordion + hand-rolled FAQPage script this replaced could
+                drift apart; FaqSection emits heading and schema together.
+                contactCta is off — the page's own CTA band follows. */}
+            <FaqSection
+              items={data.faqs.map((f) => ({ question: f.q, answer: f.a }))}
+              title="Common questions"
+              contactCta={false}
+              className="!px-0 !pt-12 !pb-0"
+            />
 
             <div className="cta-band" style={{ marginTop: 48 }}>
               <h2 className="display">{data.cta.title}</h2>

@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
-import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { ANSWERS, getAnswer, type Answer } from "../_answers";
 
 export function generateStaticParams() {
@@ -30,18 +31,6 @@ export async function generateMetadata({
       url,
       type: "article",
     },
-  };
-}
-
-function faqJsonLd(data: Answer) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: data.faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
   };
 }
 
@@ -73,14 +62,7 @@ export default async function AnswerPage({
   return (
     <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)]">
       <NavV3 />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(data)) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(data)) }}
-      />
+      <JsonLd schema={articleJsonLd(data)} />
 
       <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
         <p className="text-xs font-semibold tracking-[0.14em] uppercase text-[var(--hs-steel-dark)] font-[var(--font-mono)]">
@@ -148,15 +130,17 @@ export default async function AnswerPage({
           </section>
         ))}
 
-        {/* FAQ — shared accordion, matches the FAQPage JSON-LD above */}
-        <h2 className="mt-12 font-[var(--font-display)] text-2xl font-semibold text-[var(--hs-ink)]">
-          Frequently asked questions
-        </h2>
-        <div className="mt-5">
-          <FaqAccordion
-            items={data.faqs.map((f) => ({ question: f.q, answer: f.a }))}
-          />
-        </div>
+        {/* FAQ — the ONE shared surface (eyebrow + heading + accordion +
+            FAQPage JSON-LD). This page used to hand-roll the heading and the
+            schema around a bare accordion, so the two could drift apart;
+            FaqSection emits them together. contactCta is off because the
+            page's own CTA band follows immediately. */}
+        <FaqSection
+          items={data.faqs.map((f) => ({ question: f.q, answer: f.a }))}
+          align="left"
+          contactCta={false}
+          className="!max-w-none !mx-0 !px-0 !pb-0 !pt-12"
+        />
 
         {/* CTA */}
         <div className="mt-12 rounded-3xl border border-[var(--hs-border)] bg-[var(--hs-surface-2)] p-8 text-center">
