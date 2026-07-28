@@ -7,6 +7,7 @@ import { HeroDemoDashboard } from '@/components/landing/HeroDemoDashboard'
 import { ReportOfferCard } from '@/components/ReportOfferCard'
 import { FaqSection } from '@/components/seo/FaqSection'
 import { homeFaqs } from '@/lib/seo/faqs'
+import { ENGINE_COUNT, PATTERN_COUNT } from '@/lib/detection/engines'
 import type { Metadata } from 'next'
 
 // Self-referencing canonical for the homepage. The root layout no longer sets a
@@ -27,10 +28,10 @@ export const metadata: Metadata = {
  * ───────────────────────────────────────────────────────────────── */
 
 const STATS = [
-  { n: '16',      l: 'Detection engines',    s: 'CUI · PHI · PII · IP' },
-  { n: '~80,000', l: 'Contractors at risk',  s: 'Need CMMC Level 2' },
-  { n: '110',     l: 'NIST 800-171 controls', s: 'Mapped & SPRS-scored' },
-  { n: '<10ms',   l: 'Scan latency',         s: 'Median, fully local' },
+  { n: String(ENGINE_COUNT), l: 'Detection engines',     s: `${PATTERN_COUNT} patterns · CUI · PHI · PII` },
+  { n: '89%',                l: 'of healthcare genAI',   s: 'violations involve regulated data' },
+  { n: '110',                l: 'NIST 800-171 controls', s: 'Mapped & SPRS-scored' },
+  { n: '<10ms',              l: 'Scan latency',          s: 'p99 0.49ms measured, fully local' },
 ]
 
 const PLATFORM_CARDS = [
@@ -38,7 +39,7 @@ const PLATFORM_CARDS = [
   { Icon: Brain,    chip: 'Prioritized',  title: 'AI-Powered Gap Analysis', body: 'Brain AI flags unmet controls and generates a remediation roadmap ranked by risk severity and cost — on-device, your key.' },
   { Icon: FileText, chip: '1-click',      title: 'SSP & POA&M Export',      body: 'Auto-generate your System Security Plan and Plan of Action & Milestones as C3PAO-ready PDFs with SHA-256 signed evidence.' },
   { Icon: Eye,      chip: null,           title: 'AI Prompt Interception',  body: 'Every LLM request inspected before it leaves the perimeter. Works with ChatGPT, Copilot, Claude, Gemini — all at once.' },
-  { Icon: Zap,      chip: null,           title: '16 Detection Engines',    body: 'CUI, PII, IP, PHI, secrets, CAGE codes, contract numbers and clearance markers — flagged, blocked or quarantined.' },
+  { Icon: Zap,      chip: null,           title: `${ENGINE_COUNT} Detection Engines`, body: `PHI, CUI, PII, IP, secrets, CAGE codes, contract numbers and clearance markers — ${PATTERN_COUNT} shipped patterns, flagged, blocked or quarantined.` },
   { Icon: Activity, chip: null,           title: 'Live Threat Dashboard',   body: 'Real-time blocked prompts, risk scores and compliance posture for every employee, in one command center.' },
 ]
 
@@ -52,26 +53,28 @@ export default function HomePage() {
         <div className="hero">
           <div className="container hero-grid">
             <div>
-              <div className="pill"><i className="live-dot" /> Local-only · CMMC Level 2 · HIPAA · SOC 2</div>
+              <div className="pill"><i className="live-dot" /> Local-only · HIPAA · NIST 800-171 · SOC 2</div>
               <h1 className="display">
-                Stop your team from leaking <span className="accent">CUI to ChatGPT.</span>
+                Prove what your team pasted into <span className="accent">ChatGPT.</span>
               </h1>
               <p className="sub">
-                HoundShield intercepts every AI prompt before it leaves your network. 16 detection
-                engines. Sub-10ms latency. CMMC Level 2, HIPAA &amp; SOC 2 — enforced simultaneously,
-                scanned <b>on your hardware</b>.
+                Staff paste patient records and contract data into AI tools every day. HoundShield
+                scans every prompt <b>on your own hardware</b> before it leaves your network, then
+                hands you a signed PDF mapped to HIPAA and NIST 800-171 — evidence you can give an
+                auditor. Your prompts are never transmitted to us, because there is no us in the
+                data path.
               </p>
               <div className="hero-actions">
-                <Link className="btn btn-primary" href="/signup">
-                  Start free — no card required <ArrowRight />
+                <Link className="btn btn-primary" href="/demo#snapshot">
+                  Scan a prompt now — free, in your browser <ArrowRight />
                 </Link>
-                <Link className="btn btn-ghost" href="/how-it-works">See how it works</Link>
+                <Link className="btn btn-ghost" href="/pricing">Get the $499 report</Link>
               </div>
               <div className="hero-trust">
                 <span><Check /> One URL change</span>
-                <span><Check /> Local-only</span>
-                <span><Check /> Free to start</span>
-                <span><Check /> C3PAO-ready</span>
+                <span><Check /> Runs on your hardware</span>
+                <span><Check /> Nothing transmitted</span>
+                <span><Check /> Audit-ready PDF</span>
               </div>
             </div>
             <HeroDemoDashboard />
