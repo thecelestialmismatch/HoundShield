@@ -245,6 +245,27 @@ export function hasFeature(ent: Entitlements, key: FeatureKey): boolean {
  * The lowest tier that unlocks a given feature — for a truthful "available on X"
  * label next to a locked capability. Returns null if no tier offers it.
  */
+/**
+ * What a customer can actually buy today.
+ *
+ * The subscription tiers above still drive entitlement math for existing
+ * accounts, but they are NOT on sale: /pricing sells exactly one thing, the
+ * $499 one-time AI Risk Assessment Report (CLAUDE.md — prove the report sells
+ * before launching a subscription). Any "upgrade to unlock" CTA must point
+ * here. Pointing at a tier name sends the user hunting for a checkout that
+ * does not exist, which is a worse experience than the lock itself.
+ *
+ * When subscriptions go back on sale, update this constant — not the call
+ * sites. Locked by __tests__/purchasable-offer.test.ts.
+ */
+export const PURCHASABLE_OFFER = {
+  name: 'AI Risk Assessment Report',
+  price: '$499 one-time',
+  href: '/pricing',
+  /** Ready-to-render upsell line. */
+  label: 'Available with the $499 AI Risk Assessment Report',
+} as const;
+
 export function tierThatUnlocks(key: FeatureKey): Entitlements | null {
   const ladder: TierSlug[] = ['free', 'pro', 'growth', 'enterprise', 'agency'];
   for (const slug of ladder) {
