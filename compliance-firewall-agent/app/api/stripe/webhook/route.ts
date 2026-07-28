@@ -155,8 +155,20 @@ async function handleReportOrder(
   );
 }
 
-function getStripe() {
-  return new Stripe(getStripeSecretKey()!, {
+/**
+ * Signature verification (`webhooks.constructEvent`) is a local HMAC check over
+ * the raw body — it needs the signing secret, never the API key. But stripe-node
+ * (22.x) throws "Neither apiKey nor config.authenticator provided" on a falsy
+ * key, so key-free deliveries get this placeholder. It is never used for an API
+ * call: the only branch that talks to Stripe guards on the real key first.
+ *
+ * Deliberately NOT `sk_`-shaped — a credential-shaped literal in source trips
+ * secret scanners and invites a reader to mistake it for a real key.
+ */
+const SIGNATURE_ONLY_PLACEHOLDER_KEY = 'unset-signature-verification-only';
+
+function getStripe(secretKey: string | null) {
+  return new Stripe(secretKey ?? SIGNATURE_ONLY_PLACEHOLDER_KEY, {
     apiVersion: STRIPE_API_VERSION,
   });
 }
@@ -177,11 +189,20 @@ function extractPeriodDates(sub: Record<string, unknown>) {
 
 export async function POST(request: NextRequest) {
   const webhookSecret = getStripeWebhookSecret() || '';
-  if (!getStripeSecretKey() || !webhookSecret) {
-    return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 });
+  const secretKey = getStripeSecretKey();
+
+  // Only the SIGNING SECRET is required to accept a delivery. The $499 report
+  // order — the Stage-1 primary product, and the one that sells through the
+  // Stripe-hosted Payment Link fallback whenever STRIPE_SECRET_KEY is missing or
+  // mis-pasted — is recorded straight from the event payload and never calls the
+  // Stripe API. Requiring the API key here meant a live sale on the fallback rail
+  // was dropped on the floor: no `report_orders` row, no buyer receipt, no founder
+  // alert. Setting the webhook secret alone now makes the money path whole.
+  if (!webhookSecret) {
+    return NextResponse.json({ error: 'Stripe webhook not configured' }, { status: 503 });
   }
 
-  const stripe = getStripe();
+  const stripe = getStripe(secretKey);
   const body = await request.text();
   const sig = request.headers.get('stripe-signature');
 
@@ -219,6 +240,17 @@ export async function POST(request: NextRequest) {
 
         if (!userId) {
           console.warn('[Stripe Webhook] checkout.session.completed: no user ID found', { subscriptionId });
+          break;
+        }
+
+        // The ONLY branch that calls the Stripe API. Without a usable key we must
+        // still ACKNOWLEDGE (2xx): a non-2xx makes Stripe retry and eventually
+        // disable the endpoint, which would take the report-order path down with
+        // it — the exact revenue loss this route was just fixed to prevent.
+        if (!secretKey) {
+          console.error(
+            `[Stripe Webhook] subscription ${subscriptionId} needs STRIPE_SECRET_KEY to expand — acknowledged and skipped (set the key, then replay this event from the Stripe dashboard)`,
+          );
           break;
         }
 

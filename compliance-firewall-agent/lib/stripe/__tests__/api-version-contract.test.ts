@@ -38,10 +38,13 @@ const sourceFiles = SCAN_DIRS.flatMap((d) => {
 });
 
 describe('Stripe API version — single-source contract', () => {
-  it('scans a real tree (sanity: the five known client routes are present)', () => {
+  it('scans a real tree (sanity: the known client routes are present)', () => {
     const names = sourceFiles.map((f) => path.relative(APP_ROOT, f));
     expect(names).toContain(path.join('app', 'api', 'stripe', 'webhook', 'route.ts'));
-    expect(names).toContain(path.join('app', 'api', 'stripe', 'checkout', 'route.ts'));
+    // The canonical revenue route. (The old subscription `stripe/checkout` route
+    // was removed once /pricing collapsed to the single $499 offer — it had no
+    // caller and sold tiers the site no longer lists.)
+    expect(names).toContain(path.join('app', 'api', 'stripe', 'report-checkout', 'route.ts'));
     expect(names.length).toBeGreaterThan(100);
   });
 
@@ -63,7 +66,8 @@ describe('Stripe API version — single-source contract', () => {
       /new Stripe\(/.test(fs.readFileSync(file, 'utf8'))
     );
     // If this ever reads 0 the scan is broken, not the codebase clean.
-    expect(clientSites.length).toBeGreaterThanOrEqual(5);
+    // Four sites since the orphaned subscription checkout route was removed.
+    expect(clientSites.length).toBeGreaterThanOrEqual(4);
     const missingPin = clientSites.filter(
       (file) => !fs.readFileSync(file, 'utf8').includes('STRIPE_API_VERSION')
     );

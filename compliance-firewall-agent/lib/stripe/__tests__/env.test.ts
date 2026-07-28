@@ -77,6 +77,16 @@ describe('stripeKeyDiagnostic — value-free operator diagnosis for /api/health'
     expect(d.hint).toMatch(/compliance-firewall-agent/);
   });
 
+  it('missing: does not falsely imply the $499 report stopped selling', () => {
+    // Retail checkout falls back to the Stripe-hosted Payment Link, so a missing
+    // key is NOT a dead storefront. Saying otherwise sends the founder chasing
+    // the wrong knob — the webhook secret is what actually recovers the sale.
+    delete process.env.STRIPE_SECRET_KEY;
+    const hint = stripeKeyDiagnostic().hint ?? '';
+    expect(hint).toMatch(/STILL SELLS/i);
+    expect(hint).toMatch(/STRIPE_WEBHOOK_SECRET/);
+  });
+
   it('connected: a clean sk_ key, no hint needed', () => {
     process.env.STRIPE_SECRET_KEY = KEY;
     expect(stripeKeyDiagnostic()).toEqual({ status: 'connected' });
@@ -138,12 +148,20 @@ describe('stripeKeyDiagnostic — value-free operator diagnosis for /api/health'
 });
 
 describe('stripeWebhookDiagnostic — a live key without the webhook loses orders', () => {
-  it('missing: unset, with a hint that warns orders will not be recorded', () => {
+  it('missing: unset, with a hint that warns the sale would go unrecorded', () => {
     delete process.env.STRIPE_WEBHOOK_SECRET;
     const d = stripeWebhookDiagnostic();
     expect(d.status).toBe('missing_secret');
-    expect(d.hint).toMatch(/NOT be recorded/);
+    expect(d.hint).toMatch(/no order recorded/i);
+    expect(d.hint).toMatch(/no sale alert/i);
     expect(d.hint).toMatch(/api\/stripe\/webhook/);
+  });
+
+  it('missing: says the secret stands alone — it does not depend on the API key', () => {
+    // The webhook now records $499 orders using the signing secret alone, so the
+    // operator must not be told to wait on STRIPE_SECRET_KEY first.
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    expect(stripeWebhookDiagnostic().hint).toMatch(/does not depend on STRIPE_SECRET_KEY/i);
   });
 
   it('missing: quotes-only value is treated as unset', () => {
