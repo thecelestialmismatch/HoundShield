@@ -62,7 +62,7 @@ export function stripeKeyDiagnostic(): StripeKeyDiagnostic {
     return {
       status: 'missing_key',
       hint:
-        'STRIPE_SECRET_KEY is not set for this deployment. In Vercel: project compliance-firewall-agent → Settings → Environment Variables → add it with the Production box checked, then redeploy.',
+        'STRIPE_SECRET_KEY is not set for this deployment. The $499 report STILL SELLS — retail checkout falls back to the Stripe-hosted Payment Link — and once STRIPE_WEBHOOK_SECRET is set those sales are recorded and you are alerted. Missing until you add the key: promo codes, the branded /report/thank-you page, and subscription events. In Vercel: project compliance-firewall-agent → Settings → Environment Variables → add it with the Production box checked, then redeploy.',
     };
   }
   const key = getStripeSecretKey();
@@ -130,7 +130,7 @@ export function stripeWebhookDiagnostic(): StripeWebhookDiagnostic {
     return {
       status: 'missing_secret',
       hint:
-        'STRIPE_WEBHOOK_SECRET is not set. Payments can complete but orders will NOT be recorded and no sale alert will be sent. In Stripe: Developers → Webhooks → Add endpoint (https://houndshield.com/api/stripe/webhook), copy the whsec_ signing secret into Vercel project compliance-firewall-agent with the Production box checked, then redeploy.',
+        'STRIPE_WEBHOOK_SECRET is not set — this is the single highest-value knob, because the $499 report is already sellable via the Payment Link rail. A buyer CAN pay right now and you would never hear about it: no order recorded, no receipt to the buyer, no sale alert to you. This secret alone fixes that; it does not depend on STRIPE_SECRET_KEY. In Stripe: Developers → Webhooks → Add endpoint (https://houndshield.com/api/stripe/webhook), copy the whsec_ signing secret into Vercel project compliance-firewall-agent with the Production box checked, then redeploy.',
     };
   }
   const secret = getStripeWebhookSecret();
