@@ -5,7 +5,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 export const metadata: Metadata = {
   title: "About | HoundShield — AI Compliance Security",
   description:
-    "HoundShield builds local-only AI compliance firewalls for defense contractors and regulated industries. Learn about our mission to make CMMC Level 2 compliance achievable before the November 2026 deadline.",
+    "HoundShield builds local-only AI compliance firewalls for healthcare, legal, and defense teams. Prove what staff pasted into ChatGPT and Copilot — scanned on your own hardware, mapped to NIST 800-171 Rev 2 and HIPAA.",
   keywords: [
     "HoundShield about",
     "AI compliance company",

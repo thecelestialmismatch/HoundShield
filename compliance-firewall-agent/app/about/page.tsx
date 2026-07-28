@@ -5,6 +5,7 @@ import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-section";
 import { ScrollProgressBar } from "@/components/scroll-effects";
+import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
 import {
     Shield, Lock, Bot, Eye, DollarSign, CheckCircle,
     ArrowRight, Quote, Calendar,
@@ -200,14 +201,18 @@ export default function AboutPage() {
                             <div className="absolute inset-0 bg-gradient-to-br from-[rgba(90,134,168,0.05)] to-[rgba(129,166,198,0.05)] pointer-events-none" />
                             <div className="relative z-10">
                                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Join the Mission</h2>
+                                {/* Free-tier sweep: this promised a "14-day free trial, no credit
+                                    card required" and pointed at /signup — neither exists. One
+                                    offer, one CTA, sourced from PURCHASABLE_OFFER. */}
                                 <p className="text-[var(--hs-ink-secondary)] mb-8 max-w-md mx-auto">
-                                    Start your CMMC compliance journey today. 14-day free trial, no credit card required.
+                                    See what your team has been pasting into AI tools — and hand your
+                                    auditor the evidence. One report, one price, no subscription.
                                 </p>
                                 <Link
-                                    href="/signup"
+                                    href={PURCHASABLE_OFFER.href}
                                     className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-500 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors cursor-pointer"
                                 >
-                                    Get Started Free <ArrowRight className="w-4 h-4" />
+                                    {PURCHASABLE_OFFER.ctaLabel} <ArrowRight className="w-4 h-4" />
                                 </Link>
                             </div>
                         </div>
