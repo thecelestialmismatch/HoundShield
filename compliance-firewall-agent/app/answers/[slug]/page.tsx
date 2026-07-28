@@ -169,10 +169,10 @@ export default async function AnswerPage({
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              href="/signup"
+              href="/pricing"
               className="inline-flex items-center gap-2 rounded-xl bg-[var(--hs-steel-dark)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--hs-steel)]"
             >
-              Start free <ArrowRight className="h-4 w-4" />
+              Get the $499 report <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/products/defense"
