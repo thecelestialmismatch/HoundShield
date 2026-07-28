@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | HoundShield",
   },
   description:
-    "The local-only AI compliance firewall for defense contractors, healthcare, and technology. CMMC Level 2, HIPAA, SOC 2 — real-time AI prompt scanning, tamper-proof audit trails, and C3PAO-ready PDF evidence. Start free.",
+    "The local-only AI compliance firewall for defense contractors, healthcare, and technology. CMMC Level 2, HIPAA, SOC 2 — real-time AI prompt scanning, tamper-proof audit trails, and audit-ready PDF evidence. $499 one-time.",
   keywords: [
     "AI compliance firewall",
     "CMMC compliance",
