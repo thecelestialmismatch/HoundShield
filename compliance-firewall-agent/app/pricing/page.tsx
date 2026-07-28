@@ -1,8 +1,3 @@
-'use client'
-
-import { useState } from 'react'
-import Link from 'next/link'
-import { Check } from 'lucide-react'
 import { ReportOfferCard } from '@/components/ReportOfferCard'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
@@ -10,100 +5,22 @@ import { FaqSection } from '@/components/seo/FaqSection'
 import { pricingFaqs } from '@/lib/seo/faqs'
 
 /* ─────────────────────────────────────────────────────────────────
- * /pricing — verbatim port of the HERMES demo pricing view
- * (Direction A): billing toggle, 4 price cards (Pro featured),
- * agency note, compliance compare table. Amounts match the pricing
- * single source of truth (lib/pricing/plans).
- * One deliberate addition: the $499 one-time CMMC AI Risk Assessment
- * Report note (Stage-1 lead product — CLAUDE.md pricing doctrine).
+ * /pricing — ONE offer: the $499 one-time AI Risk Assessment Report.
+ *
+ * The subscription grid (Free/$199/$499-mo/$999 + $2,499 Agency) and the
+ * tier-compare table were removed deliberately. Two reasons:
+ *   1. CLAUDE.md pricing doctrine — ONE grid, and never lead with a
+ *      subscription before the $499 report is proven to sell.
+ *   2. "$499 one-time" and "Growth $499/mo" sat on the same page, so a
+ *      buyer could not tell what $499 actually bought. That ambiguity
+ *      costs conversions on the only page where money changes hands.
+ *
+ * Subscription tiers come back only after 3 customers have paid $499,
+ * and never as a second grid on this page. Locked by
+ * __tests__/pricing-single-offer.test.tsx.
  * ───────────────────────────────────────────────────────────────── */
 
-type Billing = 'm' | 'a'
-
-interface PriceCard {
-  tier: string
-  who: string
-  m: string
-  a: string
-  annualNote: { m: string; a: string }
-  cta: { label: string; href: string; primary?: boolean }
-  featured?: boolean
-  feats: string[]
-}
-
-const CARDS: PriceCard[] = [
-  {
-    tier: 'Free',
-    who: 'Self-assessment for a single team',
-    m: '$0', a: '$0',
-    annualNote: { m: 'No card required', a: 'No card required' },
-    cta: { label: 'Start free', href: '/signup' },
-    feats: [
-      'CMMC assessment (read-only)',
-      '110-control gap analysis',
-      'Live SPRS calculator',
-      'Up to 1,000 prompts/mo',
-      'Community support',
-    ],
-  },
-  {
-    tier: 'Pro',
-    who: 'AI gateway + full CMMC suite for defense contractors',
-    m: '$199', a: '$159',
-    annualNote: { m: 'billed monthly', a: '$1,910 billed annually' },
-    cta: { label: 'Start 7-day trial', href: '/signup?plan=pro', primary: true },
-    featured: true,
-    feats: [
-      'AI gateway — 50,000 scans/mo',
-      'Editable assessment + roadmap',
-      'SSP & POA&M generation',
-      'JSON compliance reports',
-      '10 seats · email & Slack alerts',
-    ],
-  },
-  {
-    tier: 'Growth',
-    who: 'PDF reports + C3PAO coordination for growing primes',
-    m: '$499', a: '$399',
-    annualNote: { m: 'billed monthly', a: '$4,790 billed annually' },
-    cta: { label: 'Start 7-day trial', href: '/signup?plan=growth' },
-    feats: [
-      'Everything in Pro',
-      'Unlimited scans · 25 seats',
-      'PDF compliance reports',
-      'C3PAO assessment coordination',
-      'Audit-trail export · SSO & RBAC',
-    ],
-  },
-  {
-    tier: 'Enterprise',
-    who: 'On-prem & air-gapped for large primes',
-    m: '$999', a: '$799',
-    annualNote: { m: 'billed monthly', a: '$9,590 billed annually' },
-    cta: { label: 'Contact sales', href: '/contact' },
-    feats: [
-      'Everything in Growth',
-      'On-prem / air-gapped deploy',
-      'Unlimited seats · white-label PDF',
-      'HITL quarantine review',
-      'Custom SLA 99.99% · CSM',
-    ],
-  },
-]
-
-const COMPARE: Array<{ label: string; cells: Array<string | boolean> }> = [
-  { label: 'CMMC self-assessment', cells: ['Read-only', true, true, true] },
-  { label: 'SPRS score calculator', cells: [true, true, true, true] },
-  { label: 'AI gateway scans', cells: ['—', '50k/mo', 'Unlimited', 'Unlimited'] },
-  { label: 'PDF compliance reports', cells: ['—', '—', true, 'White-label'] },
-  { label: 'C3PAO coordination', cells: ['—', '—', true, true] },
-  { label: 'On-prem / air-gapped', cells: ['—', '—', '—', true] },
-  { label: 'Team seats', cells: ['1', '10', '25', 'Unlimited'] },
-]
-
 export default function PricingPage() {
-  const [billing, setBilling] = useState<Billing>('m')
-
   return (
     <div className="hermes" style={{ minHeight: '100vh' }}>
       <NavV3 />
@@ -113,91 +30,18 @@ export default function PricingPage() {
           <div className="container">
             <div className="section-head" style={{ marginBottom: 28 }}>
               <div className="eyebrow">Pricing</div>
-              <h1 className="display">One report to start. One plan to stay covered.</h1>
+              <h1 className="display">One report. One price. No subscription.</h1>
               <p>
-                Lead with the $499 one-time assessment report — then subscribe only when you
-                want continuous coverage.
+                A $499 one-time AI Risk Assessment Report: we scan your team&apos;s real AI
+                prompts on your own hardware and hand you a signed PDF mapped to NIST 800-171.
+                No contract, no seats to count, no procurement review.
               </p>
             </div>
 
             <ReportOfferCard />
 
-            <div className="section-head" style={{ marginTop: 72 }}>
-              <div className="eyebrow">Ongoing monitoring</div>
-              <h2 className="display">Or subscribe for continuous coverage</h2>
-              <p>
-                Every framework — CMMC, HIPAA, SOC 2 — included in every paid plan. Start free,
-                scale when you&apos;re ready.
-              </p>
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <div className="bill-toggle">
-                <button type="button" className={billing === 'm' ? 'on' : undefined} onClick={() => setBilling('m')}>
-                  Monthly
-                </button>
-                <button type="button" className={billing === 'a' ? 'on' : undefined} onClick={() => setBilling('a')}>
-                  Annual <span className="save">save 20%</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="pricing-grid">
-              {CARDS.map((c) => (
-                <div className={`price-card${c.featured ? ' featured' : ''}`} key={c.tier}>
-                  <div className="tier">{c.tier}</div>
-                  <div className="who">{c.who}</div>
-                  <div className="price">
-                    {billing === 'm' ? c.m : c.a}
-                    <small>/mo</small>
-                  </div>
-                  <div className="annual">{c.annualNote[billing]}</div>
-                  <Link className={`btn ${c.cta.primary ? 'btn-primary' : 'btn-ghost'}`} href={c.cta.href}>
-                    {c.cta.label}
-                  </Link>
-                  <ul className="feat">
-                    {c.feats.map((f) => (
-                      <li key={f}><Check /> {f}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            <p className="center muted" style={{ marginTop: 18, fontSize: '.86rem' }}>
-              Managing multiple contractors? The <b>Agency</b> plan ($2,499/mo) adds a multi-tenant
-              dashboard, unlimited client accounts and a partner revenue share.{' '}
-              <Link href="/partners" style={{ color: 'var(--brand)', fontWeight: 600 }}>See partner program →</Link>
-            </p>
-
-            <div className="compare">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Compliance</th>
-                    <th>Free</th>
-                    <th>Pro</th>
-                    <th>Growth</th>
-                    <th>Enterprise</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {COMPARE.map((row) => (
-                    <tr key={row.label}>
-                      <td>{row.label}</td>
-                      {row.cells.map((cell, i) =>
-                        cell === true
-                          ? <td key={i}><Check /></td>
-                          : <td key={i} className={cell === '—' ? 'dash' : undefined}>{cell}</td>
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
             <p className="center muted" style={{ marginTop: 18, fontSize: '.82rem' }}>
-              Annual plans save up to 20%. Every paid plan includes a 30-day money-back guarantee.
+              One-time purchase, delivered as a PDF. 30-day money-back guarantee.
             </p>
           </div>
         </div>
