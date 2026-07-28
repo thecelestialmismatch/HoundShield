@@ -77,9 +77,12 @@ describe('brainAnswer — personalized + tier-aware (human, not monotone)', () =
     // 500 Pro cap − 100 used = 400 left
     expect(html).toMatch(/400/)
   })
-  it('gates PDF reports truthfully by tier', () => {
+  it('gates PDF reports truthfully — names the purchasable offer, not a dead tier', () => {
     const pro = brainAnswer('can I generate a PDF report?', { ent: getEntitlements('pro') })[0]
-    expect(pro).toMatch(/Growth/)
+    // Must point at the only thing on sale, never at a subscription tier that
+    // /pricing no longer offers a checkout for.
+    expect(pro).toMatch(/\$499 one-time AI Risk Assessment Report/)
+    expect(pro).not.toMatch(/Growth/)
     const growth = brainAnswer('generate a PDF report', { ent: getEntitlements('growth') })[0]
     expect(growth).toMatch(/Reports/)
   })
@@ -461,13 +464,14 @@ describe('LiveCommandCenter — subscription-aware + personalized', () => {
     expect(container.querySelector('#lcc-useScan')?.textContent).toMatch(/Unlimited/)
   })
 
-  it('locks a higher-tier feature for a Pro viewer with a truthful unlock label', () => {
+  it('locks a higher-tier feature for a Pro viewer and prices it at the real offer', () => {
     const pro = { company: 'Acme', plan: 'Pro', initials: 'AC', tier: 'pro', firstName: 'Rachel' }
     const { container } = render(<LiveCommandCenter viewer={pro} />)
     const feats = Array.from(container.querySelectorAll('.feat'))
     const onprem = feats.find((f) => f.textContent?.includes('On-prem'))
     expect(onprem?.className).toContain('off')
-    expect(onprem?.textContent).toMatch(/Enterprise\+/)
+    // Locked chips show what it costs to unlock via the one live checkout.
+    expect(onprem?.textContent).toMatch(/\$499 one-time/)
   })
 })
 
