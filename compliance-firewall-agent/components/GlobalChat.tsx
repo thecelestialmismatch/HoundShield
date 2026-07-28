@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
+import { CMMC_STATUS, FCA_PITCH } from "@/lib/compliance/cmmc-status";
+import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
+import { ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
 
 // Auth/onboarding routes where the floating chat bubble must NOT render — it
 // otherwise overlaps the Terms/Privacy line on the mobile signup card.
@@ -26,23 +29,25 @@ const HOUNDSHIELD_SYSTEM =
   "Adapt to who's asking: if they mention healthcare or PHI, speak to a Privacy Officer; if defense, CUI, or CMMC, speak to a security manager; if a law firm, speak to privilege. " +
   "Keep answers under 180 words, lead with the answer, and never refuse something you can actually help with. " +
   "PRODUCT FACTS: " +
-  "HoundShield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning for 16 risk categories in under 10ms. " +
+  `HoundShield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning across ${ENGINE_COUNT} detection engines (${PATTERN_COUNT} shipped patterns) in under 10ms. ` +
   "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously. 800+ models via OpenRouter. " +
   "INSTALLATION: Change baseURL to gateway.houndshield.com/v1 — works with any OpenAI-compatible SDK. 15 minutes. No agents. No network changes. " +
-  "LEAD PRODUCT: The $499 one-time CMMC AI Risk Assessment Report — run the proxy 14 days in the customer's own environment, get a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription needed. This is what to recommend first. " +
+  `LEAD PRODUCT: The ${PURCHASABLE_OFFER.name} — ${PURCHASABLE_OFFER.price}, per organization. Run the proxy 14 days in the customer's own environment, get a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171 Rev 2 and HIPAA. This is what to recommend first. ` +
+  `LEAD BUYER: healthcare Privacy Officers and HIPAA Security Officers at 50-300 provider groups and clinics — 89% of healthcare genAI policy violations involve regulated data vs a 31% cross-industry average, and 43% of healthcare staff use personal genAI accounts at work (Netskope 2025). No FedRAMP requirement applies to them. Defense is the second market. ` +
+  `FREE PROOF: ${PURCHASABLE_OFFER.tryHref} runs the real detection engines in the visitor's own browser — no account, text never transmitted. Offer this to anyone who wants proof before paying. ` +
   "DEPLOYMENT MODES: (A) Hosted trial on Vercel — NOT FedRAMP-authorized, non-CUI evaluation only; (B) Self-hosted Docker on customer infra — CUI-safe, data never leaves their boundary; (C) Air-gapped. For any CUI workload, recommend Mode B. Never claim the hosted endpoint is CUI-safe. " +
-  "MONITORING SUBSCRIPTIONS (after the report): Starter $299/mo, Pro $799/mo (continuous detection + alerts + C3PAO PDF), Enterprise $1499/mo (on-prem Docker, air-gapped). " +
-  "CMMC FACTS: 110 NIST 800-171 controls, SPRS score -203 to +110, November 2026 enforcement, C3PAO costs $30K-$150K. " +
+  "PRICING HONESTY: the one-time report is the ONLY thing we sell today. There is no free tier, no trial, and no monthly plan — never quote one. If someone wants ongoing monitoring, say it is not yet sold and offer to talk. " +
+  `CMMC FACTS: 110 NIST 800-171 Rev 2 controls, SPRS score -203 to +110, C3PAO assessment costs $30K-$150K. REGULATORY STATUS (critical, do not get this wrong): ${CMMC_STATUS.blurb} ` +
   "DETECTION: CUI (FOUO, CAGE codes, contract numbers), PHI (all 18 HIPAA identifiers), PII, API keys, source code, financial data, IP, ITAR/EAR. " +
   "INTEGRATIONS: Slack, Microsoft Teams, Splunk HEC, Azure Sentinel (HoundShieldCompliance_CL), Base L2 blockchain audit trail, MCP server (early access). " +
   "STACK: Next.js 15, React 19, Supabase, Stripe, Tailwind. Self-host via Docker. " +
-  "If asked about defense contractors: emphasize November 2026 CMMC enforcement and that 80000+ contractors need this. " +
+  `If asked about defense contractors: do NOT sell a deadline — it was cancelled. Sell liability instead. ${FCA_PITCH} ` +
   "If asked about AI agent frameworks (Goose, AgentScope, Claude Code, Cursor): explain HoundShield works as a gateway for those too. " +
   "If asked about model costs/optimization: recommend model routing (Haiku for simple tasks, Sonnet for daily work, Opus for complex decisions). " +
   "Contact: info@houndshield.com. Docs: houndshield.com/docs.";
 
 const GREETING =
-  "Hi! I'm Brain AI — powered by HoundShield. I can help with CMMC Level 2 compliance, CUI detection, SPRS scoring, and anything about AI security for defense contractors. Ask me anything!";
+  "Hi! I'm Brain AI — powered by HoundShield. I can help with HIPAA and PHI in AI tools, CMMC Level 2 and SPRS scoring, CUI detection, and what your team has been pasting into ChatGPT. Ask me anything!";
 
 /** Warm, personalized opening for a signed-in customer, addressed by their own name. */
 function personalGreeting(firstName: string): string {

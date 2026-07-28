@@ -14,11 +14,16 @@ export const KNOWLEDGE_BASE: KnowledgeDomain[] = [
         tags: ["cmmc", "nist", "controls", "level-2"],
       },
       {
-        claim: "CMMC Level 2 enforcement begins November 2026 for all DoD prime contractors.",
-        evidence: "DFARS clause 252.204-7021 phased enforcement schedule",
+        claim:
+          "SUPERSEDED 2026-07-13: CMMC Phase 2 is suspended. Third-party certification was to " +
+          "become a condition of award from 10 November 2026; the Department of War suspended it " +
+          "and froze Phases 3-4 pending a 60-day review. DFARS 252.204-7012, the 110 NIST SP " +
+          "800-171 Rev 2 controls, and annual SPRS self-attestation all remain in force.",
+        evidence:
+          "Department of War suspension announcement, 13 July 2026; DFARS 252.204-7012 unchanged",
         confidence: "high",
-        source: "https://www.federalregister.gov/documents/2024/12/26/2024-29439",
-        tags: ["cmmc", "deadline", "enforcement", "dfars"],
+        source: "https://www.acq.osd.mil/cmmc/",
+        tags: ["cmmc", "deadline", "enforcement", "dfars", "suspended"],
       },
       {
         claim: "SPRS scores range from -203 (all controls failed) to +110 (all controls met).",
@@ -280,8 +285,17 @@ export const KNOWLEDGE_BASE: KnowledgeDomain[] = [
         tags: ["market", "workaround", "behavior", "dns", "policy", "inertia"],
       },
       {
-        claim: "OODA verdict: BUILD. The local-only architecture moat is real. The forcing function (CMMC enforcement November 2026) is credible. The beachhead (50-250 person DoD contractors) is accessible via C3PAO channel. Paul Graham would fund this in its current form.",
-        evidence: "OODA Phase 1-5 analysis, April 2026",
+        claim:
+          "OODA verdict (revised 2026-07-28): BUILD, but the go-to-market changed. The local-only " +
+          "architecture moat is real and survived the regulatory shock. The old forcing function " +
+          "(CMMC certification on 10 November 2026) was suspended on 13 July 2026 and is gone. " +
+          "The beachhead is now HEALTHCARE — 50-300 provider groups and clinics, Privacy Officer " +
+          "as buyer, no FedRAMP blocker, no deadline dependency (Netskope 2025: 89% of healthcare " +
+          "genAI policy violations involve regulated data vs 31% cross-industry). Defense is " +
+          "channel two, re-messaged for False Claims Act exposure. Channel partners are RPOs and " +
+          "MSPs, NEVER C3PAOs — 32 CFR Part 170 bars assessors from recommending products to " +
+          "firms they assess.",
+        evidence: "OODA Phase 1-5 analysis, April 2026; revised after the 2026-07-13 suspension",
         confidence: "high",
         source: "internal",
         tags: ["market", "ooda", "verdict", "build", "yc", "strategy"],

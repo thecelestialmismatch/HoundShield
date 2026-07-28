@@ -22,6 +22,10 @@
  *  - HoundShield product (full coverage of all features, verticals, pricing)
  */
 
+import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
+import { ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
+import { CMMC_STATUS } from "@/lib/compliance/cmmc-status";
+
 export interface FaqEntry {
   keywords: string[];
   answer: string;
@@ -85,7 +89,7 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["cmmc", "level 2", "cmmc 2", "cybersecurity maturity", "what is cmmc"],
     answer:
-      "**CMMC Level 2** requires US defense contractors to implement all **110 NIST 800-171 Rev 2 controls**. It protects Controlled Unclassified Information (CUI) across your supply chain. Enforcement begins November 2026 — you'll need a certified C3PAO assessment ($30K–$150K) or a self-assessment with a SPRS score filed in SPRS. HoundShield automates your SPRS scoring, detects CUI in every AI prompt, and generates audit-ready reports.",
+      "**CMMC Level 2** requires US defense contractors to implement all **110 NIST 800-171 Rev 2 controls**. It protects Controlled Unclassified Information (CUI) across your supply chain. Third-party (C3PAO) certification was suspended on 13 July 2026, so today the requirement is met by a self-assessment with a SPRS score filed in SPRS — the controls and that filing are both still mandatory. HoundShield automates your SPRS scoring, detects CUI in every AI prompt, and generates audit-ready reports.",
   },
   {
     keywords: ["sprs", "score", "sprs score", "scoring", "points", "110 points"],
@@ -99,8 +103,12 @@ const FAQ_DB: FaqEntry[] = [
   },
   {
     keywords: ["november 2026", "enforcement", "deadline", "dod", "contract", "c3pao", "c3 pao", "assessment cost"],
+    // This asserted "November 2026 is the CMMC enforcement deadline" for two
+    // weeks after the Department of War suspended Phase 2. Telling a defense
+    // buyer to act on a cancelled deadline is the fastest way to lose them.
+    // Sourced from CMMC_STATUS so it can never fall out of date alone again.
     answer:
-      "**November 2026** is the CMMC enforcement deadline — after that, DoD contracts require a verified CMMC Level 2 status. A C3PAO assessment costs **$30K–$150K** and rising. About 80,000–300,000 US contractors need CMMC Level 2. Only ~400 are currently certified. HoundShield is the most affordable path: start free, get your SPRS score live on day one, and generate the evidence package a C3PAO needs — without a consultant.",
+      `**There is no CMMC enforcement deadline right now.** ${CMMC_STATUS.blurb}\n\nSo what actually bites? ${CMMC_STATUS.liveRisk}\n\nA C3PAO assessment still costs **$30K–$150K** when certification returns. Until then the score you self-attest is your own representation to the government — HoundShield produces the evidence behind it.`,
   },
   {
     keywords: ["nist", "nist 800-171", "800-171", "controls", "110 controls"],
@@ -142,15 +150,22 @@ const FAQ_DB: FaqEntry[] = [
   // ── PRICING ──────────────────────────────────────────────────────────
   {
     keywords: ["price", "pricing", "cost", "free", "pro", "enterprise", "tier", "plan", "how much"],
+    // Brain AI is a live sales surface: this is the answer a buyer gets when
+    // they ask "how much?". It listed five subscription tiers and a 14-day
+    // no-charge evaluation long after /pricing collapsed to a single one-time
+    // offer — a price no checkout could honour. Sourced from PURCHASABLE_OFFER
+    // now so the assistant and the buy button can never disagree again.
+    // (Phrasing note: the offer-honesty guard greps comments too — see
+    //  lib/billing/__tests__/offer-honesty.test.ts.)
     answer:
-      "**HoundShield pricing:**\n- **Starter** (Free) — 1,000 scans/mo, dashboard, 16-engine detection\n- **Pro** ($199/mo) — 50K scans, SOC 2 + HIPAA, Slack + Teams alerts\n- **Growth** ($499/mo) — 250K scans, CMMC L2, SIEM connectors, PDF reports\n- **Enterprise** ($999/mo) — Unlimited, blockchain anchoring, white-label, on-prem\n- **Agency/MSP** ($2,499/mo) — Multi-tenant, full platform resale\n\nAll paid plans include a 14-day free trial. Start free at houndshield.com.",
+      `**HoundShield pricing — one offer, no subscription:**\n\n**${PURCHASABLE_OFFER.name} — ${PURCHASABLE_OFFER.price}**, per organization.\n\nWe run the proxy against your real AI traffic for 14 days on your own hardware (self-hosted Docker — prompt content never leaves your network), then deliver a signed PDF that scores every prompt event against NIST 800-171 Rev 2 and HIPAA, backed by a SHA-256 hash-chained audit trail.\n\nThere is no free tier, no monthly plan, and no trial to sign up for. Want proof before you pay? The in-browser scan at ${PURCHASABLE_OFFER.tryHref} runs the real detection engines locally in your own browser — no account, and your text is never transmitted.`,
   },
 
   // ── DETECTION ────────────────────────────────────────────────────────
   {
     keywords: ["detect", "scan", "patterns", "what can you", "what do you detect", "capabilities", "16 engines", "categories"],
     answer:
-      "HoundShield scans for **16+ sensitive patterns** in under 10ms:\n- API keys & tokens (OpenAI, AWS, GitHub, Stripe...)\n- PII: SSNs, credit cards, passports, drivers licenses\n- PHI: all 18 HIPAA Safe Harbor identifiers\n- CUI: contract numbers, CAGE codes, FOUO, clearance levels\n- IP: source code patterns, trade secrets\n- Financial: bank accounts, routing numbers, IBAN\n\nAll detection happens locally — your data never leaves your network for scanning.",
+      `HoundShield scans across **${ENGINE_COUNT} detection engines (${PATTERN_COUNT} shipped patterns)** in under 10ms:\n- API keys & tokens (OpenAI, AWS, GitHub, Stripe...)\n- PII: SSNs, credit cards, passports, drivers licenses\n- PHI: all 18 HIPAA Safe Harbor identifiers\n- CUI: contract numbers, CAGE codes, FOUO, clearance levels\n- IP: source code patterns, trade secrets\n- Financial: bank accounts, routing numbers, IBAN\n\nAll detection happens locally — your data never leaves your network for scanning.`,
   },
   {
     keywords: ["false positive", "false alarm", "accuracy", "precision", "block everything"],
