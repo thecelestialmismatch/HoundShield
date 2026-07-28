@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { FileText, Flag, Shield, Lock, Crown, ArrowUpRight } from 'lucide-react'
 import {
   hasFeature,
-  tierThatUnlocks,
+  PURCHASABLE_OFFER,
   type Entitlements,
 } from '@/lib/billing/entitlements'
 import type { ArtifactType } from '@/lib/reports/artifact-pdfs'
@@ -92,10 +92,9 @@ export interface ReportsPanelProps {
 
 export function ReportsPanel({ ent, founder = false, orgFallback, sampleMode = false, onGoToPlan }: ReportsPanelProps) {
   const entitled = founder || hasFeature(ent, 'pdfReports')
-  const unlock = tierThatUnlocks('pdfReports')
-  const unlockLabel = unlock
-    ? `Available on ${unlock.name}${unlock.priceMonthly !== null ? ` — $${unlock.priceMonthly}/mo` : ''}`
-    : 'Available on a paid plan'
+  // Point at the one thing that is actually for sale. Naming a subscription
+  // tier here sent users looking for a checkout that /pricing no longer has.
+  const unlockLabel = PURCHASABLE_OFFER.label
 
   const [states, setStates] = useState<Record<ArtifactType, CardState>>({
     ssp: { phase: 'idle' },

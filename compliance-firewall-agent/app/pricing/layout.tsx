@@ -3,22 +3,22 @@ import type { Metadata } from "next";
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 export const metadata: Metadata = {
-  title: "Pricing | AI Compliance Firewall for CMMC & HIPAA",
+  title: "Pricing | $499 AI Risk Assessment Report — HIPAA & NIST 800-171",
   description:
-    "HoundShield pricing for defense contractors and regulated industries. Free starter, Pro at $199/mo, Growth at $499/mo, Enterprise at $999/mo, Agency at $2,499/mo. C3PAO-ready PDF evidence included.",
+    "One price: a $499 one-time AI Risk Assessment Report. HoundShield scans your team's real AI prompts on your own hardware and delivers a signed PDF mapped to NIST 800-171. No subscription, no seats, no procurement review.",
   keywords: [
-    "CMMC compliance pricing",
-    "AI compliance firewall cost",
-    "CMMC software pricing",
-    "defense contractor compliance tool",
-    "HIPAA AI compliance pricing",
-    "NIST 800-171 software",
+    "AI risk assessment report",
+    "HIPAA AI compliance",
+    "PHI in ChatGPT",
+    "NIST 800-171 evidence",
+    "SPRS self-assessment evidence",
+    "local-only AI DLP",
   ],
   alternates: { canonical: `${BASE_URL}/pricing` },
   openGraph: {
-    title: "HoundShield Pricing | CMMC & HIPAA AI Compliance",
+    title: "HoundShield Pricing | $499 One-Time AI Risk Assessment Report",
     description:
-      "Plans starting free. Pro $199/mo. Enterprise $999/mo with C3PAO-ready PDF reports, full CMMC Level 2 coverage, and local-only deployment.",
+      "$499 one-time. Scans AI prompts locally — your data never leaves your network — and produces a PDF mapped to NIST 800-171. No subscription.",
     url: `${BASE_URL}/pricing`,
     type: "website",
   },

@@ -43,7 +43,7 @@ import { OverviewCharts, SCANS_24H, BLOCKED_TODAY } from '@/components/dashboard
 import { AssessSnapshot } from '@/components/dashboard/AssessSnapshot'
 import { SignOutButton } from '@/components/dashboard/SignOutButton'
 import {
-  getEntitlements, formatLimit, usagePercent, hasFeature, tierThatUnlocks,
+  getEntitlements, formatLimit, usagePercent, hasFeature, PURCHASABLE_OFFER,
   FEATURE_LABELS, UNLIMITED, type Entitlements, type FeatureKey,
 } from '@/lib/billing/entitlements'
 import type { SprsInput } from '@/lib/customer/status'
@@ -170,8 +170,7 @@ export function brainAnswer(qRaw: string, ctx?: BrainContext): [string, string] 
   if (/pdf|report|ssp|poa/.test(q)) {
     const e = ctx?.ent
     if (e && !hasFeature(e, 'pdfReports')) {
-      const unlock = tierThatUnlocks('pdfReports')
-      return [`${hi}signed <b>PDF</b> compliance reports (SSP + POA&M, C3PAO-ready) unlock on <b>${unlock?.name ?? 'Growth'}</b> — you're on ${e.name}. On ${e.name} you can still export full JSON evidence from Reports, and your audit chain is already being signed on-device. Want me to show you what ${unlock?.name ?? 'Growth'} adds?`, 'reports · entitlements']
+      return [`${hi}signed <b>PDF</b> compliance reports (SSP + POA&M, NIST 800-171 mapped) come with the <b>${PURCHASABLE_OFFER.price} ${PURCHASABLE_OFFER.name}</b> — you're on ${e.name}. On ${e.name} you can still export full JSON evidence from Reports, and your audit chain is already being signed on-device. Want the report?`, 'reports · entitlements']
     }
     return [`${hi}head to <b>Reports</b> — your SSP, POA&M and C3PAO evidence pack are generated across all 110 controls and SHA-256 signed on your own hardware. One click and the PDF is on screen.`, 'reports · brain-core']
   }
@@ -1127,12 +1126,13 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 <div className="pad feat-grid">
                   {(Object.keys(FEATURE_LABELS) as FeatureKey[]).map((k) => {
                     const on = hasFeature(ent, k)
-                    const unlock = on ? null : tierThatUnlocks(k)
                     return (
                       <div key={k} className={`feat${on ? ' on' : ' off'}`}>
                         {on ? <Check className="feat-ic ok" /> : <Lock className="feat-ic lk" />}
                         <span className="feat-name">{FEATURE_LABELS[k]}</span>
-                        {on ? <span className="feat-tag inc">Included</span> : <span className="feat-tag lock">{unlock ? `${unlock.name}+` : 'Add-on'}</span>}
+                        {/* Locked features name the purchasable offer, not a tier
+                            that has no checkout behind it. */}
+                        {on ? <span className="feat-tag inc">Included</span> : <span className="feat-tag lock">{PURCHASABLE_OFFER.price}</span>}
                       </div>
                     )
                   })}

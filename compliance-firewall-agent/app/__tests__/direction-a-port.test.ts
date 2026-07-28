@@ -33,11 +33,17 @@ describe('Direction-A port — demo copy present', () => {
     expect(how).toContain('Sign the evidence')
   })
 
-  it('features: demo headline + the 16 detection engines panel', () => {
+  it('features: demo headline + the detection engines panel', () => {
     const feat = read('app/features/page.tsx')
     expect(feat).toContain('Everything inside the firewall engine')
-    expect(feat).toContain('The 16 detection engines')
-    expect(feat).toContain('CAGE codes')
+    // The count is derived from lib/detection/engines (ENGINE_COUNT) rather
+    // than typed as a literal, so the panel heading can never disagree with
+    // the shipped engine list. Assert the derived form, not a stale number.
+    expect(feat).toContain('{ENGINE_COUNT} detection engines')
+    expect(feat).toContain("from '@/lib/detection/engines'")
+    // The engine names themselves now live in that module.
+    const engines = read('lib/detection/engines.ts')
+    expect(engines).toContain('CAGE codes')
   })
 
   it('hero live demo dashboard: scan-feed rows', () => {
