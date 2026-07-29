@@ -1,5 +1,7 @@
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
-const FROM = 'HoundShield Partners <noreply@houndshield.com>';
+import { transactionalFrom } from '@/lib/email/identity';
+
+const FROM = transactionalFrom('Partners');
 
 /**
  * Transactional confirmation sent to an RPO / MSP partner applicant the moment

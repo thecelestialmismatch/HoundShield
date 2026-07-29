@@ -503,7 +503,12 @@ describe("POST /api/stripe/webhook — report order founder alert", () => {
     expect(founderCall?.[0].subject).toContain("rachel@clinic.com");
   });
 
-  it("falls back to contact@houndshield.com when FOUNDER_EMAIL is unset", async () => {
+  // Contract CHANGED deliberately: the sale alert used to default to the generic
+  // contact@ inbox while the RPO/MSP partner alert defaulted to info@ — the same
+  // decision resolved two ways. Both now route through founderInbox(), whose
+  // default is the founder's own mailbox, because a $499 sale alert sitting
+  // unread in a shared inbox is the failure mode that matters.
+  it("falls back to the founder mailbox when FOUNDER_EMAIL is unset", async () => {
     delete process.env.FOUNDER_EMAIL;
     mockConstructEvent.mockReturnValueOnce({
       type: "checkout.session.completed",
@@ -523,7 +528,7 @@ describe("POST /api/stripe/webhook — report order founder alert", () => {
     const res = await POST(makeRequest());
     expect(res.status).toBe(200);
     const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
-    expect(recipients).toContain("contact@houndshield.com");
+    expect(recipients).toContain("Gaurav@houndshield.com");
   });
 
   it("still returns 200 (billing unaffected) when an email send throws", async () => {

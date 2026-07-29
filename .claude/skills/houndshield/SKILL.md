@@ -20,8 +20,9 @@ Run STEP 0 → 1 → 2 → 3 → 4 in order, every time.
 
 - **Founder / sender: Gaurav.** Sign all outreach, cold email, RPO/MSP partner mail, and newsletters as **Gaurav, Founder — HoundShield**.
 - **From / reply-to on every draft: `Gaurav@houndshield.com`.** This is the founder's address — use it on all human-written mail (outreach, sales, partner, founder-to-buyer). Never draft founder outreach from `info@` or `contact@`.
-- Scope = **drafted** email only. `contact@houndshield.com` (general/support) and `info@houndshield.com` stay the generic inboxes wired into the contact form + partner-apply route. This does NOT change the app's `FOUNDER_EMAIL` env fallback (where automated $499 sale alerts land). To route those to Gaurav too, set `FOUNDER_EMAIL=Gaurav@houndshield.com` in Vercel — a separate step.
-- **Mailbox gap:** `Gaurav@houndshield.com` must exist as a Hostinger mailbox/alias before it can actually send/receive. Currently only `info@houndshield.com` exists (per `/api/v1/me`). Create it in hPanel → Emails first.
+- `contact@houndshield.com` is the **published** address — printed on pages and returned to a browser when a form degrades. Never the routing address (`FOUNDER_EMAIL` may point somewhere private).
+- **Enforced in code since 2026-07-29:** `compliance-firewall-agent/lib/email/identity.ts` is the single source for every sender and inbox; `founderInbox()` defaults to `Gaurav@houndshield.com`, so the $499 sale alert, warm leads, RPO applications and contact-form messages all reach the founder without any env var being set. Guard: `lib/email/__tests__/email-identity-single-source.test.ts`. Drafts live in `lib/email/outreach.ts`; send with `npm run email:preview` / `email:send` (dry-run default, one recipient, refuses placeholder addresses).
+- **Mailbox status (founder-confirmed 2026-07-29):** `Gaurav@`, `contact@` and `info@houndshield.com` all exist on Hostinger. The earlier "only info@ exists" note was stale — it came from a single `/api/v1/me` read that was never re-verified. Before the first real send, run the smoke test in `docs/FOUNDER-EMAIL-IDENTITY.md` (it proves the *receiving* half, which sending cannot).
 
 ---
 

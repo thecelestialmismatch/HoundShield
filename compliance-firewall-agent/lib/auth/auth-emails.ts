@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { transactionalFrom } from "@/lib/email/identity";
 
 /**
  * Transactional auth emails for Better Auth (password reset + verification),
@@ -10,7 +11,7 @@ import { Resend } from "resend";
  * own origin, so they are trusted; still emitted into href/text only.
  */
 
-const FROM = "HoundShield <noreply@houndshield.com>";
+const FROM = transactionalFrom();
 /** The domain reset/verification email is sent FROM — must be verified in Resend. */
 export const RESET_SENDER_DOMAIN = FROM.match(/@([^>\s]+)/)?.[1] ?? "houndshield.com";
 const BRAND = "#5A86A8"; // --hs-steel-dark

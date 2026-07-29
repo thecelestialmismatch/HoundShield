@@ -2,10 +2,26 @@
 
 **From:** `Gaurav@houndshield.com` · **Sign as:** Gaurav, Founder — HoundShield
 
-> **Blocked until the mailbox exists.** Only `info@houndshield.com` is provisioned today
-> (verified against the Hostinger API). Create `Gaurav@houndshield.com` in
-> hPanel → Emails → Create email account before sending. A founder-to-buyer email from
-> `info@` reads like a newsletter and gets deleted.
+> **Mailbox status corrected 2026-07-29:** `Gaurav@houndshield.com` **exists**
+> (founder-confirmed, along with `contact@` and `info@`). The earlier note here said
+> only `info@` was provisioned — that came from one `/api/v1/me` read and was never
+> re-verified. Nothing is blocked on the mailbox.
+>
+> **Before the first real send,** run the deliverability smoke test in
+> `docs/FOUNDER-EMAIL-IDENTITY.md`. Sending and receiving are separate systems
+> (Resend sends, Hostinger receives) — a send can succeed while replies bounce.
+
+> **These drafts are now also in code**, at
+> `compliance-firewall-agent/lib/email/outreach.ts`, where they are guard-tested
+> against claims that would cost the sale (no suspended-deadline selling, no
+> subscription tier, no SOC 2) and where rendering **throws** rather than emailing
+> `Hi [First name]` to a real person. Send with `npm run email:preview` /
+> `npm run email:send`. The versions below are the human-readable reference;
+> the code is what ships.
+>
+> Recipient sourcing — including what counts as a genuine address and why guessing
+> one risks the domain that carries password resets — is
+> `docs/OUTREACH-SOURCING-RUNBOOK.md`.
 
 **These are drafts. Nothing has been sent.** Sending is your call.
 

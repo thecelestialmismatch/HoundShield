@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { GENERAL_INBOX, founderInbox, transactionalFrom } from "@/lib/email/identity";
 
 /**
  * POST /api/contact — delivers a website contact message to the founder inbox.
@@ -13,8 +14,15 @@ import { z } from "zod";
  * can tell the visitor to email us directly — never a fake success.
  */
 
-const CONTACT_TO = process.env.FOUNDER_EMAIL || "contact@houndshield.com";
-const CONTACT_FROM = "HoundShield Contact <noreply@houndshield.com>";
+const CONTACT_FROM = transactionalFrom("Contact");
+
+/**
+ * Where the message is DELIVERED. Resolved per-request (not at module load) so a
+ * Vercel env change takes effect without waiting for a cold restart.
+ */
+function contactTo(): string {
+  return founderInbox();
+}
 
 const ContactSchema = z.object({
   name: z.string().min(1).max(200),
@@ -55,7 +63,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // the lead is never silently lost.
     if (!process.env.RESEND_API_KEY) {
       return NextResponse.json(
-        { error: "email_unconfigured", fallbackEmail: CONTACT_TO },
+        // The address handed back to the BROWSER is the generic published inbox —
+        // never the routing address, which FOUNDER_EMAIL may point at a private
+        // mailbox we must not print to every visitor.
+        { error: "email_unconfigured", fallbackEmail: GENERAL_INBOX },
         { status: 503 }
       );
     }
@@ -64,7 +75,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: CONTACT_FROM,
-      to: CONTACT_TO,
+      to: contactTo(),
       replyTo: email,
       subject: `New contact (${escapeHtml(topic)}): ${escapeHtml(name)}`,
       html: `

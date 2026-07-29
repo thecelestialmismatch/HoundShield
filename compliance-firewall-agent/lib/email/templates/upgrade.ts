@@ -1,5 +1,7 @@
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
-const FROM = 'HoundShield <noreply@houndshield.com>';
+import { transactionalFrom } from '@/lib/email/identity';
+
+const FROM = transactionalFrom();
 
 // Display name + headline benefit per paid tier — keeps the receipt on-message.
 const TIER_COPY: Record<string, { name: string; unlocks: string }> = {

@@ -4,6 +4,7 @@ import { isLlmConfigured } from "@/lib/agent/provider";
 import { cached } from "@/lib/cache/swr-cache";
 import { stripeKeyDiagnostic, stripeWebhookDiagnostic } from "@/lib/stripe/env";
 import { passwordResetDiagnostic } from "@/lib/auth/reset-diagnostics";
+import { founderInboxDiagnostic } from "@/lib/email/identity";
 
 /**
  * GET /api/health
@@ -29,6 +30,8 @@ function computeServices(): Services {
   // Password-reset readiness: the send route is enumeration-safe (always 200),
   // so every config failure is otherwise invisible. Value-free (shape/host only).
   const reset = passwordResetDiagnostic();
+  // Where human-actionable mail lands. Domain/source only, never the mailbox.
+  const founderMail = founderInboxDiagnostic();
   return {
     database: isSupabaseConfigured() ? "connected" : "demo_mode",
     ai_router: isLlmConfigured() ? "connected" : "missing_key",
@@ -41,6 +44,22 @@ function computeServices(): Services {
     reset_app_url: reset.app_url,
     ...(reset.app_url_hint ? { reset_app_url_hint: reset.app_url_hint } : {}),
     reset_sender_domain: reset.sender_domain,
+    // Where human-actionable mail (the $499 sale alert, warm leads, RPO
+    // applications) is delivered. A set-but-malformed FOUNDER_EMAIL is IGNORED by
+    // founderInbox() so alerts still land somewhere real — but a silent fallback
+    // would hide the typo forever, so it is named here. Value-free: the status
+    // says the override is unusable, never what it contains.
+    // Domain + source only — /api/health is public and unauthenticated, so it must
+    // never print a live mailbox for a harvester to scrape. Same posture as
+    // reset_sender_domain above.
+    founder_inbox: founderMail.source,
+    founder_inbox_domain: founderMail.domain,
+    ...(founderMail.broken
+      ? {
+          founder_inbox_hint:
+            "FOUNDER_EMAIL is set but is not a valid email address, so it is being ignored and alerts are falling back to the default mailbox. Fix or remove the variable in Vercel (project compliance-firewall-agent, Production), then redeploy.",
+        }
+      : {}),
     classifier: "operational",
     quarantine: "operational",
     audit_chain: "operational",
