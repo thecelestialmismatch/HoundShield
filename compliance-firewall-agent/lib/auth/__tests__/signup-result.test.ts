@@ -26,7 +26,7 @@ describe("interpretSignUp — happy paths", () => {
       { user: { identities: [{}] }, session: { access_token: "x" } },
       null,
     );
-    expect(out).toEqual({ kind: "redirect", to: "/console?welcome=true" });
+    expect(out).toEqual({ kind: "redirect", to: "/command-center?welcome=true" });
   });
 
   it("asks the user to check email when confirmation is required", () => {
