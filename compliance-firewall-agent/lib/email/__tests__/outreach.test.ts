@@ -49,7 +49,7 @@ describe('the non-technical test guide', () => {
   });
 
   it('points at the real demo URL', () => {
-    expect(renderTestGuide()).toContain('houndshield.com/demo');
+    expect(renderTestGuide()).toContain('https://houndshield.com/demo');
   });
 
   it('promises no install, no account and no IT involvement', () => {
@@ -90,7 +90,7 @@ describe('every buyer-facing draft carries the guide', () => {
   it.each(BUYER_DRAFTS.map((d) => [d.id, d] as const))('%s includes the step-by-step guide', (_id, draft) => {
     const { text } = render(draft, VARS);
     expect(text).toContain('How to try it yourself');
-    expect(text).toContain('houndshield.com/demo');
+    expect(text).toContain('https://houndshield.com/demo');
     expect(text).toContain(PREVIEW_CAVEAT);
   });
 });
@@ -262,6 +262,21 @@ describe('the test guide names a sample button that /demo actually has', () => {
     // every outreach email becomes wrong — fail here, not in a buyer's inbox.
     const count = [...demo.matchAll(/name: "[^"]+",\s*\n\s*icon:/g)].length;
     expect(count, 'the guide promises four sample buttons').toBe(4);
+  });
+
+  it('links with an explicit https:// scheme, never a bare domain', () => {
+    // Pasted into Gmail, the scheme-less "houndshield.com/demo" was rewritten to
+    // a google.com/url?q=http://… redirect: the buyer sees a tracking link and
+    // takes an extra insecure hop. Both read as bulk mail, which is the one
+    // thing a founder-to-buyer email cannot look like.
+    for (const d of OUTREACH_DRAFTS) {
+      const vars = d.id === 'defense' ? { firstName: 'Jordan' } : VARS;
+      const { text } = render(d, vars);
+      expect(text, `${d.id} must not contain a bare-domain URL`).not.toMatch(
+        /(?<!\/\/)\bhoundshield\.com\/demo/,
+      );
+      expect(text).not.toContain('http://houndshield');
+    }
   });
 
   it('sends each audience the sample it would actually care about', () => {

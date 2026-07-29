@@ -70,7 +70,11 @@ export const DEMO_SAMPLES = {
 export const TEST_IT_YOURSELF_STEPS: readonly TestStep[] = [
   {
     n: 1,
-    text: 'Open houndshield.com/demo in any web browser. There is nothing to install, no account to create, and no login.',
+    // Explicit https://, never a bare domain. A scheme-less URL makes mail
+    // clients guess: pasted into Gmail, "houndshield.com/demo" was rewritten to
+    // a google.com/url redirect pointing at HTTP, so the buyer would see a
+    // tracking link and take an extra insecure hop. Both read as bulk mail.
+    text: 'Open https://houndshield.com/demo in any web browser. There is nothing to install, no account to create, and no login.',
   },
   {
     n: 2,
