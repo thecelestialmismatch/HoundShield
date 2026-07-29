@@ -88,7 +88,24 @@
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
-.hermes *, .hermes *::before, .hermes *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* Universal reset for the hermes marketing shell — deliberately inside a cascade
+   layer. Unlayered rules beat layered ones regardless of specificity, so this
+   still zeroes browser defaults (UA styles lose to any author rule) while no
+   longer clobbering the Tailwind utilities of components rendered inside
+   .hermes.
+   It used to be unlayered, which made it specificity (0,1,0) — an exact tie with
+   every `.px-5` / `.mx-auto` utility, broken by source order because layout.tsx
+   imports globals.css before hermes.css. The reset won every tie, so Tailwind
+   components inside .hermes silently lost all padding and margin: 236 dead
+   utilities on /faq alone (search input, category pills, all 38 accordion rows),
+   36 on /pricing. `max-w-*` masked it by still applying — the reset never sets
+   max-width, so boxes were the right width in the wrong place.
+   Tailwind Preflight (unlayered, from globals.css) still zeroes UA margins on
+   headings/lists, so nothing legitimate depends on this rule outranking it.
+   Guard: app/__tests__/faq-surface-contract.test.ts */
+@layer hermes-reset {
+  .hermes *, .hermes *::before, .hermes *::after { margin: 0; padding: 0; box-sizing: border-box; }
+}
 .hermes a { color: inherit; text-decoration: none; }
 .hermes .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
 .hermes .mono { font-family: var(--f-mono); }
