@@ -132,7 +132,7 @@ export const INDUSTRIES: Industry[] = [
     ],
     cta: {
       title: "The average data breach costs $4.45M",
-      body: "That figure is from IBM's 2023 Cost of a Data Breach report. HoundShield costs less than one engineer-hour a month. Start free, no card.",
+      body: "That figure is from IBM's 2023 Cost of a Data Breach report. HoundShield costs less than one engineer-hour a month. Try the free in-browser scan — no account needed.",
       button: "Protect your team",
       href: "/signup",
     },
@@ -396,7 +396,7 @@ export const INDUSTRIES: Industry[] = [
     ],
     cta: {
       title: "One privileged leak can sink a case",
-      body: "Give your team AI speed without the malpractice or PCI risk. Start free, no card.",
+      body: "Give your team AI speed without the malpractice or PCI risk. Try the free in-browser scan — no account needed.",
       button: "Protect privilege",
       href: "/signup",
     },
@@ -475,7 +475,7 @@ export const INDUSTRIES: Industry[] = [
       },
       {
         q: "Can it detect our national caveats and codewords?",
-        a: "Yes. Detection patterns extend to AUSTEO/REL caveats, protective markings and programme codewords on top of the standard 16 engines.",
+        a: "Yes. Detection patterns extend to AUSTEO/REL caveats, protective markings and programme codewords on top of the standard detection engines.",
       },
       {
         q: "Who hosts it?",

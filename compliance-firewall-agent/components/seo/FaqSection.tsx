@@ -38,7 +38,7 @@ export function FaqSection({
   return (
     <section
       aria-labelledby="faq-heading"
-      className={`w-full max-w-3xl mx-auto px-6 py-20 ${className}`}
+      className={`faq-section w-full max-w-3xl mx-auto px-6 py-20 ${className}`.trim()}
     >
       <JsonLd schema={faqPageSchema(items)} />
 

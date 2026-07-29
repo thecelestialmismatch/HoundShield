@@ -132,7 +132,9 @@ Start by understanding:
 1. Is the user a prime contractor or subcontractor?
 2. Do they handle CUI (Controlled Unclassified Information)?
 3. What's their current CMMC status / SPRS score?
-4. What's their timeline? (November 2026 enforcement deadline)
+4. What's their timeline? (Do NOT cite a certification deadline — CMMC Phase 2 was
+   suspended on 13 July 2026. Their real timeline is their next SPRS self-attestation,
+   which is annual and still mandatory.)
 Then provide a clear, actionable 90-day roadmap to CMMC Level 2 readiness.`,
   },
 ];

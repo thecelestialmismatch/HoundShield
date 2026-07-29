@@ -34,8 +34,9 @@ export const canceledEmail = {
       <div style="background:#fef9ec;border:1px solid #fde68a;border-radius:10px;padding:20px;margin:0 0 24px;">
         <p style="color:#92400e;font-weight:600;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">Before you go</p>
         <p style="color:#78350f;font-size:14px;margin:0;line-height:1.6;">
-          CMMC Level 2 enforcement lands November 2026. If an assessment is on your horizon,
-          the evidence trail you keep <em>now</em> is what you'll be asked for then. Reactivating
+          CMMC Phase 2 was suspended on 13 July 2026, but your annual SPRS self-attestation was
+          not — and with no assessor in the loop it is your own representation to the government.
+          The evidence trail you keep <em>now</em> is what you'll be asked for then. Reactivating
           takes one click and your data is right where you left it.
         </p>
       </div>

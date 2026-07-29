@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getPlan, formatUSD } from '@/lib/pricing/plans'
+import { RISK_REPORT, formatUSD } from '@/lib/pricing/plans'
 import { NAV_TRUST_BADGE } from '@/lib/site/metrics'
 import { PURCHASABLE_OFFER } from '@/lib/billing/entitlements'
 import {
@@ -65,12 +65,38 @@ const DOCS: MenuItem[] = [
   { icon: HelpCircle, label: 'FAQ',           body: 'Searchable answers — pricing, HIPAA, CUI.', href: '/faq' },
 ]
 
-// Pricing rows — sourced from the pricing single source of truth.
+/*
+ * Pricing rows — sourced from the pricing single source of truth.
+ *
+ * This flyout used to list four monthly tiers (Free / $199 / $499 / $999),
+ * every row linking to /pricing. But /pricing deliberately sells exactly one
+ * thing — the $499 one-time report — and its own guard asserts the page shows
+ * no monthly price at all. So a visitor who clicked the "Pro" row in the nav
+ * landed on a page that offered no such plan, on every page of the site.
+ *
+ * The subscription ladder in lib/pricing/plans.ts is NOT deleted: it is the
+ * deliberate secondary ladder that returns once three customers have paid
+ * $499. It simply must not be quoted in site-wide chrome before it can be
+ * bought (CLAUDE.md: never a second pricing grid, never lead with a
+ * subscription before the report is proven to sell).
+ *
+ * Both rows below are things a buyer can actually purchase today.
+ */
 const PRICES = [
-  { label: 'Free',       note: 'Up to 1,000 prompts/mo',    amount: formatUSD(getPlan('free').monthlyPrice) },
-  { label: 'Pro',        note: 'CMMC suite + AI gateway',   amount: formatUSD(getPlan('pro').monthlyPrice) },
-  { label: 'Growth',     note: 'PDF reports + C3PAO coord', amount: formatUSD(getPlan('growth').monthlyPrice) },
-  { label: 'Enterprise', note: 'On-prem · air-gapped',      amount: formatUSD(getPlan('enterprise').monthlyPrice) },
+  {
+    label: 'AI Risk Assessment Report',
+    note: '14-day scan → signed NIST 800-171 PDF',
+    amount: formatUSD(RISK_REPORT.oneTimePrice),
+    unit: 'one-time',
+    href: '/pricing',
+  },
+  {
+    label: 'Partner wholesale',
+    note: 'Co-branded for RPOs & MSPs',
+    amount: formatUSD(RISK_REPORT.wholesalePrice),
+    unit: 'per report',
+    href: '/partners/kit',
+  },
 ]
 
 /* Demo `.dd-item` row */
@@ -159,18 +185,18 @@ export function NavV3() {
                 Pricing <ChevronDown className="chev" />
               </Link>
               <div className="dropdown dd-narrow">
-                <DdHead eyebrow="Pricing" sub="All frameworks included in every plan" />
+                <DdHead eyebrow="Pricing" sub="One report. One price. No subscription." />
                 {PRICES.map((p) => (
-                  <Link key={p.label} href="/pricing" className="dd-price" onClick={close}>
+                  <Link key={p.label} href={p.href} className="dd-price" onClick={close}>
                     <div>
                       <h5>{p.label}</h5>
                       <p>{p.note}</p>
                     </div>
-                    <span className="amt">{p.amount}<small>/mo</small></span>
+                    <span className="amt">{p.amount}<small>{p.unit}</small></span>
                   </Link>
                 ))}
                 <div className="dd-foot">
-                  <Link href="/pricing" onClick={close}>Compare all plans <ArrowRight style={{ width: 13, height: 13 }} /></Link>
+                  <Link href={PURCHASABLE_OFFER.tryHref} onClick={close}>{PURCHASABLE_OFFER.tryLabel} <ArrowRight style={{ width: 13, height: 13 }} /></Link>
                 </div>
               </div>
             </div>

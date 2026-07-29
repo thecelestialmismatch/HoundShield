@@ -91,8 +91,10 @@ export async function POST(req: NextRequest) {
       </div>
 
       <p style="color: #64748b; font-size: 13px; line-height: 1.6;">
-        CMMC Level 2 enforcement begins November 2026. 80,000+ defense contractors need to certify.
-        Only 0.5% have done it. You&apos;re ahead of the curve.
+        CMMC Phase 2 was suspended on 13 July 2026, so there is no certification deadline right now —
+        but DFARS 252.204-7012, the 110 NIST 800-171 Rev 2 controls, and your annual SPRS
+        self-attestation all still apply. With no assessor in the loop, that score is your own
+        representation to the government. The evidence behind it is what we build.
       </p>
     </div>
 
