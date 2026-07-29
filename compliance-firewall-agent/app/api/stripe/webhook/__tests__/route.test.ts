@@ -107,22 +107,116 @@ const BASE_SUBSCRIPTION = {
 // ── Config guards ──────────────────────────────────────────────────────────
 
 describe("POST /api/stripe/webhook — config guards", () => {
-  it("returns 503 when STRIPE_SECRET_KEY is missing", async () => {
-    const orig = process.env.STRIPE_SECRET_KEY;
-    delete process.env.STRIPE_SECRET_KEY;
-    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
-    const res = await POST(makeRequest());
-    expect(res.status).toBe(503);
-    process.env.STRIPE_SECRET_KEY = orig;
-    delete process.env.STRIPE_WEBHOOK_SECRET;
-  });
-
   it("returns 503 when STRIPE_WEBHOOK_SECRET is missing", async () => {
     process.env.STRIPE_SECRET_KEY = "sk_test";
     delete process.env.STRIPE_WEBHOOK_SECRET;
     const res = await POST(makeRequest());
     expect(res.status).toBe(503);
     delete process.env.STRIPE_SECRET_KEY;
+  });
+
+  it("does NOT require STRIPE_SECRET_KEY — the signing secret alone accepts a delivery", async () => {
+    // Signature verification is a local HMAC check. Requiring the API key here
+    // used to drop live Payment-Link sales on the floor.
+    delete process.env.STRIPE_SECRET_KEY;
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    setupSupabase();
+    mockConstructEvent.mockReturnValueOnce({
+      type: "customer.subscription.created",
+      id: "evt_unhandled",
+      data: { object: {} },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).not.toBe(503);
+    expect(res.status).toBe(200);
+
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    vi.clearAllMocks();
+  });
+});
+
+// ── The money path with a broken/absent STRIPE_SECRET_KEY ──────────────────
+//
+// Production reality this locks down: STRIPE_SECRET_KEY is missing/mis-pasted,
+// so /api/stripe/report-checkout serves the Stripe-hosted Payment Link. A buyer
+// pays. Stripe posts checkout.session.completed. That sale MUST be recorded and
+// the founder MUST be alerted without the API key.
+
+describe("POST /api/stripe/webhook — $499 report records without STRIPE_SECRET_KEY", () => {
+  beforeEach(() => {
+    delete process.env.STRIPE_SECRET_KEY; // the broken-key production state
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    process.env.RESEND_API_KEY = "re_test"; // exercise the alert path
+    process.env.FOUNDER_EMAIL = "founder@houndshield.com";
+    setupSupabase();
+  });
+
+  afterEach(() => {
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.FOUNDER_EMAIL;
+    vi.clearAllMocks();
+  });
+
+  it("records the payment-link sale and alerts the founder with no API key set", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_keyless_sale",
+      data: {
+        object: {
+          id: "cs_keyless",
+          mode: "payment",
+          payment_intent: "pi_keyless",
+          customer: null,
+          client_reference_id: "report-healthcare",
+          customer_details: { email: "rachel@clinic.com", name: "Rachel H" },
+          amount_total: 49900,
+          currency: "usd",
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+
+    expect(res.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        stripe_session_id: "cs_keyless",
+        email: "rachel@clinic.com",
+        amount_cents: 49900,
+        vertical: "healthcare",
+        status: "paid",
+      }),
+      expect.any(Object)
+    );
+    // Buyer receipt + founder alert both go out — the sale is not silent.
+    const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
+    expect(recipients).toContain("rachel@clinic.com");
+    expect(recipients).toContain("founder@houndshield.com");
+  });
+
+  it("ACKNOWLEDGES (2xx) a subscription event it cannot expand, instead of failing", async () => {
+    // A non-2xx would make Stripe retry and eventually disable the endpoint,
+    // which would take the report-order path down with it.
+    mockConstructEvent.mockReturnValueOnce({
+      type: "checkout.session.completed",
+      id: "evt_sub_no_key",
+      data: {
+        object: {
+          id: "cs_sub_no_key",
+          mode: "subscription",
+          subscription: "sub_1",
+          customer: "cus_1",
+          metadata: { supabase_user_id: "user-1" },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+
+    expect(res.status).toBe(200);
+    expect(mockSubscriptionsRetrieve).not.toHaveBeenCalled();
   });
 });
 
