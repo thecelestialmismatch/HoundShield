@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/client";
 import { z } from "zod";
+import { founderInbox, transactionalFrom } from "@/lib/email/identity";
 
 // Bounded, validated input (audit M2).
 const ApplySchema = z.object({
@@ -66,8 +67,10 @@ export async function POST(request: NextRequest) {
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
-          from: "HoundShield Partners <noreply@houndshield.com>",
-          to: process.env.FOUNDER_EMAIL || "info@houndshield.com",
+          from: transactionalFrom("Partners"),
+          // Was info@ while every other founder alert went to contact@ — the same
+          // decision resolved two different ways. One resolver now owns it.
+          to: founderInbox(),
           subject: `New Partner Application: ${escapeHtml(company)}`,
           html: `
             <h2>New Partner Application</h2>

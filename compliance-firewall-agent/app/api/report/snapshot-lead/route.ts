@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { GENERAL_INBOX, founderInbox, transactionalFrom } from "@/lib/email/identity";
 
 /**
  * POST /api/report/snapshot-lead
@@ -20,12 +21,7 @@ import { z } from "zod";
  * success and never drop the lead silently.
  */
 
-const NOTIFY_FROM = "HoundShield <noreply@houndshield.com>";
-
-/** Resolved per-request so deploy-time env changes take effect without a cold restart. */
-function founderInbox(): string {
-  return process.env.FOUNDER_EMAIL || "contact@houndshield.com";
-}
+const NOTIFY_FROM = transactionalFrom();
 
 const nonNegInt = z.number().int().min(0).max(100000);
 
@@ -84,7 +80,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!process.env.RESEND_API_KEY) {
       return NextResponse.json(
-        { error: "email_unconfigured", fallbackEmail: leadTo },
+        // Published to the browser → the generic inbox, never the routing address.
+        { error: "email_unconfigured", fallbackEmail: GENERAL_INBOX },
         { status: 503 }
       );
     }

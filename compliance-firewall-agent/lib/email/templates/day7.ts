@@ -1,7 +1,9 @@
 import { PURCHASABLE_OFFER } from '@/lib/billing/entitlements';
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
-const FROM = 'HoundShield <noreply@houndshield.com>';
+import { transactionalFrom } from '@/lib/email/identity';
+
+const FROM = transactionalFrom();
 
 export const day7Email = {
   from: FROM,

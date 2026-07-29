@@ -1,5 +1,7 @@
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
-const FROM = 'HoundShield <noreply@houndshield.com>';
+import { transactionalFrom } from '@/lib/email/identity';
+
+const FROM = transactionalFrom();
 
 /** Escape untrusted values (buyer name/email from Stripe) before HTML interpolation. */
 function esc(v: string): string {
