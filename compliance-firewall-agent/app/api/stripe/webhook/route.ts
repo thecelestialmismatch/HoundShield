@@ -7,6 +7,7 @@ import { upgradeEmail } from '@/lib/email/templates/upgrade';
 import { canceledEmail } from '@/lib/email/templates/canceled';
 import { reportOrderEmail } from '@/lib/email/templates/report-order';
 import { verticalFromClientReference } from '@/lib/stripe/report-payment-link';
+import { founderInbox } from '@/lib/email/identity';
 
 type ServiceClient = ReturnType<typeof createServiceClient>;
 
@@ -142,7 +143,7 @@ async function handleReportOrder(
   // Founder alert — actionable "go fulfill this" notification for the
   // manually-delivered product, beyond Stripe's generic payment receipt.
   // Best-effort; billing already succeeded, so this never blocks or throws.
-  const founderEmail = process.env.FOUNDER_EMAIL || 'contact@houndshield.com';
+  const founderEmail = founderInbox();
   await sendTransactionalToEmail(
     founderEmail,
     reportOrderEmail.founderAlert({

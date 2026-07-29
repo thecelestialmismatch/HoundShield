@@ -15,7 +15,9 @@
     "test:components:watch": "vitest",
     "test:components:ui": "vitest --ui",
     "db:migrate": "npx supabase db push",
-    "db:reset": "npx supabase db reset"
+    "db:reset": "npx supabase db reset",
+    "email:preview": "tsx scripts/send-founder-email.ts",
+    "email:send": "tsx scripts/send-founder-email.ts"
   },
   "dependencies": {
     "@react-three/fiber": "^9.6.1",

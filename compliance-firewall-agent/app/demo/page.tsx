@@ -263,10 +263,10 @@ function ThreatCard({ result, companyName }: { result: ScanResult; companyName: 
                             <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.fix}</p>
                         </div>
                     </div>
-                    {/* HoundShield Pro upgrade prompt */}
+                    {/* What the deployed proxy does with this finding */}
                     <div className="bg-brand-500/10 border border-brand-500/20 rounded-lg p-3 mt-2">
                         <p className="text-[11px] text-brand-700 leading-relaxed">
-                            <strong>With HoundShield Pro:</strong> This {result.severity === "critical" ? "would have been auto-blocked" : "would have been flagged for review"} in real-time — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider. Includes automated remediation suggestions in your Slack/Teams.
+                            <strong>With HoundShield deployed:</strong> This {result.severity === "critical" ? "would have been blocked" : "would have been flagged for review"} inline — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider — and written to a hash-chained audit log.
                         </p>
                     </div>
                 </div>
@@ -488,7 +488,7 @@ export default function FreeDemoPage() {
                                             )}
                                         </div>
 
-                                        <p className="text-xs text-[var(--hs-ink-secondary)] mb-2">Click each threat to see impact, fix tips, and why you need HoundShield Pro ↓</p>
+                                        <p className="text-xs text-[var(--hs-ink-secondary)] mb-2">Click each threat to see its impact and how to fix it ↓</p>
 
                                         {results.map((r, i) => (
                                             <ThreatCard key={i} result={r} companyName={companyName} />
@@ -498,16 +498,16 @@ export default function FreeDemoPage() {
                                         <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-[rgba(129,166,198,0.15)] border border-brand-500/25">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Package className="w-4 h-4 text-brand-700" />
-                                                <p className="text-sm font-bold text-[var(--hs-ink)]">HoundShield Pro Package</p>
+                                                <p className="text-sm font-bold text-[var(--hs-ink)]">CMMC AI Risk Assessment Report — $499</p>
                                             </div>
                                             <p className="text-xs text-[var(--hs-ink-tertiary)] mb-3 leading-relaxed">
-                                                This free scanner shows you the problem. <strong className="text-[var(--hs-ink-secondary)]">HoundShield Pro</strong> fixes it automatically — blocking leaks in real-time before your team&apos;s data reaches external AI providers.
+                                                This free scan shows you one prompt. The <strong className="text-[var(--hs-ink-secondary)]">$499 report</strong> is 14 days of monitoring inside your own environment, every finding mapped to a NIST 800-171 control, in a signed PDF you can hand to an assessor.
                                             </p>
-                                            <Link href="/auth" className="btn-primary w-full text-center text-sm !py-3 mb-2">
-                                                Get Full Protection <ArrowRight className="w-4 h-4" />
+                                            <Link href="/assessment" className="btn-primary w-full text-center text-sm !py-3 mb-2">
+                                                Get the $499 Report <ArrowRight className="w-4 h-4" />
                                             </Link>
                                             <Link href="/pricing" className="btn-ghost w-full text-center text-xs !py-2.5">
-                                                Compare Plans <ChevronRight className="w-3 h-3" />
+                                                See what&apos;s included <ChevronRight className="w-3 h-3" />
                                             </Link>
                                         </div>
                                     </div>
@@ -520,7 +520,7 @@ export default function FreeDemoPage() {
                     <div className="mt-20">
                         <div className="text-center mb-10">
                             <h2 className="text-3xl font-bold tracking-tight mb-3">What Our AI Scans For</h2>
-                            <p className="text-sm text-[var(--hs-ink-secondary)] max-w-2xl mx-auto">HoundShield uses 13 AI models to detect 9 categories of sensitive data. Here&apos;s every threat pattern we check — and what makes our detection smarter than regex-only tools.</p>
+                            <p className="text-sm text-[var(--hs-ink-secondary)] max-w-2xl mx-auto">This free scanner checks 9 threat patterns in your browser. The deployed product ships 16 detection engines across 90 patterns — CUI markings, CAGE codes, ITAR terms, PHI and more — all matched locally, with no prompt text ever leaving your network.</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
@@ -570,11 +570,11 @@ export default function FreeDemoPage() {
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-brand-700 mb-2">5. Understand What You Need</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">This free scanner uses regex patterns. <strong className="text-[var(--hs-ink-secondary)]">HoundShield Pro</strong> uses 13 AI models that understand <em>context</em> — it knows &quot;Apple&quot; in a recipe is not the same as &quot;Apple&quot; the company. That&apos;s why you need the full package.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">This free scanner checks 9 patterns on one prompt you paste. The deployed proxy checks all 16 engines on <em>every</em> prompt your team sends, blocks the violations, and records each one in a hash-chained audit log — which is the part an assessor asks to see.</p>
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-[var(--hs-success)] mb-2">6. Get the Full Package</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Ready to protect your company? Sign up for HoundShield Pro to get real-time blocking, Slack/Teams alerts, compliance reports (SOC 2, GDPR, HIPAA), and an immutable audit trail.</p>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Ready to see your real exposure? The $499 CMMC AI Risk Assessment Report runs the proxy in your own environment for 14 days and returns a signed PDF mapped to NIST 800-171, backed by an immutable audit trail.</p>
                                 </div>
                             </div>
                         </div>
@@ -601,15 +601,15 @@ export default function FreeDemoPage() {
                             </ul>
                         </div>
                         <div className="glass-card-glow p-6 border-brand-500/20">
-                            <h3 className="text-sm font-bold text-brand-700 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-700" /> HoundShield Pro Package</h3>
+                            <h3 className="text-sm font-bold text-brand-700 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-700" /> The $499 Report</h3>
                             <ul className="space-y-2.5">
                                 {[
-                                    "13 AI models with context awareness",
-                                    "Real-time gateway — blocks before AI sees data",
-                                    "Detailed remediation with auto-fix suggestions",
-                                    "Immutable SHA-256 audit trail",
-                                    "1-click SOC 2, GDPR, HIPAA reports",
-                                    "Slack/Teams alerts + HITL review queue",
+                                    "16 detection engines across 90 local patterns",
+                                    "Inline gateway — blocks before AI sees the data",
+                                    "Every finding mapped to a NIST 800-171 control",
+                                    "Immutable SHA-256 hash-chained audit trail",
+                                    "Signed PDF you can hand to a C3PAO assessor",
+                                    "Runs in your environment (Docker) — nothing leaves it",
                                 ].map(item => (
                                     <li key={item} className="flex items-start gap-2 text-xs text-[var(--hs-ink-secondary)]">
                                         <CheckCircle2 className="w-3.5 h-3.5 text-brand-700 mt-0.5 shrink-0" />

@@ -19,18 +19,27 @@
  *  - Pure + unit-tested; no I/O in this module.
  */
 
+import { FOUNDER_ADDRESS } from '@/lib/email/identity';
+
 /** Top of the upgrade ladder — a strict superset of every other plan. */
 export const FOUNDER_TIER = 'agency' as const;
 
 /** Human plan label shown wherever the founder's "plan" is displayed. */
 export const FOUNDER_PLAN_LABEL = 'Founder';
 
-/** The founder's canonical address. Always has full access. */
-const DEFAULT_FOUNDER_EMAILS = ['gaurav@houndshield.com'];
-
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
+
+/**
+ * The founder's canonical address. Always has full access.
+ *
+ * Sourced from `lib/email/identity` so the address exists in exactly ONE place:
+ * a second literal here would let "who is the founder" and "who does founder mail
+ * come from" drift apart silently. Normalized on the way in, so the comparison
+ * stays case-insensitive regardless of how identity spells it.
+ */
+const DEFAULT_FOUNDER_EMAILS = [normalizeEmail(FOUNDER_ADDRESS)];
 
 /**
  * Every email with founder access: the canonical founder address plus any

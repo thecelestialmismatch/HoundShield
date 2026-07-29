@@ -5,6 +5,73 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-29 (email identity)
+
+### A rule that lives only in a skill file is not a rule — four routes each invented their own answer
+**What:** `/houndshield` has said for weeks that founder mail comes from
+`Gaurav@houndshield.com`. No code enforced it. Four routes independently resolved "the
+inbox a human must act on" and two disagreed: the $499 sale alert, the contact form and
+the snapshot lead defaulted to `contact@`, while `partners/apply` — the Stage-1 ≥1-RPO
+goal — defaulted to `info@`. Nobody chose that split; two people reached for a plausible
+default months apart. Nine more files hardcoded their own `From` header.
+**Root cause:** the decision had no home. A convention documented in prose gets
+re-derived, slightly differently, at every call site — and every copy is a place for it
+to rot silently, because no test can fail on a disagreement it cannot see.
+**Rules:**
+1. **A cross-cutting identity (sender, inbox, brand address) belongs in one module that
+   everything imports.** If the same literal appears in nine files, the ninth is already
+   wrong and you have no way to know which.
+2. **Guard it at the SOURCE, not at runtime.** A behavioural test would have to exercise
+   every route under every env permutation, and would pass happily on a route no caller
+   reaches. Scanning the source for `FOUNDER_EMAIL ||` finds all of it in one pass.
+   (Same shape as the #244 orphaned-checkout lesson.)
+3. **When a doc states a rule the code should hold, ship the guard in the same arc.**
+   Otherwise the doc becomes evidence that the team believed something untrue.
+
+### Routing addresses and published addresses are different things
+**What:** `/api/contact` and `/api/report/snapshot-lead` both returned their *routing*
+address to the browser as `fallbackEmail` when Resend was unconfigured. Point
+`FOUNDER_EMAIL` at a personal mailbox — which the variable exists to allow — and the
+contact form would print it to every visitor who hit it during an outage.
+**Root cause:** one variable serving two audiences. "Where mail goes" and "what we tell
+strangers to write to" were the same string because they happened to have the same value.
+**Rule:** separate them by construction — a function for the internal destination, a
+constant for the publishable one — and assert in a test that the browser-facing field
+returns the published constant. Any config value that is both *overridable* and
+*displayed* is one env change away from leaking.
+
+### A "13 AI models" claim on the demo page contradicted the product's entire moat
+**What:** `/demo` claimed HoundShield uses "13 AI models with context awareness", sold a
+"HoundShield Pro" tier deleted from `/pricing` in #243 (with its CTA pointing at
+`/auth`), and offered "1-click SOC 2 reports" when SOC 2 has not been started. Found only
+because a drafted outreach email was going to link there.
+**Root cause:** marketing copy on a page nobody re-reads after launch. The pricing
+collapse in #243 fixed `/pricing` and the nav in #248, but `/demo` was a third surface
+selling the same dead tier — and the AI-models claim actively contradicts the local-regex
+architecture that is the company's asymmetric weapon.
+**Rules:**
+1. **Before linking a buyer to a page, read that page as the buyer.** The email's
+   credibility is capped by the least honest sentence on the page it points to.
+2. **When a tier or offer is deleted, grep every surface for its name** — page, nav, API
+   route, demo, dashboard. #243 → #248 → this made three passes at the same deletion
+   because each one only swept where it was looking.
+3. **A capability claim that contradicts the architecture is the easiest kind to catch:**
+   ask "which file implements this?" There was no model in the scan path at all.
+
+### My own guard caught me twice mid-build — that is what a good guard feels like
+**What:** The source-level identity guard failed twice on my own edits: a 9th hardcoded
+`From` in `api/email/welcome/route.ts` I had not found by grep, and my own direct
+`process.env.FOUNDER_EMAIL` read in `/api/health` minutes after writing the rule against
+it.
+**Root cause:** grep finds the shapes you think of. A guard runs on everything, including
+the author.
+**Rule:** write the invariant as an executable check *before* finishing the refactor, not
+after — and when it fails on your own code, that is the guard working, not an obstacle to
+route around. Also: re-verify the guard by restoring the ORIGINAL bug and watching it go
+red (3 assertions here), or it is decoration.
+
+---
+
 ## 2026-07-29 (later)
 
 ### A guard that compiles is not a guard that runs

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { transactionalFrom } from "@/lib/email/identity";
 
 function getResend(): Resend | null {
   const key = process.env.RESEND_API_KEY;
@@ -9,7 +10,7 @@ function getResend(): Resend | null {
   return new Resend(key);
 }
 
-const FROM = "HoundShield <noreply@houndshield.com>";
+const FROM = transactionalFrom();
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
 
 /**
