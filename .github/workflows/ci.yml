@@ -95,6 +95,21 @@ jobs:
       - name: Verify repo matches PROJECT-STRUCTURE.md
         run: node scripts/verify-structure.mjs
 
+  leak-guard:
+    name: Secret & PII Guard
+    runs-on: ubuntu-latest
+    steps:
+      # Needs the working tree only — the guard scans `git ls-files`, i.e. exactly
+      # what is published. History scanning is a separate, one-off job (see
+      # docs/SECURITY-ROTATION.md), not a per-PR gate.
+      - uses: actions/checkout@v7
+
+      - name: Prove the guard still discriminates
+        run: node scripts/verify-no-leaks.mjs --self-test
+
+      - name: Scan tracked files for credentials and personal addresses
+        run: node scripts/verify-no-leaks.mjs
+
   compliance-guard:
     name: Compliance Pattern Guard
     runs-on: ubuntu-latest
