@@ -21,7 +21,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          # Node 22+ is REQUIRED, not a preference: jsdom 30 declares
+          # engines ^22.22.2 and pulls undici 8 (engines >=22.19.0), and undici 8
+          # calls node:worker_threads.markAsUncloneable, which does not exist
+          # before Node 22.19. npm treats engines as advisory, so on Node 20
+          # `npm ci` still succeeds and every vitest worker then dies at import
+          # with "webidl.util.markAsUncloneable is not a function" — reported as
+          # 125 errors / no tests, which looks like a test failure but is a
+          # runtime-version mismatch. The Proxy job below is already on 22.
+          node-version: "22"
           cache: "npm"
           cache-dependency-path: compliance-firewall-agent/package-lock.json
 
