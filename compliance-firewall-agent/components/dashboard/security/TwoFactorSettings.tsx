@@ -1,5 +1,5 @@
 /**
- * TwoFactorSettings — /console/security. Enable/disable email 2FA on the
+ * TwoFactorSettings — /command-center/account-security. Enable/disable email 2FA on the
  * signed-in account (Better Auth `twoFactor` plugin, email-OTP factor only).
  *
  * Enable is a three-step wizard: password → emailed code → backup codes. The
@@ -171,7 +171,7 @@ export function TwoFactorSettings({
             </div>
           </div>
           <Link
-            href="/console"
+            href="/command-center"
             className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-slate-200"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Command Center

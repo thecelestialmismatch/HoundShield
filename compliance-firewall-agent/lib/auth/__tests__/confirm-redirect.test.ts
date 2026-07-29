@@ -7,9 +7,9 @@ describe('confirmRedirect — success destination', () => {
   });
 
   it('sends non-recovery confirmations (signup/email) to the app', () => {
-    expect(confirmRedirect('signup', null)).toBe('/console');
-    expect(confirmRedirect('email', null)).toBe('/console');
-    expect(confirmRedirect(null, null)).toBe('/console');
+    expect(confirmRedirect('signup', null)).toBe('/command-center');
+    expect(confirmRedirect('email', null)).toBe('/command-center');
+    expect(confirmRedirect(null, null)).toBe('/command-center');
   });
 
   it('honours an explicit, safe relative next over the type default', () => {
@@ -20,9 +20,9 @@ describe('confirmRedirect — success destination', () => {
   it('rejects open-redirect next values and falls back to the type default', () => {
     expect(confirmRedirect('recovery', '//evil.com')).toBe('/reset-password');
     expect(confirmRedirect('recovery', 'https://evil.com')).toBe('/reset-password');
-    expect(confirmRedirect('signup', 'http://evil.com/x')).toBe('/console');
+    expect(confirmRedirect('signup', 'http://evil.com/x')).toBe('/command-center');
     expect(confirmRedirect('recovery', 'evil.com')).toBe('/reset-password'); // not slash-prefixed
-    expect(confirmRedirect('signup', '')).toBe('/console');
+    expect(confirmRedirect('signup', '')).toBe('/command-center');
   });
 });
 

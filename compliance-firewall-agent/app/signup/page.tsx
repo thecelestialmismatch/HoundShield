@@ -51,7 +51,7 @@ export default function SignupPage() {
         return;
       }
       // Email/password with verification off → session is live; drop into product.
-      router.push('/console?welcome=true');
+      router.push('/command-center?welcome=true');
       return;
     }
 
@@ -63,7 +63,7 @@ export default function SignupPage() {
         password,
         options: {
           data: { full_name: name },
-          emailRedirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent('/console?welcome=true')}`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent('/command-center?welcome=true')}`,
         },
       }));
     } catch {
@@ -99,7 +99,7 @@ export default function SignupPage() {
 
   const handleOAuthSignup = async (provider: 'google' | 'github') => {
     if (isBetterAuthClientEnabled()) {
-      await authClient.signIn.social({ provider, callbackURL: '/console?welcome=true' });
+      await authClient.signIn.social({ provider, callbackURL: '/command-center?welcome=true' });
       return;
     }
     const supabase = createClient();

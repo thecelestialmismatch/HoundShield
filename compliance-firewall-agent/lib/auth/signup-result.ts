@@ -117,7 +117,7 @@ export function interpretSignUp(
   }
 
   if (data?.session) {
-    return { kind: "redirect", to: "/console?welcome=true" };
+    return { kind: "redirect", to: "/command-center?welcome=true" };
   }
 
   return { kind: "check-email" };
