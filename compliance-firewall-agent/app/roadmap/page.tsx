@@ -89,8 +89,9 @@ export default function RoadmapPage() {
             Built in the open.<br />Shipped on a deadline.
           </h1>
           <p className="text-lg text-[var(--hs-ink-secondary)] max-w-2xl mx-auto leading-relaxed">
-            CMMC enforcement lands November 2026. Here is exactly what HoundShield has
-            shipped, what we are building right now, and what comes next.
+            CMMC Phase 2 was suspended on 13 July 2026 — the certification deadline is gone, the
+            obligation is not. Here is exactly what HoundShield has shipped, what we are building
+            right now, and what comes next.
           </p>
         </div>
       </section>

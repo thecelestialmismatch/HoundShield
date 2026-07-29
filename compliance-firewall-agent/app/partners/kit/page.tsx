@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ArrowRight, FileCheck2, Percent, Timer } from "lucide-react";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
-import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { ENGINE_COUNT } from "@/lib/detection/engines";
 
 const TITLE = "RPO & MSP Partner Kit — Co-Branded CMMC AI Risk Assessments | HoundShield";
 const DESCRIPTION =
@@ -28,7 +29,7 @@ const STEPS = [
   },
   {
     title: "The assessment engine scores every AI prompt event",
-    body: "16 detection engines flag CUI, ITAR, PHI, and PII patterns; every event is risk-scored against NIST 800-171 Rev 2 controls and written to a SHA-256 hash-chained log.",
+    body: `${ENGINE_COUNT} detection engines flag CUI, ITAR, PHI, and PII patterns; every event is risk-scored against NIST 800-171 Rev 2 controls and written to a SHA-256 hash-chained log.`,
   },
   {
     title: "You deliver a co-branded, signed PDF",
@@ -139,15 +140,17 @@ export default function PartnerKitPage() {
           </p>
         </section>
 
-        {/* FAQ — shared accordion, matches the FAQPage JSON-LD */}
-        <h2 className="mt-12 font-[var(--font-display)] text-2xl font-semibold text-[var(--hs-ink)]">
-          Partner questions
-        </h2>
-        <div className="mt-5">
-          <FaqAccordion
-            items={FAQS.map((f) => ({ question: f.q, answer: f.a }))}
-          />
-        </div>
+        {/* FAQ — the ONE shared surface. This page previously rendered a bare
+            accordion under a hand-rolled heading and emitted no FAQPage schema
+            at all (the old comment claimed otherwise); FaqSection fixes both.
+            contactCta is off — the page's own CTA band follows. */}
+        <FaqSection
+          items={FAQS.map((f) => ({ question: f.q, answer: f.a }))}
+          title="Partner questions"
+          align="left"
+          contactCta={false}
+          className="!max-w-none !mx-0 !px-0 !pb-0 !pt-12"
+        />
 
         {/* CTA */}
         <div className="mt-12 rounded-3xl border border-[var(--hs-border)] bg-[var(--hs-surface-2)] p-8 text-center">

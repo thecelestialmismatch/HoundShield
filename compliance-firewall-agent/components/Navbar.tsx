@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { getPlan, formatUSD } from "@/lib/pricing/plans";
+import { RISK_REPORT, formatUSD } from "@/lib/pricing/plans";
 import { NAV_TRUST_BADGE } from "@/lib/site/metrics";
 import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
 import {
@@ -74,18 +74,21 @@ const FEATURES_ITEMS = [
   { icon: Activity,  color: "text-brand-800",   bg: "bg-[rgba(129,166,198,0.16)]",   label: "Live Threat Dashboard",   desc: "Real-time blocked prompts, risk scores, and compliance posture",  href: "/command-center" },
 ];
 
-// Prices sourced from the single pricing source of truth (lib/pricing/plans)
-// so this dropdown can never drift from the /pricing page.
+/*
+ * Prices sourced from the single pricing source of truth (lib/pricing/plans).
+ *
+ * NOTE: this component currently has no importers — NavV3 is the shipped nav.
+ * It is corrected rather than left stale so that re-importing it cannot
+ * reintroduce a price list nobody can buy. It previously quoted five monthly
+ * tiers and deep-linked to /signup?plan=pro for plans that are not sellable.
+ */
 const PRICING_TIERS = [
-  { label: "Free",       price: formatUSD(getPlan("free").monthlyPrice),       note: "Up to 1,000 prompts/mo", color: "text-slate-400",   href: "/signup" },
-  { label: "Pro",        price: formatUSD(getPlan("pro").monthlyPrice),        note: "SOC 2 + HIPAA coverage",  color: "text-brand-400",  href: "/signup?plan=pro" },
-  { label: "Growth",     price: formatUSD(getPlan("growth").monthlyPrice),     note: "PDF compliance reports",  color: "text-brand-500", href: "/signup?plan=growth" },
-  { label: "Enterprise", price: formatUSD(getPlan("enterprise").monthlyPrice), note: "Unlimited orgs + CMMC",   color: "text-brand-600",   href: "/contact" },
-  { label: "Agency",     price: formatUSD(getPlan("agency").monthlyPrice),     note: "White-label for MSPs",    color: "text-brand-700",  href: "/contact" },
+  { label: "AI Risk Assessment Report", price: formatUSD(RISK_REPORT.oneTimePrice),  unit: "one-time",  note: "14-day scan → signed NIST 800-171 PDF", color: "text-brand-400", href: "/pricing" },
+  { label: "Partner wholesale",         price: formatUSD(RISK_REPORT.wholesalePrice), unit: "per report", note: "Co-branded for RPOs & MSPs",           color: "text-brand-500", href: "/partners/kit" },
 ];
 
 const PARTNER_ITEMS = [
-  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "MSP / Agency",    desc: "20% revenue share · White-label option · $599/mo base",         href: "/partners#msp" },
+  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "RPO / MSP",       desc: "Co-branded report at $299 wholesale · you set the retail",      href: "/partners/kit" },
   { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
   { icon: DollarSign,color:"text-brand-400",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
 ];
@@ -279,7 +282,7 @@ function PricingFlyout({ open }: { open: boolean }) {
                   <p className="text-[11px] text-slate-500">{t.note}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-mono font-bold text-white">{t.price}<span className="text-slate-600 text-[10px] font-normal">/mo</span></span>
+                  <span className="text-sm font-mono font-bold text-white">{t.price}<span className="text-slate-600 text-[10px] font-normal">{t.unit}</span></span>
                   <ArrowRight className="w-3 h-3 text-slate-700 group-hover:text-brand-400 group-hover:translate-x-0.5 transition-all" />
                 </div>
               </Link>
@@ -287,7 +290,7 @@ function PricingFlyout({ open }: { open: boolean }) {
           </div>
           <div className="px-4 py-3 border-t border-white/[0.06] bg-white/[0.01]">
             <Link href="/pricing" className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">
-              Compare all plans <ArrowRight className="w-3 h-3" />
+              See what the report covers <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
         </motion.div>

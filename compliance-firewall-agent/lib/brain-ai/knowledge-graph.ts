@@ -275,13 +275,20 @@ everything locally. Nothing leaves your network."`,
       "cmmc_timeline",
       "cmmc",
       "CMMC enforcement timeline and urgency",
-      `CMMC Phase 1: November 2024 -- new DoD contracts can require CMMC Level 1.
-CMMC Phase 2: November 10, 2026 -- most contracts handling CUI require Level 2 certification.
-Current state: ~80,000 contractors need CMMC Level 2. ~400 are certified.
-The gap represents ~79,600 potential customers in a 18-month window.
-Contractors who miss the deadline risk contract loss on renewal.
-Average C3PAO assessment cost: $30K-$150K. Schedule is months out.
-HoundShield helps contractors reduce scope, pass assessments, and maintain controls.`,
+      // Retrieval note: brain-query.ts drops results scoring under 2, and BM25
+      // scores on term frequency over document length. The first rewrite of
+      // this node was an essay that named "CMMC" and "Level 2" once each --
+      // richer prose, but it scored 1.47 and became unretrievable. Keep the
+      // node dense AND keep the key terms repeated the way a real summary
+      // repeats them. Long-form prose belongs in CMMC_STATUS.blurb instead.
+      `CMMC Phase 2 is SUSPENDED as of 2026-07-13. The Department of War suspended the phase
+that would have required CMMC Level 2 certification on CUI contracts from 10 November 2026;
+Phases 3-4 are frozen pending a 60-day review. There is no CMMC certification deadline to sell.
+Still in force: DFARS 252.204-7012, all 110 NIST 800-171 Rev 2 controls, and the annual SPRS
+self-attestation that CMMC Level 2 requires. The forcing function is now prosecution, not
+certification -- DOJ has settled 15 False Claims Act cases over self-attested SPRS scores
+(MORSECORP $4.6M, LOGZONE $507,144). C3PAO cost when CMMC Level 2 certification returns:
+$30K-$150K.`,
       ["cmmc", "phase", "enforcement", "deadline", "november", "2026", "contractor", "certification", "80000"]
     ),
     node(
@@ -441,13 +448,14 @@ HTTPS interception uses mitmproxy-compatible certificate.`,
       "market_size",
       "market",
       "Market size and revenue path",
-      `Total addressable: ~80,000 DoD contractors needing CMMC Level 2.
-Serviceable (50-250 employees, active AI tool use): ~20,000 contractors.
-Price range: $199-$499/month per contractor.
-Revenue at 1% penetration of serviceable market: ~$4M ARR.
-Revenue target: $10K MRR by October 2026.
-Path: 1 customer -> 3 C3PAO partners -> 30 customers -> 50 customers.
-YC target: S26 application with $10K MRR traction.`,
+      `Lead market is HEALTHCARE, not defense -- CMMC Phase 2 was suspended 2026-07-13 and the
+deadline that drove the old defense plan is gone. Healthcare needs no deadline: 89% of
+healthcare genAI policy violations involve regulated data vs 31% cross-industry, and 43% of
+healthcare staff use personal genAI accounts at work (Netskope 2025). Serviceable: 50-300
+provider physician groups and clinics; buyer is the Privacy Officer.
+Defense is channel two, re-messaged for False Claims Act exposure.
+Price: one offer, $499 one-time per organization. No subscription is sold today.
+Partners are RPOs and MSPs, never C3PAOs (32 CFR Part 170 bars assessor referrals).`,
       ["tam", "market", "revenue", "mrr", "yc", "customers", "penetration", "arr"]
     ),
     node(

@@ -1,4 +1,5 @@
 import { day7Email } from '../day7';
+import { PURCHASABLE_OFFER } from '@/lib/billing/entitlements';
 
 describe('day7Email', () => {
   it('has correct from and subject', () => {
@@ -11,15 +12,18 @@ describe('day7Email', () => {
     expect(html).toContain('Acme Defense');
   });
 
-  it('includes upgrade block for free tier', () => {
+  it('offers the one purchasable report to non-paying accounts', () => {
+    // Was "Upgrade to Pro — $199/mo", a tier no checkout can sell since
+    // /pricing collapsed to the single one-time offer.
     const html = day7Email.html('ACME', 'free');
-    expect(html).toContain('Upgrade to Pro');
-    expect(html).toContain('/pricing');
+    expect(html).toContain(PURCHASABLE_OFFER.ctaLabel);
+    expect(html).toContain(PURCHASABLE_OFFER.href);
+    expect(html).not.toMatch(/\$\s?\d[\d,]*\s*\/\s*mo/i);
   });
 
-  it('omits upgrade block for paid tiers', () => {
+  it('omits the offer block for paid accounts', () => {
     const html = day7Email.html('ACME', 'pro');
-    expect(html).not.toContain('Upgrade to Pro');
+    expect(html).not.toContain(PURCHASABLE_OFFER.ctaLabel);
   });
 
   it('includes compliance dashboard CTA', () => {
