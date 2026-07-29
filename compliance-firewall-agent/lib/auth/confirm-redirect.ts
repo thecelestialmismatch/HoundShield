@@ -29,7 +29,7 @@ function safeNext(next: string | null): string | null {
 export function confirmRedirect(type: string | null, next: string | null): string {
   const dest = safeNext(next);
   if (dest) return dest;
-  return type === 'recovery' ? '/reset-password' : '/console';
+  return type === 'recovery' ? '/reset-password' : '/command-center';
 }
 
 /**

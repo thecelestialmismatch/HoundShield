@@ -29,6 +29,7 @@ import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
   Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
   Check, Zap, Crown, ListChecks, Info, Palette, SlidersHorizontal, ArrowUp, ArrowDown, EyeOff, RotateCcw, Check as CheckIcon,
+  Rocket, AlertTriangle, ScrollText, Target, Wrench,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
 import { DESIGN_THEMES, getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
@@ -79,6 +80,24 @@ const SIDE_LINKS: { id: TabId; label: string; icon: React.ElementType; badge?: b
   { id: 'assess', label: 'CMMC Assessment', icon: Shield },
   { id: 'reports', label: 'Reports', icon: FileText },
   { id: 'brain', label: 'Brain AI', icon: Brain },
+]
+
+/**
+ * Real navigation into the deep tool pages under `/command-center/(tools)`.
+ *
+ * Until the 2026-07-29 merge this console was an ISLAND: every sidebar entry
+ * above is an in-page tab, and the only outbound links were "Back to site" and
+ * "Upgrade". The 20-page tool app at /command-center was unreachable from the
+ * dashboard a customer actually lands on. These are the section entry points;
+ * "All tools" lands inside the tool shell, whose own sidebar lists all of them.
+ */
+const TOOL_LINKS: { href: string; label: string; icon: React.ElementType }[] = [
+  { href: '/command-center/getting-started', label: 'Getting Started', icon: Rocket },
+  { href: '/command-center/rules', label: 'Firewall Rules', icon: SlidersHorizontal },
+  { href: '/command-center/quarantine', label: 'Quarantine', icon: AlertTriangle },
+  { href: '/command-center/events', label: 'Audit Log', icon: ScrollText },
+  { href: '/command-center/shield', label: 'SPRS Dashboard', icon: Target },
+  { href: '/command-center/overview', label: 'All tools', icon: Wrench },
 ]
 
 // Live threat feed event pool — [type, what, engine, latency]
@@ -692,6 +711,15 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 <Icon /> {s.label}
                 {s.badge && feedBadge > 0 && <span className="pp" aria-label={`${feedBadge} new blocked events`}>{feedBadge}</span>}
               </button>
+            )
+          })}
+          <div className="gh">Tools</div>
+          {TOOL_LINKS.map((t) => {
+            const Icon = t.icon
+            return (
+              <Link key={t.href} href={t.href} className="side-link" onClick={() => setSideOpen(false)}>
+                <Icon /> {t.label}
+              </Link>
             )
           })}
           <div className="gh">Account</div>
