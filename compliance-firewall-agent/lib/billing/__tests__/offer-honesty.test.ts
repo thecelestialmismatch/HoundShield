@@ -53,10 +53,11 @@ const SALES_SURFACES = [
  * buyer.
  */
 const MONTHLY_PRICE_ALLOWED = new Map<string, string>([
-  [
-    "app/api/stripe/checkout/route.ts",
-    "Header comment documenting the dormant subscription SKUs. Code path is unsold; the comment is engineering documentation, not a quote to a buyer.",
-  ],
+  // app/api/stripe/checkout/route.ts was allowlisted here for its header comment
+  // documenting the dormant subscription SKUs. PR #244 deleted the route as a
+  // second pricing grid surviving in the API surface, and the allowlist-rot test
+  // below caught the stale entry on the very next run. Left as a comment because
+  // the deletion is the point: there is no longer any route that sells a tier.
   [
     "app/pricing/page.tsx",
     "Header comment explaining WHY the monthly grid was removed. Deleting the explanation invites someone to add the grid back. The page body is guarded by pricing-single-offer.test.tsx.",
