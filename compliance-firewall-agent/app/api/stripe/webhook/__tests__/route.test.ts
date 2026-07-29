@@ -508,7 +508,7 @@ describe("POST /api/stripe/webhook — report order founder alert", () => {
   // decision resolved two ways. Both now route through founderInbox(), whose
   // default is the founder's own mailbox, because a $499 sale alert sitting
   // unread in a shared inbox is the failure mode that matters.
-  it("falls back to the founder mailbox when FOUNDER_EMAIL is unset", async () => {
+  it("falls back to the PUBLISHED generic inbox when FOUNDER_EMAIL is unset", async () => {
     delete process.env.FOUNDER_EMAIL;
     mockConstructEvent.mockReturnValueOnce({
       type: "checkout.session.completed",
@@ -527,8 +527,10 @@ describe("POST /api/stripe/webhook — report order founder alert", () => {
 
     const res = await POST(makeRequest());
     expect(res.status).toBe(200);
+    // Never a personal address: this default ships in a public repo. Set
+    // FOUNDER_EMAIL in Vercel to route sale alerts to a mailbox you actually read.
     const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
-    expect(recipients).toContain("Gaurav@houndshield.com");
+    expect(recipients).toContain("contact@houndshield.com");
   });
 
   it("still returns 200 (billing unaffected) when an email send throws", async () => {
@@ -566,7 +568,7 @@ describe("POST /api/stripe/webhook — report order idempotency", () => {
     process.env.STRIPE_SECRET_KEY = "sk_test";
     process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
     process.env.RESEND_API_KEY = "re_test"; // enable the best-effort email path
-    process.env.FOUNDER_EMAIL = "gaurav@houndshield.com";
+    process.env.FOUNDER_EMAIL = "founder@houndshield.com";
     mockUpdate.mockReturnValue({ eq: mockEq });
     mockEq.mockReturnValue({ eq: mockEq2 });
   });
@@ -642,7 +644,7 @@ describe("POST /api/stripe/webhook — report order idempotency", () => {
     expect(mockResendSend).toHaveBeenCalledTimes(2);
     const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
     expect(recipients).toContain("rachel@clinic.com");
-    expect(recipients).toContain("gaurav@houndshield.com");
+    expect(recipients).toContain("founder@houndshield.com");
   });
 });
 

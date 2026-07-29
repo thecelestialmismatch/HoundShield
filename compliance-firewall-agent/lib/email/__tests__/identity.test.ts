@@ -1,8 +1,10 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import {
-  FOUNDER_NAME,
   FOUNDER_TITLE,
-  FOUNDER_ADDRESS,
+  founderName,
+  founderAddress,
   GENERAL_INBOX,
   NOREPLY_ADDRESS,
   TRANSACTIONAL_FROM,
@@ -17,29 +19,48 @@ import {
   founderSignature,
 } from '../identity';
 
-const ORIGINAL = process.env.FOUNDER_EMAIL;
+const ORIGINAL_EMAIL = process.env.FOUNDER_EMAIL;
+const ORIGINAL_NAME = process.env.FOUNDER_NAME;
+
+function restore(key: 'FOUNDER_EMAIL' | 'FOUNDER_NAME', value: string | undefined) {
+  if (value === undefined) delete process.env[key];
+  else process.env[key] = value;
+}
 
 afterEach(() => {
-  if (ORIGINAL === undefined) delete process.env.FOUNDER_EMAIL;
-  else process.env.FOUNDER_EMAIL = ORIGINAL;
+  restore('FOUNDER_EMAIL', ORIGINAL_EMAIL);
+  restore('FOUNDER_NAME', ORIGINAL_NAME);
 });
 
 beforeEach(() => {
   delete process.env.FOUNDER_EMAIL;
+  delete process.env.FOUNDER_NAME;
 });
 
-describe('founder identity constants', () => {
-  it('names the founder and their real mailbox', () => {
-    expect(FOUNDER_NAME).toBe('Gaurav');
+describe('personal identity is never committed to this public repo', () => {
+    it('exposes no personal name or mailbox as a module constant', () => {
+    // The regression this locks: a hardcoded founder address in a PUBLIC repo is
+    // published to every clone and every search index. Identity comes from env.
+    const src = readFileSync(join(process.cwd(), 'lib', 'email', 'identity.ts'), 'utf8');
+    expect(src).not.toMatch(/export const FOUNDER_(NAME|ADDRESS)\b/);
+    // A role title is not personal data — that one may stay.
     expect(FOUNDER_TITLE).toBe('Founder, HoundShield');
-    expect(FOUNDER_ADDRESS).toBe('Gaurav@houndshield.com');
   });
 
-  it('keeps the publishable inbox distinct from the founder address', () => {
-    // These must never converge: one is printed to visitors, the other is where
-    // revenue alerts land.
+  it('falls back to impersonal values when nothing is configured', () => {
+    expect(founderName()).toBe('HoundShield');
+    expect(founderAddress()).toBe(GENERAL_INBOX);
+  });
+
+  it('uses the configured identity when env is set', () => {
+    process.env.FOUNDER_NAME = 'Dana';
+    process.env.FOUNDER_EMAIL = 'dana@houndshield.com';
+    expect(founderName()).toBe('Dana');
+    expect(founderAddress()).toBe('dana@houndshield.com');
+  });
+
+  it('keeps the publishable inbox generic', () => {
     expect(GENERAL_INBOX).toBe('contact@houndshield.com');
-    expect(GENERAL_INBOX).not.toBe(FOUNDER_ADDRESS);
   });
 
   it('sends automated mail from a send-only address', () => {
@@ -48,7 +69,7 @@ describe('founder identity constants', () => {
   });
 
   it('every address is on the houndshield.com domain', () => {
-    for (const addr of [FOUNDER_ADDRESS, GENERAL_INBOX, NOREPLY_ADDRESS]) {
+    for (const addr of [founderAddress(), GENERAL_INBOX, NOREPLY_ADDRESS]) {
       expect(addr.toLowerCase().endsWith('@houndshield.com')).toBe(true);
     }
   });
@@ -57,7 +78,7 @@ describe('founder identity constants', () => {
 describe('isEmailShaped', () => {
   it.each([
     'a@b.co',
-    'Gaurav@houndshield.com',
+    'founder@houndshield.com',
     'first.last+tag@sub.domain.org',
   ])('accepts %s', (v) => {
     expect(isEmailShaped(v)).toBe(true);
@@ -69,7 +90,7 @@ describe('isEmailShaped', () => {
     ['two@@at.com', 'double @'],
     ['no@tld', 'no dot in domain'],
     ['spaces in@email.com', 'whitespace'],
-    ['Gaurav <g@houndshield.com>', 'angle brackets — a From header, not an address'],
+    ['Dana <d@houndshield.com>', 'angle brackets — a From header, not an address'],
     ['a@b.co,c@d.co', 'comma-separated list'],
   ])('rejects %s (%s)', (v) => {
     expect(isEmailShaped(v)).toBe(false);
@@ -100,7 +121,7 @@ describe('isPlaceholderAddress — the "no flukes" guard', () => {
 
   it.each([
     'dana@ridgeviewfamilymed.org',
-    'Gaurav@houndshield.com',
+    'founder@houndshield.com',
     'j.smith@summit7.us',
   ])('does NOT flag the real-looking address %s', (v) => {
     expect(isPlaceholderAddress(v)).toBe(false);
@@ -121,8 +142,9 @@ describe('isSendableAddress', () => {
 });
 
 describe('founderInbox', () => {
-  it('defaults to the founder mailbox, not a generic inbox', () => {
-    expect(founderInbox()).toBe(FOUNDER_ADDRESS);
+  it('defaults to the published generic inbox when unconfigured', () => {
+    // Never a personal address: this default is committed to a public repo.
+    expect(founderInbox()).toBe(GENERAL_INBOX);
   });
 
   it('honours a valid FOUNDER_EMAIL override', () => {
@@ -138,14 +160,14 @@ describe('founderInbox', () => {
   it('IGNORES a malformed override rather than obeying it', () => {
     // The failure this prevents: a typo'd env var silently routing every $499
     // sale alert to an address that cannot receive.
-    process.env.FOUNDER_EMAIL = 'gaurav-at-houndshield.com';
-    expect(founderInbox()).toBe(FOUNDER_ADDRESS);
+    process.env.FOUNDER_EMAIL = 'founder-at-houndshield.com';
+    expect(founderInbox()).toBe(GENERAL_INBOX);
   });
 
   it('never returns an empty recipient', () => {
     process.env.FOUNDER_EMAIL = '';
     expect(founderInbox()).toBeTruthy();
-    expect(founderInbox()).toBe(FOUNDER_ADDRESS);
+    expect(founderInbox()).toBe(GENERAL_INBOX);
   });
 });
 
@@ -200,8 +222,14 @@ describe('founderInboxDiagnostic', () => {
 });
 
 describe('header builders', () => {
-  it('builds a human From header for outreach', () => {
-    expect(founderFrom()).toBe('Gaurav <Gaurav@houndshield.com>');
+  it('builds a human From header from the configured identity', () => {
+    process.env.FOUNDER_NAME = 'Dana';
+    process.env.FOUNDER_EMAIL = 'dana@houndshield.com';
+    expect(founderFrom()).toBe('Dana <dana@houndshield.com>');
+  });
+
+  it('degrades to an impersonal From header rather than leaking a default', () => {
+    expect(founderFrom()).toBe('HoundShield <contact@houndshield.com>');
   });
 
   it('builds transactional From headers, with and without a label', () => {
@@ -214,9 +242,9 @@ describe('header builders', () => {
     expect(transactionalFrom('   ')).toBe('HoundShield <noreply@houndshield.com>');
   });
 
-  it('signs as a named person, never as a company or a team', () => {
-    const sig = founderSignature();
-    expect(sig).toBe('Gaurav\nFounder, HoundShield');
-    expect(sig).not.toMatch(/team|support|no-?reply/i);
+  it('signs with the configured name and the role title', () => {
+    process.env.FOUNDER_NAME = 'Dana';
+    expect(founderSignature()).toBe('Dana\nFounder, HoundShield');
+    expect(founderSignature()).not.toMatch(/no-?reply/i);
   });
 });

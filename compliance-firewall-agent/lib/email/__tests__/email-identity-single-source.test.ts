@@ -36,6 +36,9 @@ function walk(dir: string, out: string[] = []): string[] {
 const SOURCE_FILES = [...walk(APP_DIR), ...walk(LIB_DIR)];
 const IDENTITY_MODULE = join(LIB_DIR, 'email', 'identity.ts');
 
+/** Any mailbox literal on the product domain. */
+const MAILBOX_RE = /[a-z0-9._%+-]+@houndshield\.com/i;
+
 function read(f: string): string {
   return readFileSync(f, 'utf8');
 }
@@ -59,22 +62,42 @@ describe('the founder inbox is resolved in exactly one place', () => {
     expect(offenders.map((f) => f.replace(process.cwd(), ''))).toEqual([]);
   });
 
-  it('only identity.ts defines a houndshield.com mailbox literal', () => {
-    // Marketing/contact PAGES may print the published address; API routes and lib
-    // modules must not invent one.
-    const allowed = new Set<string>([
-      IDENTITY_MODULE,
-      join(APP_DIR, 'contact', 'page.tsx'), // published contact details
-      join(APP_DIR, 'partners', 'apply', 'PartnerApplyForm.tsx'), // published fallback
-    ]);
-    const offenders = SOURCE_FILES.filter((f) => {
-      if (allowed.has(f)) return false;
-      if (f.startsWith(join(LIB_DIR, 'brain-ai'))) return false; // FAQ answer text
-      return /(contact|info|noreply|gaurav)@houndshield\.com/i.test(read(f));
-    });
+  it('no API route or lib module hardcodes a mailbox literal', () => {
+    // Code paths must resolve addresses through identity.ts. Published PAGES are
+    // handled by the next test — they legitimately print a contact address.
+    const codePaths = SOURCE_FILES.filter(
+      (f) =>
+        f !== IDENTITY_MODULE &&
+        !f.startsWith(join(LIB_DIR, 'brain-ai')) && // FAQ answer prose
+        (f.startsWith(join(APP_DIR, 'api')) || f.startsWith(LIB_DIR)),
+    );
+    const offenders = codePaths.filter((f) => MAILBOX_RE.test(read(f)));
     expect(
       offenders.map((f) => f.replace(process.cwd(), '')),
       'import the address from lib/email/identity instead of writing the literal',
+    ).toEqual([]);
+  });
+
+  it('pages only ever publish a GENERIC mailbox, never a personal one', () => {
+    // Legal and marketing pages must print a contact address — security.txt is
+    // required to. What they must never print is an individual's mailbox, which
+    // is why founder identity is env-only and this asserts the whole surface.
+    const GENERIC = new Set([
+      'contact', 'info', 'noreply', 'no-reply', 'support', 'security',
+      'privacy', 'legal', 'dpa', 'abuse', 'partners', 'sales', 'hello',
+    ]);
+    const violations: string[] = [];
+    for (const f of SOURCE_FILES) {
+      for (const m of read(f).matchAll(new RegExp(MAILBOX_RE.source, 'gi'))) {
+        const local = m[0].split('@')[0].toLowerCase();
+        if (!GENERIC.has(local)) {
+          violations.push(`${f.replace(process.cwd(), '')} → ${local}@`);
+        }
+      }
+    }
+    expect(
+      violations,
+      'a non-generic mailbox literal looks like a personal address; put it in FOUNDER_EMAIL instead',
     ).toEqual([]);
   });
 

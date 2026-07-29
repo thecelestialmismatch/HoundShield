@@ -18,11 +18,11 @@ Run STEP 0 → 1 → 2 → 3 → 4 in order, every time.
 
 ## FOUNDER IDENTITY — sender for every drafted email
 
-- **Founder / sender: Gaurav.** Sign all outreach, cold email, RPO/MSP partner mail, and newsletters as **Gaurav, Founder — HoundShield**.
-- **From / reply-to on every draft: `Gaurav@houndshield.com`.** This is the founder's address — use it on all human-written mail (outreach, sales, partner, founder-to-buyer). Never draft founder outreach from `info@` or `contact@`.
+- **Founder / sender.** Sign all outreach, cold email, RPO/MSP partner mail, and newsletters as **<FOUNDER_NAME>, Founder — HoundShield**, where the name comes from the `FOUNDER_NAME` env var — it is deliberately NOT committed to this public repo.
+- **From / reply-to on every draft: the `FOUNDER_EMAIL` value.** Use it on all human-written mail (outreach, sales, partner, founder-to-buyer). Never draft founder outreach from `info@` or `contact@`. The literal address is NOT written down here: this repo is public.
 - `contact@houndshield.com` is the **published** address — printed on pages and returned to a browser when a form degrades. Never the routing address (`FOUNDER_EMAIL` may point somewhere private).
-- **Enforced in code since 2026-07-29:** `compliance-firewall-agent/lib/email/identity.ts` is the single source for every sender and inbox; `founderInbox()` defaults to `Gaurav@houndshield.com`, so the $499 sale alert, warm leads, RPO applications and contact-form messages all reach the founder without any env var being set. Guard: `lib/email/__tests__/email-identity-single-source.test.ts`. Drafts live in `lib/email/outreach.ts`; send with `npm run email:preview` / `email:send` (dry-run default, one recipient, refuses placeholder addresses).
-- **Mailbox status (founder-confirmed 2026-07-29):** `Gaurav@`, `contact@` and `info@houndshield.com` all exist on Hostinger. The earlier "only info@ exists" note was stale — it came from a single `/api/v1/me` read that was never re-verified. Before the first real send, run the smoke test in `docs/FOUNDER-EMAIL-IDENTITY.md` (it proves the *receiving* half, which sending cannot).
+- **Enforced in code since 2026-07-29:** `compliance-firewall-agent/lib/email/identity.ts` is the single source for every sender and inbox; `founderInbox()` resolves the $499 sale alert, warm leads, RPO applications and contact-form messages to `FOUNDER_EMAIL`, falling back to the published `contact@` inbox when it is unset — never to a personal address, because this default ships publicly. Guard: `lib/email/__tests__/email-identity-single-source.test.ts`. Drafts live in `lib/email/outreach.ts`; send with `npm run email:preview` / `email:send` (dry-run default, one recipient, refuses placeholder addresses).
+- **Mailbox status (founder-confirmed 2026-07-29):** the founder mailbox, `contact@` and `info@houndshield.com` all exist on Hostinger. The earlier "only info@ exists" note was stale — it came from a single `/api/v1/me` read that was never re-verified. Before the first real send, run the smoke test in `docs/FOUNDER-EMAIL-IDENTITY.md` (it proves the *receiving* half, which sending cannot).
 
 ---
 
@@ -179,7 +179,7 @@ concrete enough to do today, near-$0 cost. Not a list. One action.
 - Never claim hosted Vercel is CUI-safe. Never pitch C3PAOs as a referral channel. Never publish fictional metrics.
 - Preserve what works. Additive over destructive. Two lines beat two thousand.
 - One clear next action at the end. Always.
-- Founder email = `Gaurav@houndshield.com`; sign drafted outreach as **Gaurav** (see FOUNDER IDENTITY).
+- Founder email + name come from `FOUNDER_EMAIL` / `FOUNDER_NAME` (never committed — public repo). See FOUNDER IDENTITY.
 - **Code = Mode C.** Invoke ponytail, run all four gates. No exceptions, not even
   for "a one-line change" — those are the ones that ship broken.
 - **Selling beats building.** Checkout is dead and there are zero customers. If a

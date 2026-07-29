@@ -333,7 +333,7 @@ describe('LiveCommandCenter — founder: full access, no payment required', () =
     plan: 'Founder',
     initials: 'GA',
     tier: 'agency',
-    firstName: 'Gaurav',
+    firstName: 'Founder',
     isFounder: true,
   }
 

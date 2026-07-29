@@ -4,7 +4,7 @@
  * resolves to the top tier with NO subscription row required, while everyone
  * else keeps reading their real subscription.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const { mockIsConfigured, mockSub, mockProfile } = vi.hoisted(() => ({
   mockIsConfigured: vi.fn(() => true),
@@ -32,6 +32,17 @@ vi.mock('@/lib/supabase/client', () => ({
 
 import { getUserSubscription } from '@/lib/subscription/check';
 
+// Founder access is env-only (nothing personal committed to this public repo), so
+// these tests must configure the identity they assert on.
+const TEST_FOUNDER_EMAIL = 'founder@houndshield.com';
+beforeEach(() => {
+  process.env.FOUNDER_EMAIL = TEST_FOUNDER_EMAIL;
+});
+afterEach(() => {
+  delete process.env.FOUNDER_EMAIL;
+});
+
+
 describe('getUserSubscription', () => {
   beforeEach(() => {
     mockIsConfigured.mockReset();
@@ -53,13 +64,13 @@ describe('getUserSubscription', () => {
 
   it('founder profile email → top tier even with NO subscription row', async () => {
     mockSub.mockResolvedValue({ data: null, error: null });
-    mockProfile.mockResolvedValue({ data: { email: 'Gaurav@HoundShield.com' }, error: null });
+    mockProfile.mockResolvedValue({ data: { email: 'founder@houndshield.com' }, error: null });
     expect(await getUserSubscription('founder-id')).toBe('agency');
   });
 
   it('founder override beats a lower active subscription', async () => {
     mockSub.mockResolvedValue({ data: { tier: 'pro', status: 'active' }, error: null });
-    mockProfile.mockResolvedValue({ data: { email: 'gaurav@houndshield.com' }, error: null });
+    mockProfile.mockResolvedValue({ data: { email: 'founder@houndshield.com' }, error: null });
     expect(await getUserSubscription('founder-id')).toBe('agency');
   });
 

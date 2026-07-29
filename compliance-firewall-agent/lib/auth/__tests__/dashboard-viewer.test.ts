@@ -1,5 +1,16 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { buildDashboardViewer, initialsFrom, firstNameFrom } from "@/lib/auth/dashboard-viewer";
+
+// Founder access is env-only (nothing personal committed to this public repo), so
+// these tests must configure the identity they assert on.
+const TEST_FOUNDER_EMAIL = 'founder@houndshield.com';
+beforeEach(() => {
+  process.env.FOUNDER_EMAIL = TEST_FOUNDER_EMAIL;
+});
+afterEach(() => {
+  delete process.env.FOUNDER_EMAIL;
+});
+
 
 describe("initialsFrom", () => {
   it("takes first+last initials of a multi-word name", () => {
@@ -80,16 +91,16 @@ describe("buildDashboardViewer", () => {
 });
 
 describe("buildDashboardViewer — founder access (full access, no payment)", () => {
-  const session = { email: "gaurav@houndshield.com", name: "Gaurav" };
+  const session = { email: "founder@houndshield.com", name: "Founder" };
 
   it("founder resolves to the top tier with the Founder plan label, whatever the profile says", () => {
-    const v = buildDashboardViewer({ company: "HoundShield", full_name: "Gaurav", tier: "free" }, session);
+    const v = buildDashboardViewer({ company: "HoundShield", full_name: "Founder", tier: "free" }, session);
     expect(v).toMatchObject({
       company: "HoundShield",
       tier: "agency",
       plan: "Founder",
       isFounder: true,
-      firstName: "Gaurav",
+      firstName: "Founder",
     });
   });
 
@@ -98,13 +109,14 @@ describe("buildDashboardViewer — founder access (full access, no payment)", ()
     expect(v?.isFounder).toBe(true);
     expect(v?.tier).toBe("agency");
     expect(v?.plan).toBe("Founder");
-    expect(v?.company).toBe("Gaurav");
+    expect(v?.company).toBe("Founder");
   });
 
   it("founder with no profile AND no session name falls back to the email local part", () => {
-    const v = buildDashboardViewer(null, { email: "Gaurav@HoundShield.com" });
+    const v = buildDashboardViewer(null, { email: "founder@houndshield.com" });
     expect(v?.isFounder).toBe(true);
-    expect(v?.company).toBe("Gaurav");
+    // Local part of the email, verbatim — no capitalisation applied.
+    expect(v?.company).toBe("founder");
   });
 
   it("a non-founder session never gets the founder treatment", () => {

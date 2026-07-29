@@ -24,32 +24,59 @@
  *
  * SENDING vs RECEIVING (do not collapse these)
  * Resend SENDS as @houndshield.com (the domain is verified there — see
- * `reset_sender_domain` on /api/health). Hostinger RECEIVES: the mailboxes
- * contact@, info@ and Gaurav@ live there, which is what makes replies land
- * anywhere. Sending as Gaurav@ therefore needs no new DNS — same verified
- * domain, different local part — but a reply is only readable because the
- * Hostinger mailbox exists. See docs/FOUNDER-EMAIL-IDENTITY.md.
+ * `reset_sender_domain` on /api/health). Hostinger RECEIVES: the mailboxes on
+ * the domain live there, which is what makes replies land anywhere. Sending as
+ * any local part on the domain therefore needs no new DNS — same verified
+ * domain — but a reply is only readable because the receiving mailbox exists.
+ * See docs/FOUNDER-EMAIL-IDENTITY.md.
  *
  * Pure module: no I/O, no imports. Env is read inside functions (never at module
  * load) so a deploy-time env change takes effect without a cold restart.
  */
 
-/** The founder's display name. Signs every human-written email. */
-export const FOUNDER_NAME = 'Gaurav';
+/**
+ * PERSONAL IDENTITY IS NOT COMMITTED TO THIS REPOSITORY.
+ *
+ * This repo is PUBLIC. A founder's name and personal mailbox are operator
+ * configuration, not source code — committing them publishes them to anyone who
+ * clones the repo and to every engine that indexes GitHub. So identity is read
+ * from the environment at call time, and the in-repo defaults are the generic
+ * addresses already published on the website.
+ *
+ * Set in Vercel (Production) and in a gitignored .env.local for local sends:
+ *   FOUNDER_NAME   — the name outreach is signed with
+ *   FOUNDER_EMAIL  — the mailbox outreach comes from and replies land in
+ *
+ * Until they are set, outreach signs generically and alerts route to the
+ * published inbox: degraded, but never broken, and never leaking a private
+ * address into a public artifact. /api/health reports which state you are in.
+ */
 
-/** The founder's title, as it appears under the signature. */
+/** The title under the signature. A role, not a person — safe to commit. */
 export const FOUNDER_TITLE = 'Founder, HoundShield';
 
+/** Impersonal fallback used when FOUNDER_NAME is unset. */
+const DEFAULT_SENDER_NAME = 'HoundShield';
+
 /**
- * The founder's canonical mailbox — a real Hostinger mailbox, confirmed by the
- * founder on 2026-07-29 alongside contact@ and info@. This is the From and
- * Reply-To for all human outreach (sales, partner, founder-to-buyer) and the
- * default destination for alerts a human must act on.
+ * The name human-written email is signed with. Read from FOUNDER_NAME.
  *
- * Deliberately NOT info@ or contact@: a founder-to-buyer email from a generic
- * inbox reads like a newsletter and gets deleted unread.
+ * The generic fallback has a real cost — a founder-to-buyer email signed
+ * "HoundShield" reads like a newsletter and gets deleted unread — but that cost
+ * is recovered by setting one env var, whereas un-publishing a personal address
+ * from a public git history is not.
  */
-export const FOUNDER_ADDRESS = 'Gaurav@houndshield.com';
+export function founderName(): string {
+  return process.env.FOUNDER_NAME?.trim() || DEFAULT_SENDER_NAME;
+}
+
+/**
+ * The mailbox human outreach is sent FROM and replied TO. Read from
+ * FOUNDER_EMAIL; falls back to the published generic inbox.
+ */
+export function founderAddress(): string {
+  return founderInbox();
+}
 
 /**
  * The generic, publishable inbox. Safe to print on a page or return to a
@@ -153,7 +180,8 @@ export function isSendableAddress(value: string | null | undefined): boolean {
  * Resolution order:
  *  1. FOUNDER_EMAIL, if it is email-shaped (a malformed value is ignored, not
  *     obeyed — a typo here would silently drop every revenue alert).
- *  2. FOUNDER_ADDRESS — the founder's real mailbox.
+ *  2. GENERAL_INBOX — the published generic inbox. Never a personal address,
+ *     because this default is committed to a public repository.
  *
  * Never returns an empty string, so no caller can construct a send with no
  * recipient.
@@ -161,7 +189,19 @@ export function isSendableAddress(value: string | null | undefined): boolean {
 export function founderInbox(): string {
   const override = process.env.FOUNDER_EMAIL?.trim();
   if (isEmailShaped(override)) return override as string;
-  return FOUNDER_ADDRESS;
+  return GENERAL_INBOX;
+}
+
+/**
+ * The configured founder mailbox, or null when unset/unusable.
+ *
+ * Exists so identity.ts remains the ONLY reader of FOUNDER_EMAIL: the billing
+ * founder-access grant needs the same value, and a second `process.env` read
+ * there is how the two would drift apart.
+ */
+export function configuredFounderEmail(): string | null {
+  const raw = process.env.FOUNDER_EMAIL?.trim();
+  return isEmailShaped(raw) ? (raw as string) : null;
 }
 
 /**
@@ -198,9 +238,15 @@ export function founderInboxDiagnostic(): {
   };
 }
 
-/** From header for human outreach: `Gaurav <Gaurav@houndshield.com>`. */
+/**
+ * From header for human outreach — the configured name followed by the configured
+ * mailbox in angle brackets, assembled from FOUNDER_NAME + FOUNDER_EMAIL at call
+ * time. With neither set it degrades
+ * to `HoundShield <contact@houndshield.com>` — impersonal, but nothing private
+ * is committed to reach that outcome.
+ */
 export function founderFrom(): string {
-  return `${FOUNDER_NAME} <${FOUNDER_ADDRESS}>`;
+  return `${founderName()} <${founderAddress()}>`;
 }
 
 /**
@@ -218,5 +264,5 @@ export function transactionalFrom(label?: string): string {
  * title inflation, no marketing tagline — a person writing to a person.
  */
 export function founderSignature(): string {
-  return `${FOUNDER_NAME}\n${FOUNDER_TITLE}`;
+  return `${founderName()}\n${FOUNDER_TITLE}`;
 }
