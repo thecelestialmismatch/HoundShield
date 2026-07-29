@@ -221,6 +221,19 @@ export async function middleware(request: NextRequest) {
   }
 
   // ── Auth: protect routes ──────────────────────────────────────────────────
+  // NOT the authorization boundary — an optimization in front of it. The real
+  // gate is the server layout at app/command-center/layout.tsx, which resolves
+  // the session per request and fails closed. Keep both: this one saves a
+  // render and preserves the exact deep path in ?redirect=, the layout is what
+  // actually holds the door.
+  //
+  // That distinction is not academic here. Every line of this file was DEAD in
+  // production on 2026-07-29 — no X-Robots-Tag, no X-RateLimit-*, /auth/signup
+  // 404ing — because the repo-root vercel.json still uses the legacy `builds` +
+  // `routes` keys, which replace the routing table Vercel generates from the
+  // build (where the middleware route lives). It compiled fine and never ran.
+  // See docs/DASHBOARD-AUTH-GATE.md for the founder remediation steps.
+  //
   // Better Auth path (when active): cookie-based protection, no Supabase.
   if (betterAuthEnabled()) {
     if (needsAuth(pathname)) {
@@ -231,7 +244,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
       }
       if ((pathname === '/login' || pathname === '/signup') && sessionCookie) {
-        return NextResponse.redirect(new URL('/console', request.url));
+        return NextResponse.redirect(new URL('/command-center', request.url));
       }
     }
     return response;
@@ -280,7 +293,7 @@ export async function middleware(request: NextRequest) {
 
     // Redirect authenticated users away from login/signup → demo Live Command Center
     if ((pathname === '/login' || pathname === '/signup') && user) {
-      return NextResponse.redirect(new URL('/console', request.url));
+      return NextResponse.redirect(new URL('/command-center', request.url));
     }
   }
 

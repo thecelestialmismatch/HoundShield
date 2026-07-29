@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -21,7 +21,7 @@ import { TextLogo } from '@/components/TextLogo';
 import { AuthTabs } from '@/components/auth/AuthTabs';
 import { PasswordlessSignIn } from './PasswordlessSignIn';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Only honour same-origin relative paths — blocks open-redirect abuse.
@@ -29,7 +29,7 @@ export default function LoginPage() {
   const redirect =
     rawRedirect && rawRedirect.startsWith('/') && !rawRedirect.startsWith('//')
       ? rawRedirect
-      : '/console';
+      : '/command-center';
   // Same-origin redirect target carried across the Sign in / Sign up toggle
   // (undefined when there is no explicit redirect, so the links stay clean).
   const redirectParam =
@@ -434,6 +434,41 @@ export default function LoginPage() {
           )}
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+/**
+ * `useSearchParams()` forces a client-side-rendering bailout, so its consumer
+ * MUST sit under its own Suspense boundary or `/login` cannot be prerendered.
+ *
+ * This was latent until 2026-07-29: a root `app/loading.tsx` (an untouched
+ * scaffold leftover) wrapped the entire app in one Suspense boundary and
+ * silently satisfied the requirement for every page at once. That same root
+ * boundary put every route in a streaming context — where Next.js delivers
+ * `redirect()` as a meta tag with a **200**, not a 307 — which is why the new
+ * dashboard auth gate returned 200 until the boundary was moved down to
+ * `app/command-center/`. Wrapping the real consumer here is the fix Next.js
+ * documents, and it keeps `/login` prerendered and CDN-fast.
+ */
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+/** Branded first paint — the same mark + shimmer the old root loader used. */
+function LoginFallback() {
+  return (
+    <div className="min-h-screen bg-[var(--hs-surface-0)] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4 animate-pulse">
+        <Logo size={48} className="rounded-xl" />
+        <div className="h-1 w-24 rounded-full bg-brand-500/20 overflow-hidden">
+          <div className="h-full w-1/2 rounded-full bg-brand-500/50 animate-shimmer" />
+        </div>
+      </div>
     </div>
   );
 }

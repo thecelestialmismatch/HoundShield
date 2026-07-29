@@ -11,7 +11,7 @@ import { cookies } from 'next/headers';
  *  (e.g. `//evil.com` or `https://evil.com`, which `new URL()` would honour). */
 function safeRedirect(raw: string | null): string {
   if (raw && raw.startsWith('/') && !raw.startsWith('//')) return raw;
-  return '/console';
+  return '/command-center';
 }
 
 export async function GET(request: Request) {

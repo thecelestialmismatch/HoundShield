@@ -21,9 +21,9 @@ describe("AuthTabs", () => {
   });
 
   it("preserves a same-origin redirect target across the toggle", () => {
-    render(<AuthTabs active="signin" redirect="/console?welcome=true" />);
+    render(<AuthTabs active="signin" redirect="/command-center?welcome=true" />);
     const href = screen.getByText("Sign up").closest("a")?.getAttribute("href");
-    expect(href).toBe(`/signup?redirect=${encodeURIComponent("/console?welcome=true")}`);
+    expect(href).toBe(`/signup?redirect=${encodeURIComponent("/command-center?welcome=true")}`);
   });
 
   it("keeps the toggle links clean when there is no redirect", () => {

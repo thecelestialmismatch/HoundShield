@@ -5,6 +5,52 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-29 (later)
+
+### A guard that compiles is not a guard that runs
+**What:** `middleware.ts` protected `/command-center` correctly and had done so for months.
+Production served that dashboard to anonymous visitors anyway. The middleware compiled — the
+build log ends with `ƒ Proxy (Middleware)` — and never executed once, because the repo-root
+`vercel.json` still uses the legacy `builds` + `routes` keys, and a legacy `routes` array
+replaces the routing table the framework build generates. Reading the source proved the logic
+was right and proved nothing about production. The same dead layer had been silently 404ing
+`/dashboard` and `/shieldready` and swallowing the email-drip cron.
+**Root cause:** a control was verified by reading it, not by observing its effect.
+**Rules:**
+1. **Verify a guard by its side effects on the live system, not by its source.** Middleware here
+   sets four observable things (`X-Robots-Tag`, `X-RateLimit-*`, an `/auth/signup` redirect, an
+   auth redirect). One `curl -sI` against production would have caught this at any point.
+2. **`x-nextjs-prerender: 1` on a route that should be private is a finding by itself.** A page
+   that can be prerendered has no session in it; whatever protects it is outside the app and can
+   be switched off by config you may not control.
+3. **Put the authorization boundary inside the render.** Middleware is an optimization. A
+   fail-closed server layout in the protected subtree cannot be dropped by a deployment setting,
+   and reading the session makes the subtree dynamic, which removes the cached-HTML hole too.
+4. **When platform config and framework config disagree, the platform wins silently.** Prod
+   redirects non-www → www; `next.config.js` declares the opposite. Nothing errors. Diff what the
+   deployment actually does against what the repo says it should do.
+
+### A root `loading.tsx` turns every redirect in the app into a 200
+**What:** The new fail-closed gate returned **200**, not 307, with middleware disabled. The body
+was empty of dashboard markup (`hs-lcc` ×0, `NEXT_REDIRECT` ×2), so the gate *had* stopped the
+render — but the status line said OK. Cause: `app/loading.tsx`, an untouched scaffold file from
+the initial commit, wrapped the entire application in one Suspense boundary. Next.js documents
+it plainly: in a streaming context `redirect()` is delivered as a meta tag; otherwise as a 307.
+Once the shell has flushed, the status code is already gone.
+**Root cause:** a global convention file silently changed the semantics of every redirect in the
+app, including a pre-existing auth gate that had been answering 200 for months.
+**Rules:**
+1. **Assert the status code, not the absence of leaked content.** "The body has no secrets" and
+   "the request was refused" are different claims. Check both.
+2. **Prove a gate with the protection layer above it REMOVED.** The 307 seen with middleware
+   enabled was the middleware's. Deleting `middleware.ts` and rebuilding is what exposed the
+   truth — simulate the failure you are defending against.
+3. **Root-level `loading.tsx` is a footgun.** It forces every route to stream and masks missing
+   Suspense boundaries elsewhere (removing it immediately broke the `/login` prerender, a real
+   latent bug it had been hiding). Scope loading UI to the segments that need it.
+
+---
+
 ## 2026-07-29
 
 ### "It looks off-centre on one page" was one symptom of a reset silently voiding 272 utilities
