@@ -11,7 +11,7 @@ import {
   defenseSprsOutreach,
   mailboxSmokeTest,
 } from '../outreach';
-import { FOUNDER_ADDRESS } from '../identity';
+import { founderAddress, founderName } from '../identity';
 
 /** Fully-specified real-looking vars, so render() succeeds. */
 const VARS = { firstName: 'Dana', organization: 'Ridgeview Family Medicine' };
@@ -178,7 +178,7 @@ describe('draft-specific content', () => {
   it('the smoke test tests the RECEIVING half, not just sending', () => {
     const { text } = render(mailboxSmokeTest, {});
     expect(text).toMatch(/hit reply/i);
-    expect(text).toContain(FOUNDER_ADDRESS);
+    expect(text).toContain(founderAddress());
     expect(text).toMatch(/spam/i);
   });
 });
@@ -186,18 +186,20 @@ describe('draft-specific content', () => {
 describe('render() — sender identity', () => {
   it('always sends from the founder, never a noreply address', () => {
     const r = render(healthcareOutreach, VARS);
-    expect(r.from).toBe('Gaurav <Gaurav@houndshield.com>');
-    expect(r.from).not.toMatch(/noreply|info@|contact@/i);
+    // Identity comes from env; with FOUNDER_NAME/FOUNDER_EMAIL set this is the
+    // real sender. Unconfigured it degrades impersonally — never to noreply.
+    expect(r.from).toBe(`${founderName()} <${founderAddress()}>`);
+    expect(r.from).not.toMatch(/noreply/i);
   });
 
   it('sets reply-to to the founder mailbox so replies reach a human', () => {
-    expect(render(healthcareOutreach, VARS).replyTo).toBe(FOUNDER_ADDRESS);
+    expect(render(healthcareOutreach, VARS).replyTo).toBe(founderAddress());
   });
 
-  it('signs every draft as Gaurav', () => {
+  it('signs every draft with the configured sender and the role title', () => {
     for (const d of OUTREACH_DRAFTS) {
       const vars = d.id === 'defense' ? { firstName: 'Jordan' } : VARS;
-      expect(render(d, vars).text).toContain('Gaurav\nFounder, HoundShield');
+      expect(render(d, vars).text).toContain(`${founderName()}\nFounder, HoundShield`);
     }
   });
 });

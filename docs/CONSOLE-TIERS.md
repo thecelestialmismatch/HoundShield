@@ -18,7 +18,8 @@ Founder direction, 2026-07-14 (iterating on the 2026-07-13 tier-gated console):
 3. **The assessment is never first.** It stays a mid-list sidebar tab and runs
    **inline** inside that tab (no bounce to a separate page). The
    `#assessment` hash deep-link opens the tab in place.
-4. **Founder access.** The founder email (`gaurav@houndshield.com`) gets full
+4. **Founder access.** The configured founder email (`FOUNDER_EMAIL` /
+   `FOUNDER_ACCESS_EMAILS` — env only, never committed) gets full
    access to everything — top-tier entitlements, no payment, no Stripe row —
    across the console AND every server-side gate.
 
@@ -45,7 +46,8 @@ feature availability can never drift between them.
 [`lib/billing/founder-access.ts`](../compliance-firewall-agent/lib/billing/founder-access.ts)
 is the one place that decides "this account gets everything":
 
-- `isFounderEmail(email)` — matches `gaurav@houndshield.com` (case-insensitive);
+- `isFounderEmail(email)` — matches any configured founder address (case-insensitive);
+  returns false for everyone when unconfigured (fail-closed);
   extendable via the `FOUNDER_ACCESS_EMAILS` env var (comma-separated), never
   replaceable.
 - `resolveEffectiveTier(email, storedTier)` — founder → `agency` (top of the

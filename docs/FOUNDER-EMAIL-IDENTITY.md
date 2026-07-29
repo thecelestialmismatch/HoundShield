@@ -7,12 +7,18 @@
 
 ## The one-paragraph version
 
-Human email — outreach, sales, partner, founder-to-buyer — comes **from
-`Gaurav@houndshield.com`, signed "Gaurav, Founder — HoundShield"**. Automated mail
-(receipts, password resets, drip) comes from `noreply@houndshield.com`. Mail that a
-human must act on — a $499 sale, a warm lead, an RPO application, a contact-form
-message — is **delivered to `Gaurav@houndshield.com`** unless `FOUNDER_EMAIL`
-overrides it. All of that is decided in one module. Nothing else may decide it.
+Human email — outreach, sales, partner, founder-to-buyer — comes **from the
+`FOUNDER_EMAIL` mailbox, signed with `FOUNDER_NAME` + "Founder, HoundShield"**.
+Automated mail (receipts, password resets, drip) comes from
+`noreply@houndshield.com`. Mail a human must act on — a $499 sale, a warm lead, an
+RPO application, a contact-form message — is **delivered to `FOUNDER_EMAIL`**.
+All of that is decided in one module. Nothing else may decide it.
+
+**The founder's name and mailbox are NOT in this repository.** It is public, so
+identity is configuration: set `FOUNDER_NAME` and `FOUNDER_EMAIL`. Unset, outreach
+signs impersonally as "HoundShield" and alerts route to the published
+`contact@houndshield.com` — degraded, never broken, and never leaking a private
+address into a public artifact.
 
 ---
 
@@ -47,16 +53,16 @@ meant editing nine places and hoping.
 One module, two clearly separated kinds of address:
 
 - **Routing address** (internal): `founderInbox()`. Where mail is delivered so a
-  human acts on it. Overridable with `FOUNDER_EMAIL`. A malformed override is
-  **ignored, not obeyed** — a typo there would silently swallow every revenue
-  alert, so the code falls back to the known-good mailbox and `/api/health`
-  reports the var as broken.
+  human acts on it. Set with `FOUNDER_EMAIL`. A malformed value is **ignored, not
+  obeyed** — a typo there would silently swallow every revenue alert — so it falls
+  back to the published inbox and `/api/health` reports the var as broken.
 - **Published address** (public): `GENERAL_INBOX` = `contact@houndshield.com`.
   Printed on pages and returned to browsers. Never the routing address.
 
-`lib/billing/founder-access.ts` imports the founder address from this module
-rather than keeping its own copy, so "who is the founder" and "who does founder
-mail come from" cannot drift apart.
+`lib/billing/founder-access.ts` reads the same configured value through this
+module rather than touching `process.env` itself, so "who is the founder" and "who
+does founder mail come from" cannot drift apart. It is **fail-closed**: with no
+env set, no account receives the founder override.
 
 ---
 
@@ -66,10 +72,10 @@ This is the part that surprises people, and getting it wrong means an interested
 buyer replies into a void:
 
 - **Resend SENDS.** The domain `houndshield.com` is verified there, which is why
-  password resets already work. Sending as `Gaurav@houndshield.com` needs **no new
-  DNS** — it is the same verified domain, a different local part.
-- **Hostinger RECEIVES.** The mailboxes `Gaurav@`, `contact@` and `info@` live
-  there. A reply is only readable because the Hostinger mailbox exists.
+  password resets already work. Sending as any mailbox on that domain needs **no
+  new DNS** — same verified domain, different local part.
+- **Hostinger RECEIVES.** The mailboxes live there. A reply is only readable
+  because the receiving mailbox exists.
 
 So a send can succeed while replies bounce. Step 4 of the smoke test below is the
 only step that proves the receiving half works — do not skip it.
@@ -98,8 +104,9 @@ Resend → Domains → `houndshield.com` → **Records**. Anything else is a gue
 
 ### 1. Confirm the mailbox exists
 
-hPanel → **Emails** → select `houndshield.com`. You should see `Gaurav@houndshield.com`
-listed. If not: **Create email account** → local part `Gaurav` → set a password.
+hPanel → **Emails** → select `houndshield.com`. Confirm the mailbox you intend to
+use as `FOUNDER_EMAIL` is listed. If not: **Create email account** → set the local
+part you want → set a password.
 
 ### 2. Check there is exactly one SPF record
 
@@ -127,9 +134,8 @@ Dry run is the default; `--confirm` is required to actually send.
 
 The smoke-test email contains its own non-technical checklist: that it arrived, that
 it is in the inbox rather than spam, that the sender reads
-`Gaurav <Gaurav@houndshield.com>` with no "via" line, and — the important one —
-that hitting **Reply** addresses `Gaurav@houndshield.com` and that the reply
-actually arrives.
+your configured name and mailbox with no "via" line, and — the important one —
+that hitting **Reply** addresses that mailbox and that the reply actually arrives.
 
 If all four pass, outreach can go out.
 
@@ -173,12 +179,16 @@ research step you own — see `docs/OUTREACH-SOURCING-RUNBOOK.md`.
 
 ## Optional: route alerts somewhere with phone notifications
 
-The default already reaches `Gaurav@houndshield.com`. To send alerts elsewhere, set
-in Vercel (project `compliance-firewall-agent`, **Production** ticked):
+Set these in Vercel (project `compliance-firewall-agent`, **Production** ticked) —
+and in a gitignored `.env.local` for local sends:
 
 ```
-FOUNDER_EMAIL=whatever@you-actually-read.com
+FOUNDER_NAME=<the name outreach is signed with>
+FOUNDER_EMAIL=<the mailbox you actually read>
 ```
+
+Also set `FOUNDER_ACCESS_EMAILS` (or rely on `FOUNDER_EMAIL`) or the founder
+console override stays off — it is fail-closed by design.
 
 A malformed value is ignored and reported as broken by `/api/health` rather than
 silently swallowing alerts.
