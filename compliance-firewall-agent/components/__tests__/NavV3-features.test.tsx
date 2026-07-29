@@ -13,6 +13,7 @@ vi.mock('next/link', () => ({
 }))
 
 import { NavV3 } from '../layout/NavV3'
+import { RISK_REPORT, formatUSD } from '@/lib/pricing/plans'
 
 describe('NavV3 — exact-copy of the Direction-A demo nav', () => {
   it('renders all five hover mega-menu headers', () => {
@@ -41,11 +42,46 @@ describe('NavV3 — exact-copy of the Direction-A demo nav', () => {
     expect(document.querySelector('a[href^="/command-center/shield"]')).toBeNull()
   })
 
-  it('exposes the demo pricing ladder in the Pricing flyout', () => {
+  /*
+   * This slot used to assert the opposite — that the flyout exposed the
+   * demo's $199/$499/$999 monthly ladder — as a Direction-A port-fidelity
+   * check. That was written before /pricing dropped subscriptions entirely.
+   *
+   * The two guards then contradicted each other: pricing-single-offer.test
+   * asserts /pricing shows no monthly price, while this asserted the nav
+   * rendered on that same page shows three. The nav one was stale, so it
+   * became an honesty assertion instead. The port-fidelity intent survives
+   * in the surrounding tests, which still pin the demo's menu structure.
+   *
+   * pricing-single-offer.test mocks NavV3 away, so this is the only place
+   * the flyout's prices are actually checked.
+   */
+  it('quotes no monthly subscription in the Pricing flyout', () => {
+    const { container } = render(<NavV3 />)
+    const text = container.textContent ?? ''
+    for (const dead of ['$199', '$999', '$2,499']) {
+      expect(text, `nav must not quote the unsellable ${dead} tier`).not.toContain(dead)
+    }
+    expect(text, 'nav must not quote a per-month price').not.toMatch(/\/\s*mo\b/)
+  })
+
+  it('quotes only what a buyer can actually purchase today', () => {
+    const { container } = render(<NavV3 />)
+    const text = container.textContent ?? ''
+    // The $499 one-time report and the $299 partner wholesale — the two real
+    // offers, sourced from RISK_REPORT so they cannot drift from /pricing.
+    expect(text).toContain(formatUSD(RISK_REPORT.oneTimePrice))
+    expect(text).toContain(formatUSD(RISK_REPORT.wholesalePrice))
+    expect(text).toContain('one-time')
+  })
+
+  it('points every Pricing flyout row at a page that sells that row', () => {
     render(<NavV3 />)
-    expect(screen.getByText('$199')).toBeTruthy()
-    expect(screen.getByText('$499')).toBeTruthy()
-    expect(screen.getByText('$999')).toBeTruthy()
+    // The old flyout sent "Pro · $199/mo" to /pricing, which offers no such
+    // plan. Wholesale belongs to the partner kit, not the pricing page.
+    expect(document.querySelector('a[href="/pricing"]')).toBeTruthy()
+    expect(document.querySelector('a[href="/partners/kit"]')).toBeTruthy()
+    expect(document.querySelector('a[href^="/signup?plan="]')).toBeNull()
   })
 
   it('renders the truthful product trust badge (not a fabricated counter)', () => {
