@@ -1,3 +1,5 @@
+import { PURCHASABLE_OFFER } from '@/lib/billing/entitlements';
+
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
 const FROM = 'HoundShield <noreply@houndshield.com>';
 
@@ -12,13 +14,14 @@ export const day7Email = {
           Unlock full compliance coverage
         </p>
         <p style="color:#166534;font-size:14px;margin:0 0 16px;line-height:1.6;">
-          Free tier monitors 3 CUI patterns. Pro monitors all 16 — including export-controlled
-          technical data, classified contract numbers, and ITAR-restricted specs.
+          Turn this week's activity into evidence an auditor accepts: 14 days of your real AI
+          traffic scored against NIST 800-171 Rev 2 and HIPAA, delivered as a signed PDF with a
+          SHA-256 hash-chained audit trail. One-time, no subscription.
         </p>
         <div style="text-align:center;">
-          <a href="${APP_URL}/pricing"
+          <a href="${APP_URL}${PURCHASABLE_OFFER.href}"
             style="background:#16a34a;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block;">
-            Upgrade to Pro — $199/mo →
+            ${PURCHASABLE_OFFER.ctaLabel} →
           </a>
         </div>
       </div>` : '';

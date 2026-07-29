@@ -78,7 +78,7 @@ export function FaqAccordion({ items, className = '' }: FaqAccordionProps) {
   }
 
   return (
-    <div ref={rootRef} className={`w-full space-y-3 ${className}`}>
+    <div ref={rootRef} className={`w-full space-y-4 ${className}`}>
       {items.map((item, i) => {
         const isOpen = open === i
         const slug = faqSlug(item.question)
@@ -99,9 +99,12 @@ export function FaqAccordion({ items, className = '' }: FaqAccordionProps) {
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
               aria-controls={panelId}
-              className="w-full flex items-start justify-between gap-4 px-5 py-5 sm:px-6 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--hs-steel)] focus-visible:ring-offset-2 rounded-2xl"
+              className="w-full flex items-start justify-between gap-5 px-5 py-6 sm:px-7 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--hs-steel)] focus-visible:ring-offset-2 rounded-2xl"
             >
-              <span className="text-base sm:text-[1.05rem] font-semibold leading-snug text-[var(--hs-ink)] font-[var(--font-body)]">
+              {/* Weight and size track hermes `.step h3` (1.18rem / 700) so the
+                  FAQ rows read as the same component family as the numbered
+                  step rows on /products/[industry]. */}
+              <span className="text-[1.05rem] sm:text-[1.18rem] font-bold leading-snug text-[var(--hs-ink)] font-[var(--font-body)]">
                 {item.question}
               </span>
               <span
@@ -124,11 +127,11 @@ export function FaqAccordion({ items, className = '' }: FaqAccordionProps) {
               style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
             >
               <div className="overflow-hidden">
-                <p className="px-5 sm:px-6 text-[15px] leading-[1.7] text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
+                <p className="px-5 sm:px-7 pt-1 text-[15px] leading-[1.75] text-[var(--hs-ink-secondary)] font-[var(--font-body)]">
                   {item.answer}
                 </p>
 
-                <div className="mt-4 px-5 sm:px-6 pb-5 flex flex-wrap items-center gap-2">
+                <div className="mt-5 px-5 sm:px-7 pb-6 flex flex-wrap items-center gap-2">
                   {item.links?.map((l) => (
                     <Link
                       key={l.href + l.label}

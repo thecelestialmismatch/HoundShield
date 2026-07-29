@@ -7,6 +7,8 @@
  * IMPORTANT: the profile must be derived from the Supabase SESSION server-side
  * (never a client-sent id) — see app/api/chat/route.ts.
  */
+import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
+
 export interface BrainUserContext {
   name?: string | null;
   company?: string | null;
@@ -68,8 +70,9 @@ export function buildIdentityAnswer(ctx: BrainUserContext | null | undefined): s
     return (
       "You're browsing as a guest right now, so I don't have your account details in front of me. " +
       "Sign in and I'll greet you by name, keep your SPRS posture and open CMMC controls at hand, " +
-      "and tailor every answer to your environment. You can start free from the Start free button — " +
-      "no credit card required."
+      `and tailor every answer to your environment. No account yet? ${PURCHASABLE_OFFER.tryLabel} ` +
+      `at ${PURCHASABLE_OFFER.tryHref} — it runs in your browser, needs no sign-up, and never ` +
+      "transmits your prompt text."
     );
   }
 

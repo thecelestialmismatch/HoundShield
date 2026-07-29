@@ -51,8 +51,9 @@ export const day3Email = {
       </div>
 
       <p style="color:#64748b;font-size:13px;line-height:1.6;">
-        CMMC Level 2 enforcement: November 2026. 80,000+ contractors need to certify.
-        The ones auditing AI usage now will pass on the first try.
+        CMMC Phase 2 was suspended on 13 July 2026 — there is no certification deadline right now.
+        Your annual SPRS self-attestation is still mandatory, and it is the one DOJ prosecutes.
+        The teams auditing AI usage now are the ones who can evidence the score they filed.
       </p>
     </div>
 
