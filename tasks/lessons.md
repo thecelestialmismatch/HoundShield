@@ -1015,3 +1015,64 @@ fix — a guard that can be evaded while green is worse than no guard (false con
 dev serving 500s. Fix: stop server, move `.next` aside, restart.
 **Rule:** Never run the prod build gate while the preview dev server is up. Gate first, preview after —
 or stop/clean/restart the dev server following a build.
+
+### A secret scanner that allowlists PATHS is not a secret scanner
+**What:** Building the leak guard, the obvious way to handle ~30 deliberate fake credentials in
+tests and demo copy was to skip `__tests__/` and `app/demo/`. That would have passed CI on day one
+and been worthless on day two: the next REAL key pasted into a test file — the single most likely
+place for one to land — would sail through the gate silently.
+**Root cause:** Path exclusions are cheap to write and feel like configuration. They are actually a
+permanent, invisible hole shaped exactly like the directories where secrets most often appear.
+**Rule:** Allowlist VALUES, never paths. A known fake is recognised by its own shape, so a new
+secret in an already-forgiving file still fails. If a self-referential exclusion is truly
+unavoidable (the guard's own source), pin its size with an assertion so nobody can grow it.
+
+### Prefix-only secret matching is why teams delete their scanner
+**What:** `re_[A-Za-z0-9]+` matched the ordinary identifiers `re_pageview`, `re_patterns`,
+`re_evidence`, `re_contexts`. Bare `eyJ` matched every inline sourcemap in `public/_bootstrap.html`
+(they base64-decode to valid JSON) and integrity hashes in package-lock.json. A first run produced
+13 findings, all benign.
+**Root cause:** A prefix is a hypothesis, not a detection. Real credentials are also high-entropy,
+long, mixed-class, and free of sequential or repeated runs — and a JWT has a decodable JOSE header.
+**Rule:** Treat every false positive as a bug in the guard, not a reason to exclude a file. A noisy
+gate gets disabled within a week, which is strictly worse than no gate because it also creates the
+belief that scanning is happening.
+
+### A guard nobody has watched FAIL is a guard nobody knows works
+**What:** The leak guard's `--self-test` (must-flag vs must-pass fixtures) caught it being wrong
+three separate times before it ever ran on a PR: `AKIA1234567890ABCD12` (no repeated char, no
+placeholder word — only its `1234567890` sequence gives it away), seven docker-compose connection
+strings, and `proxy/PATTERNS.md` documenting the private-key header. Three of the guard's rules
+exist ONLY because of those failures. Separately, restoring each shipped bug turned its new
+regression test red, and removing it turned it green.
+**Rule:** Ship the discrimination proof with the guard. Assert both directions — the bad thing is
+caught AND the known-good thing is not — and run it in CI ahead of the real check.
+
+### Verify the rendered artefact in the real client, not the source string
+**What:** `lib/email/outreach.ts` read `'Open houndshield.com/demo…'` and every test passed. Pasted
+into an actual Gmail draft, that scheme-less URL became
+`https://www.google.com/url?q=http://houndshield.com/demo&source=gmail` — a tracking redirect over
+HTTP. Same pass: reading the rendered defense draft showed it telling a DoD security manager to
+click "Patient Record". Neither defect is visible in the source; both are obvious in the output.
+**Rule:** For anything a human will receive — email, PDF, rendered page — read the final artefact in
+the client that will render it. Source review and unit tests cannot see what the client rewrites.
+
+### `git add -A` after a conflicted `stash pop` commits the conflict markers
+**What:** `git stash push -- <path>` captured more than the pathspec (the changes were staged from a
+prior `reset --soft`), so `stash pop` conflicted. The very next `git add -A && git commit` swallowed
+`<<<<<<<`/`=======`/`>>>>>>>` straight into a commit, which then exited 0 and looked fine —
+the syntax error only surfaced when the file was executed.
+**Root cause:** `git add -A` is indiscriminate by definition, and a conflicted working tree is
+exactly when indiscriminate staging is most dangerous.
+**Rule:** Never `git add -A` immediately after a merge/stash/rebase step that can conflict. Check
+`git status` first, and grep the staged diff for conflict markers before committing.
+
+### GitHub Push Protection will reject your own realistic test fixtures
+**What:** The first push of the leak guard was rejected: GitHub read two `--self-test` fixtures as a
+live Stripe key and a live Supabase token. The offered escape hatch is a per-secret "allow this
+secret" unblock URL.
+**Root cause:** Good fixtures and real secrets are indistinguishable by design — that is what makes
+them good fixtures.
+**Rule:** Assemble credential fixtures from split fragments so no complete provider-format literal
+exists in the file. Never click the unblock URL to get a test fixture through: it trains precisely
+the reflex the guard exists to prevent, and the next click might be a real key.
