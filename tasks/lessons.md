@@ -5,6 +5,100 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-29
+
+### "It looks off-centre on one page" was one symptom of a reset silently voiding 272 utilities
+**What:** The founder reported the FAQ block sitting left on `/pricing`. Treated as a one-page
+layout nit, the fix would have been a `!mx-auto` on that page — and five other pages plus the
+whole `/faq` hub would have stayed broken. Measuring the computed box instead of reading the JSX
+showed the real shape: `margin-inline` and `padding-inline` computed to `0px` while `max-w-3xl`
+still applied. A browser audit for "elements carrying a Tailwind spacing class that computes to
+0px" found **236 dead utilities on `/faq` and 36 on `/pricing`** — the search input's `pl-12
+pr-12` (its icon overlapped the placeholder), every category pill, all 38 accordion rows.
+
+**Root cause:** `app/hermes.css` opened with an **unlayered** `.hermes *, ::before, ::after
+{ margin:0; padding:0 }`. Tailwind v3 emits no cascade layer, so that reset and every `.px-5` /
+`.mx-auto` utility tied at specificity (0,1,0), and ties break on **source order** —
+`layout.tsx` imports `globals.css` before `hermes.css`, so the reset won every one. Five pages
+had already been paying the tax without naming it, passing `!mx-0 !px-0 !py-0` into `FaqSection`,
+because `!important` was the only thing that beat it. `max-w-*` hid the whole class of bug by
+continuing to work: the reset never sets `max-width`, so boxes were the right *width* in the
+wrong *place* with their contents flattened — which reads as "slightly off" rather than "broken".
+
+**Rules:**
+1. When a CSS symptom is "some properties apply and others don't on the same element", that
+   asymmetry names the culprit. Ask which properties the suspect rule actually sets — here
+   `max-width` surviving proved a margin/padding reset, not a width or layout problem.
+2. Diagnose CSS from **computed style in a real browser**, never from the class list. `mx-auto`
+   being present in the JSX said nothing about whether it applied.
+3. Before "fixing" a reported page, run the audit that counts every instance of the same defect.
+   One founder-visible symptom is a sample, not the population.
+4. A universal reset (`*`) that ships alongside a utility framework belongs in an `@layer`.
+   Layered rules lose to all unlayered author rules regardless of specificity, so utilities win,
+   while UA defaults still lose to the reset. Un-layering it silently restores the entire bug
+   class — so the guard pins the layer, not any one page's layout.
+5. Repeated `!important` overrides of a shared component are a smell, not a style. Five pages
+   passing `!mx-0 !px-0` was the codebase reporting this bug for weeks in a language nobody read.
+
+
+
+### A red health check is a symptom report, not a diagnosis — probe the real endpoint before believing it
+**What:** `/api/health` read `payments: missing_key`, and every session for two weeks treated that
+as "checkout is dead, only the founder can fix it." One curl against production disproved it:
+`/api/stripe/report-checkout` returned a live Stripe Payment Link (`rail: payment_link`, HTTP 200).
+Retail had been sellable the entire time. The actual damage was one layer down and invisible to the
+health check — the webhook answered real sales with 503, so a $499 buyer could pay and be recorded
+nowhere and answered by nobody.
+**Root cause:** The health check reports the state of a *variable*, not the state of the *capability*.
+"Key missing" was read as "cannot take money," when a fallback rail deliberately built for exactly
+that outage meant the opposite. Nobody re-derived the claim against the running system, so the team
+kept fixing the loud broken thing and never saw the quiet broken thing behind it.
+**Rule:** Before accepting any "X is blocked" from a status field, hit the real endpoint and read the
+real response. A diagnostic describes configuration; only the endpoint describes behavior. And when
+a config value has a documented fallback, the fallback path — not the missing value — is where the
+next bug lives.
+
+### An env var that gates a code path which never uses it is a hidden outage
+**What:** `POST /api/stripe/webhook` required `STRIPE_SECRET_KEY` before processing any event. But
+signature verification (`webhooks.constructEvent`) is a local HMAC check over the raw body, and the
+$499 report handler reads the event payload and writes to Supabase — neither calls Stripe. A grep
+found exactly ONE Stripe API call in the entire 380-line route. The key gated the money path
+gratuitously, converting a survivable single-variable misconfiguration into total revenue silence.
+**Root cause:** Config guards get written as one blanket precondition at the top of a handler
+("Stripe stuff needs Stripe env"), by association rather than by actual dependency. The guard was
+never re-derived after the fallback rail made key-less selling possible.
+**Rule:** A precondition must guard the code that actually needs it, not the whole handler by theme.
+Before writing `if (!ENV) return 503`, grep the handler for the calls that consume `ENV` — if a branch
+doesn't use it, that branch must still run. Corollary for webhooks specifically: **degrade to 2xx, never
+to an error.** Stripe retries non-2xx and eventually disables the endpoint, so a guard that fails loudly
+on one branch silently destroys every other branch on the same endpoint.
+
+### A page-level rule is not enforced until it is enforced on the API surface
+**What:** #243 collapsed `/pricing` to the single $499 offer and added a render test proving no monthly
+price appears. `app/api/stripe/checkout/route.ts` survived untouched — a live POST endpoint still
+creating $199/$999/$2,499 subscriptions with a 14-day trial, for tiers the site no longer lists. It had
+zero references anywhere in the repo, so deleting the tiers from the page broke nothing and revealed
+nothing. Its own docblock still read *"All prices match /pricing page exactly. No orphaned tiers."*
+**Root cause:** The guard tested the surface a human sees, not the surface that takes money. Dead code
+with no callers is invisible to every test that works by exercising callers.
+**Rule:** When a product rule changes (pricing, offer, tier), grep the API routes for the old shape in
+the same arc — the page and the endpoint are two enforcement points and only one of them charges cards.
+Guard invariants that concern "what we sell" with a **source-level** scan (route directory contents,
+`mode: 'subscription'` literals), because a runtime test cannot fail on a file that has no caller.
+Inverse of the 2026-07-22 lesson: there a tested backend had no caller and the funnel was dead; here an
+untested backend had no caller and the pricing rule was quietly false. Same question finds both —
+*does anything actually reach this route?*
+
+### Prove a new test fails against the old code, or it is decoration
+**What:** The new webhook tests passed on the first run. That is exactly what a test asserting nothing
+also does. Reverting the gate to its old form and re-running showed both money-path tests going red —
+only then was the coverage real.
+**Root cause:** A green test after a fix is ambiguous: it means either "the fix works" or "the test
+never exercised the bug." The two are indistinguishable without running it against the broken code.
+**Rule:** For any regression test on a bug you just fixed, temporarily restore the bug and confirm the
+test goes red (isolate with `-t` to avoid unconsumed `mockReturnValueOnce` queues cascading into
+unrelated failures and muddying the signal). Paste the red output. A test that has never failed has
+never been tested.
 ## 2026-07-28
 
 ### The compass was one day stale on the fact the whole company was built around
