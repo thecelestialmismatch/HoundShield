@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
+  DEMO_SAMPLES,
   OUTREACH_DRAFTS,
   TEST_IT_YOURSELF_STEPS,
   PREVIEW_CAVEAT,
@@ -239,5 +242,47 @@ describe('render() — refuses template residue (the "no flukes" rule)', () => {
       const { subject, text } = render(d, vars);
       expect(`${subject}${text}`).not.toMatch(/\[[A-Za-z ]+\]|\{\{|\}\}/);
     }
+  });
+});
+
+describe('the test guide names a sample button that /demo actually has', () => {
+  // Reads the page source rather than importing it: app/demo/page.tsx is a
+  // client component and importing it would pull the whole scanner into this
+  // suite. The invariant is about what the page SAYS, so the test reads that.
+  const demo = readFileSync(join(process.cwd(), 'app', 'demo', 'page.tsx'), 'utf8');
+
+  it.each(Object.entries(DEMO_SAMPLES))('%s → "%s" is really on /demo', (_audience, sample) => {
+    expect(demo, `no sample button named "${sample}" in app/demo/page.tsx`).toContain(
+      `name: "${sample}"`,
+    );
+  });
+
+  it('offers exactly the four buttons the guide claims are there', () => {
+    // Step 1 tells the reader there are "four sample buttons". Add a fifth and
+    // every outreach email becomes wrong — fail here, not in a buyer's inbox.
+    const count = [...demo.matchAll(/name: "[^"]+",\s*\n\s*icon:/g)].length;
+    expect(count, 'the guide promises four sample buttons').toBe(4);
+  });
+
+  it('sends each audience the sample it would actually care about', () => {
+    // The defect this prevents: a DoD security manager told to click "Patient
+    // Record", which reads as an untargeted mail merge.
+    const defenseGuide = renderTestGuide(DEMO_SAMPLES.defense);
+    expect(defenseGuide).toContain(DEMO_SAMPLES.defense);
+    expect(defenseGuide).not.toContain(DEMO_SAMPLES.healthcare);
+
+    const defenseBody = render(defenseSprsOutreach, { firstName: 'Jordan' }).text;
+    expect(defenseBody).toContain(DEMO_SAMPLES.defense);
+    expect(defenseBody).not.toContain(DEMO_SAMPLES.healthcare);
+
+    const partnerBody = render(partnerOutreach, VARS).text;
+    expect(partnerBody).toContain(DEMO_SAMPLES.technical);
+    expect(partnerBody).not.toContain(DEMO_SAMPLES.healthcare);
+
+    // Healthcare keeps the patient-information wording; the others must not,
+    // because it is meaningless to an MSP or a defense contractor.
+    expect(render(healthcareOutreach, VARS).text).toContain('real patient information');
+    expect(defenseBody).not.toContain('real patient information');
+    expect(partnerBody).not.toContain('real patient information');
   });
 });
