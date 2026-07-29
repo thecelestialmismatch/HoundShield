@@ -36,7 +36,7 @@ const posts: BlogPost[] = [
     description:
       "The complete CMMC Level 2 compliance checklist for 2026. 110 NIST 800-171 controls, C3PAO assessment prep, CUI handling, and how AI tools create hidden violations.",
     excerpt:
-      "CMMC Phase 2 enforcement begins November 2026. If you're a defense contractor and haven't started, you're behind. This is the no-fluff checklist: 110 controls, what auditors actually look for, and the AI blind spot most contractors miss.",
+      "UPDATE 28 July 2026: CMMC Phase 2 was suspended on 13 July 2026, so the November 2026 certification date no longer applies — but the 110 controls and your annual SPRS self-attestation still do. This is the no-fluff checklist: 110 controls, what auditors actually look for,and the AI blind spot most contractors miss.",
     date: "2026-05-08",
     author: "HoundShield Security Team",
     authorTitle: "AI Compliance Engineers",
@@ -45,8 +45,10 @@ const posts: BlogPost[] = [
     readingTime: 12,
     featured: true,
     content: `
+<aside class="post-correction"><p><strong>Correction — 28 July 2026.</strong> This article was published on 8 May 2026, before the Department of War suspended CMMC Phase 2 on 13 July 2026. The 10 November 2026 date below <em>no longer applies</em>, and Phases 3 and 4 are frozen pending a 60-day review. Everything else in this checklist stands: DFARS 252.204-7012 still applies, all 110 NIST SP 800-171 Rev 2 controls must still be implemented, and your annual SPRS self-assessment is still mandatory. With no assessor in the loop, that self-attested score is your own representation to the government — and DOJ has settled fifteen False Claims Act cases over exactly that.</p></aside>
+
 <h2>Why CMMC Level 2 Matters Right Now</h2>
-<p>The Department of Defense's CMMC Phase 2 enforcement deadline is November 2026. Defense contractors handling Controlled Unclassified Information (CUI) must achieve CMMC Level 2 certification — or lose their contracts.</p>
+<p>The Department of Defense's CMMC Phase 2 enforcement deadline was November 2026 (see the correction above). Defense contractors handling Controlled Unclassified Information (CUI) must achieve CMMC Level 2 certification — or lose their contracts.</p>
 <p>CMMC Level 2 maps directly to all 110 security requirements in NIST SP 800-171 Rev 2. No exceptions. No partial credit.</p>
 
 <h2>The 17 CMMC Level 2 Domains</h2>
