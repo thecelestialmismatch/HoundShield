@@ -1,6 +1,6 @@
 /**
- * Founder outreach drafts — the human-written emails Gaurav sends to buyers and
- * partners, plus the plain-English "test it yourself" guide every buyer-facing
+ * Founder outreach drafts — the human-written emails the founder sends to buyers
+ * and partners, plus the plain-English "test it yourself" guide every buyer-facing
  * draft carries.
  *
  * WHY THESE LIVE IN CODE, NOT ONLY IN A MARKDOWN DOC
@@ -25,7 +25,7 @@
  * solo founder is sounding like a person.
  */
 
-import { FOUNDER_ADDRESS, founderFrom, founderSignature } from './identity';
+import { founderAddress, founderFrom, founderSignature } from './identity';
 
 /** A single step in the non-technical test guide. */
 export interface TestStep {
@@ -110,7 +110,7 @@ export interface OutreachDraft {
   rationale: string;
 }
 
-const SIG = founderSignature();
+
 
 /**
  * DRAFT 1 — Healthcare Privacy Officer. The lead buyer since the 2026-07-28
@@ -134,8 +134,8 @@ Do you have 15 minutes this week? I am not selling anything on that call. I genu
 
 ${renderTestGuide()}
 
-${SIG}
-${FOUNDER_ADDRESS}`,
+${founderSignature()}
+${founderAddress()}`,
   rationale:
     'Names the specific role and the specific fear, cites a real source, asks for time rather than money, and gives a way to verify the core claim without talking to us. No calendar link, no deck, no P.S. — each addition makes it look less like a person wrote it.',
 };
@@ -161,8 +161,8 @@ I am looking for a small number of first partners, and I would rather have one r
 
 ${renderTestGuide()}
 
-${SIG}
-${FOUNDER_ADDRESS}`,
+${founderSignature()}
+${founderAddress()}`,
   rationale:
     'Leads with their economics, not our features. States the wholesale/retail split in actual numbers so a principal can decide without a follow-up. Mode B (Docker, in-client) is named because that is the only configuration that is genuinely CUI-safe.',
 };
@@ -193,8 +193,8 @@ So the question I would ask in your position: if someone asked you tomorrow to e
 
 ${renderTestGuide()}
 
-${SIG}
-${FOUNDER_ADDRESS}`,
+${founderSignature()}
+${founderAddress()}`,
   rationale:
     'Every number is verifiable and named — that is the point of using them. Deliberately does not mention November 2026: selling against a suspended deadline gets you caught by any buyer who reads the news, and destroys the credibility the rest of the email depends on.',
 };
@@ -213,7 +213,7 @@ export const mailboxSmokeTest: OutreachDraft = {
   audience: 'An inbox the founder controls — deliverability proof, not outreach',
   required: [],
   subject: () => 'HoundShield sender check',
-  body: () => `This is a deliverability test for ${FOUNDER_ADDRESS}.
+  body: () => `This is a deliverability test for ${founderAddress()}.
 
 Check these four things, in order:
 
@@ -223,12 +223,12 @@ Check these four things, in order:
 
 3. The sender shows as "${founderFrom()}" and not a raw address or "via" some other domain. A "via" line tells the recipient this was machine-sent.
 
-4. Hit Reply. The To: field must read ${FOUNDER_ADDRESS}. Send that reply and confirm it arrives in the mailbox. Sending and receiving are two separate systems — this is the only step that proves the receiving side works.
+4. Hit Reply. The To: field must read ${founderAddress()}. Send that reply and confirm it arrives in the mailbox. Sending and receiving are two separate systems — this is the only step that proves the receiving side works.
 
 If all four pass, the sender identity is real and outreach can go out.
 
-${SIG}
-${FOUNDER_ADDRESS}`,
+${founderSignature()}
+${founderAddress()}`,
   rationale:
     'Sending and receiving are different systems: Resend sends as @houndshield.com, the Hostinger mailbox receives. A send can succeed while replies bounce into nothing, which would silently lose every interested buyer. Step 4 is the only one that tests the receiving half.',
 };
@@ -282,5 +282,5 @@ export function render(
     );
   }
 
-  return { from: founderFrom(), replyTo: FOUNDER_ADDRESS, subject, text };
+  return { from: founderFrom(), replyTo: founderAddress(), subject, text };
 }

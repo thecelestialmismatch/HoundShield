@@ -28,7 +28,7 @@
  *    with its message and a non-zero exit.
  */
 
-import { founderInbox, isSendableAddress, isEmailShaped, FOUNDER_ADDRESS } from '../lib/email/identity';
+import { founderInbox, isSendableAddress, isEmailShaped, founderAddress } from '../lib/email/identity';
 import { OUTREACH_DRAFTS, getDraft, render } from '../lib/email/outreach';
 
 interface Args {
@@ -66,7 +66,7 @@ function parseArgs(argv: string[]): Args {
 
 function usage(): void {
   console.log(`
-send-founder-email — send one founder email from ${FOUNDER_ADDRESS}
+send-founder-email — send one founder email from ${founderAddress()}
 
   --template <id>       Which draft. One of:
 ${OUTREACH_DRAFTS.map((d) => `                          ${d.id.padEnd(12)} ${d.audience}`).join('\n')}
@@ -164,7 +164,7 @@ async function main(): Promise<void> {
   }
 
   console.log(`SENT to ${to} (id ${result.data?.id ?? 'unknown'}).`);
-  console.log(`Now check that inbox, and reply to it to prove ${FOUNDER_ADDRESS} receives.\n`);
+  console.log(`Now check that inbox, and reply to it to prove ${founderAddress()} receives.\n`);
 }
 
 main().catch((err) => {

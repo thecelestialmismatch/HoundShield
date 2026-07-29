@@ -1,8 +1,8 @@
 # Healthcare Outreach — Ready to Send
 
-**From:** `Gaurav@houndshield.com` · **Sign as:** Gaurav, Founder — HoundShield
+**From:** your `FOUNDER_EMAIL` mailbox · **Sign as:** `FOUNDER_NAME`, Founder — HoundShield
 
-> **Mailbox status corrected 2026-07-29:** `Gaurav@houndshield.com` **exists**
+> **Mailbox status corrected 2026-07-29:** the founder mailbox **exists**
 > (founder-confirmed, along with `contact@` and `info@`). The earlier note here said
 > only `info@` was provisioned — that came from one `/api/v1/me` read and was never
 > re-verified. Nothing is blocked on the mailbox.
@@ -54,7 +54,7 @@ inbox, not a sequencing tool — a founder writing personally is the entire adva
 > If it's easier to just see it: you can paste a sample prompt at
 > houndshield.com/demo — it scans in your browser, nothing is sent to us.
 >
-> Gaurav
+> <FOUNDER_NAME>
 > Founder, HoundShield
 
 **Why it works:** under 90 words, names the specific role and specific fear, asks for
@@ -82,7 +82,7 @@ look more like marketing and less like a person.
 > I built a scanner that shows you exactly what's been pasted, running on your own
 > hardware. Worth 15 minutes?
 >
-> Gaurav
+> <FOUNDER_NAME>
 > Founder, HoundShield
 
 ---
@@ -97,7 +97,7 @@ look more like marketing and less like a person.
 > If it's more "we suspect it's happening but can't prove it," that's exactly the
 > conversation I'm after.
 >
-> Gaurav
+> <FOUNDER_NAME>
 
 **Send one follow-up. Never two.** "Reply with one word" makes the no cheap, and a fast
 no is worth more than a slow maybe.
@@ -123,7 +123,7 @@ the November deadline no longer exists.
 > If someone asked you to evidence your score tomorrow, could you? That's the gap I built
 > for. 15 minutes?
 >
-> Gaurav
+> <FOUNDER_NAME>
 > Founder, HoundShield
 
 **Every claim here is verifiable** — that is the point. Do not embellish the numbers.

@@ -19,6 +19,17 @@ vi.mock('@/lib/supabase/server', () => ({
 
 import { GET } from '@/app/api/me/route';
 
+// Founder access is env-only (nothing personal committed to this public repo), so
+// these tests must configure the identity they assert on.
+const TEST_FOUNDER_EMAIL = 'founder@houndshield.com';
+beforeEach(() => {
+  process.env.FOUNDER_EMAIL = TEST_FOUNDER_EMAIL;
+});
+afterEach(() => {
+  delete process.env.FOUNDER_EMAIL;
+});
+
+
 describe('GET /api/me', () => {
   beforeEach(() => {
     mockIsConfigured.mockReset();
@@ -67,9 +78,9 @@ describe('GET /api/me', () => {
 
   it('founder session resolves to the top tier — full access with no payment', async () => {
     mockGetUser.mockResolvedValue({
-      data: { user: { id: 'u1', email: 'Gaurav@HoundShield.com' } },
+      data: { user: { id: 'u1', email: 'founder@houndshield.com' } },
     });
-    mockProfile.mockResolvedValue({ data: { full_name: 'Gaurav', company: null, role: null, tier: 'free' } });
+    mockProfile.mockResolvedValue({ data: { full_name: 'Founder', company: null, role: null, tier: 'free' } });
     const res = await GET();
     const body = await res.json();
     expect(body.tier).toBe('agency');

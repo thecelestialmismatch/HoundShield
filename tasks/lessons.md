@@ -5,11 +5,61 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-07-29 (privacy — my own mistake)
+
+### I committed the founder's name and mailbox into a PUBLIC repo, in ~20 places
+**What:** Building the email-identity module, I hardcoded the founder's personal
+address as `export const FOUNDER_ADDRESS`, then propagated it into 2 new docs, 2 new
+test files, `tasks/todo.md`, `tasks/lessons.md`, the skill file, the commit message
+and the PR body — and merged it. The founder stopped me: *"what is not needed and not
+meant to push on github should not be sent on github."* `thecelestialmismatch/HoundShield`
+is `"visibility": "public"`. A personal mailbox and a personal Gmail were sitting in
+merged `main`, indexed.
+**Root cause:** I treated identity as a *correctness* problem ("one source of truth
+for the sender") and never asked the *disclosure* question ("who can read this?").
+Single-source-of-truth pressure actively pushed the wrong way: it made hardcoding the
+real value feel like the disciplined choice. Worse, the address was already present in
+9 pre-existing test files, so it read as an established repo convention rather than
+something to question.
+**Rules:**
+1. **Before committing any real-world identifier — a person's name, mailbox, phone,
+   handle, address — check the repository's visibility, and default to env config
+   regardless.** Identity is operator configuration, not source code.
+2. **"Single source of truth" applies to the RESOLVER, not the value.** The right
+   shape is one function reading one env var. A committed literal is the anti-pattern
+   wearing the pattern's clothes.
+3. **An in-repo default that ships publicly must be safe to publish.** Here the
+   fallback is the already-published `contact@`, so unconfigured means impersonal,
+   never leaked. Access grants go the other way — fail CLOSED (empty list), because a
+   missing var must not silently hand someone top-tier access.
+4. **A precedent in the codebase is not permission.** Nine test files already carried
+   the address; that made it feel normal. Inherited exposure is still exposure, and
+   "it was already here" is how it spreads.
+5. **Removing it from HEAD does not remove it from history.** Scrubbing the working
+   tree is necessary but not sufficient; a public repo's git history keeps every past
+   blob until it is rewritten. Say that plainly instead of implying the fix is total.
+
+### A blanket regex over prose mangles the prose
+**What:** Scrubbing the name, I ran `s/\bGaurav\b/the founder/` across docs. It
+produced "the mailboxes `the founder@`", "local part `the founder`", and email
+signatures reading "> the founder". It also silently broke a test asserting an email's
+local part by rewriting the expected string.
+**Root cause:** A find-and-replace optimised for *finding every instance* with no
+regard for whether each replacement was grammatical or semantic. The same partial-sweep
+failure as the v3 design split-brain, in the opposite direction: too broad, not too narrow.
+**Rule:** For prose, scrub with **targeted, reviewed replacements per file** and then
+re-read the affected passages. Reserve blanket regex for structured values (an address
+literal, an env key), never for a name embedded in sentences. Then grep for the artifacts
+a bad sweep leaves behind (`the founder@`, doubled articles) — and re-run the tests,
+because expected-value strings get caught in the blast radius.
+
+---
+
 ## 2026-07-29 (email identity)
 
 ### A rule that lives only in a skill file is not a rule — four routes each invented their own answer
 **What:** `/houndshield` has said for weeks that founder mail comes from
-`Gaurav@houndshield.com`. No code enforced it. Four routes independently resolved "the
+the founder mailbox. No code enforced it. Four routes independently resolved "the
 inbox a human must act on" and two disagreed: the $499 sale alert, the contact form and
 the snapshot lead defaulted to `contact@`, while `partners/apply` — the Stage-1 ≥1-RPO
 goal — defaulted to `info@`. Nobody chose that split; two people reached for a plausible
@@ -270,7 +320,7 @@ the count from the array so it can never drift.
 **What:** "Still no password reset" recurred across many sessions despite repeated code fixes (#224,
 #231, #237). A fresh end-to-end trace found the code chain is correct and unit-tested — the real
 blockers are operational (missing `SUPABASE_SERVICE_ROLE_KEY`, a stale `NEXT_PUBLIC_APP_URL`, an
-unverified Resend domain, a `gaurav@houndshield.com` mailbox that never existed), and the route is
+unverified Resend domain, a the founder mailbox mailbox that never existed), and the route is
 enumeration-safe so it ALWAYS returns 200 and the UI ALWAYS says "check your email". Every failure was
 invisible, so each session re-fixed the code — the one place the bug wasn't.
 **Root cause:** Chasing the code because that's what we can edit, when the signal (which env/knob is
