@@ -33,6 +33,12 @@ import { classifyRisk } from "@/lib/classifier/risk-engine";
 import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
 import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
 import { gatewayCorsHeaders } from "@/lib/gateway/cors";
+import {
+  enforceRateLimit,
+  identifierFor,
+  clientIp,
+  LLM_RATE_LIMITS,
+} from "@/lib/rate-limit-shared";
 import type { ActionTaken } from "@/lib/supabase/types";
 
 // ---------------------------------------------------------------------------
@@ -528,6 +534,17 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (!resolved) {
     return openAIError("Invalid API key.", "invalid_request_error", "invalid_api_key", 401);
   }
+
+  // Bound spend per resolved identity, before the body is parsed so a flood of
+  // large payloads is rejected cheaply. Keyed on resolved.userId (server-side
+  // from the key hash) rather than IP or any caller-supplied header, so it
+  // cannot be sidestepped by rotating source addresses.
+  const gatewayBlocked = await enforceRateLimit(
+    "gateway-completions",
+    identifierFor({ userId: resolved.userId, ip: clientIp(req) }),
+    LLM_RATE_LIMITS.gateway,
+  );
+  if (gatewayBlocked) return gatewayBlocked;
 
   // --- Parse body --------------------------------------------------------
   let rawBody: unknown;

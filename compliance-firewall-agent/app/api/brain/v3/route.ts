@@ -14,6 +14,12 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { MultiAgentOrchestrator } from "@/lib/brain-ai/multi-agent-orchestrator";
 import type { ComplianceFramework } from "@/lib/brain-ai/multi-agent-orchestrator";
+import {
+  enforceRateLimit,
+  identifierFor,
+  clientIp,
+  LLM_RATE_LIMITS,
+} from "@/lib/rate-limit-shared";
 import { z } from "zod";
 
 export const runtime = "nodejs";
@@ -28,6 +34,7 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  let userId: string | null = null;
   if (isSupabaseConfigured()) {
     const supabase = await createClient();
     const {
@@ -39,7 +46,18 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
     }
+    userId = user.id;
   }
+
+  // deep mode runs opus across 4 reasoning loops — the most expensive call in
+  // the product. Bound per caller in shared state; the in-memory limiters count
+  // per instance and the middleware layer does not run in production.
+  const blocked = await enforceRateLimit(
+    "brain-v3",
+    identifierFor({ userId, ip: clientIp(req) }),
+    LLM_RATE_LIMITS.authenticated,
+  );
+  if (blocked) return blocked;
 
   let body: unknown;
   try {
