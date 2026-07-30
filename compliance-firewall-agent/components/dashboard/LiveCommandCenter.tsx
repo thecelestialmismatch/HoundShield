@@ -29,7 +29,7 @@ import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
   Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
   Check, Zap, Crown, ListChecks, Info, Palette, SlidersHorizontal, ArrowUp, ArrowDown, EyeOff, RotateCcw, Check as CheckIcon,
-  Rocket, AlertTriangle, ScrollText, Target, Wrench,
+  Rocket, AlertTriangle, ScrollText, Target,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
 import { DESIGN_THEMES, getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
@@ -97,7 +97,10 @@ const TOOL_LINKS: { href: string; label: string; icon: React.ElementType }[] = [
   { href: '/command-center/quarantine', label: 'Quarantine', icon: AlertTriangle },
   { href: '/command-center/events', label: 'Audit Log', icon: ScrollText },
   { href: '/command-center/shield', label: 'SPRS Dashboard', icon: Target },
-  { href: '/command-center/overview', label: 'All tools', icon: Wrench },
+  // No "All tools → /command-center/overview" entry: that URL is now this very
+  // dashboard, so the link pointed at the page you were already on. Every link
+  // above opens the (tools) shell, whose sidebar is the full tool index, so
+  // browsing everything is still one click away.
 ]
 
 // Live threat feed event pool — [type, what, engine, latency]

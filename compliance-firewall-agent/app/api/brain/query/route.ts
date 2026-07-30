@@ -17,6 +17,12 @@ import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { queryBrain } from "@/lib/brain";
 import { ask as askGraph } from "@/lib/brain-ai/brain-query";
 import { MultiAgentOrchestrator } from "@/lib/brain-ai/multi-agent-orchestrator";
+import {
+  enforceRateLimit,
+  identifierFor,
+  clientIp,
+  LLM_RATE_LIMITS,
+} from "@/lib/rate-limit-shared";
 import { z } from "zod";
 
 export const runtime = "nodejs";
@@ -44,6 +50,17 @@ function mergedAnswer(question: string) {
 
 /** GET /api/brain/query?q=<question> — open to agents, no auth */
 export async function GET(req: NextRequest) {
+  // Deliberately public (agents call it), and it only reads the local BM25
+  // graph — no OpenRouter spend. Still bounded: it is unauthenticated CPU work.
+  // Counted BEFORE validation so a flood of malformed requests cannot slip the
+  // limit by failing early.
+  const blocked = await enforceRateLimit(
+    "brain-query-public",
+    identifierFor({ ip: clientIp(req) }),
+    LLM_RATE_LIMITS.publicRead,
+  );
+  if (blocked) return blocked;
+
   const q = req.nextUrl.searchParams.get("q");
   if (!q || q.trim().length < 3) {
     return NextResponse.json(
@@ -65,13 +82,27 @@ export async function GET(req: NextRequest) {
  *  x-brain-version: v3 → routes to Brain AI v3 multi-agent stack
  */
 export async function POST(req: NextRequest) {
+  let userId: string | null = null;
   if (isSupabaseConfigured()) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
+    userId = user.id;
   }
+
+  // The v3 path fans out to OpenRouter, so each call costs real tokens. Auth
+  // alone does not bound that — the free tier is real (ENTITLEMENTS.free), so a
+  // signed-up account could loop this endpoint on the founder's OpenRouter
+  // budget. Count in shared state; see lib/rate-limit-shared.ts for why the
+  // in-memory limiters never actually capped this.
+  const blocked = await enforceRateLimit(
+    "brain-query",
+    identifierFor({ userId, ip: clientIp(req) }),
+    LLM_RATE_LIMITS.authenticated,
+  );
+  if (blocked) return blocked;
 
   const brainVersion = req.headers.get("x-brain-version");
   if (brainVersion === "v3") {

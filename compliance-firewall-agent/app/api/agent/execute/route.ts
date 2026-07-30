@@ -3,16 +3,50 @@
 // Accepts task, runs agentic ReAct loop, streams results
 // ============================================================================
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { classifyRisk } from '@/lib/classifier/risk-engine';
 import { executeAgentLoop } from '@/lib/agent/orchestrator';
 import { AgentStreamEvent, AgentExecuteRequest } from '@/lib/agent/types';
+import { createClient } from '@/lib/supabase/server';
+import { isSupabaseConfigured } from '@/lib/supabase/client';
+import {
+  enforceRateLimit,
+  identifierFor,
+  clientIp,
+  LLM_RATE_LIMITS,
+} from '@/lib/rate-limit-shared';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
 
 export async function POST(req: NextRequest) {
+  // This endpoint runs an agentic ReAct loop — up to 15 LLM iterations — and
+  // falls back to the SERVER's OPENROUTER_API_KEY when the caller supplies none.
+  // It previously had no auth of any kind, so anonymous traffic could bill the
+  // founder's OpenRouter account, and the middleware limiter that nominally
+  // covered /api/* does not execute in production (legacy vercel.json `builds`
+  // mode — see docs/DEPLOYMENT-MIDDLEWARE.md). .claude/rules/api.md requires a
+  // session check on every route; this route was the exception.
+  // Both in-repo callers are dashboard components behind /command-center, which
+  // is login-gated, so requiring a session matches how it is actually used.
+  let userId: string | null = null;
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    userId = user.id;
+  }
+
+  const blocked = await enforceRateLimit(
+    'agent-execute',
+    identifierFor({ userId, ip: clientIp(req) }),
+    LLM_RATE_LIMITS.authenticated,
+  );
+  if (blocked) return blocked;
+
   try {
     const body: AgentExecuteRequest = await req.json();
     const { messages, model, tools, systemPrompt, maxIterations = 10, temperature = 0.7 } = body;

@@ -7,9 +7,9 @@
  * a light, rounded product window — the same language as the after-login
  * console, so the hero and the real dashboard read as one family.
  *
- * Still a pure demo: every value (ticking KPIs, a live throughput LINE chart,
- * a pastel detection DONUT, per-engine + destination BARS, an SPRS coverage
- * gauge and a streaming scan feed) is driven by ONE timer — no network, no
+ * Still a pure demo: every value (ticking KPIs, a streaming scan FEED, a pastel
+ * detection DONUT, per-engine + destination BARS and an SPRS coverage
+ * gauge) is driven by ONE timer — no network, no
  * real data. Styles are scoped under `.hs-demo` and injected inline so the
  * skin can't leak into or be overridden by the surrounding hero.
  *
@@ -57,8 +57,9 @@ const DESTS: [string, string, number][] = [
   ['Other', 'var(--a-steel)', 5],
 ]
 
-const N = 40 // line-chart points
-const FEED = 5
+// 3 rows ≈ the 84px the throughput chart used to occupy, so the feed card and
+// the donut card beside it still balance.
+const FEED = 3
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
 const drift = (v: number, d: number, lo: number, hi: number) =>
   clamp(v + Math.round((Math.random() - 0.5) * d), lo, hi)
@@ -68,9 +69,6 @@ export function HeroDemoDashboard() {
   const [blocked, setBlocked] = useState(2218)
   const [quar, setQuar] = useState(14)
   const [sprs, setSprs] = useState(84)
-  const [series, setSeries] = useState<number[]>(() =>
-    Array.from({ length: N }, () => 40 + Math.round(Math.random() * 34)),
-  )
   const [mix, setMix] = useState<number[]>([34, 24, 27, 15]) // CUI · Secrets · PII · PHI
   const [bars, setBars] = useState<number[]>(ENGINES.map((e) => e[2]))
   const [feed, setFeed] = useState<Row[]>(() =>
@@ -84,7 +82,6 @@ export function HeroDemoDashboard() {
     let step = 0
     const id = setInterval(() => {
       step++
-      setSeries((s) => [...s.slice(1), clamp(s[s.length - 1] + Math.round((Math.random() - 0.45) * 22), 12, 92)])
       setScans((v) => v + 2 + Math.floor(Math.random() * 12))
       setBars((b) => b.map((v) => drift(v, 14, 8, 98)))
       setMix((m) => m.map((v) => drift(v, 3, 8, 45)))
@@ -99,13 +96,6 @@ export function HeroDemoDashboard() {
     }, 1500)
     return () => clearInterval(id)
   }, [])
-
-  // ── Line chart geometry ──
-  const W = 300, H = 84, MAX = 100
-  const pts = series.map((v, i) => [(i / (N - 1)) * W, H - (v / MAX) * (H - 6) - 3])
-  const line = pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
-  const area = `0,${H} ${line} ${W},${H}`
-  const [lx, ly] = pts[pts.length - 1]
 
   // ── Donut geometry (pastel aurora sweep) ──
   const mt = mix.reduce((a, b) => a + b, 0)
@@ -185,24 +175,17 @@ export function HeroDemoDashboard() {
           {/* Line chart + donut */}
           <div className="hd-grid">
             <div className="hd-card">
-              <div className="hd-ph"><span>Gateway throughput</span><span className="live"><i /> prompts/sec</span></div>
-              <p className="hd-cap">Prompts flowing through the local gateway, scanned in &lt;10ms each.</p>
-              <svg className="hd-line" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="throughput line chart">
-                <defs>
-                  <linearGradient id="hdStroke" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="var(--a-steel)" /><stop offset="55%" stopColor="var(--a-peri)" /><stop offset="100%" stopColor="var(--a-lime)" />
-                  </linearGradient>
-                  <linearGradient id="hdFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--a-steel)" stopOpacity="0.20" /><stop offset="100%" stopColor="var(--a-steel)" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <line x1="0" y1={H * 0.5} x2={W} y2={H * 0.5} className="hd-grid-l" />
-                <line x1="0" y1={H * 0.8} x2={W} y2={H * 0.8} className="hd-grid-l" />
-                <polygon points={area} fill="url(#hdFill)" />
-                <polyline points={line} fill="none" stroke="url(#hdStroke)" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round" />
-                <circle cx={lx} cy={ly} r="3.4" fill="var(--a-lime)" />
-                <circle cx={lx} cy={ly} r="6.5" fill="var(--a-lime)" opacity="0.28" />
-              </svg>
+              <div className="hd-ph"><span>Live prompt scans</span><span className="live"><i /> on-device</span></div>
+              <p className="hd-cap">Every prompt scanned on your own hardware in &lt;10ms — verdict, then latency.</p>
+              <div className="hd-feed">
+                {feed.map((r, i) => (
+                  <div className="hd-row" key={`${r.label}-${i}-${scans}`}>
+                    <span className={`hd-tag ${r.verdict.toLowerCase()}`}>{r.verdict}</span>
+                    <span className="hd-detail">{r.label} · {r.detail}</span>
+                    <span className="hd-lat">{r.lat}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="hd-card">
@@ -255,17 +238,6 @@ export function HeroDemoDashboard() {
             <div className="hd-gauge-track"><i style={{ width: `${coverage}%` }} /></div>
           </div>
 
-          {/* Live feed */}
-          <div className="hd-ph feed-h"><span>Live prompt scans</span><span className="mono">on-device</span></div>
-          <div className="hd-feed">
-            {feed.map((r, i) => (
-              <div className="hd-row" key={`${r.label}-${i}-${scans}`}>
-                <span className={`hd-tag ${r.verdict.toLowerCase()}`}>{r.verdict}</span>
-                <span className="hd-detail">{r.label} · {r.detail}</span>
-                <span className="hd-lat">{r.lat}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
@@ -336,8 +308,6 @@ const DEMO_CSS = `
 .hs-demo .hd-ph .live{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--a-mono);font-size:.56rem;font-weight:600;color:var(--a-green)}
 .hs-demo .hd-ph .live i{width:6px;height:6px;border-radius:50%;background:var(--a-green);animation:hdPing 1.6s ease infinite}
 .hs-demo .hd-cap{font-size:.6rem;line-height:1.45;color:var(--a-mut);margin:-.1rem 0 .5rem}
-.hs-demo .hd-line{width:100%;height:80px;display:block}
-.hs-demo .hd-grid-l{stroke:rgba(30,42,55,.06);stroke-width:1}
 
 .hs-demo .hd-donut-wrap{display:flex;align-items:center;gap:.7rem}
 .hs-demo .hd-donut{width:82px;height:82px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;transition:background .6s ease}
@@ -362,9 +332,10 @@ const DEMO_CSS = `
 .hs-demo .hd-gauge-track{height:9px;border-radius:99px;background:rgba(30,42,55,.06);overflow:hidden}
 .hs-demo .hd-gauge-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a-peri),var(--a-lime));transition:width .8s ease}
 
-.hs-demo .feed-h{margin-bottom:.45rem}
 .hs-demo .hd-feed{display:flex;flex-direction:column;gap:.34rem}
-.hs-demo .hd-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.55rem;padding:.42rem .55rem;border-radius:11px;background:var(--a-card);border:1px solid var(--a-line);box-shadow:0 1px 4px rgba(56,78,112,.05);animation:hdRowIn .4s cubic-bezier(.22,.61,.36,1)}
+/* The feed now sits INSIDE a white .hd-card, so rows are recessed (--a-win)
+   rather than raised — a white-on-white row would read as one flat block. */
+.hs-demo .hd-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.55rem;padding:.42rem .55rem;border-radius:11px;background:var(--a-win);border:1px solid var(--a-line);animation:hdRowIn .4s cubic-bezier(.22,.61,.36,1)}
 @keyframes hdRowIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .hs-demo .hd-tag{font-family:var(--a-mono);font-size:.55rem;font-weight:700;letter-spacing:.03em;padding:.14rem .42rem;border-radius:6px}
 .hs-demo .hd-tag.blocked{color:#B3413A;background:rgba(224,123,57,.16)}
