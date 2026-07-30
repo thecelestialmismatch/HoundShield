@@ -35,12 +35,13 @@ import {
   Rocket,
   Home,
   KeyRound,
+  Building2,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 import { DemoBanner } from "@/components/ui/demo-banner";
 import { SignOutButton } from "@/components/dashboard/SignOutButton";
-import { isSupabaseConfigured, createBrowserClient } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 /* ── Nav Structure ──────────────────────────────────────────────── */
 type NavSection = {
@@ -291,19 +292,34 @@ function Sidebar({
 /* ── Topbar ─────────────────────────────────────────────────────── */
 function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
   const [userInitial, setUserInitial] = useState("K");
+  const [company, setCompany] = useState<string | null>(null);
 
+  // Single source for header identity: /api/me resolves the session server-side
+  // and returns name-level personalization only (never email or id). Reading the
+  // profile straight from the browser client would mean duplicating
+  // profileKeyColumn()'s Better-Auth-vs-Supabase column choice out here, where
+  // it would silently drift.
   useEffect(() => {
-    const supabase = createBrowserClient();
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) {
-        const email = data.user.email ?? "";
-        const name =
-          (data.user.user_metadata?.full_name as string | undefined) ??
-          (data.user.user_metadata?.name as string | undefined) ??
-          email;
-        setUserInitial((name[0] ?? "K").toUpperCase());
-      }
-    });
+    let cancelled = false;
+    fetch("/api/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((me) => {
+        if (cancelled || !me?.authenticated) return;
+        if (typeof me.name === "string" && me.name.length > 0) {
+          setUserInitial(me.name[0].toUpperCase());
+        }
+        if (typeof me.company === "string" && me.company.length > 0) {
+          setCompany(me.company);
+        }
+      })
+      .catch(() => {
+        // Header identity is decoration, never access — the gate in
+        // app/command-center/layout.tsx already decided that. Leave the
+        // placeholder rather than surfacing an error in the chrome.
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -312,14 +328,23 @@ function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
         sidebarCollapsed ? "left-[68px]" : "left-[260px]"
       }`}
     >
+      {/*
+        The signed-in customer's own company, not a build badge. This slot used
+        to hold a version string and a swagger label — chrome that told the
+        operator nothing about their own account, on a product sold as audit
+        evidence. Renders nothing at all until /api/me answers, and nothing when
+        the profile has no company set: an empty slot is honest, whereas a
+        stand-in org name would be fabricated data on the customer's dashboard.
+        Guarded by app/__tests__/dashboard-auth-gate.test.ts, which greps this
+        file — keep the retired label out of comments too.
+      */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <Command className="w-3.5 h-3.5" />
-          <span className="font-mono">v2.0</span>
-          <span className="px-1.5 py-0.5 rounded-md bg-brand-500/10 text-brand-400 text-[10px] font-bold ring-1 ring-brand-500/20">
-            BEAST MODE
-          </span>
-        </div>
+        {company && (
+          <div className="flex items-center gap-2 text-xs">
+            <Building2 className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
+            <span className="font-medium text-[var(--hs-ink)]">{company}</span>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-3">

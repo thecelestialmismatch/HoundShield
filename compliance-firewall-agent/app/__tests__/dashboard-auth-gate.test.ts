@@ -100,10 +100,34 @@ describe("nothing may put the app back into a streaming context", () => {
 });
 
 describe("/command-center is the ONE canonical dashboard", () => {
-  it("its index renders the Live Command Center — the after-login beast", () => {
-    const page = read("app/command-center/page.tsx");
+  it("the dashboard lives at /command-center/overview and renders the Live Command Center", () => {
+    const page = read("app/command-center/overview/page.tsx");
     expect(page).toMatch(/import \{ LiveCommandCenter \} from ['"]@\/components\/dashboard\/LiveCommandCenter['"]/);
     expect(page).toMatch(/<LiveCommandCenter viewer=\{viewer\} \/>/);
+  });
+
+  it("its index forwards to the dashboard rather than rendering a second one", () => {
+    const index = read("app/command-center/page.tsx");
+    expect(index).toMatch(/redirect\(['"]\/command-center\/overview['"]\)/);
+    // Two files rendering LiveCommandCenter would be the two-dashboard problem
+    // of 2026-07-29 all over again, just one path segment deeper.
+    expect(index).not.toMatch(/LiveCommandCenter/);
+  });
+
+  it("the /command-center/overview mockup is GONE, not merely unlinked", () => {
+    // It was an 804-line client page with every chart hardcoded and no session
+    // lookup, so it showed every operator the same invented security metrics.
+    // If it ever comes back it silently wins the route over the real dashboard.
+    expect(
+      existsSync(path.join(CFA, "app/command-center/(tools)/overview/page.tsx")),
+      "the mock overview page is back and now shadows the real dashboard route",
+    ).toBe(false);
+  });
+
+  it("the real dashboard sits OUTSIDE the (tools) group, so shells cannot nest", () => {
+    // (tools)/layout.tsx paints a full cc-light shell (aside + header + main);
+    // LiveCommandCenter brings its own hs-lcc shell. Nested = two sidebars.
+    expect(existsSync(path.join(CFA, "app/command-center/overview/page.tsx"))).toBe(true);
   });
 
   it("/console permanently redirects instead of rendering a second dashboard", () => {
@@ -143,14 +167,19 @@ describe("/command-center is the ONE canonical dashboard", () => {
 });
 
 describe("the (tools) route group — one shell, never two sidebars", () => {
-  it("(tools) is the only route segment beside the gate — no sibling escapes the shell", () => {
+  it("only the dashboard escapes the tool shell, and only because it brings its own", () => {
     // A directory added here becomes a route that renders WITHOUT the tool
-    // shell, next to the Live Command Center. (It is still gated — the layout
-    // covers the whole subtree — but it loses its chrome, which is the exact
-    // double-sidebar/no-sidebar mess the route group exists to prevent.)
+    // shell. (It is still gated — the layout covers the whole subtree — but it
+    // loses its chrome, which is the double-sidebar/no-sidebar mess the route
+    // group exists to prevent.)
+    //
+    // `overview` is the ONE permitted sibling: it renders LiveCommandCenter,
+    // which carries its own hs-lcc shell. Putting it INSIDE (tools) would nest
+    // that shell in cc-light's aside+header+main and paint two of everything —
+    // the very failure this test guards. Anything else added here is a bug.
     const entries = readdirSync(path.join(CFA, "app/command-center"), { withFileTypes: true });
-    const segments = entries.filter((e) => e.isDirectory()).map((e) => e.name);
-    expect(segments).toEqual(["(tools)"]);
+    const segments = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
+    expect(segments).toEqual(["(tools)", "overview"]);
 
     // Loose files must stay Next.js convention files, never a stray route.
     const allowed = new Set(["layout.tsx", "page.tsx", "loading.tsx", "error.tsx", "not-found.tsx"]);
@@ -166,9 +195,10 @@ describe("the (tools) route group — one shell, never two sidebars", () => {
     expect(shell).toMatch(/className="cc-light/);
   });
 
-  it("the 800-line overview kept its content at its own URL", () => {
-    const overview = read("app/command-center/(tools)/overview/page.tsx");
-    expect(overview).toMatch(/SPRSDashboardWidget/);
+  it("the tool sidebar still offers a way back to the dashboard", () => {
+    // /command-center/overview used to be an 804-line client mockup living in
+    // this group. It is now the real dashboard one level up, so this link
+    // leaves the group by design — it is the way home, not a tool.
     expect(read(TOOLS_SHELL)).toMatch(/href: "\/command-center\/overview"/);
   });
 
@@ -178,6 +208,35 @@ describe("the (tools) route group — one shell, never two sidebars", () => {
 
   it("the shell can be left — a dashboard with no sign-out is a trust smell", () => {
     expect(read(TOOLS_SHELL)).toMatch(/<SignOutButton/);
+  });
+});
+
+describe("the tools header identifies the CUSTOMER, not the build", () => {
+  const shell = read(TOOLS_SHELL);
+
+  it("the 'BEAST MODE' / v2.0 build badge is gone", () => {
+    // Version chrome told the operator nothing about their own account, and
+    // read as swagger on a product sold as audit evidence.
+    expect(shell).not.toContain("BEAST MODE");
+    expect(shell).not.toMatch(/<span className="font-mono">v2\.0<\/span>/);
+  });
+
+  it("it shows the signed-in customer's company instead", () => {
+    expect(shell).toMatch(/setCompany\(/);
+    expect(shell).toMatch(/\{company\}/);
+  });
+
+  it("renders NOTHING when the profile has no company — never a placeholder org", () => {
+    // A stand-in name here would be fabricated data on the customer's own
+    // dashboard, which is the exact failure the mock overview page committed.
+    expect(shell).toMatch(/\{company && \(/);
+  });
+
+  it("reads identity from /api/me, not by re-deriving the profile key column", () => {
+    // profileKeyColumn() picks better_auth_user_id vs id. Duplicating that
+    // choice in the browser is how the header silently drifts from the server.
+    expect(shell).toMatch(/fetch\(["']\/api\/me["']\)/);
+    expect(shell).not.toMatch(/createBrowserClient/);
   });
 });
 
@@ -192,10 +251,15 @@ describe("the Live Command Center is no longer an island", () => {
       "/command-center/quarantine",
       "/command-center/events",
       "/command-center/shield",
-      "/command-center/overview",
     ]) {
       expect(lcc).toContain(`href: '${href}'`);
     }
+  });
+
+  it("it does not link to itself", () => {
+    // /command-center/overview IS this dashboard now, so an "All tools" entry
+    // pointing there sent you to the page you were already on.
+    expect(lcc).not.toContain("href: '/command-center/overview'");
   });
 
   it("every tool it links to actually exists", () => {
