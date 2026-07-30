@@ -13,10 +13,9 @@ import { HeroDemoDashboard } from '../HeroDemoDashboard';
  * (labels + numbers on every bar). All data is simulated demo data.
  */
 describe('HeroDemoDashboard — the hero-page dashboard window', () => {
-  it('renders the full visual set: KPIs, line, donut, engines, destinations, gauge, feed', () => {
+  it('renders the full visual set: KPIs, feed, donut, engines, destinations, gauge', () => {
     render(<HeroDemoDashboard />);
     expect(screen.getByText('Scans 24h')).toBeTruthy();
-    expect(screen.getByText('Gateway throughput')).toBeTruthy();
     expect(screen.getByText('Detection mix')).toBeTruthy();
     expect(screen.getByText(/Detections by engine/)).toBeTruthy();
     expect(screen.getByText('Where prompts go')).toBeTruthy();
@@ -26,7 +25,7 @@ describe('HeroDemoDashboard — the hero-page dashboard window', () => {
 
   it('every chart panel carries a self-explanatory caption', () => {
     render(<HeroDemoDashboard />);
-    expect(screen.getByText(/scanned in <10ms each/)).toBeTruthy();
+    expect(screen.getByText(/scanned on your own hardware in <10ms/)).toBeTruthy();
     expect(screen.getByText(/What the blocks were/)).toBeTruthy();
     expect(screen.getByText(/16 detection engines/)).toBeTruthy();
     expect(screen.getByText(/every prompt scanned locally first/)).toBeTruthy();

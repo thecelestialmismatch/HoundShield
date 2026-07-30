@@ -209,7 +209,13 @@
 /* Hero copy sits on the (darker) aurora wash — nudge the faint trust row up
    to AA-grade ink so it stays legible against the gradient. */
 .hermes .hero .hero-trust span { color: var(--text-2); }
-.hermes .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding: 72px 0 84px; }
+/* padding-BLOCK, never the `padding` shorthand: this element is `container
+   hero-grid`, and `.hermes .container` (above) supplies the 24px side gutter.
+   A shorthand here writes all four sides, so `padding: 72px 0 84px` silently
+   reset that gutter to 0 — same specificity (0,2,0), and this rule comes later,
+   so it won. At a 1200px viewport (= --maxw) there is no auto margin left to
+   absorb it and the hero text sat flush against the window edge. */
+.hermes .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding-block: 72px 84px; }
 .hermes .hero .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .4rem .8rem; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); font-size: .78rem; font-weight: 600; color: var(--text-2); margin-bottom: 1.4rem; }
 .hermes .hero .pill .live-dot { width: 6px; height: 6px; }
 .hermes .hero h1 { margin-bottom: 1.2rem; }
@@ -381,7 +387,7 @@
   .hermes .burger { display: grid; }
   /* burger-open state — mirrors the demo's JS-injected cssText verbatim */
   .hermes .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 66px; left: 0; right: 0; background: var(--nav-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--nav-line); padding: 12px; gap: .2rem; align-items: stretch; }
-  .hermes .hero-grid { grid-template-columns: 1fr; gap: 30px; padding: 48px 0 56px; }
+  .hermes .hero-grid { grid-template-columns: 1fr; gap: 30px; padding-block: 48px 56px; }
   .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr 1fr; }
   .hermes .docs-wrap { grid-template-columns: 1fr; }
   /* stacked layout: a sticky 300px-tall nav would sit over the content */
