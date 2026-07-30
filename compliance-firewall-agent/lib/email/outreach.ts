@@ -36,6 +36,22 @@ export interface TestStep {
 }
 
 /**
+ * The sample-scenario buttons that exist on /demo, and which audience each one
+ * speaks to.
+ *
+ * Pointing a reader at a button by name only works if the button is there, and
+ * only lands if it is the one they care about — telling a DoD security manager
+ * to click "Patient Record" reads as a mail-merge. `outreach.test.ts` asserts
+ * every name here is really present in `app/demo/page.tsx`, so renaming a
+ * sample button fails the suite instead of quietly breaking the emails.
+ */
+export const DEMO_SAMPLES = {
+  healthcare: 'Patient Record',
+  technical: 'AWS Config',
+  defense: 'Network Scan',
+} as const;
+
+/**
  * "Try it yourself" — written for a Privacy Officer, compliance lead or office
  * manager with no technical background. No install, no account, no IT ticket.
  *
@@ -47,15 +63,22 @@ export interface TestStep {
  * the local-only claim themselves by pulling their network connection. A claim
  * the buyer can verify without trusting us is worth more than any assurance we
  * could write.
+ *
+ * Steps 1, 3, 4 and 5 are audience-independent; step 2 names a sample button and
+ * is swapped per audience by `renderTestGuide`.
  */
 export const TEST_IT_YOURSELF_STEPS: readonly TestStep[] = [
   {
     n: 1,
-    text: 'Open houndshield.com/demo in any web browser. There is nothing to install, no account to create, and no login.',
+    // Explicit https://, never a bare domain. A scheme-less URL makes mail
+    // clients guess: pasted into Gmail, "houndshield.com/demo" was rewritten to
+    // a google.com/url redirect pointing at HTTP, so the buyer would see a
+    // tracking link and take an extra insecure hop. Both read as bulk mail.
+    text: 'Open https://houndshield.com/demo in any web browser. There is nothing to install, no account to create, and no login.',
   },
   {
     n: 2,
-    text: 'Click one of the four sample buttons (try "Patient Record") — or paste in a message of the kind your staff would actually send to ChatGPT. Made-up details are fine; you do not need real patient information to see how this works.',
+    text: `Click one of the four sample buttons (try "${DEMO_SAMPLES.healthcare}") — or paste in a message of the kind your staff would actually send to ChatGPT. Made-up details are fine; you do not need real patient information to see how this works.`,
   },
   {
     n: 3,
@@ -79,9 +102,19 @@ export const TEST_IT_YOURSELF_STEPS: readonly TestStep[] = [
 export const PREVIEW_CAVEAT =
   'To be straight with you: that free scan is a preview. The $499 report is 14 days of monitoring inside your own environment, mapped to the NIST 800-171 controls, in a signed PDF you can hand to an assessor.';
 
-/** Renders the guide as the plain-text block that goes into an email body. */
-export function renderTestGuide(): string {
-  const steps = TEST_IT_YOURSELF_STEPS.map((s) => `${s.n}. ${s.text}`).join('\n\n');
+/**
+ * Renders the guide as the plain-text block that goes into an email body.
+ *
+ * `sample` swaps the button named in step 2 for the one this reader actually
+ * cares about. The healthcare wording is the default because that is the lead
+ * buyer; the sentence about patient information is rewritten for the others,
+ * since "you do not need real patient information" is nonsense to an MSP.
+ */
+export function renderTestGuide(sample: string = DEMO_SAMPLES.healthcare): string {
+  const steps = TEST_IT_YOURSELF_STEPS.map((s) => {
+    if (s.n !== 2 || sample === DEMO_SAMPLES.healthcare) return `${s.n}. ${s.text}`;
+    return `${s.n}. Click one of the four sample buttons (try "${sample}") — or paste in a message of the kind your staff would actually send to ChatGPT. Made-up details are fine; you do not need to use anything sensitive to see how this works.`;
+  }).join('\n\n');
   return `How to try it yourself (about two minutes, no IT help needed):\n\n${steps}\n\n${PREVIEW_CAVEAT}`;
 }
 
@@ -159,7 +192,7 @@ The offer for you is wholesale. You pay $299, your client pays $499–$999, you 
 
 I am looking for a small number of first partners, and I would rather have one real conversation than send fifty of these. Worth 15 minutes?
 
-${renderTestGuide()}
+${renderTestGuide(DEMO_SAMPLES.technical)}
 
 ${founderSignature()}
 ${founderAddress()}`,
@@ -191,7 +224,7 @@ So the question I would ask in your position: if someone asked you tomorrow to e
 
 15 minutes?
 
-${renderTestGuide()}
+${renderTestGuide(DEMO_SAMPLES.defense)}
 
 ${founderSignature()}
 ${founderAddress()}`,

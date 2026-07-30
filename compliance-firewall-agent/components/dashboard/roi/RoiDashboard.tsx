@@ -22,7 +22,7 @@ import {
   getRoiSnapshot,
   formatUsd,
   CATEGORIES,
-  PRO_MONTHLY,
+  MODELED_MONTHLY_COST,
   type RoiPeriod,
 } from '@/lib/dashboard/roi-model';
 import { RoiStatCards } from './RoiStatCards';
@@ -146,9 +146,12 @@ export function RoiDashboard() {
                   <span className="text-slate-300">{c.short} {formatUsd(c.costPerIncident)}</span>
                 </span>
               ))}
-              ). ROI is measured against HoundShield Pro at ${PRO_MONTHLY}/mo. One prevented CUI
-              or PHI incident already exceeds a full year of HoundShield. These are transparent
-              planning assumptions, not measured customer telemetry. Posture is scanned locally on
+              ). ROI is modeled against an assumed ongoing cost of ${MODELED_MONTHLY_COST}/mo —
+              planned subscription pricing that is <span className="text-slate-300">not currently
+              purchasable</span>. The one offer you can buy today is the $499 CMMC AI Risk
+              Assessment Report, which is how you replace every number on this page with your own.
+              One prevented CUI or PHI incident already exceeds a full year at that modeled rate.
+              These are transparent planning assumptions, not measured customer telemetry. Posture is scanned locally on
               customer infrastructure (Mode B) — prompt content never leaves the boundary.
             </p>
           </div>
