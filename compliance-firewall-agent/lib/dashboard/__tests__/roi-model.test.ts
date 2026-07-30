@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 /**
  * Compliance ROI model — unit tests.
  *
@@ -8,8 +10,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   CATEGORIES,
-  PRO_MONTHLY,
-  PRO_ANNUAL,
+  MODELED_MONTHLY_COST,
+  MODELED_ANNUAL_COST,
   PERIOD_FRACTION,
   PERIOD_MONTHS,
   incidentsForPeriod,
@@ -49,10 +51,30 @@ describe('CATEGORIES integrity', () => {
   });
 });
 
-describe('pricing constants', () => {
-  it('Pro annual is twelve months of Pro monthly', () => {
-    expect(PRO_ANNUAL).toBe(PRO_MONTHLY * 12);
-    expect(PRO_ANNUAL).toBe(9588);
+describe('the ROI denominator', () => {
+  it('annual modeled cost is twelve months of the monthly figure', () => {
+    expect(MODELED_ANNUAL_COST).toBe(MODELED_MONTHLY_COST * 12);
+    expect(MODELED_ANNUAL_COST).toBe(9588);
+  });
+
+  it('is named as a modeled assumption, not a purchasable list price', () => {
+    // Regression guard: these constants were PRO_MONTHLY / PRO_ANNUAL and the
+    // page printed "ROI is measured against HoundShield Pro at $799/mo" — a tier
+    // deleted from /pricing in #243. The name is the fix; keep it honest.
+    const src = readFileSync(
+      join(process.cwd(), 'lib', 'dashboard', 'roi-model.ts'),
+      'utf8',
+    );
+    expect(src).not.toMatch(/export const PRO_(MONTHLY|ANNUAL)/);
+  });
+
+  it('the dashboard tells the reader the modeled price is not purchasable', () => {
+    const src = readFileSync(
+      join(process.cwd(), 'components', 'dashboard', 'roi', 'RoiDashboard.tsx'),
+      'utf8',
+    );
+    expect(src).toMatch(/not currently\s*\n?\s*purchasable/);
+    expect(src).toContain('$499');
   });
 });
 

@@ -108,7 +108,7 @@ Execute strictly in this order. Never skip. Never reorder.
 
 1. **NEVER deploy to Vercel without user saying "deploy"** — always show files changed + diff summary + ask "Ready to deploy? Y/N"
 2. **`npm run build` must pass before declaring any gap done**
-3. **Git identity:** `git config user.email "thecelestialmismatch@gmail.com"` before every commit
+3. **Git identity:** `git config user.email "$FOUNDER_EMAIL"` before every commit — the literal address is not committed to this public repo (see `docs/FOUNDER-EMAIL-IDENTITY.md`)
 4. **WebSocket = Docker ONLY** — Vercel deployment = SSE only (never change this)
 5. **Supabase RLS** on every new table — no exceptions
 6. **TypeScript strict** — no `any` unless unavoidable + comment explaining why

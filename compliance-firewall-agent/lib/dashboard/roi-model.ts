@@ -93,9 +93,25 @@ export const CATEGORIES: readonly RoiCategory[] = [
   },
 ];
 
-/** HoundShield Pro list price — the ROI denominator. $799/mo × 12. */
-export const PRO_MONTHLY = 799;
-export const PRO_ANNUAL = PRO_MONTHLY * 12; // 9,588
+/**
+ * The ROI denominator: the PLANNED Pro subscription price ($799/mo), used as a
+ * modeling assumption.
+ *
+ * Naming matters here. These used to be `PRO_MONTHLY` / `PRO_ANNUAL`, described
+ * as "HoundShield Pro list price", and the dashboard printed "ROI is measured
+ * against HoundShield Pro at $799/mo" — which reads as a tier you can buy. You
+ * cannot: Pro is Stage-2 planned pricing and was removed from /pricing in #243.
+ * The only purchasable offer is the $499 one-time report.
+ *
+ * Why not re-denominate against $499 instead: the report is a one-time
+ * diagnostic, not an ongoing control, so dividing 12 months of modeled avoided
+ * cost by $499 yields a ~600x "ROI" — a number that destroys credibility with
+ * the exact buyer this page exists to persuade. A planned-but-unreleased
+ * subscription price is the honest ongoing denominator, provided the page says
+ * so plainly. It does.
+ */
+export const MODELED_MONTHLY_COST = 799;
+export const MODELED_ANNUAL_COST = MODELED_MONTHLY_COST * 12; // 9,588
 
 /** Fraction of a trailing 12 months each period represents. */
 export const PERIOD_FRACTION: Record<RoiPeriod, number> = {
@@ -140,9 +156,9 @@ export interface RoiSnapshot {
   totalIncidents: number;
   /** Average dollars protected per month across the period. */
   monthlyAverage: number;
-  /** Whole-number ROI multiple vs the HoundShield Pro cost for the period. */
+  /** Whole-number ROI multiple vs the modeled tool cost for the period. */
   roiMultiple: number;
-  /** HoundShield Pro cost for the period, in USD. */
+  /** Modeled tool cost for the period, in USD. */
   toolCost: number;
   categories: CategoryLine[];
   /** Cumulative savings, one point per month (monotonic non-decreasing). */
@@ -193,9 +209,9 @@ export function totalIncidents(period: RoiPeriod): number {
   return CATEGORIES.reduce((acc, c) => acc + incidentsForPeriod(c, period), 0);
 }
 
-/** HoundShield Pro cost for the period. */
+/** Modeled tool cost for the period, at the planned subscription price. */
 export function toolCost(period: RoiPeriod): number {
-  return Math.round(PRO_ANNUAL * PERIOD_FRACTION[period]);
+  return Math.round(MODELED_ANNUAL_COST * PERIOD_FRACTION[period]);
 }
 
 /** Whole-number ROI multiple: dollars avoided per dollar of HoundShield. */

@@ -54,7 +54,7 @@ Then ask me ONE clarifying question if you need it, and start working immediatel
 
 6. **Tailwind CSS only.** No inline styles. No CSS modules. `brand-*` tokens not `blue-*`. Components stay under 500 lines.
 
-7. **Git identity before every push:** `git config user.email` must equal `thecelestialmismatch@gmail.com`.
+7. **Git identity before every push:** `git config user.email` must equal the founder's committing address. It is deliberately not written here — this repo is public. Set it from `FOUNDER_EMAIL` (see `docs/FOUNDER-EMAIL-IDENTITY.md`).
 
 8. **At session end:** Update `.claude-session-state.md`, add new entries to both lessons files, commit everything, push to current branch, and tell me exactly what was done and what the next session starts with.
 
@@ -96,9 +96,9 @@ openssl rand -hex 32
 git config user.email
 git config user.name
 
-# Correct git identity (run once)
-git config user.email "thecelestialmismatch@gmail.com"
-git config user.name "thecelestialmismatch"
+# Correct git identity (run once, with the founder's own values)
+git config user.email "$FOUNDER_EMAIL"
+git config user.name "$FOUNDER_NAME"
 
 # Push without triggering wrong committer
 git commit --allow-empty -m "fix: identity check"
