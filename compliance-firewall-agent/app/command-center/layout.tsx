@@ -31,9 +31,15 @@ import { getSessionUser } from '@/lib/auth/session'
  * not soften this into a permissive fallback — `getViewer()` in the page below
  * is the permissive one, and it only decides PERSONALIZATION, never access.
  *
- * The `redirect` target is the dashboard root rather than the exact deep path:
- * a layout is not given the pathname by design. Middleware preserves the deep
- * path when it is alive; this gate guarantees the door is shut when it is not.
+ * The `redirect` target is the dashboard rather than the exact deep path: a
+ * layout is not given the pathname by design. Middleware would preserve the deep
+ * path — but it does NOT execute in this deployment (proven 2026-07-29: no
+ * `x-robots-tag` on /command-center, no `x-ratelimit-*` on /api/health; see
+ * docs/DEPLOYMENT-MIDDLEWARE.md), so in practice the deep path is ALWAYS lost.
+ * That is why signing in from a deep link used to land you somewhere you did not
+ * ask for. The target below is now the canonical dashboard, so the fallback
+ * lands where a signed-in operator expects to be rather than on a bare index.
+ * Exact deep-path return comes back for free once middleware runs again.
  */
 
 export const metadata: Metadata = {
@@ -49,6 +55,6 @@ export default async function CommandCenterAuthLayout({
   children: React.ReactNode
 }) {
   const user = await getSessionUser()
-  if (!user) redirect('/login?redirect=%2Fcommand-center')
+  if (!user) redirect('/login?redirect=%2Fcommand-center%2Foverview')
   return <>{children}</>
 }
