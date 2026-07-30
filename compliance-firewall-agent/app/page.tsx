@@ -55,7 +55,7 @@ export default function HomePage() {
             <div>
               <div className="pill"><i className="live-dot" /> Local-only · HIPAA · NIST 800-171 · SOC 2</div>
               <h1 className="display">
-                Prove what your team pasted into <span className="accent">ChatGPT.</span>
+                Prove what your team pasted into <span className="accent">ChatGPT, Claude and Gemini.</span>
               </h1>
               <p className="sub">
                 Staff paste patient records and contract data into AI tools every day. HoundShield
