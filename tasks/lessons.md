@@ -1076,3 +1076,38 @@ them good fixtures.
 **Rule:** Assemble credential fixtures from split fragments so no complete provider-format literal
 exists in the file. Never click the unblock URL to get a test fixture through: it trains precisely
 the reflex the guard exists to prevent, and the next click might be a real key.
+### A preview named `houndshield-prod` is `npm run start` — source edits need a rebuild before you measure
+**What:** Fixed the hero's missing left gutter in `hermes.css`, reloaded the preview, and re-measured:
+`padLeft: "0px"` — apparently unchanged. Spent a cycle hunting a cascade loser that did not exist. The
+running preview was the `houndshield-prod` entry in `.claude/launch.json` (`npm run start`), serving a
+`.next` built *before* the edit. CSS was never recompiled.
+**Root cause:** `npm run start` has no HMR and no recompile. Only `houndshield-dev` picks up edits live.
+**Rule:** Before diagnosing "my fix did not take effect", confirm the server can even see the edit.
+The tell for a stale build is that the measurement matches the OLD rule's output *byte-for-byte*
+(here `padTop: 72px / padBottom: 84px / padLeft: 0px` is exactly what `padding: 72px 0 84px` emits).
+A rule that genuinely lost the cascade almost always leaves a partial trace instead.
+
+### Inside `.hermes`, never use the `padding` shorthand on an element that also carries `container`
+**What:** `.hermes .container` supplies the 24px side gutter; `.hermes .hero-grid` then set
+`padding: 72px 0 84px`. Both are specificity (0,2,0) and the shorthand writes all four sides, so the
+later rule silently zeroed the gutter. At a 1200px viewport (= `--maxw`) there is no auto margin left
+to absorb it, and the hero text sat flush against the window edge.
+**Rule:** Use `padding-block` / `padding-inline` on co-applied `container X` elements. Same family as
+the `@layer hermes-reset` bug — the tell there is `max-w-*` working while `mx-auto` does not.
+
+### A gitignored `proxy/data/` makes the proxy suite fail locally while CI is green
+**What:** `npx vitest run` in `proxy/` reported 3 failures (`expected 429 to be 200`, fetch never
+called) while CI on `main` was green across four runs. Not the better-sqlite3 ABI issue — `npm rebuild`
+changed nothing. Cause: a leftover local `proxy/data/houndshield-events.db` holding accumulated
+LOCKOUT state. The DB path resolves at module-import time, before the test's `beforeEach` redirects
+`HOUNDSHIELD_DATA_DIR` to a temp dir, so the tests both read and pollute the real data dir. Moving
+`proxy/data/` aside → 61/61 green.
+**Rule:** When local is red and CI is green, suspect gitignored local state before suspecting the code.
+CI checks out a clean tree; your machine does not.
+
+### `cmd > log 2>&1; echo "EXIT=$?"` reports the echo's status to the task notifier, not the command's
+**What:** The background-task notification said "exit code 0" for a proxy run that had 2 failing tests.
+The compound command's exit status is the last element — the `echo`. The real code was in the captured
+`EXIT=` line inside the output file.
+**Rule:** Read the captured exit line or the summary in the log. Never take a wrapper's exit code as
+the gate result. (`${PIPESTATUS[0]}` is also bash-only — it silently yields empty in this zsh shell.)
