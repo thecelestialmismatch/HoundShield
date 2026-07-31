@@ -27,15 +27,16 @@ import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import {
   LayoutGrid, Activity, Shield, FileText, Brain, Settings as Cog,
-  Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Sparkles, Lock,
-  Check, Zap, Crown, ListChecks, Info, Palette, SlidersHorizontal, ArrowUp, ArrowDown, EyeOff, RotateCcw, Check as CheckIcon,
+  Eye, Gauge, Flag, ArrowRight, Menu, ExternalLink, ShieldCheck, Lock,
+  Check, Zap, Crown, ListChecks, Info, Palette, SlidersHorizontal, RotateCcw, Check as CheckIcon,
   Rocket, AlertTriangle, ScrollText, Target,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
 import { DESIGN_THEMES, getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
-import { useDashboardPrefs, OVERVIEW_SECTIONS, SIGNED_IN_STRIPPED_HIDDEN, type DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
+import { useDashboardPrefs, SIGNED_IN_STRIPPED_HIDDEN } from '@/lib/dashboard/use-dashboard-prefs'
 import { Section } from './OverviewSection'
 import { OperatorOverview } from './OperatorOverview'
+import { BrainQuickAsk, FirstRunChecklist } from './operator/OperatorSlots'
 import { SourceChip, ProvenancePanel } from './ProvenancePanel'
 import type { ProvenanceId } from './dataProvenance'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
@@ -261,13 +262,6 @@ export interface DashboardViewer {
 const QUAR_SEED = 15
 
 // Overview quick-ask questions for the Brain card (wired to the live analyst).
-const BRAIN_QUICK: string[] = [
-  'What changed in my SPRS score this week?',
-  'Am I CMMC ready?',
-  'Draft my incident summary',
-  'What is a DFARS 7012 spill?',
-]
-
 // Brain-tab starter chips. React-owned (mapped with real onClick handlers), not
 // the old imperative DOM-listener wiring — every button here is a first-class
 // React handler, which is what the no-dead-buttons guard verifies.
@@ -730,33 +724,18 @@ export function LiveCommandCenter({ viewer, authenticated }: {
    * `setTab` the checklist steps). One implementation, two mount points — a
    * duplicated copy would drift the moment either is edited.
    */
-  const brainSlot = (
-    <div className="panel">
-      <div className="braincard">
-        <Image className="brain-mark" src="/houndshield-logo.png" alt="HoundShield Brain AI" width={38} height={48} />
-        <div className="bc-copy">
-          <h3><Sparkles style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline', marginRight: 4 }} />{name ? `${name}, ask Brain AI` : 'Ask Brain AI'}</h3>
-          <p>On-device CMMC analyst, grounded in your own assessment &amp; audit chain. No CUI — it can route to a commercial cloud endpoint.</p>
-        </div>
-        <div className="bchips">
-          {BRAIN_QUICK.map((q) => (
-            <button key={q} type="button" onClick={() => askBrain(q)}>{q}</button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
+  /* Both panels come from components/dashboard/operator/OperatorSlots — the same
+     implementation the (tools) dashboard mounts. They take their destinations as
+     callbacks, which is what lets one implementation serve a tab shell and a
+     routed shell; a second copy here would drift the moment either was edited,
+     invisibly, because each shell only ever renders on its own route. */
+  const brainSlot = <BrainQuickAsk name={name} onAsk={askBrain} />
 
-  const checklistSlot = (
-    <div className="panel">
-      <div className="ph"><h3>Get to your first C3PAO-ready PDF</h3><span className="mono">3 steps</span></div>
-      <div className="pad steps">
-        <StepRow n="1" done={!isViewer} title="Point your AI traffic at the proxy" detail="OpenAI-compatible endpoint — one URL change." onClick={() => setTab('settings')} cta="View proxy URL" />
-        <StepRow n="2" done={!isViewer} title="See your first live scan" detail="Every prompt inspected on your hardware in <10ms." onClick={() => setTab('feed')} cta="Open live feed" />
-        <StepRow n="3" title="Generate a sample audit PDF" detail="SSP + POA&M + evidence pack, SHA-256 signed." onClick={() => setTab('reports')} cta="Generate PDF" />
-      </div>
-    </div>
-  )
+  /* `connected={!isViewer}` reads oddly but is exact: in THIS shell the only
+     remaining caller is the anonymous demo, where the seeded feed is already
+     "flowing", so its checklist shows steps 1–2 done. A signed-in operator gets
+     the routed dashboard, which passes a real gateway query instead. */
+  const checklistSlot = <FirstRunChecklist connected={!isViewer} onStep={setTab} />
 
   return (
     <div className="hs-lcc" ref={rootRef} data-theme={activeTheme.id} data-mode={activeTheme.mode} style={consoleThemeVars(activeTheme) as CSSProperties}>
@@ -1310,16 +1289,6 @@ function ActivationStrip({ onSettings, onAssess }: { onSettings: () => void; onA
         <button type="button" className="btn btn-p btn-sm" onClick={onSettings}><Zap /> Get your proxy URL</button>
         <button type="button" className="btn btn-g btn-sm" onClick={onAssess}>Start your assessment <ArrowRight /></button>
       </div>
-    </div>
-  )
-}
-
-function StepRow({ n, title, detail, cta, onClick, done }: { n: string; title: string; detail: string; cta: string; onClick: () => void; done?: boolean }) {
-  return (
-    <div className={`steprow${done ? ' done' : ''}`}>
-      <div className="step-n">{done ? '✓' : n}</div>
-      <div className="step-body"><b>{title}</b><span>{detail}</span></div>
-      <button type="button" className="btn btn-g btn-sm" onClick={onClick}>{cta} <ArrowRight /></button>
     </div>
   )
 }
