@@ -528,4 +528,94 @@ export const LCC_CSS = `
      flash (every 2.1s), and the infinite pulsing live dots. */
   .hs-lcc .bump,.hs-lcc .feed-row.fresh,.hs-lcc .dot{animation:none}
 }
+
+/* ── Operator dashboard (signed-in, real data) ───────────────────────────────
+   Panels for OperatorOverview. They reuse the existing .panel/.ph/.ovc-* system
+   wherever possible; what follows is only what has no equivalent yet. */
+
+/* Six KPI tiles instead of four. Collapses before the tiles get too narrow to
+   read a tabular number in. */
+.hs-lcc .kpis.k6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:1400px){.hs-lcc .kpis.k6{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.hs-lcc .kpis.k6{grid-template-columns:repeat(2,1fr)}}
+
+.hs-lcc .op-toolbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}
+.hs-lcc .op-toolbar h2{font-family:var(--f-disp);font-size:1.5rem;font-weight:600;margin:0 0 .2rem}
+.hs-lcc .op-toolbar-sub{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--mut2)}
+.hs-lcc .op-live{display:inline-flex;align-items:center;gap:.35rem;color:var(--ok-text);font-weight:600}
+.hs-lcc .op-live.is-err{color:var(--bad-text)}
+.hs-lcc .op-live .dot{background:var(--ok)}
+.hs-lcc .op-live.is-err .dot{background:var(--bad)}
+.hs-lcc .op-toolbar-r{display:flex;align-items:center;gap:8px}
+.hs-lcc .op-select{display:inline-flex;align-items:center;gap:.4rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.4rem .6rem;font-size:.8rem;color:var(--mut)}
+.hs-lcc .op-select svg{width:14px;height:14px;flex-shrink:0}
+.hs-lcc .op-select select{background:none;border:0;color:inherit;font:inherit;cursor:pointer;outline:none}
+.hs-lcc .op-select:focus-within{border-color:var(--brand)}
+
+.hs-lcc .op-banner{display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;margin-bottom:14px;border-radius:var(--r);font-size:.8rem;background:color-mix(in srgb,var(--warn) 10%,transparent);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);color:var(--mut)}
+.hs-lcc .op-banner.is-err{background:color-mix(in srgb,var(--bad) 10%,transparent);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
+.hs-lcc .op-banner svg{width:15px;height:15px;flex-shrink:0}
+
+/* Empty states. Every panel with no data yet uses this — never a zeroed chart. */
+.hs-lcc .op-empty{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;padding:1.1rem 0}
+.hs-lcc .op-empty-ic{width:26px;height:26px;flex-shrink:0;color:var(--brand);opacity:.85}
+.hs-lcc .op-empty-txt{flex:1;min-width:200px;display:flex;flex-direction:column;gap:.2rem}
+.hs-lcc .op-empty-txt b{font-size:.9rem}
+.hs-lcc .op-empty-txt span{font-size:.79rem;color:var(--mut2);line-height:1.5}
+
+/* Control-family matrix beside the risk radar — the exact numbers behind the
+   shape. Five columns: family, coverage bar, met / partial / unmet. */
+/* The radar is square, so a full-width ovc-svg renders as TALL as its column is
+   wide — ~530px in a 2/5 column, which stretched the trend chart beside it.
+   Cap and centre it; the family matrix below carries the detail.
+   (No backticks in this file: the whole stylesheet is one template literal.) */
+.hs-lcc .op-radar{max-width:320px;margin:0 auto}
+
+/* Two columns of 7 on a wide panel — 14 rows in one column is a long scroll
+   for data an operator scans rather than reads. */
+.hs-lcc .op-matrix{font-size:.75rem;column-count:2;column-gap:34px}
+@media(max-width:900px){.hs-lcc .op-matrix{column-count:1}}
+.hs-lcc .op-matrix-h,.hs-lcc .op-matrix-r{break-inside:avoid}
+.hs-lcc .op-matrix-h,.hs-lcc .op-matrix-r{display:grid;grid-template-columns:minmax(0,1fr) 92px 26px 26px 26px;align-items:center;gap:8px;padding:.34rem 0}
+.hs-lcc .op-matrix-h{color:var(--mut2);font-weight:600;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.hs-lcc .op-matrix-h span:not(:first-child),.hs-lcc .op-matrix-r span:not(:first-child){text-align:right}
+.hs-lcc .op-matrix-r{border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.hs-lcc .op-matrix-r:last-child{border-bottom:0}
+.hs-lcc .op-matrix-r:hover{background:color-mix(in srgb,var(--brand) 5%,transparent)}
+.hs-lcc .op-matrix-r span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hs-lcc .op-matrix-r em{font-style:normal;color:var(--mut2);margin-left:.35rem}
+.hs-lcc .op-matrix-bar{position:relative;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.hs-lcc .op-matrix-bar i{display:block;height:5px;border-radius:99px;min-width:2px;flex:0 0 auto;max-width:52px}
+.hs-lcc .op-matrix-bar b{font-variant-numeric:tabular-nums;font-size:.72rem;min-width:32px;text-align:right}
+@media(max-width:520px){
+  .hs-lcc .op-matrix-r em{display:none}
+}
+
+/* Stacked provider bar — the three outcomes inside one track. */
+.hs-lcc .op-stackbar{display:flex;height:100%;border-radius:99px;overflow:hidden}
+.hs-lcc .op-stackbar i{display:block;height:100%}
+
+/* Live-events filter chips. */
+.hs-lcc .op-filters{display:flex;gap:4px}
+.hs-lcc .op-filters button{background:none;border:0;padding:.28rem .6rem;border-radius:8px;font-size:.74rem;font-weight:600;color:var(--mut2);cursor:pointer}
+.hs-lcc .op-filters button:hover{background:color-mix(in srgb,var(--brand) 8%,transparent);color:var(--brand)}
+.hs-lcc .op-filters button.is-on{background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand)}
+.hs-lcc .op-ev-detail{font-size:.83rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hs-lcc .op-ev-meta{display:flex;gap:.6rem;margin-top:.12rem;font-size:.71rem;color:var(--mut2)}
+.hs-lcc .op-ev-right{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;gap:.1rem;font-size:.71rem}
+.hs-lcc .op-ev-right b{font-size:.7rem;letter-spacing:.03em}
+
+/* Quick actions. */
+.hs-lcc .op-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.hs-lcc .op-actions{grid-template-columns:repeat(2,1fr)}}
+.hs-lcc .op-action{display:flex;align-items:center;gap:.7rem;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--soft);text-decoration:none;color:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
+.hs-lcc .op-action:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--brand) 40%,transparent);box-shadow:0 8px 24px -14px color-mix(in srgb,var(--brand) 60%,transparent)}
+.hs-lcc .op-action:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.hs-lcc .op-action-ic{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:10px;background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand)}
+.hs-lcc .op-action-ic svg{width:17px;height:17px}
+.hs-lcc .op-action-label{flex:1;font-size:.85rem;font-weight:600}
+.hs-lcc .op-action-go{width:14px;height:14px;flex-shrink:0;color:var(--mut2)}
+.hs-lcc .op-action:hover .op-action-go{color:var(--brand)}
+
+@media(prefers-reduced-motion:reduce){.hs-lcc .op-action:hover{transform:none}}
 `

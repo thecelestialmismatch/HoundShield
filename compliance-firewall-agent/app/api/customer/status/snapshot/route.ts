@@ -27,6 +27,62 @@ import {
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * GET /api/customer/status/snapshot — the caller's OWN posture history, oldest
+ * first, for the dashboard's SPRS trend chart.
+ *
+ * This is the only real source of a compliance TREND: SPRS is computed on the
+ * operator's device, so the server can only know the points the client has
+ * previously consented to store. Consequently the series is genuinely sparse —
+ * one point per meaningful change, and none at all without consent.
+ *
+ * The dashboard must therefore treat "fewer than two points" as an empty state
+ * ("not enough history yet"), never as a licence to interpolate. The mockup this
+ * replaces drew a smooth twelve-month climb from a hardcoded array; that curve
+ * described no customer who ever existed.
+ *
+ * Reads go through the cookie client, so RLS scopes them to auth.uid() and the
+ * `.eq('user_id')` below is defence in depth, not the only boundary.
+ */
+export async function GET() {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ points: [], configured: false });
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const since = new Date(Date.now() - 365 * 86_400_000).toISOString();
+  const { data, error } = await supabase
+    .from('customer_status_snapshots')
+    .select('sprs_score, completion_percent, captured_at')
+    .eq('user_id', user.id)
+    .gte('captured_at', since)
+    .order('captured_at', { ascending: true })
+    .limit(365);
+
+  if (error) {
+    console.error('[status/snapshot] history read failed:', error.message);
+    return NextResponse.json({ error: 'Failed to load history' }, { status: 500 });
+  }
+
+  return NextResponse.json({
+    points: (data ?? [])
+      .filter((r) => typeof r.sprs_score === 'number')
+      .map((r) => ({
+        score: r.sprs_score as number,
+        completion: Number(r.completion_percent ?? 0),
+        at: r.captured_at as string,
+      })),
+    configured: true,
+  });
+}
+
 export async function POST(request: NextRequest) {
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ stored: false, reason: 'not_configured' });
