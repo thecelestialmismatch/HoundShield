@@ -224,6 +224,13 @@ describe('OperatorOverview — the assessed customer', () => {
 
     const rows = container.querySelectorAll('.op-matrix-r')
     expect(rows.length, 'one row per NIST 800-171 family').toBe(14)
+    // Every visual column carries its own header. A single header over a
+    // multi-column flow leaves the right-hand families unlabelled.
+    const groups = container.querySelectorAll('.op-matrix-col')
+    expect(groups.length).toBe(2)
+    for (const g of Array.from(groups)) {
+      expect(g.querySelector('.op-matrix-h'), 'column without a header').toBeTruthy()
+    }
     // Coverage comes from the operator's own answers, so it must never read 0/110.
     expect(screen.queryByText('0 met · 0 partial · 0 unmet')).toBeNull()
   })
