@@ -343,3 +343,39 @@ describe("redirects the deployment's routing layer cannot serve are declared in-
     expect(cfg).toMatch(/source: '\/shieldready'/);
   });
 });
+
+/**
+ * Every sign-in entry point must ask "can this deployment sign anyone in?"
+ * BEFORE it tries. Missing the check on any one of them reproduces the
+ * 2026-07-31 preview failure on that path: password and passwordless show
+ * "try again in a moment" forever, and the OAuth buttons throw inside an async
+ * handler and read as simply dead.
+ */
+describe("sign-in tells the truth about an unconfigured deployment", () => {
+  const login = read("app/login/page.tsx");
+  const passwordless = read("app/login/PasswordlessSignIn.tsx");
+
+  it("guards the password path", () => {
+    expect(login).toMatch(/if \(!isSignInAvailable\(\)\) \{\s*\n\s*setError\(SIGN_IN_UNAVAILABLE\)/);
+  });
+
+  it("guards the OAuth buttons — an unhandled throw looks like a dead button", () => {
+    const oauth = login.slice(login.indexOf("const handleOAuthLogin"));
+    expect(oauth.slice(0, 400)).toContain("isSignInAvailable()");
+  });
+
+  it("guards the email-code / magic-link path", () => {
+    expect(passwordless).toContain("isSignInAvailable()");
+    expect(passwordless).toContain("SIGN_IN_UNAVAILABLE");
+  });
+
+  it("no sign-in path still advises a retry it cannot honour", () => {
+    // The generic catch may stay — a real network blip IS transient. What must
+    // not remain is reaching that catch for a deployment that was never
+    // configured, which the guards above now short-circuit.
+    for (const [name, src] of [["login", login], ["passwordless", passwordless]] as const) {
+      const guardIdx = src.indexOf("isSignInAvailable()");
+      expect(guardIdx, `${name} has no availability guard at all`).toBeGreaterThan(-1);
+    }
+  });
+});

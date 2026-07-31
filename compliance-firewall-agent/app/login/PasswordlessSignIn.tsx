@@ -24,6 +24,7 @@ import {
   isRateLimitError,
   supabaseOtpErrorMessage,
 } from '@/lib/auth/passwordless-state';
+import { isSignInAvailable, SIGN_IN_UNAVAILABLE } from '@/lib/auth/signin-availability';
 
 interface PasswordlessSignInProps {
   /** Same-origin relative path to land on after sign-in (parent-sanitized). */
@@ -65,6 +66,12 @@ export function PasswordlessSignIn({ redirect, initialEmail, onBack }: Passwordl
       return;
     }
     setError('');
+    // A deployment with no sign-in credentials can never send a code or a link,
+    // so "try again in a moment" would be advice that cannot come true.
+    if (!isSignInAvailable()) {
+      setError(SIGN_IN_UNAVAILABLE);
+      return;
+    }
     setLoading(true);
     try {
       const supabase = createClient();
