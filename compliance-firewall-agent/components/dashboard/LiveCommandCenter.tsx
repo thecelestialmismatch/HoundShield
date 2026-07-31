@@ -934,7 +934,18 @@ export function LiveCommandCenter({ viewer, authenticated }: {
                     <div className="hero-org">{name ? `Welcome back, ${name}` : orgName}</div>
                     <div className="hero-tag">
                       <span>HoundShield AI Compliance Command Center</span>
-                      <span className="liv"><span className="dot" /> {isViewer ? 'Sample preview' : 'Live demo'}</span>
+                      {/* Only the demo branch gets a chip here, and it says what
+                          it is. This read `isViewer ? 'Sample preview' : 'Live
+                          demo'` — exactly inverted: isViewer is the SIGNED-IN
+                          case, so a paying customer's own real telemetry was
+                          labelled "Sample preview" while the seeded demo was
+                          labelled "Live". A signed-in operator needs no chip
+                          here at all; OperatorOverview's toolbar carries the
+                          real Live / Last-update indicator, driven by an actual
+                          fetch rather than a constant. */}
+                      {!isViewer && (
+                        <span className="liv"><span className="dot" /> Live demo</span>
+                      )}
                       <span className="plan-chip"><Crown /> {viewer?.isFounder ? 'Founder access' : `${ent.name} plan`}</span>
                     </div>
                   </div>
