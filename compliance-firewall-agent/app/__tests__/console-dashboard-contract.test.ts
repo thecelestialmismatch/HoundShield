@@ -59,8 +59,16 @@ describe("Brain AI — logo-forward and CUI-safe", () => {
     expect(lcc).toMatch(/commercial cloud endpoint/i);
   });
   it("keeps a quick-ask card wired to the live analyst", () => {
+    // The card itself moved to operator/OperatorSlots on 2026-07-31 so the tab
+    // shell and the routed (tools) dashboard mount ONE implementation. The
+    // wiring assertion stays on LiveCommandCenter — that is the half that
+    // differs per shell — and the markup assertion follows the card.
     expect(lcc).toContain("askBrain");
-    expect(lcc).toContain("bchips");
+    expect(lcc).toMatch(/<BrainQuickAsk[\s\S]{0,80}onAsk=\{askBrain\}/);
+    const slots = read("components/dashboard/operator/OperatorSlots.tsx");
+    expect(slots).toContain("bchips");
+    // The CUI caveat travels WITH the entry point, never a click away.
+    expect(slots).toMatch(/commercial cloud endpoint/i);
   });
 });
 

@@ -36,6 +36,7 @@ import {
   Home,
   KeyRound,
   Building2,
+  Crown,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
@@ -104,6 +105,13 @@ const NAV_SECTIONS: NavSection[] = [
       // Moved from /console/security in the 2026-07-29 merge — it now inherits
       // this shell instead of rendering chrome-less.
       { id: "account-security", label: "Account Security", icon: KeyRound, href: "/command-center/account-security" },
+      // Both were TABS inside LiveCommandCenter's own shell until 2026-07-31.
+      // That shell stopped being rendered when the dashboard moved into this
+      // route group, so without these two entries the panes would have been
+      // silently stranded — including Plan & Unlocks, the only upgrade surface
+      // in the product.
+      { id: "guide", label: "Your Guide", icon: ListChecks, href: "/command-center/guide" },
+      { id: "plan", label: "Plan & Unlocks", icon: Crown, href: "/command-center/plan" },
     ],
   },
 ];
