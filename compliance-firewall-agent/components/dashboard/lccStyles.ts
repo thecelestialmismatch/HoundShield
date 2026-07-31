@@ -569,6 +569,17 @@ export const LCC_CSS = `
    wide — ~530px in a 2/5 column, which stretched the trend chart beside it.
    Cap and centre it; the family matrix below carries the detail.
    (No backticks in this file: the whole stylesheet is one template literal.) */
+/* EMBEDDED variant — the dashboard mounted inside the (tools) sidebar shell
+   rather than owning the viewport. Only the page-level rules are neutralised:
+   .hs-lcc paints a fixed-attachment gradient as the page stage, which inside
+   another shell would tile a second background over the one (tools) already
+   draws. Every panel/token rule below is untouched, which is the point — the
+   Overview renders identically in both shells because it IS the same CSS. */
+.hs-lcc.hs-embedded{background:none;background-attachment:initial}
+
+/* Customize toggle, top-right of the embedded dashboard. */
+.hs-lcc .op-tools{display:flex;justify-content:flex-end;margin-bottom:12px}
+
 .hs-lcc .op-radar{max-width:288px;margin:0 auto}
 
 /* Two columns of 7 on a wide panel — 14 rows in one column is a long scroll

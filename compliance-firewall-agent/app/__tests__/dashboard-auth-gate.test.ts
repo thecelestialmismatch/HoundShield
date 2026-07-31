@@ -100,24 +100,34 @@ describe("nothing may put the app back into a streaming context", () => {
 });
 
 describe("/command-center is the ONE canonical dashboard", () => {
-  it("the dashboard lives at /command-center/overview and renders the Live Command Center", () => {
-    const page = read("app/command-center/overview/page.tsx");
-    expect(page).toMatch(/import \{ LiveCommandCenter \} from ['"]@\/components\/dashboard\/LiveCommandCenter['"]/);
-    expect(page).toMatch(/<LiveCommandCenter viewer=\{viewer\} authenticated \/>/);
+  it("the dashboard lives at /command-center/overview, inside the shared sidebar", () => {
+    // A route group is parentheses-only and never appears in the path, so the
+    // canonical URL is unchanged by the 2026-07-31 move into (tools).
+    const page = read("app/command-center/(tools)/overview/page.tsx");
+    expect(page).toMatch(/import \{ OperatorDashboard \} from ['"]@\/components\/dashboard\/OperatorDashboard['"]/);
+    expect(page).toMatch(/<OperatorDashboard\b/);
   });
 
-  it("tells the dashboard there IS a session, separately from who it belongs to", () => {
-    // buildDashboardViewer returns null for a profile with neither company nor
-    // full_name — an ordinary email-only signup. While `viewer` alone decided
-    // "is this a real customer?", those customers were served the SIMULATED
-    // overview under the sample org. Reaching this render proves a session
-    // (layout.tsx is a fail-closed gate), so the page states it explicitly.
-    const page = read("app/command-center/overview/page.tsx");
-    expect(page).toMatch(/authenticated/);
-    const lcc = read("components/dashboard/LiveCommandCenter.tsx");
-    expect(lcc).toMatch(/const isViewer = authenticated \?\? !!viewer/);
-    // …and such a customer is never labelled with the fictional sample org.
-    expect(lcc).toMatch(/authenticated \? 'Your Command Center' : 'Acme Defense'/);
+  it("cannot serve simulated data to a real customer, whatever their profile says", () => {
+    /**
+     * REPLACES the `authenticated ?? !!viewer` guard (2026-07-31).
+     *
+     * That prop existed because the dashboard chose between real and SIMULATED
+     * panels, and buildDashboardViewer returns null for a profile carrying
+     * neither company nor full_name — an ordinary email-only signup — so those
+     * customers fell through to the demo branch under a sample org name.
+     *
+     * The choice is now gone rather than merely corrected: the page renders
+     * OperatorDashboard, which has no simulated branch to fall into. Profile
+     * completeness can affect the greeting and nothing else, which is why the
+     * assertions below are about ABSENCE.
+     */
+    const page = read("app/command-center/(tools)/overview/page.tsx");
+    expect(page).not.toMatch(/buildDashboardViewer/);
+    const shell = read("components/dashboard/OperatorDashboard.tsx");
+    expect(shell).not.toMatch(/Acme Defense/);
+    // `name` is display-only: it may be null and nothing else changes.
+    expect(shell).toMatch(/name\?: string \| null/);
   });
 
   it("its index forwards to the dashboard rather than rendering a second one", () => {
@@ -128,20 +138,29 @@ describe("/command-center is the ONE canonical dashboard", () => {
     expect(index).not.toMatch(/LiveCommandCenter/);
   });
 
-  it("the /command-center/overview mockup is GONE, not merely unlinked", () => {
-    // It was an 804-line client page with every chart hardcoded and no session
-    // lookup, so it showed every operator the same invented security metrics.
-    // If it ever comes back it silently wins the route over the real dashboard.
-    expect(
-      existsSync(path.join(CFA, "app/command-center/(tools)/overview/page.tsx")),
-      "the mock overview page is back and now shadows the real dashboard route",
-    ).toBe(false);
+  it("the 804-line mockup is GONE, not merely unlinked", () => {
+    // Every chart in it was hardcoded and it did no session lookup, so it showed
+    // every operator the same invented security metrics. It occupied the path
+    // the real dashboard now uses, so absence-of-path is no longer the test —
+    // read the file at that path and prove none of its datasets came back.
+    const page = read("app/command-center/(tools)/overview/page.tsx");
+    for (const seed of ["generateTokenData", "threatDistribution", "riskRadarData", "REVENUE_DATA"]) {
+      expect(page, `mockup dataset "${seed}" is back`).not.toContain(seed);
+    }
   });
 
-  it("the real dashboard sits OUTSIDE the (tools) group, so shells cannot nest", () => {
-    // (tools)/layout.tsx paints a full cc-light shell (aside + header + main);
-    // LiveCommandCenter brings its own hs-lcc shell. Nested = two sidebars.
-    expect(existsSync(path.join(CFA, "app/command-center/overview/page.tsx"))).toBe(true);
+  it("the real dashboard sits INSIDE the (tools) group, so it keeps the sidebar", () => {
+    // REVERSED 2026-07-31, on founder direction ("I still want all of these
+    // features", sent with screenshots of the 23-item sidebar).
+    //
+    // This asserted the opposite, and was right while the dashboard rendered
+    // LiveCommandCenter: that component carries its own hs-lcc SHELL, so
+    // nesting it inside cc-light's aside+header+main painted two sidebars.
+    // OperatorDashboard carries the `.hs-lcc`-scoped stylesheet WITHOUT the
+    // `.shell` grid, so it inherits the tools sidebar instead of competing with
+    // it. Same panels, same CSS, one navigation.
+    expect(existsSync(path.join(CFA, "app/command-center/(tools)/overview/page.tsx"))).toBe(true);
+    expect(existsSync(path.join(CFA, "app/command-center/overview/page.tsx"))).toBe(false);
   });
 
   it("/console permanently redirects instead of rendering a second dashboard", () => {
@@ -181,19 +200,19 @@ describe("/command-center is the ONE canonical dashboard", () => {
 });
 
 describe("the (tools) route group — one shell, never two sidebars", () => {
-  it("only the dashboard escapes the tool shell, and only because it brings its own", () => {
+  it("NOTHING escapes the tool shell — every route keeps the same sidebar", () => {
     // A directory added here becomes a route that renders WITHOUT the tool
     // shell. (It is still gated — the layout covers the whole subtree — but it
-    // loses its chrome, which is the double-sidebar/no-sidebar mess the route
-    // group exists to prevent.)
+    // loses its chrome, which is the no-sidebar mess the route group prevents.)
     //
-    // `overview` is the ONE permitted sibling: it renders LiveCommandCenter,
-    // which carries its own hs-lcc shell. Putting it INSIDE (tools) would nest
-    // that shell in cc-light's aside+header+main and paint two of everything —
-    // the very failure this test guards. Anything else added here is a bug.
+    // TIGHTENED 2026-07-31: `overview` used to be a permitted sibling because it
+    // rendered LiveCommandCenter's own hs-lcc shell. It has moved inside, so the
+    // allowance is gone and the invariant is now absolute — one shell, one
+    // sidebar, no exceptions. Adding a sibling here strands a page outside the
+    // navigation, which is exactly the defect the founder reported.
     const entries = readdirSync(path.join(CFA, "app/command-center"), { withFileTypes: true });
     const segments = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
-    expect(segments).toEqual(["(tools)", "overview"]);
+    expect(segments).toEqual(["(tools)"]);
 
     // Loose files must stay Next.js convention files, never a stray route.
     const allowed = new Set(["layout.tsx", "page.tsx", "loading.tsx", "error.tsx", "not-found.tsx"]);
