@@ -1,0 +1,167 @@
+'use client'
+
+/**
+ * OperatorOverview — the Overview a SIGNED-IN customer sees.
+ *
+ * Founder direction 2026-07-31: the rich Command Center overview (KPI row, SPRS
+ * trend, risk radar, provider breakdown, live events, 24h activity, quick
+ * actions) is what should be on screen the moment you log in — "with the correct
+ * data, not the fake data".
+ *
+ * Both halves of that sentence are load-bearing, and this component exists to
+ * satisfy them at the same time. The layout is the one the founder asked for.
+ * Every number in it comes from the operator's own gateway events, their own
+ * on-device assessment, or their own recorded posture history — see
+ * `useOperatorTelemetry`. Where a source is empty the panel says so and points
+ * at the action that fills it; nothing is ever seeded to make a chart look
+ * populated.
+ *
+ * Why this is a separate component from the demo Overview in
+ * LiveCommandCenter: the anonymous, logged-out preview at the same route is a
+ * marketing surface, and its simulated panels are correct there (they are
+ * labelled "sample" and exist to show a buyer what the product does). Trying to
+ * make one set of panels serve both audiences is how a seeded number ends up in
+ * front of a paying customer. The two are kept apart on purpose.
+ *
+ * REVERSAL NOTE — this supersedes founder direction 2026-07-23 ("strip it way
+ * down"), which is why `SIGNED_IN_STRIPPED_HIDDEN` is now empty. That direction
+ * was the right call when every signed-in panel was simulated: hiding invented
+ * numbers beat showing them. Now that the panels are real, there is nothing
+ * dishonest left to hide. Do not "restore" the stripped set without also
+ * restoring simulated data — the two changes only make sense together.
+ */
+
+import { useState } from 'react'
+import { RefreshCw, Calendar, AlertTriangle } from 'lucide-react'
+import { Section } from './OverviewSection'
+import type { DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
+import type { ProvenanceId } from './dataProvenance'
+import type { EventOutcome } from '@/lib/dashboard/overview-telemetry'
+import { useOperatorTelemetry, type TelemetryWindow } from './operator/useOperatorTelemetry'
+import {
+  OperatorKpis, ActivityByHour, ProviderBreakdown, RiskRadar, FamilyMatrix,
+  SprsTrend, LiveEvents, QuickActions, DetectionsByEngine,
+} from './operator/OperatorPanels'
+
+const WINDOWS: { value: TelemetryWindow; label: string }[] = [
+  { value: 1, label: 'Last 24 hours' },
+  { value: 7, label: 'Last 7 days' },
+  { value: 30, label: 'Last 30 days' },
+]
+
+export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, checklistSlot }: {
+  prefs: DashboardPrefs
+  editing: boolean
+  onSource: (id: ProvenanceId) => void
+  onTab: (tab: 'assess' | 'settings' | 'feed' | 'reports') => void
+  /** The Brain AI quick-ask card, owned by LiveCommandCenter (it wires the live
+   *  analyst). Passed in rather than duplicated so there is one implementation. */
+  brainSlot: React.ReactNode
+  /** Likewise the first-run checklist, which drives activation to the PDF. */
+  checklistSlot: React.ReactNode
+}) {
+  const t = useOperatorTelemetry()
+  const [filter, setFilter] = useState<'all' | EventOutcome>('all')
+
+  const openSettings = () => onTab('settings')
+  const openAssess = () => onTab('assess')
+
+  return (
+    <>
+      {/* Toolbar — the founder's "Dashboard Overview / Live / Last update"
+          header, with the window picker and refresh made functional rather
+          than decorative (they were inert buttons in the mockup). */}
+      <div className="op-toolbar">
+        <div className="op-toolbar-l">
+          <h2>Dashboard Overview</h2>
+          <div className="op-toolbar-sub">
+            <span className={`op-live${t.error ? ' is-err' : ''}`}>
+              <span className="dot" /> {t.error ? 'Offline' : 'Live'}
+            </span>
+            <span className="sep">·</span>
+            <span className="mono">
+              {t.loading
+                ? 'Refreshing…'
+                : t.lastUpdated
+                  ? `Last update: ${new Date(t.lastUpdated).toLocaleTimeString()}`
+                  : 'Not yet loaded'}
+            </span>
+          </div>
+        </div>
+        <div className="op-toolbar-r">
+          <label className="op-select">
+            <Calendar aria-hidden />
+            <span className="sr-only">Time window</span>
+            <select
+              value={t.windowDays}
+              onChange={(e) => t.setWindowDays(Number(e.target.value) as TelemetryWindow)}
+            >
+              {WINDOWS.map((w) => <option key={w.value} value={w.value}>{w.label}</option>)}
+            </select>
+          </label>
+          <button type="button" className="btn btn-g btn-sm" onClick={t.refresh} disabled={t.loading}>
+            <RefreshCw aria-hidden /> Refresh
+          </button>
+        </div>
+      </div>
+
+      {/* Two conditions the operator must never have to guess at. */}
+      {t.error && (
+        <div className="op-banner is-err" role="status">
+          <AlertTriangle aria-hidden /> {t.error} Showing the last successful read.
+        </div>
+      )}
+      {t.truncated && (
+        <div className="op-banner" role="status">
+          <AlertTriangle aria-hidden /> This window exceeds the 5,000-event
+          aggregation cap — figures below cover the most recent 5,000 events.
+          The full record is in your audit log.
+        </div>
+      )}
+
+      <div className={`ovsections${editing ? ' editing' : ''}`}>
+        <Section id="kpis" prefs={prefs} editing={editing}>
+          <OperatorKpis tel={t.tel} posture={t.posture} onSource={onSource} />
+        </Section>
+
+        <Section id="brain" prefs={prefs} editing={editing}>
+          {brainSlot}
+        </Section>
+
+        <Section id="charts" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <ActivityByHour tel={t.tel} onSettings={openSettings} />
+            <ProviderBreakdown tel={t.tel} onSettings={openSettings} />
+          </div>
+        </Section>
+
+        <Section id="posture" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <SprsTrend points={t.history} onAssess={openAssess} />
+            <RiskRadar posture={t.posture} onAssess={openAssess} />
+          </div>
+          {/* The numbers behind the radar, full width — inside the radar's
+              column its 14 rows stretched the trend chart into dead space.
+              Renders nothing until there is an assessment to break down. */}
+          <FamilyMatrix posture={t.posture} />
+        </Section>
+
+        <Section id="feed" prefs={prefs} editing={editing}>
+          <LiveEvents recent={t.recent} filter={filter} onFilter={setFilter} onSettings={openSettings} />
+        </Section>
+
+        <Section id="engines" prefs={prefs} editing={editing}>
+          <DetectionsByEngine tel={t.tel} onSettings={openSettings} />
+        </Section>
+
+        <Section id="checklist" prefs={prefs} editing={editing}>
+          {checklistSlot}
+        </Section>
+
+        <Section id="actions" prefs={prefs} editing={editing}>
+          <QuickActions />
+        </Section>
+      </div>
+    </>
+  )
+}
