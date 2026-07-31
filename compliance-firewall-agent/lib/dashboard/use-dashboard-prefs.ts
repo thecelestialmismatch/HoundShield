@@ -26,9 +26,11 @@ export const OVERVIEW_SECTIONS: { id: string; label: string }[] = [
   { id: 'brain', label: 'Ask Brain AI' },
   { id: 'charts', label: 'Overview charts' },
   { id: 'throughput', label: 'Throughput & detection mix' },
+  { id: 'posture', label: 'SPRS trend & risk radar' },
   { id: 'feed', label: 'Threat feed & SPRS posture' },
   { id: 'checklist', label: 'First-run checklist' },
   { id: 'engines', label: 'Detections by engine' },
+  { id: 'actions', label: 'Quick actions' },
 ]
 
 const SECTION_IDS = OVERVIEW_SECTIONS.map((s) => s.id)
@@ -36,15 +38,30 @@ const THEME_KEY = 'hs.console.theme'
 const LAYOUT_KEY = 'hs.console.layout'
 
 /**
- * Default hidden set for a SIGNED-IN operator: the simulated telemetry panels
- * (KPI tiles, charts, throughput/detection-mix, threat feed, engine bars) start
- * hidden so a logged-in user lands on a stripped, real dashboard — their next
- * actions (Ask Brain AI + the activation checklist that ends on the PDF), not a
- * wall of demo numbers. Anything here can be brought back via Customize. The
- * anonymous public demo passes NOTHING (keeps every panel — it's a marketing
- * preview). Founder direction 2026-07-23: "strip it way down."
+ * Default hidden set for a SIGNED-IN operator: now EMPTY.
+ *
+ * It used to be `['kpis','charts','throughput','feed','engines']` — every
+ * telemetry panel hidden — under founder direction 2026-07-23, "strip it way
+ * down". That was the correct call at the time for one specific reason: those
+ * panels were all SIMULATED, and showing a logged-in customer invented security
+ * metrics is indefensible on a product sold as audit evidence. Hiding them was
+ * the cheapest available honesty fix.
+ *
+ * Founder direction 2026-07-31 supersedes it: the full dashboard should be on
+ * screen at login, "with the correct data, not the fake data". Signed-in
+ * operators now render `OperatorOverview`, whose every panel is sourced from
+ * their own gateway events, their own on-device assessment, or their own
+ * recorded posture history, and which shows an explicit empty state wherever a
+ * source has nothing in it yet. There is no longer anything dishonest to hide,
+ * so nothing starts hidden.
+ *
+ * DO NOT restore the stripped list on its own. It is only coherent alongside
+ * simulated signed-in panels; re-adding it now would hide a customer's real
+ * data from them. The anonymous public demo still passes NOTHING here — it
+ * keeps every (clearly sample-labelled) panel, because it is a marketing
+ * preview.
  */
-export const SIGNED_IN_STRIPPED_HIDDEN = ['kpis', 'charts', 'throughput', 'feed', 'engines']
+export const SIGNED_IN_STRIPPED_HIDDEN: string[] = []
 
 interface StoredLayout {
   order: string[]

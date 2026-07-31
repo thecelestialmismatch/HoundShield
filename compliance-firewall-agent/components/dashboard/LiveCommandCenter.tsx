@@ -34,6 +34,8 @@ import {
 import { LCC_CSS } from './lccStyles'
 import { DESIGN_THEMES, getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
 import { useDashboardPrefs, OVERVIEW_SECTIONS, SIGNED_IN_STRIPPED_HIDDEN, type DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
+import { Section } from './OverviewSection'
+import { OperatorOverview } from './OperatorOverview'
 import { SourceChip, ProvenancePanel } from './ProvenancePanel'
 import type { ProvenanceId } from './dataProvenance'
 import { WelcomeBanner } from '@/components/WelcomeBanner'
@@ -279,7 +281,22 @@ const BRAIN_TAB_CHIPS: string[] = [
   'Draft my incident summary',
 ]
 
-export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {}) {
+export function LiveCommandCenter({ viewer, authenticated }: {
+  viewer?: DashboardViewer
+  /**
+   * Is there a SESSION? Deliberately separate from `viewer`, which only carries
+   * a DISPLAY IDENTITY.
+   *
+   * These used to be the same signal, and that was a data-honesty bug:
+   * `buildDashboardViewer` returns null when a profile has neither a company nor
+   * a full name — an ordinary state for someone who signed up with an email and
+   * never filled the form. That customer is fully signed in, yet fell through to
+   * the anonymous branch and was shown the SIMULATED dashboard, under a
+   * hardcoded sample org name. Not knowing what to call someone is not a reason
+   * to show them invented security metrics.
+   */
+  authenticated?: boolean
+} = {}) {
   const [tab, setTab] = useState<TabId>('overview')
   const [sideOpen, setSideOpen] = useState(false)
   const [feedBadge, setFeedBadge] = useState(3)
@@ -311,8 +328,14 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
   // viewer, so it shows the sample "Acme Defense" org on the Pro plan.
   const ent = getEntitlements(viewer?.tier ?? 'pro')
   const name = viewer?.firstName?.trim() || undefined
-  const orgName = viewer?.company ?? 'Acme Defense'
-  const isViewer = !!viewer
+  // A signed-in operator is NEVER labelled with the sample org. When we have no
+  // company for them we say something true and neutral instead of borrowing a
+  // fictional defense contractor's name — the founder's original report was
+  // literally "why does it show something else has logged in".
+  const orgName = viewer?.company ?? (authenticated ? 'Your Command Center' : 'Acme Defense')
+  // Session, not display name. See the `authenticated` prop docs above: keying
+  // this off `viewer` alone sent profile-less customers to the simulated branch.
+  const isViewer = authenticated ?? !!viewer
   // Billing meters: a REAL customer sees their real consumption — zero scans
   // until their proxy is connected, one seat (their own). Fabricating 57%-used
   // meters against a real plan's caps beside a real upgrade CTA was the most
@@ -696,6 +719,45 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
 
   const tabClass = (id: TabId) => (tab === id ? 'atab on' : 'atab')
 
+  /**
+   * Two Overview panels are REAL for everyone — the Brain AI quick-ask (it
+   * queries the live analyst) and the first-run checklist (it drives activation
+   * to the $499 PDF). They therefore appear in both the signed-in dashboard and
+   * the anonymous demo.
+   *
+   * They are hoisted into slots rather than copied into each branch because
+   * both wire into this component's own state (`askBrain` drives the Brain tab,
+   * `setTab` the checklist steps). One implementation, two mount points — a
+   * duplicated copy would drift the moment either is edited.
+   */
+  const brainSlot = (
+    <div className="panel">
+      <div className="braincard">
+        <Image className="brain-mark" src="/houndshield-logo.png" alt="HoundShield Brain AI" width={38} height={48} />
+        <div className="bc-copy">
+          <h3><Sparkles style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline', marginRight: 4 }} />{name ? `${name}, ask Brain AI` : 'Ask Brain AI'}</h3>
+          <p>On-device CMMC analyst, grounded in your own assessment &amp; audit chain. No CUI — it can route to a commercial cloud endpoint.</p>
+        </div>
+        <div className="bchips">
+          {BRAIN_QUICK.map((q) => (
+            <button key={q} type="button" onClick={() => askBrain(q)}>{q}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+
+  const checklistSlot = (
+    <div className="panel">
+      <div className="ph"><h3>Get to your first C3PAO-ready PDF</h3><span className="mono">3 steps</span></div>
+      <div className="pad steps">
+        <StepRow n="1" done={!isViewer} title="Point your AI traffic at the proxy" detail="OpenAI-compatible endpoint — one URL change." onClick={() => setTab('settings')} cta="View proxy URL" />
+        <StepRow n="2" done={!isViewer} title="See your first live scan" detail="Every prompt inspected on your hardware in <10ms." onClick={() => setTab('feed')} cta="Open live feed" />
+        <StepRow n="3" title="Generate a sample audit PDF" detail="SSP + POA&M + evidence pack, SHA-256 signed." onClick={() => setTab('reports')} cta="Generate PDF" />
+      </div>
+    </div>
+  )
+
   return (
     <div className="hs-lcc" ref={rootRef} data-theme={activeTheme.id} data-mode={activeTheme.mode} style={consoleThemeVars(activeTheme) as CSSProperties}>
       <style dangerouslySetInnerHTML={{ __html: LCC_CSS }} />
@@ -867,7 +929,9 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 <div className="hero-l">
                   <div className="hero-logo"><Image src="/houndshield-logo.png" alt="HoundShield" width={34} height={44} /></div>
                   <div style={{ minWidth: 0 }}>
-                    <div className="hero-org">{name ? `Welcome back, ${name}` : (viewer?.company ?? 'Acme Defense')}</div>
+                    {/* `orgName` already resolves the signed-in case without
+                        borrowing the sample org — never inline that fallback. */}
+                    <div className="hero-org">{name ? `Welcome back, ${name}` : orgName}</div>
                     <div className="hero-tag">
                       <span>HoundShield AI Compliance Command Center</span>
                       <span className="liv"><span className="dot" /> {isViewer ? 'Sample preview' : 'Live demo'}</span>
@@ -892,7 +956,13 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 <ActivationStrip onSettings={() => setTab('settings')} onAssess={() => setTab('assess')} />
               )}
 
-              <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago <SourceChip id="system-status" onSource={setProv} className="ops-src">demo data</SourceChip></div>
+              {/* Demo-only status strip. Its "last block 4s ago" is driven by the
+                  simulated feed timer, so showing it to a signed-in operator would
+                  claim a block that never happened. They get the real Live /
+                  Last-update indicator in OperatorOverview's toolbar instead. */}
+              {!isViewer && (
+                <div className="ops"><span className="dot" /> <b>All systems operational</b> <span className="sep">—</span> 16/16 detection engines online <span className="sep">·</span> 4 regions <span className="sep">·</span> 0 incidents <span className="sep">·</span> last block <b id="lcc-lastBlock">4s</b> ago <SourceChip id="system-status" onSource={setProv} className="ops-src">demo data</SourceChip></div>
+              )}
 
               {/* Customize mode — free for everyone, saved per-device: reorder
                   or hide the sections below (order/visibility via useDashboardPrefs). */}
@@ -905,6 +975,23 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
                 </div>
               )}
 
+              {/* A SIGNED-IN operator gets the real-data dashboard; the
+                  anonymous visitor gets the simulated marketing preview below.
+                  The split is deliberate and must not be collapsed: every panel
+                  in the demo branch is seeded (SCANS_24H, BLOCKED_TODAY, the
+                  canvas throughput animation, the engine bars), which is honest
+                  on a public preview labelled "sample" and indefensible in front
+                  of a paying customer. See OperatorOverview's header. */}
+              {isViewer ? (
+                <OperatorOverview
+                  prefs={prefs}
+                  editing={customizing}
+                  onSource={setProv}
+                  onTab={setTab}
+                  brainSlot={brainSlot}
+                  checklistSlot={checklistSlot}
+                />
+              ) : (
               <div className={`ovsections${customizing ? ' editing' : ''}`}>
                 <Section id="kpis" prefs={prefs} editing={customizing}>
               {/* Each KPI tile is a button: click any number to see exactly
@@ -919,20 +1006,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
 
                 <Section id="brain" prefs={prefs} editing={customizing}>
               {/* Brain AI quick-ask — the logo-forward, keyless analyst, one tap in. */}
-              <div className="panel">
-                <div className="braincard">
-                  <Image className="brain-mark" src="/houndshield-logo.png" alt="HoundShield Brain AI" width={38} height={48} />
-                  <div className="bc-copy">
-                    <h3><Sparkles style={{ width: 15, height: 15, verticalAlign: -2, display: 'inline', marginRight: 4 }} />{name ? `${name}, ask Brain AI` : 'Ask Brain AI'}</h3>
-                    <p>On-device CMMC analyst, grounded in your own assessment &amp; audit chain. No CUI — it can route to a commercial cloud endpoint.</p>
-                  </div>
-                  <div className="bchips">
-                    {BRAIN_QUICK.map((q) => (
-                      <button key={q} type="button" onClick={() => askBrain(q)}>{q}</button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              {brainSlot}
                 </Section>
 
                 <Section id="charts" prefs={prefs} editing={customizing}>
@@ -984,14 +1058,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               {/* First-run checklist — activation driver that ends on the PDF.
                   A real customer starts at step 1 (nothing is pre-completed for
                   them); only the sample org shows the lived-in ✓s. */}
-              <div className="panel">
-                <div className="ph"><h3>Get to your first C3PAO-ready PDF</h3><span className="mono">3 steps</span></div>
-                <div className="pad steps">
-                  <StepRow n="1" done={!isViewer} title="Point your AI traffic at the proxy" detail="OpenAI-compatible endpoint — one URL change." onClick={() => setTab('settings')} cta="View proxy URL" />
-                  <StepRow n="2" done={!isViewer} title="See your first live scan" detail="Every prompt inspected on your hardware in <10ms." onClick={() => setTab('feed')} cta="Open live feed" />
-                  <StepRow n="3" title="Generate a sample audit PDF" detail="SSP + POA&M + evidence pack, SHA-256 signed." onClick={() => setTab('reports')} cta="Generate PDF" />
-                </div>
-              </div>
+              {checklistSlot}
                 </Section>
 
                 <Section id="engines" prefs={prefs} editing={customizing}>
@@ -1008,6 +1075,7 @@ export function LiveCommandCenter({ viewer }: { viewer?: DashboardViewer } = {})
               </div>
                 </Section>
               </div>
+              )}
             </div>
 
             {/* LIVE FEED */}
@@ -1201,42 +1269,6 @@ function UsageMeter({ label, value, pct, id, barId, sourceId, onSource }: {
       </div>
       <div className="usebar"><i id={barId} style={{ width: `${pct}%` }} /></div>
     </div>
-  )
-}
-
-/** One reorderable / hideable Overview section. In normal view it just applies
- *  the user's saved display order (CSS `order`) and drops itself if hidden; in
- *  Customize mode it wears a control strip (move up / down / hide-show). The JSX
- *  SOURCE order is unchanged — only the rendered visual order moves — so every
- *  structure contract test that reads this file keeps matching. */
-function Section({ id, prefs, editing, children }: {
-  id: string
-  prefs: DashboardPrefs
-  editing: boolean
-  children: React.ReactNode
-}) {
-  const hidden = prefs.isHidden(id)
-  // Hidden sections vanish entirely in normal view; in edit mode they stay
-  // (dimmed) so the operator can bring them back.
-  if (hidden && !editing) return null
-  const meta = OVERVIEW_SECTIONS.find((s) => s.id === id)
-  const label = meta?.label ?? id
-  return (
-    <section className={`ovsec${hidden ? ' is-hidden' : ''}`} data-sec={id} style={{ order: prefs.orderOf(id) }} aria-label={label}>
-      {editing && (
-        <div className="secz">
-          <span className="secz-name">{label}{hidden && <em> · hidden</em>}</span>
-          <div className="secz-btns">
-            <button type="button" aria-label={`Move ${label} up`} onClick={() => prefs.move(id, -1)}><ArrowUp aria-hidden /></button>
-            <button type="button" aria-label={`Move ${label} down`} onClick={() => prefs.move(id, 1)}><ArrowDown aria-hidden /></button>
-            <button type="button" aria-label={hidden ? `Show ${label}` : `Hide ${label}`} onClick={() => prefs.toggleHidden(id)}>
-              {hidden ? <Eye aria-hidden /> : <EyeOff aria-hidden />}
-            </button>
-          </div>
-        </div>
-      )}
-      <div className="ovsec-body">{children}</div>
-    </section>
   )
 }
 

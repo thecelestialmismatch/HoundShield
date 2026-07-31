@@ -17,23 +17,45 @@ describe('useDashboardPrefs — free, per-device console personalization', () =>
     expect(result.current.ready).toBe(true)
   })
 
-  it('a signed-in default hidden-set strips telemetry but keeps the real actions', () => {
+  /**
+   * REVERSAL, founder direction 2026-07-31 (supersedes 2026-07-23).
+   *
+   * This set used to be ['kpis','charts','throughput','feed','engines'] — every
+   * telemetry panel hidden from a signed-in operator. That was right while those
+   * panels were SIMULATED: hiding invented security metrics beat showing them.
+   *
+   * Signed-in operators now render OperatorOverview, where every panel reads
+   * their own gateway events / their own on-device assessment / their own
+   * posture history, and shows an explicit empty state when a source is empty.
+   * With nothing dishonest left to hide, nothing starts hidden.
+   *
+   * The two changes are a package: re-introducing a stripped default without
+   * also reverting to simulated panels would hide a customer's REAL data from
+   * them, which is a different bug wearing the old fix's clothes.
+   */
+  it('a signed-in operator starts with NOTHING hidden — the panels are real now', () => {
     const { result } = renderHook(() => useDashboardPrefs(SIGNED_IN_STRIPPED_HIDDEN))
-    // The simulated panels start hidden…
-    for (const id of ['kpis', 'charts', 'throughput', 'feed', 'engines']) {
-      expect(result.current.isHidden(id)).toBe(true)
+    expect(SIGNED_IN_STRIPPED_HIDDEN).toEqual([])
+    for (const id of IDS) {
+      expect(result.current.isHidden(id), `${id} must not start hidden`).toBe(false)
     }
-    // …while the real next-actions stay visible.
-    expect(result.current.isHidden('brain')).toBe(false)
-    expect(result.current.isHidden('checklist')).toBe(false)
   })
 
-  it('reset with a signed-in default returns to the stripped baseline, not "show all"', () => {
+  it('reset returns to that baseline, and Customize still hides on demand', () => {
     const { result } = renderHook(() => useDashboardPrefs(SIGNED_IN_STRIPPED_HIDDEN))
-    act(() => result.current.toggleHidden('kpis')) // operator un-hides one panel
-    expect(result.current.isHidden('kpis')).toBe(false)
+    // Hiding remains a free, per-device operator choice — only the DEFAULT moved.
+    act(() => result.current.toggleHidden('kpis'))
+    expect(result.current.isHidden('kpis')).toBe(true)
     act(() => result.current.reset())
     expect(result.current.hidden).toEqual(SIGNED_IN_STRIPPED_HIDDEN)
+    expect(result.current.isHidden('kpis')).toBe(false)
+  })
+
+  it('carries the sections the operator dashboard adds', () => {
+    // `posture` (SPRS trend + risk radar) and `actions` (quick actions) are the
+    // panels the founder asked to see at login; they must be reorderable too.
+    expect(IDS).toContain('posture')
+    expect(IDS).toContain('actions')
   })
 
   it('a stored per-device layout still overrides the signed-in default', () => {
