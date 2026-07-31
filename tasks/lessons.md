@@ -1111,3 +1111,34 @@ The compound command's exit status is the last element — the `echo`. The real 
 `EXIT=` line inside the output file.
 **Rule:** Read the captured exit line or the summary in the log. Never take a wrapper's exit code as
 the gate result. (`${PIPESTATUS[0]}` is also bash-only — it silently yields empty in this zsh shell.)
+
+### A guard that asserts a PATH is empty breaks the moment the right answer moves to that path
+**What:** `operator-dashboard-honesty.test.ts` asserted `(tools)/overview/page.tsx` does NOT exist, as a
+proxy for "the 804-line hardcoded mockup has not come back". The correct architecture then turned out to
+be the dashboard living at exactly that path, so the guard blocked the fix it was meant to protect.
+**Rule:** Guard the PROPERTY, not the location. Read the file at the path and assert it lacks the
+mockup's datasets. Path-absence assertions encode today's layout as if it were the invariant.
+
+### CSS `column-count` silently orphans the header of every column but the first
+**What:** `.op-matrix{column-count:2}` with one header row as the first child flowed that header atop the
+LEFT column only. The right-hand 7 NIST families rendered with no Family/Met/Part/Unmet labels at all.
+Nothing in the class list or the JSX hints at it — the markup is correct; the layout mode is wrong.
+**Rule:** Multi-column flow is for prose, not tables. For N labelled columns render N groups, each with
+its own header, in a grid. And diagnose from COMPUTED STYLE in a real browser — this was invisible in
+source review, in tests, and in the accessibility tree.
+
+### An inverted boolean label is worse than no label — check which branch is the signed-in one
+**What:** `{isViewer ? 'Sample preview' : 'Live demo'}` shipped for weeks. `isViewer` is the SIGNED-IN
+case, so paying customers saw their own real gateway telemetry captioned "Sample preview" while the
+seeded marketing demo was captioned "Live demo" — exactly backwards, on a product that sells audit
+evidence. A test even asserted the wrong string, because it was written when the signed-in dashboard
+genuinely WAS simulated and the label was then an honest disclosure.
+**Rule:** When the meaning of a flag changes, re-read every string that branches on it. A guard written
+under the old meaning will keep the bug green.
+
+### A refactor that stops rendering a component deletes every feature reachable only through it
+**What:** Moving the dashboard out of `LiveCommandCenter`'s tab shell left `PlanUnlocksBoard` — the only
+upgrade/paywall surface in the product — reachable from nowhere. No test failed: the component still
+existed, still had its own passing unit tests, and nothing asserted it was linked.
+**Rule:** Before removing a shell, enumerate what ONLY that shell rendered. Then guard reachability, not
+just existence: walk every nav href and fail if it has no page.
