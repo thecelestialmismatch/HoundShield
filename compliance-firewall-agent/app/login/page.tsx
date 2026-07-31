@@ -8,6 +8,7 @@ import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle, ShieldCheck } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
 import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
+import { isSignInAvailable, SIGN_IN_UNAVAILABLE } from '@/lib/auth/signin-availability';
 import {
   needsSecondFactor,
   normalizeOtpInput,
@@ -88,6 +89,14 @@ function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Ask "can this deployment sign anyone in?" BEFORE trying, so a build that
+    // was never configured says so instead of advising a retry that cannot work.
+    if (!isSignInAvailable()) {
+      setError(SIGN_IN_UNAVAILABLE);
+      return;
+    }
+
     setLoading(true);
 
     // Better Auth path (self-hosted) when active; Supabase otherwise.
@@ -175,6 +184,13 @@ function LoginForm() {
   };
 
   const handleOAuthLogin = async (provider: 'google' | 'github') => {
+    // Same check as the password path: without it createClient() throws inside
+    // an async handler, the rejection goes unhandled, and the button reads as
+    // simply dead — no error, no feedback, nothing to act on.
+    if (!isSignInAvailable()) {
+      setError(SIGN_IN_UNAVAILABLE);
+      return;
+    }
     if (isBetterAuthClientEnabled()) {
       await authClient.signIn.social({ provider, callbackURL: redirect });
       return;
