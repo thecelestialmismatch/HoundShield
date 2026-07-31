@@ -108,7 +108,11 @@ describe("hero identity band — brand-forward Overview anchor (carries the gree
   });
   it("carries the personalization inside the hero (greet-by-name + plan chip)", () => {
     expect(lcc).toMatch(/hero-org[\s\S]{0,80}Welcome back, \$\{name\}/);
-    expect(lcc).toMatch(/hero[\s\S]{0,400}plan-chip/);
+    // Source-distance window, so it measures characters rather than structure —
+    // a comment between the two markers counts against it. Widened 400 → 1200
+    // on 2026-07-31 when the demo-only "Live demo" chip gained an explanatory
+    // block. The assertion still pins what it means to: plan-chip inside hero.
+    expect(lcc).toMatch(/hero[\s\S]{0,1200}plan-chip/);
   });
   it("its status chips COMPLEMENT the KPIs (Engines / Scan p50 / Regions — no SPRS/blocked dupes)", () => {
     expect(lcc).toMatch(/hero-metric[\s\S]{0,120}Engines/);

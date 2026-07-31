@@ -569,13 +569,16 @@ export const LCC_CSS = `
    wide — ~530px in a 2/5 column, which stretched the trend chart beside it.
    Cap and centre it; the family matrix below carries the detail.
    (No backticks in this file: the whole stylesheet is one template literal.) */
-.hs-lcc .op-radar{max-width:320px;margin:0 auto}
+.hs-lcc .op-radar{max-width:288px;margin:0 auto}
 
 /* Two columns of 7 on a wide panel — 14 rows in one column is a long scroll
-   for data an operator scans rather than reads. */
-.hs-lcc .op-matrix{font-size:.75rem;column-count:2;column-gap:34px}
-@media(max-width:900px){.hs-lcc .op-matrix{column-count:1}}
-.hs-lcc .op-matrix-h,.hs-lcc .op-matrix-r{break-inside:avoid}
+   for data an operator scans rather than reads. Grid, NOT column-count: a
+   multi-column flow carries the single header atop the left column only and
+   leaves the right-hand seven families unlabelled. Each group owns a header. */
+.hs-lcc .op-matrix{font-size:.75rem;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 34px;align-items:start}
+/* Stacked narrow, the second group keeps its header — a repeat mid-scroll
+   re-orients the reader; hiding it would recreate the unlabelled-group bug. */
+@media(max-width:900px){.hs-lcc .op-matrix{grid-template-columns:minmax(0,1fr)}}
 .hs-lcc .op-matrix-h,.hs-lcc .op-matrix-r{display:grid;grid-template-columns:minmax(0,1fr) 92px 26px 26px 26px;align-items:center;gap:8px;padding:.34rem 0}
 .hs-lcc .op-matrix-h{color:var(--mut2);font-weight:600;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--line)}
 .hs-lcc .op-matrix-h span:not(:first-child),.hs-lcc .op-matrix-r span:not(:first-child){text-align:right}
