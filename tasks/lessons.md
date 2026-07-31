@@ -1142,3 +1142,26 @@ upgrade/paywall surface in the product — reachable from nowhere. No test faile
 existed, still had its own passing unit tests, and nothing asserted it was linked.
 **Rule:** Before removing a shell, enumerate what ONLY that shell rendered. Then guard reachability, not
 just existence: walk every nav href and fail if it has no page.
+
+### "Try again in a moment" is a lie when the deployment was never configured
+**What:** A preview build was missing `NEXT_PUBLIC_SUPABASE_ANON_KEY`. `createBrowserClient(url,'')`
+throws synchronously, the catch treated it as a transient network blip, and the founder retyped a
+correct password against a deployment that could never accept it. The OAuth path was worse - the throw
+was inside an async handler with no catch, so the button read as simply dead.
+**Rule:** Distinguish "this request failed" from "this build cannot do this at all", and check
+availability BEFORE the attempt. Retry advice for a permanent misconfiguration is a false statement
+about the system, not merely an unhelpful string.
+
+### NEXT_PUBLIC_* is inlined at BUILD time - the bundle proves which env a deployment had
+**What:** Diagnosing preview-vs-prod env drift with no dashboard access. Prod compiled to
+`r.k("https://x.supabase.co", "eyJhbGci...")`; preview compiled to
+`r.k("https://x.supabase.co", (a.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""))`.
+**Rule:** A literal in the chunk means the var was set at build time; a surviving `process.env` lookup
+means it was absent. Fetch the built chunk and grep - faster and more certain than reading a config UI.
+
+### tsc catches what a green test suite does not
+**What:** A scripted import insertion landed inside a multi-line import block, producing 6 syntax
+errors. **1844 tests still passed** - vitest does not typecheck, and the source-grep guards only look
+for substrings, which were all present.
+**Rule:** A green suite is not a green build. Run tsc after any scripted/regex edit to source, and never
+infer "it compiles" from "tests pass".
