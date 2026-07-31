@@ -46,6 +46,8 @@ describe('hero — Aurora only, no design switcher (2026-07-21)', () => {
 describe('console — themeable + customizable, free for everyone', () => {
   const lcc = read('components/dashboard/LiveCommandCenter.tsx')
   const css = read('components/dashboard/lccStyles.ts')
+  const section = read('components/dashboard/OverviewSection.tsx')
+  const operator = read('components/dashboard/OperatorOverview.tsx')
 
   it('applies the theme to the console root and repaints the canvas/donut from it', () => {
     expect(lcc).toMatch(/style=\{consoleThemeVars\(activeTheme\)/)
@@ -67,10 +69,23 @@ describe('console — themeable + customizable, free for everyone', () => {
     expect(lcc).toContain('ovsections')
     expect(lcc).toMatch(/<Section id="kpis"/)
     expect(lcc).toMatch(/<Section id="engines"/)
-    expect(lcc).toContain('prefs.move')
-    expect(lcc).toContain('prefs.toggleHidden')
+    // The Section wrapper itself moved to its own module so the signed-in
+    // dashboard and the anonymous demo share ONE implementation of Customize
+    // rather than growing a second, drifting copy. The controls are asserted
+    // where they now live; a duplicate in LiveCommandCenter is the regression.
+    expect(section).toContain('prefs.move')
+    expect(section).toContain('prefs.toggleHidden')
     // display order is CSS `order` on each section (source order untouched)
-    expect(lcc).toMatch(/order: prefs\.orderOf\(id\)/)
+    expect(section).toMatch(/order: prefs\.orderOf\(id\)/)
+  })
+
+  it('both Overview variants route through that one Section wrapper', () => {
+    // Customize must keep working on the signed-in dashboard too — it is a
+    // free-for-everyone feature, not a demo-only flourish.
+    expect(lcc).toMatch(/import \{ Section \} from ['"]\.\/OverviewSection['"]/)
+    expect(operator).toMatch(/import \{ Section \} from ['"]\.\/OverviewSection['"]/)
+    expect(operator).toMatch(/<Section id="kpis"/)
+    expect(operator).toMatch(/<Section id="actions"/)
   })
 
   it('personalization is NOT gated by the subscription', () => {

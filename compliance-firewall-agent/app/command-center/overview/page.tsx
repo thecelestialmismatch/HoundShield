@@ -75,5 +75,16 @@ async function getViewer() {
  */
 export default async function CommandCenterPage() {
   const viewer = await getViewer()
-  return <LiveCommandCenter viewer={viewer} />
+  // `authenticated` is hardcoded true because reaching this render PROVES a
+  // session: layout.tsx is a fail-closed server gate that redirects anonymous
+  // visitors to /login before any child renders.
+  //
+  // It is passed separately from `viewer` on purpose. `viewer` is only a display
+  // identity, and buildDashboardViewer returns null when a profile carries
+  // neither a company nor a full name — a normal state for an email-only signup.
+  // While the dashboard keyed "is this a real customer?" off `viewer`, those
+  // customers fell through to the anonymous branch and were served the SIMULATED
+  // overview under a sample org name. Identity and authentication are different
+  // questions; only the second one may decide whether the data is real.
+  return <LiveCommandCenter viewer={viewer} authenticated />
 }

@@ -103,7 +103,21 @@ describe("/command-center is the ONE canonical dashboard", () => {
   it("the dashboard lives at /command-center/overview and renders the Live Command Center", () => {
     const page = read("app/command-center/overview/page.tsx");
     expect(page).toMatch(/import \{ LiveCommandCenter \} from ['"]@\/components\/dashboard\/LiveCommandCenter['"]/);
-    expect(page).toMatch(/<LiveCommandCenter viewer=\{viewer\} \/>/);
+    expect(page).toMatch(/<LiveCommandCenter viewer=\{viewer\} authenticated \/>/);
+  });
+
+  it("tells the dashboard there IS a session, separately from who it belongs to", () => {
+    // buildDashboardViewer returns null for a profile with neither company nor
+    // full_name — an ordinary email-only signup. While `viewer` alone decided
+    // "is this a real customer?", those customers were served the SIMULATED
+    // overview under the sample org. Reaching this render proves a session
+    // (layout.tsx is a fail-closed gate), so the page states it explicitly.
+    const page = read("app/command-center/overview/page.tsx");
+    expect(page).toMatch(/authenticated/);
+    const lcc = read("components/dashboard/LiveCommandCenter.tsx");
+    expect(lcc).toMatch(/const isViewer = authenticated \?\? !!viewer/);
+    // …and such a customer is never labelled with the fictional sample org.
+    expect(lcc).toMatch(/authenticated \? 'Your Command Center' : 'Acme Defense'/);
   });
 
   it("its index forwards to the dashboard rather than rendering a second one", () => {
