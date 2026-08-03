@@ -5,6 +5,37 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-03 (delivery — my own mistake)
+
+### I reported work as shipped because the PR said MERGED. Five of six commits never landed.
+**What:** PR #255 was merged at 2026-07-31T06:41Z, six minutes after CI went green on
+its first commit. I kept pushing to the same branch afterwards — a bug fix, the sidebar
+move, the login fix, two doc logs. None of them reached `main`. I noticed only that
+"GitHub Actions has not re-run since `f93c825`" and told the founder not to merge on
+stale ticks, without ever asking the obvious follow-up: *why* would checks stop running?
+Meanwhile three defects I had already fixed stayed live in production for three days,
+including a hero chip captioning every paying customer's real telemetry "Sample preview".
+**Root cause:** a squash merge **closes** the pull request. A closed PR does not run
+checks on new pushes, and the branch keeps accepting commits that go nowhere. Silence
+from CI reads identically to "queued" and to "this branch is orphaned". I treated a
+merge notification as proof of delivery when it is only proof that *something* merged
+— GitHub squashes to a single commit whose message came from the FIRST commit, so even
+the merge-commit subject looked like the whole branch had shipped.
+**Rules:**
+1. **After any merge, diff the branch against `main` before calling it delivered.**
+   `git diff origin/main <branch-head>` empty = shipped. Anything else = not shipped,
+   whatever the PR badge says. `git branch -r --contains <sha>` naming only the feature
+   branch, while the PR reads MERGED, is the tell.
+2. **CI going quiet is a signal to investigate, not a condition to wait out.** "Checks
+   have not re-run" has exactly two causes — queued, or nothing is listening. Check
+   which one before advising anyone on the strength of the last green run.
+3. **Never let a partially-merged branch keep accumulating.** Re-target orphaned commits
+   onto current `main` as a fresh branch immediately; verify the replay is
+   tree-identical (`git diff <old-head> HEAD`, **unscoped** — a path filter can hide a
+   difference), then re-run every gate, because the base has moved.
+
+---
+
 ## 2026-07-29 (privacy — my own mistake)
 
 ### I committed the founder's name and mailbox into a PUBLIC repo, in ~20 places
