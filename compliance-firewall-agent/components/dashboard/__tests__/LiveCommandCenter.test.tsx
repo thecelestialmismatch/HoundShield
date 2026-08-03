@@ -540,10 +540,23 @@ describe('LiveCommandCenter — redesign: signed-in operators land on THEIR prod
     expect(screen.getByTestId('assessment-board')).toBeTruthy()
   })
 
-  it("the signed-in hero band reads 'Sample preview' (honest), never 'Live demo'", () => {
-    const { container } = render(<LiveCommandCenter viewer={viewer} />)
-    const liv = container.querySelector('.hero .liv')
-    expect(liv?.textContent).toMatch(/Sample preview/)
-    expect(liv?.textContent).not.toMatch(/Live demo/)
+  /**
+   * REVERSED 2026-07-31, deliberately.
+   *
+   * This previously asserted the signed-in hero band reads "Sample preview".
+   * That was correct while every signed-in panel was seeded — the label was the
+   * disclosure. Now the signed-in dashboard is the operator's own gateway
+   * telemetry, so "Sample preview" is no longer a disclosure, it is a false
+   * statement about real data, and it sat right above their real numbers.
+   *
+   * The chip is now demo-only. A signed-in operator gets the live indicator in
+   * OperatorOverview's toolbar instead, which is driven by an actual fetch and
+   * flips to "Offline" when the read fails — a constant in the hero could never
+   * do that.
+   */
+  it('never labels a signed-in operator’s real dashboard a sample', () => {
+    const { container } = render(<LiveCommandCenter viewer={viewer} authenticated />)
+    expect(container.querySelector('.hero .liv')).toBeNull()
+    expect(container.textContent).not.toMatch(/Sample preview/)
   })
 })

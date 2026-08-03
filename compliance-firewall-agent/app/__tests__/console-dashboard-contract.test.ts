@@ -59,8 +59,16 @@ describe("Brain AI — logo-forward and CUI-safe", () => {
     expect(lcc).toMatch(/commercial cloud endpoint/i);
   });
   it("keeps a quick-ask card wired to the live analyst", () => {
+    // The card itself moved to operator/OperatorSlots on 2026-07-31 so the tab
+    // shell and the routed (tools) dashboard mount ONE implementation. The
+    // wiring assertion stays on LiveCommandCenter — that is the half that
+    // differs per shell — and the markup assertion follows the card.
     expect(lcc).toContain("askBrain");
-    expect(lcc).toContain("bchips");
+    expect(lcc).toMatch(/<BrainQuickAsk[\s\S]{0,80}onAsk=\{askBrain\}/);
+    const slots = read("components/dashboard/operator/OperatorSlots.tsx");
+    expect(slots).toContain("bchips");
+    // The CUI caveat travels WITH the entry point, never a click away.
+    expect(slots).toMatch(/commercial cloud endpoint/i);
   });
 });
 
@@ -108,7 +116,11 @@ describe("hero identity band — brand-forward Overview anchor (carries the gree
   });
   it("carries the personalization inside the hero (greet-by-name + plan chip)", () => {
     expect(lcc).toMatch(/hero-org[\s\S]{0,80}Welcome back, \$\{name\}/);
-    expect(lcc).toMatch(/hero[\s\S]{0,400}plan-chip/);
+    // Source-distance window, so it measures characters rather than structure —
+    // a comment between the two markers counts against it. Widened 400 → 1200
+    // on 2026-07-31 when the demo-only "Live demo" chip gained an explanatory
+    // block. The assertion still pins what it means to: plan-chip inside hero.
+    expect(lcc).toMatch(/hero[\s\S]{0,1200}plan-chip/);
   });
   it("its status chips COMPLEMENT the KPIs (Engines / Scan p50 / Regions — no SPRS/blocked dupes)", () => {
     expect(lcc).toMatch(/hero-metric[\s\S]{0,120}Engines/);
