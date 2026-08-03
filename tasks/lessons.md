@@ -5,6 +5,37 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-03 (delivery — my own mistake)
+
+### I reported work as shipped because the PR said MERGED. Five of six commits never landed.
+**What:** PR #255 was merged at 2026-07-31T06:41Z, six minutes after CI went green on
+its first commit. I kept pushing to the same branch afterwards — a bug fix, the sidebar
+move, the login fix, two doc logs. None of them reached `main`. I noticed only that
+"GitHub Actions has not re-run since `f93c825`" and told the founder not to merge on
+stale ticks, without ever asking the obvious follow-up: *why* would checks stop running?
+Meanwhile three defects I had already fixed stayed live in production for three days,
+including a hero chip captioning every paying customer's real telemetry "Sample preview".
+**Root cause:** a squash merge **closes** the pull request. A closed PR does not run
+checks on new pushes, and the branch keeps accepting commits that go nowhere. Silence
+from CI reads identically to "queued" and to "this branch is orphaned". I treated a
+merge notification as proof of delivery when it is only proof that *something* merged
+— GitHub squashes to a single commit whose message came from the FIRST commit, so even
+the merge-commit subject looked like the whole branch had shipped.
+**Rules:**
+1. **After any merge, diff the branch against `main` before calling it delivered.**
+   `git diff origin/main <branch-head>` empty = shipped. Anything else = not shipped,
+   whatever the PR badge says. `git branch -r --contains <sha>` naming only the feature
+   branch, while the PR reads MERGED, is the tell.
+2. **CI going quiet is a signal to investigate, not a condition to wait out.** "Checks
+   have not re-run" has exactly two causes — queued, or nothing is listening. Check
+   which one before advising anyone on the strength of the last green run.
+3. **Never let a partially-merged branch keep accumulating.** Re-target orphaned commits
+   onto current `main` as a fresh branch immediately; verify the replay is
+   tree-identical (`git diff <old-head> HEAD`, **unscoped** — a path filter can hide a
+   difference), then re-run every gate, because the base has moved.
+
+---
+
 ## 2026-07-29 (privacy — my own mistake)
 
 ### I committed the founder's name and mailbox into a PUBLIC repo, in ~20 places
@@ -1111,3 +1142,57 @@ The compound command's exit status is the last element — the `echo`. The real 
 `EXIT=` line inside the output file.
 **Rule:** Read the captured exit line or the summary in the log. Never take a wrapper's exit code as
 the gate result. (`${PIPESTATUS[0]}` is also bash-only — it silently yields empty in this zsh shell.)
+
+### A guard that asserts a PATH is empty breaks the moment the right answer moves to that path
+**What:** `operator-dashboard-honesty.test.ts` asserted `(tools)/overview/page.tsx` does NOT exist, as a
+proxy for "the 804-line hardcoded mockup has not come back". The correct architecture then turned out to
+be the dashboard living at exactly that path, so the guard blocked the fix it was meant to protect.
+**Rule:** Guard the PROPERTY, not the location. Read the file at the path and assert it lacks the
+mockup's datasets. Path-absence assertions encode today's layout as if it were the invariant.
+
+### CSS `column-count` silently orphans the header of every column but the first
+**What:** `.op-matrix{column-count:2}` with one header row as the first child flowed that header atop the
+LEFT column only. The right-hand 7 NIST families rendered with no Family/Met/Part/Unmet labels at all.
+Nothing in the class list or the JSX hints at it — the markup is correct; the layout mode is wrong.
+**Rule:** Multi-column flow is for prose, not tables. For N labelled columns render N groups, each with
+its own header, in a grid. And diagnose from COMPUTED STYLE in a real browser — this was invisible in
+source review, in tests, and in the accessibility tree.
+
+### An inverted boolean label is worse than no label — check which branch is the signed-in one
+**What:** `{isViewer ? 'Sample preview' : 'Live demo'}` shipped for weeks. `isViewer` is the SIGNED-IN
+case, so paying customers saw their own real gateway telemetry captioned "Sample preview" while the
+seeded marketing demo was captioned "Live demo" — exactly backwards, on a product that sells audit
+evidence. A test even asserted the wrong string, because it was written when the signed-in dashboard
+genuinely WAS simulated and the label was then an honest disclosure.
+**Rule:** When the meaning of a flag changes, re-read every string that branches on it. A guard written
+under the old meaning will keep the bug green.
+
+### A refactor that stops rendering a component deletes every feature reachable only through it
+**What:** Moving the dashboard out of `LiveCommandCenter`'s tab shell left `PlanUnlocksBoard` — the only
+upgrade/paywall surface in the product — reachable from nowhere. No test failed: the component still
+existed, still had its own passing unit tests, and nothing asserted it was linked.
+**Rule:** Before removing a shell, enumerate what ONLY that shell rendered. Then guard reachability, not
+just existence: walk every nav href and fail if it has no page.
+
+### "Try again in a moment" is a lie when the deployment was never configured
+**What:** A preview build was missing `NEXT_PUBLIC_SUPABASE_ANON_KEY`. `createBrowserClient(url,'')`
+throws synchronously, the catch treated it as a transient network blip, and the founder retyped a
+correct password against a deployment that could never accept it. The OAuth path was worse - the throw
+was inside an async handler with no catch, so the button read as simply dead.
+**Rule:** Distinguish "this request failed" from "this build cannot do this at all", and check
+availability BEFORE the attempt. Retry advice for a permanent misconfiguration is a false statement
+about the system, not merely an unhelpful string.
+
+### NEXT_PUBLIC_* is inlined at BUILD time - the bundle proves which env a deployment had
+**What:** Diagnosing preview-vs-prod env drift with no dashboard access. Prod compiled to
+`r.k("https://x.supabase.co", "eyJhbGci...")`; preview compiled to
+`r.k("https://x.supabase.co", (a.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""))`.
+**Rule:** A literal in the chunk means the var was set at build time; a surviving `process.env` lookup
+means it was absent. Fetch the built chunk and grep - faster and more certain than reading a config UI.
+
+### tsc catches what a green test suite does not
+**What:** A scripted import insertion landed inside a multi-line import block, producing 6 syntax
+errors. **1844 tests still passed** - vitest does not typecheck, and the source-grep guards only look
+for substrings, which were all present.
+**Rule:** A green suite is not a green build. Run tsc after any scripted/regex edit to source, and never
+infer "it compiles" from "tests pass".

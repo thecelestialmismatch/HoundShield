@@ -339,7 +339,12 @@ export function RiskRadar({ posture, onAssess }: { posture: SprsPosture; onAsses
  */
 export function SprsTrend({ points, onAssess }: { points: SprsHistoryPoint[]; onAssess?: () => void }) {
   const W = 480
-  const H = 130
+  // Taller than the 24h chart on purpose: .ovc-svg is width:100%, so rendered
+  // height follows the viewBox ratio, and this panel shares a row with the
+  // square radar, which sets the row height and cannot shrink. At 130 this
+  // panel ended ~145px above its own bottom edge; 218 makes the two columns
+  // finish level. Measured, not guessed.
+  const H = 218
   const enough = points.length >= 2
 
   const scores = points.map((p) => p.score)
@@ -418,6 +423,12 @@ export function SprsTrend({ points, onAssess }: { points: SprsHistoryPoint[]; on
  * column it made that panel ~1050px tall and stretched the trend chart beside
  * it into 750px of dead space.
  */
+/** Halve a list, left column taking the extra row on an odd count. */
+function splitInTwo<T>(items: readonly T[]): T[][] {
+  const half = Math.ceil(items.length / 2)
+  return [items.slice(0, half), items.slice(half)]
+}
+
 export function FamilyMatrix({ posture }: { posture: SprsPosture }) {
   // Nothing to break down before the assessment exists. The radar directly
   // above already shows that empty state and its CTA; a second identical card
@@ -437,27 +448,35 @@ export function FamilyMatrix({ posture }: { posture: SprsPosture }) {
         place. The red rows are what an assessor opens first.
       </p>
       <div className="pad" style={{ paddingTop: 6 }}>
+        {/* Two explicit column groups, each carrying its own header row.
+            CSS `column-count` would have been fewer lines but flows a single
+            header atop the left column only, leaving the right-hand seven
+            families unlabelled. */}
         <div className="op-matrix" role="table" aria-label="Control coverage by NIST 800-171 family">
-          <div className="op-matrix-h" role="row">
-            <span role="columnheader">Family</span>
-            <span role="columnheader">In place</span>
-            <span role="columnheader" title="Met">Met</span>
-            <span role="columnheader" title="Partial">Part</span>
-            <span role="columnheader" title="Unmet">Unmet</span>
-          </div>
-          {posture.axes.map((a) => (
-            <div className="op-matrix-r" role="row" key={a.code} title={`${a.label} — ${a.total} controls`}>
-              <span role="cell"><b>{a.code}</b> <em>{a.label}</em></span>
-              <span role="cell" className="op-matrix-bar">
-                <i style={{
-                  width: `${a.retainedPct}%`,
-                  background: a.retainedPct >= 80 ? GREEN : a.retainedPct >= 40 ? '#B08205' : '#C93A3F',
-                }} />
-                <b>{a.retainedPct}%</b>
-              </span>
-              <span role="cell" className="mono">{a.met}</span>
-              <span role="cell" className="mono">{a.partial}</span>
-              <span role="cell" className="mono">{a.unmet}</span>
+          {splitInTwo(posture.axes).map((group, gi) => (
+            <div className="op-matrix-col" role="rowgroup" key={gi}>
+              <div className="op-matrix-h" role="row">
+                <span role="columnheader">Family</span>
+                <span role="columnheader">In place</span>
+                <span role="columnheader" title="Met">Met</span>
+                <span role="columnheader" title="Partial">Part</span>
+                <span role="columnheader" title="Unmet">Unmet</span>
+              </div>
+              {group.map((a) => (
+                <div className="op-matrix-r" role="row" key={a.code} title={`${a.label} — ${a.total} controls`}>
+                  <span role="cell"><b>{a.code}</b> <em>{a.label}</em></span>
+                  <span role="cell" className="op-matrix-bar">
+                    <i style={{
+                      width: `${a.retainedPct}%`,
+                      background: a.retainedPct >= 80 ? GREEN : a.retainedPct >= 40 ? '#B08205' : '#C93A3F',
+                    }} />
+                    <b>{a.retainedPct}%</b>
+                  </span>
+                  <span role="cell" className="mono">{a.met}</span>
+                  <span role="cell" className="mono">{a.partial}</span>
+                  <span role="cell" className="mono">{a.unmet}</span>
+                </div>
+              ))}
             </div>
           ))}
         </div>

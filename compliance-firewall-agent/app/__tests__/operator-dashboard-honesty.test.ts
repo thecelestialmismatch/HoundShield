@@ -63,8 +63,16 @@ describe('the founder’s panels are all present at login', () => {
     // customer whose profile had neither field — an ordinary email-only signup —
     // to the SIMULATED branch. Authentication decides whether the data is real;
     // having a display name does not.
+    //
+    // The shipped route no longer has a branch to get wrong: it renders
+    // OperatorDashboard, which mounts OperatorOverview unconditionally. Profile
+    // completeness reaches nothing but the greeting. The `authenticated ??
+    // !!viewer` split is still asserted on LiveCommandCenter because that
+    // component still carries both branches.
     expect(lcc).toMatch(/const isViewer = authenticated \?\? !!viewer/)
-    expect(read('app/command-center/overview/page.tsx')).toMatch(/authenticated/)
+    const page = read('app/command-center/(tools)/overview/page.tsx')
+    expect(page).toMatch(/<OperatorDashboard\b/)
+    expect(page).not.toMatch(/buildDashboardViewer/)
   })
 
   it('never labels a signed-in operator with the fictional sample org', () => {
@@ -162,12 +170,92 @@ describe('the tenant boundary', () => {
 })
 
 describe('the deleted mockup stays deleted', () => {
-  it('does not come back under the tools group', () => {
-    expect(existsSync(path.join(CFA, 'app/command-center/(tools)/overview/page.tsx'))).toBe(false)
+  /**
+   * REWRITTEN 2026-07-31 (founder direction: "I still want all of these
+   * features"). This used to assert `(tools)/overview/page.tsx` does NOT exist,
+   * which was a proxy for "the 804-line hardcoded mockup has not come back" —
+   * the mockup lived at that path.
+   *
+   * The dashboard now lives at exactly that path, deliberately: it moved into
+   * the `(tools)` route group so it renders inside the 23-item Command Center
+   * sidebar instead of bringing a rival one. A route group never appears in the
+   * URL, so `/command-center/overview` is unchanged.
+   *
+   * The path was never what mattered. What matters is that the file at it is the
+   * real, session-scoped dashboard and not a wall of seeded constants — so that
+   * is what is asserted now, by name and by absence of the mockup's own symbols.
+   */
+  const page = read('app/command-center/(tools)/overview/page.tsx')
+
+  it('the real dashboard owns the canonical URL', () => {
+    expect(page).toMatch(/<OperatorDashboard\b/)
+    expect(existsSync(path.join(CFA, 'app/command-center/overview/page.tsx'))).toBe(false)
   })
 
-  it('the real dashboard still owns the canonical URL', () => {
-    const page = read('app/command-center/overview/page.tsx')
-    expect(page).toMatch(/<LiveCommandCenter viewer=\{viewer\} authenticated \/>/)
+  it('carries none of the mockup’s hardcoded datasets', () => {
+    for (const seed of ['generateTokenData', 'threatDistribution', 'riskRadarData', 'REVENUE_DATA']) {
+      expect(page, `mockup seed "${seed}" is back`).not.toContain(seed)
+    }
+  })
+
+  it('renders inside the shared sidebar rather than a second shell', () => {
+    const shell = read('components/dashboard/OperatorDashboard.tsx')
+    // The panel stylesheet is `.hs-lcc`-scoped, so the wrapper must stay...
+    expect(shell).toMatch(/className="hs-lcc hs-embedded"/)
+    // ...but the 248px sidebar grid is a separate class, and mounting it here
+    // would paint a second sidebar next to the (tools) one.
+    expect(shell).not.toMatch(/className="shell"/)
+  })
+
+  it('the checklist’s "you are connected" steps come from a real query', () => {
+    expect(page).toMatch(/await hasGatewayTraffic\(\)/)
+    const probe = read('lib/dashboard/gateway-traffic.ts')
+    // Same tenant boundary as the telemetry route: session-derived id, never
+    // client-supplied, because the service-role client bypasses RLS.
+    expect(probe).toMatch(/\.eq\('user_id', user\.id\)/)
+    expect(probe).toMatch(/getSessionUser\(\)/)
+  })
+})
+
+/**
+ * Moving the dashboard into the (tools) shell stopped LiveCommandCenter from
+ * being rendered anywhere. Every pane that lived ONLY as one of its tabs would
+ * have been silently stranded — reachable by no link, in no sidebar, from
+ * nowhere in the product. That is a feature loss even when it is an accident,
+ * and the founder's instruction was the opposite ("I still want all of these
+ * features").
+ *
+ * So each stranded pane got a route and a sidebar entry, and this pins them.
+ * Plan & Unlocks matters most: it is the only upgrade surface in the product,
+ * i.e. a revenue path a refactor nearly deleted.
+ */
+describe('nothing was stranded by the move into the tool shell', () => {
+  const nav = read('app/command-center/(tools)/layout.tsx')
+
+  const RESCUED = [
+    { pane: 'Plan & Unlocks', route: 'plan', component: 'PlanUnlocksBoard' },
+    { pane: 'Your Guide', route: 'guide', component: 'CustomerStatusPanel' },
+  ]
+
+  for (const { pane, route, component } of RESCUED) {
+    it(`"${pane}" has a real page and a way to reach it`, () => {
+      const page = read(`app/command-center/(tools)/${route}/page.tsx`)
+      expect(page, `${pane} renders something else`).toContain(component)
+      expect(nav, `${pane} is in no sidebar`).toContain(`/command-center/${route}`)
+    })
+  }
+
+  it('every sidebar destination resolves to a page that exists', () => {
+    // A link to a 404 is worse than no link: it reads as a broken product.
+    const hrefs = [...nav.matchAll(/href: "(\/command-center[^"]*)"/g)].map((m) => m[1])
+    expect(hrefs.length).toBeGreaterThan(20)
+    for (const href of hrefs) {
+      const seg = href.replace('/command-center', '').replace(/^\//, '')
+      // The bare index is app/command-center/page.tsx, outside the group.
+      const rel = seg === ''
+        ? 'app/command-center/page.tsx'
+        : `app/command-center/(tools)/${seg}/page.tsx`
+      expect(existsSync(path.join(CFA, rel)), `${href} has no page`).toBe(true)
+    }
   })
 })
