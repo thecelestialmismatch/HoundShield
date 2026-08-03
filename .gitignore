@@ -149,6 +149,15 @@ compass_artifact_*.md
 # Skill scratch files under docs/
 /docs/*.skill
 
+# Agent debugging scratch. Playwright/browser-MCP dumps an accessibility tree per
+# snapshot and a PNG per screenshot, both into the repo root. They are throwaway
+# diagnostics — the 2026-08-03 session alone left 6 YAML trees and 672KB of PNGs.
+# Never commit them: this repo is PUBLIC, and a binary in git history cannot be
+# removed without a rewrite (already gated behind the credential rotation in
+# docs/SECURITY-ROTATION.md). Diagnose in the browser, keep the finding, drop the file.
+.playwright-mcp/
+/*.png
+
 # Local-only archive — moved to ~/HoundShield-Local-Archive, never pushed again.
 # brain/ was a 47MB duplicate of the knowledge base; legacy/ was 43MB of dead
 # code with zero imports (already excluded from tsconfig). Neither is the product.
