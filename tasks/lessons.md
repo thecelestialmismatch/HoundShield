@@ -1196,3 +1196,28 @@ errors. **1844 tests still passed** - vitest does not typecheck, and the source-
 for substrings, which were all present.
 **Rule:** A green suite is not a green build. Run tsc after any scripted/regex edit to source, and never
 infer "it compiles" from "tests pass".
+
+### An empty dashboard is a plumbing question before it is a rendering one
+**What:** The founder reported the after-login dashboard showing no real data. The layout was correct
+and had been since #256. Production told the real story in one query: `compliance_events` **0 rows**,
+`api_keys` **0 rows**. Four independent breaks on one rail — `generateApiKey()` had zero callers so no
+customer could mint a key; Settings displayed a fabricated key the gateway answered 401 to;
+`POST /api/v1/chat/completions` (the product) recorded nothing while advertising a request id "for
+audit lookup"; and the one path that did record inserted twice for quarantines.
+**Rule:** When a data surface is empty, trace the whole rail — what mints the credential, what
+authenticates, what writes, what reads — and check prod row counts FIRST. A `0` in the table the UI
+reads is never answered by reading the component. `grep -rn "generateApiKey"` returning only its own
+definition was the entire diagnosis, available in the first minute.
+
+### An honest empty state can hide a broken pipe
+**What:** The dashboard's no-seed-data policy is correct and guarded. It also made "traffic is
+structurally unrecordable" render identically to "no traffic yet", for weeks.
+**Rule:** Honest empty states need a liveness claim behind them. If a surface can be empty forever
+because nothing can write to it, the emptiness is a defect wearing the costume of a design decision.
+Assert the write path exists, not just that the read path is honest.
+
+### Source-grep guards must strip comments before scanning
+**What:** Two new guards failed against the very docstrings explaining the bugs they ban — the banned
+identifier appeared in the prose describing why it is banned.
+**Rule:** Scan code, not prose (`codeOf()` in `app/__tests__/dashboard-data-rail.test.ts`). A guard that
+fires on its own explanation pressures the next author to delete the history to make the build pass.
