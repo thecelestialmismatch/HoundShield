@@ -1,4 +1,3 @@
-import { createHash } from "crypto";
 import { createServiceClient } from "@/lib/supabase/client";
 import { encrypt } from "./encryption";
 import type {
@@ -17,51 +16,41 @@ const PRIORITY_MAP: Record<RiskLevel, number> = {
 };
 
 /**
- * Handles quarantining of a flagged LLM request.
+ * Attaches a human-review queue entry to an ALREADY-RECORDED compliance event.
  *
  * 1. Encrypts the prompt content (AES-256-CBC) so it's stored safely.
- * 2. Creates a compliance_event record.
- * 3. Inserts into the quarantine_queue for human review.
+ * 2. Inserts into the quarantine_queue, referencing `eventId`.
  *
  * The prompt is never stored in plaintext — even DB admins can't
  * read quarantined content without the ENCRYPTION_KEY.
+ *
+ * `eventId` IS THE FIX for a double-count bug, and is why this function no
+ * longer writes an event of its own. It used to insert a `compliance_events`
+ * row, and its only caller (`interceptLLMRequest`) then called
+ * `logComplianceEvent`, which inserted a second row for the same prompt. Every
+ * quarantined request therefore counted twice in every dashboard total, chart,
+ * and audit export — on a product whose deliverable is the audit log. The
+ * caller now writes the single event and hands the id down.
+ *
+ * Callers should reach this through `recordGatewayDecision`
+ * (lib/audit/record-decision.ts) rather than calling it directly, so that the
+ * event-then-queue ordering stays in one place.
  */
 export async function handleQuarantine(
   request: InterceptedRequest,
-  classification: ClassificationResult
+  classification: ClassificationResult,
+  eventId: string
 ): Promise<string> {
   const supabase = createServiceClient();
 
   // Encrypt the full prompt
   const encrypted = encrypt(request.prompt);
 
-  // Create the compliance event first (quarantine references it)
-  const { data: event, error: eventError } = await supabase
-    .from("compliance_events")
-    .insert({
-      user_id: request.user_id,
-      prompt_hash: hashString(request.prompt),
-      destination_provider: request.destination,
-      risk_level: classification.risk_level,
-      classifications: classification.classifications,
-      action_taken: "QUARANTINED",
-      confidence_score: classification.confidence,
-      detected_entities: classification.entities,
-      processing_time_ms: 0, // will be updated by the caller
-    })
-    .select("id")
-    .single();
-
-  if (eventError) {
-    console.error("Failed to create compliance event:", eventError);
-    throw new Error(`Compliance event creation failed: ${eventError.message}`);
-  }
-
   // Insert into quarantine queue
   const { data: quarantine, error: quarantineError } = await supabase
     .from("quarantine_queue")
     .insert({
-      event_id: event.id,
+      event_id: eventId,
       prompt_content_encrypted: encrypted.ciphertext,
       encryption_iv: encrypted.iv,
       detected_entities: classification.entities,
@@ -129,8 +118,4 @@ export async function getPendingQuarantineItems(limit = 50) {
   }
 
   return data;
-}
-
-function hashString(input: string): string {
-  return createHash("sha256").update(input).digest("hex");
 }

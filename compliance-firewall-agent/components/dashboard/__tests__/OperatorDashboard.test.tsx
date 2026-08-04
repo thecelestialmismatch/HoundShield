@@ -99,7 +99,7 @@ describe('OperatorDashboard — CTAs are routes, not dead buttons', () => {
   it('sends the checklist steps to pages that exist', async () => {
     mockApi(POPULATED)
     await act(async () => { render(<OperatorDashboard connected /> ) })
-    fireEvent.click(screen.getByText('View proxy URL').closest('button')!)
+    fireEvent.click(screen.getByText('Get your key').closest('button')!)
     expect(push).toHaveBeenCalledWith('/command-center/settings')
   })
 })
@@ -108,7 +108,7 @@ describe('OperatorDashboard — the activation checklist tells the truth', () =>
   it('does NOT tick "connected" for an operator with no traffic', async () => {
     mockApi(EMPTY)
     const { container } = await act(async () => render(<OperatorDashboard connected={false} />))
-    await waitFor(() => expect(screen.getByText('Point your AI traffic at the proxy')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Create a gateway key and point your client at it')).toBeTruthy())
     // A ticked step for someone who never connected is a fabricated completion
     // state on the one panel whose job is saying what is left to do.
     expect(container.querySelectorAll('.steprow.done').length).toBe(0)
@@ -117,7 +117,7 @@ describe('OperatorDashboard — the activation checklist tells the truth', () =>
   it('ticks them once the gateway has actually seen traffic', async () => {
     mockApi(POPULATED)
     const { container } = await act(async () => render(<OperatorDashboard connected />))
-    await waitFor(() => expect(screen.getByText('Point your AI traffic at the proxy')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Create a gateway key and point your client at it')).toBeTruthy())
     expect(container.querySelectorAll('.steprow.done').length).toBe(2)
   })
 })

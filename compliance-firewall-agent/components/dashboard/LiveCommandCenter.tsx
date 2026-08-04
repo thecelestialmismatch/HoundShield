@@ -1181,9 +1181,15 @@ export function LiveCommandCenter({ viewer, authenticated }: {
                     {/* No fabricated credentials: the old rows showed a fake
                         hs_live_ key with a "Reveal" that revealed nothing and an
                         "Edit" that saved nothing — the fake-success anti-pattern
-                        (tasks/lessons.md 2026-07-12). Honest state instead. */}
+                        (tasks/lessons.md 2026-07-12). Honest state instead.
+
+                        "Runs keyless" was ALSO wrong, and worse, because it read
+                        as reassurance: `resolveApiKey` fails closed whenever
+                        Supabase is configured, so a real deployment answers 401
+                        to every keyless call. Point at the place that mints a
+                        key that actually works. */}
                     <div className="mono" style={{ fontSize: '.7rem', color: 'var(--mut2)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '1rem 0 .4rem' }}>API key</div>
-                    <div className="gw"><span style={{ color: 'var(--mut2)' }}>None provisioned yet — the trial proxy runs keyless</span><span className="gw-tag">with deployment</span></div>
+                    <div className="gw"><span style={{ color: 'var(--mut2)' }}>Required — create one in Settings → Gateway API keys</span><span className="gw-tag">hs_live_</span></div>
                     <div className="mono" style={{ fontSize: '.7rem', color: 'var(--mut2)', textTransform: 'uppercase', letterSpacing: '.1em', margin: '1rem 0 .4rem' }}>OpenRouter key · Brain AI</div>
                     <div className="gw"><span style={{ color: 'var(--mut2)' }}>Not configured — Brain AI runs in keyless mode</span><span className="gw-tag">optional</span></div>
                   </div>
