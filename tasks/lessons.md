@@ -5,6 +5,37 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-04 (privacy — a control that only half-covered its own threat)
+
+### The leak guard could not see the company domain, so the founder's own mailbox survived the scrub
+**What:** PR #252 scrubbed the founder's identity from application code and PR #253 shipped
+`scripts/verify-no-leaks.mjs` to keep it out. Both reported the class closed. It was not:
+the founder's first name and `@houndshield.com` work mailbox were still sitting in
+`tasks/todo.md`, plus three more name references across `tasks/`, on a **public** repo,
+for six days. CI was green the whole time.
+**Root cause:** the identity rule enumerated *consumer* domains — gmail, outlook, proton —
+because that is where the first leak was found. The company domain was never in the
+pattern, so the one address most likely to be personal AND load-bearing was the one
+address the guard was structurally incapable of seeing. The scrub that preceded it was
+also scoped to code; `tasks/` is prose, tracked, and published exactly the same way.
+**Rules:**
+1. **A guard built from one incident covers one incident.** After writing a detection
+   rule, ask what *else* is in the same class and enumerate it deliberately — here, "an
+   email address that identifies a person" is the class, and consumer domains are a
+   subset of it, not the definition.
+2. **Match identity patterns case-insensitively.** The committed value was mixed-case in
+   both the local part and the domain; a lowercase-only regex would have run green
+   against the exact string it was written to catch.
+3. **Scrubbing "the code" is not scrubbing "the repo".** `git ls-files` is the boundary
+   that matters. Task logs, lessons, runbooks and skill files publish identically to
+   source.
+4. **A must-flag fixture must never be the real value.** Committing the leaked address to
+   the guard as evidence recreates the leak inside the control. Use synthetic names, and
+   prove discrimination by injecting the real string into the **working tree only**, then
+   reverting.
+
+---
+
 ## 2026-08-03 (delivery — my own mistake)
 
 ### I reported work as shipped because the PR said MERGED. Five of six commits never landed.
@@ -71,7 +102,8 @@ something to question.
    blob until it is rewritten. Say that plainly instead of implying the fix is total.
 
 ### A blanket regex over prose mangles the prose
-**What:** Scrubbing the name, I ran `s/\bGaurav\b/the founder/` across docs. It
+**What:** Scrubbing the name, I ran a blanket `s/<the founder's first name>/the founder/`
+across docs. It
 produced "the mailboxes `the founder@`", "local part `the founder`", and email
 signatures reading "> the founder". It also silently broke a test asserting an email's
 local part by rewriting the expected string.
@@ -331,7 +363,7 @@ earlier `cd` silently does not apply.
 **Rule:** **read the last lines of output; never trust an exit code from a piped
 command.** Always run the project's own binary from the project's own directory
 (`cd compliance-firewall-agent && ./node_modules/.bin/vitest run`). Encoded as GATE 2 in
-the `/houndshield` and `/gauravceo` skills so it cannot be forgotten.
+the `/houndshield` skill and the founder's portable CEO skill so it cannot be forgotten.
 
 ### "Fix the false claim" — except the claim was true
 **What:** Reported that "16 detection engines" matched nothing in the codebase, based on

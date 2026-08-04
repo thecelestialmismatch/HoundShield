@@ -226,7 +226,55 @@ const FIXTURE_LOCAL_PARTS = new Set([
   'example', 'sample', 'demo', 'placeholder', 'nobody', 'foo', 'bar',
   'jane', 'jane.doe', 'janedoe', 'john', 'john.doe', 'johndoe',
   'alice', 'bob', 'carol', 'dave', 'eve',
+  // Fixtures the suite uses to exercise FOUNDER_EMAIL and the founder-access
+  // list. `somepersonsname@` is load-bearing: PR #252 proved the page-level
+  // mailbox guard discriminates by injecting exactly that string, so renaming
+  // it would destroy the evidence. `founder`/`notfounder`/`alerts` name a role,
+  // never a human; `dana`/`d`/`second` are placeholder people in the same
+  // spirit as `alice`/`bob` above.
+  'founder', 'notfounder', 'alerts', 'dana', 'd', 'second', 'somepersonsname',
 ])
+
+/**
+ * Mailboxes on the COMPANY domain that the product genuinely publishes.
+ *
+ * `@houndshield.com` is not a consumer domain, so `CONSUMER_DOMAINS` never sees
+ * it — which is exactly how the founder's own work mailbox survived the first
+ * scrub and sat in `tasks/todo.md` on a public repo. A role address names a
+ * function and is meant to be read by strangers; a personal one names a human
+ * and belongs in `FOUNDER_EMAIL`, resolved at runtime.
+ *
+ * Every entry is auditable against a file that prints it:
+ *   contact  — app/contact/page.tsx, app/partners/apply/PartnerApplyForm.tsx
+ *   info     — components/GlobalChat.tsx, lib/brain-ai/faq.ts, sdk/package.json
+ *   support  — app/contact, app/status, app/report/thank-you, ai-plugin.json
+ *   security — app/security, app/trust, .well-known/security.txt, SECURITY.md
+ *   legal    — app/privacy, app/terms, app/dpa, app/trust
+ *   abuse    — app/acceptable-use/page.tsx
+ *   noreply / no-reply — the transactional envelope sender (lib/email/identity.ts)
+ *
+ * The remainder (privacy, dpa, partners, sales, hello) are not printed today.
+ * They are carried over deliberately from the page-level guard's GENERIC set in
+ * `lib/email/__tests__/email-identity-single-source.test.ts`, so the two guards
+ * agree on what counts as a role address rather than disagreeing by one word.
+ */
+const ROLE_LOCAL_PARTS = new Set([
+  'contact', 'info', 'support', 'security', 'legal', 'abuse', 'noreply', 'no-reply',
+  'privacy', 'dpa', 'partners', 'sales', 'hello',
+])
+
+/**
+ * Case-insensitive on purpose. The address this rule was written for was
+ * committed with a capital in BOTH halves — capitalised first name, capitalised
+ * domain — so a lowercase-only pattern would have run green against the very
+ * string it exists to catch. `Second@HoundShield.com` in the test suite is
+ * independent proof that mixed case really occurs here.
+ *
+ * The leaked value itself is deliberately not quoted anywhere in this file: the
+ * guard skips its own source (SELF_REFERENTIAL), so a "documentation" copy of it
+ * here would be a leak no rule can see.
+ */
+const COMPANY_MAILBOX = /\b([A-Za-z0-9._%+-]+)@houndshield\.com\b/gi
 
 /** Tracked env files. `.env.example` is the documented, deliberately value-free template. */
 function isForbiddenEnvFile(rel) {
@@ -287,6 +335,18 @@ export function scanText(text) {
       why: 'personal email address on a consumer domain',
       line: lineOf(text, m.index ?? 0),
       shown: `${local.slice(0, 3)}…@${m[2]}`,
+    })
+  }
+
+  COMPANY_MAILBOX.lastIndex = 0
+  for (const m of text.matchAll(COMPANY_MAILBOX)) {
+    const local = m[1].toLowerCase()
+    if (ROLE_LOCAL_PARTS.has(local) || FIXTURE_LOCAL_PARTS.has(local)) continue
+    findings.push({
+      rule: 'personal-company-email',
+      why: 'a named mailbox on houndshield.com — role addresses are published, personal ones are not',
+      line: lineOf(text, m.index ?? 0),
+      shown: `${local.slice(0, 3)}…@houndshield.com`,
     })
   }
 
@@ -388,6 +448,13 @@ const MUST_FLAG = [
   ['a personal Gmail', `git config user.email "${synth('m.okonkwo', '.personal', '@gmail.com')}"`],
   ['a named account on a consumer domain', synth('acme.demo.', 'account', '@gmail.com')],
   ['a personal Outlook address', `contact ${synth('r.harper', '1987', '@outlook.com')} to confirm`],
+  // A personal mailbox on the COMPANY domain. This is the gap that let the
+  // founder's own work address survive the 2026-07-29 scrub: it is not a
+  // consumer domain, so nothing looked at it. Synthetic names again — putting
+  // the real one here would re-commit exactly what the rule removes.
+  ['a personal mailbox on the company domain', `set ${synth('n.varga', '@houndshield.com')} as the sender`],
+  // Mixed case in BOTH halves, which is how the real one was written.
+  ['a mixed-case personal company mailbox', synth('N.Varga', '@Houndshield.com')],
 ]
 
 const MUST_PASS = [
@@ -414,7 +481,14 @@ const MUST_PASS = [
   // Neutral email fixtures the test suite relies on.
   ['neutral fixture', "const email = 'someone@gmail.com'"],
   ['docs fixture', 'jane.doe@gmail.com'],
+  // Role mailboxes the site really prints. If the company-domain rule ever
+  // starts flagging these, /contact and /security stop being reachable.
   ['product mailbox', 'contact@houndshield.com'],
+  ['published support mailbox', 'mailto:support@houndshield.com'],
+  ['published security mailbox', 'Contact: mailto:security@houndshield.com'],
+  ['published legal mailbox', 'legal@houndshield.com'],
+  ['transactional sender', "TRANSACTIONAL_FROM = 'HoundShield <noreply@houndshield.com>'"],
+  ['env-var fixture on the company domain', "process.env.FOUNDER_EMAIL = 'founder@houndshield.com'"],
   ['env-var reference, not a value', 'process.env.RESEND_API_KEY'],
   // Local-dev and CI connection strings (7 such lines exist across docs/ and skills/).
   ['dev postgres URL', 'DATABASE_URL=postgresql://user:password@localhost:5432/mydb'],
