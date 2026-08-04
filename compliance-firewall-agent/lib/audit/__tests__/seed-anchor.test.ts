@@ -65,24 +65,44 @@ class FakeSeedAnchors {
       .slice(0, limit);
   }
 
+  /**
+   * The two partial unique indexes from migration 029, kept separate on
+   * purpose. A single `previous_hash === previous_hash` rule would collapse
+   * them via JS `null === null` and would then pass even against a schema
+   * carrying only the plain unique index — under which real Postgres, treating
+   * NULLs as distinct, would happily admit a second genesis row.
+   */
+  private violatedIndex(row: Pick<AnchorRow, "entity_type" | "previous_hash">): string | null {
+    const sameChain = this.rows.filter((existing) => existing.entity_type === row.entity_type);
+
+    if (row.previous_hash === null) {
+      // idx_seed_anchors_genesis — on (entity_type) where previous_hash is null
+      return sameChain.some((existing) => existing.previous_hash === null)
+        ? "idx_seed_anchors_genesis"
+        : null;
+    }
+
+    // idx_seed_anchors_chain_link — on (entity_type, previous_hash)
+    //                               where previous_hash is not null
+    return sameChain.some((existing) => existing.previous_hash === row.previous_hash)
+      ? "idx_seed_anchors_chain_link"
+      : null;
+  }
+
   private write(row: Omit<AnchorRow, "id" | "created_at">): { error: PostgrestErrorLike | null } {
     this.insertAttempts += 1;
 
     const conflicts =
       this.alwaysConflict ||
-      (this.enforceChainIndexes &&
-        this.rows.some(
-          (existing) =>
-            existing.entity_type === row.entity_type &&
-            existing.previous_hash === row.previous_hash
-        ));
+      (this.enforceChainIndexes && this.violatedIndex(row) !== null);
 
     if (conflicts) {
       return {
         error: {
           code: "23505",
-          message:
-            'duplicate key value violates unique constraint "idx_seed_anchors_chain_link"',
+          message: `duplicate key value violates unique constraint "${
+            this.violatedIndex(row) ?? "idx_seed_anchors_chain_link"
+          }"`,
         },
       };
     }
