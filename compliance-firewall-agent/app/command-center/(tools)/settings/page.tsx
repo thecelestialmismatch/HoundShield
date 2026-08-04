@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/browser';
 import { BrainDataConsent } from '@/components/brain/BrainDataConsent';
+import { GatewayKeys } from './GatewayKeys';
 import {
   User,
   Shield,
@@ -15,7 +16,6 @@ import {
   CheckCircle2,
   AlertCircle,
   ExternalLink,
-  Copy,
   Eye,
   EyeOff,
 } from 'lucide-react';
@@ -93,11 +93,6 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // API Key
-  const [apiKey, setApiKey] = useState('');
-  const [showKey, setShowKey] = useState(false);
-  const [copied, setCopied] = useState(false);
-
   // Load user profile
   useEffect(() => {
     async function loadProfile() {
@@ -126,10 +121,6 @@ export default function SettingsPage() {
 
       setProfile(p);
       setFullName(p.full_name);
-
-      // Generate a display-only API key (from user metadata or a hash)
-      const existingKey = profileData?.api_key;
-      setApiKey(existingKey || `kls_${user.id.replace(/-/g, '').slice(0, 24)}`);
 
       setLoading(false);
     }
@@ -197,13 +188,6 @@ export default function SettingsPage() {
       setToast({ message: 'Unable to open billing portal', type: 'error' });
     }
   }, []);
-
-  // Copy API key
-  const handleCopyKey = useCallback(() => {
-    navigator.clipboard.writeText(apiKey);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [apiKey]);
 
   // Sign out
   const handleSignOut = useCallback(async () => {
@@ -318,37 +302,21 @@ export default function SettingsPage() {
         </div>
       </SectionCard>
 
-      {/* ── API Key Section ── */}
-      <SectionCard title="API Key" description="Use this key to authenticate gateway requests" icon={Key}>
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="flex-1 relative">
-              <input
-                type={showKey ? 'text' : 'password'}
-                value={apiKey}
-                readOnly
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-slate-300 font-mono text-xs focus:outline-none transition-all"
-              />
-            </div>
-            <button
-              onClick={() => setShowKey(!showKey)}
-              className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-slate-400 hover:text-slate-400 transition-all"
-              title={showKey ? 'Hide key' : 'Reveal key'}
-            >
-              {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={handleCopyKey}
-              className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-slate-400 hover:text-slate-400 transition-all"
-              title="Copy key"
-            >
-              {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-            </button>
-          </div>
-          <p className="text-[11px] text-slate-300 dark:text-slate-300">
-            Include this key in the <code className="text-slate-400 bg-white/[0.05] px-1.5 py-0.5 rounded">x-api-key</code> header of your gateway requests.
-          </p>
-        </div>
+      {/* ── Gateway API Keys ──
+          Real keys, backed by `api_keys`. This replaced a display-only string
+          derived from the signed-in user's id, which the gateway rejected with
+          401 because its hash was never stored — see GatewayKeys.tsx for why
+          that one string was the reason the dashboard had no data.
+
+          Keep this comment free of the old literal: the guard in
+          __tests__/GatewayKeys.test.tsx greps this file's source, comments
+          included, so that the fabrication cannot return. */}
+      <SectionCard
+        title="Gateway API keys"
+        description="Point any OpenAI-compatible client at your gateway"
+        icon={Key}
+      >
+        <GatewayKeys />
       </SectionCard>
 
       {/* ── Billing Section ── */}
