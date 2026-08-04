@@ -24,12 +24,21 @@
  *   X-HoundShield-Action       ALLOWED | BLOCKED | QUARANTINED
  *   X-HoundShield-Scan-Ms      scan latency in milliseconds
  *   X-HoundShield-Request-Id   opaque request identifier for audit lookup
+ *   X-HoundShield-Audit        recorded | degraded — whether this interception
+ *                              was written to the compliance audit log
+ *
+ * Every request through this route writes exactly one `compliance_events` row
+ * (ALLOWED included — "nothing was detected" is the evidence that shows the
+ * control was operating), and that row is what the Command Center dashboard
+ * and the audit export read. Get a gateway key from Settings → Gateway API
+ * keys, or `POST /api/gateway/keys`.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { z } from "zod";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
+import { recordGatewayDecision } from "@/lib/audit/record-decision";
 import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
 import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
 import { gatewayCorsHeaders } from "@/lib/gateway/cors";
@@ -588,11 +597,50 @@ export async function POST(req: NextRequest): Promise<Response> {
     classification.should_block ? "BLOCKED" :
     classification.should_quarantine ? "QUARANTINED" : "ALLOWED";
 
+  // Resolved before the audit write, not after: the recorded event has to name
+  // the provider the prompt was headed to, which is exactly what the
+  // dashboard's provider breakdown reads. It is also what a BLOCKED prompt was
+  // headed to — the destination is part of the finding, not a detail of the
+  // forward that never happened.
+  const provider = inferProvider(body.model, req.headers.get("x-provider"));
+
+  // --- Audit record ------------------------------------------------------
+  // THE decision is recorded here, before any response is written and before
+  // the prompt is forwarded upstream.
+  //
+  // This route previously recorded nothing at all. It scanned, decided, and
+  // advertised `X-HoundShield-Request-Id` as an "opaque request identifier for
+  // audit lookup" — while `compliance_events` stayed permanently empty, so
+  // there was never a row to look up. That made the SHA-256 hash-chained audit
+  // log (the artifact this product is sold on, and the input to the $499
+  // report) unwritable on the only rail customers actually use, and it is why
+  // the Command Center dashboard showed nothing: not "no traffic yet", but
+  // "traffic is never recorded".
+  //
+  // Awaited, not fire-and-forget: this runs on Fluid Compute, where the
+  // instance may be frozen the moment the response is returned, so a detached
+  // insert is a coin flip. One insert against the scan we already paid for and
+  // an upstream LLM call measured in hundreds of ms is not the latency that
+  // matters here — an unrecorded interception is.
+  const audit = await recordGatewayDecision({
+    userId,
+    prompt: textToScan,
+    destination: provider,
+    classification,
+    action,
+    processingTimeMs: scanMs,
+    requestId,
+  });
+
   const complianceHeaders: Record<string, string> = {
     "X-HoundShield-Risk-Level": classification.risk_level,
     "X-HoundShield-Action": action,
     "X-HoundShield-Scan-Ms": String(scanMs),
     "X-HoundShield-Request-Id": requestId,
+    // Disclosed per request rather than hidden: a customer assembling audit
+    // evidence has to be able to tell a recorded interception from one whose
+    // write degraded. "recorded" means the row exists and is anchored.
+    "X-HoundShield-Audit": audit.eventId ? "recorded" : "degraded",
   };
 
   // --- Block/quarantine response ----------------------------------------
@@ -640,8 +688,6 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // --- Route to upstream provider ----------------------------------------
-  const providerHint = req.headers.get("x-provider");
-  const provider = inferProvider(body.model, providerHint);
   const providerApiKey =
     req.headers.get("x-provider-api-key") ??
     (provider === "anthropic"

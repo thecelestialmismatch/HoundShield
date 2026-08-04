@@ -90,11 +90,17 @@ export function FirstRunChecklist({ connected, onStep }: {
     <div className="panel">
       <div className="ph"><h3>Get to your first C3PAO-ready PDF</h3><span className="mono">3 steps</span></div>
       <div className="pad steps">
+        {/* Names the action that now exists. This step used to read "View proxy
+            URL", which was all it could offer: there was no way to mint a
+            gateway key, and the key Settings displayed was a string derived
+            from the user id that the gateway rejected with 401. An operator
+            could follow this checklist to the letter and still never produce a
+            single event. Settings issues real keys now, so the step says so. */}
         <StepRow
           n="1" done={connected}
-          title="Point your AI traffic at the proxy"
-          detail="OpenAI-compatible endpoint — one URL change."
-          onClick={() => onStep('settings')} cta="View proxy URL"
+          title="Create a gateway key and point your client at it"
+          detail="OpenAI-compatible endpoint — one URL and one key."
+          onClick={() => onStep('settings')} cta="Get your key"
         />
         <StepRow
           n="2" done={connected}
