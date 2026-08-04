@@ -125,9 +125,19 @@ export function OperatorKpis({ tel, posture, onSource }: {
 
       <button type="button" className="kpi a-warn" aria-haspopup="dialog" onClick={() => onSource('quarantine')}>
         <Info className="kpi-info" aria-hidden />
-        <div className="l"><Flag aria-hidden /> Quarantine queue</div>
+        {/* Says what it MEASURES. This counts QUARANTINED events inside the
+            window (outcomeOf maps QUARANTINED → 'warning'); it does not read
+            `quarantine_queue.review_status`, so an item a reviewer already
+            cleared is still in this number. It was captioned "awaiting human
+            review", which claimed a live queue depth it has never computed —
+            harmless while `quarantine_queue` was empty in production, and
+            wrong the moment the gateway starts filling it. `/command-center/
+            quarantine` is the surface that reads the real pending set.
+            ponytail: wire this tile to a pending-count query if an operator
+            ever needs queue depth without leaving the dashboard. */}
+        <div className="l"><Flag aria-hidden /> Held for review</div>
         <div className="n" style={{ color: 'var(--warn)' }}>{tel.connected ? fmt(tel.totals.warning) : dash}</div>
-        <div className="d">awaiting human review</div>
+        <div className="d">quarantined · last {tel.windowDays}d</div>
       </button>
     </div>
   )
