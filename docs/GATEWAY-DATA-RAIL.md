@@ -121,6 +121,34 @@ Requires an active plan above `free` (`canAccessGateway`) and Supabase
 configured — a keyless deployment answers `503` from the key route rather than
 pretending.
 
+## Known follow-up this change EXPOSES (it does not cause it)
+
+`createSeedAnchor` (`lib/audit/seed-anchor.ts`) builds the hash chain by reading
+the newest anchor and then inserting one that points at it:
+
+```
+select content_hash … order by created_at desc limit 1   ← read previous
+insert … previous_hash = <that>                          ← write next
+```
+
+That read-then-write is **not serialized**, and the read is not scoped per
+tenant. Two blocked prompts landing concurrently can read the same
+`previous_hash` and write two anchors claiming the same parent — a forked chain,
+which is exactly what a verifier is supposed to treat as tampering.
+
+This was unreachable in practice while the gateway wrote nothing. It becomes
+reachable the moment real traffic flows. It is deliberately **not** fixed in the
+same change: correcting it means serializing the chain (a Postgres advisory lock
+keyed on `entity_type`, or a monotonic sequence with the hash computed in a
+single statement), and that belongs in a reviewable change of its own rather
+than buried in a plumbing fix.
+
+Latency note while you are in there: an ALLOWED request costs one insert. A
+BLOCKED or QUARANTINED request costs four round trips (event insert, anchor
+read, anchor insert, seed_hash update). `X-HoundShield-Scan-Ms` is captured
+*before* any of it, so the sub-10ms scan claim is unaffected and still
+measurable — but total request time for a blocked prompt is higher than it was.
+
 ## What this does NOT do
 
 It does not put data on a dashboard that has no traffic behind it. There is
