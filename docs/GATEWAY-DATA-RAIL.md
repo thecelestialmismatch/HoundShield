@@ -121,7 +121,7 @@ Requires an active plan above `free` (`canAccessGateway`) and Supabase
 configured — a keyless deployment answers `503` from the key route rather than
 pretending.
 
-## Known follow-up this change EXPOSES (it does not cause it)
+## Follow-up this change EXPOSED — now FIXED (migration 029)
 
 `createSeedAnchor` (`lib/audit/seed-anchor.ts`) builds the hash chain by reading
 the newest anchor and then inserting one that points at it:
@@ -131,17 +131,40 @@ select content_hash … order by created_at desc limit 1   ← read previous
 insert … previous_hash = <that>                          ← write next
 ```
 
-That read-then-write is **not serialized**, and the read is not scoped per
-tenant. Two blocked prompts landing concurrently can read the same
-`previous_hash` and write two anchors claiming the same parent — a forked chain,
-which is exactly what a verifier is supposed to treat as tampering.
+That read-then-write was **not serialized**. Two blocked prompts landing
+concurrently could read the same `previous_hash` and write two anchors claiming
+the same parent — a forked chain, which is exactly what a verifier is supposed
+to treat as tampering.
 
-This was unreachable in practice while the gateway wrote nothing. It becomes
-reachable the moment real traffic flows. It is deliberately **not** fixed in the
-same change: correcting it means serializing the chain (a Postgres advisory lock
-keyed on `entity_type`, or a monotonic sequence with the hash computed in a
-single statement), and that belongs in a reviewable change of its own rather
-than buried in a plumbing fix.
+Fixed by making the fork unrepresentable in the database rather than by locking
+in the application. Migration `029_seed_anchor_chain_integrity.sql` adds two
+partial unique indexes on `seed_anchors`:
+
+| Index | Guarantee |
+|---|---|
+| `(entity_type, previous_hash) where previous_hash is not null` | At most one anchor per parent |
+| `(entity_type) where previous_hash is null` | Exactly one genesis per chain |
+
+The writer that loses the race gets a `23505`, re-reads the tip and re-links
+against it. Because the guarantee lives in the schema, a writer that bypasses
+`createSeedAnchor` still cannot fork the chain. The hash input format is
+unchanged and no historical row was touched, so existing anchors remain
+byte-identical and verifiable.
+
+Two ceilings this leaves in place, both deliberate:
+
+- **One chain per `entity_type`, not per tenant.** `seed_anchors` has no
+  `user_id` and `verifySeedChain(entityType)` takes no user, so every tenant
+  contends on the same tip. Per-tenant chains would need a `user_id` column and
+  a re-link of every historical `previous_hash` — a rewrite of the audit
+  history, which is not something to do casually to tamper-evidence data.
+- **Retries are bounded at 10.** Only one writer wins each round, so that bound
+  is the supported simultaneous-burst width for a single chain. Beyond it,
+  `logComplianceEvent` still records the event and logs the anchor failure —
+  a gap in evidence, never a forged link.
+
+The pre-flight queries in the migration header must return zero rows before it
+is applied; the index creation fails loudly if the chain is already forked.
 
 Latency note while you are in there: an ALLOWED request costs one insert. A
 BLOCKED or QUARANTINED request costs four round trips (event insert, anchor
