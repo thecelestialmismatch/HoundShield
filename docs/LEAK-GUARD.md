@@ -84,6 +84,12 @@ The match is **case-insensitive**, because the address this rule was written for
 was committed with a capital in both halves and a lowercase-only pattern would
 have missed the exact string it exists to catch.
 
+Test fixtures on this domain (`founder@`, `dana@`, `somepersonsname@`, …) live
+in their own set, read by this rule alone. Folding them into the shared
+`FIXTURE_LOCAL_PARTS` would have let `dana@gmail.com` through the
+consumer-domain rule as a side effect — a fixture needed on one domain must not
+widen the rule for the other, and the self-test pins that apart.
+
 ## Three design decisions worth knowing
 
 **It scans only git-tracked files.** `git ls-files` is the threat model stated
@@ -143,8 +149,8 @@ value to the relevant rule's fixture list in `scripts/verify-no-leaks.mjs` —
 
 ## The self-test
 
-`--self-test` feeds 16 credential and identity shapes that must all be flagged
-and 32 known-benign strings that must all pass, then fails if any is wrong. It
+`--self-test` feeds 17 credential and identity shapes that must all be flagged
+and 33 known-benign strings that must all pass, then fails if any is wrong. It
 runs in CI ahead of the scan.
 
 Every email fixture in it is **synthetic**. Using the real founder Gmail or the
