@@ -226,12 +226,24 @@ const FIXTURE_LOCAL_PARTS = new Set([
   'example', 'sample', 'demo', 'placeholder', 'nobody', 'foo', 'bar',
   'jane', 'jane.doe', 'janedoe', 'john', 'john.doe', 'johndoe',
   'alice', 'bob', 'carol', 'dave', 'eve',
-  // Fixtures the suite uses to exercise FOUNDER_EMAIL and the founder-access
-  // list. `somepersonsname@` is load-bearing: PR #252 proved the page-level
-  // mailbox guard discriminates by injecting exactly that string, so renaming
-  // it would destroy the evidence. `founder`/`notfounder`/`alerts` name a role,
-  // never a human; `dana`/`d`/`second` are placeholder people in the same
-  // spirit as `alice`/`bob` above.
+])
+
+/**
+ * Fixtures that exist ONLY on the company domain — read by the company-mailbox
+ * rule below and by nothing else.
+ *
+ * Deliberately a separate set rather than more entries in `FIXTURE_LOCAL_PARTS`:
+ * that set is shared with the consumer-domain rule, so folding `dana` into it
+ * would quietly let `dana@gmail.com` through as well. A fixture needed on one
+ * domain must not widen the rule for the other.
+ *
+ * `somepersonsname@` is load-bearing: PR #252 proved the page-level mailbox
+ * guard discriminates by injecting exactly that string, so renaming it would
+ * destroy the evidence. `founder`/`notfounder`/`alerts` name a role, never a
+ * human; `dana`/`d`/`second` are placeholder people in the spirit of
+ * `alice`/`bob` above.
+ */
+const COMPANY_FIXTURE_LOCAL_PARTS = new Set([
   'founder', 'notfounder', 'alerts', 'dana', 'd', 'second', 'somepersonsname',
 ])
 
@@ -341,7 +353,13 @@ export function scanText(text) {
   COMPANY_MAILBOX.lastIndex = 0
   for (const m of text.matchAll(COMPANY_MAILBOX)) {
     const local = m[1].toLowerCase()
-    if (ROLE_LOCAL_PARTS.has(local) || FIXTURE_LOCAL_PARTS.has(local)) continue
+    if (
+      ROLE_LOCAL_PARTS.has(local) ||
+      FIXTURE_LOCAL_PARTS.has(local) ||
+      COMPANY_FIXTURE_LOCAL_PARTS.has(local)
+    ) {
+      continue
+    }
     findings.push({
       rule: 'personal-company-email',
       why: 'a named mailbox on houndshield.com — role addresses are published, personal ones are not',
@@ -455,6 +473,9 @@ const MUST_FLAG = [
   ['a personal mailbox on the company domain', `set ${synth('n.varga', '@houndshield.com')} as the sender`],
   // Mixed case in BOTH halves, which is how the real one was written.
   ['a mixed-case personal company mailbox', synth('N.Varga', '@Houndshield.com')],
+  // Pins the two fixture sets apart: `dana` is allowed on the company domain
+  // and must STILL be a personal address on a consumer one.
+  ['a company-domain fixture name on a consumer domain', synth('dana', '@gmail.com')],
 ]
 
 const MUST_PASS = [
@@ -489,6 +510,7 @@ const MUST_PASS = [
   ['published legal mailbox', 'legal@houndshield.com'],
   ['transactional sender', "TRANSACTIONAL_FROM = 'HoundShield <noreply@houndshield.com>'"],
   ['env-var fixture on the company domain', "process.env.FOUNDER_EMAIL = 'founder@houndshield.com'"],
+  ['placeholder-person fixture on the company domain', "expect(founderAddress()).toBe('dana@houndshield.com')"],
   ['env-var reference, not a value', 'process.env.RESEND_API_KEY'],
   // Local-dev and CI connection strings (7 such lines exist across docs/ and skills/).
   ['dev postgres URL', 'DATABASE_URL=postgresql://user:password@localhost:5432/mydb'],
