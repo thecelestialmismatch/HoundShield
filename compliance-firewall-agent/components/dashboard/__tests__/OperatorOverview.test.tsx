@@ -97,7 +97,7 @@ describe('OperatorOverview — the founder’s panels are on screen', () => {
     await waitFor(() => expect(screen.getByText('Dashboard Overview')).toBeTruthy())
 
     for (const heading of [
-      'Total events', 'Blocked', 'Scan latency p50', 'SPRS score', 'Controls met', 'Quarantine queue',
+      'Total events', 'Blocked', 'Scan latency p50', 'SPRS score', 'Controls met', 'Held for review',
       '24h activity', 'Provider breakdown', 'SPRS compliance trend', 'Risk assessment',
       'Live events', 'Detections by engine',
     ]) {
