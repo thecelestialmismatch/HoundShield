@@ -26,8 +26,9 @@
  * actually failed.
  */
 
-import { readFileSync, existsSync } from 'fs'
+import { readFileSync, existsSync, readdirSync } from 'fs'
 import path from 'path'
+import { GATEWAY_BASE_URL } from '@/lib/gateway/base-url'
 
 const CFA = process.cwd()
 const read = (rel: string) => readFileSync(path.join(CFA, rel), 'utf8')
@@ -48,6 +49,78 @@ const codeOf = (rel: string) =>
 const V1_ROUTE = 'app/api/v1/chat/completions/route.ts'
 const KEYS_ROUTE = 'app/api/gateway/keys/route.ts'
 const RECORDER = 'lib/audit/record-decision.ts'
+
+/** Every .ts/.tsx file under the app's own source roots. */
+function sourceFiles(): string[] {
+  const out: string[] = []
+  const walk = (rel: string) => {
+    for (const entry of readdirSync(path.join(CFA, rel), { withFileTypes: true })) {
+      const child = path.join(rel, entry.name)
+      if (entry.isDirectory()) {
+        if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue
+        walk(child)
+      } else if (/\.tsx?$/.test(entry.name)) {
+        out.push(child)
+      }
+    }
+  }
+  for (const root of ['app', 'components', 'lib']) walk(root)
+  return out
+}
+
+describe('link 0 — the URL we hand the customer is one that answers', () => {
+  // Probed against production 2026-08-05. Both branded hosts resolve to Vercel
+  // edge IPs with no project attached and answer 404 on every path; only
+  // GATEWAY_BASE_URL reaches the route (401 on a bad key — failing closed, which
+  // means the router and the database were both reached).
+  const DEAD_HOSTS = ['proxy.houndshield.com', 'gateway.houndshield.com']
+
+  // base-url.ts is the single source of truth and documents both dead hosts in
+  // its docstring; this file names them above to say what it is banning.
+  const ALLOWED = new Set([
+    'lib/gateway/base-url.ts',
+    path.join('app', '__tests__', 'dashboard-data-rail.test.ts'),
+  ])
+
+  it('no source file advertises a gateway host that 404s', () => {
+    const offenders: string[] = []
+    for (const rel of sourceFiles()) {
+      if (ALLOWED.has(rel)) continue
+      // Comments stripped: several files narrate the dead hosts as the history
+      // they exist to correct, and that history is worth keeping.
+      // Backslashes stripped: the one that escaped the first sweep of this fix
+      // was `proxy\.houndshield\.com` inside a test's regex literal.
+      const code = codeOf(rel).replace(/\\/g, '')
+      for (const host of DEAD_HOSTS) {
+        if (code.includes(host)) offenders.push(`${rel} → ${host}`)
+      }
+    }
+    // Eight copies of a dead string is how this shipped: FAQ answers, the
+    // system prompt, a day-3 onboarding email, the docs page, Settings, the
+    // dashboard copy button. Import GATEWAY_BASE_URL instead of adding a ninth.
+    expect(offenders, `dead gateway host in source:\n${offenders.join('\n')}`).toEqual([])
+  })
+
+  it('the constant points at the origin that actually serves the route', () => {
+    expect(GATEWAY_BASE_URL).toBe('https://www.houndshield.com/api/v1')
+    expect(existsSync(path.join(CFA, 'app/api/v1/chat/completions/route.ts'))).toBe(true)
+  })
+
+  it('the surfaces that quote a base URL import it rather than spelling it out', () => {
+    for (const rel of [
+      'lib/brain-ai/faq.ts',
+      'components/GlobalChat.tsx',
+      'lib/email/templates/day3.ts',
+      'app/docs/api-data.ts',
+      'app/command-center/(tools)/settings/GatewayKeys.tsx',
+      'components/dashboard/LiveCommandCenter.tsx',
+    ]) {
+      expect(codeOf(rel), `${rel} no longer sources its URL from base-url`).toMatch(
+        /from ['"]@\/lib\/gateway\/base-url['"]/
+      )
+    }
+  })
+})
 
 describe('link 1 — a customer can obtain a key that actually authenticates', () => {
   it('an issuance endpoint exists', () => {
@@ -75,6 +148,15 @@ describe('link 1 — a customer can obtain a key that actually authenticates', (
   it('Settings reaches that endpoint instead of building a string locally', () => {
     const ui = read('app/command-center/(tools)/settings/GatewayKeys.tsx')
     expect(ui).toContain('/api/gateway/keys')
+  })
+
+  it('and it will not issue a key to a plan the gateway rejects', () => {
+    // Both ends must consult the SAME predicate. If issuance skips it, a free
+    // user gets a real, listed credential plus a curl snippet promising events
+    // on their dashboard — and every request 402s forever.
+    for (const rel of [KEYS_ROUTE, V1_ROUTE]) {
+      expect(codeOf(rel), `${rel} does not gate on plan`).toContain('canAccessGateway')
+    }
   })
 })
 
