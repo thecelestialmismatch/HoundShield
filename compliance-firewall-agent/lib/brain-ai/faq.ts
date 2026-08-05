@@ -25,6 +25,7 @@
 import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
 import { ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
 import { CMMC_STATUS } from "@/lib/compliance/cmmc-status";
+import { GATEWAY_BASE_URL } from "@/lib/gateway/base-url";
 
 export interface FaqEntry {
   keywords: string[];
@@ -77,12 +78,12 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["what is houndshield", "houndshield", "what does it do", "explain houndshield", "overview", "product", "firewall"],
     answer:
-      "**HoundShield** is an AI compliance firewall — a single proxy URL that sits between your team and every AI provider. Change one line of code:\n\n```\nbaseURL: 'https://gateway.houndshield.com/v1'\n```\n\nEvery prompt (ChatGPT, Copilot, Claude, Gemini, 800+ models) is scanned in **under 10ms** across 16 risk categories. CUI, PHI, API keys, PII — all detected and blocked before they reach the AI. SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously on every request.",
+      "**HoundShield** is an AI compliance firewall — a single proxy URL that sits between your team and every AI provider. Change one line of code:\n\n```\nbaseURL: '" + GATEWAY_BASE_URL + "'\n```\n\nEvery prompt (ChatGPT, Copilot, Claude, Gemini, 800+ models) is scanned in **under 10ms** across 16 risk categories. CUI, PHI, API keys, PII — all detected and blocked before they reach the AI. SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously on every request.",
   },
   {
     keywords: ["how does houndshield work", "architecture", "proxy", "intercept", "mechanism", "how it works"],
     answer:
-      "HoundShield acts as a **transparent proxy gateway**:\n\n1. Your team's AI tools point to `gateway.houndshield.com/v1` instead of OpenAI/Anthropic\n2. Every prompt passes through the 16-engine detection matrix (<10ms)\n3. PASS: forwarded to 800+ models via OpenRouter\n4. BLOCK: rejected with compliance reason\n5. QUARANTINE: AES-256 encrypted, routed to human reviewer\n\nThe stream output is also scanned token-by-token — if an LLM starts generating a credit card number mid-response, it's truncated before delivery.",
+      "HoundShield acts as a **transparent proxy gateway**:\n\n1. Your team's AI tools point to `" + GATEWAY_BASE_URL + "` instead of OpenAI/Anthropic\n2. Every prompt passes through the 16-engine detection matrix (<10ms)\n3. PASS: forwarded to 800+ models via OpenRouter\n4. BLOCK: rejected with compliance reason\n5. QUARANTINE: AES-256 encrypted, routed to human reviewer\n\nThe stream output is also scanned token-by-token — if an LLM starts generating a credit card number mid-response, it's truncated before delivery.",
   },
 
   // ── CMMC ────────────────────────────────────────────────────────────
@@ -134,12 +135,12 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["install", "setup", "integrate", "how to use", "get started", "quickstart", "base url", "gateway", "onboard", "how do i install", "how to install", "deploy hound shield", "start hound shield"],
     answer:
-      "**One line of code** — change your AI API base URL:\n\n```\nbaseURL: 'https://gateway.houndshield.com/v1'\n```\n\nWorks with OpenAI SDK, LangChain, LlamaIndex, and any HTTP client. Supports ChatGPT, Copilot, Claude, Gemini, and 800+ models via OpenRouter. Takes under 15 minutes. No agents to install, no firewall rules, no user training.",
+      "**One line of code** — change your AI API base URL:\n\n```\nbaseURL: '" + GATEWAY_BASE_URL + "'\n```\n\nWorks with OpenAI SDK, LangChain, LlamaIndex, and any HTTP client. Supports ChatGPT, Copilot, Claude, Gemini, and 800+ models via OpenRouter. Takes under 15 minutes. No agents to install, no firewall rules, no user training.",
   },
   {
     keywords: ["python", "langchain", "openai sdk", "sdk", "node", "curl", "integration example"],
     answer:
-      "```python\n# Python / LangChain\nclient = OpenAI(\n  base_url='https://gateway.houndshield.com/v1',\n  api_key=os.environ['OPENAI_API_KEY']\n)\n```\n\n```typescript\n// Node.js / TypeScript\nconst openai = new OpenAI({\n  baseURL: 'https://gateway.houndshield.com/v1',\n  apiKey: process.env.OPENAI_API_KEY,\n});\n```\n\nAny OpenAI-compatible client works. Use any model slug (gpt-4o, claude-sonnet-4-6, gemini-flash, llama-3.3...) — HoundShield routes to OpenRouter's 800+ model catalog.",
+      "```python\n# Python / LangChain\nclient = OpenAI(\n  base_url='" + GATEWAY_BASE_URL + "',\n  api_key=os.environ['OPENAI_API_KEY']\n)\n```\n\n```typescript\n// Node.js / TypeScript\nconst openai = new OpenAI({\n  baseURL: '" + GATEWAY_BASE_URL + "',\n  apiKey: process.env.OPENAI_API_KEY,\n});\n```\n\nAny OpenAI-compatible client works. Use any model slug (gpt-4o, claude-sonnet-4-6, gemini-flash, llama-3.3...) — HoundShield routes to OpenRouter's 800+ model catalog.",
   },
   {
     keywords: ["docker", "self-host", "on-prem", "air-gap", "self hosted", "local", "on premises"],
@@ -223,7 +224,7 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["goose", "agentscope", "multi-agent", "agentic", "ai agent", "autonomous", "workflow"],
     answer:
-      "HoundShield integrates with **multi-agent frameworks** (Goose, AgentScope, AutoGen, LangGraph):\n\n1. Point the agent's LLM base URL to `gateway.houndshield.com/v1`\n2. Every agent tool call and LLM request is automatically scanned\n3. CUI/PHI leakage in agentic workflows is blocked before external exposure\n\nThis is critical for defense contractors running AI agents on documents containing CUI — the agent may autonomously forward sensitive data without user review.",
+      "HoundShield integrates with **multi-agent frameworks** (Goose, AgentScope, AutoGen, LangGraph):\n\n1. Point the agent's LLM base URL at your HoundShield gateway\n2. Every agent tool call and LLM request is automatically scanned\n3. CUI/PHI leakage in agentic workflows is blocked before external exposure\n\nThis is critical for defense contractors running AI agents on documents containing CUI — the agent may autonomously forward sensitive data without user review.\n\n**For CUI, that gateway must be your own self-hosted one** (Mode B — Docker on your infrastructure). The hosted endpoint at `" + GATEWAY_BASE_URL + "` runs on shared cloud infrastructure that is not FedRAMP-authorized, so it is for non-CUI evaluation only.",
   },
 
   // ── MODEL ACCESS ─────────────────────────────────────────────────────
@@ -282,7 +283,7 @@ const FAQ_DB: FaqEntry[] = [
     tier: "fallback",
     keywords: ["help me", "can you help", "could you help", "i need help", "need some help", "please help", "fix this", "fix my", "fix it", "an issue", "this issue", "my issue", "what issue", "a problem", "my problem", "have a problem", "having trouble", "not working", "doesnt work", "doesn't work", "broken", "an error", "getting an error"],
     answer:
-      "Happy to help — tell me what's going wrong and I'll get specific.\n\nA few things I can troubleshoot right now:\n- **Setup / gateway** — proxy not intercepting? Check your base URL is `https://proxy.houndshield.com/v1`\n- **Dashboard or SPRS score** — tell me what you're seeing vs. what you expected\n- **Detections** — a false positive, or something we missed? Paste a redacted example\n- **Billing or account** — email info@houndshield.com and a human will sort it same day\n\nDescribe the issue in a sentence or two and I'll take it from there.",
+      "Happy to help — tell me what's going wrong and I'll get specific.\n\nA few things I can troubleshoot right now:\n- **Setup / gateway** — proxy not intercepting? Check your base URL is `https://www.houndshield.com/api/v1`\n- **Dashboard or SPRS score** — tell me what you're seeing vs. what you expected\n- **Detections** — a false positive, or something we missed? Paste a redacted example\n- **Billing or account** — email info@houndshield.com and a human will sort it same day\n\nDescribe the issue in a sentence or two and I'll take it from there.",
   },
 
   // ── BUILD-A-BOT / CODING ASKS (fallback tier) ────────────────────────
@@ -292,7 +293,7 @@ const FAQ_DB: FaqEntry[] = [
     tier: "fallback",
     keywords: ["coding", "coading", "write code", "write me code", "build a bot", "build the bot", "build an ai", "build the ai", "build a chatbot", "make a bot", "make a chatbot", "chatbot", "ai bot", "build an app", "build a system", "build the system", "the abs system", "programming", "how to code", "write a program"],
     answer:
-      "I'm a compliance specialist rather than a general coding assistant — but if you're building something with AI in it, here's the part I'm genuinely great at: making it compliant from day one.\n\nPoint your app's LLM calls at the HoundShield gateway:\n\n```typescript\nconst openai = new OpenAI({\n  baseURL: 'https://proxy.houndshield.com/v1',\n  apiKey: process.env.OPENAI_API_KEY,\n});\n```\n\nEvery prompt your app sends is scanned in under 10ms for CUI, PHI, PII and secrets — before it ever reaches the model. Works with any OpenAI-compatible SDK, LangChain, or agent framework.\n\nWhat are you building? If it touches regulated data (defense, healthcare, legal), I can map exactly which controls it needs.",
+      "I'm a compliance specialist rather than a general coding assistant — but if you're building something with AI in it, here's the part I'm genuinely great at: making it compliant from day one.\n\nPoint your app's LLM calls at the HoundShield gateway:\n\n```typescript\nconst openai = new OpenAI({\n  baseURL: 'https://www.houndshield.com/api/v1',\n  apiKey: process.env.OPENAI_API_KEY,\n});\n```\n\nEvery prompt your app sends is scanned in under 10ms for CUI, PHI, PII and secrets — before it ever reaches the model. Works with any OpenAI-compatible SDK, LangChain, or agent framework.\n\nWhat are you building? If it touches regulated data (defense, healthcare, legal), I can map exactly which controls it needs.",
   },
 
   // ── ROADMAP ──────────────────────────────────────────────────────────
@@ -306,7 +307,7 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["claude code", "optimize", "token", "cost", "model routing", "haiku", "sonnet", "opus"],
     answer:
-      "**Optimizing your AI tool costs:**\n- Use **Haiku** for quick lookups, formatting, renaming tasks\n- Use **Sonnet** for most daily work — tests, edits, explanations\n- Use **Opus** only for complex multi-file refactors and architecture decisions\n\nHoundShield integrates with Claude Code directly: set `gateway.houndshield.com/v1` as your base URL to get compliance scanning on every IDE AI request — including Copilot completions.",
+      "**Optimizing your AI tool costs:**\n- Use **Haiku** for quick lookups, formatting, renaming tasks\n- Use **Sonnet** for most daily work — tests, edits, explanations\n- Use **Opus** only for complex multi-file refactors and architecture decisions\n\nHoundShield integrates with Claude Code directly: set `" + GATEWAY_BASE_URL + "` as your base URL to get compliance scanning on every IDE AI request — including Copilot completions.",
   },
   {
     keywords: ["context window", "context", "token usage", "mcp tokens", "clear context"],

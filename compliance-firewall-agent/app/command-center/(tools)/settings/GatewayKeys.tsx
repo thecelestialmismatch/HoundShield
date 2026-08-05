@@ -33,9 +33,7 @@ import {
   Trash2,
 } from 'lucide-react';
 
-/** The customer-facing gateway origin. Same value the Overview's activation
- *  checklist sends people here to find. */
-export const GATEWAY_BASE_URL = 'https://proxy.houndshield.com/v1';
+import { GATEWAY_BASE_URL, GATEWAY_COMPLETIONS_URL } from '@/lib/gateway/base-url';
 
 export interface GatewayKey {
   id: string;
@@ -207,7 +205,7 @@ export function GatewayKeys() {
               Verify it end to end
             </div>
             <pre className="px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-slate-300 font-mono text-[11px] overflow-x-auto">
-{`curl ${GATEWAY_BASE_URL}/chat/completions \\
+{`curl ${GATEWAY_COMPLETIONS_URL} \\
   -H "Authorization: Bearer ${freshKey}" \\
   -H "x-provider-api-key: $OPENAI_API_KEY" \\
   -H "Content-Type: application/json" \\
