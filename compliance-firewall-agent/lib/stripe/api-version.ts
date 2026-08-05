@@ -11,4 +11,4 @@
  */
 import type Stripe from 'stripe';
 
-export const STRIPE_API_VERSION: Stripe.LatestApiVersion = '2026-06-24.dahlia';
+export const STRIPE_API_VERSION: Stripe.LatestApiVersion = '2026-07-29.dahlia';
