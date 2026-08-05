@@ -23,47 +23,89 @@ export interface SeedData {
   content: Record<string, unknown>;
 }
 
+/** Postgres unique_violation — another writer claimed this parent first. */
+const UNIQUE_VIOLATION = "23505";
+
+/**
+ * Attempts before giving up rather than spinning on a contended chain.
+ *
+ * Only one writer can win each round, so N simultaneous writers need up to N
+ * rounds to all land. This budget is therefore the supported burst width for
+ * a single chain. Retries are paced by the database round-trip itself, so no
+ * backoff is needed.
+ *
+ * ponytail: one chain per entity_type means every tenant contends on the same
+ * tip. Per-tenant chains would divide contention by tenant count, but that
+ * needs a user_id column and a re-link of every historical previous_hash.
+ */
+const MAX_CHAIN_ATTEMPTS = 10;
+
 /**
  * Creates a cryptographic anchor (seed) for a compliance entity.
  *
  * The hash covers the entity content + the previous seed hash,
  * forming an integrity chain. If any record is modified after
  * the fact, the chain breaks and verification fails.
+ *
+ * Reading the chain tip and writing the next link are two statements, so two
+ * concurrent callers can read the same tip. The unique indexes added in
+ * migration 029 make that outcome unrepresentable: the losing writer gets a
+ * 23505 instead of forking the chain, and re-links against the new tip here.
+ * The constraint — not this loop — is what guarantees a single chain, so a
+ * writer that bypasses this function still cannot fork it.
  */
 export async function createSeedAnchor(data: SeedData): Promise<string> {
   const supabase = createServiceClient();
-
-  // Get the most recent seed to chain from
-  const { data: lastSeed } = await supabase
-    .from("seed_anchors")
-    .select("content_hash")
-    .eq("entity_type", data.entity_type)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .single();
-
-  const previousHash = lastSeed?.content_hash ?? "GENESIS";
-
-  // Hash = SHA-256(entity_content + previous_hash)
   const contentString = JSON.stringify(data.content, Object.keys(data.content).sort());
-  const hashInput = contentString + "|" + previousHash;
-  const contentHash = createHash("sha256").update(hashInput).digest("hex");
 
-  // Store the anchor
-  const { error } = await supabase.from("seed_anchors").insert({
-    entity_type: data.entity_type,
-    entity_id: data.entity_id,
-    content_hash: contentHash,
-    previous_hash: previousHash === "GENESIS" ? null : previousHash,
-    verification_status: "VALID",
-  });
+  for (let attempt = 0; attempt < MAX_CHAIN_ATTEMPTS; attempt++) {
+    // Get the most recent seed to chain from. A read failure must never be
+    // read as "the chain is empty" — that would start a second genesis
+    // mid-chain, which verification reports as tampering.
+    // ponytail: `created_at` is not a total order, so simultaneous writes can
+    // return a non-tip and burn a retry. Add a monotonic sequence column if
+    // contention ever shows up in practice.
+    const { data: lastSeed, error: readError } = await supabase
+      .from("seed_anchors")
+      .select("content_hash")
+      .eq("entity_type", data.entity_type)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-  if (error) {
-    console.error("Failed to create seed anchor:", error);
-    throw new Error(`Seed anchor creation failed: ${error.message}`);
+    if (readError) {
+      console.error("Failed to read seed chain tip:", readError);
+      throw new Error(`Seed anchor read failed: ${readError.message}`);
+    }
+
+    const previousHash = lastSeed?.content_hash ?? "GENESIS";
+
+    // Hash = SHA-256(entity_content + previous_hash)
+    const hashInput = contentString + "|" + previousHash;
+    const contentHash = createHash("sha256").update(hashInput).digest("hex");
+
+    // Store the anchor
+    const { error } = await supabase.from("seed_anchors").insert({
+      entity_type: data.entity_type,
+      entity_id: data.entity_id,
+      content_hash: contentHash,
+      previous_hash: previousHash === "GENESIS" ? null : previousHash,
+      verification_status: "VALID",
+    });
+
+    if (!error) {
+      return contentHash;
+    }
+
+    if (error.code !== UNIQUE_VIOLATION) {
+      console.error("Failed to create seed anchor:", error);
+      throw new Error(`Seed anchor creation failed: ${error.message}`);
+    }
   }
 
-  return contentHash;
+  throw new Error(
+    `Seed anchor creation failed: chain for "${data.entity_type}" stayed contended after ${MAX_CHAIN_ATTEMPTS} attempts`
+  );
 }
 
 /**
