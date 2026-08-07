@@ -13,9 +13,19 @@ interface AnchorRow {
   created_at: string;
   entity_type: string;
   entity_id: string;
+  content: Record<string, unknown> | null;
   content_hash: string;
   previous_hash: string | null;
   verification_status: string;
+}
+
+/** The `compliance_events` columns pass 3 re-reads. */
+interface EventRow {
+  id: string;
+  prompt_hash: string;
+  risk_level: string;
+  action_taken: string;
+  classifications: string[];
 }
 
 interface PostgrestErrorLike {
@@ -36,8 +46,11 @@ const BASE_TIME = Date.UTC(2026, 7, 4, 12, 0, 0);
  */
 class FakeSeedAnchors {
   rows: AnchorRow[] = [];
+  /** The `compliance_events` rows pass 3 cross-checks against. */
+  events: EventRow[] = [];
   insertAttempts = 0;
   readError: PostgrestErrorLike | null = null;
+  eventsReadError: PostgrestErrorLike | null = null;
   alwaysConflict = false;
 
   private seq = 0;
@@ -45,16 +58,40 @@ class FakeSeedAnchors {
   constructor(private readonly enforceChainIndexes = true) {}
 
   /** Appends a row directly, bypassing the writer under test. */
-  seed(row: Omit<AnchorRow, "id" | "created_at" | "verification_status">): AnchorRow {
+  seed(
+    row: Omit<AnchorRow, "id" | "created_at" | "verification_status" | "content"> &
+      Partial<Pick<AnchorRow, "content">>
+  ): AnchorRow {
     const stored: AnchorRow = {
       id: `anchor-${this.seq}`,
       created_at: new Date(BASE_TIME + this.seq).toISOString(),
       verification_status: "VALID",
+      content: null,
       ...row,
     };
     this.seq += 1;
     this.rows.push(stored);
     return stored;
+  }
+
+  /** Adds a `compliance_events` row — the thing an attacker would edit. */
+  seedEvent(row: Partial<EventRow> & Pick<EventRow, "id">): EventRow {
+    const stored: EventRow = {
+      prompt_hash: "unset",
+      risk_level: "HIGH",
+      action_taken: "BLOCKED",
+      classifications: [],
+      ...row,
+    };
+    this.events.push(stored);
+    return stored;
+  }
+
+  /** Edits a live event row in place, exactly as post-hoc tampering would. */
+  tamperEvent(id: string, patch: Partial<EventRow>): void {
+    const index = this.events.findIndex((row) => row.id === id);
+    if (index === -1) throw new Error(`no event ${id}`);
+    this.events[index] = { ...this.events[index], ...patch };
   }
 
   /** Rows newest-first, the order `order("created_at", { ascending: false })` gives. */
@@ -115,6 +152,24 @@ class FakeSeedAnchors {
   client() {
     return {
       from: (table: string) => {
+        // Pass 3 re-reads the source table, so the double has to serve it.
+        if (table === "compliance_events") {
+          return {
+            select: () => ({
+              in: (_column: string, ids: string[]) => ({
+                then: (resolve: (value: unknown) => unknown) =>
+                  Promise.resolve(
+                    this.eventsReadError
+                      ? { data: null, error: this.eventsReadError }
+                      : {
+                          data: this.events.filter((row) => ids.includes(row.id)),
+                          error: null,
+                        }
+                  ).then(resolve),
+              }),
+            }),
+          } as never;
+        }
         if (table !== "seed_anchors") throw new Error(`unexpected table: ${table}`);
         return {
           select: () => {
@@ -182,13 +237,14 @@ beforeEach(() => {
 
 describe("createSeedAnchor concurrency", () => {
   it("serialises concurrent writers into one linear chain", async () => {
-    const writers = Array.from({ length: 8 }, (_, i) =>
-      createSeedAnchor({
+    const writers = Array.from({ length: 8 }, (_, i) => {
+      table.seedEvent({ id: `event-${i}`, prompt_hash: `hash-${i}`, action_taken: "BLOCKED" });
+      return createSeedAnchor({
         entity_type: "EVENT",
         entity_id: `event-${i}`,
         content: { prompt_hash: `hash-${i}`, action_taken: "BLOCKED" },
-      })
-    );
+      });
+    });
 
     const hashes = await Promise.all(writers);
     expect(hashes).toHaveLength(8);
@@ -219,6 +275,7 @@ describe("createSeedAnchor concurrency", () => {
   });
 
   it("keeps chains for different entity types independent", async () => {
+    table.seedEvent({ id: "e1" });
     await Promise.all([
       createSeedAnchor({ entity_type: "EVENT", entity_id: "e1", content: { a: 1 } }),
       createSeedAnchor({ entity_type: "POLICY", entity_id: "p1", content: { b: 2 } }),
@@ -318,6 +375,7 @@ describe("hash format compatibility", () => {
     });
 
     const next = { prompt_hash: "new-1", risk_level: "HIGH" };
+    table.seedEvent({ id: "new-1", prompt_hash: "new-1", risk_level: "HIGH" });
     const nextHash = await createSeedAnchor({
       entity_type: "EVENT",
       entity_id: "new-1",
@@ -329,6 +387,198 @@ describe("hash format compatibility", () => {
     await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
       valid: true,
       checked: 3,
+      // The two pre-030 anchors are reported as uncheckable, not as passed.
+      unverifiable: 2,
+      source_checked: 1,
     });
+  });
+});
+
+/**
+ * Anchors one EVENT the way `logComplianceEvent` does — source row first, then
+ * the anchor over it — and hands back the id so a test can tamper with it.
+ */
+async function anchorEvent(
+  id: string,
+  fields: Partial<EventRow> = {}
+): Promise<string> {
+  const event = table.seedEvent({ id, ...fields });
+  await createSeedAnchor({
+    entity_type: "EVENT",
+    entity_id: id,
+    content: {
+      prompt_hash: event.prompt_hash,
+      risk_level: event.risk_level,
+      action_taken: event.action_taken,
+      classifications: event.classifications,
+      // Anchor-build time. Deliberately has no column to disagree with — see
+      // EVENT_SOURCE_FIELDS.
+      timestamp: new Date(BASE_TIME).toISOString(),
+    },
+  });
+  return id;
+}
+
+describe("content integrity (pass 2)", () => {
+  it("detects an edit to the anchor's own stored content", async () => {
+    await anchorEvent("event-1", { prompt_hash: "abc", risk_level: "CRITICAL" });
+
+    // Rewrite the anchored content without recomputing content_hash.
+    table.rows[0].content = { ...table.rows[0].content, risk_level: "LOW" };
+
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
+      valid: false,
+      error_type: "CONTENT_TAMPERED",
+      broken_at: table.rows[0].id,
+    });
+  });
+
+  it("reports pre-030 anchors as unverifiable rather than folding them into a pass", async () => {
+    // Two anchors with no stored content — exactly what production holds today.
+    const first = table.seed({
+      entity_type: "EVENT",
+      entity_id: "legacy-a",
+      content_hash: "a".repeat(64),
+      previous_hash: null,
+    });
+    table.seed({
+      entity_type: "EVENT",
+      entity_id: "legacy-b",
+      content_hash: "b".repeat(64),
+      previous_hash: first.content_hash,
+    });
+
+    const result = await verifySeedChain("EVENT");
+
+    // Linkage holds, so this is not tampering — but nothing about their
+    // contents was proven, and the count says so out loud. Before this fix the
+    // same rows returned `{ valid: true, checked: 2 }` with no hint that the
+    // content pass had skipped every one of them.
+    expect(result.valid).toBe(true);
+    expect(result.checked).toBe(2);
+    expect(result.unverifiable).toBe(2);
+    expect(result.source_checked).toBe(0);
+  });
+});
+
+describe("source integrity (pass 3)", () => {
+  it("FAILS when a compliance_events row is edited after anchoring", async () => {
+    await anchorEvent("event-1", {
+      prompt_hash: "abc",
+      risk_level: "CRITICAL",
+      action_taken: "BLOCKED",
+      classifications: ["CUI"],
+    });
+
+    // Baseline: an untouched log verifies.
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
+      valid: true,
+      source_checked: 1,
+    });
+
+    // The attack the $499 report is sold against: downgrade a logged violation
+    // so it stops looking like one. `seed_anchors` is untouched, so passes 1
+    // and 2 both still succeed — only the source cross-check sees this.
+    table.tamperEvent("event-1", { risk_level: "LOW" });
+
+    const result = await verifySeedChain("EVENT");
+    expect(result.valid).toBe(false);
+    expect(result.error_type).toBe("SOURCE_TAMPERED");
+    expect(result.broken_at).toBe(table.rows[0].id);
+    expect(result.detail).toMatch(/risk_level/);
+    expect(result.detail).toMatch(/CRITICAL/);
+    expect(result.detail).toMatch(/LOW/);
+  });
+
+  it("detects a removed classification", async () => {
+    await anchorEvent("event-1", { classifications: ["CUI", "ITAR"] });
+    table.tamperEvent("event-1", { classifications: ["CUI"] });
+
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
+      valid: false,
+      error_type: "SOURCE_TAMPERED",
+    });
+  });
+
+  it("detects a rewritten prompt_hash", async () => {
+    await anchorEvent("event-1", { prompt_hash: "a".repeat(64) });
+    table.tamperEvent("event-1", { prompt_hash: "b".repeat(64) });
+
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
+      valid: false,
+      error_type: "SOURCE_TAMPERED",
+    });
+  });
+
+  it("detects a deleted compliance_events row", async () => {
+    await anchorEvent("event-1", { risk_level: "CRITICAL" });
+    table.events = [];
+
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
+      valid: false,
+      error_type: "SOURCE_MISSING",
+      broken_at: table.rows[0].id,
+    });
+  });
+
+  it("does not call a reordered classifications array tampering", async () => {
+    await anchorEvent("event-1", { classifications: ["CUI", "ITAR"] });
+    table.tamperEvent("event-1", { classifications: ["ITAR", "CUI"] });
+
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({ valid: true });
+  });
+
+  it("does not compare the anchor's timestamp against created_at", async () => {
+    // The anchored `timestamp` is the anchor's own build time and no column
+    // holds it. If it were treated as a source field, every healthy row would
+    // report tampering — so this passing is the assertion.
+    await anchorEvent("event-1", { risk_level: "HIGH" });
+
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
+      valid: true,
+      source_checked: 1,
+    });
+  });
+
+  it("fails closed when the source table cannot be read", async () => {
+    await anchorEvent("event-1");
+    table.eventsReadError = { code: "42501", message: "permission denied" };
+
+    // An unreadable source table proves nothing. Reporting "valid" here would
+    // be the same lie in a new costume.
+    await expect(verifySeedChain("EVENT")).resolves.toMatchObject({
+      valid: false,
+      error_type: "FETCH_ERROR",
+    });
+  });
+
+  it("leaves non-EVENT chains to passes 1 and 2, and says so via source_checked", async () => {
+    await createSeedAnchor({
+      entity_type: "POLICY",
+      entity_id: "rule-1",
+      content: { operation: "UPDATE", approved_by: "ops" },
+    });
+
+    // POLICY anchors record an operation, not a row snapshot — there is no row
+    // whose current state they should still equal.
+    await expect(verifySeedChain("POLICY")).resolves.toMatchObject({
+      valid: true,
+      checked: 1,
+      unverifiable: 0,
+      source_checked: 0,
+    });
+  });
+});
+
+describe("regression: the anchor records what it hashed", () => {
+  it("writes content, without which passes 2 and 3 are both dead code", async () => {
+    const content = { prompt_hash: "abc", risk_level: "HIGH" };
+    table.seedEvent({ id: "event-1", prompt_hash: "abc", risk_level: "HIGH" });
+
+    await createSeedAnchor({ entity_type: "EVENT", entity_id: "event-1", content });
+
+    // The precise defect: `content` was never persisted, so `seed.content` was
+    // always undefined and the content pass skipped every row in silence.
+    expect(table.rows[0].content).toEqual(content);
   });
 });
