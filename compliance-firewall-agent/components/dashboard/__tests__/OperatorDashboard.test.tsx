@@ -53,10 +53,23 @@ describe('OperatorDashboard — the founder’s layout, inside the shared sideba
   it('renders the Overview panels', async () => {
     mockApi(POPULATED)
     await act(async () => { render(<OperatorDashboard name="Sam" connected />) })
-    await waitFor(() => expect(screen.getByText('Dashboard Overview')).toBeTruthy())
+    // The heading greets the signed-in operator when the session has a name.
+    // The page already resolved it for the Brain AI card, so this costs a prop
+    // rather than a second lookup.
+    await waitFor(() => expect(screen.getByText('Welcome back, Sam')).toBeTruthy())
     for (const heading of ['24h activity', 'Provider breakdown', 'Risk assessment', 'Live events']) {
       expect(screen.getAllByText(heading).length, `${heading} missing`).toBeGreaterThan(0)
     }
+  })
+
+  it('falls back to the page name rather than inventing an identity', async () => {
+    // No profile, no name set, or a failed read. A stand-in greeting ("Welcome
+    // back, there") would be a fabricated identity on the customer's own
+    // dashboard — the same rule the header's company slot follows.
+    mockApi(POPULATED)
+    await act(async () => { render(<OperatorDashboard name={null} connected />) })
+    await waitFor(() => expect(screen.getByText('Dashboard Overview')).toBeTruthy())
+    expect(screen.queryByText(/welcome back/i)).toBeNull()
   })
 
   it('brings the panel stylesheet but NOT a second sidebar', async () => {

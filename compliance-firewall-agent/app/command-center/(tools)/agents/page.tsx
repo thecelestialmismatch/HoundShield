@@ -12,6 +12,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Bot, Network, Zap, Clock, Brain, Activity } from "lucide-react";
 import type { SimAgent, SimEdge } from "@/components/dashboard/simulation-graph";
+import { SampleDataNotice } from "@/components/dashboard/SampleDataNotice";
 
 const SimulationGraph = dynamic(
   () => import("@/components/dashboard/simulation-graph").then((m) => m.SimulationGraph),
@@ -61,10 +62,17 @@ export default function AgentsPage() {
           </div>
           <div>
             <h1 className="text-xl font-semibold text-white">Agent Simulation</h1>
-            <p className="text-sm text-white/40">Live compliance pipeline multi-agent graph</p>
+            {/* Was "Live compliance pipeline multi-agent graph". Nothing about
+                this is live: AGENTS and EDGES below are module constants and the
+                page issues no request. "Live" on simulated data is the exact
+                claim the notice underneath exists to retract. */}
+            <p className="text-sm text-white/40">Compliance pipeline multi-agent graph</p>
           </div>
         </div>
       </div>
+
+      <SampleDataNotice surface="agent graph" />
+
       <div className="grid grid-cols-3 gap-3 mb-6 max-w-md">
         {[
           { label: "Active", value: activeCount, icon: Activity, color: "text-brand-400" },

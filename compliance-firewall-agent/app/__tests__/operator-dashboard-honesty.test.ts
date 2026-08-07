@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync, existsSync } from 'fs'
 import path from 'path'
+import { readShellSource } from './helpers/shell-source'
 
 /**
  * The after-login dashboard shows REAL data — the contract.
@@ -25,7 +26,22 @@ const CFA = path.resolve(__dirname, '../..')
 const read = (rel: string) => readFileSync(path.join(CFA, rel), 'utf8')
 
 const operator = read('components/dashboard/OperatorOverview.tsx')
-const panels = read('components/dashboard/operator/OperatorPanels.tsx')
+/**
+ * All the panel modules as one source.
+ *
+ * `OperatorPanels.tsx` became a barrel on 2026-08-07 — it was 616 lines against
+ * the repo's 500-line rule, so it was split by concern. The honesty rules below
+ * are about what the panels render, not about which file holds which chart, so
+ * they read the whole set. Same reasoning as helpers/shell-source.ts.
+ */
+const panels = [
+  'panelPrimitives.tsx',
+  'OperatorKpis.tsx',
+  'OperatorCharts.tsx',
+  'OperatorFeed.tsx',
+]
+  .map((f) => read(`components/dashboard/operator/${f}`))
+  .join('\n')
 const hook = read('components/dashboard/operator/useOperatorTelemetry.ts')
 const lcc = read('components/dashboard/LiveCommandCenter.tsx')
 const route = read('app/api/dashboard/overview/route.ts')
@@ -230,7 +246,9 @@ describe('the deleted mockup stays deleted', () => {
  * i.e. a revenue path a refactor nearly deleted.
  */
 describe('nothing was stranded by the move into the tool shell', () => {
-  const nav = read('app/command-center/(tools)/layout.tsx')
+  // The whole shell, not one file: NAV_SECTIONS moved to `_shell/nav.ts` when
+  // the shell was split on 2026-08-07, and the destinations are what matters.
+  const nav = readShellSource()
 
   const RESCUED = [
     { pane: 'Plan & Unlocks', route: 'plan', component: 'PlanUnlocksBoard' },

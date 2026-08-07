@@ -49,11 +49,22 @@ const WINDOWS: { value: TelemetryWindow; label: string }[] = [
   { value: 30, label: 'Last 30 days' },
 ]
 
-export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, checklistSlot }: {
+export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, checklistSlot, name }: {
   prefs: DashboardPrefs
   editing: boolean
   onSource: (id: ProvenanceId) => void
   onTab: (tab: 'assess' | 'settings' | 'feed' | 'reports') => void
+  /**
+   * The operator's first name, when the session has one.
+   *
+   * Display only, and deliberately optional: the page already resolves this for
+   * the Brain AI card, so greeting the person who just signed in costs one
+   * prop rather than a second lookup. Absent — no profile, no name set, a failed
+   * read — the heading falls back to the page's own name. A stand-in ("there",
+   * "Operator") would be a fabricated identity on the customer's own dashboard,
+   * which is the same rule the company slot in the header follows.
+   */
+  name?: string | null
   /** The Brain AI quick-ask card, owned by LiveCommandCenter (it wires the live
    *  analyst). Passed in rather than duplicated so there is one implementation. */
   brainSlot: React.ReactNode
@@ -73,7 +84,7 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
           than decorative (they were inert buttons in the mockup). */}
       <div className="op-toolbar">
         <div className="op-toolbar-l">
-          <h2>Dashboard Overview</h2>
+          <h2>{name ? `Welcome back, ${name}` : 'Dashboard Overview'}</h2>
           <div className="op-toolbar-sub">
             <span className={`op-live${t.error ? ' is-err' : ''}`}>
               <span className="dot" /> {t.error ? 'Offline' : 'Live'}
