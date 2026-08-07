@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Building2, ChevronDown, Menu } from "lucide-react";
+import { useViewer } from "./useViewer";
 
 /**
  * The Command Center header.
@@ -42,36 +42,12 @@ export function Topbar({
   sidebarCollapsed: boolean;
   onOpenMobileNav: () => void;
 }) {
-  const [userInitial, setUserInitial] = useState<string | null>(null);
-  const [company, setCompany] = useState<string | null>(null);
-
-  // Single source for header identity: /api/me resolves the session server-side
-  // and returns name-level personalization only (never email or id). Reading the
-  // profile straight from the browser client would mean duplicating
-  // profileKeyColumn()'s Better-Auth-vs-Supabase column choice out here, where
-  // it would silently drift.
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/me")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((me) => {
-        if (cancelled || !me?.authenticated) return;
-        if (typeof me.name === "string" && me.name.length > 0) {
-          setUserInitial(me.name[0].toUpperCase());
-        }
-        if (typeof me.company === "string" && me.company.length > 0) {
-          setCompany(me.company);
-        }
-      })
-      .catch(() => {
-        // Header identity is decoration, never access — the gate in
-        // app/command-center/layout.tsx already decided that. Leave the slot
-        // empty rather than surfacing an error in the chrome.
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Header identity comes from the shell's single /api/me read, shared with the
+  // sidebar's personalized dashboard label. It used to be a second fetch of the
+  // same endpoint right here, which meant two requests per page and two places
+  // for "what counts as a usable name" to drift apart.
+  const { name, company } = useViewer();
+  const userInitial = name ? name[0].toUpperCase() : null;
 
   return (
     <header

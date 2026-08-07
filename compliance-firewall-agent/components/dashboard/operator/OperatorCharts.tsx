@@ -9,6 +9,7 @@
  * Recharts crashes on SSR and these render inside the server-rendered shell.
  */
 
+import Link from 'next/link'
 import { ClipboardCheck, ArrowRight, BarChart3 } from 'lucide-react'
 import type { OverviewTelemetry } from '@/lib/dashboard/overview-telemetry'
 import type { SprsPosture } from '@/lib/dashboard/sprs-posture'
@@ -87,7 +88,11 @@ export function ProviderBreakdown({ tel, onSettings }: { tel: OverviewTelemetry;
         ) : (
           <>
             {tel.providers.map((p) => (
-              <div className="ovc-hrow" key={p.provider}>
+              <Link
+                className="ovc-hrow is-link"
+                key={p.provider}
+                href={`/command-center/events?provider=${encodeURIComponent(p.provider)}`}
+              >
                 <span className="ovc-hlab" title={p.provider}>{p.provider}</span>
                 <div className="ovc-htrack" title={`${p.provider}: ${fmt(p.passed)} passed · ${fmt(p.warning)} held · ${fmt(p.blocked)} blocked`}>
                   <div className="op-stackbar" style={{ width: `${(p.total / max) * 100}%` }}>
@@ -97,7 +102,7 @@ export function ProviderBreakdown({ tel, onSettings }: { tel: OverviewTelemetry;
                   </div>
                 </div>
                 <b className="ovc-hval">{fmt(p.total)}</b>
-              </div>
+              </Link>
             ))}
             <div className="ovc-legend">
               <span><i style={{ background: GREEN }} /> Passed</span>
@@ -388,13 +393,18 @@ export function DetectionsByEngine({ tel, onSettings }: { tel: OverviewTelemetry
           <NoTelemetry what="detections" onSettings={onSettings} />
         ) : (
           tel.detections.slice(0, 8).map((d, i) => (
-            <div className="ovc-hrow" key={d.name} title={`${d.name}: ${fmt(d.count)}`}>
+            <Link
+              className="ovc-hrow is-link"
+              key={d.name}
+              href={`/command-center/events?detection=${encodeURIComponent(d.name)}`}
+              title={`${d.name}: ${fmt(d.count)} — open these events`}
+            >
               <span className="ovc-hlab">{d.name}</span>
               <div className="ovc-htrack">
                 <i style={{ width: `${(d.count / max) * 100}%`, background: palette[i % palette.length] }} />
               </div>
               <b className="ovc-hval">{fmt(d.count)}</b>
-            </div>
+            </Link>
           ))
         )}
       </div>

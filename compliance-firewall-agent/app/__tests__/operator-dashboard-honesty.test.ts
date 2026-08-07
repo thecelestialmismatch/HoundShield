@@ -63,7 +63,7 @@ describe('the founder’s panels are all present at login', () => {
   })
 
   it('keeps the toolbar chrome — and makes it work, not decorate', () => {
-    expect(operator).toContain('Dashboard Overview')
+    expect(operator).toContain("dashboardLabel(name ?? null, 'Your Dashboard')")
     expect(operator).toMatch(/Last update/)
     // The mockup's window picker and Refresh were inert buttons.
     expect(operator).toMatch(/onClick=\{t\.refresh\}/)

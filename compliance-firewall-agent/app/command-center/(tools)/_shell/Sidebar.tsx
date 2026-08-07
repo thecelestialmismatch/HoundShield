@@ -10,6 +10,7 @@ import { TextLogo } from "@/components/TextLogo";
 import { SignOutButton } from "@/components/dashboard/SignOutButton";
 import { NAV_SECTIONS, isNavItemActive } from "./nav";
 import { useQuarantineCount } from "./useQuarantineCount";
+import { useViewer, dashboardLabel } from "./useViewer";
 
 /**
  * The Command Center sidebar — a fixed rail on desktop, an off-canvas drawer
@@ -47,6 +48,7 @@ export function Sidebar({
   const closeRef = useRef<HTMLButtonElement>(null);
   const sectionId = useId();
   const quarantineCount = useQuarantineCount();
+  const { name } = useViewer();
 
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     Firewall: true,
@@ -209,8 +211,12 @@ export function Sidebar({
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    {section.items.map(({ id, label, icon: Icon, href, count }) => {
+                    {section.items.map(({ id, label: staticLabel, icon: Icon, href, count, personalize }) => {
                       const isActive = isNavItemActive(href, pathname);
+                      // "Sam's Dashboard" once /api/me answers; the static
+                      // "Your Dashboard" until then and whenever there is no
+                      // name. Never an invented stand-in.
+                      const label = personalize ? dashboardLabel(name, staticLabel) : staticLabel;
                       // Only ever a real number, and only when there is
                       // something to act on. Null (loading, failed, demo) and
                       // zero both render nothing — see useQuarantineCount.

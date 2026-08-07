@@ -56,7 +56,7 @@ describe('OperatorDashboard — the founder’s layout, inside the shared sideba
     // The heading greets the signed-in operator when the session has a name.
     // The page already resolved it for the Brain AI card, so this costs a prop
     // rather than a second lookup.
-    await waitFor(() => expect(screen.getByText('Welcome back, Sam')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText("Sam's Dashboard")).toBeTruthy())
     for (const heading of ['24h activity', 'Provider breakdown', 'Risk assessment', 'Live events']) {
       expect(screen.getAllByText(heading).length, `${heading} missing`).toBeGreaterThan(0)
     }
@@ -68,7 +68,7 @@ describe('OperatorDashboard — the founder’s layout, inside the shared sideba
     // dashboard — the same rule the header's company slot follows.
     mockApi(POPULATED)
     await act(async () => { render(<OperatorDashboard name={null} connected />) })
-    await waitFor(() => expect(screen.getByText('Dashboard Overview')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Your Dashboard')).toBeTruthy())
     expect(screen.queryByText(/welcome back/i)).toBeNull()
   })
 

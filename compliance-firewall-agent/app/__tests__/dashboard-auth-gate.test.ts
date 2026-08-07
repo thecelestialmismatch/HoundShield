@@ -246,8 +246,24 @@ describe("the (tools) route group — one shell, never two sidebars", () => {
     expect(shellSource()).toMatch(/href: "\/command-center\/overview"/);
   });
 
-  it("the shell links back to the merged dashboard home", () => {
-    expect(shellSource()).toMatch(/label: "Dashboard Home"[^}]*href: "\/command-center"/);
+  it("offers ONE dashboard entry, not two pointing at the same page", () => {
+    // Until 2026-08-07 the nav carried "Dashboard Home" (/command-center) AND
+    // "Overview" (/command-center/overview) as separate rows. They were the same
+    // destination: app/command-center/page.tsx is a bare redirect() to the
+    // overview. Founder direction — merge them into one entry.
+    const shell = shellSource();
+    expect(shell).not.toMatch(/label: "Dashboard Home"/);
+    expect(shell).not.toMatch(/href: "\/command-center"\s*[,}]/);
+    // …and exactly one item still resolves to the dashboard.
+    const toDashboard = shell.match(/href: "\/command-center\/overview"/g) ?? [];
+    expect(toDashboard).toHaveLength(1);
+  });
+
+  it("the redirect page survives the merge — bookmarks still land", () => {
+    // Deleting the nav row must NOT delete the route. Seven post-login landings
+    // and every existing bookmark target /command-center.
+    const index = readFileSync(path.join(CFA, "app/command-center/page.tsx"), "utf8");
+    expect(index).toMatch(/redirect\(['"]\/command-center\/overview['"]\)/);
   });
 
   it("the shell can be left — a dashboard with no sign-out is a trust smell", () => {
@@ -266,8 +282,13 @@ describe("the tools header identifies the CUSTOMER, not the build", () => {
   });
 
   it("it shows the signed-in customer's company instead", () => {
-    expect(shell).toMatch(/setCompany\(/);
+    // Asserts the OUTCOME, not the mechanism. This used to grep `setCompany(`,
+    // which pinned it to one component owning its own useState + fetch; the
+    // shell now reads /api/me once via useViewer() and shares it, so the old
+    // grep failed on a refactor that changed nothing the customer can see.
     expect(shell).toMatch(/\{company\}/);
+    expect(shell).toMatch(/company:\s*string \| null/);
+    expect(shell).toMatch(/fetch\("\/api\/me"\)/);
   });
 
   it("renders NOTHING when the profile has no company — never a placeholder org", () => {

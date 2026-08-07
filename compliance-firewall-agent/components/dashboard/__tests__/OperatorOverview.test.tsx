@@ -94,7 +94,7 @@ describe('OperatorOverview — the founder’s panels are on screen', () => {
   it('renders every requested panel', async () => {
     mockApi(POPULATED)
     await act(async () => { renderOverview() })
-    await waitFor(() => expect(screen.getByText('Dashboard Overview')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Your Dashboard')).toBeTruthy())
 
     for (const heading of [
       'Total events', 'Blocked', 'Scan latency p50', 'SPRS score', 'Controls met', 'Held for review',
@@ -126,8 +126,13 @@ describe('OperatorOverview — real numbers, and only real numbers', () => {
   it('shows the operator’s own totals', async () => {
     mockApi(POPULATED)
     await act(async () => { renderOverview() })
-    await waitFor(() => expect(screen.getByText('412')).toBeTruthy())
-    expect(screen.getByText('7ms')).toBeTruthy()
+    // `getAllByText`, not `getByText`: since the section index landed on
+    // 2026-08-07 the event total legitimately appears more than once — the KPI
+    // tile, plus the Real-Time Feed and Audit Log rows, which both report the
+    // same count from the same source. The assertion is that the operator's own
+    // figure is on screen, not that it appears exactly once.
+    await waitFor(() => expect(screen.getAllByText('412').length).toBeGreaterThan(0))
+    expect(screen.getAllByText('7ms').length).toBeGreaterThan(0)
     expect(screen.getByText('4.9% of traffic')).toBeTruthy()
   })
 
@@ -164,7 +169,7 @@ describe('OperatorOverview — the empty customer', () => {
   it('says there is no data instead of drawing zeros', async () => {
     mockApi(EMPTY)
     const { container } = await act(async () => renderOverview())
-    await waitFor(() => expect(screen.getByText('Dashboard Overview')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Your Dashboard')).toBeTruthy())
 
     expect(screen.getAllByText(/No .* yet/).length).toBeGreaterThan(0)
     // An em dash, not a 0 — "0ms" would read as a measurement.

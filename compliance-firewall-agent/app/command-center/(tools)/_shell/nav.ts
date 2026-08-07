@@ -21,7 +21,6 @@ import {
   Download,
   Map,
   Rocket,
-  Home,
   KeyRound,
   Command,
   Crown,
@@ -54,6 +53,12 @@ export type NavItem = {
    * count now comes from the real endpoint or it does not render at all.
    */
   count?: "quarantine";
+  /**
+   * Swap `label` for "<First>'s Dashboard" once the session name is known.
+   * A flag, never the name itself — nav.ts is a static module and baking a
+   * name into it would show one customer's name to everyone.
+   */
+  personalize?: boolean;
 };
 
 export type NavSection = {
@@ -67,15 +72,24 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "Firewall",
     icon: Shield,
     items: [
-      // "Dashboard Home" is /command-center itself, which forwards to the
-      // overview. It renders OUTSIDE this (tools) route group, which is exactly
-      // why the group exists: no double sidebar.
-      { id: "home", label: "Dashboard Home", icon: Home, href: "/command-center" },
+      // ONE dashboard entry, not two.
+      //
+      // "Dashboard Home" (/command-center) and "Overview"
+      // (/command-center/overview) were separate nav items pointing at the SAME
+      // page: `app/command-center/page.tsx` is a bare `redirect()` to the
+      // overview. Two rows, one destination, and the operator had to guess which
+      // was which.
+      //
+      // The redirect page stays — seven post-login landings and every existing
+      // bookmark target `/command-center`, so deleting it would strand them.
+      // What goes is the duplicate row in the nav.
+      //
+      // `personalize` asks the sidebar to swap this label for "<First>'s
+      // Dashboard" once /api/me answers. It is not a literal name and there is
+      // no stand-in: with no session name the static label below is what
+      // renders, on the same rule the header's company slot follows.
+      { id: "overview", label: "Your Dashboard", icon: LayoutDashboard, href: "/command-center/overview", personalize: true },
       { id: "getting-started", label: "Getting Started", icon: Rocket, href: "/command-center/getting-started" },
-      // Was href "/command-center" until the 2026-07-29 merge handed that URL
-      // to the Live Command Center; this overview kept its content and moved to
-      // its own segment.
-      { id: "overview", label: "Overview", icon: LayoutDashboard, href: "/command-center/overview" },
       { id: "realtime", label: "Real-Time Feed", icon: Zap, href: "/command-center/realtime" },
       { id: "timeline", label: "Threat Timeline", icon: Activity, href: "/command-center/timeline" },
       { id: "scanner", label: "Live Scanner", icon: Scan, href: "/command-center/scanner" },
@@ -127,9 +141,11 @@ export const NAV_ITEMS: NavItem[] = NAV_SECTIONS.flatMap((s) => s.items);
 /**
  * Is `href` the destination the current pathname is on?
  *
- * `/command-center` needs an exact match — a `startsWith` there marks
- * "Dashboard Home" active on all 23 pages, because every one of them is a
- * prefix match.
+ * The `/command-center` exact-match arm is kept deliberately even though no nav
+ * item points there any more. That URL is still a live route — seven post-login
+ * landings and every old bookmark hit it before it redirects — and a plain
+ * `startsWith` would light up EVERY item for the instant it renders, because
+ * `/command-center` is a prefix of all 23 destinations.
  */
 export function isNavItemActive(href: string, pathname: string): boolean {
   return href === "/command-center" ? pathname === "/command-center" : pathname.startsWith(href);

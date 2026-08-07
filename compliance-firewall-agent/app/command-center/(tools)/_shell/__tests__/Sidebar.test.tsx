@@ -134,14 +134,50 @@ describe('navigation semantics', () => {
     )
   })
 
-  it('does not mark Dashboard Home active on every page', () => {
-    // `/command-center` is a prefix of all 23 routes, so a startsWith match
-    // there lights up Home everywhere.
+  it('exposes ONE dashboard destination, not a Home/Overview pair', () => {
+    renderSidebar()
+    expect(screen.queryByRole('link', { name: /dashboard home/i })).toBeNull()
+    const toDashboard = screen
+      .getAllByRole('link')
+      .filter((a) => a.getAttribute('href') === '/command-center/overview')
+    expect(toDashboard).toHaveLength(1)
+  })
+
+  it('marks only the current page active — not every page', () => {
+    // `/command-center` is a prefix of all 23 routes, so a startsWith match on
+    // it lit up the old Home row everywhere.
     pathname = '/command-center/rules'
     renderSidebar()
-    expect(screen.getByRole('link', { name: /dashboard home/i })).not.toHaveAttribute(
-      'aria-current',
+    expect(screen.getAllByRole('link').filter((a) => a.getAttribute('aria-current') === 'page'))
+      .toHaveLength(1)
+  })
+
+  it('personalizes the dashboard label once the session name is known', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) =>
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve(
+              String(url).includes('/api/me')
+                ? { authenticated: true, name: 'Sam', company: 'Meridian' }
+                : { items: [], count: 0 },
+            ),
+        }),
+      ),
     )
+    renderSidebar()
+    expect(await screen.findByRole('link', { name: /sam's dashboard/i })).toBeTruthy()
+  })
+
+  it('falls back to the neutral label when there is no name — never a stand-in', () => {
+    // Same rule the header's company slot follows: an empty/neutral slot is
+    // honest, an invented one is fabricated data on the customer's dashboard.
+    mockQuarantine({ items: [], count: 0 })
+    renderSidebar()
+    expect(screen.getByRole('link', { name: /your dashboard/i })).toBeTruthy()
+    expect(screen.queryByRole('link', { name: /'s dashboard/i })).toBeNull()
   })
 
   it('the search affordance is a real control that opens the palette', () => {
