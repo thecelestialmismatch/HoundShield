@@ -7,9 +7,19 @@ export type Viewer = {
   name: string | null;
   /** The customer's own company, when their profile carries one. */
   company: string | null;
+  /**
+   * True when `profiles.role` is exactly 'admin'.
+   *
+   * DECORATION ONLY — it decides whether the founder sees a link, never whether
+   * anyone may read anything. `/admin` is protected by the fail-closed server
+   * gate in `app/admin/layout.tsx`, which re-resolves the role per request. A
+   * customer who forges this flag in devtools gets a link that redirects them
+   * straight back to their own dashboard.
+   */
+  admin: boolean;
 };
 
-const EMPTY: Viewer = { name: null, company: null };
+const EMPTY: Viewer = { name: null, company: null, admin: false };
 
 /**
  * The ONE `/api/me` read in the shell.
@@ -45,6 +55,9 @@ export function useViewer(): Viewer {
         setViewer({
           name: typeof me.name === "string" && me.name.length > 0 ? me.name : null,
           company: typeof me.company === "string" && me.company.length > 0 ? me.company : null,
+          // Exact match only. 'consultant', 'ADMIN' and 'admin ' are not admin —
+          // same rule the server gate applies, so the link and the door agree.
+          admin: me.role === "admin",
         });
       })
       .catch(() => {

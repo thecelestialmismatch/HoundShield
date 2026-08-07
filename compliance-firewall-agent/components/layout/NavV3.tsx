@@ -41,6 +41,11 @@ const INDUSTRIES: MenuItem[] = [
   { icon: Lock,      label: 'Technology',      tag: 'SOC 2',   body: 'Engineers pasting API keys & source into Copilot.', href: '/products/technology' },
   { icon: Heart,     label: 'Healthcare',      tag: 'HIPAA',   body: 'Clinicians pasting PHI into AI for documentation.',  href: '/products/healthcare' },
   { icon: Shield,    label: 'Defense',         tag: 'CMMC L2', body: 'DoD contractors leaking CUI into proposal tools.',   href: '/products/defense' },
+  // Reinstated 2026-08-07 (founder decision): enforcement was paused on
+  // 13 July 2026 pending the DoW review and no replacement date was issued, so
+  // HoundShield continues to work to 10 November 2026 — and the buyer searching
+  // "CMMC Phase 2" has a page again.
+  { icon: Shield,    label: 'CMMC Phase 2',    tag: 'Nov 10',  body: 'What is binding today, and how to be ready.',        href: '/cmmc-phase-2' },
   { icon: Briefcase, label: 'Legal & Finance', tag: 'PCI',     body: 'Privileged client data shared with AI assistants.',  href: '/products/legal' },
   { icon: Globe,     label: 'Five Eyes',       tag: 'AUKUS',   body: 'Allied suppliers navigating DISP & Essential 8.',    href: '/products/global' },
   { icon: Landmark,  label: 'Government',      soon: true,     body: 'FedRAMP / FISMA — agency AI governance.',            href: '/products/government' },

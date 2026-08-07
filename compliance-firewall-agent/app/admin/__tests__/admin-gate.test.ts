@@ -183,10 +183,22 @@ describe('the cross-tenant reader is only reachable from behind the gate', () =>
     expect(read('lib/admin/role.ts')).toMatch(/^import 'server-only'/m)
   })
 
-  it('is not linked from any customer surface', () => {
-    // Not a security control — the gate is. But an unlinked panel is not in
-    // anyone's crawl path or muscle memory, which is defence in depth for free.
-    const offenders: string[] = []
+  it('is linked ONLY from behind an admin check', () => {
+    /*
+     * The panel started life linked from nowhere. That was safe and, for the
+     * one person who needs it daily, broken — reaching it meant typing the URL.
+     * It is now in the Command Center sidebar, rendered only when /api/me
+     * reports role === 'admin'.
+     *
+     * So the invariant moved rather than relaxed: a link may exist, but every
+     * file containing one must gate it. An unconditional `href="/admin"` on a
+     * customer surface is what this now catches — it would put the founder
+     * panel in every customer's sidebar and in Google's crawl path.
+     *
+     * The link is still only decoration. `app/admin/layout.tsx` re-resolves the
+     * role per request and fails closed, so forging the flag buys a redirect.
+     */
+    const ungated: string[] = []
     const walk = (dir: string) => {
       for (const e of readdirSync(dir, { withFileTypes: true })) {
         const full = path.join(dir, e.name)
@@ -198,10 +210,27 @@ describe('the cross-tenant reader is only reachable from behind the gate', () =>
         if (!/\.tsx?$/.test(e.name) || /\.(test|spec)\./.test(e.name)) continue
         const rel = path.relative(CFA, full)
         if (rel.startsWith('app/admin')) continue
-        if (/href[:=]\s*["'`]\/admin\b/.test(readFileSync(full, 'utf8'))) offenders.push(rel)
+
+        const src = readFileSync(full, 'utf8')
+        if (!/href[:=]\s*["'`]\/admin\b/.test(src)) continue
+        // The file links to /admin, so it must also branch on admin.
+        if (!/\badmin\s*&&/.test(src)) ungated.push(rel)
       }
     }
     for (const d of ['app', 'components', 'lib']) walk(path.join(CFA, d))
-    expect(offenders).toEqual([])
+
+    expect(
+      ungated,
+      `these link to /admin without gating on the admin flag:\n${ungated.join('\n')}`,
+    ).toEqual([])
+  })
+
+  it('the sidebar link is gated on an exact role match, same as the door', () => {
+    const viewer = read('app/command-center/(tools)/_shell/useViewer.ts')
+    // 'ADMIN', 'admin ' and 'consultant' must not light the link, because they
+    // do not open the door either — a link that lies about access is worse
+    // than no link.
+    expect(viewer).toMatch(/me\.role === ["']admin["']/)
+    expect(read('app/command-center/(tools)/_shell/Sidebar.tsx')).toMatch(/\{admin && \(/)
   })
 })

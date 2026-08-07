@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Menu, Search, Settings, X } from "lucide-react";
+import { ChevronDown, Menu, Search, Settings, ShieldCheck, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
 import { SignOutButton } from "@/components/dashboard/SignOutButton";
@@ -48,7 +48,7 @@ export function Sidebar({
   const closeRef = useRef<HTMLButtonElement>(null);
   const sectionId = useId();
   const quarantineCount = useQuarantineCount();
-  const { name } = useViewer();
+  const { name, admin } = useViewer();
 
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     Firewall: true,
@@ -297,6 +297,27 @@ export function Sidebar({
           aria-hidden="true"
           className="pointer-events-none absolute -top-6 right-0 left-0 h-6 bg-gradient-to-t from-[var(--hs-surface-1)] to-transparent"
         />
+        {/* The founder's way between the three surfaces. HoundShield has the
+            customer app (/), this customer dashboard, and the cross-tenant
+            founder panel — and until now the third was reachable only by typing
+            the URL, because it is deliberately linked from nowhere public.
+            Unlinked is fine for a customer; for the person who needs it daily it
+            is just broken.
+
+            Rendered only when /api/me reports role === 'admin'. That check is
+            DECORATION: `app/admin/layout.tsx` re-resolves the role from
+            `profiles.role` per request and fails closed, so forging this flag in
+            devtools buys a link that redirects you back here. */}
+        {admin && (
+          <Link
+            href="/admin"
+            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-brand-400 hover:bg-brand-400/10 transition-colors"
+            title="Founder admin — every tenant"
+          >
+            <ShieldCheck className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+            {!collapsed && <span>Founder admin</span>}
+          </Link>
+        )}
         <Link
           href="/command-center/settings"
           className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-colors"
