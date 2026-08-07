@@ -1572,3 +1572,11 @@ assertion greped it, so the file looked referenced.
 **Rule:** A test that greps a file is not a use of that file. When auditing for dead code, check
 imports from production modules only — and delete the component rather than fixing the href in
 something nothing renders.
+
+### An uncorrelated sublink is not the only thing that gets evaluated once — fixed layout arithmetic rots too
+**What:** The pitch decks' sources slide placed rows at `y = 1.95 + j * 0.82`, a pitch that happened to fit exactly 6 rows per column. Adding two references pushed the 7th row's link to 7.57in on a 7.5in canvas. pptxgenjs *writes* out-of-bounds shapes rather than clamping or erroring, so the citation was simply not on the slide — on the one slide whose entire job is being checkable — and the file still validated clean.
+**Rule:** Derive layout pitch from the item count against the real canvas (`(bottom - top) / rows`), never a constant tuned to today's list. And measure geometry after every content change: `validate.py` passes an off-canvas shape, only a bounds check on `left/top/width/height` catches it.
+
+### The 100x feature was already arriving and being thrown away
+**What:** Looking for a differentiating feature, the honest answer was not something to invent. Every AI coding agent — Claude Code, Cursor, Aider, Copilot, LangChain — is an OpenAI-compatible client, so agent traffic already flowed through the gateway with zero integration. What was missing is that the gateway read `req.headers` for auth and provider routing and discarded the rest, recording 400 anonymous events where a customer needed one attributable run. NIST 800-171 3.3.2 wants actions traceable to individual users; an autonomous run has no individual.
+**Rule:** Before designing a new capability, list what the system already receives and does not persist. The cheapest differentiated feature is usually data already crossing the boundary. Keep it descriptive: header-derived attribution is audit evidence, never an authorization input — the tenant boundary stays the server-resolved key.

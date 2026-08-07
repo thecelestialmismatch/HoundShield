@@ -40,6 +40,7 @@ const COLUMNS: RoadmapColumn[] = [
       { title: 'Live SPRS scoring', body: 'Real-time score (−203 to +110) with per-control gap analysis and remediation priorities.' },
       { title: 'Slack, Teams & SIEM alerts', body: 'Block Kit / Adaptive Cards plus Splunk HEC and Azure Sentinel forwarding.' },
       { title: 'Docker self-host deploy', body: 'Three commands to a hardened, non-root deployment on your own hardware.' },
+      { title: 'Agent attribution', body: 'Every intercepted prompt records whether it came from a person, a script, or an autonomous agent — Claude Code, Cursor, Aider, Copilot, LangChain and more, named in your audit log.' },
     ],
   },
   {
@@ -49,6 +50,8 @@ const COLUMNS: RoadmapColumn[] = [
     items: [
       { title: 'Browser extension', body: 'Chrome/Edge interception for browser-native AI tools that bypass the proxy.' },
       { title: 'MCP server integration', body: 'Compliance scanning for Claude Desktop, Cursor, and every MCP-compatible agent tool call.' },
+      { title: 'Agent run grouping', body: 'Collapse the hundreds of prompts in one autonomous run into a single reviewable unit with a named human owner — the AU.2.041 answer for traffic no person sent individually.' },
+      { title: 'Per-agent policy', body: 'Different rules for people and for agents: an unattended run can be held for review on patterns a human would simply be warned about.' },
       { title: 'C3PAO partner portal', body: 'White-label, multi-client dashboard for assessors and CMMC consultants.' },
       { title: 'Onboarding email sequence', body: 'Guided day 1 / 3 / 7 path from install to first exported PDF report.' },
     ],
