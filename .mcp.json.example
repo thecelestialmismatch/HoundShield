@@ -1,6 +1,11 @@
 {
   "$comment": "Template. Copy to .mcp.json (gitignored-safe to keep local, or commit if your team wants shared servers): cp .mcp.json.example .mcp.json — then Claude Code loads these project MCP servers on next start. Secrets come from the environment, never hard-coded.",
   "mcpServers": {
+    "$comment_tinyfish": "TinyFish Web Agent: search + page fetch (both free), browser automation (1 credit/step) and remote CDP sessions. Streamable HTTP, stateless — nothing to install and no API key here; OAuth runs on first connect (sign in to agent.tinyfish.ai in your default browser first). This is Tier 1 of the /houndshield WEB & RESEARCH ladder; with it absent the skill falls back to WebSearch/WebFetch and then to .claude/skills/houndshield/scripts/hound-web.mjs, so removing it degrades capability rather than breaking anything. Do NOT also register it via `claude mcp add` if it is already connected at account scope — you get a duplicate that shadows the original.",
+    "tinyfish": {
+      "type": "http",
+      "url": "https://agent.tinyfish.ai/mcp"
+    },
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"],
