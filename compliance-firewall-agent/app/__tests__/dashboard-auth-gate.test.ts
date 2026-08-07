@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import path from "path";
+import { readShellRoot, readShellSource } from "./helpers/shell-source";
 
 /**
  * ONE dashboard, behind login.
@@ -31,7 +32,15 @@ const CFA = path.resolve(__dirname, "../..");
 const read = (rel: string) => readFileSync(path.join(CFA, rel), "utf8");
 
 const GATE = "app/command-center/layout.tsx";
-const TOOLS_SHELL = "app/command-center/(tools)/layout.tsx";
+
+/**
+ * The tool shell, read as one source across `layout.tsx` + `_shell/*`.
+ *
+ * Was a single path until the shell was split on 2026-08-07. The invariants
+ * below are about the shell as a whole, not about which file holds which line,
+ * so they follow the code instead of pinning it. See helpers/shell-source.ts.
+ */
+const shellSource = () => readShellSource();
 
 describe("the authorization boundary is a fail-closed server layout", () => {
   const gate = read(GATE);
@@ -223,29 +232,47 @@ describe("the (tools) route group — one shell, never two sidebars", () => {
   });
 
   it("the tool shell is the client component that was there before the merge", () => {
-    const shell = read(TOOLS_SHELL);
-    expect(shell).toMatch(/^["']use client["'];/);
-    expect(shell).toMatch(/className="cc-light/);
+    // The composition root specifically: `cc-light` and the client boundary are
+    // properties of the file that wraps everything, not of the parts.
+    const root = readShellRoot();
+    expect(root).toMatch(/^["']use client["'];/);
+    expect(root).toMatch(/className="cc-light/);
   });
 
   it("the tool sidebar still offers a way back to the dashboard", () => {
     // /command-center/overview used to be an 804-line client mockup living in
     // this group. It is now the real dashboard one level up, so this link
     // leaves the group by design — it is the way home, not a tool.
-    expect(read(TOOLS_SHELL)).toMatch(/href: "\/command-center\/overview"/);
+    expect(shellSource()).toMatch(/href: "\/command-center\/overview"/);
   });
 
-  it("the shell links back to the merged dashboard home", () => {
-    expect(read(TOOLS_SHELL)).toMatch(/label: "Dashboard Home"[^}]*href: "\/command-center"/);
+  it("offers ONE dashboard entry, not two pointing at the same page", () => {
+    // Until 2026-08-07 the nav carried "Dashboard Home" (/command-center) AND
+    // "Overview" (/command-center/overview) as separate rows. They were the same
+    // destination: app/command-center/page.tsx is a bare redirect() to the
+    // overview. Founder direction — merge them into one entry.
+    const shell = shellSource();
+    expect(shell).not.toMatch(/label: "Dashboard Home"/);
+    expect(shell).not.toMatch(/href: "\/command-center"\s*[,}]/);
+    // …and exactly one item still resolves to the dashboard.
+    const toDashboard = shell.match(/href: "\/command-center\/overview"/g) ?? [];
+    expect(toDashboard).toHaveLength(1);
+  });
+
+  it("the redirect page survives the merge — bookmarks still land", () => {
+    // Deleting the nav row must NOT delete the route. Seven post-login landings
+    // and every existing bookmark target /command-center.
+    const index = readFileSync(path.join(CFA, "app/command-center/page.tsx"), "utf8");
+    expect(index).toMatch(/redirect\(['"]\/command-center\/overview['"]\)/);
   });
 
   it("the shell can be left — a dashboard with no sign-out is a trust smell", () => {
-    expect(read(TOOLS_SHELL)).toMatch(/<SignOutButton/);
+    expect(shellSource()).toMatch(/<SignOutButton/);
   });
 });
 
 describe("the tools header identifies the CUSTOMER, not the build", () => {
-  const shell = read(TOOLS_SHELL);
+  const shell = shellSource();
 
   it("the 'BEAST MODE' / v2.0 build badge is gone", () => {
     // Version chrome told the operator nothing about their own account, and
@@ -255,8 +282,13 @@ describe("the tools header identifies the CUSTOMER, not the build", () => {
   });
 
   it("it shows the signed-in customer's company instead", () => {
-    expect(shell).toMatch(/setCompany\(/);
+    // Asserts the OUTCOME, not the mechanism. This used to grep `setCompany(`,
+    // which pinned it to one component owning its own useState + fetch; the
+    // shell now reads /api/me once via useViewer() and shares it, so the old
+    // grep failed on a refactor that changed nothing the customer can see.
     expect(shell).toMatch(/\{company\}/);
+    expect(shell).toMatch(/company:\s*string \| null/);
+    expect(shell).toMatch(/fetch\("\/api\/me"\)/);
   });
 
   it("renders NOTHING when the profile has no company — never a placeholder org", () => {

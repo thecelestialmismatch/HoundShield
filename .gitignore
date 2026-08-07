@@ -163,3 +163,6 @@ compass_artifact_*.md
 # code with zero imports (already excluded from tsconfig). Neither is the product.
 brain/
 compliance-firewall-agent/legacy/
+
+# Pitch decks — founder direction 2026-08-07: keep local, not in the repo yet.
+docs/decks/

@@ -115,6 +115,7 @@ export function OperatorDashboard({ name, connected = false }: {
       )}
 
       <OperatorOverview
+        name={name}
         prefs={prefs}
         editing={customizing}
         onSource={setProv}

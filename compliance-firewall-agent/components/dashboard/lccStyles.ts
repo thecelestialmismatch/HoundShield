@@ -546,7 +546,10 @@ export const LCC_CSS = `
 .hs-lcc .op-live.is-err{color:var(--bad-text)}
 .hs-lcc .op-live .dot{background:var(--ok)}
 .hs-lcc .op-live.is-err .dot{background:var(--bad)}
-.hs-lcc .op-toolbar-r{display:flex;align-items:center;gap:8px}
+/* Wraps, and may shrink. Three controls (window picker, Refresh, Download) came
+   to 383px in a 343px column at 375px, so the page scrolled sideways — the same
+   class of bug as the bare 1fr grid tracks, and caught the same way. */
+.hs-lcc .op-toolbar-r{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0}
 .hs-lcc .op-select{display:inline-flex;align-items:center;gap:.4rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:.4rem .6rem;font-size:.8rem;color:var(--mut)}
 .hs-lcc .op-select svg{width:14px;height:14px;flex-shrink:0}
 .hs-lcc .op-select select{background:none;border:0;color:inherit;font:inherit;cursor:pointer;outline:none}
@@ -619,15 +622,244 @@ export const LCC_CSS = `
 .hs-lcc .op-ev-right{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;gap:.1rem;font-size:.71rem}
 .hs-lcc .op-ev-right b{font-size:.7rem;letter-spacing:.03em}
 
+/* Top-right download. Native details/summary — no dropdown dependency, and
+   keyboard + screen-reader behaviour comes free. */
+.hs-lcc .op-dl{position:relative}
+.hs-lcc .op-dl>summary{list-style:none;cursor:pointer;user-select:none}
+.hs-lcc .op-dl>summary::-webkit-details-marker{display:none}
+.hs-lcc .op-dl-spin{animation:op-dl-rot 1s linear infinite}
+@keyframes op-dl-rot{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.hs-lcc .op-dl-spin{animation:none}}
+.hs-lcc .op-dl-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:30;width:290px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:0 12px 32px -12px rgba(0,0,0,.28);padding:6px}
+.hs-lcc .op-dl-menu button{display:block;width:100%;text-align:left;padding:10px 12px;
+  min-height:44px;border:0;border-radius:calc(var(--r) - 4px);background:transparent;
+  color:inherit;cursor:pointer;font:inherit}
+.hs-lcc .op-dl-menu button:hover:not(:disabled){background:color-mix(in srgb,var(--brand) 8%,transparent)}
+.hs-lcc .op-dl-menu button:disabled{opacity:.5;cursor:default}
+.hs-lcc .op-dl-menu button b{display:block;font-size:.875rem;font-weight:600}
+.hs-lcc .op-dl-menu button span{display:block;font-size:.75rem;color:var(--mut2);margin-top:2px}
+.hs-lcc .op-dl-note{margin:6px 12px;font-size:.7rem;color:var(--mut2)}
+.hs-lcc .op-dl-err{margin:6px 12px 8px;font-size:.75rem;color:var(--bad);display:flex;gap:6px;align-items:flex-start}
+.hs-lcc .op-dl-err svg{width:14px;height:14px;flex-shrink:0;margin-top:1px}
+.hs-lcc .op-dl-err a{color:var(--brand);text-decoration:underline}
+/* On a phone the menu is the width of the screen, not a 290px card hanging off
+   the right edge of a 375px viewport. */
+@media(max-width:560px){
+  /* The toolbar row becomes the positioning context so the menu can span the
+     content column instead of hanging a 290px card off the right edge of a
+     375px viewport. The max-width:100% is the belt to that braces: without it
+     the fixed width wins and the page scrolls sideways. */
+  .hs-lcc .op-toolbar-r{position:relative}
+  .hs-lcc .op-dl{position:static}
+  .hs-lcc .op-dl-menu{left:0;right:0;width:auto;max-width:100%}
+  .hs-lcc .op-dl>summary{width:100%}
+}
+
+/* 7-day trend. */
+.hs-lcc .op-tr-svg{width:100%;height:74px;display:block}
+.hs-lcc .op-tr-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:8px}
+.hs-lcc .op-tr-day{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;
+  min-height:44px;padding:6px 2px;border-radius:8px;text-decoration:none;color:inherit}
+.hs-lcc .op-tr-day:hover{background:color-mix(in srgb,var(--brand) 8%,transparent)}
+.hs-lcc .op-tr-day b{font-size:.82rem;font-variant-numeric:tabular-nums}
+.hs-lcc .op-tr-day i{width:16px;background:var(--bad);border-radius:2px;display:block}
+.hs-lcc .op-tr-day span{font-size:.66rem;color:var(--mut2)}
+.hs-lcc .op-tr-day em{font-style:normal;font-size:.6rem;color:var(--mut2);text-align:center}
+
+/* Latency profile. */
+.hs-lcc .op-lat{display:grid;grid-template-columns:34px 1fr 58px;gap:8px 8px;align-items:center;margin-bottom:8px}
+.hs-lcc .op-lat-k{font-size:.72rem;color:var(--mut2);font-family:ui-monospace,Menlo,monospace}
+.hs-lcc .op-lat-track{height:10px;border-radius:99px;background:color-mix(in srgb,var(--line) 60%,transparent);overflow:hidden}
+.hs-lcc .op-lat-track i{display:block;height:100%;border-radius:99px}
+.hs-lcc .op-lat-v{font-size:.85rem;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.hs-lcc .op-lat-n{grid-column:2/-1;font-size:.66rem;color:var(--mut2);margin-top:-4px}
+.hs-lcc .op-lat-foot{margin:10px 0 0;font-size:.72rem;color:var(--mut2);line-height:1.5}
+
+/* SPRS gauge. */
+.hs-lcc .op-gauge{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.hs-lcc .op-gauge-v{font-size:1.6rem;font-weight:700;fill:var(--ink);font-variant-numeric:tabular-nums}
+.hs-lcc .op-gauge-side{display:grid;gap:8px;min-width:0;flex:1}
+.hs-lcc .op-gauge-side div{display:flex;align-items:baseline;gap:8px}
+.hs-lcc .op-gauge-side b{font-size:1.1rem;font-variant-numeric:tabular-nums}
+.hs-lcc .op-gauge-side span{font-size:.72rem;color:var(--mut2)}
+.hs-lcc .op-gauge-cta{font-size:.78rem;font-weight:600;color:var(--brand);text-decoration:none;
+  min-height:40px;display:inline-flex;align-items:center}
+
+/* Block rate + cumulative. */
+.hs-lcc .op-rate-hd{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.hs-lcc .op-rate-hd b{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+.hs-lcc .op-rate-hd span{font-size:.72rem;color:var(--mut2)}
+.hs-lcc .op-rate-svg{width:100%;height:66px;display:block}
+.hs-lcc .op-rate-x{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:6px}
+.hs-lcc .op-rate-d{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;
+  justify-content:center;border-radius:8px;text-decoration:none;color:inherit}
+.hs-lcc .op-rate-d:hover{background:color-mix(in srgb,var(--brand) 8%,transparent)}
+.hs-lcc .op-rate-d b{font-size:.72rem;font-variant-numeric:tabular-nums}
+.hs-lcc .op-rate-d span{font-size:.64rem;color:var(--mut2)}
+
+/* Hour-of-day profile. */
+.hs-lcc .op-hod{display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:2px;height:82px;align-items:end}
+.hs-lcc .op-hod-b{display:flex;align-items:flex-end;height:100%;min-width:0;border-radius:2px}
+.hs-lcc .op-hod-b:hover{background:color-mix(in srgb,var(--brand) 10%,transparent)}
+.hs-lcc .op-hod-b i{width:100%;border-radius:2px 2px 0 0;min-height:2px;display:block}
+.hs-lcc .op-hod-x{display:flex;justify-content:space-between;font-size:.62rem;color:var(--mut2);margin-top:6px}
+.hs-lcc .op-hod-foot{margin:8px 0 0;font-size:.72rem;color:var(--mut2);line-height:1.5}
+.hs-lcc .op-hod-foot b{color:var(--ink)}
+
+/* Gateway console. */
+.hs-lcc .op-term{margin:0 14px 14px;border-radius:10px;overflow:hidden;border:1px solid #23252a;background:#0b0d10}
+.hs-lcc .op-term-bar{display:flex;align-items:center;gap:6px;padding:7px 10px;background:#14171b;border-bottom:1px solid #23252a}
+.hs-lcc .op-term-bar .d{width:9px;height:9px;border-radius:99px;display:block}
+.hs-lcc .op-term-bar .d.r{background:#ff5f57}
+.hs-lcc .op-term-bar .d.y{background:#febc2e}
+.hs-lcc .op-term-bar .d.g{background:#28c840}
+.hs-lcc .op-term-bar span{margin-left:6px;font-size:.68rem;color:#8a8f98;font-family:ui-monospace,Menlo,monospace}
+.hs-lcc .op-term-body{margin:0;padding:10px 12px;overflow-x:auto;font-family:ui-monospace,Menlo,monospace;
+  font-size:.72rem;line-height:1.8;color:#d0d6e0;white-space:pre}
+.hs-lcc .op-term-l{display:grid;grid-template-columns:64px 46px 92px 1fr 52px;gap:10px;
+  text-decoration:none;color:inherit;border-radius:4px;padding:0 4px;margin:0 -4px}
+.hs-lcc a.op-term-l:hover{background:rgba(255,255,255,.06)}
+.hs-lcc .op-term-l .t{color:#62666d}
+.hs-lcc .op-term-l .p{color:#d0d6e0}
+.hs-lcc .op-term-l .d{color:#8a8f98;overflow:hidden;text-overflow:ellipsis}
+.hs-lcc .op-term-l .m{color:#62666d;text-align:right}
+.hs-lcc .op-term-l .v{font-weight:700}
+.hs-lcc .op-term-l.is-block .v{color:#ff6b6b}
+.hs-lcc .op-term-l.is-hold .v{color:#e0b341}
+.hs-lcc .op-term-l.is-pass .v{color:#27a644}
+.hs-lcc .op-term-l.is-dim{display:block;color:#62666d}
+.hs-lcc .op-term-l.is-warn{display:block;color:#e0b341}
+@media(max-width:640px){
+  .hs-lcc .op-term-body{font-size:.66rem}
+  .hs-lcc .op-term-l{grid-template-columns:58px 44px 1fr;gap:8px}
+  .hs-lcc .op-term-l .d,.hs-lcc .op-term-l .m{display:none}
+}
+
+/* Heatmap: 25 columns (day label + 24 hours). */
+.hs-lcc .op-hm{display:grid;grid-template-columns:34px repeat(24,minmax(0,1fr));gap:2px;align-items:center}
+.hs-lcc .op-hm-corner{height:1px}
+.hs-lcc .op-hm-hr{font-size:.6rem;color:var(--mut2);text-align:center;font-variant-numeric:tabular-nums}
+.hs-lcc .op-hm-day{font-size:.65rem;color:var(--mut2);text-align:right;padding-right:6px}
+.hs-lcc .op-hm-c{aspect-ratio:1;border-radius:2px;background:var(--hm-0);display:block;
+  min-height:10px;transition:outline-color .12s;outline:2px solid transparent}
+.hs-lcc .op-hm-c:hover{outline-color:var(--brand)}
+.hs-lcc .op-hm-c:focus-visible{outline-color:var(--brand)}
+.hs-lcc .op-hm-c.s0{background:var(--hm-0)}
+.hs-lcc .op-hm-c.s1{background:var(--hm-1)}
+.hs-lcc .op-hm-c.s2{background:var(--hm-2)}
+.hs-lcc .op-hm-c.s3{background:var(--hm-3)}
+.hs-lcc .op-hm-c.s4{background:var(--hm-4)}
+.hs-lcc .op-hm-c.is-bad{background:var(--bad)}
+.hs-lcc{--hm-0:color-mix(in srgb,var(--line) 45%,transparent);
+  --hm-1:color-mix(in srgb,var(--brand) 18%,transparent);
+  --hm-2:color-mix(in srgb,var(--brand) 38%,transparent);
+  --hm-3:color-mix(in srgb,var(--brand) 62%,transparent);
+  --hm-4:var(--brand)}
+.hs-lcc .op-hm-key{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:.68rem;color:var(--mut2);flex-wrap:wrap}
+.hs-lcc .op-hm-key i{width:12px;height:12px;border-radius:2px;display:block}
+.hs-lcc .op-hm-key .op-hm-bad{background:var(--bad)}
+@media(max-width:700px){
+  /* 24 columns under ~10px each is unreadable and untappable. Scroll the grid
+     instead of shrinking it — the row stays legible and the cells stay hittable. */
+  .hs-lcc .op-hm-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .hs-lcc .op-hm{min-width:560px}
+}
+
+/* Donut. One component, reused for outcome mix and blocked severity. */
+.hs-lcc .op-donut{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hs-lcc .op-donut svg{flex:0 0 auto}
+.hs-lcc .op-donut-lg{display:grid;gap:6px;min-width:0;flex:1}
+.hs-lcc .op-dn-row{display:flex;align-items:center;gap:8px;min-height:28px;font-size:.78rem;
+  text-decoration:none;color:inherit;border-radius:6px;padding:2px 6px;margin:-2px -6px}
+.hs-lcc .op-dn-row:hover{background:color-mix(in srgb,var(--brand) 8%,transparent)}
+.hs-lcc .op-dn-row i{width:9px;height:9px;border-radius:2px;flex:0 0 auto}
+.hs-lcc .op-dn-row span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hs-lcc .op-dn-row b{font-variant-numeric:tabular-nums}
+.hs-lcc .op-dn-row em{font-style:normal;color:var(--mut2);font-size:.7rem;width:38px;text-align:right}
+
+/* A chart row that navigates must look like it does. */
+.hs-lcc .ovc-hrow.is-link{text-decoration:none;color:inherit;border-radius:6px;
+  padding:2px 6px;margin-left:-6px;margin-right:-6px;min-height:34px}
+.hs-lcc .ovc-hrow.is-link:hover{background:color-mix(in srgb,var(--brand) 8%,transparent)}
+.hs-lcc .ovc-hrow.is-link:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+
+/* Donut centre labels + quiet empty state. */
+.hs-lcc .op-dn-total{font-size:1.35rem;font-weight:700;fill:var(--ink);font-variant-numeric:tabular-nums}
+.hs-lcc .op-dn-cap{font-size:.62rem;fill:var(--mut2);letter-spacing:.04em}
+.hs-lcc .op-empty-quiet{font-size:.82rem;color:var(--mut2);line-height:1.5}
+
+/* "What this stopped" — the before/after value panel. */
+.hs-lcc .op-saved .ph h3{display:flex;align-items:center;gap:8px}
+.hs-lcc .op-saved .ph h3 svg{width:16px;height:16px;color:var(--ok)}
+.hs-lcc .op-saved-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center}
+.hs-lcc .op-saved-col{padding:14px 16px;border-radius:var(--r);border:1px solid var(--line);min-width:0}
+.hs-lcc .op-saved-col.is-before{background:color-mix(in srgb,var(--bad) 6%,transparent)}
+.hs-lcc .op-saved-col.is-after{background:color-mix(in srgb,var(--ok) 8%,transparent)}
+.hs-lcc .op-saved-k{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mut2)}
+.hs-lcc .op-saved-v{display:block;font-size:2rem;font-weight:700;line-height:1.1;margin:4px 0 2px;
+  font-variant-numeric:tabular-nums;color:var(--bad)}
+.hs-lcc .op-saved-v.is-good{color:var(--ok)}
+.hs-lcc .op-saved-s{display:block;font-size:.75rem;color:var(--mut2);line-height:1.45}
+.hs-lcc .op-saved-arrow{font-size:1.3rem;color:var(--mut2)}
+.hs-lcc .op-saved-note{margin:14px 0 0;font-size:.8rem;line-height:1.55;color:var(--mut)}
+.hs-lcc .op-saved-note b{color:var(--ink)}
+.hs-lcc .op-saved-cta{display:inline-flex;align-items:center;gap:6px;margin-top:12px;min-height:40px;
+  font-size:.8rem;font-weight:600;color:var(--brand);text-decoration:none}
+.hs-lcc .op-saved-cta svg{width:14px;height:14px}
+@media(max-width:640px){
+  /* Stack; the arrow points down instead of across. */
+  .hs-lcc .op-saved-ba{grid-template-columns:minmax(0,1fr);gap:10px}
+  .hs-lcc .op-saved-arrow{transform:rotate(90deg);justify-self:center}
+}
+
+/* Section index — every area of the product, its live number, and the way in.
+   Founder direction 2026-08-07: "show all the details … and if they need detail
+   information they can go to that particular section of that data". */
+.hs-lcc .op-ix-grp{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--mut2);padding:14px 0 8px}
+.hs-lcc .op-index{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media(max-width:1100px){.hs-lcc .op-index{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:820px){.hs-lcc .op-index{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.hs-lcc .op-index{grid-template-columns:minmax(0,1fr)}}
+.hs-lcc .op-ix{display:flex;align-items:center;gap:10px;min-width:0;min-height:44px;
+  padding:11px 13px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);text-decoration:none;color:inherit;
+  transition:border-color .18s,transform .18s}
+.hs-lcc .op-ix:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--brand) 40%,transparent)}
+@media(prefers-reduced-motion:reduce){.hs-lcc .op-ix:hover{transform:none}}
+.hs-lcc .op-ix:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.hs-lcc .op-ix-dot{width:7px;height:7px;border-radius:99px;flex:0 0 auto}
+.hs-lcc .op-ix-t{flex:1;min-width:0}
+.hs-lcc .op-ix-t b{display:block;font-size:.8rem;font-weight:600;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.hs-lcc .op-ix-t span{display:block;font-size:.7rem;color:var(--mut2);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.hs-lcc .op-ix-v{font-size:1rem;font-weight:600;font-variant-numeric:tabular-nums;flex:0 0 auto}
+.hs-lcc .op-ix-v.is-mut{color:var(--mut2);font-weight:400;font-size:.8rem}
+
 /* Quick actions. */
-.hs-lcc .op-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-@media(max-width:900px){.hs-lcc .op-actions{grid-template-columns:repeat(2,1fr)}}
-.hs-lcc .op-action{display:flex;align-items:center;gap:.7rem;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--soft);text-decoration:none;color:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
+/* minmax(0,1fr), not a bare 1fr. A bare 1fr track carries an implicit
+   min-width:auto, so it can never shrink below the card's min-content width
+   (~197px: 36px icon + label + 14px chevron + padding). That made this the one
+   grid on the dashboard that overflowed its own container — measured in
+   Chromium 2026-08-07 at exactly the two widths the arithmetic predicts:
+   4 tracks × 177px = 708px inside a 700px column at 1024px (14px over), and
+   2 tracks × 197px = 394px inside a 343px column at 375px (40px over). Every
+   other panel grid here already uses auto-fit/minmax and was never affected.
+   Guarded by app/__tests__/dashboard-responsive-contract.test.ts. */
+.hs-lcc .op-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media(max-width:900px){.hs-lcc .op-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Below ~560px two columns leave under 100px for the label. One full-width row
+   per action reads better on a phone than two cramped ones. */
+@media(max-width:560px){.hs-lcc .op-actions{grid-template-columns:minmax(0,1fr)}}
+.hs-lcc .op-action{display:flex;align-items:center;gap:.7rem;min-width:0;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--soft);text-decoration:none;color:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
 .hs-lcc .op-action:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--brand) 40%,transparent);box-shadow:0 8px 24px -14px color-mix(in srgb,var(--brand) 60%,transparent)}
 .hs-lcc .op-action:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hs-lcc .op-action-ic{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:10px;background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand)}
 .hs-lcc .op-action-ic svg{width:17px;height:17px}
-.hs-lcc .op-action-label{flex:1;font-size:.85rem;font-weight:600}
+.hs-lcc .op-action-label{flex:1;min-width:0;font-size:.85rem;font-weight:600}
 .hs-lcc .op-action-go{width:14px;height:14px;flex-shrink:0;color:var(--mut2)}
 .hs-lcc .op-action:hover .op-action-go{color:var(--brand)}
 

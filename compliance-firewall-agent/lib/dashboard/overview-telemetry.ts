@@ -96,10 +96,20 @@ export interface OverviewTelemetry {
    *  recorded one. This is the honest replacement for the mockup's "Tokens
    *  Scanned" tile — the gateway records `processing_time_ms`, never tokens. */
   scanP50Ms: number | null
+  /** Same latency set at the 90th and 99th percentile. Null when nothing has
+   *  been timed yet — never 0, which would read as "instant". */
+  scanP90Ms: number | null
+  scanP99Ms: number | null
   /** Exactly 24 buckets, oldest → newest, ending with the current hour. */
   hourly: HourBucket[]
   /** Exactly 7 buckets, oldest → newest, ending today. */
   daily: DayBucket[]
+  /** 7 rows (oldest day → today) x 24 UTC hours. Same rows as `daily`, split by
+   *  hour so the heatmap can show WHEN in the day traffic and blocks land — the
+   *  one shape neither `hourly` (24h only) nor `daily` (no time of day) can
+   *  answer. Cell counts are events; `heatBlocked` is the blocked subset. */
+  heat: number[][]
+  heatBlocked: number[][]
   /** Destination LLM providers, busiest first. */
   providers: ProviderBucket[]
   /** Severity mix of BLOCKED events only — "how bad were the things we stopped". */
@@ -141,6 +151,22 @@ export function median(values: number[]): number | null {
   const sorted = [...values].sort((a, b) => a - b)
   const mid = Math.floor((sorted.length - 1) / 2)
   return sorted[mid]
+}
+
+/**
+ * Nearest-rank percentile (lower of the two middle values, same convention as
+ * `median` above so p50 from either helper agrees).
+ *
+ * Nearest-rank rather than interpolated: these are millisecond readings the
+ * gateway actually recorded, and an interpolated p99 reports a latency no
+ * request ever had. On a panel a customer may quote to an assessor, every number
+ * should be a measurement.
+ */
+export function percentile(values: number[], p: number): number | null {
+  if (values.length === 0) return null
+  const sorted = [...values].sort((a, b) => a - b)
+  const rank = Math.ceil((p / 100) * sorted.length) - 1
+  return sorted[Math.min(Math.max(rank, 0), sorted.length - 1)]
 }
 
 /** UTC midnight for a timestamp, as an epoch ms. */
@@ -191,6 +217,8 @@ export function aggregateOverview(
     }
   })
   const dailyIndex = new Map(daily.map((d, i) => [d.date, i]))
+  const heat: number[][] = Array.from({ length: 7 }, () => new Array(24).fill(0))
+  const heatBlocked: number[][] = Array.from({ length: 7 }, () => new Array(24).fill(0))
 
   const totals: OverviewTotals = { events: 0, passed: 0, warning: 0, blocked: 0, blockRatePct: 0 }
   const providers = new Map<string, ProviderBucket>()
@@ -224,6 +252,10 @@ export function aggregateOverview(
     if (dayIdx !== undefined) {
       daily[dayIdx].events += 1
       if (outcome === 'blocked') daily[dayIdx].blocked += 1
+      // Same row, split by hour — free here, since the row is already resolved.
+      const h = new Date(ts).getUTCHours()
+      heat[dayIdx][h] += 1
+      if (outcome === 'blocked') heatBlocked[dayIdx][h] += 1
     }
 
     // Provider mix. A null provider is real data (a local model with no
@@ -237,8 +269,16 @@ export function aggregateOverview(
     providers.set(providerName, p)
 
     // Severity mix of BLOCKS only — the mix of what got stopped.
+    //
+    // Upper-cased before bucketing because `RISK_ORDER` below filters on exactly
+    // 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'NONE'. A row whose risk_level
+    // arrived as 'critical' used to be counted here and then silently dropped by
+    // that filter — the severity chart would report "nothing was blocked" while
+    // the Blocked KPI beside it said 20. Under-reporting severity on a
+    // compliance dashboard is the worst direction for this bug to fail in.
     if (outcome === 'blocked') {
-      risk.set(row.risk_level, (risk.get(row.risk_level) ?? 0) + 1)
+      const level = (row.risk_level ?? '').trim().toUpperCase() || 'NONE'
+      risk.set(level, (risk.get(level) ?? 0) + 1)
     }
 
     for (const c of row.classifications ?? []) {
@@ -256,8 +296,12 @@ export function aggregateOverview(
     windowDays,
     totals,
     scanP50Ms: median(latencies),
+    scanP90Ms: percentile(latencies, 90),
+    scanP99Ms: percentile(latencies, 99),
     hourly,
     daily,
+    heat,
+    heatBlocked,
     // Busiest first, then alphabetical. The name tie-break is not cosmetic:
     // without it equal-volume providers fall back to Map insertion order, which
     // is "whichever event happened to arrive first", so the bars visibly
