@@ -4,12 +4,12 @@ import { useRef } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { NavV3 } from "@/components/layout/NavV3";
+import { UPCOMING } from "@/lib/product/upcoming";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import {
   Shield, Cpu, CreditCard, LayoutDashboard, KeyRound, Blocks,
-  Sparkles, Calendar, Rocket, FolderSearch,
-  Users, ClipboardCheck, Smartphone, ArrowRight, Compass,
+  Sparkles, Calendar, Rocket, ClipboardCheck, ArrowRight, Compass,
 } from "lucide-react";
 
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -107,12 +107,17 @@ const releases: Release[] = [
   },
 ];
 
-const roadmap = [
-  { q: "Q3 2026", title: "Evidence Collection Automation", desc: "Auto-gather artifacts and screenshots mapped to CMMC controls.", icon: FolderSearch },
-  { q: "Q3 2026", title: "Multi-Organization Support", desc: "Manage multiple subsidiaries under a single parent account.", icon: Users },
-  { q: "Q4 2026", title: "C3PAO Assessment Prep Wizard", desc: "Guided walkthrough to prepare for third-party CMMC assessments.", icon: ClipboardCheck },
-  { q: "Q4 2026", title: "Mobile App (iOS / Android)", desc: "Review alerts, approve quarantine actions, and track compliance on the go.", icon: Smartphone },
-];
+/*
+ * The "Coming next" list is no longer local to this file.
+ *
+ * It used to be a `roadmap` const here AND a separate shipped/building/planned
+ * board on /roadmap — two lists about the same product, already disagreeing.
+ * Both now read lib/product/upcoming.ts.
+ *
+ * The quarter labels ("Q3 2026") went with it. Founder direction 7 Aug 2026: no
+ * ship dates on a roadmap. A date is a promise a small team cannot keep, and a
+ * customer told Q3 who gets Q1 trusts nothing else on the page.
+ */
 
 export default function ChangelogPage() {
   return (
@@ -194,21 +199,31 @@ export default function ChangelogPage() {
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Coming next</h2>
           </FadeIn>
           <div className="grid sm:grid-cols-2 gap-6">
-            {roadmap.map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <FadeIn key={item.title} delay={i * 0.08}>
-                  <div className="group border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-6 h-full cursor-pointer hover:border-brand-500/20 hover:bg-brand-500/[0.03] transition-colors duration-300">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Icon className="w-5 h-5 text-brand-700" />
-                      <span className="text-[10px] uppercase tracking-wider text-brand-700 font-bold">{item.q}</span>
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{item.desc}</p>
+            {UPCOMING.map((item, i) => (
+              <FadeIn key={item.id} delay={i * 0.08}>
+                <div className="group border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-6 h-full hover:border-brand-500/20 hover:bg-brand-500/[0.03] transition-colors duration-300">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Rocket className="w-5 h-5 text-brand-700" />
+                    {/* A window phrase, never a date. */}
+                    <span className="text-[10px] uppercase tracking-wider text-brand-700 font-bold">{item.window}</span>
                   </div>
-                </FadeIn>
-              );
-            })}
+                  <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                  <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{item.blurb}</p>
+                  {/* Same brief demo the signed-in dashboard shows, so the two
+                      surfaces cannot describe the feature differently. */}
+                  <div className="mt-4 space-y-1.5 font-mono text-[11px]">
+                    <div className="flex items-center gap-2 rounded-md bg-[var(--hs-surface-1)] px-2.5 py-1.5">
+                      <span className="shrink-0 rounded bg-slate-200 px-1.5 py-0.5 text-[9px] uppercase tracking-wide text-slate-600">today</span>
+                      <span className="truncate text-[var(--hs-ink-secondary)]">{item.demo.before}</span>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-md bg-[var(--hs-surface-1)] px-2.5 py-1.5">
+                      <span className="shrink-0 rounded bg-emerald-100 px-1.5 py-0.5 text-[9px] uppercase tracking-wide text-emerald-700">next</span>
+                      <span className="truncate text-[var(--hs-ink)]">{item.demo.after}</span>
+                    </div>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>

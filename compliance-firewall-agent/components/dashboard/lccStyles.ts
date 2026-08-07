@@ -546,6 +546,34 @@ export const LCC_CSS = `
    badge. Sized off the title so it never dominates it. */
 /* "Who sent it" — people vs autonomous agents. Rows are links to the filtered
    audit log, so the bar is a target, not decoration. */
+/* "Coming to your gateway" — the unbuilt-features preview. Visually quieter
+   than the measured panels around it: dashed edge and muted ground, so it never
+   reads as data the customer already has. */
+.hs-lcc .op-soon-lead{border:1px dashed var(--line2);border-radius:10px;padding:14px;background:var(--surf2)}
+.hs-lcc .op-soon-hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hs-lcc .op-soon-hd b{font-size:.95rem;font-weight:600}
+.hs-lcc .op-soon-when{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:#4a6a8a;background:rgba(58,110,165,.12);border:1px solid rgba(58,110,165,.28);white-space:nowrap}
+.hs-lcc .op-soon-blurb{margin:6px 0 12px;font-size:.82rem;line-height:1.5;color:var(--mut2)}
+.hs-lcc .op-soon-demo{display:grid;gap:6px}
+.hs-lcc .op-soon-row{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:7px;background:var(--surf);min-width:0}
+.hs-lcc .op-soon-row code{font-family:var(--f-mono);font-size:.7rem;color:var(--mut2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.hs-lcc .op-soon-row.is-after code{color:var(--ink)}
+.hs-lcc .op-soon-tag{font-family:var(--f-mono);font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;flex-shrink:0;color:#7C8AA0;background:rgba(124,138,160,.14)}
+.hs-lcc .op-soon-row.is-after .op-soon-tag{color:#0E7A55;background:rgba(14,159,110,.14)}
+.hs-lcc .op-soon-why{margin:12px 0 0;font-size:.76rem;line-height:1.55;color:var(--mut2)}
+.hs-lcc .op-soon-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.hs-lcc .op-soon-list li{display:grid;gap:2px;padding:9px 12px;border-left:2px solid var(--line2);background:var(--surf2);border-radius:0 7px 7px 0}
+.hs-lcc .op-soon-list b{font-size:.8rem;font-weight:600}
+.hs-lcc .op-soon-list span{font-size:.75rem;line-height:1.45;color:var(--mut2)}
+.hs-lcc .op-soon-list em{font-family:var(--f-mono);font-style:normal;font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;color:var(--mut2);margin-top:2px}
+/* On a narrow screen the before/after lines wrap instead of truncating. The
+   whole value of the demo is the contrast between the two, and ellipsis lands
+   on a phone exactly where the informative half of each line begins. */
+@media(max-width:620px){
+.hs-lcc .op-soon-row{align-items:flex-start}
+.hs-lcc .op-soon-row code{white-space:normal;overflow:visible;line-height:1.45}
+.hs-lcc .op-soon-tag{margin-top:1px}
+}
 .hs-lcc .op-act-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .hs-lcc .op-act-row{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) auto;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;text-decoration:none;color:inherit;min-width:0}
 .hs-lcc .op-act-row:hover{background:var(--surf2)}

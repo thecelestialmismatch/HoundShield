@@ -4,6 +4,7 @@ import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ModeBNotice } from '@/components/ModeBNotice'
 import { HeroDemoDashboard } from '@/components/landing/HeroDemoDashboard'
+import { UpcomingHeroBanner } from '@/components/landing/UpcomingHeroBanner'
 import { ReportOfferCard } from '@/components/ReportOfferCard'
 import { FaqSection } from '@/components/seo/FaqSection'
 import { homeFaqs } from '@/lib/seo/faqs'
@@ -54,6 +55,10 @@ export default function HomePage() {
           <div className="container hero-grid">
             <div>
               <div className="pill"><i className="live-dot" /> Local-only · HIPAA · NIST 800-171 · SOC 2</div>
+              {/* Renders nothing today. Flip one item's `promote` in
+                  lib/product/upcoming.ts when it is close enough that a
+                  visitor would act on it. */}
+              <UpcomingHeroBanner />
               <h1 className="display">
                 Prove what your team pasted into <span className="accent">ChatGPT, Claude and Gemini.</span>
               </h1>
