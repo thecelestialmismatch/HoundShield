@@ -161,7 +161,16 @@ compass_artifact_*.md
 # Local-only archive — moved to ~/HoundShield-Local-Archive, never pushed again.
 # brain/ was a 47MB duplicate of the knowledge base; legacy/ was 43MB of dead
 # code with zero imports (already excluded from tsconfig). Neither is the product.
-brain/
+#
+# ANCHORED (`/brain/`, not `brain/`) — this cost a red CI on 2026-08-07. An
+# unanchored pattern matches a directory of that name at ANY depth, so it was
+# also swallowing `compliance-firewall-agent/components/brain/`, a real source
+# directory. Nobody noticed because its one existing file was tracked before the
+# rule landed and git keeps tracking what it already tracks. The next file added
+# there — components/brain/AnswerText.tsx — was silently never committed: the
+# local build passed against it on disk, and CI failed with TS2307 on a module
+# that simply was not in the repository.
+/brain/
 compliance-firewall-agent/legacy/
 
 # Pitch decks — founder direction 2026-08-07: keep local, not in the repo yet.
