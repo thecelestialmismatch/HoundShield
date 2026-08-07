@@ -174,6 +174,12 @@ measurable — but total request time for a blocked prompt is higher than it was
 
 ## What this does NOT do
 
+It does not, on its own, make the audit log tamper-evident. Anchoring writes the
+chain; *verifying* it is a separate question, and the content-integrity half of
+that verification had never executed — see
+[AUDIT-CHAIN-INTEGRITY.md](./AUDIT-CHAIN-INTEGRITY.md) for what the chain proves
+after migration 030, and what it still does not.
+
 It does not put data on a dashboard that has no traffic behind it. There is
 still no seeded fallback anywhere in `lib/dashboard/overview-telemetry.ts`, and
 `app/__tests__/operator-dashboard-honesty.test.ts` fails the build if one
