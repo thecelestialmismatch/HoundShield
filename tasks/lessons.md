@@ -5,6 +5,39 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-07 (a missing dependency is a question for the founder, not a writing prompt)
+
+### The codebase was carrying evidence of what `ponytail` was, and it still was not enough
+**What:** `~/.claude/skills/ponytail/SKILL.md` was missing and Mode C routed all code work
+through it. The repo had real evidence — `todo.md` described "the existing ponytail skill +
+4 gates", and five source files used a `ponytail:` comment convention. Enough to write a
+convincing reconstruction. The founder then supplied the actual upstream
+(`DietrichGebert/ponytail`, MIT), and the real skill was a 120-line intensity-graded ladder
+with a `lite/full/ultra` switch and a "when NOT to be lazy" section — none of which the
+repo's traces implied.
+**Root cause:** circumstantial evidence establishes that something existed, never what it
+said. A reconstruction that reads plausibly is the most expensive kind of wrong, because
+nothing later flags it as invented.
+**Rule:** when a referenced artifact is missing, make the reference non-fatal and ask.
+Reconstruct only when the full spec is published (as with `setup-auditor`, where the delete
+and add tables were in the page text), and label it a reconstruction in the file itself.
+
+### Vendoring beats depending on a user-scope path that no one controls
+**What:** the original reference pointed at `~/.claude/skills/`, outside the repo, so it
+vanished with the machine and was invisible to every clone.
+**Rule:** vendor third-party skills into `.claude/skills/` with `LICENSE` and a
+`VENDORED.md` naming upstream URL, commit SHA and date, and copy `SKILL.md` verbatim.
+Provenance is what separates vendoring from silent forking.
+
+### Installing a good skill can make your own instructions redundant
+**What:** houndshield's GATE 1 had five checks. Four were the ponytail ladder restated from
+memory — worse than the original and now able to drift from it.
+**Rule:** when adopting a skill that owns a concern, delete your paraphrase of it rather
+than keeping both. Two copies of a rule is one copy plus a future contradiction. Keep only
+what the adopted skill genuinely does not cover.
+
+---
+
 ## 2026-08-07 (prompt audits — deleting the ritual without deleting the knowledge)
 
 ### A "verify before done" block can have unrecoverable facts fused into it
