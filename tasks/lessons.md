@@ -1422,3 +1422,43 @@ Assert the write path exists, not just that the read path is honest.
 identifier appeared in the prose describing why it is banned.
 **Rule:** Scan code, not prose (`codeOf()` in `app/__tests__/dashboard-data-rail.test.ts`). A guard that
 fires on its own explanation pressures the next author to delete the history to make the build pass.
+
+### A guard against a column that does not exist is a check that never runs
+**What:** `verifySeedChain`'s pass 2 — the content-integrity half of the product's
+tamper-evidence claim — was wrapped in `if (seed.content && seed.content_hash)`. There was no
+`content` column and no writer for one, so the condition was false for every row ever written.
+The function returned `{ valid: true }` while having verified nothing about any content, for the
+entire life of the table.
+**Rule:** A truthy guard on optional data is indistinguishable from a passed check unless the
+absent case is counted and returned. When a check can be skipped, the skip must appear in the
+result (`unverifiable: N`), never be folded into the pass. Grep the schema for every field a
+verification branches on before trusting the verification.
+
+### A green suite does not prove a test can fail
+**What:** The new source-tamper tests passed on the first run. Passing proves the code and the
+test agree, not that the test constrains anything. Two mutations settled it: removing
+`content: data.content` failed 9 tests; keeping content but neutering only the pass-3 field
+comparison still failed 3 — which is the evidence that storing the content alone would NOT have
+caught a downgraded `risk_level`.
+**Rule:** For a security or evidence property, break the fix on purpose and watch the test go
+red before claiming it works. Mutate each layer separately — a test that fails for both
+mutations has not isolated which layer is load-bearing.
+
+### The "obvious right fix" can be arithmetically impossible — check the data before choosing it
+**What:** Recomputing the hash from the source `compliance_events` row was the recommended
+approach and is the one that detects the real attack. It cannot be done: the anchored content
+includes `timestamp: new Date().toISOString()` captured when the anchor was built, which is
+stored in no column — `created_at` is a different `now()` from the insert. Three of the four
+entity types have the same problem.
+**Rule:** Before committing to a recomputation strategy, enumerate every field in the hashed
+input and name the column each one would be read back from. One field with no home invalidates
+the whole approach, and it is cheaper to find that in the schema than in the diff.
+
+### A dependabot minor bump can leave `main` red where the build cannot see it
+**What:** #262 bumped stripe 22.3.2 → 22.4.0, which moved `Stripe.LatestApiVersion` and broke
+`lib/stripe/api-version.ts` — the single file deliberately designed to break. CI runs
+`npx tsc --noEmit` (ci.yml:40) but `next.config.ts` sets `typescript.ignoreBuildErrors: true`,
+so `npm run build` passed while `main` did not typecheck.
+**Rule:** Run `tsc` against pristine `origin/main` before attributing any type error to your own
+diff — and remember a green `npm run build` says nothing about types in this repo. A pinned
+literal that tracks an SDK type must be updated in the same PR as the bump.
