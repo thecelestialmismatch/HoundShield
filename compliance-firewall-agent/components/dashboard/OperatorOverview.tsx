@@ -37,6 +37,7 @@ import { Section } from './OverviewSection'
 import type { DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
 import { DashboardDownload } from './operator/DashboardDownload'
 import { AgentOversight } from './operator/AgentOversight'
+import { ComingSoon } from './operator/ComingSoon'
 import { SectionIndex } from './operator/SectionIndex'
 import { ActivityHeatmap } from './operator/ActivityHeatmap'
 import { OutcomeMix, BlockedSeverity } from './operator/OutcomeDonuts'
@@ -260,6 +261,13 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
 
         {/* Where to go next. The panels above say what is happening; nothing on
             this page said where to look for more until 2026-08-07. */}
+        {/* Retention, not measurement. Sits low on the page on purpose — a
+            customer opens this dashboard to see their own traffic, and the
+            preview earns its place only after that job is done. */}
+        <Section id="soon" prefs={prefs} editing={editing}>
+          <ComingSoon />
+        </Section>
+
         <Section id="index" prefs={prefs} editing={editing}>
           <SectionIndex tel={t.tel} posture={t.posture} quarantine={quarantine} />
         </Section>
