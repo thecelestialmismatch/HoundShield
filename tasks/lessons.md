@@ -5,6 +5,136 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-07 (a missing dependency is a question for the founder, not a writing prompt)
+
+### The codebase was carrying evidence of what `ponytail` was, and it still was not enough
+**What:** `~/.claude/skills/ponytail/SKILL.md` was missing and Mode C routed all code work
+through it. The repo had real evidence — `todo.md` described "the existing ponytail skill +
+4 gates", and five source files used a `ponytail:` comment convention. Enough to write a
+convincing reconstruction. The founder then supplied the actual upstream
+(`DietrichGebert/ponytail`, MIT), and the real skill was a 120-line intensity-graded ladder
+with a `lite/full/ultra` switch and a "when NOT to be lazy" section — none of which the
+repo's traces implied.
+**Root cause:** circumstantial evidence establishes that something existed, never what it
+said. A reconstruction that reads plausibly is the most expensive kind of wrong, because
+nothing later flags it as invented.
+**Rule:** when a referenced artifact is missing, make the reference non-fatal and ask.
+Reconstruct only when the full spec is published (as with `setup-auditor`, where the delete
+and add tables were in the page text), and label it a reconstruction in the file itself.
+
+### Vendoring beats depending on a user-scope path that no one controls
+**What:** the original reference pointed at `~/.claude/skills/`, outside the repo, so it
+vanished with the machine and was invisible to every clone.
+**Rule:** vendor third-party skills into `.claude/skills/` with `LICENSE` and a
+`VENDORED.md` naming upstream URL, commit SHA and date, and copy `SKILL.md` verbatim.
+Provenance is what separates vendoring from silent forking.
+
+### Installing a good skill can make your own instructions redundant
+**What:** houndshield's GATE 1 had five checks. Four were the ponytail ladder restated from
+memory — worse than the original and now able to drift from it.
+**Rule:** when adopting a skill that owns a concern, delete your paraphrase of it rather
+than keeping both. Two copies of a rule is one copy plus a future contradiction. Keep only
+what the adopted skill genuinely does not cover.
+
+---
+
+## 2026-08-07 (prompt audits — deleting the ritual without deleting the knowledge)
+
+### A "verify before done" block can have unrecoverable facts fused into it
+**What:** the Six-Month Audit flagged `/houndshield` GATE 2 for deletion, correctly — Anthropic's
+Opus 5 page says explicit verification instructions cause over-verification and should be removed.
+But GATE 2 also carried four things the model cannot re-derive by being careful: a piped command
+returns the pipe's exit status, `npx vitest` from repo root loads the PARENT config and "passes"
+while testing nothing, `--reporter=basic` fails and still exits 0, and `npm run build` during a dev
+server corrupts `.next`. A clean delete would have removed all four.
+**Root cause:** pattern-matching on the section heading instead of reading what the section
+contains. Verification ceremony and environment truth look identical from a grep.
+**Rule:** when a delete-pass hit lands on a verification block, split it before deleting. Ceremony
+("nothing is done until…") goes; facts about what the tooling lies about move to a neutral heading.
+The same guard applies to truth rules — "only claim what you verified", "say `unknown` rather than
+inventing a number" — those stop fabrication and are never severity filters. They stay.
+
+### An audit that reports only hits is not an audit
+**What:** four of the seven delete checks returned nothing for this skill.
+**Rule:** name the clean checks individually. Silence is indistinguishable from an unrun check, and
+"NOT RUN" on anything unverifiable beats a clean bill that was not earned.
+
+### A skill cannot replace an MCP server — but it can remove the dependency on one
+**What:** the ask was "convert the TinyFish MCP into a skill so we can uninstall the MCP". A skill is
+markdown; it cannot manufacture tools that execute on someone else's infrastructure.
+**Root cause:** the goal (HoundShield does its own web work) was reachable; the stated method
+(markdown alone) was not.
+**Rule:** answer the goal, name the method's limit in one line, then build the thing that actually
+delivers it — here, a tiered fallback plus a real local driver. Shipping the markdown alone would
+have been a workaround presented as a fix.
+
+### Chrome does not read `NODE_EXTRA_CA_CERTS`, and that looks like a network outage
+**What:** `hound-web.mjs` failed with `ERR_CERT_AUTHORITY_INVALID` behind the sandbox egress proxy
+while `curl` on the same host succeeded. curl reads `CURL_CA_BUNDLE`; Chrome reads NSS, where the
+interception CA was absent.
+**Rule:** derive the SPKI pins from the CA bundle the environment already trusts and pass
+`--ignore-certificate-errors-spki-list`. That trusts exactly those CAs and keeps verification on for
+everything else. Never reach for `--ignore-certificate-errors`. Note also that a proxy 403 on
+CONNECT is an allowlist denial, not a bug in your code — check `curl` before debugging further.
+
+---
+
+## 2026-08-05 (CSS — three ways a layout bug hides from the obvious check)
+
+### `scrollWidth` cannot see a left-edge overflow, so a sweep that only checks it reports clean
+**What:** the 375px sweep was green on `/` while, at 1200px, the Products mega-menu was
+rendering at `[-118, 588]` — its entire first column clipped off the left of the window.
+**Root cause:** `documentElement.scrollWidth` measures the scrollable extent, and browsers
+do not create scrollable area to the LEFT of the origin in a LTR document. Content at a
+negative x is simply invisible. `scrollWidth === clientWidth` therefore proves "nothing
+hangs off the RIGHT", which is not the same claim as "nothing is off-screen".
+**Rule:** assert `scrollWidth === clientWidth` **and** walk the elements checking
+`getBoundingClientRect().left >= 0` as a separate condition. And check the widest
+breakpoint too — a fixed-width panel centred on a trigger fails at 1200 precisely because
+there is more room there for the centring maths to push it negative.
+
+### A class collision between two unscoped stylesheets is invisible in both files
+**What:** every marketing `.nav-item` was padded twice — `8px 12px` from its own rule and
+`8px 12px` again from somewhere else — spreading the nav ~120px wider than designed.
+Reading `hermes.css` showed nothing wrong. Reading the JSX showed nothing wrong.
+**Root cause:** `app/globals.css:369` declares a **bare, unscoped** `.nav-item` for the
+DASHBOARD SIDEBAR. Both stylesheets load on every page, so the sidebar's padding also
+painted the marketing nav. Neither file is wrong when read alone; the defect only exists
+in the union, and only shows up in computed style.
+**Rule:** before "fixing" a spacing value, `grep -rn '^\s*\.<class>\s*{' app/ components/`
+across ALL stylesheets first — a second unscoped declaration is the likelier cause than
+the rule you are looking at. When you must neutralise someone else's unscoped selector
+rather than scope it at source, guard it with a **self-retiring** test: assert the
+collision still exists, so the day it is fixed properly the test fails and tells the next
+person to delete the workaround, instead of the workaround silently outliving its reason.
+
+### A red `main` is a prerequisite, not scope creep — but only after you prove it is pre-existing
+**What:** `npx tsc --noEmit` failed on this branch in `lib/stripe/api-version.ts`. Nothing
+in the diff touched Stripe. The reflex "my change broke it" and the reflex "not mine,
+ignore it" are both wrong.
+**Root cause:** `origin/main`'s dependabot bump #262 took `stripe` to 22.4.0, whose
+`LatestApiVersion` literal type moved to `2026-07-29.dahlia` while the pin still read
+`2026-06-24.dahlia`. `gh run list --branch main` showed run `31000072671` **failing in
+49s** — main was red before this branch existed, and every PR cut from it inherits that.
+**Rule:** when a gate fails on something your diff does not touch, prove provenance with
+`gh run list --branch main` before deciding — then fix it in its own clearly-labelled
+commit and say so out loud, because an unrelated money-path change riding quietly inside
+a CSS PR is exactly what makes review untrustworthy. Also note `next.config`'s
+`typescript.ignoreBuildErrors: true` means **`npm run build` passing is NOT a typecheck** —
+tsc is a separate gate and must be run separately.
+
+### Generated `.next/dev/types` outlive the dev server and poison a later tsc run
+**What:** `tsc` reported 25 errors for `.next/dev/types/validator.ts` importing
+`app/command-center/*/page.js` files that no longer exist there.
+**Root cause:** `tsconfig.json` includes `.next/dev/types/**/*.ts`. Those are generated by
+a DEV server run and are not cleaned by a prod build, so they described a route tree from
+an older session.
+**Rule:** treat `.next/**` errors as artifacts, not source. Gate on
+`tsc --noEmit | grep -v '^\.next/'` (CI checks out fresh and never sees them), or clear
+`.next` first.
+
+---
+
 ## 2026-08-04 (privacy — a control that only half-covered its own threat)
 
 ### The leak guard could not see the company domain, so the founder's own mailbox survived the scrub

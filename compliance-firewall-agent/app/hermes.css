@@ -135,7 +135,13 @@
 .hermes .brand-text { font-family: var(--f-disp); font-weight: 700; font-size: 1.2rem; letter-spacing: -.01em; color: var(--text); }
 .hermes .brand-text b { color: var(--brand); }
 .hermes .nav-links { display: flex; align-items: center; gap: .15rem; }
-.hermes .nav-item { position: relative; }
+/* `padding: 0` is load-bearing. `.nav-item` is ALSO the dashboard sidebar's row
+   class in globals.css (`display:flex; gap:.75rem; padding:.5rem .75rem`), and
+   that unscoped rule reaches these marketing nav items too. The hermes design
+   puts the hover pill and its padding on `.nav-link`, so every item was padded
+   twice — 24px of dead space each, 120px across the row, which spread the links
+   out and squeezed the brand. Guard: app/__tests__/mobile-overflow-contract.test.ts */
+.hermes .nav-item { position: relative; padding: 0; gap: 0; }
 .hermes .nav-link { display: inline-flex; align-items: center; gap: .3rem; padding: .5rem .75rem; font-size: .9rem; font-weight: 500; color: var(--text-2); border-radius: var(--r-sm); cursor: pointer; transition: all .18s var(--ease); }
 .hermes .nav-link:hover, .hermes .nav-item:hover .nav-link, .hermes .nav-item:focus-within .nav-link { color: var(--text); background: var(--surface-2); }
 .hermes .nav-link .chev { width: 13px; height: 13px; transition: transform .2s var(--ease); }
@@ -153,6 +159,15 @@
 .hermes .nav-item:hover .dropdown, .hermes .nav-item:focus-within .dropdown { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
 .hermes .nav-item:hover, .hermes .nav-item:focus-within { z-index: 71; }
 .hermes .dropdown.wide { width: 720px; }
+/* The 720px mega-menu is centred on its trigger, and its trigger is the FIRST
+   item in the row — at a 1200px viewport that put its left edge at -118px and
+   clipped its entire first column off the screen. Anchor it to the whole links
+   row instead (which is itself centred in the nav) so a fixed-width panel is
+   centred in the viewport, not on a left-hand button. Only one dropdown is
+   `.wide`; the four `.dd-narrow` ones are 340px and still hang off their own
+   trigger. Guard: app/__tests__/mobile-overflow-contract.test.ts */
+.hermes .nav-links { position: relative; }
+.hermes .nav-item:has(> .dropdown.wide) { position: static; }
 .hermes .dd-head { padding: .65rem .8rem .55rem; border-bottom: 1px solid var(--pop-line); margin-bottom: .4rem; }
 .hermes .dd-head .eyebrow { color: var(--brand-2); }
 .hermes .dd-head p { font-size: .74rem; color: var(--pop-mut); margin-top: .15rem; }
@@ -214,8 +229,12 @@
    A shorthand here writes all four sides, so `padding: 72px 0 84px` silently
    reset that gutter to 0 — same specificity (0,2,0), and this rule comes later,
    so it won. At a 1200px viewport (= --maxw) there is no auto margin left to
-   absorb it and the hero text sat flush against the window edge. */
+   absorb it and the hero text sat flush against the window edge.
+   Guard: app/__tests__/mobile-overflow-contract.test.ts */
 .hermes .hero-grid { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding-block: 72px 84px; }
+/* Grid items default to min-width:auto, so a nowrap button or the demo panel
+   would force the track wider than the viewport. Same fix as `.docs-wrap > *`. */
+.hermes .hero-grid > * { min-width: 0; }
 .hermes .hero .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .4rem .8rem; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); font-size: .78rem; font-weight: 600; color: var(--text-2); margin-bottom: 1.4rem; }
 .hermes .hero .pill .live-dot { width: 6px; height: 6px; }
 .hermes .hero h1 { margin-bottom: 1.2rem; }
@@ -386,7 +405,32 @@
   .hermes .nav-links, .hermes .nav-cta .live-badge, .hermes .nav-cta .btn-ghost:not(.burger) { display: none; }
   .hermes .burger { display: grid; }
   /* burger-open state — mirrors the demo's JS-injected cssText verbatim */
-  .hermes .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 66px; left: 0; right: 0; background: var(--nav-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--nav-line); padding: 12px; gap: .2rem; align-items: stretch; }
+  /* OPAQUE, not the nav's translucent `--nav-bg`: this panel sits over the
+     hero, and at 82% alpha the headline read straight through the menu links.
+     A solid surface plus a shadow keeps them legible without depending on
+     backdrop-filter, which does not survive every browser or stacking context. */
+  .hermes .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 66px; left: 0; right: 0; background: var(--page); box-shadow: var(--shadow); border-bottom: 1px solid var(--nav-line); padding: 12px; gap: .2rem; align-items: stretch; }
+  /* Full-contrast text and a 44px-tall touch target per row. */
+  .hermes .nav-links.open .nav-link { color: var(--text); font-size: 1rem; font-weight: 600; padding: .8rem .75rem; justify-content: space-between; }
+  /* Inside the stacked menu the flyouts become in-flow accordion panels. The
+     desktop dropdown is absolutely positioned, centred on its parent and
+     720px wide (`.dropdown.wide`), which on a 375px screen ran from -165 to
+     540 and dragged the whole document 165px wide. `display: none` while
+     closed, because a `visibility: hidden` panel still occupies column
+     height; `display: block` on hover/focus-within keeps every sub-link
+     reachable by pointer AND by keyboard. */
+  .hermes .nav-links.open .dropdown { display: none; }
+  /* `.nav-item` is also the dashboard sidebar's row class in globals.css, so
+     these are flex ROWS by inheritance. Harmless while the panel is absolutely
+     positioned; once it flows, the link and the panel would sit side by side. */
+  .hermes .nav-links.open .nav-item { flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
+  .hermes .nav-links.open .nav-item:hover .dropdown,
+  .hermes .nav-links.open .nav-item:focus-within .dropdown {
+    display: block; position: static; width: auto; max-width: 100%;
+    transform: none; opacity: 1; visibility: visible; pointer-events: auto;
+    margin: .35rem 0 .2rem; box-shadow: none;
+  }
+  .hermes .nav-links.open .dd-grid { grid-template-columns: 1fr; }
   .hermes .hero-grid { grid-template-columns: 1fr; gap: 30px; padding-block: 48px 56px; }
   .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr 1fr; }
   .hermes .docs-wrap { grid-template-columns: 1fr; }
@@ -395,6 +439,14 @@
 }
 @media (max-width: 560px) {
   .hermes .grid-3, .hermes .grid-2, .hermes .pricing-grid, .hermes .foot-grid, .hermes .stat-row { grid-template-columns: 1fr; }
+  /* Below ~433px the wordmark + the $499 CTA + the burger no longer fit on one
+     66px row, and nothing in `.nav-cta` can shrink (`.btn` is white-space:nowrap),
+     so the row pushed 34px past the viewport. Drop the wordmark, keep the mark —
+     the logo's alt text still names the link, so the accessible name is unchanged. */
+  .hermes .brand-text { display: none; }
+  /* The hero's primary CTA is wider than a small phone on one line. Let it wrap
+     instead of forcing the grid track wider than the screen. */
+  .hermes .hero-actions .btn { white-space: normal; }
 }
 
 /* The hero live-demo dashboard is a self-contained DARK component
