@@ -101,7 +101,20 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
               Falls back to the neutral label with no session name — never an
               invented stand-in. Same helper the sidebar uses, so the two can
               never disagree. */}
-          <h2>{dashboardLabel(name ?? null, 'Your Dashboard')}</h2>
+          <h2>
+            {dashboardLabel(name ?? null, 'Your Dashboard')}
+            {/* Seeded data says so, on screen, next to the title — not in a
+                tooltip and not only in the API response. This dashboard is sold
+                as audit evidence, so an unlabelled screenshot of generated
+                numbers would be a fabricated metric (CLAUDE.md NEVER-DO). The
+                flag is set by the aggregator from the rows themselves, so it
+                cannot be switched off from the UI. */}
+            {t.tel.synthetic && (
+              <span className="op-demo-tag" title="Seeded demo telemetry — not measured traffic">
+                Demo data
+              </span>
+            )}
+          </h2>
           <div className="op-toolbar-sub">
             <span className={`op-live${t.error ? ' is-err' : ''}`}>
               <span className="dot" /> {t.error ? 'Offline' : 'Live'}

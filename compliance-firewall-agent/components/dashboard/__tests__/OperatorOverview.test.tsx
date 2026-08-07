@@ -268,3 +268,41 @@ describe('OperatorOverview — the radar draws valid geometry', () => {
     }
   })
 })
+
+/**
+ * Seeded demo telemetry must say so on screen.
+ *
+ * The demo account (lib/dashboard/demo-telemetry-seed.ts) exists so the product
+ * can be shown populated instead of showing its empty state to its own founder.
+ * The price of it is this label. A screenshot of generated numbers with no
+ * caveat is a fabricated metric on a product sold as audit evidence, which is
+ * explicitly on the NEVER-DO list in CLAUDE.md — so the tag is a test, not a
+ * convention someone can quietly drop while tidying the toolbar.
+ */
+describe('OperatorOverview — synthetic data labels itself', () => {
+  it('shows the Demo data tag when the window contains seeded rows', async () => {
+    mockApi({ ...POPULATED, synthetic: true })
+    await act(async () => { renderOverview() })
+    await waitFor(() => expect(screen.getByText('Your Dashboard')).toBeTruthy())
+
+    expect(screen.getByText('Demo data')).toBeTruthy()
+  })
+
+  it('shows nothing of the sort on real telemetry', async () => {
+    mockApi({ ...POPULATED, synthetic: false })
+    await act(async () => { renderOverview() })
+    await waitFor(() => expect(screen.getByText('Your Dashboard')).toBeTruthy())
+
+    // A customer's own measured traffic must never be captioned as a demo.
+    expect(screen.queryByText('Demo data')).toBeNull()
+  })
+
+  it('stays unlabelled when the API omits the flag entirely', async () => {
+    // Older payload shape, or a route that has not been redeployed yet.
+    mockApi(POPULATED)
+    await act(async () => { renderOverview() })
+    await waitFor(() => expect(screen.getByText('Your Dashboard')).toBeTruthy())
+
+    expect(screen.queryByText('Demo data')).toBeNull()
+  })
+})
