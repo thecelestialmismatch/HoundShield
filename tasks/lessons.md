@@ -5,6 +5,47 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-07 (prompt audits — deleting the ritual without deleting the knowledge)
+
+### A "verify before done" block can have unrecoverable facts fused into it
+**What:** the Six-Month Audit flagged `/houndshield` GATE 2 for deletion, correctly — Anthropic's
+Opus 5 page says explicit verification instructions cause over-verification and should be removed.
+But GATE 2 also carried four things the model cannot re-derive by being careful: a piped command
+returns the pipe's exit status, `npx vitest` from repo root loads the PARENT config and "passes"
+while testing nothing, `--reporter=basic` fails and still exits 0, and `npm run build` during a dev
+server corrupts `.next`. A clean delete would have removed all four.
+**Root cause:** pattern-matching on the section heading instead of reading what the section
+contains. Verification ceremony and environment truth look identical from a grep.
+**Rule:** when a delete-pass hit lands on a verification block, split it before deleting. Ceremony
+("nothing is done until…") goes; facts about what the tooling lies about move to a neutral heading.
+The same guard applies to truth rules — "only claim what you verified", "say `unknown` rather than
+inventing a number" — those stop fabrication and are never severity filters. They stay.
+
+### An audit that reports only hits is not an audit
+**What:** four of the seven delete checks returned nothing for this skill.
+**Rule:** name the clean checks individually. Silence is indistinguishable from an unrun check, and
+"NOT RUN" on anything unverifiable beats a clean bill that was not earned.
+
+### A skill cannot replace an MCP server — but it can remove the dependency on one
+**What:** the ask was "convert the TinyFish MCP into a skill so we can uninstall the MCP". A skill is
+markdown; it cannot manufacture tools that execute on someone else's infrastructure.
+**Root cause:** the goal (HoundShield does its own web work) was reachable; the stated method
+(markdown alone) was not.
+**Rule:** answer the goal, name the method's limit in one line, then build the thing that actually
+delivers it — here, a tiered fallback plus a real local driver. Shipping the markdown alone would
+have been a workaround presented as a fix.
+
+### Chrome does not read `NODE_EXTRA_CA_CERTS`, and that looks like a network outage
+**What:** `hound-web.mjs` failed with `ERR_CERT_AUTHORITY_INVALID` behind the sandbox egress proxy
+while `curl` on the same host succeeded. curl reads `CURL_CA_BUNDLE`; Chrome reads NSS, where the
+interception CA was absent.
+**Rule:** derive the SPKI pins from the CA bundle the environment already trusts and pass
+`--ignore-certificate-errors-spki-list`. That trusts exactly those CAs and keeps verification on for
+everything else. Never reach for `--ignore-certificate-errors`. Note also that a proxy 403 on
+CONNECT is an allowlist denial, not a bug in your code — check `curl` before debugging further.
+
+---
+
 ## 2026-08-05 (CSS — three ways a layout bug hides from the obvious check)
 
 ### `scrollWidth` cannot see a left-edge overflow, so a sweep that only checks it reports clean
