@@ -55,7 +55,7 @@ Then ask: "What are we shipping today?"
 
 | Mode | Stack | CUI-safe? | Right for |
 |------|-------|-----------|-----------|
-| A) Hosted trial | `www.houndshield.com/api/v1` (Vercel) | ❌ NOT FedRAMP | Demo, non-CUI evaluation only |
+| A) Hosted trial | `proxy.houndshield.com` (Vercel) | ❌ NOT FedRAMP | Demo, non-CUI evaluation only |
 | B) Self-hosted Docker | Customer's own infra | ✅ Data never leaves boundary | CUI-handling contractors |
 | C) Air-gapped | Customer's isolated network | ✅ | Enterprise, IL-5+ |
 

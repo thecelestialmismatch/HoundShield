@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { findFaqAnswer } from "../faq";
 import { cleanAnswer } from "../format-answer";
-import { GATEWAY_BASE_URL } from "@/lib/gateway/base-url";
 
 /** Strings that must never appear in any user-facing answer. */
 const INTERNAL_LEAKS = [
@@ -99,13 +98,13 @@ describe("findFaqAnswer — 'help me…' asks NEVER get the contact-info dump (p
     for (const q of ["help me to build the ai bot", "help me to build the abs system", "coading?"]) {
       const answer = findFaqAnswer(q);
       expect(answer, q).not.toBeNull();
-      expect(answer!, q).toContain(GATEWAY_BASE_URL);
+      expect(answer!, q).toContain("proxy.houndshield.com/v1");
     }
   });
 
   it("specific product questions still outrank the help triage (two-tier)", () => {
     const answer = findFaqAnswer("help me install houndshield")!;
-    expect(answer).toContain(GATEWAY_BASE_URL);
+    expect(answer).toContain("gateway.houndshield.com");
     expect(answer).not.toContain("what's going wrong");
   })
 
@@ -134,7 +133,7 @@ describe("findFaqAnswer — compliance questions still outrank chit-chat", () =>
     const answer = findFaqAnswer("how do i install houndshield");
     expect(answer).not.toBeNull();
     // Mentions the gateway URL change — not the chit-chat reply.
-    expect(answer!.toLowerCase()).toContain(GATEWAY_BASE_URL.toLowerCase());
+    expect(answer!.toLowerCase()).toContain("gateway.houndshield.com");
     expect(answer!.toLowerCase()).not.toContain("thanks for asking");
   });
 });

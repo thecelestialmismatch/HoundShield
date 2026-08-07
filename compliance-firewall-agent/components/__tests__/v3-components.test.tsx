@@ -171,8 +171,8 @@ import { CodeBlock } from '../ui/CodeBlock'
 
 describe('CodeBlock', () => {
   it('renders the provided code', () => {
-    render(<CodeBlock code="OPENAI_BASE_URL=https://gateway.example.com" />)
-    expect(screen.getByText('OPENAI_BASE_URL=https://gateway.example.com')).toBeTruthy()
+    render(<CodeBlock code="OPENAI_BASE_URL=https://proxy.houndshield.com" />)
+    expect(screen.getByText('OPENAI_BASE_URL=https://proxy.houndshield.com')).toBeTruthy()
   })
 
   it('shows filename when provided', () => {

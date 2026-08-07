@@ -1,8 +1,6 @@
 # The Gateway Data Rail
 
-**Status:** links 1–3 fixed 2026-08-04; links 4–5 (the dead gateway host and the
-free-tier key cliff) fixed 2026-08-05. All guarded by
-`app/__tests__/dashboard-data-rail.test.ts`.
+**Status:** fixed 2026-08-04. Guarded by `app/__tests__/dashboard-data-rail.test.ts`.
 
 This is the chain that has to be unbroken for a signed-in customer's Command
 Center to contain anything at all. Every link was broken at once, and each break
@@ -10,11 +8,8 @@ was invisible on its own — which is why an empty dashboard read as a UI proble
 for weeks when it was a plumbing problem.
 
 ```
-the URL we print is one that       lib/gateway/base-url.ts  GATEWAY_BASE_URL
-answers  ↓                         https://www.houndshield.com/api/v1
 Settings mints a real key          app/command-center/(tools)/settings/GatewayKeys.tsx
         ↓                          POST /api/gateway/keys           → api_keys
-                                   (402 on free — the gateway would reject it)
 the key authenticates the gateway  lib/gateway/api-key.ts  resolveApiKey()
         ↓
 the gateway RECORDS the decision   POST /api/v1/chat/completions
@@ -76,49 +71,6 @@ counted **twice** in every total, chart, and audit export.
 attaches a review-queue entry to an already-recorded event instead of minting a
 rival one. Both rails funnel through `recordGatewayDecision`.
 
-### 4. Every surface handed out a URL that 404s
-
-Fixing links 1–3 made the rail carriable. It did not make it *reachable*: the
-address the product printed was dead, on **two** different branded hosts, which
-is why repairing one of them looked complete and was not.
-
-| Host | DNS | `POST /v1/chat/completions` | `POST /api/v1/chat/completions` |
-|---|---|---|---|
-| `proxy.houndshield.com` | Vercel edge | 404 | 404 |
-| `gateway.houndshield.com` | Vercel edge | 404 | 404 |
-| `www.houndshield.com` | Vercel edge | 404 | **401 Invalid API key** |
-
-*(Probed against production 2026-08-05.)* The 401 is the answer we want: the
-route is live, `resolveApiKey` reached the database, found no matching hash, and
-failed closed. Both branded hosts resolve to Vercel and have no project
-attached — the DNS is done, the project assignment is not.
-
-Eight surfaces carried a dead host: Settings, the console settings tab, the
-public API docs, a marketing code block, five Brain AI answers, the chat system
-prompt, the runtime-modes table, and — worst — the **day-3 onboarding email**,
-which mails a new customer a URL that cannot work.
-
-**Fixed by:** `lib/gateway/base-url.ts`. One constant, imported everywhere.
-`app/__tests__/dashboard-data-rail.test.ts` ("link 0") walks every `.ts`/`.tsx`
-under `app/`, `components/` and `lib/`, strips comments, and fails the build if
-either dead host reappears outside that file.
-
-**Founder action, not a code change:** to ship a branded gateway host, attach it
-to this Vercel project in the Vercel dashboard. Then change the one constant.
-
-### 5. A free-tier key was real, listed, and guaranteed to fail
-
-`POST /api/gateway/keys` minted for any signed-in user. `POST /api/v1/chat/completions`
-rejects free-tier traffic with **402** (`canAccessGateway`). So a free user could
-mint a key, see it in the keys list, copy the curl snippet that promises *"the
-block lands on your dashboard as a real event within seconds"* — and get 402 on
-every request, forever. The same defect class as link 1, one step further down:
-instructions the product gives you that cannot work.
-
-**Fixed by:** the same `canAccessGateway` check at issuance, returning 402 with
-the reason and a pointer to `/pricing` instead of a credential. Both ends now
-consult one predicate; the guard asserts both files reference it.
-
 ## Design decisions worth keeping
 
 **Every decision is recorded, including ALLOWED.** "Nothing was detected" is
@@ -152,7 +104,7 @@ content, only encrypted (AES-256-CBC), and only when a human must review it.
 3. Send a prompt that must be blocked:
 
 ```bash
-curl https://www.houndshield.com/api/v1/chat/completions \
+curl https://proxy.houndshield.com/v1/chat/completions \
   -H "Authorization: Bearer hs_live_..." \
   -H "x-provider-api-key: $OPENAI_API_KEY" \
   -H "Content-Type: application/json" \
@@ -169,7 +121,7 @@ Requires an active plan above `free` (`canAccessGateway`) and Supabase
 configured — a keyless deployment answers `503` from the key route rather than
 pretending.
 
-## Known follow-up this change EXPOSES (it does not cause it)
+## Follow-up this change EXPOSED — now FIXED (migration 029)
 
 `createSeedAnchor` (`lib/audit/seed-anchor.ts`) builds the hash chain by reading
 the newest anchor and then inserting one that points at it:
@@ -179,17 +131,40 @@ select content_hash … order by created_at desc limit 1   ← read previous
 insert … previous_hash = <that>                          ← write next
 ```
 
-That read-then-write is **not serialized**, and the read is not scoped per
-tenant. Two blocked prompts landing concurrently can read the same
-`previous_hash` and write two anchors claiming the same parent — a forked chain,
-which is exactly what a verifier is supposed to treat as tampering.
+That read-then-write was **not serialized**. Two blocked prompts landing
+concurrently could read the same `previous_hash` and write two anchors claiming
+the same parent — a forked chain, which is exactly what a verifier is supposed
+to treat as tampering.
 
-This was unreachable in practice while the gateway wrote nothing. It becomes
-reachable the moment real traffic flows. It is deliberately **not** fixed in the
-same change: correcting it means serializing the chain (a Postgres advisory lock
-keyed on `entity_type`, or a monotonic sequence with the hash computed in a
-single statement), and that belongs in a reviewable change of its own rather
-than buried in a plumbing fix.
+Fixed by making the fork unrepresentable in the database rather than by locking
+in the application. Migration `029_seed_anchor_chain_integrity.sql` adds two
+partial unique indexes on `seed_anchors`:
+
+| Index | Guarantee |
+|---|---|
+| `(entity_type, previous_hash) where previous_hash is not null` | At most one anchor per parent |
+| `(entity_type) where previous_hash is null` | Exactly one genesis per chain |
+
+The writer that loses the race gets a `23505`, re-reads the tip and re-links
+against it. Because the guarantee lives in the schema, a writer that bypasses
+`createSeedAnchor` still cannot fork the chain. The hash input format is
+unchanged and no historical row was touched, so existing anchors remain
+byte-identical and verifiable.
+
+Two ceilings this leaves in place, both deliberate:
+
+- **One chain per `entity_type`, not per tenant.** `seed_anchors` has no
+  `user_id` and `verifySeedChain(entityType)` takes no user, so every tenant
+  contends on the same tip. Per-tenant chains would need a `user_id` column and
+  a re-link of every historical `previous_hash` — a rewrite of the audit
+  history, which is not something to do casually to tamper-evidence data.
+- **Retries are bounded at 10.** Only one writer wins each round, so that bound
+  is the supported simultaneous-burst width for a single chain. Beyond it,
+  `logComplianceEvent` still records the event and logs the anchor failure —
+  a gap in evidence, never a forged link.
+
+The pre-flight queries in the migration header must return zero rows before it
+is applied; the index creation fails loudly if the chain is already forked.
 
 Latency note while you are in there: an ALLOWED request costs one insert. A
 BLOCKED or QUARANTINED request costs four round trips (event insert, anchor

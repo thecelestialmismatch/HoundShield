@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 }
 
 const QUICKSTART_STEPS = [
-  { n: '1', title: 'Get your key', body: 'Sign up, then create a gateway key in Command Center → Settings → Gateway API keys. It is shown once. Self-hosted (Mode B) also sets its own admin token on the container.' },
+  { n: '1', title: 'Get your keys', body: 'Sign up, then copy your gateway license + admin token from Dashboard → Settings → API Keys.' },
   { n: '2', title: 'Point your SDK at HoundShield', body: 'Change the baseURL in any OpenAI-compatible client to the gateway. Zero behavior change for your team.' },
   { n: '3', title: 'Every query is now CMMC-monitored', body: 'CUI, CAGE codes, contract numbers, PHI and secrets are flagged and blocked in <10ms — before anything leaves your perimeter.' },
 ]

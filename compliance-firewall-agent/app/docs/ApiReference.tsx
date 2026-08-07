@@ -97,23 +97,6 @@ function EndpointSection({ endpoint, lang }: { endpoint: Endpoint; lang: Lang })
             <Lock size={11} /> admin token
           </span>
         )}
-        {/* Without this, a reader calls a Mode-B route against the hosted base
-            and gets a 404 — which is exactly how these two were documented. */}
-        {endpoint.selfHosted && (
-          <span
-            className="mono"
-            style={{
-              fontSize: '.64rem',
-              letterSpacing: '.04em',
-              padding: '.15rem .45rem',
-              borderRadius: 6,
-              border: '1px solid var(--line)',
-              color: 'var(--text-3)',
-            }}
-          >
-            your proxy · Mode B
-          </span>
-        )}
       </div>
 
       <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '.8rem 0 .4rem' }}>{endpoint.title}</h3>

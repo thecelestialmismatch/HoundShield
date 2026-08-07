@@ -38,11 +38,6 @@ export interface Endpoint {
   summary: string;
   /** How the caller authenticates this route. */
   auth: string;
-  /**
-   * Served by the customer's OWN proxy (Mode B), not by the hosted rail.
-   * Snippets for these compose off `PROXY_BASE`, never `GATEWAY_BASE`.
-   */
-  selfHosted?: boolean;
   /** Management route — requires the admin token. */
   admin?: boolean;
   headers?: ApiField[];
@@ -52,25 +47,7 @@ export interface Endpoint {
   response: string;
 }
 
-// Every snippet below composes `${GATEWAY_BASE}/v1/...` or `${GATEWAY_BASE}/health`,
-// so this is the API ROOT, not the origin. It used to be
-// `https://proxy.houndshield.com`, a host that resolves to Vercel and then
-// answers 404 DEPLOYMENT_NOT_FOUND — every curl on this page was unrunnable.
-import { GATEWAY_API_ROOT } from '@/lib/gateway/base-url';
-
-export const GATEWAY_BASE = GATEWAY_API_ROOT;
-
-/**
- * The customer's OWN proxy container (Mode B) — `proxy/server.ts`, which prints
- * exactly this on boot and defaults to PORT 8080.
- *
- * `/v1/stats` and `/v1/events` are implemented there and ONLY there. They used
- * to be documented against the hosted base, where they answer 404 — and worse,
- * `/v1/stats` takes no auth, which is correct on a single-tenant box inside the
- * customer's perimeter and would have been a cross-tenant leak on a shared
- * host. Two different products were being described by one base URL.
- */
-export const PROXY_BASE = 'http://localhost:8080';
+export const GATEWAY_BASE = 'https://proxy.houndshield.com';
 
 export const LANG_LABEL: Record<Lang, string> = {
   curl: 'cURL',
@@ -170,17 +147,15 @@ health = requests.get("${GATEWAY_BASE}/health").json()`,
     method: 'GET',
     path: '/v1/stats',
     title: 'Live stats',
-    summary:
-      'Aggregate counters for your own proxy — total scanned, blocked, quarantined, and average detection latency. Served by the container you run (Mode B), so the numbers are yours alone and never leave your network.',
-    auth: 'None — it is your own single-tenant container, and it returns counts only, never prompt content.',
-    selfHosted: true,
+    summary: 'Aggregate counters for the gateway — total scanned, blocked, quarantined, and average detection latency.',
+    auth: 'None (aggregate counts only, no prompt content).',
     request: {
-      curl: `curl ${PROXY_BASE}/v1/stats`,
-      js: `const r = await fetch("${PROXY_BASE}/v1/stats");
+      curl: `curl ${GATEWAY_BASE}/v1/stats`,
+      js: `const r = await fetch("${GATEWAY_BASE}/v1/stats");
 const { data } = await r.json();`,
       python: `import requests
 
-data = requests.get("${PROXY_BASE}/v1/stats").json()["data"]`,
+data = requests.get("${GATEWAY_BASE}/v1/stats").json()["data"]`,
     },
     response: `{ "success": true, "data": { "scanned": 14388, "blocked": 512, "quarantined": 37, "avg_ms": 8 } }`,
   },
@@ -189,10 +164,8 @@ data = requests.get("${PROXY_BASE}/v1/stats").json()["data"]`,
     method: 'GET',
     path: '/v1/events',
     title: 'Audit log',
-    summary:
-      'The tamper-evident, SHA-256 hash-chained event log on your own proxy — the assessor evidence trail. Filter by action or time window and page through with limit/offset. Signed-in customers on the hosted rail read the same events from the Command Center instead.',
-    auth: 'Admin token (set on your container as HOUNDSHIELD_ADMIN_TOKEN).',
-    selfHosted: true,
+    summary: 'The tamper-evident, SHA-256 hash-chained event log — the C3PAO evidence trail. Filter by action or time window and page through with limit/offset.',
+    auth: 'Admin token.',
     admin: true,
     params: [
       { name: 'limit', type: 'int', desc: 'Max rows (default 100, max 500).' },
@@ -201,16 +174,16 @@ data = requests.get("${PROXY_BASE}/v1/stats").json()["data"]`,
       { name: 'since', type: 'ISO 8601', desc: 'Only events at/after this timestamp.' },
     ],
     request: {
-      curl: `curl "${PROXY_BASE}/v1/events?action=BLOCKED&limit=50" \\
+      curl: `curl "${GATEWAY_BASE}/v1/events?action=BLOCKED&limit=50" \\
   -H "x-admin-token: $HOUNDSHIELD_ADMIN_TOKEN"`,
-      js: `const r = await fetch("${PROXY_BASE}/v1/events?action=BLOCKED&limit=50", {
+      js: `const r = await fetch("${GATEWAY_BASE}/v1/events?action=BLOCKED&limit=50", {
   headers: { "x-admin-token": process.env.HOUNDSHIELD_ADMIN_TOKEN },
 });
 const { data } = await r.json();`,
       python: `import os, requests
 
 r = requests.get(
-    "${PROXY_BASE}/v1/events",
+    "${GATEWAY_BASE}/v1/events",
     params={"action": "BLOCKED", "limit": 50},
     headers={"x-admin-token": os.environ["HOUNDSHIELD_ADMIN_TOKEN"]},
 )

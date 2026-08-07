@@ -16,7 +16,6 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import { GatewayKeys } from '../GatewayKeys'
-import { GATEWAY_BASE_URL, GATEWAY_COMPLETIONS_URL } from '@/lib/gateway/base-url'
 
 const SETTINGS_PAGE = readFileSync(
   join(process.cwd(), 'app/command-center/(tools)/settings/page.tsx'),
@@ -71,7 +70,7 @@ describe('GatewayKeys', () => {
   it('shows the real gateway URL a client must be pointed at', async () => {
     vi.stubGlobal('fetch', mockFetch({ 'GET /api/gateway/keys': () => json({ keys: [] }) }))
     render(<GatewayKeys />)
-    expect(await screen.findByText(GATEWAY_BASE_URL)).toBeTruthy()
+    expect(await screen.findByText('https://proxy.houndshield.com/v1')).toBeTruthy()
   })
 
   it('never fabricates a key — an account with none says so', async () => {
@@ -114,9 +113,7 @@ describe('GatewayKeys', () => {
 
     fireEvent.click(await screen.findByRole('button', { name: /create gateway key/i }))
 
-    const curl = await screen.findByText(
-      (text) => text.startsWith('curl ') && text.includes(GATEWAY_COMPLETIONS_URL)
-    )
+    const curl = await screen.findByText(/curl https:\/\/proxy\.houndshield\.com\/v1/)
     expect(curl.textContent).toContain('Authorization: Bearer hs_live_SECRETVALUE123')
   })
 

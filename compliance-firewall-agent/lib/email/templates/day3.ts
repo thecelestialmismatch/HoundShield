@@ -1,6 +1,5 @@
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
 import { transactionalFrom } from '@/lib/email/identity';
-import { GATEWAY_BASE_URL } from '@/lib/gateway/base-url';
 
 const FROM = transactionalFrom();
 
@@ -32,7 +31,7 @@ export const day3Email = {
       </p>
 
       <div style="background:#fff7ed;border-left:4px solid #ea580c;border-radius:0 8px 8px 0;padding:16px 20px;margin:0 0 24px;font-family:monospace;font-size:13px;color:#1e293b;">
-        ${GATEWAY_BASE_URL}
+        https://gateway.houndshield.com/v1
       </div>
 
       <div style="text-align:center;margin:32px 0;">

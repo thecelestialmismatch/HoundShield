@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { readFileSync } from 'fs'
 import path from 'path'
-import { GATEWAY_BASE_URL } from '@/lib/gateway/base-url'
 
 vi.mock('next/image', () => ({
   // eslint-disable-next-line @next/next/no-img-element
@@ -205,7 +204,7 @@ describe('LiveCommandCenter — exact-copy after-login dashboard', () => {
     render(<LiveCommandCenter />)
     fireEvent.click(screen.getAllByText('Copy')[0].closest('button')!)
     await screen.findByText('Copied')
-    expect(writeText).toHaveBeenCalledWith(GATEWAY_BASE_URL)
+    expect(writeText).toHaveBeenCalledWith('https://proxy.houndshield.com/v1')
   })
 
   it('Settings has NO fake-success chrome — Reveal/Edit stubs and fabricated keys are gone', () => {
