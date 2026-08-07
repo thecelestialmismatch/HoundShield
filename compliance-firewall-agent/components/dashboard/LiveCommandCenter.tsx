@@ -32,7 +32,6 @@ import {
   Rocket, AlertTriangle, ScrollText, Target,
 } from 'lucide-react'
 import { LCC_CSS } from './lccStyles'
-import { GATEWAY_BASE_URL } from '@/lib/gateway/base-url'
 import { DESIGN_THEMES, getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
 import { useDashboardPrefs, SIGNED_IN_STRIPPED_HIDDEN } from '@/lib/dashboard/use-dashboard-prefs'
 import { Section } from './OverviewSection'
@@ -1178,7 +1177,7 @@ export function LiveCommandCenter({ viewer, authenticated }: {
                   <div className="ph"><h3>Gateway</h3><span className="mono">OpenAI-compatible</span></div>
                   <div className="pad">
                     <div className="mono" style={{ fontSize: '.7rem', color: 'var(--mut2)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: '.4rem' }}>Proxy URL</div>
-                    <CopyRow value={GATEWAY_BASE_URL} />
+                    <CopyRow value="https://proxy.houndshield.com/v1" />
                     {/* No fabricated credentials: the old rows showed a fake
                         hs_live_ key with a "Reveal" that revealed nothing and an
                         "Edit" that saved nothing — the fake-success anti-pattern

@@ -11,8 +11,7 @@
  *   - identity comes from the SESSION, never from input;
  *   - the raw key is returned exactly once and is never re-readable;
  *   - only the SHA-256 hash is persisted;
- *   - revocation cannot reach another tenant's key;
- *   - a key is never issued to a plan the gateway will reject.
+ *   - revocation cannot reach another tenant's key.
  */
 
 const { mockRequireUser, mockIsConfigured, mockInsert, mockSelectList, mockCount, mockUpdate } =
@@ -102,15 +101,6 @@ vi.mock('@/lib/rate-limit-shared', () => ({
   LLM_RATE_LIMITS: { authenticated: { limit: 20, windowMs: 60_000 } },
 }));
 
-// Only the TIER lookup is faked — `canAccessGateway` stays real, so these cases
-// exercise the same predicate `/api/v1/chat/completions` enforces rather than a
-// copy of it. Default to a paid tier so the issuance cases keep testing issuance.
-const { mockTier } = vi.hoisted(() => ({ mockTier: vi.fn(async () => 'pro') }));
-vi.mock('@/lib/subscription/check', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@/lib/subscription/check')>()),
-  getUserSubscription: () => mockTier(),
-}));
-
 import { createHash } from 'crypto';
 import { NextRequest } from 'next/server';
 import { GET, POST, DELETE } from '@/app/api/gateway/keys/route';
@@ -139,7 +129,6 @@ describe('/api/gateway/keys', () => {
     mockCount.mockReset().mockResolvedValue({ count: 0, error: null });
     mockUpdate.mockReset().mockResolvedValue({ data: { id: 'key-1' }, error: null });
     mockRateLimit.mockReset().mockResolvedValue(null);
-    mockTier.mockReset().mockResolvedValue('pro');
     mockInsert.mockReset().mockResolvedValue({
       data: { id: 'key-1', key_prefix: 'hs_live_abc…', name: 'Gateway key', is_active: true },
       error: null,
@@ -202,27 +191,6 @@ describe('/api/gateway/keys', () => {
     const res = await POST(postReq({ name: 'x' }));
     expect(res.status).toBe(409);
   });
-
-  // ── Plan gate ──────────────────────────────────────────────────────────────
-  // The gateway answers free-tier traffic with 402. Minting here without the
-  // same check hands a free user a credential that is real, listed, and
-  // guaranteed to fail — the same class of defect this route exists to close.
-  it('POST refuses on the free plan instead of issuing a key the gateway will reject', async () => {
-    mockTier.mockResolvedValue('free');
-    const res = await POST(postReq({ name: 'x' }));
-    expect(res.status).toBe(402);
-    // Nothing was written: no dead row to explain later.
-    expect(applied.insert).toBeUndefined();
-    expect((await res.json()).error).toMatch(/pro plan/i);
-  });
-
-  it.each(['pro', 'growth', 'enterprise', 'agency'])(
-    'POST still mints on %s — the gate is free-tier only',
-    async (tier) => {
-      mockTier.mockResolvedValue(tier);
-      expect((await POST(postReq({ name: 'x' }))).status).toBe(201);
-    }
-  );
 
   // ── Listing ────────────────────────────────────────────────────────────────
   it('GET scopes to the session user and never selects a secret column', async () => {

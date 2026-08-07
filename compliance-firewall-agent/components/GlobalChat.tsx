@@ -8,7 +8,6 @@ import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { CMMC_STATUS, FCA_PITCH } from "@/lib/compliance/cmmc-status";
 import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
 import { ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
-import { GATEWAY_BASE_URL } from "@/lib/gateway/base-url";
 
 // Auth/onboarding routes where the floating chat bubble must NOT render — it
 // otherwise overlaps the Terms/Privacy line on the mobile signup card.
@@ -30,9 +29,9 @@ const HOUNDSHIELD_SYSTEM =
   "Adapt to who's asking: if they mention healthcare or PHI, speak to a Privacy Officer; if defense, CUI, or CMMC, speak to a security manager; if a law firm, speak to privilege. " +
   "Keep answers under 180 words, lead with the answer, and never refuse something you can actually help with. " +
   "PRODUCT FACTS: " +
-  `HoundShield is a single proxy URL (${GATEWAY_BASE_URL}) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning across ${ENGINE_COUNT} detection engines (${PATTERN_COUNT} shipped patterns) in under 10ms. ` +
+  `HoundShield is a single proxy URL (gateway.houndshield.com/v1) that intercepts every AI prompt before it reaches ChatGPT/Copilot/Claude/Gemini — scanning across ${ENGINE_COUNT} detection engines (${PATTERN_COUNT} shipped patterns) in under 10ms. ` +
   "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously. 800+ models via OpenRouter. " +
-  `INSTALLATION: Change baseURL to ${GATEWAY_BASE_URL} — works with any OpenAI-compatible SDK. 15 minutes. No agents. No network changes. That hosted URL is the Mode-A trial rail; a CUI workload must point at the customer's own self-hosted Docker gateway instead. ` +
+  "INSTALLATION: Change baseURL to gateway.houndshield.com/v1 — works with any OpenAI-compatible SDK. 15 minutes. No agents. No network changes. " +
   `LEAD PRODUCT: The ${PURCHASABLE_OFFER.name} — ${PURCHASABLE_OFFER.price}, per organization. Run the proxy 14 days in the customer's own environment, get a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171 Rev 2 and HIPAA. This is what to recommend first. ` +
   `LEAD BUYER: healthcare Privacy Officers and HIPAA Security Officers at 50-300 provider groups and clinics — 89% of healthcare genAI policy violations involve regulated data vs a 31% cross-industry average, and 43% of healthcare staff use personal genAI accounts at work (Netskope 2025). No FedRAMP requirement applies to them. Defense is the second market. ` +
   `FREE PROOF: ${PURCHASABLE_OFFER.tryHref} runs the real detection engines in the visitor's own browser — no account, text never transmitted. Offer this to anyone who wants proof before paying. ` +

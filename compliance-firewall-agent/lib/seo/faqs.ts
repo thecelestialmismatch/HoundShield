@@ -313,7 +313,7 @@ export const installSteps: HowToStep[] = [
   },
   {
     name: "Point your AI tools at HoundShield",
-    text: "Change the base URL in your AI tools to the gateway you deployed in step 1 — your own host, for example https://houndshield.internal.example.com/v1 — instead of the cloud AI API. This is the only client-side change required.",
+    text: "Change the base URL in your AI tools to your HoundShield endpoint, for example https://gateway.houndshield.com/v1, instead of the cloud AI API. This is the only client-side change required.",
   },
   {
     name: "Send a test prompt and verify the audit log",

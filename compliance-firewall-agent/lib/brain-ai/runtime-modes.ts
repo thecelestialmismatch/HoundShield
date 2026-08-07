@@ -6,8 +6,6 @@
  * Brain AI original implementation for HoundShield.
  */
 
-import { GATEWAY_BASE_URL } from "@/lib/gateway/base-url";
-
 export type RuntimeMode =
   | "standard"      // Normal SSE streaming via /api/brain-ai/execute
   | "direct"        // Direct API call, no streaming
@@ -71,7 +69,7 @@ const RUNTIME_MODES: DirectModeReport[] = [
   },
   {
     mode: "embedded",
-    endpoint: GATEWAY_BASE_URL,
+    endpoint: "https://gateway.houndshield.com/v1",
     supportsStreaming: true,
     supportsTools: false,
     maxTokens: 16384,
