@@ -5,6 +5,73 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-07 (the premium pass — where a design failure actually lived)
+
+### "Make it premium" was a responsive bug and four lies, not a visual-design problem
+**What:** the brief asked to take the post-login dashboard from generic to premium against a design
+reference. The instinct is to restyle. The actual defects were that the shell declared **zero**
+breakpoints (67px of usable content on a 375px phone, on all 23 pages) and that four pieces of
+chrome — a quarantine badge, a health pill, an unread dot, an avatar initial — were constants
+dressed as live state.
+**Root cause:** aesthetic language ("generic", "premium") describes the symptom. The dashboard read
+as cheap *because* it broke on a phone and *because* its numbers were fake, not because its palette
+was wrong. The palette was already fine and already tokenised.
+**Rule:** when a request is about how something feels, measure before restyling. `grep -oE
+"\b(sm|md|lg|xl|2xl):"` over the layout, and a pass for state that nothing feeds, find more premium
+than a new colour ramp does.
+
+### Reachability is a fact to trace, not to infer from a file listing
+**What:** the plan named six mockup components to label. Tracing imports found only **three** were
+mounted by any page; the other four — plus `agent-workspace`, `memory-view`, `knowledge-base` —
+are mounted by nothing at all, and `pipeline`/`workspace`/`knowledge` are bare redirects.
+**Root cause:** `grep -c "^const [A-Z_]* = \["` finds mockups. It says nothing about whether a
+customer can reach one. Labelling all six would have decorated ~4,500 lines of dead code and
+reported work that protected nobody.
+**Rule:** before fixing a user-facing defect on a page, prove a user can get to the page. Follow the
+imports from the route, not the component's own contents.
+
+### A guard that pins a path punishes the refactor it should have permitted
+**What:** eleven assertions across three test files read `(tools)/layout.tsx` by path. Splitting the
+427-line shell — necessary, because the drawer and palette break the 500-line rule — would have
+failed eight tests that were each still asserting something true (company not build badge,
+sign-out present, no indigo, every nav href resolving).
+**Root cause:** the invariants were about the shell as a concept; the tests encoded them as facts
+about one file. Those are the same thing only until the file moves.
+**Rule:** when a guard greps source, have it read the *unit* the invariant is about, not the file
+the code happens to sit in today. `helpers/shell-source.ts` concatenates `layout.tsx` + `_shell/*`,
+so this split and the next one are free. Same treatment for the panel modules.
+
+### Wiring a fake to a real endpoint can just launder the fake
+**What:** the plan said to replace the hardcoded "All Systems Operational" pill with a read of
+`/api/health`. `/api/health` returns `status: "healthy"` as a **hardcoded literal**, and its
+`services` block reports HoundShield's own Stripe/Resend/OpenRouter config — our billing plumbing,
+not the customer's security posture.
+**Root cause:** "hardcoded value → fetch the value" looks like a fix and is only a fix if the thing
+at the other end is a measurement. An HTTP round trip is not evidence.
+**Rule:** before wiring a display to a source, read what the source actually computes. If it is a
+constant or it describes us rather than the customer, delete the display and record the ceiling and
+upgrade path as a `ponytail:` marker — which is what `Topbar.tsx` now carries.
+
+### A stale DESIGN.md is worse than no DESIGN.md
+**What:** `DESIGN.md` was dated 2026-04-11 and described a dark `#07070b` landing page with an
+indigo brand. The product moved to light mode months ago; `CLAUDE.md` says so and every line of
+`globals.css` agrees. It drifted for four months with nothing to catch it — on the exact artifact
+type the founder's reference repo is about.
+**Root cause:** documents written *for agents to obey* fail silently. A wrong one does not error,
+it produces confidently wrong UI, and the agent that wrote it never sees the consequence.
+**Rule:** any doc an agent reads as instructions needs a test. `design-md-tokens.test.ts` asserts
+every token named in DESIGN.md still exists in the stylesheets and that the retired dark/indigo
+claims cannot return. Prose can drift; the tokens an agent copies verbatim cannot.
+
+### The lint baseline in todo.md was stale, and "0 new warnings" needed proving
+**What:** `todo.md` recorded a 38-warning baseline (2026-07-31). The suite now reports 39, several
+PRs later. Reporting "39 vs 38, I added one" would have been wrong.
+**Rule:** do not trust a recorded baseline across other people's merges. List the warning files and
+intersect with the changed set — the honest claim is "zero warnings in any file I touched", which
+is checkable, rather than a delta against a number nobody re-measured.
+
+---
+
 ## 2026-08-07 (a missing dependency is a question for the founder, not a writing prompt)
 
 ### The codebase was carrying evidence of what `ponytail` was, and it still was not enough

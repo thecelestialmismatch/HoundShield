@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo Design Product — visual catalog</title>
+<style>
+/* Self-contained on purpose: no CDN, no webfont, no build step. Open the file.
+   Geist is named first and falls back to the system stack when unavailable. */
+:root{
+  --ds-steel:#81A6C6; --ds-steel-dark:#5A86A8; --ds-steel-light:#C5DAE9; --ds-sky:#AACDDC;
+  --ds-cream:#F3E3D0; --ds-cream-deep:#EDD5BC; --ds-sand:#D2C4B4; --ds-sand-light:#E8DDD1;
+  --ds-surface-0:#FAFCFF; --ds-surface-1:#E9F0F7; --ds-surface-2:#F3E3D0; --ds-surface-3:#EDD5BC;
+  --ds-navy:#0D1B2A;
+  --ds-ink:#0A1420; --ds-ink-secondary:#14222D; --ds-ink-tertiary:#2E4150;
+  --ds-border-subtle:rgba(129,166,198,.12); --ds-border:rgba(129,166,198,.22);
+  --ds-border-strong:rgba(129,166,198,.45); --ds-border-ink:rgba(15,30,46,.10);
+  --ds-success:#059669; --ds-success-bg:#ECFDF5;
+  --ds-danger:#DC2626;  --ds-danger-bg:#FEF2F2;
+  --ds-warn:#D97706;    --ds-warn-bg:#FFFBEB;
+  --ds-action:#2F6BF0;  --ds-action-hover:#245FE0; --ds-delta:#37A05A;
+  --ds-aurora-bg:linear-gradient(155deg,#C9D1DB 0%,#D3D8D5 44%,#DFE6D2 100%);
+  --ds-aurora-glass:rgba(255,255,255,.66);
+  --ds-aurora-shadow:0 30px 70px rgba(56,78,112,.20), 0 6px 18px rgba(56,78,112,.10);
+  --ds-lime:#B6D94E; --ds-peach:#F0B880; --ds-peri:#A9C7EE;
+  --ds-shadow-sm:0 1px 2px rgba(15,30,46,.04),0 1px 3px rgba(129,166,198,.06);
+  --ds-shadow-md:0 4px 16px rgba(15,30,46,.06),0 1px 4px rgba(129,166,198,.08);
+  --ds-shadow-lg:0 8px 32px rgba(15,30,46,.08),0 2px 8px rgba(129,166,198,.10);
+  --f-body:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ds-surface-1);color:var(--ds-ink);font-family:var(--f-body);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:16px}
+@media(min-width:640px){.wrap{padding:24px}}
+@media(min-width:1024px){.wrap{padding:48px 32px}}
+header.hd{margin-bottom:40px}
+h1{font-size:clamp(1.9rem,4vw,2.6rem);font-weight:600;letter-spacing:-.02em;margin:0 0 .3rem}
+.sub{color:var(--ds-ink-tertiary);max-width:62ch;margin:0}
+section{margin:44px 0}
+h2{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--ds-ink-tertiary);margin:0 0 14px;padding-bottom:8px;
+  border-bottom:1px solid var(--ds-border-ink)}
+.note{font-size:.82rem;color:var(--ds-ink-tertiary);margin:10px 0 0;max-width:70ch}
+.grid{display:grid;gap:12px}
+.sw{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.swatch{border:1px solid var(--ds-border-ink);border-radius:12px;overflow:hidden;
+  background:var(--ds-surface-0);box-shadow:var(--ds-shadow-sm)}
+.chip{height:64px}
+.swatch .meta{padding:8px 10px}
+.swatch b{display:block;font-size:.78rem;font-weight:600}
+.swatch code{font-family:var(--f-mono);font-size:.68rem;color:var(--ds-ink-tertiary)}
+.card{background:var(--ds-surface-0);border:1px solid var(--ds-border-ink);border-radius:14px;
+  padding:20px;box-shadow:var(--ds-shadow-sm)}
+.cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;
+  font-size:.875rem;font-weight:600;border:1px solid transparent;cursor:pointer;
+  font-family:inherit;transition:background .15s,border-color .15s,color .15s}
+.btn:focus-visible{outline:2px solid var(--ds-steel-dark);outline-offset:2px}
+.btn-p{background:var(--ds-steel-dark);color:#fff}
+.btn-p:hover{background:#4d7691}
+.btn-s{border-color:var(--ds-border-ink);color:var(--ds-ink-secondary);background:transparent}
+.btn-s:hover{background:rgba(15,30,46,.05)}
+.btn-g{background:transparent;color:var(--ds-ink-tertiary)}
+.btn-g:hover{color:var(--ds-ink)}
+.btn-d{background:rgba(220,38,38,.10);box-shadow:inset 0 0 0 1px rgba(220,38,38,.30);
+  color:var(--ds-danger)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;
+  font-size:.75rem;font-family:var(--f-mono)}
+.p-crit{background:rgba(201,58,63,.10);box-shadow:inset 0 0 0 1px rgba(201,58,63,.30);color:#C93A3F}
+.p-high{background:rgba(201,106,40,.10);box-shadow:inset 0 0 0 1px rgba(201,106,40,.30);color:#A8541F}
+.p-med {background:rgba(176,130,5,.10); box-shadow:inset 0 0 0 1px rgba(176,130,5,.30); color:#8A6504}
+.p-low {background:rgba(58,110,165,.10);box-shadow:inset 0 0 0 1px rgba(58,110,165,.30);color:#3A6EA5}
+.p-ok  {background:var(--ds-success-bg);box-shadow:inset 0 0 0 1px rgba(5,150,105,.30);color:var(--ds-success)}
+input.f{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--ds-border-ink);
+  background:var(--ds-surface-0);font-family:inherit;font-size:.9rem;color:var(--ds-ink)}
+input.f::placeholder{color:var(--ds-ink-tertiary);opacity:.75}
+input.f:focus-visible{outline:2px solid var(--ds-steel-dark);outline-offset:1px;border-color:transparent}
+.type div{margin-bottom:10px}
+.t-h1{font-size:clamp(2.2rem,5vw,3.2rem);font-weight:600;letter-spacing:-.025em;line-height:1.1}
+.t-h2{font-size:1.875rem;font-weight:700;letter-spacing:-.015em}
+.t-h3{font-size:1.5rem;font-weight:600}
+.t-h4{font-size:1.125rem;font-weight:600}
+.t-b {font-size:.9375rem;color:var(--ds-ink-secondary)}
+.t-m {font-family:var(--f-mono);font-size:.875rem}
+.t-l {font-size:.75rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ds-ink-tertiary)}
+.aurora{background:var(--ds-aurora-bg);border-radius:16px;padding:20px;
+  box-shadow:var(--ds-aurora-shadow)}
+.glass{background:var(--ds-aurora-glass);backdrop-filter:blur(12px);border-radius:12px;
+  padding:16px;border:1px solid rgba(255,255,255,.5)}
+.kpi b{display:block;font-family:var(--f-mono);font-size:1.6rem;font-weight:600;line-height:1.1}
+.kpi span{font-size:.72rem;color:var(--ds-ink-tertiary)}
+.states{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.state{border:1px dashed var(--ds-border-strong);border-radius:12px;padding:18px;
+  background:var(--ds-surface-0)}
+.state h4{margin:0 0 6px;font-size:.9rem}
+.state p{margin:0;font-size:.82rem;color:var(--ds-ink-tertiary)}
+.skel{height:9px;border-radius:5px;background:rgba(129,166,198,.25);margin-bottom:7px;
+  animation:sh 1.4s ease-in-out infinite}
+.skel:nth-child(2){width:70%}.skel:nth-child(3){width:45%}
+@keyframes sh{0%,100%{opacity:.45}50%{opacity:.85}}
+.shell{border:1px solid var(--ds-border-ink);border-radius:14px;overflow:hidden;
+  display:grid;grid-template-columns:180px 1fr;background:var(--ds-surface-0);
+  box-shadow:var(--ds-shadow-md)}
+.shell .rail{background:var(--ds-surface-1);border-right:1px solid var(--ds-border-ink);padding:12px}
+.shell .it{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;
+  font-size:.8rem;color:var(--ds-ink-tertiary);position:relative}
+.shell .it.on{background:rgba(129,166,198,.18);color:var(--ds-steel-dark);font-weight:600}
+.shell .it.on::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:16px;border-radius:99px;background:var(--ds-steel-dark)}
+.shell .main{padding:16px}
+.shell .bar{height:34px;border-bottom:1px solid var(--ds-border-ink);margin:-16px -16px 14px;
+  display:flex;align-items:center;padding:0 14px;font-size:.72rem;
+  color:var(--ds-ink-tertiary);background:rgba(250,252,255,.85)}
+@media(max-width:640px){.shell{grid-template-columns:1fr}.shell .rail{display:none}}
+footer{margin:56px 0 0;padding-top:18px;border-top:1px solid var(--ds-border-ink);
+  font-size:.8rem;color:var(--ds-ink-tertiary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hd">
+  <h1>Demo Design Product</h1>
+  <p class="sub">Visual catalog for the design system in <code>DESIGN.md</code>. Self-contained —
+  no CDN, no build step, no webfont. Every value below is a token you can copy.</p>
+</header>
+
+<section>
+  <h2>Surfaces</h2>
+  <div class="grid sw">
+    <div class="swatch"><div class="chip" style="background:#FAFCFF;border-bottom:1px solid var(--ds-border-ink)"></div><div class="meta"><b>surface-0</b><code>#FAFCFF</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#E9F0F7"></div><div class="meta"><b>surface-1</b><code>#E9F0F7</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#F3E3D0"></div><div class="meta"><b>surface-2</b><code>#F3E3D0</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#EDD5BC"></div><div class="meta"><b>surface-3</b><code>#EDD5BC</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#0D1B2A"></div><div class="meta"><b>navy</b><code>#0D1B2A</code></div></div>
+  </div>
+  <p class="note">Alternate 0 → 1 → 2 → navy down a page. Each step is visibly distinct from its
+  neighbour; if two are hard to tell apart, collapse them rather than ship a distinction nobody
+  can see.</p>
+</section>
+
+<section>
+  <h2>Brand &amp; ink</h2>
+  <div class="grid sw">
+    <div class="swatch"><div class="chip" style="background:#81A6C6"></div><div class="meta"><b>steel</b><code>#81A6C6</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#5A86A8"></div><div class="meta"><b>steel-dark</b><code>#5A86A8</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#C5DAE9"></div><div class="meta"><b>steel-light</b><code>#C5DAE9</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#AACDDC"></div><div class="meta"><b>sky</b><code>#AACDDC</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#F3E3D0"></div><div class="meta"><b>cream</b><code>#F3E3D0</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#D2C4B4"></div><div class="meta"><b>sand</b><code>#D2C4B4</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#0A1420"></div><div class="meta"><b>ink</b><code>#0A1420</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#2E4150"></div><div class="meta"><b>ink-tertiary</b><code>#2E4150</code></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Semantic &amp; data</h2>
+  <div class="grid sw">
+    <div class="swatch"><div class="chip" style="background:#059669"></div><div class="meta"><b>success</b><code>#059669</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#DC2626"></div><div class="meta"><b>danger</b><code>#DC2626</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#D97706"></div><div class="meta"><b>warn</b><code>#D97706</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#2F6BF0"></div><div class="meta"><b>action</b><code>#2F6BF0</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#B6D94E"></div><div class="meta"><b>lime</b><code>#B6D94E</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#F0B880"></div><div class="meta"><b>peach</b><code>#F0B880</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#A9C7EE"></div><div class="meta"><b>peri</b><code>#A9C7EE</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#7C5CB8"></div><div class="meta"><b>violet</b><code>#7C5CB8</code></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Typography scale</h2>
+  <div class="card type">
+    <div class="t-h1">Precision, in daylight</div>
+    <div class="t-h2">Section heading</div>
+    <div class="t-h3">Panel heading</div>
+    <div class="t-h4">Card header</div>
+    <div class="t-b">Body copy sits at 15px with a 1.6 line-height. Dense, but never cramped —
+      this is a tool people read for hours.</div>
+    <div class="t-m">99.4% · 7ms · 1,284 events · evt_aa11bb</div>
+    <div class="t-l">Muted label</div>
+  </div>
+  <p class="note">Every number a user could act on is monospaced. It is a legibility rule, not a
+  decorative one — figures get compared across screens and against exported documents.</p>
+</section>
+
+<section>
+  <h2>Buttons</h2>
+  <div class="card">
+    <div class="row">
+      <button class="btn btn-p">Primary action</button>
+      <button class="btn btn-s">Secondary</button>
+      <button class="btn btn-g">Ghost</button>
+      <button class="btn btn-d">Destructive</button>
+      <button class="btn btn-p" disabled>Disabled</button>
+    </div>
+    <p class="note">Tab to any button — the focus ring is part of the system, not an afterthought.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Inputs &amp; badges</h2>
+  <div class="grid cards">
+    <div class="card">
+      <label class="t-l" for="d">Input</label>
+      <input class="f" id="d" placeholder="Search…" style="margin-top:6px">
+    </div>
+    <div class="card">
+      <span class="t-l">Ranked badges</span>
+      <div class="row" style="margin-top:8px">
+        <span class="pill p-crit">CRITICAL</span>
+        <span class="pill p-high">HIGH</span>
+        <span class="pill p-med">MEDIUM</span>
+        <span class="pill p-low">LOW</span>
+        <span class="pill p-ok">RESOLVED</span>
+      </div>
+    </div>
+  </div>
+  <p class="note">Severity is never colour alone — each pill carries its label as text.</p>
+</section>
+
+<section>
+  <h2>Aurora panel layer</h2>
+  <div class="aurora">
+    <div class="grid cards">
+      <div class="glass kpi"><b>1,284</b><span>Events · last 7d</span></div>
+      <div class="glass kpi"><b style="color:#C93A3F">20</b><span>Blocked · 1.6% of traffic</span></div>
+      <div class="glass kpi"><b>7ms</b><span>Median latency</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Application shell</h2>
+  <div class="shell">
+    <div class="rail">
+      <div class="t-l" style="padding:4px 10px 8px">Section</div>
+      <div class="it on">Overview</div>
+      <div class="it">Activity</div>
+      <div class="it">Reports</div>
+      <div class="it">Settings</div>
+    </div>
+    <div class="main">
+      <div class="bar">Customer name</div>
+      <div class="t-h4">Welcome back, Dana</div>
+      <p class="t-b" style="margin:.3rem 0 0">The active rail item carries a 3px marker
+        <em>and</em> <code>aria-current="page"</code> — never colour alone.</p>
+    </div>
+  </div>
+  <p class="note">Narrow this window below 640px: the rail goes off-canvas rather than crushing the
+  content column. In a real build it becomes a drawer with a scrim, Escape, and a focus trap.</p>
+</section>
+
+<section>
+  <h2>The four states — design the empty one first</h2>
+  <div class="grid states">
+    <div class="state">
+      <h4>Populated</h4>
+      <p><span class="t-m">1,284</span> events, <span class="t-m">7ms</span> median.</p>
+    </div>
+    <div class="state">
+      <h4>Empty</h4>
+      <p>No events yet. Point your traffic here and this fills from your own data.</p>
+    </div>
+    <div class="state">
+      <h4>Loading</h4>
+      <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    </div>
+    <div class="state">
+      <h4>Error</h4>
+      <p>Could not load. Showing the last successful read. <b>Retry</b></p>
+    </div>
+  </div>
+  <p class="note"><b>The rule this system exists to enforce:</b> unknown renders nothing — never a
+  placeholder, never a zero, never a plausible-looking default. Sample content is labelled as
+  sample, in one consistent voice. Fake state is how an interface looks finished before it is.</p>
+</section>
+
+<footer>
+  Demo Design Product · exported 2026-08-07 · see <code>DESIGN.md</code> for the full system.
+</footer>
+
+</div>
+</body>
+</html>
