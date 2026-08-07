@@ -28,6 +28,7 @@ export const OVERVIEW_SECTIONS: { id: string; label: string }[] = [
   { id: 'mix', label: 'Outcome & severity donuts' },
   { id: 'terminal', label: 'Gateway console (live)' },
   { id: 'actors', label: 'Who sent it (people vs agents)' },
+  { id: 'soon', label: "What's coming next" },
   { id: 'trend', label: '7-day trend & latency profile' },
   { id: 'rate', label: 'Block rate & cumulative total' },
   { id: 'gauge', label: 'SPRS gauge & hour-of-day' },
