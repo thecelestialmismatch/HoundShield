@@ -544,6 +544,20 @@ export const LCC_CSS = `
 /* "Demo data" — seeded telemetry declaring itself beside the dashboard title.
    Amber rather than the brand steel: it must read as a caveat, not as a feature
    badge. Sized off the title so it never dominates it. */
+/* "Who sent it" — people vs autonomous agents. Rows are links to the filtered
+   audit log, so the bar is a target, not decoration. */
+.hs-lcc .op-act-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.hs-lcc .op-act-row{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) auto;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;text-decoration:none;color:inherit;min-width:0}
+.hs-lcc .op-act-row:hover{background:var(--surf2)}
+.hs-lcc .op-act-name{display:flex;align-items:center;gap:7px;font-size:.82rem;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hs-lcc .op-act-dot{width:8px;height:8px;border-radius:99px;flex-shrink:0}
+.hs-lcc .op-act-tag{font-family:var(--f-mono);font-style:normal;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:99px;color:#8a4a14;background:rgba(201,106,40,.13);border:1px solid rgba(201,106,40,.3);flex-shrink:0}
+.hs-lcc .op-act-bar{height:7px;border-radius:99px;background:var(--surf2);overflow:hidden;min-width:0}
+.hs-lcc .op-act-bar i{display:block;height:100%;border-radius:99px}
+.hs-lcc .op-act-n{font-size:.72rem;color:var(--mut2);white-space:nowrap}
+.hs-lcc .op-act-n b{font-weight:600;color:var(--warn,#C96A28)}
+.hs-lcc .op-act-none{margin:10px 0 0;font-size:.76rem;line-height:1.5;color:var(--mut2)}
+@media(max-width:620px){.hs-lcc .op-act-row{grid-template-columns:minmax(0,1fr) auto}.hs-lcc .op-act-bar{display:none}}
 .hs-lcc .op-demo-tag{font-family:var(--f-mono);font-size:.62rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;color:#92610a;background:rgba(217,151,20,.13);border:1px solid rgba(217,151,20,.32);white-space:nowrap}
 .hs-lcc .op-toolbar-sub{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--mut2)}
 .hs-lcc .op-live{display:inline-flex;align-items:center;gap:.35rem;color:var(--ok-text);font-weight:600}

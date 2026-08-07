@@ -30,8 +30,12 @@ export interface TelemetryEventRow {
   classifications: string[] | null
   action_taken: string
   processing_time_ms: number | null
-  /** Present on seeded demo rows only. See `synthetic` on OverviewTelemetry. */
-  metadata?: { synthetic?: boolean } | null
+  /** `synthetic` marks seeded demo rows; `actor` is what the client claimed to
+   *  be when it sent the prompt. Both are descriptive, never identity. */
+  metadata?: {
+    synthetic?: boolean
+    actor?: { kind?: string | null; client?: string | null } | null
+  } | null
 }
 
 /** One row of the "Live events" table. Metadata only, by construction. */
@@ -76,6 +80,14 @@ export interface ProviderBucket {
 export interface NamedCount {
   name: string
   count: number
+}
+
+export interface ActorCount {
+  /** Display name, e.g. "Claude Code". Never invented — see actorLabel(). */
+  name: string
+  kind: 'agent' | 'sdk' | 'browser' | 'unknown'
+  count: number
+  blocked: number
 }
 
 export interface OverviewTotals {
@@ -132,6 +144,20 @@ export interface OverviewTelemetry {
   riskMix: NamedCount[]
   /** What was detected, from the `classifications` array. Busiest first. */
   detections: NamedCount[]
+  /**
+   * What SENT the prompts — a person's browser, a script, or an autonomous
+   * agent. Busiest first.
+   *
+   * Derived from `metadata.actor`, recorded by the gateway from the client's
+   * own headers (lib/gateway/actor.ts). Descriptive evidence, never identity.
+   * Rows written before actor recording shipped simply do not appear, which is
+   * correct: the honest answer for those is "we did not capture it", not a
+   * bucket labelled Human.
+   */
+  actors: ActorCount[]
+  /** Prompts sent by something that acts without a human reviewing each one.
+   *  The number a compliance officer asks for first. */
+  autonomousEvents: number
 }
 
 const DAY_MS = 86_400_000
@@ -141,6 +167,20 @@ const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const
 /** Severity order for display — worst first, so a reader's eye lands on
  *  CRITICAL rather than on whichever bucket happened to be biggest. */
 const RISK_ORDER = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'NONE'] as const
+
+/** The four actor kinds lib/gateway/actor.ts can emit. Anything else stored in
+ *  metadata is treated as unknown rather than trusted into a new bucket. */
+const ACTOR_KINDS = new Set(['agent', 'sdk', 'browser', 'unknown'])
+
+/** Used only when the client sent no name. Mirrors actorLabel() in
+ *  lib/gateway/actor.ts — duplicated rather than imported so this module stays
+ *  pure and dependency-free, and reconciled by a test. */
+const FALLBACK_ACTOR_NAME: Record<ActorCount['kind'], string> = {
+  agent: 'Unnamed agent',
+  sdk: 'Unnamed script',
+  browser: 'Browser',
+  unknown: 'Unidentified',
+}
 
 /**
  * Map a stored `action_taken` onto the three outcomes the dashboard shows.
@@ -240,6 +280,8 @@ export function aggregateOverview(
   const providers = new Map<string, ProviderBucket>()
   const risk = new Map<string, number>()
   const detections = new Map<string, number>()
+  const actors = new Map<string, ActorCount>()
+  let autonomousEvents = 0
   const latencies: number[] = []
 
   for (const row of rows) {
@@ -253,6 +295,24 @@ export function aggregateOverview(
 
     if (typeof row.processing_time_ms === 'number' && row.processing_time_ms >= 0) {
       latencies.push(row.processing_time_ms)
+    }
+
+    // Who/what sent it. Rows written before the gateway recorded this carry no
+    // actor and are skipped rather than bucketed as "Human" — inventing a
+    // sender for an event we did not attribute is exactly the fabrication this
+    // module exists to prevent.
+    const rawActor = row.metadata?.actor
+    if (rawActor) {
+      const kind = ACTOR_KINDS.has(rawActor.kind ?? '')
+        ? (rawActor.kind as ActorCount['kind'])
+        : 'unknown'
+      const name = rawActor.client?.trim() || FALLBACK_ACTOR_NAME[kind]
+      const key = `${kind}:${name}`
+      const bucket = actors.get(key) ?? { name, kind, count: 0, blocked: 0 }
+      bucket.count += 1
+      if (outcome === 'blocked') bucket.blocked += 1
+      actors.set(key, bucket)
+      if (kind === 'agent') autonomousEvents += 1
     }
 
     // Hourly (last 24h only — a subset of the window).
@@ -332,6 +392,16 @@ export function aggregateOverview(
     detections: [...detections.entries()]
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count),
+    // Agents first, then by volume: the whole point of this panel is that
+    // autonomous traffic is the row you must look at, and sorting purely by
+    // count buries one agent under a thousand browser prompts.
+    actors: [...actors.values()].sort(
+      (a, b) =>
+        Number(b.kind === 'agent') - Number(a.kind === 'agent') ||
+        b.count - a.count ||
+        a.name.localeCompare(b.name),
+    ),
+    autonomousEvents,
   }
 }
 

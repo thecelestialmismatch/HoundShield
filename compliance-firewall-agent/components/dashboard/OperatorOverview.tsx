@@ -36,6 +36,7 @@ import { RefreshCw, Calendar, AlertTriangle } from 'lucide-react'
 import { Section } from './OverviewSection'
 import type { DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
 import { DashboardDownload } from './operator/DashboardDownload'
+import { AgentOversight } from './operator/AgentOversight'
 import { SectionIndex } from './operator/SectionIndex'
 import { ActivityHeatmap } from './operator/ActivityHeatmap'
 import { OutcomeMix, BlockedSeverity } from './operator/OutcomeDonuts'
@@ -196,6 +197,13 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
         {/* What is happening right now, in the register an engineer reads. */}
         <Section id="terminal" prefs={prefs} editing={editing}>
           <GatewayTerminal tel={t.tel} recent={t.recent} />
+        </Section>
+
+        {/* Who/what is sending. Sits next to the live console because the two
+            answer the same operator question from opposite ends: what just
+            happened, and what keeps making it happen. */}
+        <Section id="actors" prefs={prefs} editing={editing}>
+          <AgentOversight tel={t.tel} />
         </Section>
 
         <Section id="trend" prefs={prefs} editing={editing}>
