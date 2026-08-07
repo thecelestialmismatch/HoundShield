@@ -105,9 +105,12 @@ describe("logo motion — the approved pose exists on every surface", () => {
     );
   });
 
-  it("the sidebar logo chip keeps group/brand so chip hover tilts the mark", () => {
-    expect(read("components/layout/Sidebar.tsx")).toMatch(/group\/brand[^"]*w-7 h-7/);
-  });
+  // The assertion that used to sit here pinned components/layout/Sidebar.tsx,
+  // a second sidebar that no route ever imported — superseded by the Command
+  // Center's own rail in app/command-center/(tools)/_shell/Sidebar.tsx. It was
+  // also the only dead internal link in the repo (`/command-center/feed`, a page
+  // that does not exist). Deleted 2026-08-07 with the file. The live sidebar's
+  // logo chip is covered by the Command Center shell guards.
 });
 
 describe("logo motion — sideways sway can never return", () => {

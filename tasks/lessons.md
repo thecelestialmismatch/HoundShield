@@ -1529,3 +1529,46 @@ so `npm run build` passed while `main` did not typecheck.
 **Rule:** Run `tsc` against pristine `origin/main` before attributing any type error to your own
 diff — and remember a green `npm run build` says nothing about types in this repo. A pinned
 literal that tracks an SDK type must be updated in the same PR as the bump.
+
+### Three network round-trips hid behind three innocent function calls
+**What:** `/command-center/overview` felt slow on a phone. The cause was not rendering: the
+fail-closed gate in `app/command-center/layout.tsx`, `getSessionProfile()` in the page, and the
+tenant filter inside `hasGatewayTraffic()` each called `getSessionUser()`, and
+`supabase.auth.getUser()` is a **network call to GoTrue**, not a local JWT decode — that is
+precisely why Supabase tells you to trust it over `getSession()`. Three sequential auth
+round-trips before one byte of HTML streamed. Worse, `getSessionProfile('full_name')` then
+discarded the profile row it queried; the greeting reads `user.name` off the session.
+**Rule:** In an RSC tree, count how many times a request-scoped resolver is *called*, not how
+many times it appears to be. Wrap session/auth resolvers in React `cache()` so layout + page +
+helpers share one round-trip, and check that a helper's extra query is actually read before
+paying for it. The failure mode is invisible — every caller returns the right answer, just
+slowly, forever.
+
+### React `cache()` is a silent no-op outside a render, which makes it untestable by default
+**What:** A test asserting the dedup above saw 3 calls against correct code. `cache()` only
+memoizes in React's **react-server** build AND only inside a cache scope the renderer opens
+(`ReactSharedInternals.A`); Vitest resolves the *client* build, whose `cache()` is a bare
+passthrough. Asserting something weaker ("the export is wrapped") would have proven nothing.
+**Rule:** Reproduce the two things Next provides — mock `react` to `react.react-server.js` and
+open a minimal cache scope per simulated request. Then verify the guard has teeth by unwrapping
+the fix and watching it go red (it did: 3 of 7 failed).
+
+### An uncorrelated sublink in PostgreSQL is evaluated ONCE, however volatile it looks
+**What:** Seeding demo telemetry, each event picked its hour with
+`(select h from hours where cum >= random() * tot order by cum limit 1)`. All 4,168 rows landed
+in the same hour of the same clock position. The sublink references no outer column, so the
+planner hoists it into an **InitPlan** and runs it a single time for the whole statement — the
+`random()` inside does not make the subquery per-row.
+**Rule:** For per-row randomness, index a constant array with a per-row `random()`
+(`(select p from pool)[1 + floor(random()*n)::int]`), never a `limit 1` sublink. And verify a
+seed by its *distribution* — `count(distinct extract(hour from created_at))` caught this
+instantly; `count(*)` was 4,168 and looked perfect.
+
+### A dead component is where dead links go to hide
+**What:** A repo-wide check of every internal `href` found exactly one broken link,
+`/command-center/feed`, in `components/layout/Sidebar.tsx` — a second sidebar that no route
+imported, superseded by the Command Center rail. It survived because a `logo-motion-contract`
+assertion greped it, so the file looked referenced.
+**Rule:** A test that greps a file is not a use of that file. When auditing for dead code, check
+imports from production modules only — and delete the component rather than fixing the href in
+something nothing renders.

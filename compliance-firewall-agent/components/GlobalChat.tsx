@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { X, Send } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { AnswerText } from "@/components/brain/AnswerText";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { CMMC_STATUS, FCA_PITCH } from "@/lib/compliance/cmmc-status";
 import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
@@ -341,7 +342,14 @@ export function GlobalChat() {
                     : "self-start bg-white/[0.05] text-white/85 border border-white/[0.07] rounded-bl-sm"
                 }`}
               >
-                {msg.text}
+                {msg.role === "bot" ? (
+                  <AnswerText
+                    text={msg.text}
+                    className="text-[var(--hs-steel-light)] underline underline-offset-2 decoration-[var(--hs-steel-light)]/40 hover:decoration-[var(--hs-steel-light)]"
+                  />
+                ) : (
+                  msg.text
+                )}
               </div>
             ))}
             {isTyping && <TypingDots />}

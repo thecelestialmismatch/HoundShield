@@ -48,8 +48,11 @@ const ALLOWED_WINDOWS = [1, 7, 30] as const
  */
 const MAX_ROWS = 5_000
 
+// `metadata` is read for exactly one field — `synthetic` — which is how the
+// dashboard knows to label seeded demo data as seeded. See the `synthetic` note
+// on OverviewTelemetry. The prompt itself is still never selected.
 const SELECT_COLUMNS =
-  'id, created_at, destination_provider, risk_level, classifications, action_taken, processing_time_ms'
+  'id, created_at, destination_provider, risk_level, classifications, action_taken, processing_time_ms, metadata'
 
 export async function GET(req: NextRequest) {
   // Identity from the session. Fails closed with 401 when there is none — and
