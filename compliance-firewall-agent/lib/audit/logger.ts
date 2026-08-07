@@ -1,6 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/client";
 import { createSeedAnchor } from "./seed-anchor";
 import { anchorComplianceEvent } from "@/lib/blockchain/anchor-service";
+import type { Actor } from "@/lib/gateway/actor";
 import type {
   RiskLevel,
   ActionTaken,
@@ -18,6 +19,9 @@ interface ComplianceEventInput {
   confidence_score: number;
   detected_entities: DetectedEntity[];
   processing_time_ms: number;
+  /** What the client claimed to be. Descriptive audit evidence, never identity —
+   *  see lib/gateway/actor.ts. Omitted for callers that have no request context. */
+  actor?: Actor;
 }
 
 /**
@@ -49,6 +53,10 @@ export async function logComplianceEvent(
       confidence_score: input.confidence_score,
       detected_entities: input.detected_entities,
       processing_time_ms: input.processing_time_ms,
+      // `actor` rides in metadata rather than its own column: it is descriptive
+      // evidence, not a queryable tenancy field, and a jsonb key needs no
+      // migration to extend as new agent runtimes appear.
+      ...(input.actor ? { metadata: { actor: input.actor } } : {}),
     })
     .select("id")
     .single();

@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { logComplianceEvent } from "./logger";
+import type { Actor } from "@/lib/gateway/actor";
 import { handleQuarantine } from "@/lib/quarantine/handler";
 import type {
   ActionTaken,
@@ -59,6 +60,10 @@ export interface GatewayDecision {
   /** The gateway's own request id, so a customer can tie a response header to
    *  a queue entry. Display/reference only. */
   requestId: string;
+  /** What sent this prompt — a person's browser, a script, or an autonomous
+   *  agent. Client-supplied and therefore DESCRIPTIVE ONLY; the tenant boundary
+   *  is `userId` above, resolved from the API key. See lib/gateway/actor.ts. */
+  actor?: Actor;
 }
 
 export interface RecordedDecision {
@@ -88,6 +93,7 @@ export async function recordGatewayDecision(
     action,
     processingTimeMs,
     requestId,
+    actor,
   } = decision;
 
   try {
@@ -104,6 +110,7 @@ export async function recordGatewayDecision(
       confidence_score: classification.confidence,
       detected_entities: classification.entities,
       processing_time_ms: processingTimeMs,
+      actor,
     });
 
     if (action !== "QUARANTINED") {

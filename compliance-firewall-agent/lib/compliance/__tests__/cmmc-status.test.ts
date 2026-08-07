@@ -39,8 +39,17 @@ function sourceFiles(dir: string, acc: string[] = []): string[] {
 /** "November 2026", "November 10, 2026", "10 November 2026", "Nov 10 2026". */
 const NAMES_THE_DATE = /\b(?:10\s+)?nov(?:\.|ember)?\s*(?:10\s*,?\s*)?2026\b/i;
 
-/** Any acknowledgement that the phase was suspended. */
-const NAMES_THE_SUSPENSION = /suspend|2026-07-13|13 july 2026|july 13,? 2026|superseded/i;
+/**
+ * Any acknowledgement of the programme's actual status.
+ *
+ * "pause"/"paused" joined this list on 2026-08-07, when the product's framing
+ * moved from "suspended, deadline gone" to "paused for review, November is
+ * still the date to be ready for" (founder decision). The guard's job is
+ * unchanged and is the reason it still has teeth: a file may name the November
+ * date ONLY if it also says where the programme stands. Quoting the date bare,
+ * as a live certification deadline, is what loses the buyer who checks.
+ */
+const NAMES_THE_SUSPENSION = /suspend|paus|2026-07-13|13 july 2026|july 13,? 2026|superseded/i;
 
 describe("CMMC regulatory status", () => {
   const files = SCAN_DIRS.flatMap((d) => sourceFiles(join(ROOT, d)));
@@ -50,7 +59,7 @@ describe("CMMC regulatory status", () => {
     expect(files.length).toBeGreaterThan(100);
   });
 
-  it("no source file cites the November 2026 deadline without naming the suspension", () => {
+  it("no source file cites the November 2026 date without naming the programme status", () => {
     const violations: string[] = [];
     for (const file of files) {
       const src = readFileSync(file, "utf8");
@@ -59,7 +68,7 @@ describe("CMMC regulatory status", () => {
     }
     expect(
       violations,
-      `cites the cancelled CMMC deadline as live: ${violations.join(", ")}`,
+      `names 10 Nov 2026 without saying where CMMC Phase 2 stands: ${violations.join(", ")}`,
     ).toEqual([]);
   });
 

@@ -38,6 +38,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { z } from "zod";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
+import { identifyActor } from "@/lib/gateway/actor";
 import { recordGatewayDecision } from "@/lib/audit/record-decision";
 import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
 import { resolveApiKey, ApiKeyBackendUnavailable } from "@/lib/gateway/api-key";
@@ -630,6 +631,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     action,
     processingTimeMs: scanMs,
     requestId,
+    // What sent this. Every AI coding agent already speaks this endpoint's
+    // protocol, so agent traffic arrives here with no integration — and until
+    // now it was recorded as 400 anonymous events where the customer needed one
+    // attributable run. Client-supplied and DESCRIPTIVE ONLY: `userId` above is
+    // the tenant boundary, resolved from the API key.
+    actor: identifyActor(req.headers),
   });
 
   const complianceHeaders: Record<string, string> = {
