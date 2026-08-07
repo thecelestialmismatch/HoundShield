@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ENDPOINTS, DOC_NAV, GATEWAY_BASE, LANG_LABEL, type Lang } from '../api-data';
+import { ENDPOINTS, DOC_NAV, GATEWAY_BASE, PROXY_BASE, LANG_LABEL, type Lang } from '../api-data';
 
 describe('API reference data integrity', () => {
   it('every endpoint has a unique anchor id', () => {
@@ -32,9 +32,43 @@ describe('API reference data integrity', () => {
     }
   });
 
-  it('curl/http samples target the gateway base', () => {
-    for (const e of ENDPOINTS) {
-      expect(e.request.curl).toContain(GATEWAY_BASE);
+  // Two products, two base URLs. `/v1/stats` and `/v1/events` live in
+  // proxy/server.ts and answer 404 on the hosted rail; documenting them against
+  // GATEWAY_BASE handed every reader an unrunnable curl — and implied that an
+  // unauthenticated stats route was public on a MULTI-TENANT host, which it
+  // must never be. The scope flag is what keeps the two apart.
+  const langs: Lang[] = ['curl', 'js', 'python'];
+
+  it('hosted endpoints target the hosted base, and only that', () => {
+    for (const e of ENDPOINTS.filter((x) => !x.selfHosted)) {
+      for (const l of langs) {
+        expect(e.request[l], `${e.id} · ${l}`).toContain(GATEWAY_BASE);
+        expect(e.request[l], `${e.id} · ${l} points at a proxy`).not.toContain(PROXY_BASE);
+      }
+    }
+  });
+
+  it("self-hosted endpoints target the customer's own proxy, never the shared host", () => {
+    const selfHosted = ENDPOINTS.filter((e) => e.selfHosted);
+    // If this drops to zero the guard below stops guarding anything.
+    expect(selfHosted.length).toBeGreaterThan(0);
+    for (const e of selfHosted) {
+      for (const l of langs) {
+        expect(e.request[l], `${e.id} · ${l}`).toContain(PROXY_BASE);
+        expect(e.request[l], `${e.id} · ${l} leaks onto the hosted rail`).not.toContain(
+          GATEWAY_BASE
+        );
+      }
+    }
+  });
+
+  it('an unauthenticated endpoint is never advertised on the shared host', () => {
+    // No-auth on your own single-tenant container is fine. No-auth on the
+    // multi-tenant host would expose one customer's volume to every other.
+    for (const e of ENDPOINTS.filter((x) => !x.selfHosted)) {
+      if (/^none\.?$/i.test(e.auth.trim())) {
+        expect(['health'], `${e.id} is public on the shared host`).toContain(e.id);
+      }
     }
   });
 
