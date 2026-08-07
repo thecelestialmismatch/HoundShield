@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { OperatorDashboard } from '@/components/dashboard/OperatorDashboard'
-import { getSessionProfile } from '@/lib/auth/profile'
+import { getSessionUser } from '@/lib/auth/session'
 import { hasGatewayTraffic } from '@/lib/dashboard/gateway-traffic'
 
 export const metadata: Metadata = {
@@ -40,13 +40,20 @@ export const dynamic = 'force-dynamic'
  * below is a security control.
  */
 export default async function CommandCenterOverviewPage() {
-  // Best-effort personalization ONLY. A missing or failed profile degrades the
+  // Best-effort personalization ONLY. A missing or failed session degrades the
   // greeting, never the door — and never the honesty of the data, which
   // useOperatorTelemetry fetches per session regardless of what happens here.
+  //
+  // `getSessionUser`, not `getSessionProfile`: the only field read here is
+  // `user.name`, which comes off the session itself. The profile variant fired a
+  // `select full_name from profiles` whose result was then discarded on the very
+  // next line — a whole database round-trip, per dashboard load, for a value it
+  // never used. And `getSessionUser` is request-cached, so after the gate in
+  // app/command-center/layout.tsx already resolved the session this costs nothing.
   let name: string | null = null
   try {
-    const session = await getSessionProfile('full_name')
-    name = session?.user.name?.split(' ')[0] ?? null
+    const user = await getSessionUser()
+    name = user?.name?.split(' ')[0] ?? null
   } catch {
     name = null
   }

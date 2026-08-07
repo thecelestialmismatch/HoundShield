@@ -30,6 +30,8 @@ export interface TelemetryEventRow {
   classifications: string[] | null
   action_taken: string
   processing_time_ms: number | null
+  /** Present on seeded demo rows only. See `synthetic` on OverviewTelemetry. */
+  metadata?: { synthetic?: boolean } | null
 }
 
 /** One row of the "Live events" table. Metadata only, by construction. */
@@ -89,6 +91,20 @@ export interface OverviewTelemetry {
   /** False when the customer has no events at all — the "proxy not connected
    *  yet" state. The UI must branch on this rather than rendering zeros. */
   connected: boolean
+  /**
+   * True when ANY row in the window was seeded rather than observed.
+   *
+   * The dashboard is sold as audit evidence, so the one thing it may never do is
+   * present numbers it did not measure as numbers it did. The demo account
+   * (lib/dashboard/demo-telemetry-seed.ts) exists so the product can be shown
+   * populated; this flag is the price of it. Every surface that renders this
+   * telemetry must say so on screen when it is true — an unlabelled screenshot
+   * of seeded data is a fabricated metric, which is on the NEVER-DO list.
+   *
+   * Deliberately `some`, not `every`: a single synthetic row in the window makes
+   * the totals partly synthetic, and "mostly real" is not a claim worth making.
+   */
+  synthetic: boolean
   /** Size of the aggregation window, in days. */
   windowDays: number
   totals: OverviewTotals
@@ -293,6 +309,7 @@ export function aggregateOverview(
 
   return {
     connected: totals.events > 0,
+    synthetic: rows.some((row) => row.metadata?.synthetic === true),
     windowDays,
     totals,
     scanP50Ms: median(latencies),

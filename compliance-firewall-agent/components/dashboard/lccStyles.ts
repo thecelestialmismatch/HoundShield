@@ -540,7 +540,11 @@ export const LCC_CSS = `
 @media(max-width:760px){.hs-lcc .kpis.k6{grid-template-columns:repeat(2,1fr)}}
 
 .hs-lcc .op-toolbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}
-.hs-lcc .op-toolbar h2{font-family:var(--f-disp);font-size:1.5rem;font-weight:600;margin:0 0 .2rem}
+.hs-lcc .op-toolbar h2{font-family:var(--f-disp);font-size:1.5rem;font-weight:600;margin:0 0 .2rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+/* "Demo data" — seeded telemetry declaring itself beside the dashboard title.
+   Amber rather than the brand steel: it must read as a caveat, not as a feature
+   badge. Sized off the title so it never dominates it. */
+.hs-lcc .op-demo-tag{font-family:var(--f-mono);font-size:.62rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;color:#92610a;background:rgba(217,151,20,.13);border:1px solid rgba(217,151,20,.32);white-space:nowrap}
 .hs-lcc .op-toolbar-sub{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--mut2)}
 .hs-lcc .op-live{display:inline-flex;align-items:center;gap:.35rem;color:var(--ok-text);font-weight:600}
 .hs-lcc .op-live.is-err{color:var(--bad-text)}

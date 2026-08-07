@@ -21,6 +21,7 @@ import {
   Settings2,
   ShieldAlert,
 } from "lucide-react";
+import { AnswerText } from "@/components/brain/AnswerText";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -112,7 +113,11 @@ function renderContent(rawContent: string) {
                 if (bp.startsWith("**") && bp.endsWith("**")) {
                   return <strong key={k} className="text-white font-semibold">{bp.slice(2, -2)}</strong>;
                 }
-                return <span key={k}>{bp}</span>;
+                // Same treatment as the floating Brain AI widget: a destination
+                // the assistant names is a destination you can click. Applied to
+                // the non-bold, non-code runs only, so a URL inside a fenced
+                // block stays copyable text.
+                return <AnswerText key={k} text={bp} className="text-brand-400 underline underline-offset-2 decoration-brand-400/40 hover:decoration-brand-400" />;
               })}
               {j < part.split("\n").length - 1 && <br />}
             </span>
