@@ -133,6 +133,46 @@ an older session.
 `tsc --noEmit | grep -v '^\.next/'` (CI checks out fresh and never sees them), or clear
 `.next` first.
 
+## 2026-08-05 (verification — my own mistake)
+
+### I scoped a bug to one string and declared the file fixed. There were two strings.
+**What:** the gateway URL was dead. I grepped `proxy.houndshield.com`, found six copies,
+repointed them, and moved on. A later grep for the *concept* turned up
+`gateway.houndshield.com` in nine more files — including two FAQ answers in a file I had
+already "finished", so `lib/brain-ai/faq.ts` sat half-fixed with no test able to see it.
+**Root cause:** I searched for the token I had first observed instead of the property I
+was fixing. One dead host is a typo; "every surface that hands out a gateway URL" is the
+actual invariant, and it was never the thing I searched for.
+**Rule:** when a bad value appears in more than two places, stop editing and first
+enumerate every value that plays the same ROLE — grep the concept (`/v1`, `baseURL`,
+`base_url`), not the string you happened to see. Then fix them in one pass behind one
+constant, and add the guard before claiming done.
+
+### My own guard missed an instance because the string was regex-escaped.
+**What:** the "link 0" guard walks every source file for the dead hosts. It passed. The
+full suite then failed on `GatewayKeys.test.tsx:117`, which held
+`/curl https:\/\/proxy\.houndshield\.com\/v1/` — a regex literal. The guard's `includes()`
+never matched because of the backslashes.
+**Root cause:** I wrote the guard against how *I* had been writing the string, not against
+how the codebase writes strings. Escaped, split, and templated forms are all the same
+value to a reader and to a customer.
+**Rule:** a source-scanning guard must normalize before it matches — at minimum strip
+backslashes. And a guard that passes on the first run is unproven: confirm it walks a
+non-zero file count and that it goes red against a known-bad instance before trusting it.
+
+### A 404 is not proof a feature is missing.
+**What:** `/v1/stats` and `/v1/events` were documented and 404 in production. I was one
+step from deleting them from the docs as phantom endpoints. They are implemented in
+`proxy/server.ts` — real Mode-B routes, wrongly advertised at the Mode-A base URL.
+Deleting them would have removed a real capability from the docs and left the actual
+defect (two products described by one base URL) in place. Worse, `/v1/stats` takes no
+auth, which is right on the customer's own container and a cross-tenant leak on a shared
+host — the docs were implicitly promising the dangerous version.
+**Rule:** before removing a documented capability that 404s, grep the OTHER deployment
+targets in the repo for the same path. In a multi-mode product (hosted / self-hosted /
+air-gapped), "which mode serves this?" is part of every endpoint's definition, not an
+afterthought — and an endpoint's auth requirement can change meaning with the mode.
+
 ---
 
 ## 2026-08-04 (privacy — a control that only half-covered its own threat)
@@ -163,7 +203,6 @@ also scoped to code; `tasks/` is prose, tracked, and published exactly the same 
    the guard as evidence recreates the leak inside the control. Use synthetic names, and
    prove discrimination by injecting the real string into the **working tree only**, then
    reverting.
-
 ---
 
 ## 2026-08-03 (delivery — my own mistake)

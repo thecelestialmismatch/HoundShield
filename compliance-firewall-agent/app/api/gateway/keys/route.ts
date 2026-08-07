@@ -32,6 +32,7 @@ import { requireUser } from "@/lib/auth/api-guard";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { generateApiKey } from "@/lib/gateway/api-key";
 import { enforceRateLimit, LLM_RATE_LIMITS } from "@/lib/rate-limit-shared";
+import { getUserSubscription, canAccessGateway } from "@/lib/subscription/check";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -90,6 +91,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     LLM_RATE_LIMITS.authenticated
   );
   if (limited) return limited;
+
+  // The gateway itself rejects free-tier traffic with 402 (`canAccessGateway`
+  // in app/api/v1/chat/completions/route.ts). Minting here without the same
+  // check hands a free user a credential that is real, listed, and guaranteed
+  // to fail — and the screen that issues it promises "the block lands on your
+  // dashboard as a real event within seconds". That is the same defect this
+  // route exists to close, one link further down: instructions the product
+  // gives you that cannot work. Fail closed, and name the reason.
+  const tier = await getUserSubscription(auth.user.id);
+  if (!canAccessGateway(tier)) {
+    return NextResponse.json(
+      {
+        error:
+          "Gateway access requires a Pro plan or higher. A key minted on the free plan would be rejected by the gateway, so we don't issue one. Upgrade at /pricing.",
+      },
+      { status: 402 }
+    );
+  }
 
   // Optional label. Bad input degrades to the default rather than 400-ing —
   // the name is cosmetic and failing a key mint over it would be absurd.
