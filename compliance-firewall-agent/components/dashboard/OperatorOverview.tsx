@@ -40,6 +40,9 @@ import { SectionIndex } from './operator/SectionIndex'
 import { ActivityHeatmap } from './operator/ActivityHeatmap'
 import { OutcomeMix, BlockedSeverity } from './operator/OutcomeDonuts'
 import { ExposurePrevented } from './operator/ExposurePrevented'
+import { DailyTrend, LatencyProfile, SprsGauge } from './operator/TrendCharts'
+import { BlockRateTrend, HourOfDayProfile, CumulativeInspected } from './operator/RiskWindows'
+import { GatewayTerminal } from './operator/GatewayTerminal'
 import { useQuarantineCount } from '@/app/command-center/(tools)/_shell/useQuarantineCount'
 import { dashboardLabel } from '@/app/command-center/(tools)/_shell/useViewer'
 import type { ProvenanceId } from './dataProvenance'
@@ -174,6 +177,32 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
           <div className="row r-3-2">
             <OutcomeMix tel={t.tel} />
             <BlockedSeverity tel={t.tel} />
+          </div>
+        </Section>
+
+        {/* What is happening right now, in the register an engineer reads. */}
+        <Section id="terminal" prefs={prefs} editing={editing}>
+          <GatewayTerminal tel={t.tel} recent={t.recent} />
+        </Section>
+
+        <Section id="trend" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <DailyTrend tel={t.tel} />
+            <LatencyProfile tel={t.tel} />
+          </div>
+        </Section>
+
+        <Section id="rate" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <BlockRateTrend tel={t.tel} />
+            <CumulativeInspected tel={t.tel} />
+          </div>
+        </Section>
+
+        <Section id="gauge" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <SprsGauge posture={t.posture} />
+            <HourOfDayProfile tel={t.tel} />
           </div>
         </Section>
 

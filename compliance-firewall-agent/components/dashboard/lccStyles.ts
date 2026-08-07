@@ -657,6 +657,86 @@ export const LCC_CSS = `
   .hs-lcc .op-dl>summary{width:100%}
 }
 
+/* 7-day trend. */
+.hs-lcc .op-tr-svg{width:100%;height:74px;display:block}
+.hs-lcc .op-tr-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:8px}
+.hs-lcc .op-tr-day{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;
+  min-height:44px;padding:6px 2px;border-radius:8px;text-decoration:none;color:inherit}
+.hs-lcc .op-tr-day:hover{background:color-mix(in srgb,var(--brand) 8%,transparent)}
+.hs-lcc .op-tr-day b{font-size:.82rem;font-variant-numeric:tabular-nums}
+.hs-lcc .op-tr-day i{width:16px;background:var(--bad);border-radius:2px;display:block}
+.hs-lcc .op-tr-day span{font-size:.66rem;color:var(--mut2)}
+.hs-lcc .op-tr-day em{font-style:normal;font-size:.6rem;color:var(--mut2);text-align:center}
+
+/* Latency profile. */
+.hs-lcc .op-lat{display:grid;grid-template-columns:34px 1fr 58px;gap:8px 8px;align-items:center;margin-bottom:8px}
+.hs-lcc .op-lat-k{font-size:.72rem;color:var(--mut2);font-family:ui-monospace,Menlo,monospace}
+.hs-lcc .op-lat-track{height:10px;border-radius:99px;background:color-mix(in srgb,var(--line) 60%,transparent);overflow:hidden}
+.hs-lcc .op-lat-track i{display:block;height:100%;border-radius:99px}
+.hs-lcc .op-lat-v{font-size:.85rem;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.hs-lcc .op-lat-n{grid-column:2/-1;font-size:.66rem;color:var(--mut2);margin-top:-4px}
+.hs-lcc .op-lat-foot{margin:10px 0 0;font-size:.72rem;color:var(--mut2);line-height:1.5}
+
+/* SPRS gauge. */
+.hs-lcc .op-gauge{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.hs-lcc .op-gauge-v{font-size:1.6rem;font-weight:700;fill:var(--ink);font-variant-numeric:tabular-nums}
+.hs-lcc .op-gauge-side{display:grid;gap:8px;min-width:0;flex:1}
+.hs-lcc .op-gauge-side div{display:flex;align-items:baseline;gap:8px}
+.hs-lcc .op-gauge-side b{font-size:1.1rem;font-variant-numeric:tabular-nums}
+.hs-lcc .op-gauge-side span{font-size:.72rem;color:var(--mut2)}
+.hs-lcc .op-gauge-cta{font-size:.78rem;font-weight:600;color:var(--brand);text-decoration:none;
+  min-height:40px;display:inline-flex;align-items:center}
+
+/* Block rate + cumulative. */
+.hs-lcc .op-rate-hd{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.hs-lcc .op-rate-hd b{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+.hs-lcc .op-rate-hd span{font-size:.72rem;color:var(--mut2)}
+.hs-lcc .op-rate-svg{width:100%;height:66px;display:block}
+.hs-lcc .op-rate-x{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:6px}
+.hs-lcc .op-rate-d{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;
+  justify-content:center;border-radius:8px;text-decoration:none;color:inherit}
+.hs-lcc .op-rate-d:hover{background:color-mix(in srgb,var(--brand) 8%,transparent)}
+.hs-lcc .op-rate-d b{font-size:.72rem;font-variant-numeric:tabular-nums}
+.hs-lcc .op-rate-d span{font-size:.64rem;color:var(--mut2)}
+
+/* Hour-of-day profile. */
+.hs-lcc .op-hod{display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:2px;height:82px;align-items:end}
+.hs-lcc .op-hod-b{display:flex;align-items:flex-end;height:100%;min-width:0;border-radius:2px}
+.hs-lcc .op-hod-b:hover{background:color-mix(in srgb,var(--brand) 10%,transparent)}
+.hs-lcc .op-hod-b i{width:100%;border-radius:2px 2px 0 0;min-height:2px;display:block}
+.hs-lcc .op-hod-x{display:flex;justify-content:space-between;font-size:.62rem;color:var(--mut2);margin-top:6px}
+.hs-lcc .op-hod-foot{margin:8px 0 0;font-size:.72rem;color:var(--mut2);line-height:1.5}
+.hs-lcc .op-hod-foot b{color:var(--ink)}
+
+/* Gateway console. */
+.hs-lcc .op-term{margin:0 14px 14px;border-radius:10px;overflow:hidden;border:1px solid #23252a;background:#0b0d10}
+.hs-lcc .op-term-bar{display:flex;align-items:center;gap:6px;padding:7px 10px;background:#14171b;border-bottom:1px solid #23252a}
+.hs-lcc .op-term-bar .d{width:9px;height:9px;border-radius:99px;display:block}
+.hs-lcc .op-term-bar .d.r{background:#ff5f57}
+.hs-lcc .op-term-bar .d.y{background:#febc2e}
+.hs-lcc .op-term-bar .d.g{background:#28c840}
+.hs-lcc .op-term-bar span{margin-left:6px;font-size:.68rem;color:#8a8f98;font-family:ui-monospace,Menlo,monospace}
+.hs-lcc .op-term-body{margin:0;padding:10px 12px;overflow-x:auto;font-family:ui-monospace,Menlo,monospace;
+  font-size:.72rem;line-height:1.8;color:#d0d6e0;white-space:pre}
+.hs-lcc .op-term-l{display:grid;grid-template-columns:64px 46px 92px 1fr 52px;gap:10px;
+  text-decoration:none;color:inherit;border-radius:4px;padding:0 4px;margin:0 -4px}
+.hs-lcc a.op-term-l:hover{background:rgba(255,255,255,.06)}
+.hs-lcc .op-term-l .t{color:#62666d}
+.hs-lcc .op-term-l .p{color:#d0d6e0}
+.hs-lcc .op-term-l .d{color:#8a8f98;overflow:hidden;text-overflow:ellipsis}
+.hs-lcc .op-term-l .m{color:#62666d;text-align:right}
+.hs-lcc .op-term-l .v{font-weight:700}
+.hs-lcc .op-term-l.is-block .v{color:#ff6b6b}
+.hs-lcc .op-term-l.is-hold .v{color:#e0b341}
+.hs-lcc .op-term-l.is-pass .v{color:#27a644}
+.hs-lcc .op-term-l.is-dim{display:block;color:#62666d}
+.hs-lcc .op-term-l.is-warn{display:block;color:#e0b341}
+@media(max-width:640px){
+  .hs-lcc .op-term-body{font-size:.66rem}
+  .hs-lcc .op-term-l{grid-template-columns:58px 44px 1fr;gap:8px}
+  .hs-lcc .op-term-l .d,.hs-lcc .op-term-l .m{display:none}
+}
+
 /* Heatmap: 25 columns (day label + 24 hours). */
 .hs-lcc .op-hm{display:grid;grid-template-columns:34px repeat(24,minmax(0,1fr));gap:2px;align-items:center}
 .hs-lcc .op-hm-corner{height:1px}

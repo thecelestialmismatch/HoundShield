@@ -96,6 +96,10 @@ export interface OverviewTelemetry {
    *  recorded one. This is the honest replacement for the mockup's "Tokens
    *  Scanned" tile — the gateway records `processing_time_ms`, never tokens. */
   scanP50Ms: number | null
+  /** Same latency set at the 90th and 99th percentile. Null when nothing has
+   *  been timed yet — never 0, which would read as "instant". */
+  scanP90Ms: number | null
+  scanP99Ms: number | null
   /** Exactly 24 buckets, oldest → newest, ending with the current hour. */
   hourly: HourBucket[]
   /** Exactly 7 buckets, oldest → newest, ending today. */
@@ -147,6 +151,22 @@ export function median(values: number[]): number | null {
   const sorted = [...values].sort((a, b) => a - b)
   const mid = Math.floor((sorted.length - 1) / 2)
   return sorted[mid]
+}
+
+/**
+ * Nearest-rank percentile (lower of the two middle values, same convention as
+ * `median` above so p50 from either helper agrees).
+ *
+ * Nearest-rank rather than interpolated: these are millisecond readings the
+ * gateway actually recorded, and an interpolated p99 reports a latency no
+ * request ever had. On a panel a customer may quote to an assessor, every number
+ * should be a measurement.
+ */
+export function percentile(values: number[], p: number): number | null {
+  if (values.length === 0) return null
+  const sorted = [...values].sort((a, b) => a - b)
+  const rank = Math.ceil((p / 100) * sorted.length) - 1
+  return sorted[Math.min(Math.max(rank, 0), sorted.length - 1)]
 }
 
 /** UTC midnight for a timestamp, as an epoch ms. */
@@ -276,6 +296,8 @@ export function aggregateOverview(
     windowDays,
     totals,
     scanP50Ms: median(latencies),
+    scanP90Ms: percentile(latencies, 90),
+    scanP99Ms: percentile(latencies, 99),
     hourly,
     daily,
     heat,

@@ -277,8 +277,26 @@ export function Sidebar({
         })}
       </nav>
 
-      {/* Bottom */}
-      <div className="border-t border-white/[0.06] p-3 space-y-1">
+      {/*
+        Pinned footer — always the last thing in the rail, never a nav row.
+
+        It was already last in the DOM and `nav` already carries `flex-1`, so it
+        measured flush to the viewport bottom (900px of a 900px viewport). What
+        it did NOT do was LOOK pinned: the 23-item nav scrolls (1012px of content
+        in 625px), so the list cut off mid-section directly above a hairline, and
+        Settings read as simply the next item after whatever the scroll happened
+        to end on.
+
+        `mt-auto` makes the intent explicit rather than emergent, and the
+        stronger surface + shadow separates the footer from the scrolling list so
+        it reads as chrome. The fade above the border tells the operator the nav
+        continues — nothing is missing, it scrolls.
+      */}
+      <div className="relative mt-auto flex-shrink-0 border-t border-[var(--hs-border-ink)] bg-[var(--hs-surface-1)] p-3 space-y-1 shadow-[0_-8px_16px_-12px_rgba(15,30,46,0.18)]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-6 right-0 left-0 h-6 bg-gradient-to-t from-[var(--hs-surface-1)] to-transparent"
+        />
         <Link
           href="/command-center/settings"
           className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-colors"
