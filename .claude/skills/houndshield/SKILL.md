@@ -100,19 +100,21 @@ Skip inapplicable stages (say which + why). Close with a CEO Advisor call: the o
 ### Mode C — ENGINEERING (any request that touches code)
 Business personas cannot write, review or fix code. Route ALL code work here.
 
-If `~/.claude/skills/ponytail/SKILL.md` exists, invoke it and follow its ladder rather
-than re-deriving one. If it is absent, say so in one line and continue — the gates below
-stand on their own.
+**Invoke the `ponytail` skill and follow its ladder.** It is vendored into this repo at
+`.claude/skills/ponytail/` (MIT, provenance in `VENDORED.md`), so it is always present —
+no user-scope install required. Default intensity `full`; reach for `/ponytail ultra` when
+a request smells like scope creep, `lite` when the founder should see the fuller option
+before it gets cut. Do not restate the ladder here — run it.
 
-Then work these four gates:
+Ponytail owns **what gets built**: YAGNI, reuse before writing, stdlib and native platform
+features before a dependency, root cause over symptom, shortest working diff. The four
+gates below own what ponytail does not — blast radius, environment traps, delegation, and
+irreversibility.
 
-**GATE 1 — THINK BEFORE WRITING (run before the first edit)**
-1. Does this need to exist at all? Speculative → say so in one line, stop.
-2. Does it already exist here? Grep before you write. Re-implementing what lives two
-   files over is the most common failure.
-3. Can the same outcome come from FEWER lines? If yes, take that.
-4. Is this the root cause or a symptom? Grep every caller before editing one.
-5. What breaks if I'm wrong? Name it out loud before proceeding.
+**GATE 1 — NAME THE BLAST RADIUS (before the first edit)**
+What breaks if this is wrong? Say it in one line before proceeding. Ponytail shortens the
+solution, never the reading: trace every file the change touches and the real flow end to
+end first. A small diff in the wrong place is not lazy, it is a second bug.
 
 **GATE 2 — REPO FACTS (what this environment lies to you about)**
 Not a verification ritual — these are failure modes care alone will not catch, because
@@ -145,7 +147,9 @@ happen, what breaks, and how to undo it. Then wait.
 ### PERSONA ROUTING TABLE
 | Persona (`personas/<file>.md`) | Route when the request is about… |
 |--------------------------------|----------------------------------|
-| **Mode C gates** (plus `ponytail` if installed) | ANY code: write, fix, refactor, review, test, deploy, pick a dependency |
+| **`ponytail` + Mode C gates** | ANY code: write, fix, refactor, review, test, deploy, pick a dependency |
+| `ponytail-review` / `ponytail-audit` | "is this over-engineered", "what can we delete" — a diff, or the whole repo |
+| `ponytail-debt` | "what did we defer", "list the shortcuts" — harvests every `ponytail:` comment into a ledger |
 | **`WEB & RESEARCH`** (below) | anything needing the live web: search, read a page, competitor pricing, scraping, filling a form, driving a browser |
 | `ceo-advisor` | founder decisions, prioritization, strategy, "help me decide", "what do I do next" |
 | `ai-research-analyst` | market research, competitor analysis, industry/trend intel |
@@ -309,8 +313,11 @@ concrete enough to do today, near-$0 cost. Not a list. One action.
 - Preserve what works. Additive over destructive. Two lines beat two thousand.
 - One clear next action at the end. Always.
 - Founder email + name come from `FOUNDER_EMAIL` / `FOUNDER_NAME` (never committed — public repo). See FOUNDER IDENTITY.
-- **Code = Mode C.** Work the four gates, including on one-line changes — those are
-  the ones that ship broken.
+- **Code = Mode C.** Run ponytail, then the four gates — including on one-line changes,
+  which are the ones that ship broken.
+- **Mark deliberate shortcuts** with a `ponytail:` comment naming the ceiling and the
+  upgrade path, the way `proxy/ooda/loop.ts` and `lib/audit/seed-anchor.ts` already do.
+  `/ponytail-debt` is what stops "later" becoming "never".
 - **Selling beats building.** Checkout is dead and there are zero customers. If a
   request is a new feature, challenge it against "does this close a paid report?"
   before writing anything.
