@@ -620,14 +620,26 @@ export const LCC_CSS = `
 .hs-lcc .op-ev-right b{font-size:.7rem;letter-spacing:.03em}
 
 /* Quick actions. */
-.hs-lcc .op-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-@media(max-width:900px){.hs-lcc .op-actions{grid-template-columns:repeat(2,1fr)}}
-.hs-lcc .op-action{display:flex;align-items:center;gap:.7rem;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--soft);text-decoration:none;color:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
+/* minmax(0,1fr), not a bare 1fr. A bare 1fr track carries an implicit
+   min-width:auto, so it can never shrink below the card's min-content width
+   (~197px: 36px icon + label + 14px chevron + padding). That made this the one
+   grid on the dashboard that overflowed its own container — measured in
+   Chromium 2026-08-07 at exactly the two widths the arithmetic predicts:
+   4 tracks × 177px = 708px inside a 700px column at 1024px (14px over), and
+   2 tracks × 197px = 394px inside a 343px column at 375px (40px over). Every
+   other panel grid here already uses auto-fit/minmax and was never affected.
+   Guarded by app/__tests__/dashboard-responsive-contract.test.ts. */
+.hs-lcc .op-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media(max-width:900px){.hs-lcc .op-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Below ~560px two columns leave under 100px for the label. One full-width row
+   per action reads better on a phone than two cramped ones. */
+@media(max-width:560px){.hs-lcc .op-actions{grid-template-columns:minmax(0,1fr)}}
+.hs-lcc .op-action{display:flex;align-items:center;gap:.7rem;min-width:0;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--soft);text-decoration:none;color:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
 .hs-lcc .op-action:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--brand) 40%,transparent);box-shadow:0 8px 24px -14px color-mix(in srgb,var(--brand) 60%,transparent)}
 .hs-lcc .op-action:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hs-lcc .op-action-ic{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:10px;background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand)}
 .hs-lcc .op-action-ic svg{width:17px;height:17px}
-.hs-lcc .op-action-label{flex:1;font-size:.85rem;font-weight:600}
+.hs-lcc .op-action-label{flex:1;min-width:0;font-size:.85rem;font-weight:600}
 .hs-lcc .op-action-go{width:14px;height:14px;flex-shrink:0;color:var(--mut2)}
 .hs-lcc .op-action:hover .op-action-go{color:var(--brand)}
 
