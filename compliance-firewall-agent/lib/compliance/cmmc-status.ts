@@ -15,6 +15,30 @@
  * November 2026 without also naming the suspension.
  *
  * NEVER-DO (CLAUDE.md): sell the November 10 deadline. It does not exist.
+ *
+ * ── WHEN PHASE 2 COMES BACK ─────────────────────────────────────────────────
+ * Re-checked 2026-08-07 (Federal News Network, Breaking Defense, war.gov,
+ * Arnold & Porter, Holland & Knight, Cyber AB town hall): STILL SUSPENDED. The
+ * Reform Task Force RFI closed 12:00 ET on 2026-08-14 and the 60-day review
+ * reports after that, so a new memo is likely and a reinstatement — probably
+ * with a different date and scope — is a live possibility, not a fantasy.
+ *
+ * That is why this file exists as one constant rather than thirteen hardcoded
+ * strings. Reinstating is a SMALL, MECHANICAL change, and doing it correctly
+ * means doing it here and nowhere else:
+ *
+ *   1. Update `headline`, `blurb` and the exported dates to the new memo.
+ *   2. Run `npm test`. `__tests__/cmmc-status.test.ts` fails the build if any
+ *      source file names a CMMC date without also naming its current status,
+ *      so it will point at every surface that needs to follow.
+ *   3. Regenerate the pitch decks: `node docs/decks/render-html.mjs &&
+ *      node docs/decks/render-pptx.mjs`. They read SOURCES from content.mjs.
+ *
+ * Do NOT reinstate the deadline ahead of the memo. A defense buyer checks this
+ * in one search, and a vendor caught quoting a cancelled requirement to create
+ * urgency loses the deal and the reference. The pitch that works today is
+ * liability (DOJ prosecutes self-attestation under the False Claims Act), and
+ * it keeps working whether or not certification returns.
  */
 
 /** ISO date the Department of War suspended CMMC Phase 2. */
