@@ -251,3 +251,51 @@ describe('toRecentEvents — metadata only', () => {
     expect(toRecentEvents(many, 8)).toHaveLength(8)
   })
 })
+
+describe('severity mix is case-insensitive', () => {
+  it('counts a lower-case risk_level instead of silently dropping it', () => {
+    // RISK_ORDER filters on exact upper-case names. A row stored as 'critical'
+    // used to be bucketed under that literal and then filtered out, so the
+    // severity chart reported "nothing was blocked" while the Blocked KPI beside
+    // it showed a real number.
+    const now = Date.parse('2026-08-07T12:00:00Z')
+    const t = aggregateOverview(
+      [
+        ev({ created_at: '2026-08-07T11:00:00Z', action_taken: 'BLOCKED', risk_level: 'critical' }),
+        ev({ created_at: '2026-08-07T11:05:00Z', action_taken: 'BLOCKED', risk_level: 'CRITICAL' }),
+        ev({ created_at: '2026-08-07T11:10:00Z', action_taken: 'BLOCKED', risk_level: ' medium ' }),
+      ],
+      { now, windowDays: 7 },
+    )
+    expect(t.totals.blocked).toBe(3)
+    expect(t.riskMix).toEqual([
+      { name: 'CRITICAL', count: 2 },
+      { name: 'MEDIUM', count: 1 },
+    ])
+    // The chart total must always reconcile with the KPI beside it.
+    expect(t.riskMix.reduce((n, r) => n + r.count, 0)).toBe(t.totals.blocked)
+  })
+})
+
+describe('day x hour heat buckets', () => {
+  it('splits the same rows as `daily`, by UTC hour', () => {
+    const now = Date.parse('2026-08-07T23:59:00Z')
+    const t = aggregateOverview(
+      [
+        ev({ created_at: '2026-08-07T09:30:00Z' }),
+        ev({ created_at: '2026-08-07T09:45:00Z' }),
+        ev({ created_at: '2026-08-07T16:05:00Z', action_taken: 'BLOCKED', risk_level: 'HIGH' }),
+      ],
+      { now, windowDays: 7 },
+    )
+    expect(t.heat).toHaveLength(7)
+    expect(t.heat[0]).toHaveLength(24)
+    const today = t.heat[6]
+    expect(today[9]).toBe(2)
+    expect(today[16]).toBe(1)
+    expect(t.heatBlocked[6][16]).toBe(1)
+    expect(t.heatBlocked[6][9]).toBe(0)
+    // Heat must reconcile with the daily bucket it splits.
+    expect(today.reduce((a, b) => a + b, 0)).toBe(t.daily[6].events)
+  })
+})

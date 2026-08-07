@@ -23,7 +23,14 @@ import { DEFAULT_THEME_ID, getThemeById } from './design-themes'
  *  order; the identity band + status strip above them are fixed anchors. */
 export const OVERVIEW_SECTIONS: { id: string; label: string }[] = [
   { id: 'kpis', label: 'KPI tiles' },
+  { id: 'saved', label: 'What this stopped' },
   { id: 'brain', label: 'Ask Brain AI' },
+  { id: 'mix', label: 'Outcome & severity donuts' },
+  { id: 'terminal', label: 'Gateway console (live)' },
+  { id: 'trend', label: '7-day trend & latency profile' },
+  { id: 'rate', label: 'Block rate & cumulative total' },
+  { id: 'gauge', label: 'SPRS gauge & hour-of-day' },
+  { id: 'heatmap', label: 'Activity heatmap' },
   { id: 'charts', label: 'Overview charts' },
   { id: 'throughput', label: 'Throughput & detection mix' },
   { id: 'posture', label: 'SPRS trend & risk radar' },
@@ -31,6 +38,10 @@ export const OVERVIEW_SECTIONS: { id: string; label: string }[] = [
   { id: 'checklist', label: 'First-run checklist' },
   { id: 'engines', label: 'Detections by engine' },
   { id: 'actions', label: 'Quick actions' },
+  // Added 2026-08-07 with SectionIndex. A section rendered by the overview but
+  // missing from this registry is invisible to the Customize panel and to
+  // `orderOf`, so it can never be reordered or hidden — register every id.
+  { id: 'index', label: 'Everything else (section index)' },
 ]
 
 const SECTION_IDS = OVERVIEW_SECTIONS.map((s) => s.id)

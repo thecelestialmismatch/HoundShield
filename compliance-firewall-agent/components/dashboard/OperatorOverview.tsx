@@ -35,6 +35,16 @@ import { useState } from 'react'
 import { RefreshCw, Calendar, AlertTriangle } from 'lucide-react'
 import { Section } from './OverviewSection'
 import type { DashboardPrefs } from '@/lib/dashboard/use-dashboard-prefs'
+import { DashboardDownload } from './operator/DashboardDownload'
+import { SectionIndex } from './operator/SectionIndex'
+import { ActivityHeatmap } from './operator/ActivityHeatmap'
+import { OutcomeMix, BlockedSeverity } from './operator/OutcomeDonuts'
+import { ExposurePrevented } from './operator/ExposurePrevented'
+import { DailyTrend, LatencyProfile, SprsGauge } from './operator/TrendCharts'
+import { BlockRateTrend, HourOfDayProfile, CumulativeInspected } from './operator/RiskWindows'
+import { GatewayTerminal } from './operator/GatewayTerminal'
+import { useQuarantineCount } from '@/app/command-center/(tools)/_shell/useQuarantineCount'
+import { dashboardLabel } from '@/app/command-center/(tools)/_shell/useViewer'
 import type { ProvenanceId } from './dataProvenance'
 import type { EventOutcome } from '@/lib/dashboard/overview-telemetry'
 import { useOperatorTelemetry, type TelemetryWindow } from './operator/useOperatorTelemetry'
@@ -49,11 +59,22 @@ const WINDOWS: { value: TelemetryWindow; label: string }[] = [
   { value: 30, label: 'Last 30 days' },
 ]
 
-export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, checklistSlot }: {
+export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, checklistSlot, name }: {
   prefs: DashboardPrefs
   editing: boolean
   onSource: (id: ProvenanceId) => void
   onTab: (tab: 'assess' | 'settings' | 'feed' | 'reports') => void
+  /**
+   * The operator's first name, when the session has one.
+   *
+   * Display only, and deliberately optional: the page already resolves this for
+   * the Brain AI card, so greeting the person who just signed in costs one
+   * prop rather than a second lookup. Absent — no profile, no name set, a failed
+   * read — the heading falls back to the page's own name. A stand-in ("there",
+   * "Operator") would be a fabricated identity on the customer's own dashboard,
+   * which is the same rule the company slot in the header follows.
+   */
+  name?: string | null
   /** The Brain AI quick-ask card, owned by LiveCommandCenter (it wires the live
    *  analyst). Passed in rather than duplicated so there is one implementation. */
   brainSlot: React.ReactNode
@@ -62,6 +83,9 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
 }) {
   const t = useOperatorTelemetry()
   const [filter, setFilter] = useState<'all' | EventOutcome>('all')
+  // Same live read the sidebar badge uses — null while loading, on error, or in
+  // demo mode, and null renders a dash rather than an invented zero.
+  const quarantine = useQuarantineCount()
 
   const openSettings = () => onTab('settings')
   const openAssess = () => onTab('assess')
@@ -73,7 +97,11 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
           than decorative (they were inert buttons in the mockup). */}
       <div className="op-toolbar">
         <div className="op-toolbar-l">
-          <h2>Dashboard Overview</h2>
+          {/* "Sam's Dashboard", matching the single merged sidebar entry.
+              Falls back to the neutral label with no session name — never an
+              invented stand-in. Same helper the sidebar uses, so the two can
+              never disagree. */}
+          <h2>{dashboardLabel(name ?? null, 'Your Dashboard')}</h2>
           <div className="op-toolbar-sub">
             <span className={`op-live${t.error ? ' is-err' : ''}`}>
               <span className="dot" /> {t.error ? 'Offline' : 'Live'}
@@ -102,6 +130,10 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
           <button type="button" className="btn btn-g btn-sm" onClick={t.refresh} disabled={t.loading}>
             <RefreshCw aria-hidden /> Refresh
           </button>
+          {/* Top-right download — founder direction 2026-08-07. Hands the
+              operator's selected window straight to the existing report
+              endpoint so the file always covers what they are looking at. */}
+          <DashboardDownload windowDays={t.windowDays} />
         </div>
       </div>
 
@@ -124,6 +156,12 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
           <OperatorKpis tel={t.tel} posture={t.posture} onSource={onSource} />
         </Section>
 
+        {/* Why this product exists, in this tenant's own numbers. Sits directly
+            under the KPIs because it is the answer to "so what". */}
+        <Section id="saved" prefs={prefs} editing={editing}>
+          <ExposurePrevented tel={t.tel} />
+        </Section>
+
         <Section id="brain" prefs={prefs} editing={editing}>
           {brainSlot}
         </Section>
@@ -133,6 +171,43 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
             <ActivityByHour tel={t.tel} onSettings={openSettings} />
             <ProviderBreakdown tel={t.tel} onSettings={openSettings} />
           </div>
+        </Section>
+
+        <Section id="mix" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <OutcomeMix tel={t.tel} />
+            <BlockedSeverity tel={t.tel} />
+          </div>
+        </Section>
+
+        {/* What is happening right now, in the register an engineer reads. */}
+        <Section id="terminal" prefs={prefs} editing={editing}>
+          <GatewayTerminal tel={t.tel} recent={t.recent} />
+        </Section>
+
+        <Section id="trend" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <DailyTrend tel={t.tel} />
+            <LatencyProfile tel={t.tel} />
+          </div>
+        </Section>
+
+        <Section id="rate" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <BlockRateTrend tel={t.tel} />
+            <CumulativeInspected tel={t.tel} />
+          </div>
+        </Section>
+
+        <Section id="gauge" prefs={prefs} editing={editing}>
+          <div className="row r-3-2">
+            <SprsGauge posture={t.posture} />
+            <HourOfDayProfile tel={t.tel} />
+          </div>
+        </Section>
+
+        <Section id="heatmap" prefs={prefs} editing={editing}>
+          <ActivityHeatmap tel={t.tel} />
         </Section>
 
         <Section id="posture" prefs={prefs} editing={editing}>
@@ -160,6 +235,12 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
 
         <Section id="actions" prefs={prefs} editing={editing}>
           <QuickActions />
+        </Section>
+
+        {/* Where to go next. The panels above say what is happening; nothing on
+            this page said where to look for more until 2026-08-07. */}
+        <Section id="index" prefs={prefs} editing={editing}>
+          <SectionIndex tel={t.tel} posture={t.posture} quarantine={quarantine} />
         </Section>
       </div>
     </>

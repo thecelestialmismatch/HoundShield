@@ -1,427 +1,124 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  LayoutDashboard,
-  Shield,
-  Activity,
-  AlertTriangle,
-  Scan,
-  Zap,
-  ClipboardCheck,
-  SearchX,
-  FileBarChart,
-  BookOpen,
-  MessageSquare,
-  ListChecks,
-  Users,
-  Settings,
-  ChevronDown,
-  Bell,
-  Search,
-  Menu,
-  Command,
-  ShieldCheck,
-  Target,
-  ScrollText,
-  Wrench,
-  SlidersHorizontal,
-  BarChart3,
-  Download,
-  Map,
-  Rocket,
-  Home,
-  KeyRound,
-  Building2,
-  Crown,
-} from "lucide-react";
-import { Logo } from "@/components/Logo";
-import { TextLogo } from "@/components/TextLogo";
+import { useCallback, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { DemoBanner } from "@/components/ui/demo-banner";
-import { SignOutButton } from "@/components/dashboard/SignOutButton";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { Sidebar } from "./_shell/Sidebar";
+import { Topbar } from "./_shell/Topbar";
+import { CommandPalette, usePaletteShortcut } from "./_shell/CommandPalette";
 
-/* ── Nav Structure ──────────────────────────────────────────────── */
-type NavSection = {
-  label: string;
-  icon: typeof LayoutDashboard;
-  items: {
-    id: string;
-    label: string;
-    icon: typeof LayoutDashboard;
-    href: string;
-    badge?: string;
-  }[];
-};
-
-const NAV_SECTIONS: NavSection[] = [
-  {
-    label: "Firewall",
-    icon: Shield,
-    items: [
-      // "Dashboard Home" is the merged Live Command Center at /command-center
-      // itself. It renders OUTSIDE this (tools) route group, so it brings its
-      // own shell — which is exactly why the group exists: no double sidebar.
-      { id: "home", label: "Dashboard Home", icon: Home, href: "/command-center" },
-      { id: "getting-started", label: "Getting Started", icon: Rocket, href: "/command-center/getting-started" },
-      // Was href "/command-center" until the 2026-07-29 merge handed that URL
-      // to the Live Command Center; this 800-line SPRS/throughput overview kept
-      // its content and moved to its own segment.
-      { id: "overview", label: "Overview", icon: LayoutDashboard, href: "/command-center/overview" },
-      { id: "realtime", label: "Real-Time Feed", icon: Zap, href: "/command-center/realtime" },
-      { id: "timeline", label: "Threat Timeline", icon: Activity, href: "/command-center/timeline" },
-      { id: "scanner", label: "Live Scanner", icon: Scan, href: "/command-center/scanner" },
-      { id: "events", label: "Audit Log", icon: ScrollText, href: "/command-center/events" },
-      { id: "quarantine", label: "Quarantine", icon: AlertTriangle, href: "/command-center/quarantine", badge: "4" },
-      { id: "rules", label: "Firewall Rules", icon: SlidersHorizontal, href: "/command-center/rules" },
-      { id: "security", label: "Security Dashboard", icon: BarChart3, href: "/command-center/security" },
-      { id: "audit-export", label: "Export Audit Log", icon: Download, href: "/command-center/audit-export" },
-    ],
-  },
-  {
-    label: "CMMC Shield",
-    icon: ShieldCheck,
-    items: [
-      { id: "shield-dashboard", label: "SPRS Dashboard", icon: Target, href: "/command-center/shield" },
-      { id: "assessment", label: "Assessment", icon: ClipboardCheck, href: "/command-center/shield/assessment" },
-      { id: "coverage", label: "Coverage Map", icon: Map, href: "/command-center/shield/coverage" },
-      { id: "gaps", label: "Gap Analysis", icon: SearchX, href: "/command-center/shield/gaps" },
-      { id: "reports", label: "Reports", icon: FileBarChart, href: "/command-center/shield/reports" },
-      { id: "resources", label: "Resources", icon: BookOpen, href: "/command-center/shield/resources" },
-    ],
-  },
-  {
-    label: "Response",
-    icon: Wrench,
-    items: [
-      { id: "chat", label: "Compliance AI", icon: MessageSquare, href: "/command-center/chat" },
-      { id: "tasks", label: "Remediation Tasks", icon: ListChecks, href: "/command-center/tasks" },
-      { id: "team", label: "Team", icon: Users, href: "/command-center/team" },
-      { id: "agents", label: "Agent Simulation", icon: Command, href: "/command-center/agents" },
-      { id: "sdk", label: "SDK Integration", icon: BookOpen, href: "/command-center/sdk" },
-      // Moved from /console/security in the 2026-07-29 merge — it now inherits
-      // this shell instead of rendering chrome-less.
-      { id: "account-security", label: "Account Security", icon: KeyRound, href: "/command-center/account-security" },
-      // Both were TABS inside LiveCommandCenter's own shell until 2026-07-31.
-      // That shell stopped being rendered when the dashboard moved into this
-      // route group, so without these two entries the panes would have been
-      // silently stranded — including Plan & Unlocks, the only upgrade surface
-      // in the product.
-      { id: "guide", label: "Your Guide", icon: ListChecks, href: "/command-center/guide" },
-      { id: "plan", label: "Plan & Unlocks", icon: Crown, href: "/command-center/plan" },
-    ],
-  },
-];
-
-/* ── Sidebar ────────────────────────────────────────────────────── */
-function Sidebar({
-  collapsed,
-  onToggle,
-}: {
-  collapsed: boolean;
-  onToggle: () => void;
-}) {
-  const pathname = usePathname();
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    Firewall: true,
-    "CMMC Shield": true,
-    Response: true,
-  });
-
-  const toggleSection = (label: string) => {
-    setExpandedSections((prev) => ({ ...prev, [label]: !prev[label] }));
-  };
-
-  return (
-    <aside
-      className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[var(--hs-surface-1)] border-r border-[var(--hs-border-ink)] transition-all duration-300 ${
-        collapsed ? "w-[68px]" : "w-[260px]"
-      }`}
-    >
-      {/* Brand — aspect-correct dark-on-light Doberman mark (no forced square box),
-          tilts on hover via the shared group/brand rule. */}
-      <div className="flex h-16 items-center gap-2.5 border-b border-[var(--hs-border-ink)] px-4">
-        <Link href="/" className="flex items-center gap-2.5 group group/brand">
-          <Logo size={34} />
-          {!collapsed && (
-            <motion.div
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex flex-col"
-            >
-              <TextLogo className="text-lg" />
-              <span className="text-[10px] text-[var(--hs-ink-tertiary)] -mt-0.5 tracking-wider uppercase">
-                Command Center
-              </span>
-            </motion.div>
-          )}
-        </Link>
-      </div>
-
-      {/* Search */}
-      {!collapsed && (
-        <div className="px-3 py-3">
-          <div className="flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-sm text-slate-400 hover:border-white/20 transition-colors cursor-pointer">
-            <Search className="w-3.5 h-3.5" />
-            <span>Search...</span>
-            <kbd className="ml-auto text-[10px] bg-white/5 px-1.5 py-0.5 rounded border border-white/10 text-slate-500 font-mono">
-              K
-            </kbd>
-          </div>
-        </div>
-      )}
-
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-2 py-2">
-        {NAV_SECTIONS.map((section) => {
-          const SectionIcon = section.icon;
-          const isExpanded = expandedSections[section.label];
-
-          return (
-            <div key={section.label} className="mb-1">
-              {/* Section header */}
-              <button
-                onClick={() => !collapsed && toggleSection(section.label)}
-                className={`w-full flex items-center gap-2 rounded-lg px-2.5 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500 hover:text-slate-300 transition-colors ${
-                  collapsed ? "justify-center" : ""
-                }`}
-              >
-                <SectionIcon className="w-3.5 h-3.5 flex-shrink-0" />
-                {!collapsed && (
-                  <>
-                    <span className="flex-1 text-left">{section.label}</span>
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform ${isExpanded ? "" : "-rotate-90"}`}
-                    />
-                  </>
-                )}
-              </button>
-
-              {/* Items */}
-              <AnimatePresence initial={false}>
-                {(isExpanded || collapsed) && (
-                  <motion.div
-                    initial={collapsed ? false : { height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    {section.items.map(({ id, label, icon: Icon, href, badge }) => {
-                      const isActive =
-                        href === "/command-center"
-                          ? pathname === "/command-center"
-                          : pathname.startsWith(href);
-
-                      return (
-                        <Link
-                          key={id}
-                          href={href}
-                          className={`group relative flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-200 ${
-                            collapsed ? "justify-center" : ""
-                          } ${
-                            isActive
-                              ? "bg-brand-500/10 text-brand-400"
-                              : "text-slate-500 hover:bg-white/5 hover:text-slate-300"
-                          }`}
-                          title={collapsed ? label : undefined}
-                        >
-                          {isActive && (
-                            <motion.div
-                              layoutId="sidebarActive"
-                              className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-full bg-brand-500"
-                              transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-                            />
-                          )}
-                          <Icon
-                            className={`w-4 h-4 flex-shrink-0 transition-colors ${
-                              isActive
-                                ? "text-brand-500"
-                                : "text-slate-500 group-hover:text-slate-300"
-                            }`}
-                          />
-                          {!collapsed && (
-                            <>
-                              <span className="flex-1 truncate">{label}</span>
-                              {badge && (
-                                <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-rose-500/10 text-rose-400 ring-1 ring-rose-500/20">
-                                  {badge}
-                                </span>
-                              )}
-                            </>
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          );
-        })}
-      </nav>
-
-      {/* Bottom */}
-      <div className="border-t border-white/[0.06] p-3 space-y-1">
-        <Link
-          href="/command-center/settings"
-          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-colors"
-        >
-          <Settings className="w-4 h-4" />
-          {!collapsed && <span>Settings</span>}
-        </Link>
-        {/* A dashboard the customer cannot leave is a trust smell. The Live
-            Command Center has had a sign-out since PR #205; this shell never
-            did, which only became visible once the subtree was actually gated. */}
-        {/* Collapsed = icon only. `text-[0px]` zeroes the label's box without
-            removing it from the accessibility tree (a lucide <svg> sizes from
-            its own width/height, not font-size), so the button keeps its
-            accessible name when the rail is narrow. */}
-        <SignOutButton
-          className={`w-full flex items-center rounded-lg px-3 py-2 text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-colors [&>svg]:w-4 [&>svg]:h-4 [&>svg]:flex-shrink-0 ${
-            collapsed ? "justify-center gap-0 text-[0px]" : "gap-2.5 text-[13px]"
-          }`}
-        />
-        <button
-          onClick={onToggle}
-          className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-colors"
-        >
-          <Menu className="w-4 h-4" />
-          {!collapsed && <span>Collapse</span>}
-        </button>
-      </div>
-    </aside>
-  );
-}
-
-/* ── Topbar ─────────────────────────────────────────────────────── */
-function Topbar({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
-  const [userInitial, setUserInitial] = useState("K");
-  const [company, setCompany] = useState<string | null>(null);
-
-  // Single source for header identity: /api/me resolves the session server-side
-  // and returns name-level personalization only (never email or id). Reading the
-  // profile straight from the browser client would mean duplicating
-  // profileKeyColumn()'s Better-Auth-vs-Supabase column choice out here, where
-  // it would silently drift.
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/me")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((me) => {
-        if (cancelled || !me?.authenticated) return;
-        if (typeof me.name === "string" && me.name.length > 0) {
-          setUserInitial(me.name[0].toUpperCase());
-        }
-        if (typeof me.company === "string" && me.company.length > 0) {
-          setCompany(me.company);
-        }
-      })
-      .catch(() => {
-        // Header identity is decoration, never access — the gate in
-        // app/command-center/layout.tsx already decided that. Leave the
-        // placeholder rather than surfacing an error in the chrome.
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return (
-    <header
-      className={`fixed top-0 right-0 z-40 h-14 border-b border-[var(--hs-border-ink)] bg-[rgba(250,252,255,0.85)] backdrop-blur-xl flex items-center justify-between px-6 transition-all duration-300 ${
-        sidebarCollapsed ? "left-[68px]" : "left-[260px]"
-      }`}
-    >
-      {/*
-        The signed-in customer's own company, not a build badge. This slot used
-        to hold a version string and a swagger label — chrome that told the
-        operator nothing about their own account, on a product sold as audit
-        evidence. Renders nothing at all until /api/me answers, and nothing when
-        the profile has no company set: an empty slot is honest, whereas a
-        stand-in org name would be fabricated data on the customer's dashboard.
-        Guarded by app/__tests__/dashboard-auth-gate.test.ts, which greps this
-        file — keep the retired label out of comments too.
-      */}
-      <div className="flex items-center gap-3">
-        {company && (
-          <div className="flex items-center gap-2 text-xs">
-            <Building2 className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
-            <span className="font-medium text-[var(--hs-ink)]">{company}</span>
-          </div>
-        )}
-      </div>
-
-      <div className="flex items-center gap-3">
-        {/* Status indicator */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[11px] text-emerald-400 font-medium">All Systems Operational</span>
-        </div>
-
-        {/* Notifications */}
-        <button className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
-        </button>
-
-        {/* User — links to settings */}
-        <Link
-          href="/command-center/settings"
-          className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
-        >
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-            {userInitial}
-          </div>
-          <ChevronDown className="w-3 h-3 text-slate-500" />
-        </Link>
-      </div>
-    </header>
-  );
-}
-
-/* ── Layout ─────────────────────────────────────────────────────── */
+/**
+ * The shell every one of the 23 Command Center pages renders inside.
+ *
+ * Split into `_shell/` on 2026-08-07. The single file had reached 427 lines
+ * before the responsive drawer and the ⌘K palette landed, which would have put
+ * it well past the repo's 500-line component rule. `_shell` is underscore-
+ * prefixed so Next.js treats it as private — it is a folder of components, never
+ * a route, and the "nothing escapes the tool shell" guard in
+ * `dashboard-auth-gate.test.ts` still holds.
+ *
+ * The guards that grep this shell now read `layout.tsx` + `_shell/*` as ONE
+ * source via `app/__tests__/helpers/shell-source.ts`, so the invariants they
+ * encode (the customer's company not a build badge, sign-out present, no
+ * indigo, every nav href resolving to a real page) survived the split intact
+ * and will survive the next one.
+ *
+ * This file is now composition only: state, the three regions, and the layout
+ * arithmetic that keeps them aligned as the sidebar changes width.
+ *
+ * Access was decided upstream by the fail-closed gate in
+ * `app/command-center/layout.tsx`, the parent of this route group. Nothing here
+ * is a security control.
+ */
 export default function CommandCenterLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Desktop rail width. Pre-existing feature, persisted nowhere by design.
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  // Off-canvas drawer, below `lg` only. Distinct from `sidebarCollapsed`: a
+  // phone always gets the full labelled drawer, never a 68px icon rail.
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
   const demoMode = !isSupabaseConfigured();
+
+  const closeMobileNav = useCallback(() => setMobileNavOpen(false), []);
+  const openPalette = useCallback(() => {
+    setMobileNavOpen(false);
+    setPaletteOpen(true);
+  }, []);
+
+  usePaletteShortcut(openPalette);
 
   return (
     <div className="cc-light min-h-screen bg-[var(--hs-surface-1)] text-[var(--hs-ink)] font-sans">
+      {/* Keyboard users land here first. With 23 nav destinations ahead of the
+          content, tabbing to the page itself was a 30-stop journey on every
+          navigation. */}
+      <a
+        href="#cc-main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[80] focus:rounded-lg focus:bg-[var(--hs-surface-0)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--hs-ink)] focus:ring-2 focus:ring-brand-500"
+      >
+        Skip to main content
+      </a>
+
       {/* Subtle background mesh (steel + warm cream haze — matches /console) */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[40%] rounded-full bg-brand-400/[0.06] blur-[120px]" />
         <div className="absolute top-[40%] -right-[10%] h-[50%] w-[35%] rounded-full bg-[rgba(243,227,208,0.4)] blur-[120px]" />
       </div>
 
+      {/* Scrim. Below `lg` only — on desktop the rail is permanent furniture and
+          must never be dimmed behind an overlay. */}
+      <AnimatePresence>
+        {mobileNavOpen && (
+          <motion.button
+            type="button"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={closeMobileNav}
+            aria-label="Close navigation"
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       <Sidebar
         collapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        onToggleCollapsed={() => setSidebarCollapsed((v) => !v)}
+        mobileOpen={mobileNavOpen}
+        onCloseMobile={closeMobileNav}
+        onOpenPalette={openPalette}
       />
-      <Topbar sidebarCollapsed={sidebarCollapsed} />
+      <Topbar
+        sidebarCollapsed={sidebarCollapsed}
+        onOpenMobileNav={() => setMobileNavOpen(true)}
+      />
 
       {/* Demo mode banner — fixed below topbar, above content */}
       <div
-        className={`fixed top-14 right-0 z-40 transition-all duration-300 ${
-          sidebarCollapsed ? "left-[68px]" : "left-[260px]"
+        className={`fixed top-14 right-0 left-0 z-40 transition-all duration-300 ${
+          sidebarCollapsed ? "lg:left-[68px]" : "lg:left-[260px]"
         }`}
       >
         <DemoBanner show={demoMode} />
       </div>
 
       <main
+        id="cc-main"
         className={`relative z-10 min-h-screen transition-all duration-300 ${
-          sidebarCollapsed ? "ml-[68px]" : "ml-[260px]"
+          sidebarCollapsed ? "lg:ml-[68px]" : "lg:ml-[260px]"
         } ${demoMode ? "pt-[88px]" : "pt-14"}`}
       >
-        <div className="p-6 lg:p-8">{children}</div>
+        <div className="p-4 sm:p-6 lg:p-8">{children}</div>
       </main>
+
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   );
 }

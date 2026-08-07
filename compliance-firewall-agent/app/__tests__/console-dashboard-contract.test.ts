@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "fs";
 import path from "path";
+import { readShellSource } from "./helpers/shell-source";
 
 /**
  * After-login dashboard contract.
@@ -154,7 +155,9 @@ describe("/command-center unified onto the light palette", () => {
   // The tool shell moved into the (tools) route group in the 2026-07-29 merge,
   // so /command-center itself could render the Live Command Center without a
   // second sidebar. Same file, same chrome — one segment deeper.
-  const layout = read("app/command-center/(tools)/layout.tsx");
+  // Split into `_shell/` on 2026-08-07 — read as one source so the palette
+  // rules below cover the sidebar and header wherever they now live.
+  const layout = readShellSource();
   const globals = read("app/globals.css");
   it("the shell root carries the cc-light scope on a light surface", () => {
     expect(layout).toMatch(/className="cc-light[^"]*bg-\[var\(--hs-surface-1\)\]/);
