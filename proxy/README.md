@@ -30,16 +30,23 @@ Blocked prompts get a `403` with the detection category. Everything is logged lo
 
 ```bash
 docker run -p 8080:8080 \
-  -e LICENSE_KEY=your-key \
-  -e PROXY_TARGET=https://api.openai.com \
-  ghcr.io/houndshield/proxy:latest
+  -e HOUNDSHIELD_LICENSE_KEY=your-key \
+  -e UPSTREAM_API_KEY=sk-your-openai-key \
+  -e UPSTREAM_PROVIDER=openai \
+  -v houndshield-data:/data \
+  houndshield/proxy:latest
 ```
+
+`UPSTREAM_PROVIDER` accepts `openai`, `anthropic`, `google`, or `openrouter`
+(default `openai`). `UPSTREAM_API_KEY` is the provider key your team already
+uses. The `/data` volume holds the local event log — keep it to retain your
+audit trail across restarts.
 
 **Docker Compose**
 
 ```bash
-curl -O https://raw.githubusercontent.com/houndshield/proxy/main/docker-compose.yml
-docker compose up -d
+curl -O https://raw.githubusercontent.com/thecelestialmismatch/houndshield/main/proxy/docker-compose.yml
+HOUNDSHIELD_LICENSE_KEY=your-key UPSTREAM_API_KEY=sk-... docker compose up -d
 ```
 
 **Configure your AI tools**
@@ -48,11 +55,15 @@ Change the base URL in your AI SDK or `.env`:
 
 ```bash
 # Before
-OPENAI_BASE_URL=https://api.openai.com
+OPENAI_BASE_URL=https://api.openai.com/v1
 
 # After (route through HoundShield proxy)
-OPENAI_BASE_URL=http://localhost:8080/openai
+OPENAI_BASE_URL=http://localhost:8080/v1
 ```
+
+The proxy serves `POST /v1/chat/completions`, so an OpenAI-compatible client
+needs no change beyond the base URL. Confirm it is up with
+`curl http://localhost:8080/health`.
 
 That's it. All traffic now scans through the proxy.
 
@@ -61,11 +72,11 @@ That's it. All traffic now scans through the proxy.
 ## Self-host from source
 
 ```bash
-git clone https://github.com/houndshield/proxy
-cd proxy
+git clone https://github.com/thecelestialmismatch/houndshield
+cd houndshield/proxy
 npm install
 npm run build
-LICENSE_KEY=your-key PROXY_TARGET=https://api.openai.com npm start
+HOUNDSHIELD_LICENSE_KEY=your-key UPSTREAM_API_KEY=sk-... npm start
 ```
 
 ---

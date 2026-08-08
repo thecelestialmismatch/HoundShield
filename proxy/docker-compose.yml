@@ -2,7 +2,11 @@ version: "3.9"
 
 services:
   houndshield-proxy:
-    image: ghcr.io/thecelestialmismatch/houndshield-proxy:latest
+    # Must match what .github/workflows/docker-publish.yml actually pushes.
+    # This previously pointed at ghcr.io/thecelestialmismatch/houndshield-proxy,
+    # an image that is never built or published anywhere — so the documented
+    # Mode B install failed on the pull for every customer who tried it.
+    image: houndshield/proxy:latest
     # Uncomment to build locally instead:
     # build: .
     container_name: houndshield-proxy
