@@ -260,6 +260,13 @@ export class StreamScanner {
       return newAlerts;
     } catch (error) {
       // Scanner errors must never crash the stream. Log and continue.
+      // ponytail: deliberate fail-OPEN — tokens are already in flight and
+      // cannot be unsent, so aborting mid-response is the worse failure. The
+      // ceiling is that a classifier outage silently disables output scanning
+      // and the session still reports clean:true. Upgrade path: surface a
+      // scanner_degraded flag on OutputScanResult and have the caller decide
+      // (truncate / annotate the audit record) rather than swallowing it here.
+      // Contract pinned by __tests__/stream-scanner.test.ts.
       console.error("[houndshield:scanner] Scan failed:", error);
       this.totalScanTimeMs += performance.now() - startTime;
       // Still advance position to avoid infinite retry on the same window

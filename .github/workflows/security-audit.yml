@@ -1,12 +1,21 @@
 name: Security Audit
 
-# Report-only dependency audit for production dependencies in both packages.
-# Both packages currently carry known advisories, so this job surfaces the
-# state as a WARNING ANNOTATION on every PR without failing the check —
-# a red X here would read as broken CI while the signal is "known baseline".
-# Remediation lands through Dependabot PRs (see .github/dependabot.yml),
-# each gated by full CI. Once the baseline is clean, drop the `if !` wrapper
-# to make this a hard gate.
+# Hard gate: high-severity advisories in PRODUCTION dependencies fail the build.
+#
+# This was report-only, wrapped in `if ! npm audit`, because both packages
+# carried a known advisory baseline. That wrapper made the job incapable of
+# failing — and its green check was then read as evidence the baseline was
+# clean, which it was not: the app carried 7 high-severity advisories at the
+# time. A check that cannot fail does not just miss problems, it actively
+# misreports them.
+#
+# The baseline was cleared (2026-08-08, `npm audit fix`, lockfile-only, no
+# direct dependency versions changed), so the wrapper is now gone as its
+# original author intended. Remediation still arrives via Dependabot PRs
+# (see .github/dependabot.yml); this gate keeps the baseline at zero.
+#
+# If this job goes red: fix or explicitly accept the advisory. Do not
+# reinstate the wrapper.
 
 on:
   pull_request:
@@ -34,7 +43,4 @@ jobs:
           node-version: "20"
 
       - name: Audit production dependencies (high+)
-        run: |
-          if ! npm audit --omit=dev --audit-level=high; then
-            echo "::warning title=npm audit (${{ matrix.package }})::High-severity advisories present in production dependencies — full report in this job's log. Fixes arrive via Dependabot PRs."
-          fi
+        run: npm audit --omit=dev --audit-level=high

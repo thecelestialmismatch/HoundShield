@@ -1,6 +1,6 @@
 # HoundShield Detection Patterns
 
-16 patterns covering CMMC/CUI, HIPAA/PHI, PII, credentials, and IP.
+33 patterns covering CMMC/CUI, HIPAA/PHI, PII, credentials, and IP.
 All patterns enforced locally — zero data transmitted externally.
 
 Each pattern maps to one or more NIST SP 800-171 Rev 2 controls.
