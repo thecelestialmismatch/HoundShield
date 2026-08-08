@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "fs";
 import path from "path";
 import { PRODUCT_METRICS, NAV_TRUST_BADGE } from "@/lib/site/metrics";
+import { ENGINE_COUNT } from "@/lib/detection/engines";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..");
 
@@ -10,6 +11,17 @@ describe("product metrics", () => {
     expect(PRODUCT_METRICS.detectionEngines).toBe(16);
     expect(PRODUCT_METRICS.nistControls).toBe(110);
     expect(PRODUCT_METRICS.scanLatencyMs).toBe(10);
+  });
+
+  it("agrees with the computed engine list, so the two cannot drift apart", () => {
+    /*
+     * Two independent sources state the engine count: this hardcoded
+     * constant (used by the nav badge and /about) and ENGINE_COUNT, which
+     * is derived from the shipped ENGINES array. Both said 16, but nothing
+     * connected them — adding a 17th engine would have moved one and left
+     * the other quietly lying. This is the link.
+     */
+    expect(PRODUCT_METRICS.detectionEngines).toBe(ENGINE_COUNT);
   });
 
   it("builds one consistent nav badge from those facts", () => {

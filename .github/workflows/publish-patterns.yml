@@ -35,13 +35,13 @@ jobs:
           cd proxy
           npm ci --ignore-scripts
           npx tsx -e "
-            import { PATTERNS } from './patterns/index.ts';
+            import { ALL_PATTERNS } from './patterns/index.ts';
             const summary = {
-              total: PATTERNS.length,
+              total: ALL_PATTERNS.length,
               by_category: {},
               updated_at: new Date().toISOString(),
             };
-            for (const p of PATTERNS) {
+            for (const p of ALL_PATTERNS) {
               summary.by_category[p.category] = (summary.by_category[p.category] ?? 0) + 1;
             }
             console.log(JSON.stringify(summary, null, 2));

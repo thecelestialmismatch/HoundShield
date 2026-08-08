@@ -17,6 +17,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { queryBrain } from "@/lib/brain";
 import { ask as askGraph } from "@/lib/brain-ai/brain-query";
 import { MultiAgentOrchestrator } from "@/lib/brain-ai/multi-agent-orchestrator";
+import { classifyRisk } from "@/lib/classifier/risk-engine";
 import {
   enforceRateLimit,
   identifierFor,
@@ -124,6 +125,50 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: v3Parsed.error.issues[0]?.message ?? "Invalid request" },
         { status: 400 }
+      );
+    }
+
+    /*
+     * CUI/PHI spillage guard — must run before the orchestrator is built.
+     *
+     * The v3 path fans out to OpenRouter, a commercial endpoint that is not
+     * FedRAMP-authorized. Sending CUI there is a reportable spillage event
+     * (DFARS 252.204-7012), and PHI without a BAA is a HIPAA disclosure.
+     *
+     * Until now the only thing standing between a user and that outcome was
+     * a warning label in the chat UI (components/GlobalChat.tsx). A label is
+     * not a control: it does not exist for anyone POSTing this route
+     * directly — scripts, agents, the documented API, or a different client
+     * — and CLAUDE.md requires the boundary itself, not a notice about it.
+     *
+     * Scoped deliberately to the v3 branch. The v1 path below answers from
+     * the local BM25 graph and never leaves the process, so scanning it
+     * would cost latency to protect a boundary that is not being crossed.
+     *
+     * Fails closed: if the classifier throws, the prompt does not go out.
+     */
+    let classification;
+    try {
+      classification = await classifyRisk(v3Parsed.data.query);
+    } catch {
+      return NextResponse.json(
+        { success: false, error: "Content scan unavailable — request not forwarded." },
+        { status: 503 },
+      );
+    }
+
+    if (classification.should_block || classification.should_quarantine) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Blocked: this query appears to contain CUI, PHI, or PII. Brain AI routes " +
+            "to a commercial cloud endpoint (not FedRAMP-authorized), so sending it " +
+            "would be a spillage event. Remove the sensitive content and try again.",
+          risk_level: classification.risk_level,
+          categories: classification.classifications,
+        },
+        { status: 400, headers: { "x-brain-blocked": "cui-guard" } },
       );
     }
 
