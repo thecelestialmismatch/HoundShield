@@ -323,9 +323,14 @@ concrete enough to do today, near-$0 cost. Not a list. One action.
   before writing anything.
 
 ## MARKET TRUTH (verified 2026-07-28 — re-check before citing)
-- **CMMC Phase 2 was SUSPENDED on 2026-07-13** by the Department of War. The
-  10 Nov 2026 C3PAO gate is gone; Phases 3–4 frozen; 60-day review ends ≈11 Sep.
-  **Never sell against the November deadline — it does not exist.**
+- **CMMC Phase 2: DoD suspended the rollout 2026-07-13** — Phases 3–4 frozen,
+  60-day review ends ≈11 Sep. A buyer can find this in one search, so never claim
+  the gate is legally binding today.
+- **FOUNDER DIRECTION (stated twice, overrides the above for planning):** we are
+  NOT treating Phase 2 as cancelled. We continue building and selling for it and
+  keep November as our own timeline. Build the Phase 2 surfaces; do not re-litigate
+  this each session. What changes is the *pitch*, not the roadmap — lead with
+  liability (below), because that lands whether or not the gate returns.
 - **Still in force:** DFARS 252.204-7012, the 110 NIST SP 800-171 Rev 2 controls,
   and annual SPRS self-attestation.
 - **The new wedge is liability, not deadlines.** DOJ's Civil Cyber-Fraud Initiative
