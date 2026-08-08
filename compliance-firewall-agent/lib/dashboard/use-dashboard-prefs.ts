@@ -28,7 +28,6 @@ export const OVERVIEW_SECTIONS: { id: string; label: string }[] = [
   { id: 'mix', label: 'Outcome & severity donuts' },
   { id: 'terminal', label: 'Gateway console (live)' },
   { id: 'actors', label: 'Who sent it (people vs agents)' },
-  { id: 'soon', label: "What's coming next" },
   { id: 'trend', label: '7-day trend & latency profile' },
   { id: 'rate', label: 'Block rate & cumulative total' },
   { id: 'gauge', label: 'SPRS gauge & hour-of-day' },
@@ -40,6 +39,11 @@ export const OVERVIEW_SECTIONS: { id: string; label: string }[] = [
   { id: 'checklist', label: 'First-run checklist' },
   { id: 'engines', label: 'Detections by engine' },
   { id: 'actions', label: 'Quick actions' },
+  // Last, below every panel that measures something. This is a preview of work
+  // not yet shipped, and a customer opens this dashboard to see their own
+  // traffic — it was rendering 7th of 19, above the trend charts and the live
+  // feed, which put marketing ahead of the thing they logged in for.
+  { id: 'soon', label: "What's coming next" },
   // Added 2026-08-07 with SectionIndex. A section rendered by the overview but
   // missing from this registry is invisible to the Customize panel and to
   // `orderOf`, so it can never be reordered or hidden — register every id.

@@ -54,7 +54,11 @@ export default function HomePage() {
         <div className="hero">
           <div className="container hero-grid">
             <div>
-              <div className="pill"><i className="live-dot" /> Local-only · HIPAA · NIST 800-171 · SOC 2</div>
+              {/* No SOC 2 here. In a badge row next to "Local-only" it reads as a
+                  certification we hold, and we have not started SOC 2 — the pitch
+                  deck says so in as many words. Claiming it to an RPO principal who
+                  asks for the report costs the relationship, not just the deal. */}
+              <div className="pill"><i className="live-dot" /> Local-only · HIPAA · NIST 800-171</div>
               {/* Renders nothing today. Flip one item's `promote` in
                   lib/product/upcoming.ts when it is close enough that a
                   visitor would act on it. */}
