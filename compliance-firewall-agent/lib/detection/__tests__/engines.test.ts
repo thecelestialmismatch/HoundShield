@@ -41,10 +41,32 @@ describe('detection engine counts', () => {
     expect(ENGINE_COUNT).toBe(16)
   })
 
-  it('PATTERN_COUNT is the sum of every shipped pattern registry', () => {
-    expect(PATTERN_COUNT).toBe(
-      BUILTIN_PATTERNS.length + CMMC_PATTERNS.length + HIPAA_PATTERNS.length,
-    )
+  it('PATTERN_COUNT counts each shipped pattern exactly once', () => {
+    /*
+     * This test used to assert the SUM of the three registries, which is
+     * how the double-count survived: BUILTIN_PATTERNS already contains
+     * every CMMC and HIPAA pattern, so the sum reported 90 for 53 real
+     * patterns and the homepage published it. The test was green the
+     * whole time — it faithfully asserted the bug.
+     *
+     * Count distinct names, not array arithmetic.
+     */
+    const distinct = new Set(BUILTIN_PATTERNS.map((p) => p.name))
+    expect(PATTERN_COUNT).toBe(distinct.size)
+  })
+
+  it('BUILTIN_PATTERNS is the superset — the other registries are views into it', () => {
+    // If this ever stops holding, PATTERN_COUNT starts UNDER-counting and
+    // the sum it replaced becomes right again. Fail loudly if so.
+    const builtin = new Set(BUILTIN_PATTERNS.map((p) => p.name))
+    for (const p of [...CMMC_PATTERNS, ...HIPAA_PATTERNS]) {
+      expect(builtin.has(p.name), `${p.name} is missing from BUILTIN_PATTERNS`).toBe(true)
+    }
+  })
+
+  it('ships no duplicate pattern names, which is what inflated the count', () => {
+    const names = BUILTIN_PATTERNS.map((p) => p.name)
+    expect(new Set(names).size).toBe(names.length)
   })
 
   it('ships at least one pattern per advertised engine', () => {

@@ -520,7 +520,7 @@ export default function FreeDemoPage() {
                     <div className="mt-20">
                         <div className="text-center mb-10">
                             <h2 className="text-3xl font-bold tracking-tight mb-3">What Our AI Scans For</h2>
-                            <p className="text-sm text-[var(--hs-ink-secondary)] max-w-2xl mx-auto">This free scanner checks 9 threat patterns in your browser. The deployed product ships 16 detection engines across 90 patterns — CUI markings, CAGE codes, ITAR terms, PHI and more — all matched locally, with no prompt text ever leaving your network.</p>
+                            <p className="text-sm text-[var(--hs-ink-secondary)] max-w-2xl mx-auto">This free scanner checks 9 threat patterns in your browser. The deployed product ships 16 detection engines across 53 patterns — CUI markings, CAGE codes, ITAR terms, PHI and more — all matched locally, with no prompt text ever leaving your network.</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">

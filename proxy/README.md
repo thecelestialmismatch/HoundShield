@@ -87,7 +87,7 @@ HOUNDSHIELD_LICENSE_KEY=your-key UPSTREAM_API_KEY=sk-... npm start
 |-----------|---------|-------------|
 | `proxy/server.ts` | MIT | HTTPS proxy server |
 | `proxy/scanner.ts` | MIT | Pattern scanner engine |
-| `proxy/patterns/index.ts` | MIT | 16 CMMC/HIPAA/PII detection patterns |
+| `proxy/patterns/index.ts` | MIT | 33 CMMC/HIPAA/PII detection patterns |
 | `proxy/storage.ts` | MIT | Local audit log (SHA-256 chained) |
 | `proxy/webhook.ts` | MIT | Webhook delivery for alerts |
 
@@ -95,14 +95,13 @@ HOUNDSHIELD_LICENSE_KEY=your-key UPSTREAM_API_KEY=sk-... npm start
 
 ## What requires a license
 
-| Feature | Plan |
-|---------|------|
-| Dashboard + analytics | Pro ($199/mo) |
-| Brain AI compliance advisor | Pro+ |
-| PDF report (C3PAO-ready evidence) | Growth ($499/mo) |
-| Multi-tenant / MSP portal | Enterprise ($999+/mo) |
+The proxy above is MIT and runs standalone. One paid product sits on top of it:
 
-Get a free license key at [houndshield.com](https://houndshield.com) — free tier includes the proxy with up to 10,000 scans/day.
+| Product | Price |
+|---------|-------|
+| **CMMC AI Risk Assessment Report** — run the proxy 14 days in your own environment, get a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171 | **$499 one-time** |
+
+No subscription. See [houndshield.com/pricing](https://houndshield.com/pricing).
 
 ---
 
@@ -116,7 +115,7 @@ HoundShield runs entirely on your infrastructure. The proxy never transmits prom
 
 ## Detection patterns
 
-See [PATTERNS.md](./PATTERNS.md) for the full list of 16 detection patterns with NIST control mappings.
+See [PATTERNS.md](./PATTERNS.md) for the full list of 33 detection patterns with NIST control mappings.
 
 ---
 
