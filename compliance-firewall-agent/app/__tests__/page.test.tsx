@@ -59,7 +59,17 @@ describe('HomePage — HERMES demo parity', () => {
 
   it('hero pill leads with HIPAA and NIST, not a CMMC certification date', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Local-only · HIPAA · NIST 800-171 · SOC 2/i)).toBeTruthy()
+    expect(screen.getByText(/Local-only · HIPAA · NIST 800-171/i)).toBeTruthy()
+  })
+
+  it('never badges SOC 2 in the hero — it is not started', () => {
+    const { container } = render(<HomePage />)
+    // A framework name in the badge row reads as a certification we hold.
+    // Guarding the pill specifically, not the whole page, so prose that
+    // legitimately discusses SOC 2 coverage elsewhere is unaffected.
+    const pill = container.querySelector('.pill')
+    expect(pill).toBeTruthy()
+    expect(pill?.textContent).not.toMatch(/SOC\s?2/i)
   })
 
   it('hero sub keeps the local-scan emphasis "on your own hardware"', () => {
