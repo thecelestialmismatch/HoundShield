@@ -103,7 +103,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 | Integration | Status | Action Required |
 |-------------|--------|-----------------|
-| Supabase auth + DB | ✅ Wired | Migrations through 011 applied to prod |
+| Supabase auth + DB | ✅ Wired | Migrations through 030 applied to prod |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
 | Stripe webhook | ⚠️ Verify URL | Confirm `https://houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
@@ -305,13 +305,13 @@ compliance-firewall-agent/
   app/api/health/houndshield.ts    — Integration health check
   lib/brain-ai/                    — BM25 knowledge graph + query interface
   lib/gateway/                     — Core AI interception engine
-  lib/classifier/                  — 16-pattern CUI/PII/IP/PHI detector
-  supabase/migrations/             — through 011 applied to prod
+  lib/classifier/                  — 53-pattern / 16-engine CUI/PII/IP/PHI detector
+  supabase/migrations/             — through 030 applied to prod
 
 proxy/
   server.ts                        — HTTPS proxy (the actual product)
   scanner.ts                       — Pattern scanner (do not modify)
-  patterns/index.ts                — 16 patterns (extend only)
+  patterns/index.ts                — 33 patterns (extend only)
 
 tasks/
   todo.md                          — Stage queue (read first every session)

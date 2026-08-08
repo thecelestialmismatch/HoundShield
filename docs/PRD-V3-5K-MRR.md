@@ -28,7 +28,7 @@ HoundShield is a local-only AI compliance firewall.
 
 1. Jordan changes one proxy URL on her network (HTTPS_PROXY env var or browser config)
 2. Every AI prompt from every machine on the network routes through HoundShield's Docker container
-3. HoundShield scans locally in <10ms using 16 CUI/PII/PHI detection patterns
+3. HoundShield scans locally in <10ms using 33 CUI/PII/PHI detection patterns
 4. Detected CUI is blocked or quarantined — never reaches the AI provider
 5. Every event is logged in a tamper-proof audit trail (Merkle-root sealed)
 6. Jordan gets a SPRS score improvement + PDF report for her assessor
@@ -79,7 +79,7 @@ All of these are already built. Zero new features required to close first custom
 
 | Feature | Status | Required For |
 |---------|--------|-------------|
-| HTTPS proxy with 16 patterns | ✅ | All paying tiers |
+| HTTPS proxy with 33 patterns | ✅ | All paying tiers |
 | Docker install (1 command) | ✅ | All tiers |
 | CMMC assessment (110 controls) | ✅ | All tiers |
 | SPRS score calculator | ✅ | All tiers |
