@@ -1,318 +1,191 @@
 "use client";
 
 /**
- * Security Dashboard (Day 7)
+ * Security Dashboard.
  *
- * High-level security overview with:
- *   - Total blocked requests
- *   - Average scan latency
- *   - Recent violation summaries
- *   - Line chart: average scan latency over time
- *   - Risk level distribution donut
- *   - Top violated categories
+ * WHAT THIS PAGE USED TO BE, and why none of it survived
+ * Every number on it was invented. Two local factory functions used a
+ * random-number generator to produce 24 hours of scan latency and eight
+ * violations with arbitrary categories and risk levels, freshly on each load;
+ * the risk donut and category bars were hardcoded arrays (18/34/48/62/438,
+ * 42/31/28/17/12). The four stat cards carried fixed trend deltas measured
+ * against nothing. "Refresh" was a timer that re-rendered the same constants.
+ * The file's own docstring claimed "Data source: /api/audit/export (real
+ * Supabase)"; there was no fetch anywhere in it.
  *
- * Data source: /api/audit/export (real Supabase) with demo fallback.
+ * (The guard test alongside this file asserts those mechanisms are absent by
+ * name, so this note deliberately describes them rather than spelling them.)
+ *
+ * A customer logging in saw a security posture that changed every time they
+ * reloaded. That is worse than an empty page: an empty page tells the truth.
+ *
+ * WHAT IT IS NOW
+ * The same telemetry the Overview runs on — `useOperatorTelemetry()`, scoped to
+ * the session user — rendered through the same panels. Reusing the panels
+ * rather than re-plotting the charts is what guarantees the two pages can never
+ * disagree about the same tenant, and it inherits their honesty properties for
+ * free: an unmeasured value renders as an em dash rather than zero, and an
+ * empty state is an empty state rather than a flat-lined chart.
+ *
+ * Every panel here is a link to the rows behind it. The donut slices already
+ * carried hrefs into /command-center/events with the outcome and risk
+ * pre-filtered; the KPI tiles now do the same. Clicking a number goes to the
+ * records that produced it.
  */
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Shield,
-  AlertTriangle,
-  Clock,
-  Zap,
-  TrendingUp,
-  TrendingDown,
-  RefreshCw,
-  BarChart3,
-  XCircle,
-  Eye,
-} from "lucide-react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  Legend,
-} from "recharts";
+import { type CSSProperties } from "react";
+import Link from "next/link";
+import { RefreshCw, ShieldAlert, AlertTriangle, Clock, ScrollText } from "lucide-react";
+import { LCC_CSS } from "@/components/dashboard/lccStyles";
+import { useOperatorTelemetry } from "@/components/dashboard/operator/useOperatorTelemetry";
+import { LatencyProfile } from "@/components/dashboard/operator/TrendCharts";
+import { OutcomeMix, BlockedSeverity } from "@/components/dashboard/operator/OutcomeDonuts";
+import { DetectionsByEngine, ActivityByHour } from "@/components/dashboard/operator/OperatorCharts";
+import { getThemeById, consoleThemeVars } from "@/lib/dashboard/design-themes";
+import { useDashboardPrefs } from "@/lib/dashboard/use-dashboard-prefs";
 
-// ---------------------------------------------------------------------------
-// Demo / fallback data
-// ---------------------------------------------------------------------------
-
-function makeLatencyData() {
-  return Array.from({ length: 24 }, (_, i) => {
-    const h = i;
-    const label = h === 0 ? "12am" : h < 12 ? `${h}am` : h === 12 ? "12pm" : `${h - 12}pm`;
-    return {
-      time: label,
-      avg_ms: Math.floor(12 + Math.random() * 30),
-      p95_ms: Math.floor(40 + Math.random() * 60),
-    };
-  });
-}
-
-function makeViolations() {
-  const categories = ["PII", "FINANCIAL", "IP", "HIPAA_PHI", "STRATEGIC"];
-  const actions = ["BLOCKED", "QUARANTINED"];
-  return Array.from({ length: 8 }, (_, i) => ({
-    id: `v-${i}`,
-    timestamp: new Date(Date.now() - i * 47_000).toISOString(),
-    category: categories[Math.floor(Math.random() * categories.length)],
-    risk_level: ["HIGH", "CRITICAL"][Math.floor(Math.random() * 2)] as string,
-    action: actions[Math.floor(Math.random() * 2)],
-    latency_ms: Math.floor(8 + Math.random() * 40),
-  }));
-}
-
-const LATENCY_DATA = makeLatencyData();
-const VIOLATIONS = makeViolations();
-
-const RISK_PIE = [
-  { name: "CRITICAL", value: 18, color: "#ef4444" },
-  { name: "HIGH", value: 34, color: "#f97316" },
-  { name: "MEDIUM", value: 48, color: "#f59e0b" },
-  { name: "LOW", value: 62, color: "#3b82f6" },
-  { name: "NONE", value: 438, color: "rgba(255,255,255,0.1)" },
-];
-
-const CATEGORY_BAR = [
-  { category: "PII", count: 42 },
-  { category: "IP/Secrets", count: 31 },
-  { category: "HIPAA", count: 28 },
-  { category: "Financial", count: 17 },
-  { category: "Strategic", count: 12 },
-];
-
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
-
-const RISK_COLORS: Record<string, string> = {
-  CRITICAL: "text-red-400 bg-red-400/10 border-red-400/20",
-  HIGH: "text-orange-400 bg-orange-400/10 border-orange-400/20",
-  MEDIUM: "text-amber-400 bg-amber-400/10 border-amber-400/20",
-  LOW: "text-sky-400 bg-sky-400/10 border-sky-400/20",
-  NONE: "text-white/30 bg-white/5 border-white/10",
-};
-
-function StatCard({
+/**
+ * A KPI tile that is also a link to its own evidence.
+ *
+ * `value` is `null` when the metric was not measured — rendered as an em dash,
+ * never as 0, because "no events yet" and "zero blocked out of a million" are
+ * different facts and a customer cannot tell them apart from a zero.
+ */
+function StatLink({
   label,
   value,
+  href,
   icon: Icon,
-  color,
-  trend,
-  trendUp,
+  hint,
+  accent,
+  unit = "",
 }: {
   label: string;
-  value: string | number;
+  value: number | null;
+  href: string;
   icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  trend?: string;
-  trendUp?: boolean;
+  hint: string;
+  accent: string;
+  unit?: string;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]"
-    >
-      <div className="flex items-start justify-between mb-3">
-        <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${color}`}>
-          <Icon className="w-5 h-5" />
-        </div>
-        {trend && (
-          <div className={`flex items-center gap-1 text-xs ${trendUp ? "text-emerald-400" : "text-red-400"}`}>
-            {trendUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-            {trend}
-          </div>
-        )}
+    // Reuses the Overview's `.kpi` classes rather than new ones, so the two
+    // pages stay visually identical without a second stylesheet to maintain.
+    // The Overview's tiles are buttons that open a provenance dialog; these are
+    // links, because the ask here was "click the number, land on the records".
+    <Link href={href} className={`kpi ${accent}`} aria-label={`${label} — open the underlying records`}>
+      <div className="l">
+        <Icon aria-hidden /> {label}
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
-      <p className="text-sm text-white/40 mt-1">{label}</p>
-    </motion.div>
+      <div className="n">{value === null ? "—" : `${value.toLocaleString()}${unit}`}</div>
+      <div className="d">{hint}</div>
+    </Link>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
-
 export default function SecurityDashboardPage() {
-  const [loading, setLoading] = useState(false);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
+  const t = useOperatorTelemetry();
+  const prefs = useDashboardPrefs();
+  const theme = getThemeById(prefs.themeId);
 
-  const avgLatency = Math.round(
-    LATENCY_DATA.reduce((s, d) => s + d.avg_ms, 0) / LATENCY_DATA.length
-  );
-  const totalBlocked = VIOLATIONS.filter((v) => v.action === "BLOCKED").length;
-  const totalQuarantined = VIOLATIONS.filter((v) => v.action === "QUARANTINED").length;
-  const criticalCount = VIOLATIONS.filter((v) => v.risk_level === "CRITICAL").length;
-
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setLastRefresh(new Date());
-    }, 800);
-  };
+  const totals = t.tel.totals;
+  // `connected` is false when the tenant has no events at all. Distinguishing it
+  // from a real zero is the whole point of the em dash — see StatLink.
+  const measured = t.tel.connected;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-6">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-brand-500/20 flex items-center justify-center">
-            <BarChart3 className="w-5 h-5 text-brand-400" />
-          </div>
-          <div>
-            <h1 className="text-xl font-semibold text-white">Security Dashboard</h1>
-            <p className="text-sm text-white/40">
-              Last updated {lastRefresh.toLocaleTimeString()}
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={handleRefresh}
-          disabled={loading}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.04] border border-white/10 text-sm text-white/50 hover:text-white transition-colors disabled:opacity-50"
-        >
-          <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
-          Refresh
+    <div
+      className="hs-lcc hs-embedded"
+      data-theme={theme.id}
+      data-mode={theme.mode}
+      style={consoleThemeVars(theme) as CSSProperties}
+    >
+      <style dangerouslySetInnerHTML={{ __html: LCC_CSS }} />
+
+      <div className="op-tools">
+        <button type="button" className="btn btn-g btn-sm" onClick={t.refresh} disabled={t.loading}>
+          <RefreshCw aria-hidden /> {t.loading ? "Refreshing…" : "Refresh"}
         </button>
       </div>
 
-      {/* Metric cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Blocked" value={totalBlocked.toLocaleString()} icon={XCircle} color="bg-red-500/20 text-red-400" trend="+8%" trendUp={false} />
-        <StatCard label="Quarantined" value={totalQuarantined.toLocaleString()} icon={AlertTriangle} color="bg-brand-500/20 text-brand-400" trend="-2%" trendUp={true} />
-        <StatCard label="Avg Scan Latency" value={`${avgLatency}ms`} icon={Clock} color="bg-amber-500/20 text-amber-400" trend="-3ms" trendUp={true} />
-        <StatCard label="Critical Violations" value={criticalCount} icon={Shield} color="bg-red-500/20 text-red-400" />
+      {/* An error is not an empty dashboard. If we could not ask, say so —
+          rendering zeros here would be indistinguishable from a clean tenant. */}
+      {t.error && (
+        <div className="op-banner" role="alert">
+          <AlertTriangle aria-hidden /> {t.error} — these panels are showing the last
+          successful read, not live data.
+        </div>
+      )}
+
+      {/* The telemetry contract requires every surface rendering this data to
+          disclose seeded rows on screen: an unlabelled screenshot of demo
+          numbers is a fabricated metric. The flag is set by the aggregator from
+          the rows themselves, so it cannot be switched off from the UI. */}
+      {t.tel.synthetic && (
+        <div className="op-banner" role="status">
+          <AlertTriangle aria-hidden /> Demo data — some rows in this window were
+          seeded, not measured from your gateway.
+        </div>
+      )}
+
+      {t.truncated && (
+        <div className="op-banner" role="status">
+          <AlertTriangle aria-hidden /> This window exceeds the 5,000-event aggregation
+          cap — figures below cover the most recent 5,000 events. The full record is in
+          your audit log.
+        </div>
+      )}
+
+      <div className="kpis k6">
+        <StatLink
+          label="Inspected"
+          value={measured ? totals.events : null}
+          href="/command-center/events"
+          icon={ScrollText}
+          accent="a-ok"
+          hint={measured ? `last ${t.tel.windowDays}d · your gateway` : "no traffic yet"}
+        />
+        <StatLink
+          label="Blocked"
+          value={measured ? totals.blocked : null}
+          href="/command-center/events?outcome=blocked"
+          icon={ShieldAlert}
+          accent="a-bad"
+          hint={measured ? `${totals.blockRatePct}% of traffic` : "no traffic yet"}
+        />
+        <StatLink
+          label="Held for review"
+          value={measured ? totals.warning : null}
+          href="/command-center/quarantine"
+          icon={AlertTriangle}
+          accent="a-orange"
+          hint="awaiting a human decision"
+        />
+        <StatLink
+          label="Scan latency p50"
+          value={t.tel.scanP50Ms}
+          unit="ms"
+          href="/command-center/realtime"
+          icon={Clock}
+          accent="a-brand"
+          hint="median, measured on your hardware"
+        />
       </div>
 
-      {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        {/* Latency line chart */}
-        <div className="lg:col-span-2 p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-          <div className="flex items-center gap-2 mb-4">
-            <Zap className="w-4 h-4 text-brand-400" />
-            <span className="text-sm font-medium text-white">Scan Latency (Last 24h)</span>
-            <span className="ml-auto text-xs text-white/30">avg + p95</span>
-          </div>
-          <div style={{ height: 200 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={LATENCY_DATA} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="time" tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} interval={3} />
-                <YAxis tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} unit="ms" />
-                <Tooltip
-                  contentStyle={{ background: "#111111", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
-                  labelStyle={{ color: "rgba(255,255,255,0.6)" }}
-                />
-                <Line type="monotone" dataKey="avg_ms" stroke="#818cf8" strokeWidth={2} dot={false} name="Avg" />
-                <Line type="monotone" dataKey="p95_ms" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="4 2" dot={false} name="P95" />
-                <Legend wrapperStyle={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Risk distribution donut */}
-        <div className="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-          <div className="flex items-center gap-2 mb-4">
-            <Shield className="w-4 h-4 text-brand-400" />
-            <span className="text-sm font-medium text-white">Risk Distribution</span>
-          </div>
-          <div style={{ height: 160 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={RISK_PIE} cx="50%" cy="50%" innerRadius={48} outerRadius={72} paddingAngle={2} dataKey="value">
-                  {RISK_PIE.map((entry) => (
-                    <Cell key={entry.name} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{ background: "#111111", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="grid grid-cols-2 gap-1.5 mt-2">
-            {RISK_PIE.slice(0, 4).map((r) => (
-              <div key={r.name} className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: r.color }} />
-                <span className="text-xs text-white/40">{r.name}</span>
-                <span className="text-xs text-white/60 ml-auto">{r.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Donut slices carry their own hrefs into the filtered audit log — that
+          is the "click the graph, land on the rows" behaviour, inherited rather
+          than reimplemented here. */}
+      <div className="row r-3-2">
+        <OutcomeMix tel={t.tel} />
+        <BlockedSeverity tel={t.tel} />
       </div>
 
-      {/* Category breakdown + recent violations */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Top violated categories */}
-        <div className="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-          <div className="flex items-center gap-2 mb-4">
-            <BarChart3 className="w-4 h-4 text-brand-400" />
-            <span className="text-sm font-medium text-white">Top Violation Categories</span>
-          </div>
-          <div style={{ height: 180 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={CATEGORY_BAR} layout="vertical" margin={{ top: 0, right: 12, bottom: 0, left: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
-                <XAxis type="number" tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10 }} tickLine={false} axisLine={false} />
-                <YAxis type="category" dataKey="category" tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }} tickLine={false} axisLine={false} width={68} />
-                <Tooltip
-                  contentStyle={{ background: "#111111", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: 12 }}
-                />
-                <Bar dataKey="count" fill="#818cf8" radius={[0, 4, 4, 0]} name="Violations" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Recent violations */}
-        <div className="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-          <div className="flex items-center gap-2 mb-4">
-            <Eye className="w-4 h-4 text-brand-400" />
-            <span className="text-sm font-medium text-white">Recent Violations</span>
-          </div>
-          <div className="space-y-2">
-            {VIOLATIONS.slice(0, 6).map((v) => (
-              <div key={v.id} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                <div className="flex-shrink-0">
-                  {v.action === "BLOCKED" ? (
-                    <XCircle className="w-4 h-4 text-red-400" />
-                  ) : (
-                    <AlertTriangle className="w-4 h-4 text-brand-400" />
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs px-1.5 py-0.5 rounded border font-medium ${RISK_COLORS[v.risk_level] ?? ""}`}>
-                      {v.risk_level}
-                    </span>
-                    <span className="text-xs text-white/50">{v.category}</span>
-                  </div>
-                  <p className="text-xs text-white/25 mt-0.5">
-                    {new Date(v.timestamp).toLocaleTimeString()} - {v.latency_ms}ms
-                  </p>
-                </div>
-                <div className="text-xs text-white/30 flex-shrink-0">{v.action}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="row r-3-2">
+        <ActivityByHour tel={t.tel} />
+        <LatencyProfile tel={t.tel} />
       </div>
+
+      <DetectionsByEngine tel={t.tel} />
     </div>
   );
 }
