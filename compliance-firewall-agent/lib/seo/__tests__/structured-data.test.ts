@@ -9,6 +9,7 @@ import {
   BASE_URL,
 } from "../structured-data";
 import type { FaqItem, HowToStep } from "../faqs";
+import { RISK_REPORT } from "@/lib/pricing/plans";
 
 describe("softwareApplicationSchema", () => {
   const schema = softwareApplicationSchema();
@@ -20,22 +21,42 @@ describe("softwareApplicationSchema", () => {
     expect(schema.url).toBe(BASE_URL);
   });
 
-  it("leads with the $499 report offer and matches the pricing tiers", () => {
+  /*
+   * This test used to assert the opposite: six offers, prices
+   * ["499","0","199","499","999","2499"]. It faithfully locked in a bug.
+   *
+   * /pricing sells exactly one thing — the $499 one-time report — and is
+   * itself locked to that by pricing-single-offer.test.tsx. The schema was
+   * still publishing five unbuyable subscription tiers to Google and every
+   * answer engine, which is both a broken buyer journey and the second
+   * pricing grid the project forbids. Structured data is public pricing;
+   * it has to obey the same one-grid rule as the page.
+   */
+  it("advertises exactly the one offer /pricing sells", () => {
     const offers = schema.offers as Array<Record<string, unknown>>;
-    expect(offers).toHaveLength(6);
-    for (const offer of offers) {
-      expect(offer["@type"]).toBe("Offer");
-      expect(offer.priceCurrency).toBe("USD");
-      expect(typeof offer.price).toBe("string");
+    expect(offers).toHaveLength(1);
+    expect(offers[0]["@type"]).toBe("Offer");
+    expect(offers[0].priceCurrency).toBe("USD");
+    expect(offers[0].name).toBe(RISK_REPORT.name);
+    expect(offers[0].price).toBe(String(RISK_REPORT.oneTimePrice));
+  });
+
+  it("publishes no subscription price while none is purchasable", () => {
+    const offers = schema.offers as Array<Record<string, unknown>>;
+    const prices = offers.map((o) => o.price);
+    for (const gone of ["0", "199", "999", "2499"]) {
+      expect(prices, `${gone} is not purchasable on /pricing`).not.toContain(gone);
     }
-    // $499 one-time report is the lead product (listed first).
-    expect(offers[0].name).toBe("CMMC AI Risk Assessment Report");
-    expect(offers[0].price).toBe("499");
-    // Tier prices match app/pricing/page.tsx (Free/Pro/Growth/Enterprise/Agency).
-    expect(offers.map((o) => o.price)).toEqual(["499", "0", "199", "499", "999", "2499"]);
-    // The $2,499 tier is "Agency", not "Federal".
-    expect(offers.some((o) => o.name === "Agency")).toBe(true);
-    expect(offers.some((o) => o.name === "Federal")).toBe(false);
+    for (const tier of ["Free", "Pro", "Growth", "Enterprise", "Agency", "Federal"]) {
+      expect(offers.some((o) => o.name === tier)).toBe(false);
+    }
+  });
+
+  it("sources the price from the pricing single source of truth", () => {
+    // Not a literal — so the schema cannot drift from lib/pricing/plans.ts.
+    const offers = schema.offers as Array<Record<string, unknown>>;
+    expect(offers[0].price).toBe(String(RISK_REPORT.oneTimePrice));
+    expect(String(offers[0].description)).toContain(String(RISK_REPORT.oneTimePrice));
   });
 
   it("lists product features", () => {

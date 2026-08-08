@@ -31,6 +31,12 @@ const REPO = path.resolve(CFA, '..')
 /** Directories whose contents ship as part of the app. */
 const SOURCE_DIRS = ['app', 'components', 'lib', 'hooks', 'scripts', 'test', 'proxy']
 
+/**
+ * Path segments that are generated, never authored. Anything under one of
+ * these is ignored on purpose in every package, and is not "hidden source".
+ */
+const ARTIFACT_DIRS = ['node_modules', 'dist', '.next', 'build', 'coverage', 'out']
+
 function ignoredSourceFiles(): string[] {
   // `--others --ignored --exclude-standard` lists exactly the files git is
   // hiding: untracked AND matched by an ignore rule. Tracked files never appear,
@@ -48,12 +54,24 @@ function ignoredSourceFiles(): string[] {
     .filter(Boolean)
     .filter((file) => /\.(ts|tsx|js|jsx|mjs|cjs|css)$/.test(file))
     .filter((file) => {
+      // Dependencies and build output are ignored deliberately and must stay
+      // that way. This has to run FIRST, ahead of the proxy short-circuit
+      // below, and it has to cover artifacts from EVERY package rather than
+      // just the app's .next — the check previously did neither.
+      //
+      // The consequence was that the guard only held while the proxy happened
+      // to be neither installed nor built. `cd proxy && npm ci` and
+      // `npm run build` are both steps in our own CI and quickstart, so
+      // following the documentation turned this suite red with hundreds of
+      // phantom "hidden source files". A guard that fails when you do the
+      // documented thing is one people learn to skip — which defeats the
+      // real bug it exists to catch.
+      if (ARTIFACT_DIRS.some((dir) => file.split('/').includes(dir))) return false
+
       const rel = path.relative('compliance-firewall-agent', file)
-      // Only the app's own source trees. Build output, caches and node_modules
-      // are ignored on purpose and must stay that way.
+      // Only the app's own source trees, plus the proxy package.
       if (file.startsWith('proxy/')) return true
       if (rel.startsWith('..')) return false
-      if (rel.includes('node_modules') || rel.startsWith('.next')) return false
       return SOURCE_DIRS.some((dir) => rel === dir || rel.startsWith(`${dir}/`))
     })
 }
