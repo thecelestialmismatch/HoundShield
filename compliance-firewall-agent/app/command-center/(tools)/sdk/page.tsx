@@ -8,7 +8,9 @@
  */
 
 import { useState } from "react";
-import { Code2, Copy, Check, Terminal, Package, BarChart3, Shield, Zap, TrendingUp, TrendingDown } from "lucide-react";
+import { useOperatorTelemetry } from "@/components/dashboard/operator/useOperatorTelemetry";
+// TrendingUp/TrendingDown are gone with the invented trend deltas they decorated.
+import { Code2, Copy, Check, Terminal, Package, BarChart3, Shield, Zap } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 // ---------------------------------------------------------------------------
@@ -81,21 +83,29 @@ curl -X POST https://houndshield.com/api/gateway/intercept \\
 // Demo analytics data
 // ---------------------------------------------------------------------------
 
-function generateAnalyticsData() {
-  const hours = Array.from({ length: 24 }, (_, i) => {
-    const h = i;
-    const label = h === 0 ? "12am" : h < 12 ? `${h}am` : h === 12 ? "12pm" : `${h - 12}pm`;
-    const total = Math.floor(Math.random() * 400) + 50;
-    const blocked = Math.floor(total * (0.05 + Math.random() * 0.15));
-    return { time: label, allowed: total - blocked, blocked };
-  });
-  return hours;
+/**
+ * Turns the gateway's own hourly buckets into the shape the area chart wants.
+ *
+ * This replaced a generator that invented 24 hours of traffic with a
+ * random-number call on every render, alongside three stat tiles and trend
+ * deltas measured against nothing. The only thing marking any of it as fake
+ * was a code comment, so a customer read invented numbers as their own — and
+ * the block rate changed when they reloaded. (The guard test asserts those
+ * literals are absent, so this note describes them rather than quoting them.)
+ *
+ * On this page in particular that was self-defeating: the SDK page is where
+ * someone decides whether to point their client at the gateway. Their real
+ * traffic is the argument for doing it, and an empty chart is a better one than
+ * a fabricated chart, because it says "connect and this fills in".
+ */
+function toSeries(hourly: { hour: number; events: number; blocked: number }[]) {
+  return hourly.map((h) => ({
+    time:
+      h.hour === 0 ? "12am" : h.hour < 12 ? `${h.hour}am` : h.hour === 12 ? "12pm" : `${h.hour - 12}pm`,
+    allowed: Math.max(0, h.events - h.blocked),
+    blocked: h.blocked,
+  }));
 }
-
-const ANALYTICS = generateAnalyticsData();
-const totalAllowed = ANALYTICS.reduce((s, d) => s + d.allowed, 0);
-const totalBlocked = ANALYTICS.reduce((s, d) => s + d.blocked, 0);
-const blockRate = Math.round((totalBlocked / (totalAllowed + totalBlocked)) * 100);
 
 // ---------------------------------------------------------------------------
 // Code block component
@@ -134,6 +144,12 @@ function CodeBlock({ code, label }: { code: string; language: string; label: str
 
 export default function SDKPage() {
   const [tab, setTab] = useState<"python" | "node" | "curl">("python");
+  // Same tenant-scoped source the Overview and Security pages run on, so the
+  // three cannot disagree about one customer's traffic.
+  const { tel } = useOperatorTelemetry();
+  const totals = tel.totals;
+  const connected = tel.connected;
+  const series = toSeries(tel.hourly);
 
   const tabs = [
     { id: "python" as const, label: "Python", icon: Code2 },
@@ -166,53 +182,50 @@ export default function SDKPage() {
       <div className="mb-8 p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
         <div className="flex items-center gap-2 mb-4">
           <BarChart3 className="w-4 h-4 text-brand-400" />
-          <span className="text-sm font-medium text-white">Request Analytics (Last 24h)</span>
+          <span className="text-sm font-medium text-white">
+            Your request analytics{connected ? ` (last ${tel.windowDays}d)` : ""}
+          </span>
+          {tel.synthetic && (
+            // The telemetry contract requires every surface rendering this data
+            // to disclose seeded rows: an unlabelled screenshot of demo numbers
+            // is a fabricated metric.
+            <span className="ml-auto text-xs text-amber-400">Demo data — seeded, not measured</span>
+          )}
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-5">
           {[
-            {
-              label: "Allowed",
-              value: totalAllowed.toLocaleString(),
-              icon: Shield,
-              color: "text-emerald-400",
-              trend: "+12%",
-              up: true,
-            },
-            {
-              label: "Blocked",
-              value: totalBlocked.toLocaleString(),
-              icon: Zap,
-              color: "text-red-400",
-              trend: "-4%",
-              up: false,
-            },
-            {
-              label: "Block Rate",
-              value: `${blockRate}%`,
-              icon: BarChart3,
-              color: "text-amber-400",
-              trend: "stable",
-              up: null,
-            },
-          ].map(({ label, value, icon: Icon, color, trend, up }) => (
+            { label: "Allowed", value: connected ? totals.passed.toLocaleString() : "—", icon: Shield, color: "text-emerald-400" },
+            { label: "Blocked", value: connected ? totals.blocked.toLocaleString() : "—", icon: Zap, color: "text-red-400" },
+            { label: "Block rate", value: connected ? `${totals.blockRatePct}%` : "—", icon: BarChart3, color: "text-amber-400" },
+          ].map(({ label, value, icon: Icon, color }) => (
+            // No trend deltas. The gateway records events, not a baseline to
+            // compare them against, so any percentage here could only be made up.
             <div key={label} className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-              <div className="flex items-center justify-between mb-2">
-                <Icon className={`w-4 h-4 ${color}`} />
-                <div className={`flex items-center gap-1 text-xs ${up === true ? "text-emerald-400" : up === false ? "text-red-400" : "text-white/30"}`}>
-                  {up === true ? <TrendingUp className="w-3 h-3" /> : up === false ? <TrendingDown className="w-3 h-3" /> : null}
-                  {trend}
-                </div>
-              </div>
+              <Icon className={`w-4 h-4 ${color} mb-2`} />
               <p className="text-xl font-semibold text-white">{value}</p>
               <p className="text-xs text-white/40 mt-0.5">{label}</p>
             </div>
           ))}
         </div>
 
+        {/* An empty state, not a flat-lined chart. Zeroed axes read as "we
+            measured you and you send nothing"; the truth is that no request has
+            arrived yet — which on this page is the call to action, not a gap. */}
+        {!connected ? (
+          <div
+            className="flex h-40 flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-white/[0.08] text-center"
+            data-testid="sdk-no-traffic"
+          >
+            <p className="text-sm text-white/50">No requests through the gateway yet.</p>
+            <p className="text-xs text-white/30">
+              Send one with the snippet above and this fills in with your own traffic.
+            </p>
+          </div>
+        ) : (
         <div style={{ height: 160 }}>
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={ANALYTICS} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
+            <AreaChart data={series} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="allowedGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
@@ -235,6 +248,7 @@ export default function SDKPage() {
             </AreaChart>
           </ResponsiveContainer>
         </div>
+        )}
       </div>
 
       {/* Integration snippets */}
