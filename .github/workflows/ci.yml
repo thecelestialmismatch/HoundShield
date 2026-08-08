@@ -42,8 +42,13 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Run tests
-        run: npm test
+      # Coverage thresholds live in vitest.config.ts and FAIL this step when
+      # missed. The repo's previous threshold (70%) sat in a jest.config.js
+      # that nothing executed — `npm test` is vitest — so it never once ran.
+      # This replaces `npm test` rather than running alongside it: the same
+      # suite, with the gate attached.
+      - name: Run tests with coverage gate
+        run: npm run test:coverage
 
       - name: Build
         run: npm run build
@@ -77,8 +82,9 @@ jobs:
       - name: TypeScript check
         run: npm run lint
 
-      - name: Run tests
-        run: npm test
+      # Coverage thresholds in proxy/vitest.config.ts fail this step when missed.
+      - name: Run tests with coverage gate
+        run: npm run test:coverage
 
       - name: Scanner latency benchmark (<10ms p99 contract)
         run: npm run bench

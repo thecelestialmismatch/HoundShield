@@ -1,9 +1,18 @@
 name: Lighthouse CI
 
-# Core Web Vitals scoreboard for the pages that earn search clicks.
-# Informational (continue-on-error): scores and reports are uploaded as
-# artifacts on every PR so regressions are visible before they cost CTR —
-# slow pages bleed rankings. Tighten into a hard gate once budgets are set.
+# Quality gate for the pages that earn search clicks.
+#
+# Accessibility, SEO and best-practices are HARD GATES — they score rendered
+# markup deterministically, and SEO is a primary acquisition channel here.
+# Performance stays a warning: it measured 0.67-0.84 across the same pages in
+# a single sitting, and a check that fails at random is one people learn to
+# ignore.
+#
+# Previously this job asserted everything as 'warn', appended '|| true', AND
+# set continue-on-error — three independent guarantees that it could never
+# fail, while still presenting as a check on the PR.
+#
+# Thresholds live in compliance-firewall-agent/.lighthouserc.json.
 
 on:
   pull_request:
@@ -16,7 +25,6 @@ jobs:
   lighthouse:
     name: Lighthouse (marketing pages)
     runs-on: ubuntu-latest
-    continue-on-error: true
     defaults:
       run:
         working-directory: compliance-firewall-agent
@@ -52,9 +60,7 @@ jobs:
             --url=http://localhost:3000/controls \
             --url=http://localhost:3000/blog \
             --numberOfRuns=1
-          npx --yes @lhci/cli@0.14.x assert \
-            --assertions.categories:performance=warn \
-            --assertions.categories:seo=warn || true
+          npx --yes @lhci/cli@0.14.x assert
 
       - name: Upload reports
         uses: actions/upload-artifact@v7

@@ -35,5 +35,38 @@ export default defineConfig({
     globals: false,
     include: ["**/__tests__/**/*.test.ts"],
     env: { HOUNDSHIELD_DATA_DIR: TEST_DATA_DIR },
+    coverage: {
+      provider: "v8",
+      reporter: ["text-summary", "json-summary"],
+      /*
+       * `include` is explicit so that files NO test imports still count
+       * against the number. Without it, v8 reports only modules the suite
+       * happened to load — which measures the tests against themselves and
+       * reads ~82% while server.ts, storage.ts, webhook.ts and license.ts
+       * contribute nothing. That flatters the figure exactly where the risk
+       * is highest.
+       */
+      include: ["*.ts", "patterns/**/*.ts", "ooda/**/*.ts"],
+      exclude: [
+        "**/__tests__/**",
+        "**/*.test.ts",
+        "**/*.d.ts",
+        "dist/**",
+        "bench/**",
+        "vitest.config.ts",
+      ],
+      /*
+       * Ratchet, set at the measured floor rounded down to the nearest 5%.
+       * Measured 2026-08-08 with the include above:
+       *   statements 65.26%  branches 54.29%  functions 69.90%  lines 66.30%
+       * Raise these as coverage improves; never lower them to green a build.
+       */
+      thresholds: {
+        lines: 65,
+        functions: 65,
+        branches: 50,
+        statements: 65,
+      },
+    },
   },
 });

@@ -168,11 +168,23 @@ describe('/demo tells the truth about the product', () => {
   });
 
   it('quotes the engine and pattern counts that engines.ts computes', () => {
-    // Hardcoded in the page on purpose: importing engines.ts would pull all 90
-    // pattern regexes into this client bundle. This assertion is what keeps the
-    // literal honest, so a 17th engine fails here instead of shipping a lie.
+    /*
+     * Hardcoded in the page on purpose: importing engines.ts would pull every
+     * pattern regex into this client bundle. This assertion is what keeps the
+     * literal honest, so a 17th engine fails here instead of shipping a lie.
+     *
+     * It previously asserted `PATTERN_COUNT === 90` — and did its job
+     * perfectly, right up to the point where the number itself was wrong.
+     * engines.ts summed BUILTIN + CMMC + HIPAA while BUILTIN already contained
+     * the other two, so 53 real patterns were published as 90 here, on the
+     * homepage stat row, and in the detection-engines card. The literal 90 in
+     * this file is what made the inflated figure look deliberate.
+     *
+     * Only ENGINE_COUNT keeps a hardcoded expectation now: it is a curated
+     * list a human maintains. The pattern count is derived, so pinning a
+     * second copy of it here just creates another thing to be wrong.
+     */
     expect(ENGINE_COUNT).toBe(16);
-    expect(PATTERN_COUNT).toBe(90);
     expect(demo).toContain(`${ENGINE_COUNT} detection engines`);
     expect(demo).toContain(`${PATTERN_COUNT} patterns`);
   });

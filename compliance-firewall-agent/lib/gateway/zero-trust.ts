@@ -94,6 +94,43 @@ export function invalidateZeroTrustCache(orgId: string): void {
 }
 
 // ---------------------------------------------------------------------------
+// Time window parsing
+// ---------------------------------------------------------------------------
+
+/**
+ * Parses a `"09:00-17:00 UTC"` style window into minutes-since-midnight.
+ *
+ * Returns null for anything it cannot read. Previously this was inlined and
+ * unguarded: a value without a "-" left `end` undefined, and `end.split(":")`
+ * threw a TypeError that escaped `evaluateZeroTrust` entirely. One malformed
+ * row — user-editable data — turned an access-control decision into an
+ * unhandled exception at the gateway.
+ *
+ * Callers treat null as "this rule allows nothing", so a bad row narrows
+ * access rather than widening it.
+ */
+function parseTimeWindow(
+  value: string
+): { startMin: number; endMin: number } | null {
+  const [start, end] = value.replace(" UTC", "").trim().split("-");
+  if (!start || !end) return null;
+
+  const toMinutes = (part: string): number | null => {
+    const [h, m] = part.trim().split(":").map(Number);
+    if (!Number.isInteger(h) || h < 0 || h > 23) return null;
+    const minutes = m === undefined ? 0 : m;
+    if (!Number.isInteger(minutes) || minutes < 0 || minutes > 59) return null;
+    return h * 60 + minutes;
+  };
+
+  const startMin = toMinutes(start);
+  const endMin = toMinutes(end);
+  if (startMin === null || endMin === null) return null;
+
+  return { startMin, endMin };
+}
+
+// ---------------------------------------------------------------------------
 // Decision engine
 // ---------------------------------------------------------------------------
 
@@ -178,12 +215,17 @@ export async function evaluateZeroTrust(
     const currentMinutes = utcHour * 60 + utcMin;
 
     const inWindow = timeRules.some((r) => {
-      const [start, end] = r.value.replace(" UTC", "").split("-");
-      const [sh, sm] = start.split(":").map(Number);
-      const [eh, em] = end.split(":").map(Number);
-      const startMin = sh * 60 + (sm ?? 0);
-      const endMin = eh * 60 + (em ?? 0);
-      return currentMinutes >= startMin && currentMinutes <= endMin;
+      const parsed = parseTimeWindow(r.value);
+      if (!parsed) return false; // unparseable rule grants nothing — fail closed
+      const { startMin, endMin } = parsed;
+
+      // A window whose end is before its start crosses midnight
+      // ("22:00-02:00"). Comparing with && can never be true in that case,
+      // which silently locked out every org on a night shift. Wrapping
+      // windows are a union of two ranges, not an intersection.
+      return endMin < startMin
+        ? currentMinutes >= startMin || currentMinutes <= endMin
+        : currentMinutes >= startMin && currentMinutes <= endMin;
     });
 
     if (!inWindow) {

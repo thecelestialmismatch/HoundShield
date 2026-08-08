@@ -35,7 +35,15 @@ const SOURCE_DIRS = ['app', 'components', 'lib', 'hooks', 'scripts', 'test', 'pr
  * Path segments that are generated, never authored. Anything under one of
  * these is ignored on purpose in every package, and is not "hidden source".
  */
-const ARTIFACT_DIRS = ['node_modules', 'dist', '.next', 'build', 'coverage', 'out']
+const ARTIFACT_DIRS = [
+  'node_modules',
+  'dist',
+  '.next',
+  'build',
+  'coverage',
+  '.lighthouseci',
+  'out',
+]
 
 function ignoredSourceFiles(): string[] {
   // `--others --ignored --exclude-standard` lists exactly the files git is
