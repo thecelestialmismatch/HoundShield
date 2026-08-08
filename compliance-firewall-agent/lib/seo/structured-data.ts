@@ -7,6 +7,7 @@
  */
 
 import type { FaqItem, HowToStep } from "./faqs";
+import { RISK_REPORT } from "@/lib/pricing/plans";
 
 export const BASE_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
@@ -20,16 +21,31 @@ interface OfferInput {
   description: string;
 }
 
-// Tier names and prices must match app/pricing/page.tsx exactly. The $499
-// one-time CMMC AI Risk Assessment Report is the lead product and is listed
-// first. The $2,499 tier is "Agency" on the pricing page (not "Federal").
+/*
+ * Offers must match what /pricing actually sells — exactly one thing.
+ *
+ * This list used to carry six tiers (Free, Pro $199, Growth $499/mo,
+ * Enterprise $999, Agency $2,499) alongside the report. /pricing stopped
+ * selling all of them — it is deliberately a single-offer page, locked by
+ * app/pricing/__tests__/pricing-single-offer.test.tsx — but this schema kept
+ * publishing them to Google, Perplexity and every other answer engine.
+ *
+ * Two concrete harms, not just untidiness:
+ *   1. Rich results advertised prices with no checkout behind them. A buyer
+ *      arriving on "HoundShield Pro — $199/mo" lands on a page selling one
+ *      $499 report, and bounces.
+ *   2. It was a literal second pricing grid — the machine-readable one — in
+ *      a codebase whose first pricing rule is that there is only ever one.
+ *
+ * The subscription ladder still exists in lib/pricing/plans.ts for Stage 2.
+ * It does not belong here until it is something a visitor can actually buy.
+ */
 const PRODUCT_OFFERS: readonly OfferInput[] = [
-  { name: "CMMC AI Risk Assessment Report", price: "499", description: "One-time $499 report — run the proxy 14 days in your own environment for a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription." },
-  { name: "Free", price: "0", description: "Free tier — CMMC self-assessment, SPRS calculator, up to 1,000 prompts/mo" },
-  { name: "Pro", price: "199", description: "Pro — AI gateway (50,000 scans/mo), SSP & POA&M generation, 10 seats" },
-  { name: "Growth", price: "499", description: "Growth — unlimited scans, PDF reports, C3PAO coordination, SSO & RBAC, 25 seats" },
-  { name: "Enterprise", price: "999", description: "Enterprise — on-prem / air-gapped, white-label PDF, dedicated CSM" },
-  { name: "Agency", price: "2499", description: "Agency / MSP — multi-tenant, unlimited client accounts, revenue-share program" },
+  {
+    name: RISK_REPORT.name,
+    price: String(RISK_REPORT.oneTimePrice),
+    description: `One-time $${RISK_REPORT.oneTimePrice} report — run the proxy 14 days in your own environment for a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription.`,
+  },
 ];
 
 const PRODUCT_FEATURES: readonly string[] = [

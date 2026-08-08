@@ -7,10 +7,11 @@ import { AnimatedSection, AnimatedCounter } from "@/components/landing/animated-
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
 import { PRODUCT_METRICS } from "@/lib/site/metrics";
+import { ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
 import { RISK_REPORT } from "@/lib/pricing/plans";
 import {
     Shield, Lock, Bot, Eye, DollarSign, CheckCircle,
-    ArrowRight, Quote, Calendar,
+    ArrowRight, Calendar,
 } from "lucide-react";
 
 /* ===== DATA ===== */
@@ -42,19 +43,59 @@ const values = [
     { icon: CheckCircle, title: "Compliant", desc: "SOC 2 and GDPR ready out of the box. We practice the compliance we preach.", color: "text-brand-700", bg: "bg-brand-500/10 border-brand-500/20" },
 ];
 
-const testimonials = [
-    { quote: "We went from zero documentation to assessment-ready in six weeks. Our C3PAO was genuinely impressed with the evidence packages HoundShield generated.", name: "Sarah Mitchell", title: "VP of Cybersecurity", company: "Ridgeline Defense Systems" },
-    { quote: "As a 30-person shop, we thought CMMC Level 2 was out of reach. HoundShield made the 110 controls approachable and showed us exactly what to fix first.", name: "James Thornton", title: "CTO", company: "Apex Tactical Solutions" },
-    { quote: "The AI gap analysis found policy gaps our internal audit missed. The automated POA&M tracking alone saves us 15 hours a week.", name: "Maria Chen", title: "Compliance Director", company: "Vanguard Aero Engineering" },
+/*
+ * Honesty sweep, continued. Three things used to live here and had to go:
+ *
+ *   1. Three testimonials attributed to named people at named companies
+ *      ("Sarah Mitchell, VP of Cybersecurity, Ridgeline Defense Systems" and
+ *      two others). None of those people or companies exist. Fabricated
+ *      endorsements are an FTC exposure (16 CFR Part 255) and the exact thing
+ *      a defense buyer runs down before a call — one search and the whole
+ *      site's credibility is gone.
+ *   2. A "Trusted by Defense Contractors" heading over them.
+ *   3. A timeline row claiming "1,000+ Users — trusted by over a thousand
+ *      defense contractors", plus "20 defense subcontractors" in the beta row.
+ *      Both are customer counts we cannot substantiate.
+ *
+ * What replaces them is the strongest honest claim available: proof the
+ * reader can check themselves, computed from the shipped product. Nothing
+ * here asserts a customer, a logo, or a quote.
+ *
+ * Locked by app/about/__tests__/about-honesty.test.tsx.
+ */
+const proofs = [
+    {
+        icon: Eye,
+        title: "Read the detection source",
+        desc: `All ${ENGINE_COUNT} engines and ${PATTERN_COUNT} patterns are plain regex in the repository. No model, no black box — diff them against your own CUI markings before you buy.`,
+    },
+    {
+        icon: Lock,
+        title: "Verify the audit chain yourself",
+        desc: "Every event is SHA-256 hash-chained. Recompute the chain from your own log and confirm no entry was altered or removed — the integrity claim does not depend on trusting us.",
+    },
+    {
+        icon: Shield,
+        title: "Run it inside your own boundary",
+        desc: "Mode B ships as a Docker image on your infrastructure. Prompt content never leaves your network, so there is no vendor cloud in the CUI path to take on faith.",
+    },
+    {
+        icon: CheckCircle,
+        title: "Benchmark the latency claim",
+        desc: `The <${PRODUCT_METRICS.scanLatencyMs}ms figure is enforced by a benchmark in CI, not a marketing estimate. Run it on your own hardware and hold us to the number.`,
+    },
 ];
 
+/*
+ * Dated rows describe engineering milestones only — what was built and when.
+ * No row may assert a customer count; see the honesty note above.
+ */
 const timeline = [
     { date: "2024 Q3", title: "Founded", desc: "HoundShield launched with a singular mission: make CMMC compliance accessible to every defense contractor." },
-    { date: "2024 Q4", title: "First Beta", desc: "Early access program with 20 defense subcontractors. Validated core assessment engine." },
+    { date: "2024 Q4", title: "First Beta", desc: "Closed early-access program. Validated the core assessment engine against real contractor workflows." },
     { date: "2025 Q1", title: "NIST 800-171 Engine", desc: "Full mapping of all 110 security controls with automated evidence collection." },
     { date: "2025 Q3", title: "Public Launch", desc: "General availability with AI-powered gap analysis, remediation plans, and audit trail generation." },
     { date: "2026 Q1", title: "CMMC Level 2 Mapping", desc: "Complete alignment with CMMC 2.0 assessment objectives and C3PAO preparation workflows." },
-    { date: "2026 Q3", title: "1,000+ Users", desc: "Trusted by over a thousand defense contractors from sole proprietors to mid-tier primes." },
 ];
 
 /* ===== PAGE ===== */
@@ -150,27 +191,33 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Testimonials */}
+            {/* Proof you can check yourself (replaces fabricated testimonials) */}
             <section className="py-16 px-6 bg-[var(--hs-surface-1)]">
                 <div className="max-w-5xl mx-auto">
-                    <AnimatedSection className="text-center mb-12">
-                        <h2 className="text-3xl font-bold tracking-tight">Trusted by Defense Contractors</h2>
+                    <AnimatedSection className="text-center mb-4">
+                        <h2 className="text-3xl font-bold tracking-tight">Don&apos;t Take Our Word For It</h2>
                     </AnimatedSection>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {testimonials.map((t, i) => (
-                            <AnimatedSection key={t.name} delay={i * 100}>
-                                <div className="border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-7 h-full flex flex-col">
-                                    <Quote className="w-5 h-5 text-brand-500/40 mb-4 flex-shrink-0" />
-                                    <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed flex-1 mb-6">
-                                        {t.quote}
-                                    </p>
-                                    <div className="border-t border-[var(--hs-border)] pt-4">
-                                        <p className="text-sm font-semibold text-[var(--hs-ink)]">{t.name}</p>
-                                        <p className="text-xs text-[var(--hs-ink-secondary)]">{t.title}, {t.company}</p>
+                    <AnimatedSection className="text-center mb-12">
+                        <p className="text-[var(--hs-ink-secondary)] max-w-2xl mx-auto leading-relaxed">
+                            We&apos;re early, and we&apos;d rather show you something checkable than a
+                            wall of logos. Every claim below can be verified before you spend a dollar.
+                        </p>
+                    </AnimatedSection>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                        {proofs.map((p, i) => {
+                            const Icon = p.icon;
+                            return (
+                                <AnimatedSection key={p.title} delay={i * 100}>
+                                    <div className="border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl p-7 h-full">
+                                        <div className="w-11 h-11 rounded-xl bg-brand-50 border border-brand-200 flex items-center justify-center mb-4">
+                                            <Icon className="w-5 h-5 text-brand-500" />
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-[var(--hs-ink)] mb-2">{p.title}</h3>
+                                        <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">{p.desc}</p>
                                     </div>
-                                </div>
-                            </AnimatedSection>
-                        ))}
+                                </AnimatedSection>
+                            );
+                        })}
                     </div>
                 </div>
             </section>

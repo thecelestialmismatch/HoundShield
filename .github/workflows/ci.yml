@@ -116,13 +116,38 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Verify 16+ CUI patterns present
+      # Counts the patterns the scanner actually loads, by importing the
+      # module. The previous guard ran `grep -c "category:"`, which also
+      # matched the PatternCategory type alias and the DetectionPattern /
+      # DetectedEntity interface fields — roughly four free hits that no
+      # detection rule contributes to. It would therefore have passed with
+      # a dozen real patterns deleted, which is the one thing it exists to
+      # prevent. Importing ALL_PATTERNS also proves the export name the
+      # publish-patterns workflow depends on still resolves.
+      - name: Verify the shipped CUI pattern set has not been degraded
         run: |
-          COUNT=$(grep -c "category:" proxy/patterns/index.ts 2>/dev/null || echo 0)
-          echo "Pattern categories found: $COUNT"
-          if [ "$COUNT" -lt 16 ]; then
-            echo "BLOCKED: CUI pattern count dropped below 16 (found: $COUNT)"
-            echo "Compliance engine must never be degraded."
-            exit 1
-          fi
-          echo "PASS: $COUNT CUI pattern categories verified"
+          cd proxy
+          npm ci --ignore-scripts
+          npx tsx -e "
+            import { ALL_PATTERNS } from './patterns/index.ts';
+            const MIN = 33;
+            const byCategory = {};
+            for (const p of ALL_PATTERNS) {
+              byCategory[p.category] = (byCategory[p.category] ?? 0) + 1;
+            }
+            console.log('Patterns loaded:', ALL_PATTERNS.length, byCategory);
+            if (ALL_PATTERNS.length < MIN) {
+              console.error(
+                'BLOCKED: pattern count dropped to ' + ALL_PATTERNS.length +
+                ' (floor is ' + MIN + '). The compliance engine must never be degraded.'
+              );
+              process.exit(1);
+            }
+            for (const required of ['CUI', 'PHI', 'PII']) {
+              if (!byCategory[required]) {
+                console.error('BLOCKED: no ' + required + ' patterns remain.');
+                process.exit(1);
+              }
+            }
+            console.log('PASS:', ALL_PATTERNS.length, 'patterns verified');
+          "
