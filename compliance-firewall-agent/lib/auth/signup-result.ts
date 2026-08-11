@@ -30,9 +30,12 @@ export interface SignUpResultLike {
   session: unknown | null;
 }
 
-const ALREADY_REGISTERED_MESSAGE =
-  "That email is already registered. Sign in instead — and if you first signed up with Google or GitHub, use that button above.";
-const GENERIC_ERROR_MESSAGE =
+/**
+ * The single message every sign-up failure resolves to, rate limiting aside.
+ * Exported so the test suite can pin the "one neutral message" contract by
+ * identity rather than by copying the wording into an assertion.
+ */
+export const GENERIC_ERROR_MESSAGE =
   "We couldn't create your account just now — a temporary problem on our end. Please try again in a minute.";
 const RATE_LIMIT_MESSAGE =
   "Too many attempts — please wait a minute, then try again.";
@@ -85,16 +88,32 @@ function isRateLimited(low: string): boolean {
 }
 
 /**
+ * Does this error mean "that address already has an account"?
+ *
+ * Exported so callers can route a collision to the SAME neutral "check your
+ * email" outcome a fresh address gets, instead of rendering it as an error.
+ * The distinction must never reach the UI — see ALREADY_REGISTERED_MESSAGE.
+ */
+export function isDuplicateEmailError(error: unknown): boolean {
+  return isDuplicateEmail(extractMessage(error).toLowerCase());
+}
+
+/**
  * Any sign-up error -> a safe, human, never-empty, never-"{}" message.
  * Shared by both the Supabase and Better Auth code paths.
+ *
+ * ENUMERATION: this never returns raw server text and never returns
+ * ALREADY_REGISTERED_MESSAGE. Echoing GoTrue's wording was one of the three
+ * ways this app told an anonymous caller whether an email had an account —
+ * for a compliance product, whether a given company is a customer. Callers
+ * detect a collision with isDuplicateEmailError() and show the neutral
+ * success panel instead.
  */
 export function signUpErrorMessage(error: unknown): string {
   const raw = extractMessage(error);
   const low = raw.toLowerCase();
-  if (isDuplicateEmail(low)) return ALREADY_REGISTERED_MESSAGE;
   if (isRateLimited(low)) return RATE_LIMIT_MESSAGE;
-  if (!raw || isOpaqueServerError(low)) return GENERIC_ERROR_MESSAGE;
-  return raw;
+  return GENERIC_ERROR_MESSAGE;
 }
 
 export function interpretSignUp(

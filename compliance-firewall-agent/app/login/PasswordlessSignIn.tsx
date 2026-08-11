@@ -25,6 +25,7 @@ import {
   supabaseOtpErrorMessage,
 } from '@/lib/auth/passwordless-state';
 import { isSignInAvailable, SIGN_IN_UNAVAILABLE } from '@/lib/auth/signin-availability';
+import { postAuth } from '@/lib/auth/server-auth-client';
 
 interface PasswordlessSignInProps {
   /** Same-origin relative path to land on after sign-in (parent-sanitized). */
@@ -73,27 +74,47 @@ export function PasswordlessSignIn({ redirect, initialEmail, onBack }: Passwordl
       return;
     }
     setLoading(true);
-    try {
-      const supabase = createClient();
-      const options: { shouldCreateUser: boolean; emailRedirectTo?: string } = {
-        shouldCreateUser: false,
-      };
-      if (method === 'link') {
-        options.emailRedirectTo = `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(
-          redirect,
-        )}`;
-      }
-      const { error: sendError } = await supabase.auth.signInWithOtp({ email, options });
-      // Surface only throttling; hide account-existence errors (no enumeration).
-      if (sendError && isRateLimitError(sendError.message)) {
-        setError(supabaseOtpErrorMessage(sendError.message));
+
+    // Server route first — it bounds the send, which is both an email-bomb
+    // vector and a Supabase/Resend quota spend. The browser call below cannot
+    // be rate limited because it never reaches our infrastructure.
+    const result = await postAuth('/api/auth/otp', {
+      action: 'send',
+      email,
+      method,
+      redirect,
+    });
+
+    if (result.kind === 'error') {
+      setError(result.message);
+      setLoading(false);
+      return;
+    }
+
+    if (result.kind === 'unavailable') {
+      // 501 — server routes off. Legacy direct-to-Supabase path.
+      try {
+        const supabase = createClient();
+        const options: { shouldCreateUser: boolean; emailRedirectTo?: string } = {
+          shouldCreateUser: false,
+        };
+        if (method === 'link') {
+          options.emailRedirectTo = `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(
+            redirect,
+          )}`;
+        }
+        const { error: sendError } = await supabase.auth.signInWithOtp({ email, options });
+        // Surface only throttling; hide account-existence errors (no enumeration).
+        if (sendError && isRateLimitError(sendError.message)) {
+          setError(supabaseOtpErrorMessage(sendError.message));
+          setLoading(false);
+          return;
+        }
+      } catch {
+        setError("We couldn't reach the sign-in service. Please try again in a moment.");
         setLoading(false);
         return;
       }
-    } catch {
-      setError("We couldn't reach the sign-in service. Please try again in a moment.");
-      setLoading(false);
-      return;
     }
     const now = Date.now();
     setLastSentAt(now);
@@ -111,23 +132,39 @@ export function PasswordlessSignIn({ redirect, initialEmail, onBack }: Passwordl
     }
     setError('');
     setLoading(true);
-    try {
-      const supabase = createClient();
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        email,
-        token: otp,
-        type: 'email',
-      });
-      if (verifyError) {
-        setError(supabaseOtpErrorMessage(verifyError.message));
-        setLoading(false);
-        return;
-      }
-    } catch {
-      setError("We couldn't verify the code. Please try again in a moment.");
+
+    // Server route first. A 6-digit code is a 1,000,000-wide space and a
+    // correct guess mints a full session, so the guesses have to be counted —
+    // the route feeds the same lockout the password path uses.
+    const result = await postAuth('/api/auth/otp', { action: 'verify', email, token: otp });
+
+    if (result.kind === 'error') {
+      setError(result.message);
       setLoading(false);
       return;
     }
+
+    if (result.kind === 'unavailable') {
+      // 501 — server routes off. Legacy direct-to-Supabase path.
+      try {
+        const supabase = createClient();
+        const { error: verifyError } = await supabase.auth.verifyOtp({
+          email,
+          token: otp,
+          type: 'email',
+        });
+        if (verifyError) {
+          setError(supabaseOtpErrorMessage(verifyError.message));
+          setLoading(false);
+          return;
+        }
+      } catch {
+        setError("We couldn't verify the code. Please try again in a moment.");
+        setLoading(false);
+        return;
+      }
+    }
+
     router.push(redirect);
     router.refresh();
   };

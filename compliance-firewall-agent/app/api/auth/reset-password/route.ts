@@ -2,6 +2,8 @@ import { NextResponse, after } from 'next/server';
 import { createServiceClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { sendPasswordResetEmail } from '@/lib/auth/auth-emails';
 import { recoveryRequestSchema, buildRecoveryConfirmUrl } from '@/lib/auth/recovery-link';
+import { enforceRateLimit, identifierFor, clientIp } from '@/lib/rate-limit-shared';
+import { lockoutKey } from '@/lib/auth/lockout';
 
 /**
  * POST /api/auth/reset-password — self-hosted password-reset send.
@@ -17,10 +19,31 @@ import { recoveryRequestSchema, buildRecoveryConfirmUrl } from '@/lib/auth/recov
  * Resend send runs in `after()` (off the response path) so an existing account
  * does NOT return slower than a non-existent one — response latency can't be
  * used as an account-existence oracle.
+ *
+ * RATE LIMITED HERE, IN THE ROUTE. A 5-per-minute bucket for this path already
+ * existed in middleware.ts — and was dead: the repo-root vercel.json uses the
+ * legacy `builds`/`routes` keys, which replace the routing table the middleware
+ * lives in, so none of it executes on this deployment (verified 2026-08-11:
+ * /auth/signup 404s, no X-RateLimit-* on any response). Until that config is
+ * fixed separately, an "unauthenticated endpoint that emails a stranger" was
+ * completely unbounded — an email-bomb vector aimed at a customer's inbox and a
+ * way to burn Supabase and Resend quota. A limiter in a file that never runs is
+ * worse than no limiter, because it reads as covered.
  */
+const RESET_IP_LIMIT = { limit: 5, windowMs: 60_000 };
+const RESET_EMAIL_LIMIT = { limit: 3, windowMs: 900_000 };
+
 const ok = () => NextResponse.json({ ok: true });
 
 export async function POST(request: Request) {
+  // Per-IP first — cheapest check, and it needs no parsed body.
+  const ipBlocked = await enforceRateLimit(
+    'auth:reset-ip',
+    identifierFor({ ip: clientIp(request) }),
+    RESET_IP_LIMIT,
+  );
+  if (ipBlocked) return ipBlocked;
+
   let email: string;
   try {
     const parsed = recoveryRequestSchema.safeParse(await request.json());
@@ -31,6 +54,17 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
   }
+
+  // Per-address, so a botnet cannot spread an inbox flood across many IPs.
+  // Keyed on the hash — this bucket must never hold an address. Applied to any
+  // well-formed email whether or not it has an account, or the 429 itself
+  // would become the enumeration oracle the rest of this route avoids.
+  const emailBlocked = await enforceRateLimit(
+    'auth:reset-email',
+    `e:${lockoutKey(email)}`,
+    RESET_EMAIL_LIMIT,
+  );
+  if (emailBlocked) return emailBlocked;
 
   // No Supabase configured (dev/demo) → stay enumeration-safe, send nothing.
   if (!isSupabaseConfigured()) {
