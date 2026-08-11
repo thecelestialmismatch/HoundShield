@@ -11,13 +11,38 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { initiateSso, resolveSsoByDomain, getProviderLabel } from "@/lib/auth/saml";
+import { enforceRateLimit, identifierFor, clientIp } from "@/lib/rate-limit-shared";
 
 const SsoCheckSchema = z.object({
   email: z.string().email(),
   redirectTo: z.string().default("/dashboard"),
 });
 
+/**
+ * Both handlers are unauthenticated BY NECESSITY — IdP discovery happens
+ * before anyone can sign in, so a session gate would break the feature it is
+ * meant to protect.
+ *
+ * The residual risk is org enumeration: a caller can ask "does acme.com use
+ * SSO here?" and, for a compliance product, a yes is close to "acme.com is a
+ * customer". That cannot be removed without removing the endpoint, so the fix
+ * is to make it un-walkable rather than un-askable — one domain at a time is
+ * inherent, a scripted sweep of thousands is not. 20/min per IP via the
+ * shared Postgres limiter (migration 028).
+ *
+ * This was previously unbounded in production: the only limiter covering it
+ * lived in middleware.ts, which does not execute on this deployment.
+ */
+const SSO_LOOKUP_LIMIT = { limit: 20, windowMs: 60_000 };
+
 export async function GET(request: NextRequest) {
+  const blocked = await enforceRateLimit(
+    "auth:sso-lookup",
+    identifierFor({ ip: clientIp(request) }),
+    SSO_LOOKUP_LIMIT,
+  );
+  if (blocked) return blocked;
+
   const searchParams = request.nextUrl.searchParams;
   const email = searchParams.get("email") ?? "";
   const domain = email.split("@")[1]?.toLowerCase();
@@ -39,6 +64,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const blocked = await enforceRateLimit(
+    "auth:sso-initiate",
+    identifierFor({ ip: clientIp(request) }),
+    SSO_LOOKUP_LIMIT,
+  );
+  if (blocked) return blocked;
+
   try {
     const body = await request.json();
     const parsed = SsoCheckSchema.safeParse(body);

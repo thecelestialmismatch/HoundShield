@@ -9,6 +9,8 @@ import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle, ShieldCheck } from 'l
 import { createClient } from '@/lib/supabase/browser';
 import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
 import { isSignInAvailable, SIGN_IN_UNAVAILABLE } from '@/lib/auth/signin-availability';
+import { postAuth } from '@/lib/auth/server-auth-client';
+import { signInErrorMessage } from '@/lib/auth/auth-error-message';
 import {
   needsSecondFactor,
   normalizeOtpInput,
@@ -104,7 +106,9 @@ function LoginForm() {
       try {
         const { data, error: baError } = await authClient.signIn.email({ email, password });
         if (baError) {
-          setError(baError.message || 'Invalid email or password.');
+          // Never echo raw server text — it distinguishes "no such account"
+          // from "wrong password" and enumerates customers.
+          setError(signInErrorMessage(baError));
           setLoading(false);
           return;
         }
@@ -126,6 +130,25 @@ function LoginForm() {
       return;
     }
 
+    // Server route first: it is the only place rate limiting, account lockout
+    // (NIST 800-171 3.1.8) and response-timing equalization can be applied,
+    // because the browser→GoTrue call never passes through our infrastructure.
+    const result = await postAuth('/api/auth/login', { email, password });
+
+    if (result.kind === 'ok') {
+      router.push(redirect);
+      router.refresh();
+      return;
+    }
+
+    if (result.kind === 'error') {
+      setError(result.message);
+      setLoading(false);
+      return;
+    }
+
+    // 501 — server routes switched off (AUTH_SERVER_ROUTES=off). Fall back to
+    // the legacy direct-to-Supabase call so a rollback needs no redeploy.
     let authError;
     try {
       const supabase = createClient();
@@ -137,10 +160,7 @@ function LoginForm() {
     }
 
     if (authError) {
-      const msg = authError.message === 'Invalid login credentials'
-        ? 'Invalid login credentials — if you just signed up, please confirm your email first.'
-        : authError.message;
-      setError(msg);
+      setError(signInErrorMessage(authError));
       setLoading(false);
       return;
     }

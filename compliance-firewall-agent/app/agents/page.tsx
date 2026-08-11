@@ -352,7 +352,7 @@ export default function AgentsPage() {
               and 13 AI models to autonomously handle compliance at scale.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link href="/auth" className="btn-primary">
+              <Link href="/signup" className="btn-primary">
                 Deploy Your First Agent <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/features" className="btn-ghost">
@@ -742,7 +742,7 @@ export default function AgentsPage() {
                   Scale to unlimited custom agents on Pro.
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4">
-                  <Link href="/auth" className="btn-primary text-base !py-3 !px-8">
+                  <Link href="/signup" className="btn-primary text-base !py-3 !px-8">
                     Get Started Free <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link href="/command-center" className="btn-ghost text-base !py-3 !px-8">
