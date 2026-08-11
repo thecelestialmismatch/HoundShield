@@ -8,7 +8,14 @@ import { ScrollProgressBar } from '@/components/scroll-effects';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/browser';
 import { authClient, isBetterAuthClientEnabled } from '@/lib/auth/auth-client';
-import { interpretSignUp, signUpErrorMessage, validateSignUpInput } from '@/lib/auth/signup-result';
+import {
+  interpretSignUp,
+  signUpErrorMessage,
+  validateSignUpInput,
+  isDuplicateEmailError,
+} from '@/lib/auth/signup-result';
+import { postAuth } from '@/lib/auth/server-auth-client';
+import { AUTH_SIGNUP_CHECK_EMAIL } from '@/lib/auth/auth-error-message';
 import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
 import { AuthTabs } from '@/components/auth/AuthTabs';
@@ -41,7 +48,12 @@ export default function SignupPage() {
       try {
         const { error: baError } = await authClient.signUp.email({ email, password, name });
         if (baError) {
-          setError(signUpErrorMessage(baError));
+          // A collision resolves to the SAME neutral panel a new address gets.
+          if (isDuplicateEmailError(baError)) {
+            setSuccess(true);
+          } else {
+            setError(signUpErrorMessage(baError));
+          }
           setLoading(false);
           return;
         }
@@ -50,11 +62,37 @@ export default function SignupPage() {
         setLoading(false);
         return;
       }
-      // Email/password with verification off → session is live; drop into product.
-      router.push('/command-center?welcome=true');
+      // Better Auth now requires a verified address (requireEmailVerification),
+      // so sign-up yields NO session — the same neutral "check your email"
+      // panel the Supabase path shows.
+      setSuccess(true);
+      setLoading(false);
       return;
     }
 
+    // Server route first — it answers identically for a new address and one
+    // that already exists, which is what closes the enumeration leak this page
+    // used to have ("That email is already registered").
+    const result = await postAuth('/api/auth/signup', { email, password, name });
+
+    if (result.kind === 'ok') {
+      const next = result.data.next;
+      if (typeof next === 'string') {
+        router.push(next);
+        return;
+      }
+      setSuccess(true);
+      setLoading(false);
+      return;
+    }
+
+    if (result.kind === 'error') {
+      setError(result.message);
+      setLoading(false);
+      return;
+    }
+
+    // 501 — server routes off. Legacy direct-to-Supabase path.
     let data, authError;
     try {
       const supabase = createClient();
@@ -81,9 +119,10 @@ export default function SignupPage() {
         router.push(outcome.to);
         return;
       case 'already-registered':
-        setError(
-          'That email is already registered. Sign in instead — and if you first signed up with Google or GitHub, use that button above.',
-        );
+        // Do NOT tell the caller the address exists. Same neutral outcome as a
+        // brand-new address — the person who actually owns the inbox learns
+        // which it was from their email, and nobody else can.
+        setSuccess(true);
         setLoading(false);
         return;
       case 'error':
@@ -123,9 +162,11 @@ export default function SignupPage() {
             <CheckCircle2 className="w-8 h-8 text-[var(--hs-success)]" />
           </div>
           <h2 className="text-xl font-bold text-[var(--hs-ink)] mb-2">Check your email</h2>
+          {/* Neutral by design: identical wording whether the address was new
+              or already had an account. Saying "we sent a link" unconditionally
+              would also be untrue in the second case. */}
           <p className="text-[var(--hs-ink-secondary)] text-sm mb-6">
-            We sent a confirmation link to <span className="text-[var(--hs-ink-secondary)] font-medium">{email}</span>.
-            Click it to activate your account.
+            {AUTH_SIGNUP_CHECK_EMAIL}
           </p>
           <Link
             href="/login"

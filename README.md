@@ -112,10 +112,55 @@ docs/                        STRIPE-FIX · TESTING-GUIDE · ROADMAP-12-MONTH ·
                              SECURITY-ROTATION · OUTREACH-HEALTHCARE
 ```
 
+## Tech stack
+
+Versions are the installed majors; `compliance-firewall-agent/package.json` and
+`proxy/package.json` are the source of truth if this table drifts.
+
+### Web plane — `compliance-firewall-agent/`
+
+| Layer | Choice | What it does here |
+|---|---|---|
+| Language | **TypeScript 5**, `strict: true` | The build does **not** gate on type errors (`next.config` sets `typescript.ignoreBuildErrors`), so `npx tsc --noEmit` is a separate, required check. |
+| Framework | **Next.js 16** (App Router) | Server Components by default. Credential handling lives in server routes under `app/api/auth/` — that is what gives rate limiting, lockout and response-timing control somewhere to attach. |
+| UI | **React 19**, **Tailwind CSS 3.4**, Framer Motion, Recharts, Lucide | Public pages are light-mode `hermes.css`; `/command-center` is dark. |
+| Database | **Supabase Postgres** (`@supabase/supabase-js`, `@supabase/ssr`) | Row-level security. Schema changes are numbered files in `supabase/migrations/`, applied in order. |
+| Auth | **Supabase Auth (GoTrue)** primary · **Better Auth 1.6** for SSO/2FA surfaces | Password hashing is GoTrue's **bcrypt**. The application never hashes a password itself — verified: no MD5/SHA-1 or raw-SHA-256 password path exists in `lib/` or `app/`. |
+| Validation | **Zod 4** | Every credential route parses its body through a schema before the value is used. |
+| Email | **Resend** | Reset and verification mail is generated and sent by us (`generateLink` + Resend), so the flow needs no Supabase-dashboard template config. |
+| Payments | **Stripe 22** | The $499 one-time report. |
+| Tests | **Vitest 4** | 2,478 tests across 185 files. |
+| Monitoring | **Sentry**, **PostHog** | PostHog is gated on cookie opt-in. |
+
+### Proxy — `proxy/` (the shipped product)
+
+**Node.js + Express 5**, **better-sqlite3** for the local append-only audit
+store, **Zod** for config validation. No network dependency on HoundShield —
+prompt content never leaves the customer's network.
+
+### The auth flow, module by module
+
+Server-side unless noted.
+
+| Module | Responsibility |
+|---|---|
+| `lib/auth/credential-guard.ts` | Zod schemas plus the shared per-IP / per-address gate every credential route calls first. |
+| `lib/auth/lockout.ts` | Consecutive-failure account lockout (5 attempts → 15 min), keyed on a SHA-256 of the address so the lock itself cannot confirm an account exists. NIST 800-171 **3.1.8** / CMMC **AC.2.008**. |
+| `lib/auth/timing.ts` | Equalizes response latency to a 600 ms floor plus jitter, closing the bcrypt-vs-no-bcrypt timing oracle. |
+| `lib/auth/captcha.ts` | Turnstile verification, required after repeated failures. |
+| `lib/auth/auth-error-message.ts` | The single neutral message every sign-in failure returns. |
+| `lib/auth/signup-result.ts` | Same contract for sign-up — never echoes "already registered". |
+| `lib/auth/server-auth-client.ts` | Browser caller; treats `501` as "feature off, use the legacy path". |
+| `lib/rate-limit-shared.ts` | Postgres-backed counters shared across instances, with a local fail-open fallback. |
+
+Rollback: `AUTH_SERVER_ROUTES=off` makes the server credential routes answer
+`501` and the browser reverts to its previous direct-to-Supabase calls. It is
+read server-side, so flipping it takes effect **without a rebuild**.
+
 ## Testing
 
 ```bash
-cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 1531 tests
+cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 2497 tests
 cd proxy && npx vitest run                                       # 61 tests
 cd proxy && npm run bench                                        # p99 < 10ms gate
 cd compliance-firewall-agent && npm run build                    # must pass pre-deploy
