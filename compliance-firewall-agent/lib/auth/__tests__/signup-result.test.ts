@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import {
+  GENERIC_ERROR_MESSAGE,
   interpretSignUp,
+  isDuplicateEmailError,
   signUpErrorMessage,
   validateSignUpInput,
 } from "@/lib/auth/signup-result";
@@ -106,15 +108,48 @@ describe("signUpErrorMessage — shared safe mapper (Better Auth + Supabase)", (
     }
   });
 
-  it("returns the already-registered guidance for a duplicate email", () => {
-    expect(signUpErrorMessage({ message: "user already exists" })).toMatch(/already registered/i);
+  // These three previously asserted the OPPOSITE — that the mapper echoed
+  // "already registered" and passed raw server text through. That wording was
+  // one of the ways an anonymous caller could learn whether a given address,
+  // and so a given company, was a HoundShield customer. The contract is now
+  // "one neutral message for every failure"; these assertions pin it down so a
+  // future refactor cannot quietly reopen the oracle.
+  it("never leaks that an address is already registered", () => {
+    const msg = signUpErrorMessage({ message: "user already exists" });
+    expect(msg).not.toMatch(/already registered/i);
+    expect(msg).not.toMatch(/already exists/i);
+    expect(msg).toBe(GENERIC_ERROR_MESSAGE);
   });
 
-  it("passes a specific, usable message through unchanged", () => {
-    expect(signUpErrorMessage({ message: "Password is too weak" })).toBe("Password is too weak");
+  it("does not pass raw server text through to the UI", () => {
+    expect(signUpErrorMessage({ message: "Password is too weak" })).toBe(GENERIC_ERROR_MESSAGE);
+    expect(signUpErrorMessage("Signups are disabled")).toBe(GENERIC_ERROR_MESSAGE);
   });
 
-  it("accepts a plain string error", () => {
-    expect(signUpErrorMessage("Signups are disabled")).toBe("Signups are disabled");
+  it("returns one identical message for existing and unknown addresses", () => {
+    expect(signUpErrorMessage({ message: "user already exists" })).toBe(
+      signUpErrorMessage({ message: "some other failure" }),
+    );
+  });
+
+  it("still surfaces rate limiting, which reveals nothing about any account", () => {
+    expect(signUpErrorMessage({ message: "email rate limit exceeded" })).toMatch(/too many/i);
+  });
+});
+
+describe("isDuplicateEmailError — collision detection stays server-side", () => {
+  it("detects a duplicate across both auth backends' wordings", () => {
+    for (const message of [
+      "user already exists",
+      "User already registered",
+      "duplicate key value violates unique constraint",
+    ]) {
+      expect(isDuplicateEmailError({ message })).toBe(true);
+    }
+  });
+
+  it("does not fire on unrelated errors", () => {
+    expect(isDuplicateEmailError({ message: "Password is too weak" })).toBe(false);
+    expect(isDuplicateEmailError(null)).toBe(false);
   });
 });

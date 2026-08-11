@@ -45,7 +45,7 @@ export async function GET(request: Request) {
 
       const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
       if (!error) {
-        return NextResponse.redirect(new URL(confirmRedirect(type, next), origin));
+        return noReferrer(NextResponse.redirect(new URL(confirmRedirect(type, next), origin)));
       }
     } catch {
       // Misconfigured env or a transient network failure must not 500 a user
@@ -55,5 +55,28 @@ export async function GET(request: Request) {
   }
 
   // Missing params or verification failed (expired / already used).
-  return NextResponse.redirect(new URL(confirmFailureRedirect(type), origin));
+  return noReferrer(NextResponse.redirect(new URL(confirmFailureRedirect(type), origin)));
+}
+
+/**
+ * Partial mitigation for the one requirement this flow cannot fully meet:
+ * "reset tokens are never exposed in URLs".
+ *
+ * Supabase's SSR recovery design puts `token_hash` in the query string, and
+ * that is not ours to change — the link is minted by GoTrue's
+ * admin.generateLink and has to arrive as a GET. So the token lands in this
+ * request's URL, and from there in browser history and edge access logs.
+ *
+ * What we CAN stop is it travelling any further. `no-referrer` means the
+ * redirect target (/reset-password) and every asset it loads receive no
+ * Referer header, so the token-bearing URL is not handed to a third party or
+ * written into a downstream log. The token is a single-use hash with a short
+ * TTL, which bounds the rest.
+ *
+ * Reported as a partial in docs/SECURITY-AUDIT-2026-08-11.md rather than
+ * claimed as satisfied.
+ */
+function noReferrer(res: NextResponse): NextResponse {
+  res.headers.set('Referrer-Policy', 'no-referrer');
+  return res;
 }

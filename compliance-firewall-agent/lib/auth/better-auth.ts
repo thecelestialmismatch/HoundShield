@@ -60,10 +60,16 @@ function buildAuth() {
     trustedOrigins: [baseURL, "https://houndshield.com", "http://localhost:3000"],
     emailAndPassword: {
       enabled: true,
-      // Email verification is available (sendVerificationEmail below) but left
-      // optional for now to keep the funnel frictionless; flip to true when
-      // ready. See docs/BETTER-AUTH-MIGRATION.md.
-      requireEmailVerification: false,
+      // An account is NOT active until the address is proven. Previously false
+      // "to keep the funnel frictionless", which meant anyone could hold a live
+      // session on an address they do not own — enough to sign up as
+      // someone@customer.gov and have the product treat them as that person.
+      // For a tool sold as audit evidence, an unverified identity in the
+      // session is a defect in the evidence, not a growth tactic.
+      //
+      // Load-bearing. lib/auth/__tests__/email-verification-required.test.ts
+      // fails if either of these regresses to false.
+      requireEmailVerification: true,
       minPasswordLength: 8,
       // Password reset — the /forgot-password → /reset-password flow. `url`
       // targets the redirectTo the client passed, with ?token appended.
@@ -72,7 +78,9 @@ function buildAuth() {
       },
     },
     emailVerification: {
-      sendOnSignUp: false,
+      // Must be true, or requireEmailVerification above locks every new user
+      // out of an account they can never activate — no email is ever sent.
+      sendOnSignUp: true,
       sendVerificationEmail: async ({ user, url }) => {
         await sendVerificationEmail(user.email, url);
       },
