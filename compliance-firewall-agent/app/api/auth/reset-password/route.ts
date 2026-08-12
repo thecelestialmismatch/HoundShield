@@ -5,6 +5,7 @@ import { recoveryRequestSchema, buildRecoveryConfirmUrl } from '@/lib/auth/recov
 import { enforceRateLimit, identifierFor, clientIp } from '@/lib/rate-limit-shared';
 import { lockoutKey } from '@/lib/auth/lockout';
 import { settleAuthTiming } from '@/lib/auth/timing';
+import { recordAuthEvent } from '@/lib/auth/audit-log';
 
 /**
  * POST /api/auth/reset-password — self-hosted password-reset send.
@@ -71,6 +72,18 @@ export async function POST(request: Request) {
     await settleAuthTiming(startedAt);
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
   }
+
+  // Recorded for the ATTEMPT, uniformly, before we know whether the address
+  // resolves — a password-reset request against a customer's address is exactly
+  // the event an incident review needs, and the one no log currently held.
+  after(() =>
+    recordAuthEvent({
+      event: 'password_reset_requested',
+      email,
+      ip: clientIp(request),
+      userAgent: request.headers.get('user-agent'),
+    }),
+  );
 
   // Per-address, so a botnet cannot spread an inbox flood across many IPs.
   // Keyed on the hash — this bucket must never hold an address. Applied to any
