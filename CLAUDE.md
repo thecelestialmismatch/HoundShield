@@ -103,7 +103,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 | Integration | Status | Action Required |
 |-------------|--------|-----------------|
-| Supabase auth + DB | ✅ Wired | Migrations through 032 in repo; 001–027 applied to prod. **028 (rate-limit buckets), 031 (auth lockouts) and 032 (auth audit trail) NOT yet applied** — until they are, shared rate limiting, lockout, CAPTCHA escalation and the authentication audit trail are all inert in production. |
+| Supabase auth + DB | ✅ Wired | Migrations through 032 in repo. Applied to prod: 001–027, plus **028 (rate-limit buckets), 031 (auth lockouts) and 032 (auth audit trail) applied 2026-08-12** — shared rate limiting, lockout, CAPTCHA escalation and the auth audit trail are now live. **029 + 030 (seed-anchor chain) remain unapplied** — separate subsystem, out of scope. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
 | Stripe webhook | ⚠️ Verify URL | Confirm `https://houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |

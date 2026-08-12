@@ -28,7 +28,7 @@ scope ("Phase 1 and 2 with brain-ai fix"). Everything landed on
 | 6 | Sensitive data in logs | 🔴 MEDIUM | ✅ **Fixed** — the Stripe webhook masked a buyer's raw email. | `app/api/stripe/webhook/route.ts` |
 | 7 | IDOR | 🔴 HIGH | ✅ **Fixed** — session ids namespaced to the owner; the list-everything branch deleted; `/transcript` scoped the same way. | `lib/brain-ai/route-guard.ts` |
 | 8 | Weak security headers | ⚠️ MEDIUM | ✅ **Fixed** — `base-uri` and `form-action` added to the layer that actually ships. | `next.config.js` |
-| 14 | No audit logging on sensitive actions | 🔴 HIGH | ✅ **Fixed** — append-only `auth_audit_events` table plus a writer wired into login, signup and reset. ⚠️ **Inert until migration 032 is applied to production.** | `lib/auth/audit-log.ts`, `supabase/migrations/032_auth_audit_events.sql` |
+| 14 | No audit logging on sensitive actions | 🔴 HIGH | ✅ **Fixed and live** — append-only `auth_audit_events` table plus a writer wired into login, signup and reset. Migration **032 applied to production 2026-08-12** (verified: table + RLS with no read policy + append-only trigger that rejects UPDATE and DELETE). | `lib/auth/audit-log.ts`, `supabase/migrations/032_auth_audit_events.sql` |
 | 19 | Denial-of-service vectors | 🔴 HIGH | ⚠️ **Partly fixed** — the unauthenticated, unmetered LLM path is closed (auth + rate limit + a model allow-list, so a caller can no longer pin the most expensive model). Other unthrottled expensive operations named below are unchanged. | `lib/brain-ai/allowed-models.ts` |
 
 **Correction to this report.** Issue #14 originally recommended emitting auth
@@ -39,13 +39,29 @@ reads it to render operator telemetry — so auth rows would either violate the
 CHECK or inflate a customer's "prompts scanned" figures with rows that were
 never prompts. Authentication events were given their own table instead.
 
-**Still open, and owned by the founder rather than by code.** Migrations **028**
-(rate-limit buckets), **031** (auth lockouts) and **032** (auth audit trail) are
-in the repo but **not applied to production** — the latest applied is 027.
-Until they are, shared rate limiting, account lockout, CAPTCHA escalation and
-the authentication audit trail are all present in code and inert in production.
-That is the single highest-value action remaining, and no amount of further
-code changes substitutes for it.
+**Migrations now applied (2026-08-12).** Migrations **028** (rate-limit buckets),
+**031** (auth lockouts) and **032** (auth audit trail) were applied to the
+production Supabase project (`qifynzuyrdxmxlumpsrq`) via the Supabase MCP, after
+the latest prior migration `027`. Each was verified after apply: all three
+tables exist with RLS enabled, the four RPCs (`consume_rate_limit`,
+`sweep_rate_limit_buckets`, `register_auth_failure`, `sweep_auth_lockouts`) are
+present, `auth_audit_events` has zero read policies (RLS-on + no-policy = anon
+and authenticated read nothing), and its append-only trigger was proven to
+reject both UPDATE and DELETE with a probe that rolled itself back (no bogus
+audit row persisted). Shared rate limiting, account lockout, CAPTCHA escalation
+and the authentication audit trail are therefore **live in production**, not
+merely present in code.
+
+Migrations **029** (seed-anchor chain integrity) and **030** (seed-anchor
+content) remain unapplied — a separate subsystem, out of scope for this
+security work, and flagged here only so the numbering gap is visible.
+
+**Still owned by the founder rather than by code** (dashboard/config, not
+schema): turn Supabase **"Confirm email" ON** (makes requirement 3 hold at the
+provider as well as at the guard), enable **leaked-password protection**, and
+set the environment variables that make the reset-email path and the Stripe
+webhook fire (`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`,
+`STRIPE_WEBHOOK_SECRET`).
 
 ---
 
