@@ -23,6 +23,7 @@
 // ============================================================================
 
 import { createHash } from 'crypto';
+import { safeFetchText } from '@/lib/net/safe-fetch';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -118,31 +119,26 @@ const MAX_RAW_SIZE = 500_000; // 500KB — skip extremely large documents
 // Step 1: Fetch
 // ---------------------------------------------------------------------------
 
+/**
+ * Fetch one source document.
+ *
+ * `url` arrives from a request body, so this MUST NOT be a bare `fetch()` — it
+ * was, and that made the route a server-side request forgery primitive with a
+ * read-back channel (the fetched text lands in the index, which the same
+ * endpoint serves). `safeFetchText` resolves the hostname and refuses private,
+ * loopback, link-local and cloud-metadata addresses, re-checks every redirect
+ * hop, and enforces the size cap on the stream rather than trusting
+ * Content-Length. See lib/net/safe-fetch.ts.
+ */
 async function fetchContent(url: string): Promise<string> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-  try {
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'HoundShield-BrainAI-Ingestor/1.0',
-        Accept: 'text/html,text/plain,text/markdown,application/json',
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    }
-
-    const raw = await res.text();
-    if (raw.length > MAX_RAW_SIZE) {
-      throw new Error(`Document too large (${raw.length} chars > ${MAX_RAW_SIZE} limit)`);
-    }
-    return raw;
-  } finally {
-    clearTimeout(timer);
-  }
+  return safeFetchText(url, {
+    timeoutMs: FETCH_TIMEOUT_MS,
+    maxBytes: MAX_RAW_SIZE,
+    headers: {
+      'User-Agent': 'HoundShield-BrainAI-Ingestor/1.0',
+      Accept: 'text/html,text/plain,text/markdown,application/json',
+    },
+  });
 }
 
 // ---------------------------------------------------------------------------

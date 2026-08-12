@@ -129,7 +129,7 @@ Versions are the installed majors; `compliance-firewall-agent/package.json` and
 | Validation | **Zod 4** | Every credential route parses its body through a schema before the value is used. |
 | Email | **Resend** | Reset and verification mail is generated and sent by us (`generateLink` + Resend), so the flow needs no Supabase-dashboard template config. |
 | Payments | **Stripe 22** | The $499 one-time report. |
-| Tests | **Vitest 4** | 2,478 tests across 185 files. |
+| Tests | **Vitest 4** | 2,622 tests across 191 files. |
 | Monitoring | **Sentry**, **PostHog** | PostHog is gated on cookie opt-in. |
 
 ### Proxy — `proxy/` (the shipped product)
@@ -152,6 +152,16 @@ Server-side unless noted.
 | `lib/auth/signup-result.ts` | Same contract for sign-up — never echoes "already registered". |
 | `lib/auth/server-auth-client.ts` | Browser caller; treats `501` as "feature off, use the legacy path". |
 | `lib/rate-limit-shared.ts` | Postgres-backed counters shared across instances, with a local fail-open fallback. |
+| `lib/auth/session.ts` | The one place the app asks "who is the caller?". Normalizes Supabase and Better Auth into a `SessionUser`, including `emailVerified`. Wrapped in React `cache()` — memoized per request, never across requests. |
+| `lib/auth/api-guard.ts` | `requireUser()` / `requireRole()`. Fails closed: no session → `401`; session whose address is unproven → `403 email_unverified`. This is where "an account is not active until the email is verified" is actually enforced, rather than being a property of a Supabase dashboard toggle. |
+
+### Supporting guards outside the credential routes
+
+| Module | Responsibility |
+|---|---|
+| `lib/net/safe-fetch.ts` | SSRF bound for any URL that arrives in a request body. Resolves the hostname and judges every returned address against the private/reserved blocklist (IPv4, IPv6, and IPv4-mapped IPv6), re-validates each redirect hop, and caps response size and time. Resolution rather than hostname matching, because a name an attacker controls can point anywhere. |
+| `lib/brain-ai/route-guard.ts` | `guardBrainAi()` — the shared authenticate-then-meter front half of every `/api/brain-ai/*` handler, plus `scopedSessionId()`, which namespaces a session id to its owner so a supplied `?id=` can only address the caller's own row. |
+| `lib/brain-ai/allowed-models.ts` | Server-side allow-list for the caller-supplied `model` field, derived by filtering the existing pricing table on an output-price ceiling. A request field must never select what we are billed for. |
 
 Rollback: `AUTH_SERVER_ROUTES=off` makes the server credential routes answer
 `501` and the browser reverts to its previous direct-to-Supabase calls. It is
@@ -160,7 +170,7 @@ read server-side, so flipping it takes effect **without a rebuild**.
 ## Testing
 
 ```bash
-cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 2497 tests
+cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 2622 tests
 cd proxy && npx vitest run                                       # 61 tests
 cd proxy && npm run bench                                        # p99 < 10ms gate
 cd compliance-firewall-agent && npm run build                    # must pass pre-deploy
