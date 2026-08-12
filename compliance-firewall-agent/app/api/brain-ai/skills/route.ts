@@ -4,6 +4,10 @@
  * GET /api/brain-ai/skills              — list all skills
  * GET /api/brain-ai/skills?name=<name>  — get specific skill
  * GET /api/brain-ai/skills?category=<c> — filter by category
+ *
+ * Gated because the skill index enumerates what Brain AI can be made to do.
+ * That is the capability list an attacker would want before deciding what to
+ * aim at /execute.
  */
 
 import { NextRequest } from "next/server";
@@ -13,10 +17,14 @@ import {
   getSkillsByCategory,
   renderSkillIndex,
 } from "@/lib/brain-ai/skills";
+import { guardBrainAi } from "@/lib/brain-ai/route-guard";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  const { blocked } = await guardBrainAi(req, "read");
+  if (blocked) return blocked;
+
   const name = req.nextUrl.searchParams.get("name");
   const category = req.nextUrl.searchParams.get("category");
   const format = req.nextUrl.searchParams.get("format");

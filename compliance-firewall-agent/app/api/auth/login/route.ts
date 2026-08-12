@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
 import {
@@ -10,6 +10,8 @@ import {
 } from '@/lib/auth/credential-guard';
 import { registerFailure, clearFailures } from '@/lib/auth/lockout';
 import { settleAuthTiming } from '@/lib/auth/timing';
+import { recordAuthEvent } from '@/lib/auth/audit-log';
+import { clientIp } from '@/lib/rate-limit-shared';
 import {
   signInErrorMessage,
   lockedOutMessage,
@@ -36,6 +38,11 @@ import {
  * TIMING. Every path settles through settleAuthTiming() before returning,
  * including the early failures. A path that returns without settling becomes
  * the oracle the rest of this file exists to close.
+ *
+ * AUDIT. Success, failure and lockout each write a row to auth_audit_events
+ * (NIST 800-171 3.3.1/3.3.2, CMMC AU.2.041) — keyed on a hash of the submitted
+ * address, so a row proves an ATTEMPT, never an account. Writes go through
+ * after(), off the response path, for the timing reason above.
  *
  * ROLLBACK. AUTH_SERVER_ROUTES=off makes this answer 501 and the browser falls
  * back to its previous direct-to-Supabase call. Server-read, so it takes effect
@@ -106,6 +113,18 @@ export async function POST(request: Request) {
 
   if (authError) {
     const lock = await registerFailure(email);
+    // Audit writes run in after(), off the response path. Inline they would add
+    // a database round-trip to the failure branch only — which is a NEW timing
+    // oracle bolted onto the one this route exists to close.
+    after(() =>
+      recordAuthEvent({
+        event: lock.locked ? 'lockout_triggered' : 'login_failure',
+        email,
+        ip: clientIp(request),
+        userAgent: request.headers.get('user-agent'),
+        detail: { locked: lock.locked, minutes_remaining: lock.minutesRemaining },
+      }),
+    );
     await settleAuthTiming(startedAt);
     if (lock.locked) {
       return NextResponse.json(
@@ -118,6 +137,14 @@ export async function POST(request: Request) {
 
   // "Consecutive" only means consecutive if success resets the streak.
   await clearFailures(email);
+  after(() =>
+    recordAuthEvent({
+      event: 'login_success',
+      email,
+      ip: clientIp(request),
+      userAgent: request.headers.get('user-agent'),
+    }),
+  );
   await settleAuthTiming(startedAt);
   // The session cookie was set by the Supabase SSR client during the call above.
   return NextResponse.json({ ok: true });

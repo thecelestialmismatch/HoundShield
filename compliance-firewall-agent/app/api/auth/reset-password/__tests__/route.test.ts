@@ -48,6 +48,9 @@ vi.mock('next/server', async (importOriginal) => {
   return { ...actual, after: (cb: () => unknown) => { cb(); } };
 });
 
+// The audit trail has its own suite (lib/auth/__tests__/audit-log.test.ts).
+vi.mock('@/lib/auth/audit-log', () => ({ recordAuthEvent: async () => {} }));
+
 import { POST } from '@/app/api/auth/reset-password/route';
 
 function req(body: unknown, ip = '203.0.113.9'): Request {
