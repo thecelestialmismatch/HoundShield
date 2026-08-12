@@ -101,6 +101,22 @@ const nextConfig = {
               "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://openrouter.ai https://bytez.com",
               "media-src 'self' https://d8j0ntlcm91z4.cloudfront.net",
               "frame-ancestors 'none'",
+              // base-uri and form-action were present in middleware.ts but NOT
+              // here, and middleware does not execute on this deployment — the
+              // repo-root vercel.json uses the legacy `builds`/`routes` keys,
+              // which replace the routing table middleware lives in. So both
+              // directives read as covered in review while being absent on the
+              // wire. Restated here, in the layer that actually ships.
+              //
+              // base-uri: without it, an injected <base href> silently
+              //   re-points every relative script/form on the page at an
+              //   attacker origin — which matters more than usual while
+              //   script-src still carries 'unsafe-inline'.
+              // form-action: without it, an injected form can post credentials
+              //   off-site; CSP is the only thing that constrains where a form
+              //   submits, as frame-ancestors and default-src do not apply.
+              "base-uri 'self'",
+              "form-action 'self'",
             ].join("; "),
           },
         ],

@@ -33,6 +33,21 @@ const REQUIRED_HEADERS: Array<[string, RegExp]> = [
   ["Permissions-Policy", /Permissions-Policy/i],
   ["Content-Security-Policy", /Content-Security-Policy/i],
   ["CSP frame-ancestors 'none'", /frame-ancestors 'none'/],
+  // Both of these were present in middleware.ts and MISSING from next.config.js
+  // until 2026-08-12. That gap was invisible in review precisely because this
+  // list did not name them and the middleware copy looked like coverage — while
+  // middleware does not execute on this deployment at all (repo-root
+  // vercel.json uses the legacy `builds`/`routes` keys, which replace the
+  // routing table it lives in). Asserted per-layer so the dead layer can never
+  // again stand in for the live one.
+  //
+  // base-uri:    without it an injected <base href> re-points every relative
+  //              script and form at an attacker origin — sharper than usual
+  //              while script-src still carries 'unsafe-inline'.
+  // form-action: CSP is the ONLY control over where a form may submit;
+  //              default-src and frame-ancestors do not constrain it.
+  ["CSP base-uri 'self'", /base-uri 'self'/],
+  ["CSP form-action 'self'", /form-action 'self'/],
 ];
 
 describe("security headers ship on every response (both layers)", () => {

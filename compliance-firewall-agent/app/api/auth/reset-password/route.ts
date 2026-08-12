@@ -4,6 +4,8 @@ import { sendPasswordResetEmail } from '@/lib/auth/auth-emails';
 import { recoveryRequestSchema, buildRecoveryConfirmUrl } from '@/lib/auth/recovery-link';
 import { enforceRateLimit, identifierFor, clientIp } from '@/lib/rate-limit-shared';
 import { lockoutKey } from '@/lib/auth/lockout';
+import { settleAuthTiming } from '@/lib/auth/timing';
+import { recordAuthEvent } from '@/lib/auth/audit-log';
 
 /**
  * POST /api/auth/reset-password — self-hosted password-reset send.
@@ -19,6 +21,15 @@ import { lockoutKey } from '@/lib/auth/lockout';
  * Resend send runs in `after()` (off the response path) so an existing account
  * does NOT return slower than a non-existent one — response latency can't be
  * used as an account-existence oracle.
+ *
+ * …AND THAT WAS NOT SUFFICIENT ON ITS OWN. Moving the *email send* off the
+ * response path leaves `admin.generateLink` ON it, and that call is exactly the
+ * one whose cost depends on the answer: it mints and stores a recovery token
+ * for an address that resolves, and returns an error for one that does not. The
+ * gap is the same shape as the bcrypt gap that ../login guards against, so it
+ * gets the same treatment — every path below settles against the shared floor
+ * in lib/auth/timing.ts before returning. `after()` bounds the slow half; the
+ * floor bounds the fast half. Neither closes the oracle alone.
  *
  * RATE LIMITED HERE, IN THE ROUTE. A 5-per-minute bucket for this path already
  * existed in middleware.ts — and was dead: the repo-root vercel.json uses the
@@ -36,24 +47,43 @@ const RESET_EMAIL_LIMIT = { limit: 3, windowMs: 900_000 };
 const ok = () => NextResponse.json({ ok: true });
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
+
   // Per-IP first — cheapest check, and it needs no parsed body.
   const ipBlocked = await enforceRateLimit(
     'auth:reset-ip',
     identifierFor({ ip: clientIp(request) }),
     RESET_IP_LIMIT,
   );
-  if (ipBlocked) return ipBlocked;
+  if (ipBlocked) {
+    await settleAuthTiming(startedAt);
+    return ipBlocked;
+  }
 
   let email: string;
   try {
     const parsed = recoveryRequestSchema.safeParse(await request.json());
     if (!parsed.success) {
+      await settleAuthTiming(startedAt);
       return NextResponse.json({ error: 'A valid email is required.' }, { status: 400 });
     }
     email = parsed.data.email;
   } catch {
+    await settleAuthTiming(startedAt);
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
   }
+
+  // Recorded for the ATTEMPT, uniformly, before we know whether the address
+  // resolves — a password-reset request against a customer's address is exactly
+  // the event an incident review needs, and the one no log currently held.
+  after(() =>
+    recordAuthEvent({
+      event: 'password_reset_requested',
+      email,
+      ip: clientIp(request),
+      userAgent: request.headers.get('user-agent'),
+    }),
+  );
 
   // Per-address, so a botnet cannot spread an inbox flood across many IPs.
   // Keyed on the hash — this bucket must never hold an address. Applied to any
@@ -64,13 +94,17 @@ export async function POST(request: Request) {
     `e:${lockoutKey(email)}`,
     RESET_EMAIL_LIMIT,
   );
-  if (emailBlocked) return emailBlocked;
+  if (emailBlocked) {
+    await settleAuthTiming(startedAt);
+    return emailBlocked;
+  }
 
   // No Supabase configured (dev/demo) → stay enumeration-safe, send nothing.
   if (!isSupabaseConfigured()) {
     // Server-side only (never in the response) — every failure here is silent by
     // design, so log the outcome so a "nothing happening" report is diagnosable.
     console.warn('[reset-password] Supabase not configured — no recovery email sent');
+    await settleAuthTiming(startedAt);
     return ok();
   }
 
@@ -94,5 +128,8 @@ export async function POST(request: Request) {
     console.error('[reset-password] link generation failed:', err instanceof Error ? err.message : err);
   }
 
+  // Single exit for every outcome above — known account, unknown account, and
+  // thrown error all leave through the same floor.
+  await settleAuthTiming(startedAt);
   return ok();
 }
