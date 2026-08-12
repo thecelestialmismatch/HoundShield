@@ -3,9 +3,49 @@
 **Branch:** `HoundShield/houndshield-security-phase-1-6f8056` @ `5e19fcd`
 **Production:** `https://www.houndshield.com` · Supabase project `qifynzuyrdxmxlumpsrq`
 **Date:** 2026-08-11
-**Status:** AUDIT ONLY — **no code modified.** Recommendations are proposals.
+**Status when written:** AUDIT ONLY — no code modified. Recommendations were proposals.
 
 Companion: [`SECURITY-PHASE-1-AUTH-REPORT.md`](./SECURITY-PHASE-1-AUTH-REPORT.md)
+
+---
+
+## Remediation status (updated 2026-08-12)
+
+The audit below is preserved **as written on 2026-08-11**, including its
+severities and its "Present/Absent" calls, so the record of what was found is
+not quietly rewritten by what was later fixed. This section is the only part
+that changes.
+
+Fixes were applied after the founder reviewed Phase 1 and approved a combined
+scope ("Phase 1 and 2 with brain-ai fix"). Everything landed on
+`HoundShield/houndshield-security-phase-1-6f8056`.
+
+| # | Issue | Audit call | Now | Where |
+|---|---|---|---|---|
+| 2 | Insecure session management | 🔴 MEDIUM | ⚠️ **Partly fixed** — `requireUser()` now refuses an unverified session. The `@supabase/ssr` cookie remains `httpOnly: false` with a 400-day `maxAge`; that is a library default, not a one-line flip, and is still open. | `lib/auth/api-guard.ts` |
+| 3 | Broken access control | 🔴 HIGH | ✅ **Fixed** — all eight `/api/brain-ai/*` routes now authenticate and meter; `GET /api/gateway/metrics` now requires a session. | `lib/brain-ai/route-guard.ts` |
+| 5 | Missing input validation (SSRF) | 🔴 HIGH | ✅ **Fixed** — caller-supplied URLs resolved and judged against a private/reserved blocklist, redirects re-validated, size and time capped. | `lib/net/safe-fetch.ts` |
+| 6 | Sensitive data in logs | 🔴 MEDIUM | ✅ **Fixed** — the Stripe webhook masked a buyer's raw email. | `app/api/stripe/webhook/route.ts` |
+| 7 | IDOR | 🔴 HIGH | ✅ **Fixed** — session ids namespaced to the owner; the list-everything branch deleted; `/transcript` scoped the same way. | `lib/brain-ai/route-guard.ts` |
+| 8 | Weak security headers | ⚠️ MEDIUM | ✅ **Fixed** — `base-uri` and `form-action` added to the layer that actually ships. | `next.config.js` |
+| 14 | No audit logging on sensitive actions | 🔴 HIGH | ✅ **Fixed** — append-only `auth_audit_events` table plus a writer wired into login, signup and reset. ⚠️ **Inert until migration 032 is applied to production.** | `lib/auth/audit-log.ts`, `supabase/migrations/032_auth_audit_events.sql` |
+| 19 | Denial-of-service vectors | 🔴 HIGH | ⚠️ **Partly fixed** — the unauthenticated, unmetered LLM path is closed (auth + rate limit + a model allow-list, so a caller can no longer pin the most expensive model). Other unthrottled expensive operations named below are unchanged. | `lib/brain-ai/allowed-models.ts` |
+
+**Correction to this report.** Issue #14 originally recommended emitting auth
+events into `compliance_events`. That was wrong and the recommendation is
+withdrawn: migration 001 constrains that table's `action_taken` to
+`('ALLOWED','BLOCKED','QUARANTINED')`, and `lib/dashboard/gateway-traffic.ts`
+reads it to render operator telemetry — so auth rows would either violate the
+CHECK or inflate a customer's "prompts scanned" figures with rows that were
+never prompts. Authentication events were given their own table instead.
+
+**Still open, and owned by the founder rather than by code.** Migrations **028**
+(rate-limit buckets), **031** (auth lockouts) and **032** (auth audit trail) are
+in the repo but **not applied to production** — the latest applied is 027.
+Until they are, shared rate limiting, account lockout, CAPTCHA escalation and
+the authentication audit trail are all present in code and inert in production.
+That is the single highest-value action remaining, and no amount of further
+code changes substitutes for it.
 
 ---
 

@@ -13,7 +13,7 @@ Nothing leaves the building.
 
 [![CI](https://github.com/thecelestialmismatch/HoundShield/actions/workflows/ci.yml/badge.svg)](https://github.com/thecelestialmismatch/HoundShield/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-0F172A?style=flat-square)](LICENSE)
-![tests](https://img.shields.io/badge/tests-1531_passing-3FB950?style=flat-square)
+![tests](https://img.shields.io/badge/tests-2648_passing-3FB950?style=flat-square)
 ![proxy](https://img.shields.io/badge/proxy_tests-61_passing-3FB950?style=flat-square)
 ![latency](https://img.shields.io/badge/scan_p99-0.49ms-C8A24B?style=flat-square)
 ![NIST 800-171](https://img.shields.io/badge/NIST_800--171-110_controls-C8A24B?style=flat-square)
@@ -45,7 +45,7 @@ Not marketing figures — reproduce every one with the commands in
 |---|---|---|
 | Scan latency | **p99 0.492 ms** (budget 10 ms) · mean 0.105 ms over 2,000 cold scans | `cd proxy && npm run bench` |
 | Detection coverage | **90 patterns** (53 builtin · 17 CMMC · 20 HIPAA) across **16 engines** | `lib/detection/engines.ts` |
-| App test suite | **1,531 passing** / 124 files | `cd compliance-firewall-agent && ./node_modules/.bin/vitest run` |
+| App test suite | **2,648 passing** / 192 files | `cd compliance-firewall-agent && ./node_modules/.bin/vitest run` |
 | Proxy test suite | **61 passing** | `cd proxy && npx vitest run` |
 
 Engine and pattern counts shown in the UI are **computed from the shipped registries**, so
@@ -129,7 +129,7 @@ Versions are the installed majors; `compliance-firewall-agent/package.json` and
 | Validation | **Zod 4** | Every credential route parses its body through a schema before the value is used. |
 | Email | **Resend** | Reset and verification mail is generated and sent by us (`generateLink` + Resend), so the flow needs no Supabase-dashboard template config. |
 | Payments | **Stripe 22** | The $499 one-time report. |
-| Tests | **Vitest 4** | 2,622 tests across 191 files. |
+| Tests | **Vitest 4** | 2,648 tests across 192 files. |
 | Monitoring | **Sentry**, **PostHog** | PostHog is gated on cookie opt-in. |
 
 ### Proxy — `proxy/` (the shipped product)
@@ -154,6 +154,7 @@ Server-side unless noted.
 | `lib/rate-limit-shared.ts` | Postgres-backed counters shared across instances, with a local fail-open fallback. |
 | `lib/auth/session.ts` | The one place the app asks "who is the caller?". Normalizes Supabase and Better Auth into a `SessionUser`, including `emailVerified`. Wrapped in React `cache()` — memoized per request, never across requests. |
 | `lib/auth/api-guard.ts` | `requireUser()` / `requireRole()`. Fails closed: no session → `401`; session whose address is unproven → `403 email_unverified`. This is where "an account is not active until the email is verified" is actually enforced, rather than being a property of a Supabase dashboard toggle. |
+| `lib/auth/audit-log.ts` | Append-only authentication audit trail (`auth_audit_events`, migration 032). NIST 800-171 **3.3.1 / 3.3.2**, CMMC **AU.2.041**. Keyed on an email hash and written whether or not the address resolves, so a row proves an *attempt*, never an account. Fails open (an audit outage must not become an auth outage) but logs at error level, because silence would make "no rows" look like "no attacks". |
 
 ### Supporting guards outside the credential routes
 
@@ -170,7 +171,7 @@ read server-side, so flipping it takes effect **without a rebuild**.
 ## Testing
 
 ```bash
-cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 2622 tests
+cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 2648 tests
 cd proxy && npx vitest run                                       # 61 tests
 cd proxy && npm run bench                                        # p99 < 10ms gate
 cd compliance-firewall-agent && npm run build                    # must pass pre-deploy

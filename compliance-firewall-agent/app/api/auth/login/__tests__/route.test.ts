@@ -62,6 +62,19 @@ vi.mock('@/lib/auth/timing', async (importOriginal) => {
   return { ...actual, settleAuthTiming: mockSettle };
 });
 
+// Keep the real NextResponse; make after() run its callback synchronously
+// WITHOUT awaiting it, mirroring production (the audit row is written but never
+// blocks the response). Calling the handler directly gives Next no request
+// scope, so the real after() throws — same shim as the reset-password suite.
+vi.mock('next/server', async (importOriginal) => {
+  const actual = (await importOriginal()) as typeof import('next/server');
+  return { ...actual, after: (cb: () => unknown) => { cb(); } };
+});
+
+// The audit trail has its own suite (lib/auth/__tests__/audit-log.test.ts).
+// Here it is stubbed so a route case never depends on a database.
+vi.mock('@/lib/auth/audit-log', () => ({ recordAuthEvent: async () => {} }));
+
 import { NextResponse } from 'next/server';
 import { POST } from '@/app/api/auth/login/route';
 import { AUTH_INVALID_CREDENTIALS } from '@/lib/auth/auth-error-message';

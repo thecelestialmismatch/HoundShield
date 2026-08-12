@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
@@ -10,6 +10,8 @@ import {
   serverAuthDisabled,
 } from '@/lib/auth/credential-guard';
 import { settleAuthTiming } from '@/lib/auth/timing';
+import { recordAuthEvent } from '@/lib/auth/audit-log';
+import { clientIp } from '@/lib/rate-limit-shared';
 import {
   AUTH_SIGNUP_CHECK_EMAIL,
   AUTH_RATE_LIMITED,
@@ -101,6 +103,21 @@ export async function POST(request: Request) {
   }
 
   const origin = (process.env.NEXT_PUBLIC_APP_URL ?? '').trim() || new URL(request.url).origin;
+
+  // Recorded ONCE for the attempt, before the outcome is known, and with the
+  // same event type whichever branch follows. Recording "created" separately
+  // from "already existed" would rebuild inside the audit table the exact
+  // distinction this route spends its whole length erasing — and an audit trail
+  // is not a safe place to keep an enumeration oracle just because it is
+  // service-role only. `user_id` stays null here for the same reason.
+  after(() =>
+    recordAuthEvent({
+      event: 'signup_requested',
+      email,
+      ip: clientIp(request),
+      userAgent: request.headers.get('user-agent'),
+    }),
+  );
 
   try {
     const supabase = await createClient();
