@@ -8,6 +8,7 @@ import { canceledEmail } from '@/lib/email/templates/canceled';
 import { reportOrderEmail } from '@/lib/email/templates/report-order';
 import { verticalFromClientReference } from '@/lib/stripe/report-payment-link';
 import { founderInbox } from '@/lib/email/identity';
+import { maskEmail } from '@/lib/reports/order-view';
 
 type ServiceClient = ReturnType<typeof createServiceClient>;
 
@@ -123,7 +124,16 @@ async function handleReportOrder(
   if (error) {
     console.error('[Stripe Webhook] report_orders upsert failed:', error);
   }
-  console.log(`[Stripe Webhook] report order recorded: ${session.id} email=${email} wholesale=${isWholesale}`);
+  // Masked, not raw. This line wrote a paying customer's address into Vercel's
+  // log retention in plaintext, where it is readable by anyone with project
+  // access and outlives the request by weeks. For a compliance product whose
+  // pitch is "prompts never leave your network", leaking buyer PII into a
+  // third-party log store is the wrong side of our own argument. The session id
+  // is retained because it is the actual correlation key for support, and it is
+  // not personal data. Reuses the tested helper in lib/reports/order-view.ts.
+  console.log(
+    `[Stripe Webhook] report order recorded: ${session.id} email=${maskEmail(email)} wholesale=${isWholesale}`,
+  );
 
   // Fulfillment emails fire once — on first record only. A Stripe retry re-runs
   // this handler (and idempotently re-upserts the row), but must not re-notify the

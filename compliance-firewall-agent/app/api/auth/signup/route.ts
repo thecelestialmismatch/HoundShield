@@ -129,14 +129,35 @@ export async function POST(request: Request) {
     }
 
     if (data?.session) {
-      // Auto-confirm is ON. The account is live, so send them into the product
-      // — but this branch is exactly the enumeration gap described above.
+      // Auto-confirm is ON: Supabase just minted a LIVE session for a brand-new
+      // address, and returned none for an address that already existed. That
+      // asymmetry was the last enumeration gap in this route, and it could not
+      // be closed by rewording the body — the difference was the Set-Cookie
+      // header, which an attacker reads without parsing any JSON at all.
+      //
+      // So the session is discarded rather than described. Both branches now
+      // emit the same body AND the same absent cookie, and requirement 3
+      // ("verified email ownership before an account becomes active") stops
+      // depending on a dashboard toggle: whatever Supabase is configured to do,
+      // this route refuses to hand back a usable session for an unproven
+      // address. The person who owns the inbox confirms and signs in normally.
+      try {
+        await supabase.auth.signOut();
+      } catch (signOutError: unknown) {
+        // Fail loudly server-side. If the sign-out did not take, the cookie
+        // survives and the oracle is open again — that must not be silent.
+        console.error(
+          '[auth/signup] could not discard the auto-confirm session; sign-up may be enumerable by cookie presence:',
+          signOutError instanceof Error ? signOutError.message : String(signOutError),
+        );
+      }
       console.warn(
-        '[auth/signup] Supabase returned a session on sign-up: "Confirm email" is OFF, ' +
-          'so sign-up is enumerable by session presence. Enable it in the Supabase dashboard.',
+        '[auth/signup] Supabase returned a session on sign-up: "Confirm email" is OFF. ' +
+          'The session was discarded so sign-up stays non-enumerable, but new users cannot ' +
+          'sign in until they confirm. Enable "Confirm email" in the Supabase dashboard.',
       );
       await settleAuthTiming(startedAt);
-      return NextResponse.json({ ok: true, next: '/command-center?welcome=true' });
+      return neutralOk();
     }
   } catch (error: unknown) {
     console.error(

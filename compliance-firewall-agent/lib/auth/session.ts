@@ -38,6 +38,18 @@ export type SessionUser = {
   id: string;
   email: string | null;
   name: string | null;
+  /**
+   * Has this address been proven to belong to the person holding the session?
+   *
+   * Carried here because requirement 3 ("verified email ownership before an
+   * account becomes active") can only be enforced where identity is resolved —
+   * ./api-guard.ts reads it to refuse unverified callers. Both providers are
+   * normalized to a boolean so the guard never has to know which one answered.
+   *
+   * Absent or unreadable → `false`. An unverifiable claim is not a verified
+   * one, and this is the field a fail-open bug would hide in.
+   */
+  emailVerified: boolean;
 };
 
 async function resolveSessionUser(): Promise<SessionUser | null> {
@@ -51,6 +63,8 @@ async function resolveSessionUser(): Promise<SessionUser | null> {
         id: session.user.id,
         email: session.user.email ?? null,
         name: session.user.name ?? null,
+        // Better Auth exposes this as a boolean column on its user table.
+        emailVerified: session.user.emailVerified === true,
       };
     } catch {
       return null;
@@ -72,6 +86,10 @@ async function resolveSessionUser(): Promise<SessionUser | null> {
         (user.user_metadata?.full_name as string | undefined) ??
         (user.user_metadata?.name as string | undefined) ??
         null,
+      // GoTrue stamps `email_confirmed_at` when the address is proven — either
+      // by the confirmation link, or immediately if "Confirm email" is OFF.
+      // Presence of the timestamp is the verified signal; its absence is not.
+      emailVerified: Boolean(user.email_confirmed_at),
     };
   } catch {
     return null;
