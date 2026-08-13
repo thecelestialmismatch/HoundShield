@@ -56,16 +56,32 @@ export default defineConfig({
         "vitest.config.ts",
       ],
       /*
-       * Ratchet, set at the measured floor rounded down to the nearest 5%.
-       * Measured 2026-08-08 with the include above:
-       *   statements 65.26%  branches 54.29%  functions 69.90%  lines 66.30%
-       * Raise these as coverage improves; never lower them to green a build.
+       * Ratchet. Measured 2026-08-13 with the include above:
+       *   statements 70.30%  branches 58.89%  functions 75.72%  lines 71.55%
+       *
+       * Set ~3pp BELOW measured, deliberately not at the floor.
+       *
+       * The previous policy was "measured floor rounded down to the nearest
+       * 5%", which put statements at 65 against a measured 65.26% — 0.26pp of
+       * headroom. On 2026-08-11 that turned main red with no proxy code change
+       * at all: `git diff 1ae0b75 5e19fcd -- proxy/` is empty, every coverage
+       * denominator was identical (596/326/103/552), and three statements
+       * simply stopped executing on a newer runner image. 64.76% < 65, and
+       * every open branch inherited a red baseline for two days.
+       *
+       * So the band is sized against that drift, not against a round number:
+       * ~0.5pp observed, ~3pp allowed, ~6x margin. Wide enough that a runner
+       * bump cannot re-red the build, tight enough that deleting a test file
+       * still fails it — which is the entire point of a ratchet.
+       *
+       * Raise these as coverage improves, keeping the ~3pp band. Never lower
+       * them to green a build.
        */
       thresholds: {
-        lines: 65,
-        functions: 65,
-        branches: 50,
-        statements: 65,
+        lines: 68,
+        functions: 72,
+        branches: 55,
+        statements: 67,
       },
     },
   },
