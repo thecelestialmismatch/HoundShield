@@ -218,8 +218,14 @@ const CONSUMER_DOMAINS =
 
 /**
  * Local parts that are self-evidently fixtures. Compared by EQUALITY, not
- * substring: `houndshield.demo.account@gmail.com` is a real account this repo
- * should not name, and a substring check on "demo" would have waved it through.
+ * substring.
+ *
+ * The distinction is the whole point: a real, reachable mailbox can CONTAIN a
+ * fixture word — a project demo account whose local part ends in `.demo.account`
+ * is a live inbox, not a placeholder — and a substring check on "demo" waves it
+ * straight through. Equality catches it. Naming the offending address here to
+ * illustrate the point would defeat the guard in the same breath as explaining
+ * it, so the shape is described and the mailbox is not.
  */
 const FIXTURE_LOCAL_PARTS = new Set([
   'someone', 'somebody', 'anyone', 'test', 'tester', 'user', 'you', 'me',
