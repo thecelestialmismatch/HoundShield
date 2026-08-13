@@ -1,4 +1,6 @@
 import { NavV3 } from "@/components/layout/NavV3";
+import { controllerDisclosure } from "@/lib/legal/entity";
+import { SUB_PROCESSORS } from "@/lib/legal/subprocessors";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -54,13 +56,20 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">4. Data Sharing</h2>
-            <p>We do not sell your data. We share information only with:</p>
+            <p>We do not sell your data. We share information only with the sub-processors below.
+            This list is generated from the same source of truth the <Link href="/dpa" className="text-brand-700 hover:text-brand-700">DPA</Link> uses,
+            so the two documents can never disagree:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
-              <li><strong className="text-[var(--hs-ink-secondary)]">Supabase:</strong> Database hosting and authentication</li>
-              <li><strong className="text-[var(--hs-ink-secondary)]">Stripe:</strong> Payment processing</li>
-              <li><strong className="text-[var(--hs-ink-secondary)]">Vercel:</strong> Application hosting</li>
-              <li><strong className="text-[var(--hs-ink-secondary)]">OpenRouter:</strong> AI model inference (only when you use AI features)</li>
+              {SUB_PROCESSORS.map((s) => (
+                <li key={s.name}>
+                  <strong className="text-[var(--hs-ink-secondary)]">{s.name}:</strong> {s.purpose}
+                </li>
+              ))}
             </ul>
+            <p className="mt-2">
+              Full detail, including data categories and processing region, is on the{" "}
+              <Link href="/subprocessors" className="text-brand-700 hover:text-brand-700">sub-processors page</Link>.
+            </p>
             <p className="mt-2">We may disclose information if required by law or to protect the rights, safety, or property of HoundShield or its users.</p>
           </section>
 
@@ -101,8 +110,11 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">9. Contact &amp; Data Controller</h2>
             <p>
-              This service is operated by <strong className="text-[var(--hs-ink-secondary)]">[COMPANY LEGAL NAME]</strong>{" "}
-              (&ldquo;HoundShield&rdquo;), <strong className="text-[var(--hs-ink-secondary)]">[MAILING ADDRESS]</strong>, which is the data controller for the personal information described in this policy.
+              {controllerDisclosure()}
+            </p>
+            <p className="mt-2">
+              The operator described above is the data controller for the personal information
+              described in this policy.
             </p>
             <p className="mt-2">For privacy requests or questions, contact <a href="mailto:legal@houndshield.com" className="text-brand-700 hover:text-brand-700">legal@houndshield.com</a>.</p>
           </section>

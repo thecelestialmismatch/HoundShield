@@ -84,6 +84,19 @@ export function founderAddress(): string {
  */
 export const GENERAL_INBOX = 'contact@houndshield.com';
 
+/**
+ * The inbox published on the legal documents — privacy, terms, DPA,
+ * sub-processors.
+ *
+ * Deliberately separate from GENERAL_INBOX. Statutory requests (GDPR access and
+ * erasure, CCPA/CPRA rights, DPA sub-processor objections) carry hard response
+ * deadlines, and routing them into general contact traffic is how a deadline
+ * gets missed. Kept here rather than in lib/legal so this file stays the single
+ * place any mailbox is named — see email-identity-single-source.test.ts, which
+ * enforces exactly that and caught this address being hardcoded elsewhere.
+ */
+export const LEGAL_INBOX = 'legal@houndshield.com';
+
 /** Send-only address for automated mail. No mailbox needs to exist to send as this. */
 export const NOREPLY_ADDRESS = 'noreply@houndshield.com';
 
