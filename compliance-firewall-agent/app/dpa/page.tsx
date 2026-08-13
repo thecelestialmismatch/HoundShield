@@ -1,4 +1,5 @@
 import { NavV3 } from "@/components/layout/NavV3";
+import { controllerDisclosure } from "@/lib/legal/entity";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -26,7 +27,7 @@ export default function DpaPage() {
               This Data Processing Agreement (&ldquo;DPA&rdquo;) forms part of the
               <Link href="/terms" className="text-brand-700 hover:text-brand-700"> Terms of Service</Link>{" "}
               between the customer (&ldquo;Controller&rdquo;) and{" "}
-              <strong className="text-[var(--hs-ink-secondary)]">[COMPANY LEGAL NAME]</strong>, operator of HoundShield
+              <strong className="text-[var(--hs-ink-secondary)]">{controllerDisclosure()}</strong>, operator of HoundShield
               (&ldquo;Processor&rdquo;),
               and governs the processing of Personal Data and Covered Defense Information. It is offered to
               satisfy GDPR Art. 28, the HIPAA Business Associate requirements, and DFARS 252.204-7012 flow-down
