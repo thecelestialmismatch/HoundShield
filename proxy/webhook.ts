@@ -9,6 +9,38 @@
  */
 
 import fetch from "node-fetch";
+import { z } from "zod";
+
+/**
+ * The wire contract, enforced rather than promised.
+ *
+ * This module's header claims it NEVER transmits prompt text, CUI content, user
+ * messages or response content. Until this schema existed that claim rested
+ * entirely on the parameter type and on `ooda/loop.ts` being the only caller:
+ * `flush` serialises `{ ...event }`, so any caller that got past TypeScript —
+ * a cast, a spread of a wider object, a JS consumer of the built `dist/` —
+ * silently POSTed customer content to houndshield.com.
+ *
+ * That is not a style point. In Mode B the proxy runs inside the customer's
+ * network and this webhook is the ONLY channel that sends anything back out, so
+ * whether it can carry content is what decides HIPAA Business Associate status
+ * (45 CFR 160.103) for a healthcare deployment.
+ *
+ * Zod strip mode, matching `schema.ts`, which uses the same posture for the same
+ * reason: unknown fields cannot smuggle content past the boundary. Every field
+ * legitimately sent must be enumerated here.
+ */
+const EventSchema = z
+  .object({
+    request_id: z.string(),
+    org_id: z.string(),
+    action: z.enum(["ALLOWED", "BLOCKED", "QUARANTINED"]),
+    risk_level: z.string(),
+    pattern_name: z.string().optional(),
+    nist_control: z.string().optional(),
+    scan_ms: z.number(),
+  })
+  .strip();
 
 export interface EventPayload {
   request_id: string;
@@ -74,8 +106,20 @@ function scheduleFlush(): void {
  * Returns immediately — does not await network call.
  */
 export function enqueueEvent(event: Omit<EventPayload, "timestamp" | "source">): void {
+  // Strip before queueing, not before sending: an un-stripped object must never
+  // exist in memory long enough for a future flush path to serialise it.
+  const parsed = EventSchema.safeParse(event);
+  if (!parsed.success) {
+    // Drop rather than send a partial. This is telemetry, and a malformed event
+    // is worth less than the guarantee that only enumerated fields leave the
+    // network. Never log `event` itself here — that is the content this
+    // function exists to contain.
+    console.error("[houndshield] webhook event rejected by schema, dropped");
+    return;
+  }
+
   _queue.push({
-    ...event,
+    ...parsed.data,
     source: "docker_proxy",
     timestamp: new Date().toISOString(),
   });

@@ -10,11 +10,13 @@
  * than implying: the module header promises it "NEVER transmits prompt text,
  * CUI content, user messages, response content." That promise is kept by the
  * `Omit<EventPayload, "timestamp" | "source">` parameter type and by the fact
- * that `ooda/loop.ts:238` is the single call site, NOT by the module. `flush`
- * serialises `{ ...event }`, so it forwards whatever keys it is handed. Two
- * tests below say so: one proves the correct call produces a metadata-only
- * body, and `forwards an extra field a caller adds …` proves the module would
- * not reject a bad one. That second test is audit finding 14, executable.
+ * that `ooda/loop.ts:238` was the single call site, NOT by the module: `flush`
+ * serialised `{ ...event }` and forwarded whatever keys it was handed.
+ *
+ * That gap is now closed. `EventSchema` in webhook.ts strips at enqueue time,
+ * matching the zod strip posture `schema.ts` uses on the request path for the
+ * same reason. `strips an extra field a caller adds …` below is audit finding
+ * 14 as an executable regression test — it failed before the schema existed.
  *
  * Delivery is deliberately lossy: a failed POST is swallowed and the batch is
  * dropped rather than re-queued, so a houndshield.com outage can never stall
@@ -203,22 +205,35 @@ describe("the payload is metadata only", () => {
     });
   });
 
-  it("forwards an extra field a caller adds — the contract is the type, not the module", async () => {
-    // Documents the gap, and is the test to change when it closes.
+  it("strips an extra field a caller adds, even one that gets past TypeScript", async () => {
+    // This is audit finding 14, now closed and pinned.
     //
     // The pattern NAME belongs on the wire; the substring that matched it must
-    // never appear. `ooda/loop.ts` honours that, and TypeScript rejects the
-    // object literal below without the cast. But `flush` serialises
-    // `{ ...event }`, so any caller that gets past the type — a cast, a spread
-    // of a wider object, a JS consumer of the built `dist/` — silently POSTs
-    // CUI to houndshield.com. A four-line key allowlist in `enqueueEvent`
-    // would make the module's own header true. Filed as audit finding 14.
+    // never appear. `ooda/loop.ts` honours that and TypeScript rejects the
+    // object literal below without the cast — but before EventSchema existed,
+    // `flush` serialised `{ ...event }`, so a cast, a spread of a wider object,
+    // or a JS consumer of the built `dist/` silently POSTed CUI to
+    // houndshield.com. This assertion failed then. It must never fail again.
+    //
+    // Why it matters beyond hygiene: in Mode B this webhook is the only channel
+    // leaving the customer's network, so whether it can carry content decides
+    // HIPAA Business Associate status under 45 CFR 160.103.
     enqueueEvent({ ...event(), matched_text: "CAGE code 1ABC2" } as EnqueuedEvent);
     await flushWebhook();
 
     const wire = JSON.stringify(lastPost().events);
-    expect(wire).toContain("CAGE code");
-    expect(wire).toContain("1ABC2"); // ← flips to .not.toContain once finding 14 lands
+    expect(wire).toContain("CAGE code"); // the pattern name still ships
+    expect(wire).not.toContain("1ABC2"); // the matched content never does
+    expect(lastPost().events[0]).not.toHaveProperty("matched_text");
+  });
+
+  it("drops an event that does not satisfy the schema rather than sending a partial", async () => {
+    // A malformed event is worth less than the guarantee that only enumerated
+    // fields leave the network, so the queue rejects it outright.
+    enqueueEvent({ ...event(), scan_ms: "fast" as unknown as number } as EnqueuedEvent);
+    await flushWebhook();
+
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("omits the optional fields when a scan matched no pattern", async () => {
