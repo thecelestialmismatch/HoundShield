@@ -1,4 +1,5 @@
 import { NavV3 } from "@/components/layout/NavV3";
+import { controllerDisclosure } from "@/lib/legal/entity";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -86,8 +87,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">11. Company &amp; Contact</h2>
             <p>
-              HoundShield is operated by <strong className="text-[var(--hs-ink-secondary)]">[COMPANY LEGAL NAME]</strong>,{" "}
-              <strong className="text-[var(--hs-ink-secondary)]">[MAILING ADDRESS]</strong>.
+              HoundShield is operated by <strong className="text-[var(--hs-ink-secondary)]">{controllerDisclosure()}</strong>,{" "}
+              <strong className="text-[var(--hs-ink-secondary)]"></strong>.
             </p>
             <p className="mt-2">Questions about these terms? Contact us at <a href="mailto:legal@houndshield.com" className="text-brand-700 hover:text-brand-700">legal@houndshield.com</a>.</p>
           </section>
