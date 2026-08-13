@@ -15,10 +15,16 @@ import { KIND_META } from './dataProvenance'
  *
  * Reachability was traced rather than assumed, and it matters: seven other
  * mockup components (`content-pipeline`, `calendar-view`, `agent-builder`,
- * `agent-workspace`, `memory-view`, `knowledge-base`, `execution-trace`) are
- * mounted by no page at all, and `pipeline`, `workspace` and `knowledge` are
- * bare redirects to `/command-center`. Labelling those would have been
- * decorating dead code.
+ * `agent-workspace`, `memory-view`, `knowledge-base`, `execution-trace`) were
+ * mounted by no page at all. Labelling those would have been decorating dead
+ * code, so they were deleted instead — see the repo-debt PR. This notice now
+ * covers only the three reachable pages named above.
+ *
+ * Note for anyone re-running that analysis: `knowledge-base` was a basename
+ * shared by three files, and only the dashboard one was dead.
+ * `lib/brain/knowledge-base.ts` and `lib/agent/tools/knowledge-base.ts` are
+ * both load-bearing and imported by their siblings' `index.ts`. Match on the
+ * import specifier, not the basename.
  *
  * The honest fix for a mockup is to say so. Building real backends for agent
  * simulation, content pipelines and calendars is building products that do not
