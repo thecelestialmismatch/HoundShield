@@ -47,6 +47,33 @@ emits, not a rule the consumer re-derives. `/api/health` now returns `degraded: 
 the page renders it. Same shape as the shell-source guard fix: put the invariant where it can
 only be written once.
 
+### A missing legal page is usually the smaller half of the problem
+**What:** the brief was "we don't have a refund policy — create it". True: four surfaces
+advertised a 30-day money-back guarantee and no `/refund` page existed. But reading those four
+surfaces to write the policy found that `/terms` §4 described refunds for *monthly and annual
+subscriptions you may cancel at any time* — a product HoundShield does not sell — while saying
+nothing about the one-time report that is the only thing purchasable. The FAQ, inside JSON-LD
+that answer engines quote, advertised a 20% annual discount on plans that do not exist and
+contradicted CLAUDE.md's 17%.
+**Root cause:** the guarantee was copied outward from marketing to four places and never
+reconciled with what the checkout actually sells. Nothing owned the claim.
+**Rule:** before writing a missing document, read every surface that already references it. The
+absence is what someone noticed; the contradictions are what the absence was hiding. Then make
+one module own the claim and have the surfaces read it — the same fix `entity.ts` and
+`subprocessors.ts` already applied to the identical failure.
+
+### Never write a policy narrower than the promise already made in public
+**What:** it was tempting to write sensible-sounding carve-outs — no refund once the PDF is
+delivered, no refund if you ran the proxy.
+**Root cause:** those read as prudent and are actually a retroactive reduction of a commitment
+already advertised to every visitor, and every one of them describes normal use of a product
+whose entire deliverable is a PDF produced by running the proxy. A guarantee claimable only by
+someone who never used what they bought is a technicality, not a guarantee.
+**Rule:** when documenting an existing promise, the written policy may match or exceed it, never
+undercut it. `EXCLUSIONS` ships as an explicitly empty exported list rather than as silence, so
+adding one is a visible reviewed act, and the guard fails any exclusion that describes ordinary
+use.
+
 ### Two of my own guards were wrong before they were right
 **What:** the new CSP drift guard matched `script-src` with an unanchored pattern; both files
 discuss `script-src` in comments ABOVE the directive, so it captured English and diffed prose.
