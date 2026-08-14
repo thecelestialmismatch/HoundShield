@@ -12,11 +12,17 @@ import { useViewer } from "./useViewer";
  *  1. An "All Systems Operational" pill with a pulsing green dot, hardcoded as a
  *     string and checked against nothing. It read as live status and was a
  *     literal. Wiring it to `/api/health` was considered and rejected twice
- *     over: that route returns `status: "healthy"` as a hardcoded literal of its
- *     own, so the pill would have been the same constant laundered through an
- *     HTTP call; and its `services` block reports HOUNDSHIELD's vendor config
+ *     over: that route returned `status: "healthy"` as a hardcoded literal of
+ *     its own, so the pill would have been the same constant laundered through
+ *     an HTTP call; and its `services` block reports HOUNDSHIELD's vendor config
  *     (Stripe keys, Resend, OpenRouter), which is our billing plumbing, not the
  *     customer's security posture, and does not belong in their chrome.
+ *     UPDATE 2026-08-14: the first of those two reasons no longer holds —
+ *     `/api/health` now derives `status` from four real control probes
+ *     (lib/health/service-status.ts, audit #20c). The SECOND reason is the one
+ *     that was load-bearing and it is unchanged: those probes measure OUR
+ *     infrastructure, so putting them in the customer's header would still be
+ *     answering a question they did not ask. The pill stays gone.
  *     The operator's real gateway status already has an honest home: the
  *     Live/Offline indicator on the overview, which is per-tenant and derived
  *     from their own telemetry.
