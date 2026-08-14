@@ -6,7 +6,7 @@ import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBar
 import { SUB_PROCESSORS, contentTouchingSubProcessors } from "@/lib/legal/subprocessors";
 
 export const metadata: Metadata = {
-  title: "Sub-processors | HoundShield",
+  title: "Sub-processors",
   description:
     "Every third party that processes data on HoundShield's behalf, what it receives, and where.",
   alternates: { canonical: "/subprocessors" },

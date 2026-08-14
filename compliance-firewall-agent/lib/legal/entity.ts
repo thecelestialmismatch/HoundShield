@@ -97,15 +97,15 @@ export const LAUNCH_BLOCKERS = [
   },
   {
     id: "hipaa-posture",
-    blocking: true,
-    summary: "State the Mode B-only position for healthcare on /hipaa",
-    why: "Under 45 CFR 160.103 the hosted Mode A endpoint makes HoundShield a Business Associate; self-hosted Mode B does not. The site must not imply the safe posture while offering the unsafe one.",
+    blocking: false,
+    summary: "RESOLVED 2026-08-13 — /hipaa states the Mode A/Mode B PHI boundary and the Business Associate position",
+    why: "Under 45 CFR 160.103 the hosted Mode A endpoint would make HoundShield a Business Associate; self-hosted Mode B does not. /hipaa now states both explicitly, and four surfaces that advertised an unbackable BAA were corrected. legal-contract.test.ts re-verifies the page still says so before trusting this entry.",
   },
   {
     id: "webhook-allowlist",
-    blocking: true,
-    summary: "Enforce the metadata-only contract in proxy/webhook.ts (audit finding 14)",
-    why: "The webhook is the only channel that can carry customer content back to houndshield.com in Mode B. It currently forwards any key it is handed, so it is what stands between the company and Business Associate status.",
+    blocking: false,
+    summary: "RESOLVED 2026-08-13 — metadata-only contract enforced in proxy/webhook.ts (audit finding 14)",
+    why: "The webhook is the only channel that can carry customer content back to houndshield.com in Mode B. A zod strip-mode allowlist now drops every non-enumerated field at enqueue (PR #286). legal-contract.test.ts re-verifies the schema still exists in the proxy source before trusting this entry.",
   },
   {
     id: "subprocessors",

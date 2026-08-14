@@ -82,8 +82,8 @@ const FEATURES = [
   },
   {
     icon: Activity,
-    title: "Tamper-Proof Audit Trail",
-    desc: "SHA-256 hash chain + blockchain anchoring on Base L2. Every AI interaction logged with immutable evidence.",
+    title: "Tamper-Evident Audit Trail",
+    desc: "SHA-256 hash-chained audit log. Every AI interaction recorded with evidence you can hand to an auditor.",
   },
 ];
 
@@ -216,9 +216,9 @@ export default function HIPAAPage() {
                 detail: "Average cost of a healthcare data breach in 2025. Highest of any industry for 14 consecutive years.",
               },
               {
-                stat: "0",
-                label: "AI compliance tools exist",
-                detail: "No HIPAA-specific tool monitors AI usage in real-time. Until HoundShield.",
+                stat: "89%",
+                label: "involve regulated data",
+                detail: "Share of healthcare generative-AI data policy violations involving regulated data (Netskope), versus 31% across all industries.",
               },
             ].map(({ stat, label, detail }, i) => (
               <FadeIn key={label} delay={i * 0.1}>
@@ -320,6 +320,106 @@ export default function HIPAAPage() {
                 View Pricing
               </Link>
             </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ── Compliance posture — the Business Associate position ───────── */}
+      <section
+        id="compliance-posture"
+        className="py-24 md:py-32 border-t border-[var(--hs-border-subtle)]"
+      >
+        <div className="max-w-3xl mx-auto px-6">
+          <FadeIn className="text-center mb-12">
+            <div className="inline-flex justify-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--hs-success)] mb-4">
+              Our HIPAA Position
+            </div>
+            <h2 className="text-[clamp(28px,4vw,44px)] font-editorial font-bold tracking-tight leading-[1.1] text-[var(--hs-ink)] mb-4">
+              Where HoundShield stands, in plain terms
+            </h2>
+            <p className="text-lg text-[var(--hs-ink-secondary)]">
+              A Privacy Officer should not have to guess whether a vendor is a business associate.
+              Here is our position, stated once, precisely.
+            </p>
+          </FadeIn>
+
+          <div className="space-y-4">
+            <FadeIn>
+              <div className="glass-card rounded-xl p-6">
+                <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2">
+                  Mode A (hosted trial): evaluation only, no PHI, no BAA
+                </h3>
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
+                  The hosted endpoint at houndshield.com runs on Vercel and exists for evaluating
+                  the product with non-PHI data. We do not offer a BAA for it, and you must not
+                  send PHI through it. A vendor that receives PHI on your behalf becomes your
+                  business associate under 45 CFR 160.103 — which is exactly the relationship
+                  Mode A is designed not to create.
+                </p>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.08}>
+              <div className="glass-card rounded-xl p-6">
+                <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2">
+                  Mode B (self-hosted): PHI never reaches us, so no BAA is needed with us
+                </h3>
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
+                  In Mode B the proxy runs as Docker inside your own network. Prompt content —
+                  including any PHI a clinician tries to paste — is scanned locally and never
+                  transmitted to HoundShield. Because we do not create, receive, maintain, or
+                  transmit PHI on your behalf, HoundShield does not act as a business associate
+                  in this deployment, and no BAA between you and HoundShield is required. This
+                  is the deployment mode for live PHI.
+                </p>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.16}>
+              <div className="glass-card rounded-xl p-6">
+                <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2">
+                  The telemetry that keeps that true
+                </h3>
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
+                  The only data a Mode B deployment sends back to houndshield.com is an enumerated
+                  metadata set: the action taken, risk level, pattern name, timestamps, and scan
+                  timing. Never prompt text, never the matched content. That contract is enforced
+                  by an allowlist in the proxy&rsquo;s code — fields outside the list are stripped
+                  before anything leaves your network — not merely promised in a document. Vendor
+                  details are on the{" "}
+                  <Link href="/subprocessors" className="text-brand-700 hover:text-brand-700">
+                    sub-processors page
+                  </Link>
+                  .
+                </p>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.24}>
+              <div className="glass-card rounded-xl p-6">
+                <h3 className="text-base font-semibold text-[var(--hs-ink)] mb-2">
+                  What stays your responsibility
+                </h3>
+                <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
+                  BAAs with AI vendors you deliberately send PHI to — under your own API keys, at
+                  your instruction — remain between you and those vendors. HoundShield&rsquo;s job
+                  is making sure the traffic that should not happen gets blocked before it leaves,
+                  and giving you the audit trail that proves it.
+                </p>
+              </div>
+            </FadeIn>
+          </div>
+
+          <FadeIn delay={0.3}>
+            <p className="mt-8 text-xs text-[var(--hs-ink-tertiary)] text-center leading-relaxed">
+              This is our good-faith reading of 45 CFR 160.103 as it applies to each deployment
+              mode. It is not legal advice — confirm the analysis with your privacy counsel. All
+              of our legal documents are collected at{" "}
+              <Link href="/legal" className="text-brand-700 hover:text-brand-700">
+                /legal
+              </Link>
+              .
+            </p>
           </FadeIn>
         </div>
       </section>

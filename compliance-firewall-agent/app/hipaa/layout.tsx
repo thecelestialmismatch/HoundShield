@@ -6,7 +6,7 @@ const BASE_URL = SITE_URL;
 export const metadata: Metadata = {
   title: "HIPAA & AI | PHI Protection for Healthcare AI Usage",
   description:
-    "Help your team use AI without exposing PHI. HoundShield detects PHI in AI prompts before they reach cloud services and generates audit trails to support your HIPAA program. Self-hosted (Mode B) deployment keeps PHI inside your boundary; a BAA is available for that mode.",
+    "Help your team use AI without exposing PHI. HoundShield detects PHI in AI prompts before they reach cloud services and generates audit trails to support your HIPAA program. Self-hosted (Mode B) keeps PHI inside your boundary — it never reaches us, so no BAA with HoundShield is required.",
   keywords: [
     "HIPAA AI",
     "PHI protection AI",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "HIPAA & AI | HoundShield",
     description:
-      "Help prevent PHI from reaching cloud AI services. Local PHI detection, audit trails to support your HIPAA program, and a BAA available for self-hosted (Mode B) deployments.",
+      "Help prevent PHI from reaching cloud AI services. Local PHI detection, and audit trails to support your HIPAA program. In self-hosted Mode B, PHI never reaches HoundShield, so no BAA with us is required.",
     url: `${BASE_URL}/hipaa`,
     type: "website",
   },

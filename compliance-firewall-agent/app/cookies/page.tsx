@@ -5,9 +5,10 @@ import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
 import { STORED_ITEMS, itemsByCategory, type StoredItem } from "@/lib/legal/cookies";
 import { LEGAL_ENTITY } from "@/lib/legal/entity";
+import { CookieSettingsButton } from "./CookieSettingsButton";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | HoundShield",
+  title: "Cookie Policy",
   description:
     "Every cookie and browser-storage item HoundShield sets, what it is for, how long it lasts, and how to change your choice. Analytics stays off until you opt in.",
   alternates: { canonical: "/cookies" },
@@ -119,11 +120,13 @@ export default function CookiePolicyPage() {
               Changing your mind
             </h2>
             <p>
-              Use the &ldquo;Cookie settings&rdquo; control in the consent banner, or clear this
-              site&rsquo;s data in your browser — the banner then asks again from scratch. Refusing
+              Use the button below and the consent banner reopens, with the same
+              &ldquo;Cookie settings&rdquo; control you saw on your first visit. Clearing this
+              site&rsquo;s data in your browser has the same effect. Refusing
               analytics costs you nothing: every feature works identically either way, and we do
               not treat a refusal as a reason to ask again on the next page.
             </p>
+            <CookieSettingsButton />
           </section>
 
           <section>
