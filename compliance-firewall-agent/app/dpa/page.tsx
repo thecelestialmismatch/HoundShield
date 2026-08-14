@@ -1,12 +1,13 @@
 import { NavV3 } from "@/components/layout/NavV3";
 import { controllerDisclosure } from "@/lib/legal/entity";
+import { SUB_PROCESSORS } from "@/lib/legal/subprocessors";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
 
 export const metadata: Metadata = {
-  title: "Data Processing Agreement | HoundShield",
+  title: "Data Processing Agreement",
   description:
     "HoundShield's Data Processing Agreement (DPA) for GDPR, HIPAA, and DFARS-regulated customers. Local-only architecture means prompt content never leaves your network.",
   alternates: { canonical: "https://houndshield.com/dpa" },
@@ -62,11 +63,18 @@ export default function DpaPage() {
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">3. Sub-processors</h2>
             <p>The Processor engages the following sub-processors for the cloud control plane (account, billing, metadata):</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
-              <li><strong className="text-[var(--hs-ink-secondary)]">Supabase</strong> — authentication &amp; metadata database (US region)</li>
-              <li><strong className="text-[var(--hs-ink-secondary)]">Vercel</strong> — application hosting / edge network</li>
-              <li><strong className="text-[var(--hs-ink-secondary)]">Stripe</strong> — payment processing</li>
-              <li><strong className="text-[var(--hs-ink-secondary)]">Resend</strong> — transactional email</li>
+              {SUB_PROCESSORS.map((s) => (
+                <li key={s.name}>
+                  <strong className="text-[var(--hs-ink-secondary)]">{s.name}</strong> — {s.purpose} ({s.region})
+                </li>
+              ))}
             </ul>
+            <p className="mt-2">
+              This is the same list published on the{" "}
+              <Link href="/subprocessors" className="text-brand-700 hover:text-brand-700">sub-processors page</Link>{" "}
+              and cited by the <Link href="/privacy" className="text-brand-700 hover:text-brand-700">Privacy Policy</Link>,
+              rendered from one source so the three documents cannot disagree.
+            </p>
             <p className="mt-2">
               The Processor will give 30 days&rsquo; notice of any new sub-processor and the Controller may object
               on reasonable data-protection grounds.
