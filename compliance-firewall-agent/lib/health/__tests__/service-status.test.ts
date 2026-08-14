@@ -25,6 +25,8 @@ const ENV_KEYS = [
   "ENCRYPTION_KEY",
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "MARKETING_POSTAL_ADDRESS",
+  "UNSUBSCRIBE_SECRET",
 ] as const;
 
 let saved: Record<string, string | undefined>;
@@ -181,6 +183,26 @@ describe("buildHealthReport — controls are measured, not declared", () => {
 
     process.env.ENCRYPTION_KEY = "a1b2c3d4".repeat(8); // 64 hex chars
     expect((await build()).services.quarantine_encryption).toBe("enabled");
+  });
+
+  it("reports the onboarding drip as disabled, and says which variable, when it cannot lawfully send", async () => {
+    // This one fails CLOSED — no address means no send, not an unlawful send.
+    // It is reported anyway because a silently dark drip looks identical to a
+    // working one from the outside, and the fix is a single env var.
+    delete process.env.MARKETING_POSTAL_ADDRESS;
+    const { services, degraded } = await build();
+    expect(services.marketing_email).toBe("disabled");
+    expect(degraded).toContain("marketing_email");
+    expect(services.marketing_email_hint).toMatch(/MARKETING_POSTAL_ADDRESS/);
+  });
+
+  it("reports the drip as enabled once the statutory elements are configured", async () => {
+    process.env.MARKETING_POSTAL_ADDRESS = "HoundShield, 1 Example St, Wilmington DE 19801";
+    process.env.UNSUBSCRIBE_SECRET = "test-unsubscribe-secret";
+    const { services, degraded } = await build();
+    expect(services.marketing_email).toBe("enabled");
+    expect(degraded).not.toContain("marketing_email");
+    expect(services.marketing_email_hint).toBeUndefined();
   });
 
   it("never leaks a configured value into the public response", async () => {

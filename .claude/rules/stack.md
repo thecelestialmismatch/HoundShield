@@ -17,7 +17,7 @@ compliance-firewall-agent/          Next.js 16, React 19, Tailwind, Framer Motio
   lib/agent/memory-dna.ts           Compressed memory pattern
   lib/brain-ai/knowledge-graph.ts   BM25-indexed knowledge graph (queryable, token-efficient)
   lib/brain-ai/brain-query.ts       Public query interface (ask(), addKnowledge(), marketCheck())
-  supabase/migrations/              001-033 in repo; 029/030/033 NOT applied to prod
+  supabase/migrations/              001-034 in repo; 029/030/033/034 NOT applied to prod
 
 proxy/                              Node.js HTTPS proxy (the actual product)
   server.ts                         HTTP proxy server

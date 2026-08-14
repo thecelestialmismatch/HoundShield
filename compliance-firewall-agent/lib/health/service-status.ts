@@ -3,6 +3,7 @@ import { isLlmConfigured } from "@/lib/agent/provider";
 import { stripeKeyDiagnostic, stripeWebhookDiagnostic } from "@/lib/stripe/env";
 import { passwordResetDiagnostic } from "@/lib/auth/reset-diagnostics";
 import { founderInboxDiagnostic } from "@/lib/email/identity";
+import { marketingBlockReason } from "@/lib/legal/marketing-email";
 
 /**
  * What /api/health reports, and which of it means a control is actually doing
@@ -216,6 +217,7 @@ export async function buildHealthReport(): Promise<HealthReport> {
   // Both probes hit the same database; run them together rather than serially.
   const [rateLimit, lockout] = await Promise.all([rateLimitStore(), authLockoutStore()]);
   const captchaState = captcha();
+  const marketingBlocked = marketingBlockReason();
   const encryptionState = quarantineEncryption();
 
   const services: Services = {
@@ -266,6 +268,12 @@ export async function buildHealthReport(): Promise<HealthReport> {
             "TURNSTILE_SECRET_KEY is not set. verifyCaptcha() returns true for every token, so the CAPTCHA escalation step after repeated failures is a no-op.",
         }
       : {}),
+    // Onboarding email. NOT a control failing open — it fails CLOSED by design
+    // (CAN-SPAM 15 U.S.C. 7704). Reported because the operator otherwise has no
+    // way to learn the drip is silently sending nothing, and the fix is one
+    // environment variable.
+    marketing_email: marketingBlocked === null ? "enabled" : "disabled",
+    ...(marketingBlocked ? { marketing_email_hint: marketingBlocked } : {}),
     quarantine_encryption: encryptionState,
     ...(encryptionState !== "enabled"
       ? {
