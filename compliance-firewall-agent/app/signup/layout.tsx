@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site-url";
 
 const BASE_URL = SITE_URL;
 export const metadata: Metadata = {
-  title: "Start Free | HoundShield",
+  title: "Start Free",
   description:
     "Create your HoundShield account. Free CMMC self-assessment, SPRS score, and local-only AI prompt firewall — no credit card required.",
   alternates: { canonical: `${BASE_URL}/signup` },

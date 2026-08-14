@@ -7,7 +7,7 @@ import { LEGAL_DOCUMENTS } from "@/lib/legal/index-registry";
 import { controllerDisclosure, isEntityEstablished, LEGAL_ENTITY } from "@/lib/legal/entity";
 
 export const metadata: Metadata = {
-  title: "Legal | HoundShield",
+  title: "Legal",
   description:
     "Every HoundShield legal document in one place — privacy, cookies, terms, refunds, DPA, sub-processors, acceptable use and accessibility — with the regulation each one answers to.",
   alternates: { canonical: "/legal" },

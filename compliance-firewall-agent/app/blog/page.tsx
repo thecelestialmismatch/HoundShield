@@ -8,7 +8,7 @@ import { SITE_URL } from "@/lib/site-url";
 
 // ── SEO metadata ─────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "CMMC Compliance Blog | HoundShield",
+  title: "CMMC Compliance Blog",
   description:
     "Expert guides on CMMC Level 2, AI security for defense contractors, HIPAA compliance, and protecting CUI. Written by compliance engineers for ISSOs and IT security managers.",
   keywords: [

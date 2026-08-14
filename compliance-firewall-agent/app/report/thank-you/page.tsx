@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import { CheckCircle2, ArrowRight, Server, FileText } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Order confirmed — CMMC AI Risk Assessment Report | HoundShield",
+  title: "Order confirmed — CMMC AI Risk Assessment Report",
   description:
     "Your $499 CMMC AI Risk Assessment Report is confirmed. Deploy the proxy in your own environment and receive a SHA-256-signed PDF mapped to NIST 800-171 in 14 days.",
   robots: { index: false, follow: false },

@@ -7,7 +7,7 @@ import { ModeBNotice } from "@/components/ModeBNotice";
 import { Lock, ShieldCheck, FileLock2, Network, KeyRound, Bug } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Security & Trust | HoundShield",
+  title: "Security & Trust",
   description:
     "How HoundShield protects your data: local-only scanning, AES-256 encryption, SHA-256 audit trails, TLS 1.3, and a published vulnerability disclosure policy. Nothing leaves your network.",
   alternates: { canonical: "https://houndshield.com/security" },

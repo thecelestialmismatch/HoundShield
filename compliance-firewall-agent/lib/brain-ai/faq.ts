@@ -243,7 +243,7 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["healthcare", "hospital", "clinic", "ehr", "electronic health", "medical records"],
     answer:
-      "For **healthcare**, HoundShield prevents HIPAA violations when clinical staff use AI:\n- Blocks all 18 PHI identifiers before reaching ChatGPT, Copilot, or Claude\n- HIPAA-compliant logging (SHA-256 hashed, no PHI in plaintext)\n- BAA available on Growth+\n- Works with Epic, Cerner, Epic MyChart workflows — no EHR changes needed\n- Zero-latency to clinical workflows (<10ms overhead)",
+      "For **healthcare**, HoundShield helps prevent HIPAA violations when clinical staff use AI:\n- Detects all 18 PHI identifiers before prompts reach ChatGPT, Copilot, or Claude\n- Audit logging that keeps no PHI in plaintext (SHA-256 hashed)\n- In self-hosted Mode B, PHI never reaches HoundShield, so no BAA with us is required. The hosted trial is for non-PHI evaluation only and is not covered by a BAA — see /hipaa\n- Sits in front of AI tools, so no EHR changes are needed\n- <10ms scan overhead",
   },
   {
     keywords: ["law firm", "legal", "attorney", "privilege", "m&a", "finance", "bank"],

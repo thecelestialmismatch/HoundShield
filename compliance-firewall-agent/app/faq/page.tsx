@@ -8,7 +8,7 @@ import { FaqHub } from "@/components/seo/FaqHub";
 import { faqHubGroups } from "@/lib/seo/faqs";
 
 export const metadata: Metadata = {
-  title: "FAQ — CMMC, HIPAA, pricing & deployment answers | HoundShield",
+  title: "FAQ — CMMC, HIPAA, pricing & deployment answers",
   description:
     "Every HoundShield question in one searchable place: the $499 CMMC AI Risk Assessment Report, pricing and the free tier, HIPAA and PHI, deployment modes, SPRS scoring, and Brain AI. Deep-linkable, assessor-grade answers.",
   alternates: { canonical: "https://houndshield.com/faq" },
