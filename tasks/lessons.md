@@ -74,6 +74,29 @@ undercut it. `EXCLUSIONS` ships as an explicitly empty exported list rather than
 adding one is a visible reviewed act, and the guard fails any exclusion that describes ordinary
 use.
 
+### A correct control with an empty disclosure is a consent defect, not a docs defect
+**What:** the cookie banner was already right — analytics gated, "Accept essential" offered,
+PostHog genuinely not initialised without opt-in. It linked to a privacy clause that named no
+cookie at all.
+**Root cause:** the mechanism was reviewed and the information the mechanism asks about was not.
+ePrivacy Art. 5(3) requires consent to be *informed*, so an unnamed set means the consent
+itself is the weak part — the thing collected, not the page describing it.
+**Rule:** when auditing a consent flow, ask what the user is consenting TO, not only whether
+the toggle works. And build the inventory from code with per-item evidence paths: a policy
+naming cookies the code does not set is a published inaccuracy about data handling, which on
+this product is the exact failure we sell against.
+
+### Model the difference between "required by law" and "we chose to publish it"
+**What:** the legal-index guard demanded a checkable statutory citation for every document and
+failed on the Acceptable Use Policy, which is a contract term. The tempting fix was to attach a
+plausible-sounding statute.
+**Root cause:** the registry had one field for two different things — legal obligation and
+editorial choice.
+**Rule:** when a guard fails on honest data, fix the model, not the data. `basis: statutory |
+contractual` made the check correct AND made the page more truthful, because a reader can now
+see which documents the law compels. Inventing a citation would have passed the test and made
+the page worse.
+
 ### Two of my own guards were wrong before they were right
 **What:** the new CSP drift guard matched `script-src` with an unanchored pattern; both files
 discuss `script-src` in comments ABOVE the directive, so it captured English and diffed prose.
