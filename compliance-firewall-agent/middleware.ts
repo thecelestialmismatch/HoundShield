@@ -128,7 +128,11 @@ export async function middleware(request: NextRequest) {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      // Kept byte-equivalent to next.config.js: 'unsafe-eval' removed (audit
+      // #8b). This layer does not execute on the current deployment, but the
+      // two must never disagree — a dead layer that still carries a weaker
+      // policy is exactly how the base-uri/form-action gap read as covered.
+      "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: https: blob:",

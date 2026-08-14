@@ -20,6 +20,21 @@ function read(rel: string): string {
   return readFileSync(resolve(process.cwd(), rel), "utf8");
 }
 
+/**
+ * The `script-src` DIRECTIVE, not prose that happens to mention it.
+ *
+ * An unanchored "script-src followed by anything up to a quote" pattern looks
+ * equivalent and is not: both files discuss `script-src` in comments above the
+ * directive, so such a pattern captures English and asserts against it —
+ * passing or failing on the wording of a comment rather than on the shipped
+ * policy. Anchoring to the opening double quote of the JS string literal is
+ * what makes this read the header. (Observed: the first draft of this helper
+ * did exactly that and reported a diff of prose.)
+ */
+function scriptSrcOf(src: string): string {
+  return src.match(/"script-src[^"]*"/)?.[0].replace(/"/g, "") ?? "";
+}
+
 const LAYERS: Array<[string, string]> = [
   ["next.config.js (static/CDN layer)", read("next.config.js")],
   ["middleware.ts (dynamic layer)", read("middleware.ts")],
@@ -61,6 +76,29 @@ describe("security headers ship on every response (both layers)", () => {
 
   it("next.config applies its headers to every path", () => {
     expect(read("next.config.js")).toMatch(/source:\s*["']\/\(\.\*\)["']/);
+  });
+
+  it.each(LAYERS)("%s does not allow 'unsafe-eval' in script-src", (_label, src) => {
+    // Audit #8b. This compounds with #2: the session cookie is httpOnly:false
+    // by @supabase/ssr design, so any XSS that lands is immediate session theft
+    // rather than a contained defacement. Tightening script-src is the half of
+    // that pair which is actually tractable.
+    //
+    // Asserted per-layer and scoped to script-src specifically: 'unsafe-inline'
+    // is still required there (App Router, no nonce plumbing) and 'unsafe-inline'
+    // in style-src is untouched, so a blunt search for "unsafe" would fail on
+    // directives that are meant to be present.
+    expect(scriptSrcOf(src), "script-src directive should exist").not.toBe("");
+    expect(scriptSrcOf(src)).not.toMatch(/unsafe-eval/);
+  });
+
+  it("the two layers agree on script-src (no drift)", () => {
+    // The dead middleware layer must never carry a weaker policy than the live
+    // one — that mismatch is precisely how the missing base-uri/form-action
+    // read as covered in review for months. Compared as a SET so the two files
+    // may list the sources in different orders.
+    const sources = (src: string) => scriptSrcOf(src).split(/\s+/).filter(Boolean).sort().join(" ");
+    expect(sources(read("next.config.js"))).toBe(sources(read("middleware.ts")));
   });
 
   it("the two layers agree on the HSTS max-age (no drift)", () => {
