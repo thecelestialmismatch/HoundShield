@@ -129,6 +129,23 @@ has to land first.
    this is exactly the file someone re-adds in good faith.
 3. Redeploy.
 
+### The loop this PR had to defuse first
+
+`docs/SECURITY-PHASE-2-AUDIT.md` warned that restoring framework routing could
+produce an infinite redirect loop. Measured against production on 2026-08-14,
+it was real and armed:
+
+```
+GET https://houndshield.com/api/health   ->  308  ->  https://www.houndshield.com/...
+```
+
+Vercel's domain configuration canonicalises **apex -> www**. `next.config.js`
+carried a permanent redirect pointing **www -> apex**. Both live at once is
+apex -> www -> apex, forever, on every URL of the site. It had never fired only
+because the legacy repo-root `vercel.json` stops next.config redirects reaching
+the edge — the exact condition step 2 removes. The rule is deleted, and
+`app/__tests__/canonical-host.test.ts` fails if it ever returns.
+
 **Do not reverse steps 1 and 2.** With Root Directory still `.`, the repo-root
 `vercel.json` is the only thing telling Vercel where the app lives; deleting it
 first makes Vercel zero-config-build the repository root, whose `package.json`
