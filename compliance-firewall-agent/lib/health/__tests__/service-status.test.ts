@@ -1,8 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   degradedKeys,
   isHintKey,
   isOperationalValue,
+  PROBED_TABLES,
   type Services,
 } from "@/lib/health/service-status";
 
@@ -98,6 +101,46 @@ describe("degradedKeys — a control that fails open must be loud", () => {
       expect(isOperationalValue(value)).toBe(false);
     }
   });
+});
+
+describe("every probed column exists in the migration that creates the table", () => {
+  /*
+   * THE BUG THIS EXISTS FOR, found in production and not in review.
+   *
+   * The first version probed `.select("key")` on rate_limit_buckets, whose
+   * primary key is `bucket_key`. PostgREST returned an error, the probe's catch
+   * swallowed it, and /api/health reported `rate_limit_store: degraded_local`
+   * while shared rate limiting was working perfectly.
+   *
+   * That is the worst possible failure for this endpoint. It was written to
+   * stop a control failing SILENTLY; a misspelled probe makes it cry wolf
+   * instead, which sends an operator chasing an outage that does not exist and
+   * teaches them to distrust the page. A false alarm is a worse lie than the
+   * hardcoded "operational" this module deleted.
+   *
+   * Asserted against the migration DDL rather than a copy of the column name,
+   * so renaming a column in a future migration fails here rather than in prod.
+   */
+  const MIGRATIONS = join(process.cwd(), "supabase", "migrations");
+
+  it.each(Object.entries(PROBED_TABLES))(
+    "%s.%s is a real column",
+    (table, column) => {
+      const files = readdirSync(MIGRATIONS).filter((f) => f.endsWith(".sql"));
+      const ddl = files
+        .map((f) => readFileSync(join(MIGRATIONS, f), "utf8"))
+        .find((sql) => new RegExp(`create table[^;]*\\b${table}\\b`, "i").test(sql));
+
+      expect(ddl, `no migration creates ${table}`).toBeTruthy();
+
+      const body = ddl!.slice(ddl!.search(new RegExp(`create table[^(]*\\b${table}\\b`, "i")));
+      const columns = body.slice(body.indexOf("(") + 1, body.indexOf(");"));
+      expect(
+        new RegExp(`^\\s*${column}\\s`, "m").test(columns),
+        `${table} has no column "${column}" — the probe would report a FALSE outage`,
+      ).toBe(true);
+    },
+  );
 });
 
 describe("buildHealthReport — controls are measured, not declared", () => {

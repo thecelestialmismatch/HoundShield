@@ -97,6 +97,20 @@ contractual` made the check correct AND made the page more truthful, because a r
 see which documents the law compels. Inventing a citation would have passed the test and made
 the page worse.
 
+### A misspelled probe turns a truth-teller into a wolf-crier
+**What:** `/api/health` shipped and immediately reported `rate_limit_store: degraded_local` in
+production. Shared rate limiting was working perfectly. The probe selected `key` from
+`rate_limit_buckets`, whose primary key is `bucket_key`; PostgREST errored, the catch swallowed
+it, and the endpoint reported an outage that did not exist.
+**Root cause:** the probe's failure path cannot distinguish "the table is unreachable" from "I
+asked for a column that does not exist", and nothing checked the column name against the DDL.
+Reviewing the endpoint's LOGIC finds nothing — the logic is right.
+**Rule:** for a module whose whole job is to report degradation, the false-positive direction is
+the dangerous one. A silent control teaches nobody anything; a lying alarm teaches the operator
+to ignore the page, which is worse than the hardcoded "operational" this endpoint replaced. Pin
+every probed identifier against the schema that defines it, and **read the live endpoint after
+deploying** — this was invisible in 2,738 green tests and found in one HTTP response.
+
 ### The rulebook is code that executes on the next agent
 **What:** `.claude/rules/frontend.md` ordered "Homepage bg: `bg-[#07070b]` — never `bg-white`"
 and "Dark mode always: `<html className="dark scroll-smooth">`". `app/layout.tsx` has carried no
