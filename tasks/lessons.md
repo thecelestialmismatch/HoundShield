@@ -5,6 +5,112 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-08-14 (finishing the security audit — when the recommendation is the bug)
+
+### A remediation item can be unimplementable, and it will still look shipped
+**What:** the Phase 2 audit's #2 listed "set `maxAge` to 7–30 days via `cookieOptions` on
+`createServerClient`" as the safe, independent, do-it-now fix. `@supabase/ssr` 0.12.4 spreads
+caller options and then overwrites `maxAge` with its own 400-day default on both cookie-set
+paths. The diff would have been three lines, reviewed as a session-lifetime fix, and changed
+nothing.
+**Root cause:** the audit read the library's DEFAULTS (`constants.js`) and correctly reported
+them, then assumed the documented override applied to them. Nobody read the merge site.
+**Rule:** before implementing a fix that configures someone else's library, read the code that
+CONSUMES the option, not the code that declares its default. And prove it by running it — one
+throwaway script against a local stub server settled this in two minutes, where reading
+`cookies.js` alone still left room to be wrong. When the recommendation turns out to be
+impossible, withdraw it in writing where the recommendation lives; a silent omission reads as
+an oversight the next time someone audits the auditor.
+
+### An eval() probe cannot test a CSP, because the prober is exempt
+**What:** removing `'unsafe-eval'` needed proof the app still worked. The obvious control —
+run `eval()` in the page and see it fail — reported `EVAL_ALLOWED` on all six routes. So did
+the second attempt, which injected a `<script>` element that called eval.
+**Root cause:** Chrome DevTools evaluation contexts bypass CSP by design, and a script element
+created from one inherits the exemption. The control was measuring the debugger, not the page.
+**Rule:** when a control comes back green, ask what would make it come back green if the thing
+under test were broken. A subresource load IS subject to the document policy, so requesting a
+script from a forbidden origin proves both that CSP is enforced AND that the detector can see a
+violation. "Zero violations" is worthless until something has made the detector fire.
+
+### Deleting a constant can expose that its READER was the bigger lie
+**What:** `/api/health` published `classifier`/`quarantine`/`audit_chain` as hardcoded
+`"operational"`. Removing them meant reading the consumer — the public `/status` page — which
+decided operational-ness with a local `new Set(["operational","connected","healthy"])`. The
+health vocabulary had grown "set", "ok", "override", "default" and a bare sender domain, none
+of which that set knew, so the page had been showing a warning triangle next to a row reading
+"houndshield.com" and saying "Some services need attention" to every visitor, permanently.
+**Root cause:** producer and consumer each owned half of one decision, and only the producer
+was ever updated.
+**Rule:** when two modules must agree on what a value MEANS, the meaning is data the producer
+emits, not a rule the consumer re-derives. `/api/health` now returns `degraded: string[]` and
+the page renders it. Same shape as the shell-source guard fix: put the invariant where it can
+only be written once.
+
+### A missing legal page is usually the smaller half of the problem
+**What:** the brief was "we don't have a refund policy — create it". True: four surfaces
+advertised a 30-day money-back guarantee and no `/refund` page existed. But reading those four
+surfaces to write the policy found that `/terms` §4 described refunds for *monthly and annual
+subscriptions you may cancel at any time* — a product HoundShield does not sell — while saying
+nothing about the one-time report that is the only thing purchasable. The FAQ, inside JSON-LD
+that answer engines quote, advertised a 20% annual discount on plans that do not exist and
+contradicted CLAUDE.md's 17%.
+**Root cause:** the guarantee was copied outward from marketing to four places and never
+reconciled with what the checkout actually sells. Nothing owned the claim.
+**Rule:** before writing a missing document, read every surface that already references it. The
+absence is what someone noticed; the contradictions are what the absence was hiding. Then make
+one module own the claim and have the surfaces read it — the same fix `entity.ts` and
+`subprocessors.ts` already applied to the identical failure.
+
+### Never write a policy narrower than the promise already made in public
+**What:** it was tempting to write sensible-sounding carve-outs — no refund once the PDF is
+delivered, no refund if you ran the proxy.
+**Root cause:** those read as prudent and are actually a retroactive reduction of a commitment
+already advertised to every visitor, and every one of them describes normal use of a product
+whose entire deliverable is a PDF produced by running the proxy. A guarantee claimable only by
+someone who never used what they bought is a technicality, not a guarantee.
+**Rule:** when documenting an existing promise, the written policy may match or exceed it, never
+undercut it. `EXCLUSIONS` ships as an explicitly empty exported list rather than as silence, so
+adding one is a visible reviewed act, and the guard fails any exclusion that describes ordinary
+use.
+
+### A correct control with an empty disclosure is a consent defect, not a docs defect
+**What:** the cookie banner was already right — analytics gated, "Accept essential" offered,
+PostHog genuinely not initialised without opt-in. It linked to a privacy clause that named no
+cookie at all.
+**Root cause:** the mechanism was reviewed and the information the mechanism asks about was not.
+ePrivacy Art. 5(3) requires consent to be *informed*, so an unnamed set means the consent
+itself is the weak part — the thing collected, not the page describing it.
+**Rule:** when auditing a consent flow, ask what the user is consenting TO, not only whether
+the toggle works. And build the inventory from code with per-item evidence paths: a policy
+naming cookies the code does not set is a published inaccuracy about data handling, which on
+this product is the exact failure we sell against.
+
+### Model the difference between "required by law" and "we chose to publish it"
+**What:** the legal-index guard demanded a checkable statutory citation for every document and
+failed on the Acceptable Use Policy, which is a contract term. The tempting fix was to attach a
+plausible-sounding statute.
+**Root cause:** the registry had one field for two different things — legal obligation and
+editorial choice.
+**Rule:** when a guard fails on honest data, fix the model, not the data. `basis: statutory |
+contractual` made the check correct AND made the page more truthful, because a reader can now
+see which documents the law compels. Inventing a citation would have passed the test and made
+the page worse.
+
+### Two of my own guards were wrong before they were right
+**What:** the new CSP drift guard matched `script-src` with an unanchored pattern; both files
+discuss `script-src` in comments ABOVE the directive, so it captured English and diffed prose.
+Its explanatory JSDoc then contained `*/` inside a regex literal and terminated the comment,
+breaking the file's parse.
+**Root cause:** a guard that greps source is itself source, and gets no review from the thing
+it guards.
+**Rule:** probe-test every new guard in BOTH directions before believing it — break the thing
+and watch it go red. Both of these were caught that way within a minute. Anchor source-greps to
+syntax that only the real construct has (here, the opening quote of the string literal), never
+to a bare identifier that prose can contain.
+
+---
+
 ## 2026-08-07 (the premium pass — where a design failure actually lived)
 
 ### "Make it premium" was a responsive bug and four lies, not a visual-design problem

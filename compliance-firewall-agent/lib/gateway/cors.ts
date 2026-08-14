@@ -18,7 +18,15 @@ const BASE_HEADERS: Record<string, string> = {
 
 export function gatewayCorsHeaders(requestOrigin: string | null): Record<string, string> {
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "").trim();
-  const isDemo = !appUrl || appUrl === "http://localhost:3000";
+  // Audit findings #11b / #20d: demo mode reflected ANY origin and keyed that
+  // decision on NEXT_PUBLIC_APP_URL alone. A public deployment that lost the
+  // variable — an env var deleted, a preview built without it — silently became
+  // allow-all, which is the failure this reflection was never meant to cover.
+  // Requiring a non-production build as well means a missing variable can no
+  // longer open it; the worst case is now a preview with no CORS header, which
+  // fails closed in the browser.
+  const isDemo =
+    process.env.NODE_ENV !== "production" && (!appUrl || appUrl === "http://localhost:3000");
   const origin = requestOrigin ?? "";
 
   const headers: Record<string, string> = { ...BASE_HEADERS };

@@ -1,5 +1,7 @@
 import { NavV3 } from "@/components/layout/NavV3";
 import { controllerDisclosure } from "@/lib/legal/entity";
+import { REFUND_WINDOW_DAYS } from "@/lib/legal/refund-policy";
+import { RISK_REPORT, formatUSD } from "@/lib/pricing/plans";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -42,9 +44,24 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">4. Subscription and Billing</h2>
-            <p>Paid subscriptions are billed in advance on a monthly or annual basis through Stripe. You may cancel at any time, and cancellation takes effect at the end of your current billing period. Refunds are available within 30 days of initial purchase per our money-back guarantee.</p>
-            <p className="mt-2">We reserve the right to change pricing with 30 days notice. Existing subscribers will be grandfathered at their current rate for the remainder of their billing period.</p>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">4. Billing and Refunds</h2>
+            <p>
+              HoundShield sells the {RISK_REPORT.name} as a{" "}
+              <strong className="text-[var(--hs-ink-secondary)]">one-time purchase</strong> of{" "}
+              {formatUSD(RISK_REPORT.oneTimePrice)}, charged once through Stripe. There is no
+              subscription, no seat count and no minimum term, so there is nothing to cancel and
+              nothing that renews.
+            </p>
+            <p className="mt-2">
+              A full refund is available within {REFUND_WINDOW_DAYS} days of purchase, including
+              after the report has been delivered. The complete terms — how to claim one, how long
+              it takes, and what happens to your data — are on our{" "}
+              <Link href="/refund" className="text-brand-700 hover:text-brand-700">
+                Refund Policy
+              </Link>{" "}
+              page.
+            </p>
+            <p className="mt-2">We reserve the right to change pricing at any time. A price change never affects an order already placed.</p>
           </section>
 
           <section>
