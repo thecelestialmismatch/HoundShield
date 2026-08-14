@@ -1,8 +1,19 @@
 # Middleware does not execute in production
 
-**Status:** open — needs one Vercel dashboard change that only the founder can make.
+**Status:** **code half done and staged; still blocked on one Vercel dashboard
+change that only the founder can make.** The repo-root `vercel.json` deletion is
+committed on `claude/deploy-topology-middleware` and **must not be merged before**
+the Root Directory setting changes — see "The fix" below for why the order is not
+optional.
 **Found:** 2026-07-29. **Severity:** medium on its own; it silently removed a layer
 that other work assumed was present.
+
+> **Since this was written (2026-08-14):** no security control depends on
+> middleware executing any more. The last one that did — the request-rate ceiling
+> on `/api/scan` — was moved into the route and now counts in shared Postgres, and
+> the CSP directives were moved into `next.config.js` in #283. So this issue is now
+> a correctness and cron problem, not a security exposure, and it can wait for a
+> deploy the founder can watch.
 
 ---
 
@@ -97,17 +108,49 @@ See `lib/rate-limit-shared.ts` and `supabase/migrations/028_rate_limit_buckets.s
 **Fixing middleware execution would not have fixed the spend exposure.** These are
 two separate bugs that looked like one.
 
-## The fix — founder action
+## The fix — founder action, in this order
 
-Two changes, both in the Vercel dashboard, then one commit.
+**Step 2 is already written and committed** (branch
+`claude/deploy-topology-middleware`, held as a draft PR). Step 1 is yours, and it
+has to land first.
 
 1. **Project → Settings → Build & Deployment → Root Directory:** change `.` to
    `compliance-firewall-agent`.
-2. **Delete the repo-root `vercel.json`.** Once Root Directory points at the app,
-   the `builds`/`routes` indirection is what the setting now does natively.
+   Confirmed still unset as of 2026-08-14: the Vercel bot's own PR comment on
+   #287 reports `"rootDirectory":null`.
+   The moment this changes, Vercel stops reading the repo-root `vercel.json`
+   entirely and builds the app directory zero-config — so **this single setting
+   is the actual fix**, and the deletion below is what stops it regressing.
+2. **Merge the PR that deletes the repo-root `vercel.json`.**
    `compliance-firewall-agent/vercel.json` (the `crons` block) becomes the config
    Vercel reads — which is also what finally registers the email drip.
+   `scripts/verify-structure.mjs` now fails if that file ever reappears, because a
+   structure guard that only checks for presence cannot protect a deletion, and
+   this is exactly the file someone re-adds in good faith.
 3. Redeploy.
+
+### The loop this PR had to defuse first
+
+`docs/SECURITY-PHASE-2-AUDIT.md` warned that restoring framework routing could
+produce an infinite redirect loop. Measured against production on 2026-08-14,
+it was real and armed:
+
+```
+GET https://houndshield.com/api/health   ->  308  ->  https://www.houndshield.com/...
+```
+
+Vercel's domain configuration canonicalises **apex -> www**. `next.config.js`
+carried a permanent redirect pointing **www -> apex**. Both live at once is
+apex -> www -> apex, forever, on every URL of the site. It had never fired only
+because the legacy repo-root `vercel.json` stops next.config redirects reaching
+the edge — the exact condition step 2 removes. The rule is deleted, and
+`app/__tests__/canonical-host.test.ts` fails if it ever returns.
+
+**Do not reverse steps 1 and 2.** With Root Directory still `.`, the repo-root
+`vercel.json` is the only thing telling Vercel where the app lives; deleting it
+first makes Vercel zero-config-build the repository root, whose `package.json`
+has no `next` dependency and no build script. That is a production outage, not a
+failed build you notice in a preview.
 
 ### Verify after deploying
 
