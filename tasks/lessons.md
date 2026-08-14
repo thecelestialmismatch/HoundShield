@@ -97,6 +97,31 @@ contractual` made the check correct AND made the page more truthful, because a r
 see which documents the law compels. Inventing a citation would have passed the test and made
 the page worse.
 
+### The same constant, copied twenty-nine times, is wrong twenty-nine times
+**What:** every canonical tag, Open Graph URL, `sitemap.xml` entry, `robots.txt` and onboarding
+email link was built from `process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com"`,
+declared separately in 29 files. `NEXT_PUBLIC_APP_URL` is unset in production, and the apex
+308s to www — so every one of them named an address that refuses to serve it. The Stripe
+checkout success/cancel URL was in that set, on the most revenue-critical redirect in the app.
+**Root cause:** the value had no owner. `lib/gateway/base-url.ts` already exists because the
+identical failure hit the gateway host — eight copies across two dead subdomains, so fixing one
+looked complete and was not. Nobody generalised the lesson to the marketing surface.
+**Rule:** a fallback URL is configuration, and configuration gets exactly one home. When you
+find the same literal in more than two files, the duplication IS the bug — fixing the instances
+you noticed leaves the rest wrong and looks finished. Also: a codemod on `??` misses `||`; the
+guard found the straggler the script did not.
+
+### A guard aimed at the symptom flags the innocent
+**What:** the single-source guard first matched any `process.env.NEXT_PUBLIC_APP_URL ??` and
+flagged six correct files — two that fall back to the REQUEST ORIGIN so a confirm link matches
+the host the user is on, two that fall back to localhost for dev, one that must read the raw
+value to decide CORS demo mode, and one whose entire job is diagnosing that value.
+**Root cause:** the guard targeted "reads the env var" when the defect was "falls back to the
+production host".
+**Rule:** write the assertion against the DEFECT, not the neighbourhood it lives in. If a guard
+would force correct code to change, it is measuring the wrong thing — and the fix is to narrow
+the guard, never to bend the six files to satisfy it.
+
 ### A misspelled probe turns a truth-teller into a wolf-crier
 **What:** `/api/health` shipped and immediately reported `rate_limit_store: degraded_local` in
 production. Shared rate limiting was working perfectly. The probe selected `key` from

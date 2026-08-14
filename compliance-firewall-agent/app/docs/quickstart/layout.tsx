@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+import { SITE_URL } from "@/lib/site-url";
 
+const BASE_URL = SITE_URL;
 // The parent app/docs/layout.tsx canonicalises to /docs; this override gives
 // the quickstart page its own title, description, and self-referencing
 // canonical so it indexes as a distinct page.

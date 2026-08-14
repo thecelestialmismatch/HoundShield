@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site-url";
+
 /**
  * HoundShield — Microsoft Teams Integration
  *
@@ -65,7 +67,7 @@ export async function postTeamsAlert(payload: TeamsCompliancePayload): Promise<v
 
   if (!webhookUrl) return; // Teams not configured
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const appUrl = SITE_URL;
   const reviewUrl =
     payload.reviewUrl ??
     `${appUrl}/command-center/events?id=${payload.eventId}`;

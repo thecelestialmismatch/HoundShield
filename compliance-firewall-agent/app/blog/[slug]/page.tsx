@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllPosts, getPostBySlug } from "@/lib/blog/posts";
 
+import { SITE_URL } from "@/lib/site-url";
+
 // ── Static params (build all posts at compile time) ───────────────────────────
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -18,7 +20,7 @@ export async function generateMetadata({
   const post = getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const baseUrl = SITE_URL;
   const url = `${baseUrl}/blog/${post.slug}`;
 
   return {
@@ -49,7 +51,7 @@ export async function generateMetadata({
 // ── JSON-LD Article schema ─────────────────────────────────────────────────────
 function ArticleJsonLd({ post }: { post: ReturnType<typeof getPostBySlug> }) {
   if (!post) return null;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const baseUrl = SITE_URL;
   const schema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -84,7 +86,7 @@ function ArticleJsonLd({ post }: { post: ReturnType<typeof getPostBySlug> }) {
 // ── BreadcrumbList JSON-LD ────────────────────────────────────────────────────
 function BreadcrumbJsonLd({ post }: { post: ReturnType<typeof getPostBySlug> }) {
   if (!post) return null;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const baseUrl = SITE_URL;
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

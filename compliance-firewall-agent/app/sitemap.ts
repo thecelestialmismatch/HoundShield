@@ -5,9 +5,10 @@ import { ANSWER_SLUGS } from "./answers/_answers";
 import { COMPARISON_SLUGS } from "@/lib/comparisons/competitors";
 import { CONTROL_SLUGS } from "./controls/_meta";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+import { SITE_URL } from "@/lib/site-url";
 
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = SITE_URL;
   // Static public pages — private routes (/command-center, /login, /signup, /auth) excluded
   const staticPages: MetadataRoute.Sitemap = [
     {
