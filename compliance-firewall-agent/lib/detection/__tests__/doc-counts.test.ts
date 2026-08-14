@@ -60,6 +60,13 @@ const GUARDED_DOCS = [
   'CLAUDE.md',
   '.claude/rules/stack.md',
   '.claude/rules/api.md',
+  // Added 2026-08-14. Both had drifted and neither was scanned:
+  //   database.md  "migrations 001-004 applied"  (really 001-027 + 028/031/032)
+  //   frontend.md  "Dark mode always ... never bg-white" for a landing page that
+  //                has been LIGHT for months — app/layout.tsx has no `dark`
+  //                class. An agent obeying it would repaint the live site.
+  '.claude/rules/database.md',
+  '.claude/rules/frontend.md',
   'proxy/README.md',
   'proxy/PATTERNS.md',
 ] as const
@@ -145,6 +152,71 @@ describe('docs state no stale migration count', () => {
       violations,
       `migration count is ${MIGRATION_COUNT}:\n${violations.join('\n')}`,
     ).toEqual([])
+  })
+})
+
+describe('docs never claim every migration is applied', () => {
+  it('no doc says a migration range is "all applied to prod"', () => {
+    /*
+     * .claude/rules/stack.md said "001-030, all applied to prod". Two things
+     * were wrong and only one of them is a number: 029 and 030 have never been
+     * applied, and unlike a stale count that claim tells a reader a TABLE
+     * EXISTS when it does not — which is how you get code written against a
+     * missing table.
+     *
+     * The sibling check above already catches a stale full-set claim
+     * ("through 011"), so this deliberately does NOT re-check the range: an
+     * earlier draft did, and flagged "Applied to production: 001-027, plus 028,
+     * 031, 032" — legitimately partial and correct as written. Two overlapping
+     * checks where one of them false-positives is worse than one that
+     * discriminates; pushing the docs to round 027 up would have made them lie.
+     */
+    const violations = trackedDocs().flatMap((rel) =>
+      readFileSync(join(REPO, rel), 'utf8')
+        .split('\n')
+        .filter((line) => /migration/i.test(line) && /all applied to prod/i.test(line))
+        .map((line) => `${rel}: "${line.trim()}" — name the unapplied ones`),
+    )
+
+    expect(violations, violations.join('\n')).toEqual([])
+  })
+})
+
+describe('the frontend rulebook matches the theme that ships', () => {
+  it('does not order dark mode for a landing page that renders light', () => {
+    /*
+     * frontend.md said "Homepage bg: bg-[#07070b] — never bg-white" and "Dark
+     * mode always: <html className='dark scroll-smooth'>". app/layout.tsx has
+     * carried no `dark` class for months. These files are instructions, so the
+     * drift was not cosmetic: the next agent to read it would have repainted
+     * the live marketing site.
+     *
+     * Asserted against the LAYOUT rather than against a copy of the rule, so
+     * the day the app genuinely goes dark this flips on its own instead of
+     * pinning a stale answer.
+     */
+    const layout = readFileSync(join(APP, 'app', 'layout.tsx'), 'utf8')
+    const htmlTag = layout.match(/<html[\s\S]*?>/)?.[0] ?? ''
+    const shipsDark = /className=[^>]*\bdark\b/.test(htmlTag)
+
+    // Blockquote lines are the correction note, which QUOTES the old rule in
+    // order to retire it. Reading them would make the note look like the
+    // directive — the same trap that made the CSP guard diff comment prose and
+    // the accessibility guard read a disclaimer as a claim. Judge what the file
+    // INSTRUCTS, which is everything outside the quote.
+    const rules = readFileSync(join(REPO, '.claude', 'rules', 'frontend.md'), 'utf8')
+    const directives = rules
+      .split('\n')
+      .filter((line) => !line.trimStart().startsWith('>'))
+      .join('\n')
+    const ordersDarkAlways = /Dark mode always/i.test(directives)
+
+    expect(
+      ordersDarkAlways,
+      shipsDark
+        ? 'app ships dark but frontend.md no longer says so'
+        : 'frontend.md orders "Dark mode always" while app/layout.tsx has no dark class',
+    ).toBe(shipsDark)
   })
 })
 

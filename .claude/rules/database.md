@@ -16,7 +16,12 @@ paths:
 - File pattern: `supabase/migrations/00X_description.sql`
 - Never edit existing migrations — always create new ones
 - Test locally before pushing: `npx supabase db push`
-- Current production state: migrations 001–004 applied
+- Migration files in repo: `compliance-firewall-agent/supabase/migrations/` (001–033)
+- Applied to production: 001–027, plus 028 (rate-limit buckets), 031 (auth lockouts)
+  and 032 (auth audit trail), applied 2026-08-12
+- NOT applied: 029 + 030 (seed-anchor chain) and 033 (Better Auth restrictive deny)
+- `/api/health` reports `rate_limit_store` / `auth_lockout_store` as degraded when a
+  migration is missing, so check there before assuming a table exists
 
 ## Query Patterns
 - Parameterized queries only — no string concatenation

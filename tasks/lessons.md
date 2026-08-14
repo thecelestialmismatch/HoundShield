@@ -97,6 +97,34 @@ contractual` made the check correct AND made the page more truthful, because a r
 see which documents the law compels. Inventing a citation would have passed the test and made
 the page worse.
 
+### The rulebook is code that executes on the next agent
+**What:** `.claude/rules/frontend.md` ordered "Homepage bg: `bg-[#07070b]` — never `bg-white`"
+and "Dark mode always: `<html className="dark scroll-smooth">`". `app/layout.tsx` has carried no
+`dark` class for months; the landing page is light. `database.md` said "migrations 001–004
+applied" against 001–027 + 028/031/032. `stack.md` said "Next.js 15" against Next 16 and
+"001-030, all applied to prod" when 029 and 030 have never been applied.
+**Root cause:** the docs drift guard existed and covered `stack.md` and `api.md`, but its checks
+only matched pattern counts and the phrase "through N". "001-030, all applied to prod" and
+"Dark mode always" matched neither, so a guard written for exactly this class reported green
+while the rulebook rotted. `DESIGN.md` had the identical theme drift and was fixed on
+2026-08-07; nobody checked its sibling.
+**Rule:** these files are instructions, not descriptions — a wrong one is executed, not merely
+read. "All applied to prod" is the worst shape of all, because unlike a stale number it tells
+the next session a table exists when it does not. Assert the rule against the ARTEFACT
+(`layout.tsx`), never against a copy of the rule, so the check flips by itself the day the truth
+changes.
+
+### Two overlapping checks, one of which false-positives, is worse than one that discriminates
+**What:** the new migration-range check flagged "Applied to production: 001–027, plus 028, 031,
+032" — legitimately partial and correct as written. Widening the window, then narrowing it to a
+line, then requiring an "in repo" phrase all failed, because a markdown table cell holds a
+correct full-set claim and a correct partial one on the same line.
+**Root cause:** the existing "through N" check already covered stale full-set claims. The new
+range check was overlap, and its only unique catch was the "all applied to prod" clause.
+**Rule:** when a new guard fights the data, check whether an existing guard already covers the
+honest half. Delete the overlap and keep the clause that discriminates. A check that pressures
+docs toward a rounder, falser number is worse than no check.
+
 ### Two of my own guards were wrong before they were right
 **What:** the new CSP drift guard matched `script-src` with an unanchored pattern; both files
 discuss `script-src` in comments ABOVE the directive, so it captured English and diffed prose.
