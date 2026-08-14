@@ -7,7 +7,7 @@ import { LEGAL_ENTITY } from "@/lib/legal/entity";
 import { A11Y_GATE_MIN_SCORE, A11Y_MEASURED_RANGE } from "@/lib/legal/accessibility";
 
 export const metadata: Metadata = {
-  title: "Accessibility Statement | HoundShield",
+  title: "Accessibility Statement",
   description:
     "HoundShield's accessibility posture: what we measure, what those measurements do and do not prove, known limitations, and how to report a barrier.",
   alternates: { canonical: "/accessibility" },

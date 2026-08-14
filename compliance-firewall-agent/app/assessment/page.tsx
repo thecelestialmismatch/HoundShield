@@ -9,7 +9,7 @@ import { reportFaqs } from "@/lib/seo/faqs";
 import { Check, ShieldCheck, FileText, Server, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "CMMC AI Risk Assessment Report — $499 | HoundShield",
+  title: "CMMC AI Risk Assessment Report — $499",
   description:
     "A $499 one-time CMMC AI Risk Assessment Report. We scan your AI usage locally, map findings to NIST 800-171, and deliver a tamper-evident PDF your assessor accepts. Data never leaves your network.",
   alternates: { canonical: "https://houndshield.com/assessment" },

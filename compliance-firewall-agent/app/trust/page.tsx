@@ -7,7 +7,7 @@ import { ModeBNotice } from "@/components/ModeBNotice";
 import { ShieldCheck, FileCheck2, Server, Clock3, ExternalLink } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Trust Center | HoundShield",
+  title: "Trust Center",
   description:
     "HoundShield's Trust Center: compliance posture, framework alignment (CMMC L2, NIST 800-171, HIPAA), SOC 2 roadmap, subprocessors, and data handling. Honest about what's certified vs in progress.",
   alternates: { canonical: "https://houndshield.com/trust" },

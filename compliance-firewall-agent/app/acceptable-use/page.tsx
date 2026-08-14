@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
 
 export const metadata: Metadata = {
-  title: "Acceptable Use Policy | HoundShield",
+  title: "Acceptable Use Policy",
   description:
     "The rules governing acceptable use of the HoundShield AI compliance firewall and related services.",
   alternates: { canonical: "https://houndshield.com/acceptable-use" },
