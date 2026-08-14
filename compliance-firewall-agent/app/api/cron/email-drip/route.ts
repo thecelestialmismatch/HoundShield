@@ -4,6 +4,12 @@ import { createServiceClient } from '@/lib/supabase/client';
 import { day3Email } from '@/lib/email/templates/day3';
 import { day7Email } from '@/lib/email/templates/day7';
 import { day14Email } from '@/lib/email/templates/day14';
+import {
+  canSendMarketing,
+  marketingBlockReason,
+  marketingFooter,
+  marketingHeaders,
+} from '@/lib/legal/marketing-email';
 
 function getResend(): Resend | null {
   const key = process.env.RESEND_API_KEY;
@@ -33,6 +39,17 @@ export async function GET(request: NextRequest) {
   if (!resend) {
     console.warn('[email-drip] RESEND_API_KEY not set — skipping run');
     return NextResponse.json({ skipped: true, reason: 'Resend not configured' });
+  }
+
+  // CAN-SPAM gate, before any recipient is selected. Fails CLOSED: with no
+  // postal address configured there is no lawful marketing message to send, so
+  // the run is a no-op rather than a batch of violations. 15 U.S.C. 7704(a)(5)
+  // is assessed per message, which is why this is checked before the loop and
+  // again per recipient below.
+  const blocked = marketingBlockReason();
+  if (blocked) {
+    console.warn('[email-drip] marketing sending disabled —', blocked);
+    return NextResponse.json({ skipped: true, reason: blocked });
   }
 
   const supabase = createServiceClient();
@@ -81,7 +98,7 @@ async function processDayN(
   const userIds = rows.map((r) => r.user_id);
   const { data: profiles, error: profileErr } = await supabase
     .from('profiles')
-    .select('id, email, full_name, tier')
+    .select('id, email, full_name, tier, marketing_opt_out_at')
     .in('id', userIds);
 
   if (profileErr) {
@@ -101,6 +118,23 @@ async function processDayN(
       continue;
     }
 
+    // Honour the opt-out. 15 U.S.C. 7704(a)(4) gives 10 business days; filtering
+    // at send time means the answer is always "immediately".
+    if (profile.marketing_opt_out_at) {
+      skipped++;
+      continue;
+    }
+
+    // Per-recipient, because the footer needs a signable unsubscribe token for
+    // THIS user — a run-level check cannot prove that.
+    const footer = marketingFooter(row.user_id);
+    const headers = marketingHeaders(row.user_id);
+    if (!canSendMarketing(row.user_id) || !footer || !headers) {
+      console.warn(`[email-drip] day${day} skipped user=${row.user_id}: no compliant unsubscribe`);
+      skipped++;
+      continue;
+    }
+
     const orgName: string = profile.full_name ?? 'your team';
     const tier: string = profile.tier ?? 'free';
 
@@ -114,7 +148,10 @@ async function processDayN(
       from: emailConfig.from,
       to: profile.email,
       subject: emailConfig.subject,
-      html: emailConfig.html,
+      // Footer appended here rather than inside each template: one legal notice,
+      // not three copies that drift.
+      html: emailConfig.html + footer,
+      headers,
     });
 
     if (sendErr) {

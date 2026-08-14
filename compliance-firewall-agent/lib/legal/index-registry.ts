@@ -21,6 +21,16 @@
  * the kind of decorative compliance this page exists to avoid.
  */
 
+/**
+ * MARKET SCOPE. HoundShield sells in the United States only (founder decision,
+ * 2026-08-14). The citations below therefore lead with the US instruments that
+ * actually apply and mark the EU ones "where it applies" — the DPA and SCC
+ * machinery stays because customers ask for it in diligence, but the site must
+ * not imply an EU establishment, an Art. 27 representative, or a transfer
+ * posture the company is not operating. If an EU customer is ever taken on,
+ * GDPR Art. 27 requires appointing an EU representative before that sale.
+ */
+
 /** Whether the law compels this document, or we publish it by choice. */
 export type LegalBasis = "statutory" | "contractual";
 
@@ -43,9 +53,11 @@ export const LEGAL_DOCUMENTS: readonly LegalDocument[] = [
     summary:
       "What personal data we handle, why, on what legal basis, and how to exercise your rights over it.",
     required: [
-      "GDPR Art. 13–14 (information to data subjects)",
       "CCPA/CPRA notice at collection",
       "CalOPPA",
+      "State privacy laws (VA, CO, CT, UT, TX)",
+      "COPPA (children)",
+      "GDPR Art. 13–14, where it applies",
     ],
   },
   {
@@ -55,16 +67,23 @@ export const LEGAL_DOCUMENTS: readonly LegalDocument[] = [
     summary:
       "Every cookie and browser-storage item we set, its purpose and lifetime. Analytics stays off until you opt in.",
     required: [
-      "ePrivacy Directive Art. 5(3) (consent for non-essential storage)",
-      "GDPR Art. 13",
+      "CCPA/CPRA (no sale or sharing)",
+      "ePrivacy Directive Art. 5(3), where it applies",
     ],
   },
   {
     href: "/terms",
-    basis: "statutory",
+    // Contractual, not statutory. It was cited to the EU e-Commerce Directive
+    // Art. 5, which is the service-provider-information rule for vendors
+    // offering services in the EU. US-only, that hook does not apply, and a
+    // terms-of-service is what it always was: a contract we choose to publish.
+    // Reclassified rather than given an invented statute — the guard caught the
+    // difference, which is what it is for.
+    basis: "contractual",
     title: "Terms of Service",
-    summary: "The contract governing use of HoundShield, including billing and liability.",
-    required: ["Contract formation", "EU Directive 2000/31/EC Art. 5 (service-provider information)"],
+    summary:
+      "The contract governing use of HoundShield — billing, liability, and the Delaware governing law and venue.",
+    required: ["Contract formation", "Governing law and venue (Delaware, USA)"],
   },
   {
     href: "/refund",
@@ -74,8 +93,7 @@ export const LEGAL_DOCUMENTS: readonly LegalDocument[] = [
       "The terms behind the 30-day money-back guarantee — how to claim one and how long it takes.",
     required: [
       "Stripe merchant requirements",
-      "FTC guidance on advertised guarantees",
-      "EU Consumer Rights Directive 2011/83/EU (withdrawal), where it applies",
+      "FTC Act §5 — guidance on advertised guarantees",
     ],
   },
   {
@@ -83,8 +101,8 @@ export const LEGAL_DOCUMENTS: readonly LegalDocument[] = [
     basis: "statutory",
     title: "Data Processing Agreement",
     summary:
-      "The processor terms we offer controllers, including international transfer mechanisms.",
-    required: ["GDPR Art. 28(3)", "UK GDPR", "Standard Contractual Clauses"],
+      "The processor terms we offer any customer who needs one. HoundShield sells in the United States today; the transfer machinery is here for customers who ask, not a posture we currently operate.",
+    required: ["GDPR Art. 28(3), where it applies", "Standard Contractual Clauses, on request"],
   },
   {
     href: "/subprocessors",
@@ -92,7 +110,7 @@ export const LEGAL_DOCUMENTS: readonly LegalDocument[] = [
     title: "Sub-processors",
     summary:
       "The complete list of third parties that process data on our behalf, what each receives, and where.",
-    required: ["GDPR Art. 28(2) (disclosure of sub-processors)"],
+    required: ["Buyer diligence", "GDPR Art. 28(2), where it applies"],
   },
   {
     href: "/acceptable-use",

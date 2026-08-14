@@ -3,6 +3,7 @@ import { isLlmConfigured } from "@/lib/agent/provider";
 import { stripeKeyDiagnostic, stripeWebhookDiagnostic } from "@/lib/stripe/env";
 import { passwordResetDiagnostic } from "@/lib/auth/reset-diagnostics";
 import { founderInboxDiagnostic } from "@/lib/email/identity";
+import { marketingBlockReason } from "@/lib/legal/marketing-email";
 
 /**
  * What /api/health reports, and which of it means a control is actually doing
@@ -75,11 +76,14 @@ const RATE_LIMIT_TABLE = "rate_limit_buckets";
 const RATE_LIMIT_COLUMN = "bucket_key";
 const LOCKOUT_TABLE = "auth_lockouts";
 const LOCKOUT_COLUMN = "email_hash";
+const OPT_OUT_TABLE = "profiles";
+const OPT_OUT_COLUMN = "marketing_opt_out_at";
 
 /** Exposed so the guard can pin these against the migration DDL. */
 export const PROBED_TABLES = {
   [RATE_LIMIT_TABLE]: RATE_LIMIT_COLUMN,
   [LOCKOUT_TABLE]: LOCKOUT_COLUMN,
+  [OPT_OUT_TABLE]: OPT_OUT_COLUMN,
 } as const;
 
 /**
@@ -128,6 +132,35 @@ async function authLockoutStore(): Promise<string> {
     // lockout.ts returns DEGRADED and lets the attempt through. Credential
     // stuffing is unbounded in this state.
     return "degraded_open";
+  }
+}
+
+/**
+ * Can an unsubscribe be RECORDED?
+ *
+ * Migration 034 adds `profiles.marketing_opt_out_at`, and it is not applied to
+ * production yet. That creates an ordering trap with a silent failure mode: the
+ * moment MARKETING_POSTAL_ADDRESS is set, the CAN-SPAM gate opens and the drip
+ * starts selecting a column that does not exist. PostgREST errors, processDayN
+ * throws, `Promise.allSettled` records it, and the run reports nothing sent —
+ * a drip that looks configured and is silently dark.
+ *
+ * It fails in the safe direction (no unlawful mail), but silence is exactly
+ * what this module exists to stop, and the fix is one migration. Probed
+ * separately from the env check because the two failures have different
+ * remedies and an operator should not have to guess which one they have.
+ */
+async function marketingOptOutStore(): Promise<string> {
+  if (!isSupabaseConfigured()) return "not_configured";
+  try {
+    const { error } = await createServiceClient()
+      .from(OPT_OUT_TABLE)
+      .select(OPT_OUT_COLUMN, { count: "exact", head: true })
+      .limit(1);
+    if (error) throw new Error(error.message);
+    return "enforcing";
+  } catch {
+    return "missing_migration";
   }
 }
 
@@ -213,9 +246,15 @@ export async function buildHealthReport(): Promise<HealthReport> {
   const reset = passwordResetDiagnostic();
   const founderMail = founderInboxDiagnostic();
 
-  // Both probes hit the same database; run them together rather than serially.
-  const [rateLimit, lockout] = await Promise.all([rateLimitStore(), authLockoutStore()]);
+  // All three probes hit the same database; run them together rather than
+  // serially — this endpoint is polled by uptime monitors.
+  const [rateLimit, lockout, optOut] = await Promise.all([
+    rateLimitStore(),
+    authLockoutStore(),
+    marketingOptOutStore(),
+  ]);
   const captchaState = captcha();
+  const marketingBlocked = marketingBlockReason();
   const encryptionState = quarantineEncryption();
 
   const services: Services = {
@@ -264,6 +303,23 @@ export async function buildHealthReport(): Promise<HealthReport> {
       ? {
           captcha_hint:
             "TURNSTILE_SECRET_KEY is not set. verifyCaptcha() returns true for every token, so the CAPTCHA escalation step after repeated failures is a no-op.",
+        }
+      : {}),
+    // Onboarding email. NOT a control failing open — it fails CLOSED by design
+    // (CAN-SPAM 15 U.S.C. 7704). Reported because the operator otherwise has no
+    // way to learn the drip is silently sending nothing, and the fix is one
+    // environment variable.
+    marketing_email: marketingBlocked === null ? "enabled" : "disabled",
+    ...(marketingBlocked ? { marketing_email_hint: marketingBlocked } : {}),
+    // The other half of the same control: an opt-out that cannot be STORED
+    // cannot be honoured within the 10 business days 7704(a)(4) allows.
+    marketing_opt_out_store: optOut,
+    ...(optOut !== "enforcing"
+      ? {
+          marketing_opt_out_store_hint:
+            optOut === "not_configured"
+              ? "No database is configured, so an unsubscribe cannot be recorded."
+              : `The ${OPT_OUT_TABLE}.${OPT_OUT_COLUMN} column is unreachable, so unsubscribe requests cannot be recorded and the onboarding drip will fail on every run once it is enabled. Apply supabase/migrations/034_marketing_opt_out.sql BEFORE setting MARKETING_POSTAL_ADDRESS.`,
         }
       : {}),
     quarantine_encryption: encryptionState,

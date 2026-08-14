@@ -81,6 +81,12 @@ export function controllerDisclosure(): string {
  * Surfaced as data rather than prose so `__tests__/legal-contract.test.ts` can
  * assert the list is honest, and so nothing here can be quietly forgotten.
  *
+ * `blocking: false` means DONE or genuinely optional — never "deprioritised".
+ * Closed items stay in the list with the evidence that closed them, because a
+ * launch-blocker list that only ever grows is one nobody reads, and one that
+ * still flags finished work is the same defect as a health check that cries
+ * wolf: the next reader stops believing any of it.
+ *
  * On the first item: incorporation is not paperwork hygiene. Selling compliance
  * software to DoD subcontractors and healthcare providers as an unincorporated
  * individual means personal, unlimited liability — the DPA is enforceable
