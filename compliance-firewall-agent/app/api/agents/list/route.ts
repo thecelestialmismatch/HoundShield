@@ -16,6 +16,14 @@ import { classifyTask } from '@/lib/agent/agent-router';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+/**
+ * Audit finding #5 (residual): `task` was checked for type and emptiness but had
+ * no maximum length, so a single request could hand `classifyTask` — and the
+ * echoed `suggestedPrompt` it builds — an arbitrarily large string. Generous for
+ * a real task description, bounded for a loop.
+ */
+const MAX_TASK_CHARS = 8_000;
+
 // ---------------------------------------------------------------------------
 // GET — list all agents
 // ---------------------------------------------------------------------------
@@ -43,6 +51,13 @@ export async function POST(req: NextRequest) {
 
   if (!task || typeof task !== 'string' || task.trim().length === 0) {
     return Response.json({ error: 'task is required' }, { status: 400 });
+  }
+
+  if (task.length > MAX_TASK_CHARS) {
+    return Response.json(
+      { error: `task exceeds ${MAX_TASK_CHARS} characters` },
+      { status: 413 },
+    );
   }
 
   const routing = classifyTask(task.trim(), agent_id);

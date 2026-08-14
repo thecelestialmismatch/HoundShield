@@ -118,8 +118,13 @@ export async function POST(req: NextRequest) {
   });
 
   if (error) {
+    // Audit finding #13: this returned `error.message` — a raw upstream (Resend)
+    // string — straight to the client. The detail belongs in the server log; the
+    // caller gets a fixed string. Every other route in the app already does this
+    // (login/route.ts:99-104, signup/route.ts:141-147); this was the one place
+    // the pattern was broken.
     console.error("[email/welcome] Resend error:", error);
-    return NextResponse.json({ sent: false, error: error.message });
+    return NextResponse.json({ sent: false, error: "Unable to send the welcome email." });
   }
 
   // Enroll in drip sequence — upsert so repeated calls are safe.
