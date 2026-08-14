@@ -113,6 +113,13 @@ export function FooterV3({ dark = false }: FooterV3Props) {
               <Link href="/terms" className="text-xs text-slate-600 hover:text-slate-400 transition-colors font-[var(--font-body)]">
                 Terms
               </Link>
+              {/* A "30-day money-back guarantee" is advertised on /pricing, in the
+                  FAQ schema and in the order-confirmation email. A buyer who wants
+                  to read the terms before a $499 PO must be able to find them
+                  without knowing the URL. */}
+              <Link href="/refund" className="text-xs text-slate-600 hover:text-slate-400 transition-colors font-[var(--font-body)]">
+                Refunds
+              </Link>
             </div>
           </div>
         </div>
@@ -162,7 +169,8 @@ export function FooterV3({ dark = false }: FooterV3Props) {
             <span>
               © {new Date().getFullYear()} HoundShield. All rights reserved. ·{' '}
               <Link href="/privacy" style={{ cursor: 'pointer' }}>Privacy</Link> ·{' '}
-              <Link href="/terms" style={{ cursor: 'pointer' }}>Terms</Link>
+              <Link href="/terms" style={{ cursor: 'pointer' }}>Terms</Link> ·{' '}
+              <Link href="/refund" style={{ cursor: 'pointer' }}>Refunds</Link>
             </span>
             <span className="mono">houndshield.com · local-only · zero data exfiltration</span>
           </div>

@@ -107,6 +107,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
     {
+      // Higher priority than the other legal pages on purpose: this one answers
+      // a pre-purchase objection, so it is worth indexing and worth citing.
+      url: `${baseUrl}/refund`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
       url: `${baseUrl}/how-it-works`,
       lastModified: new Date(),
       changeFrequency: "weekly",
