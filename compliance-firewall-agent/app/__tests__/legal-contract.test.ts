@@ -12,7 +12,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import {
   LEGAL_ENTITY,
@@ -57,6 +57,88 @@ describe("no unfilled placeholder ships", () => {
     expect("operated by [COMPANY LEGAL NAME] of".match(PLACEHOLDER)).toEqual([
       "[COMPANY LEGAL NAME]",
     ]);
+  });
+});
+
+describe("the disclosure renders as a sentence, not as fragments glued together", () => {
+  /*
+   * THE BUG THIS EXISTS FOR, found in production on 2026-08-14.
+   *
+   * `/terms` §12 wrapped the disclosure in its own prose and an empty element:
+   *
+   *   HoundShield is operated by <strong>{controllerDisclosure()}</strong>,{" "}
+   *   <strong></strong>.
+   *
+   * controllerDisclosure() already returns a COMPLETE sentence, so the page
+   * served:
+   *
+   *   "HoundShield is operated by HoundShield is operated by an independent
+   *    sole proprietor. … regardless of entity status., ."
+   *
+   * The duplicated clause and the dangling ", ." were on the section of a
+   * contract that identifies the counterparty, in a document sold to DoD
+   * subcontractors. Every existing guard passed: there was no placeholder, the
+   * entity function was honest, and the page rendered 200.
+   *
+   * The empty element is the generic tell — a half-finished JSX slot where a
+   * value was meant to go — so that is what is asserted, alongside the specific
+   * double-prefix.
+   */
+  const EMPTY_INLINE = /<(strong|em|b|span|p)\b[^>]*>\s*<\/\1>/g;
+
+  /**
+   * Match the RENDERED page, not the commentary about it.
+   *
+   * Written after this guard went red on the very comment explaining the bug it
+   * guards against — a comment that necessarily quotes the bad output. It is the
+   * sixth guard in this codebase to read its own explanatory prose (see the CSP
+   * drift check and the accessibility overclaim check, which both learned it the
+   * same way). A guard that cannot tell code from a comment about code will
+   * eventually be deleted by whoever is trying to ship.
+   *
+   * `//` is stripped only when it is not part of a scheme, so `https://…` in a
+   * legal page survives.
+   */
+  function withoutComments(src: string): string {
+    return src
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/(^|[^:])\/\/.*$/gm, "$1");
+  }
+
+  it.each(LEGAL_PAGES)("/%s has no empty inline element left over", (route) => {
+    const src = pageSource(route);
+    expect(src, `${route}/page.tsx should exist`).not.toBe("");
+    expect(withoutComments(src).match(EMPTY_INLINE) ?? []).toEqual([]);
+  });
+
+  it("catches an empty element if one is reintroduced", () => {
+    // Fails in both directions so the regex cannot rot into matching nothing.
+    expect('<strong className="x"></strong>'.match(EMPTY_INLINE)).toEqual([
+      '<strong className="x"></strong>',
+    ]);
+  });
+
+  it.each(LEGAL_PAGES)("/%s does not re-introduce the disclosure it renders", (route) => {
+    const src = withoutComments(pageSource(route));
+    if (!src.includes("controllerDisclosure()")) return;
+    // controllerDisclosure() opens with "<trading name> is operated by …" while
+    // unincorporated. A page that writes that lead-in itself says it twice.
+    expect(
+      src,
+      `${route}/page.tsx prefixes controllerDisclosure() with prose it already contains`,
+    ).not.toMatch(new RegExp(`${LEGAL_ENTITY.tradingName} is operated by`));
+  });
+
+  it("catches a double-prefixed disclosure if one is reintroduced", () => {
+    // Both directions, and specifically NOT satisfied by the comment form —
+    // otherwise stripping comments could silently neuter the check above.
+    const bad = `<p>${LEGAL_ENTITY.tradingName} is operated by {controllerDisclosure()}</p>`;
+    expect(withoutComments(bad)).toMatch(
+      new RegExp(`${LEGAL_ENTITY.tradingName} is operated by`),
+    );
+    expect(withoutComments(`{/* ${bad} */}`)).not.toMatch(
+      new RegExp(`${LEGAL_ENTITY.tradingName} is operated by`),
+    );
   });
 });
 
@@ -136,12 +218,30 @@ describe("launch blockers stay visible", () => {
     expect(incorporate?.blocking).toBe(true);
   });
 
-  it("keeps the webhook allowlist on the blocking list", () => {
-    // proxy/webhook.ts is the only channel that can carry customer content back
-    // to houndshield.com in Mode B, so it is what decides HIPAA Business
-    // Associate status. Audit finding 14.
-    const webhook = LAUNCH_BLOCKERS.find((b) => b.id === "webhook-allowlist");
-    expect(webhook?.blocking).toBe(true);
+  it("never marks a CLOSED item as still blocking", () => {
+    /*
+     * This test used to assert `webhook-allowlist` stayed blocking. PR #286
+     * closed that work, so honesty and the suite were in direct conflict:
+     * marking it done turned the build red.
+     *
+     * A guard that pins today's answer converts progress into a failure. It now
+     * asserts the PROPERTY — an item whose summary says DONE must not also
+     * claim to be blocking — so the list can be updated truthfully and still be
+     * enforced.
+     */
+    const lying = LAUNCH_BLOCKERS.filter((b) => /^DONE\b/.test(b.summary) && b.blocking);
+    expect(
+      lying.map((b) => b.id),
+      "these are recorded as DONE but still flagged blocking",
+    ).toEqual([]);
+  });
+
+  it("keeps a reason on closed items, not just open ones", () => {
+    // The evidence that closed a blocker is the part worth keeping — without it
+    // the next reader cannot tell a finished item from a forgotten one.
+    for (const b of LAUNCH_BLOCKERS.filter((x) => !x.blocking)) {
+      expect(b.why.length, `${b.id} was closed without recording why`).toBeGreaterThan(20);
+    }
   });
 
   it("gives a reason for every blocker", () => {

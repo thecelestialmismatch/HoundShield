@@ -81,6 +81,12 @@ export function controllerDisclosure(): string {
  * Surfaced as data rather than prose so `__tests__/legal-contract.test.ts` can
  * assert the list is honest, and so nothing here can be quietly forgotten.
  *
+ * `blocking: false` means DONE or genuinely optional — never "deprioritised".
+ * Closed items stay in the list with the evidence that closed them, because a
+ * launch-blocker list that only ever grows is one nobody reads, and one that
+ * still flags finished work is the same defect as a health check that cries
+ * wolf: the next reader stops believing any of it.
+ *
  * On the first item: incorporation is not paperwork hygiene. Selling compliance
  * software to DoD subcontractors and healthcare providers as an unincorporated
  * individual means personal, unlimited liability — the DPA is enforceable
@@ -97,15 +103,15 @@ export const LAUNCH_BLOCKERS = [
   },
   {
     id: "hipaa-posture",
-    blocking: true,
-    summary: "State the Mode B-only position for healthcare on /hipaa",
-    why: "Under 45 CFR 160.103 the hosted Mode A endpoint makes HoundShield a Business Associate; self-hosted Mode B does not. The site must not imply the safe posture while offering the unsafe one.",
+    blocking: false,
+    summary: "DONE — /hipaa states the Mode B-only position for live PHI",
+    why: "Closed. app/hipaa/page.tsx:161 says the hosted trial 'is not covered by a BAA' and that live PHI must run self-hosted (Mode B). Under 45 CFR 160.103 that is the distinction that decides Business Associate status, and the site now states it rather than implying the safe posture while offering the unsafe one.",
   },
   {
     id: "webhook-allowlist",
-    blocking: true,
-    summary: "Enforce the metadata-only contract in proxy/webhook.ts (audit finding 14)",
-    why: "The webhook is the only channel that can carry customer content back to houndshield.com in Mode B. It currently forwards any key it is handed, so it is what stands between the company and Business Associate status.",
+    blocking: false,
+    summary: "DONE — proxy/webhook.ts enforces the metadata-only contract (audit finding 14)",
+    why: "Closed by PR #286. The webhook is the only channel that can carry customer content out of a Mode B deployment, so it decides Business Associate status. It now strips to an enumerated field list with zod at enqueue, and the finding-14 test asserts containment instead of the leak.",
   },
   {
     id: "subprocessors",
