@@ -28,7 +28,7 @@ Legend:  🟢 product (don't break) · 📚 reusable library · 📄 docs · ⚙
 | **Docs (PRD, roadmap, launch, SEO)** | `docs/` · plus `ROADMAP.md` `BACKLOG.md` `DECISIONS.md` `DESIGN.md` |
 | **Sprint queue / lessons** | `tasks/todo.md` · `tasks/lessons.md` (read first each session) |
 | **Brain AI knowledge data** | `brain/` |
-| **Deploy config** | `vercel.json` (root) · crons in `compliance-firewall-agent/vercel.json` |
+| **Deploy config** | `compliance-firewall-agent/vercel.json` (crons). Vercel's **Root Directory** setting points at `compliance-firewall-agent/`; there is deliberately no repo-root `vercel.json` — see `docs/DEPLOYMENT-MIDDLEWARE.md`. |
 | **AgentHarness (deep research)** | `tools/agent-harness/` (submodule) + bridge `tools/agent-harness-bridge/` |
 | **How to launch the app locally** | `dev-start.sh` · `.claude/launch.json` |
 
@@ -74,8 +74,8 @@ HoundShield/                         Project root Claude Code reads
 └── scripts/ config/ schemas/ manifests/ integrations/  ⚙️ tooling & config
 ```
 
-> **Why the app sits in a subfolder:** `vercel.json` builds
-> `compliance-firewall-agent/package.json` only. The **repo root is a control/meta
+> **Why the app sits in a subfolder:** Vercel's Root Directory is set to
+> `compliance-firewall-agent/`, so it builds that package only. The **repo root is a control/meta
 > layer** (agents, skills, commands, docs, `.claude/`). Reorganizing root folders
 > therefore **cannot break the production build** — proven by the Vercel preview on
 > every PR.
@@ -125,7 +125,7 @@ from. Active, curated copies live under `.claude/`.
 | Path | What it is |
 |------|-----------|
 | `package.json` (root) | Workspace marker + `verify:structure` script. App deps live in `compliance-firewall-agent/`. |
-| `vercel.json` | Vercel deploy config (builds `compliance-firewall-agent/`). |
+| ~~`vercel.json`~~ | **Deleted.** Its legacy `builds`/`routes` keys put the deployment into the pre-framework builder pipeline, where middleware compiles into the output and is never invoked. Vercel's Root Directory setting replaces it. `scripts/verify-structure.mjs` fails if it returns. |
 | `next.config.ts` · `postcss.config.mjs` · `tsconfig.json` | Next/TS/CSS build |
 | `eslint.config.js` · `eslint.config.mjs` · `commitlint.config.js` | Lint/commit rules |
 | `vitest.config.ts` | Test runner config |
