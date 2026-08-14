@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site-url";
+
 /**
  * HoundShield — Slack Integration
  *
@@ -72,7 +74,7 @@ export async function postSlackAlert(payload: SlackCompliancePayload): Promise<v
 
   if (!webhookUrl) return; // Slack not configured
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const appUrl = SITE_URL;
   const reviewUrl =
     payload.reviewUrl ??
     `${appUrl}/command-center/events?id=${payload.eventId}`;

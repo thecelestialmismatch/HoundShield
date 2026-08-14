@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { transactionalFrom } from "@/lib/email/identity";
 
+import { SITE_URL } from "@/lib/site-url";
+
 function getResend(): Resend | null {
   const key = process.env.RESEND_API_KEY;
   if (!key) return null;
@@ -11,8 +13,7 @@ function getResend(): Resend | null {
 }
 
 const FROM = transactionalFrom();
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
-
+const APP_URL = SITE_URL;
 /**
  * POST /api/email/welcome
  *

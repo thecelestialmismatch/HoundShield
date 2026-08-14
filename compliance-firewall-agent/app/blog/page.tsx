@@ -4,6 +4,8 @@ import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { getAllPosts, type BlogPost, type BlogCategory } from "@/lib/blog/posts";
 
+import { SITE_URL } from "@/lib/site-url";
+
 // ── SEO metadata ─────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   title: "CMMC Compliance Blog | HoundShield",
@@ -20,20 +22,20 @@ export const metadata: Metadata = {
     "C3PAO preparation",
   ],
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com"}/blog`,
+    canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
     title: "CMMC Compliance Blog | HoundShield",
     description:
       "Expert guides on CMMC Level 2, AI security, and CUI protection for defense contractors.",
     type: "website",
-    url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com"}/blog`,
+    url: `${SITE_URL}/blog`,
   },
 };
 
 // ── JSON-LD ───────────────────────────────────────────────────────────────────
 function BlogJsonLd({ posts }: { posts: BlogPost[] }) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  const baseUrl = SITE_URL;
   const schema = {
     "@context": "https://schema.org",
     "@type": "Blog",

@@ -1,6 +1,8 @@
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com';
+const APP_URL = SITE_URL;
 import { transactionalFrom } from '@/lib/email/identity';
 import { GATEWAY_BASE_URL } from '@/lib/gateway/base-url';
+
+import { SITE_URL } from "@/lib/site-url";
 
 const FROM = transactionalFrom();
 

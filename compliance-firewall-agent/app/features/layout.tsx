@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+import { SITE_URL } from "@/lib/site-url";
 
+const BASE_URL = SITE_URL;
 export const metadata: Metadata = {
   title: "Features | AI Compliance Firewall for CMMC Level 2, HIPAA & SOC 2",
   description:

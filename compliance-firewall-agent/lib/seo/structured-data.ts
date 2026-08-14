@@ -9,8 +9,10 @@
 import type { FaqItem, HowToStep } from "./faqs";
 import { RISK_REPORT } from "@/lib/pricing/plans";
 
+import { SITE_URL } from "@/lib/site-url";
+
 export const BASE_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
+  SITE_URL;
 
 /** Anything that can be serialized into a <script type="application/ld+json">. */
 export type JsonLdSchema = Record<string, unknown>;
