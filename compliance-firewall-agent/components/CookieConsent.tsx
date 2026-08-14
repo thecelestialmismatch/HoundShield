@@ -76,6 +76,10 @@ export function CookieConsent() {
               We use essential cookies to run HoundShield and, with your consent,
               anonymous analytics to improve it. Your prompt content is{" "}
               <strong className="text-[var(--hs-ink)]">never</strong> tracked.{" "}
+              <Link href="/cookies" className="text-brand-700 underline hover:text-brand-700">
+                Cookie Policy
+              </Link>{" "}
+              ·{" "}
               <Link href="/privacy" className="text-brand-700 underline hover:text-brand-700">
                 Privacy Policy
               </Link>

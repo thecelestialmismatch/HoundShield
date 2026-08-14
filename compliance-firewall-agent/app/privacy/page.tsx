@@ -92,6 +92,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">7. Cookies</h2>
             <p>We use essential cookies for authentication and session management. We use anonymous analytics cookies only after you opt in via our cookie consent banner. You can control cookie preferences through the banner or your browser settings.</p>
+            <p className="mt-2">Every item we store in your browser — its name, who sets it, what it is for and how long it lasts — is listed in our <Link href="/cookies" className="text-brand-700 hover:text-brand-700">Cookie Policy</Link>. ePrivacy Art. 5(3) requires that detail, not just the category.</p>
           </section>
 
           <section>
