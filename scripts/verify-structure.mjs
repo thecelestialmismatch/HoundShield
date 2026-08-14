@@ -26,7 +26,14 @@ const REQUIRED = [
   // 🟢 the product (must never go missing)
   ['compliance-firewall-agent', 'dir', 'The Next.js app (Vercel builds this)'],
   ['proxy', 'dir', 'HTTPS intercept proxy (Mode B)'],
-  ['vercel.json', 'file', 'Vercel deploy config'],
+  // The repo-root vercel.json is deliberately GONE. It used the legacy
+  // `builds`/`routes` keys, which put the deployment into the pre-framework
+  // builder pipeline — middleware compiled into the output and was never
+  // invoked. Vercel's Root Directory setting now points at the app directory
+  // and does natively what that indirection was doing. Requiring the file here
+  // would fail the repo the moment the fix lands, so it is required NOT to
+  // exist. See docs/DEPLOYMENT-MIDDLEWARE.md.
+  ['compliance-firewall-agent/vercel.json', 'file', 'Vercel config Vercel actually reads (crons)'],
 
   // 🧠 Claude Code control folder — canonical layout
   ['.claude', 'dir', 'Claude Code control folder'],
@@ -68,6 +75,26 @@ const REQUIRED = [
   ['PROJECT-STRUCTURE.md', 'file', 'Top-level structure map + find index'],
 ]
 
+/**
+ * [path, why] — paths that must NOT exist.
+ *
+ * A structure guard that only checks for presence cannot protect a deletion.
+ * The repo-root `vercel.json` was removed because its legacy `builds`/`routes`
+ * keys silently disabled middleware for the whole deployment, and it is exactly
+ * the kind of file someone re-adds in good faith ("the repo has no Vercel
+ * config?"). Re-adding it while Root Directory points at the app directory
+ * would break the build a second time, in a way that compiles and deploys
+ * cleanly and only shows up as security controls quietly not running.
+ */
+const FORBIDDEN = [
+  [
+    'vercel.json',
+    'Repo-root Vercel config must stay deleted — its legacy `builds`/`routes` keys ' +
+      'stop middleware from ever being invoked. Vercel Root Directory = ' +
+      'compliance-firewall-agent replaces it. See docs/DEPLOYMENT-MIDDLEWARE.md.',
+  ],
+]
+
 let missing = 0
 let warnings = 0
 const lines = []
@@ -99,11 +126,22 @@ for (const [rel, kind, why] of REQUIRED) {
   lines.push(`  ✅ ${rel}`)
 }
 
+for (const [rel, why] of FORBIDDEN) {
+  if (existsSync(join(ROOT, rel))) {
+    lines.push(`  ❌ FORBIDDEN ${rel}  — ${why}`)
+    missing++
+  } else {
+    lines.push(`  ✅ ${rel} absent, as required`)
+  }
+}
+
 console.log('HoundShield structure verification')
 console.log('==================================')
 console.log(lines.join('\n'))
 console.log('----------------------------------')
-console.log(`checked ${REQUIRED.length} paths · ${missing} missing · ${warnings} warning(s)`)
+console.log(
+  `checked ${REQUIRED.length + FORBIDDEN.length} paths · ${missing} problem(s) · ${warnings} warning(s)`,
+)
 
 if (missing > 0) {
   console.error('\nFAIL — repo structure does not match PROJECT-STRUCTURE.md.')
