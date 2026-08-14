@@ -5,7 +5,10 @@
 **Date:** 2026-08-11
 **Status when written:** AUDIT ONLY — no code modified. Recommendations were proposals.
 
-Companion: [`SECURITY-PHASE-1-AUTH-REPORT.md`](./SECURITY-PHASE-1-AUTH-REPORT.md)
+> This report linked a companion `SECURITY-PHASE-1-AUTH-REPORT.md`. That file has
+> never existed in this repository — it is in no commit, and no commit deleted it —
+> so the link is removed rather than left to send readers at nothing. The Phase 1
+> findings survive only as the "G" references cited inline below (G5, G6, G8).
 
 ---
 
@@ -62,6 +65,72 @@ provider as well as at the guard), enable **leaked-password protection**, and
 set the environment variables that make the reset-email path and the Stripe
 webhook fire (`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`,
 `STRIPE_WEBHOOK_SECRET`).
+
+---
+
+## Remediation status, round 2 (updated 2026-08-14)
+
+Everything remaining on the recommendation table below that was owned by **code**
+is now closed. Same rule as above: the audit body is not rewritten, only this
+section moves.
+
+| # | Issue | Audit call | Now | Where |
+|---|---|---|---|---|
+| 1 | CSRF — no origin check anywhere | ⚠️ MEDIUM | ✅ **Fixed** — `requireUser()` now judges `Origin` before it does any database work. Same-origin is established by comparing `Origin` to `Host`, so preview deployments and the apex/www pair need no configuration. An ABSENT `Origin` is still allowed (non-browser callers never send one); a present, non-matching one is 403. | `lib/auth/origin-guard.ts` |
+| 2 | Insecure session management | 🔴 MEDIUM | ⚠️ **Partly fixed, and one recommendation WITHDRAWN.** `secure` is now set in production. **`maxAge` cannot be set this way** — see the correction below. `httpOnly` remains `false` for the reason already given. | `lib/supabase/server.ts` |
+| 5 | Input validation (residual) | 🔴 HIGH | ✅ **Closed** — the SSRF half shipped in #283; the last unbounded string (`task` on `/api/agents/list`) is now capped. | `app/api/agents/list/route.ts` |
+| 8b | CSP allows `'unsafe-eval'` | ⚠️ MEDIUM | ✅ **Fixed** — removed from `script-src` in both layers. `'unsafe-inline'` stays (App Router constraint). | `next.config.js`, `middleware.ts` |
+| 11b | CORS demo reflection | ⚠️ LOW | ✅ **Fixed** — reflection now also requires `NODE_ENV !== 'production'`, so a missing `NEXT_PUBLIC_APP_URL` can no longer turn a public deployment into allow-all. | `lib/gateway/cors.ts` |
+| 13 | Error handling leaks internals | ⚠️ LOW | ✅ **Fixed** — the one broken instance returned a raw Resend message to the client; it now returns a fixed string and logs the detail. | `app/api/email/welcome/route.ts` |
+| 16b | Better Auth tables: RLS, no policies | ⚠️ MEDIUM | ✅ **Written, not yet applied** — migration 033 adds a **restrictive** deny-all for `anon`/`authenticated`. Restrictive rather than permissive on purpose: it cannot be undone by a future permissive policy, only by deleting it by name. | `supabase/migrations/033_better_auth_deny_all.sql` |
+| 19d | No rate ceiling where middleware was the only one | 🔴 HIGH | ✅ **Fixed** — `/api/scan` (unauthenticated, runs the regex engine plus an outbound model call) now counts against the shared Postgres limiter at 15/min. This does **not** depend on the middleware deployment issue ever being fixed. | `app/api/scan/route.ts` |
+| 20c | Fail-open controls are silent | ⚠️ MEDIUM | ✅ **Fixed** — `/api/health` derives `status` from four real probes and names every degraded control in a `degraded` array. The three constants it used to publish (`classifier`, `quarantine`, `audit_chain`, each hardcoded `"operational"`) are deleted. | `lib/health/service-status.ts` |
+
+### Correction to this report: the `maxAge` recommendation is withdrawn
+
+Issue #2 recommended shortening the 400-day session "via `cookieOptions` on
+`createServerClient`", listed as the safe, do-it-now item. **It is not
+implementable and shipping it would have produced a diff that changed nothing.**
+
+`@supabase/ssr` 0.12.4 spreads caller options and then overwrites the result with
+its own default, on both cookie-set paths:
+
+```js
+// node_modules/@supabase/ssr/dist/main/cookies.js:231-234  (and again at :461-465)
+const setCookieOptions = {
+  ...DEFAULT_COOKIE_OPTIONS,
+  ...options?.cookieOptions,
+  maxAge: DEFAULT_COOKIE_OPTIONS.maxAge,   // <- the caller's value is discarded
+};
+```
+
+Measured rather than read: driving one real session write with
+`cookieOptions: { maxAge: 2592000 }` (30 days) emits a cookie carrying
+`maxAge: 34560000` (400 days). `secure` in the same object **is** honoured, which
+is why half of #2 shipped and half did not.
+
+Session lifetime is therefore governed by GoTrue's JWT expiry and refresh-token
+rotation — a **Supabase dashboard setting** (Authentication → Sessions), and so a
+founder action, not a code change. `lib/auth/__tests__/session-cookie-flags.test.ts`
+pins the library's current behaviour so that the day an upgrade starts honouring
+the option, the suite goes red and says the code path is now available.
+
+### Still open after this round
+
+- **#2** `httpOnly: false` (architectural — requires removing browser-side
+  `createClient()` use) and the session lifetime (founder, Supabase dashboard).
+- **#10** dependency advisories — the CI gate exists and both packages report
+  0 vulnerabilities at `--omit=dev --audit-level=high`.
+- **#11a / #19d (remainder) / item 13** — middleware still does not execute in
+  production. Tracked separately in `docs/DEPLOYMENT-MIDDLEWARE.md`; it needs one
+  Vercel dashboard change (Root Directory → `compliance-firewall-agent`) landed
+  together with deleting the repo-root `vercel.json`. Doing either alone breaks
+  the build. No security control now depends on it.
+- **Founder/config items** unchanged: Supabase "Confirm email" ON,
+  leaked-password protection, `STRIPE_WEBHOOK_SECRET`, `OPENROUTER_API_KEY`,
+  `ENCRYPTION_KEY`, `TURNSTILE_SECRET_KEY`, `CRON_SECRET`, and applying
+  migrations 029, 030 and 033. `/api/health` now reports the state of several of
+  these instead of reporting green regardless.
 
 ---
 

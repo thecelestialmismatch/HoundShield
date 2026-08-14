@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { createServiceClient } from "@/lib/supabase/client";
 import { getSessionUser } from "@/lib/auth/session";
 import { isBetterAuthEnabled, profileKeyColumn } from "@/lib/auth/auth-config";
+import { isAllowedOrigin } from "@/lib/auth/origin-guard";
 
 /**
  * Server-side auth guards for API route handlers.
@@ -53,6 +55,42 @@ function emailUnverified(): GuardFailure {
 }
 
 /**
+ * A browser was driven to call us from somewhere that is not us. Distinct from
+ * 401 because the caller may well hold a perfectly good session — that is the
+ * point of the attack — so "sign in" would be the wrong advice.
+ */
+function crossOrigin(): GuardFailure {
+  return {
+    user: null,
+    response: NextResponse.json(
+      { error: "Cross-origin request rejected", code: "cross_origin" },
+      { status: 403 },
+    ),
+  };
+}
+
+/**
+ * Read the request's Origin/Host and judge them.
+ *
+ * `headers()` throws outside a request scope (e.g. at build time). Treated as
+ * "no origin to check" rather than as a rejection: this function's job is to
+ * catch a browser being driven cross-site, and there is no browser in that
+ * case. The session check downstream still fails closed.
+ */
+async function originAllowed(): Promise<boolean> {
+  try {
+    const h = await headers();
+    return isAllowedOrigin({
+      origin: h.get("origin"),
+      host: h.get("host"),
+      appUrl: process.env.NEXT_PUBLIC_APP_URL,
+    });
+  } catch {
+    return true;
+  }
+}
+
+/**
  * Require an authenticated user whose email is verified. Returns the user or a
  * ready-to-return 401/403.
  *
@@ -74,6 +112,11 @@ function emailUnverified(): GuardFailure {
  * records the query to find such rows before deploying.
  */
 export async function requireUser(): Promise<GuardResult> {
+  // Cross-origin, first. Cheapest check, and it runs BEFORE the session lookup
+  // so a CSRF attempt costs no database work. See lib/auth/origin-guard.ts for
+  // why an absent Origin is allowed and a mismatched one is not.
+  if (!(await originAllowed())) return crossOrigin();
+
   // Identity comes from the unified session resolver (Better Auth when enabled,
   // else Supabase). Fails closed: no session → 401, so protected routes are
   // never reachable anonymously in demo mode either.

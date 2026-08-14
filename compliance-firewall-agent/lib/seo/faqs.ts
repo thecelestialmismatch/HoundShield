@@ -102,9 +102,17 @@ export const pricingFaqs: FaqItem[] = [
       "The certification gate was paused on 13 July 2026; the underlying obligation was not. You must still implement NIST SP 800-171 Rev 2 and still submit an annual SPRS self-assessment. With no third-party assessor in the loop, that score is your own representation to the government — and DOJ has settled fifteen False Claims Act cases over exactly that, including $4.6M from MORSECORP and $507,144 from LOGZONE. Evidence matters more now, not less.",
   },
   {
-    question: "Does HoundShield offer annual billing?",
+    // Rewritten 2026-08-14. This previously read "Every paid HoundShield plan can
+    // be billed annually at a 20% discount... Contact sales for multi-tenant
+    // agency pricing." Three problems, all of them shipped inside FAQPage JSON-LD
+    // that answer engines quote verbatim: there is no subscription to bill
+    // annually, the 20% figure contradicted the 17% recorded in CLAUDE.md, and
+    // "every paid plan" implied a tier list /pricing does not sell. Same defect
+    // class as the schema.org six-tier bug fixed in #275 — machine-readable
+    // output describing products with no checkout behind them.
+    question: "Is there a subscription, or a refund if the report is not useful?",
     answer:
-      "Yes. Every paid HoundShield plan can be billed annually at a 20% discount compared with month-to-month billing, and every paid plan carries a 30-day money-back guarantee. Annual billing is the typical choice for contractors and healthcare teams budgeting against a fixed compliance deadline. Contact sales for multi-tenant agency pricing.",
+      "Neither applies the way people expect. There is no subscription: the CMMC AI Risk Assessment Report is a one-time $499 purchase, charged once, with no seats to count and no renewal — which is also why it clears a purchase order without a procurement review. And yes, there is a 30-day money-back guarantee: request a refund within 30 days of purchase and you get the full amount back, including after the PDF has been delivered. The full terms are published at houndshield.com/refund.",
   },
 ];
 

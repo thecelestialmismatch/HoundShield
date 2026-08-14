@@ -13,19 +13,46 @@ type HealthResponse = {
   uptime_seconds: number;
   timestamp: string;
   services: Record<string, string>;
+  /** Service keys whose control is not doing its job. Absent on older deployments. */
+  degraded?: string[];
   environment: string;
 };
 
-const OPERATIONAL = new Set(["operational", "connected", "healthy"]);
+/**
+ * Which rows get a warning triangle is decided by /api/health, not here.
+ *
+ * This page used to own a local `new Set(["operational","connected","healthy"])`
+ * and mark every other value as a problem. The health vocabulary had long since
+ * outgrown it — "set", "ok", "override", "default", and a bare sender domain are
+ * all healthy states it did not know — so this page put a warning next to a row
+ * reading "houndshield.com" and told every visitor "Some services need
+ * attention" permanently, whatever the truth was. On a public status page that
+ * is worse than showing nothing.
+ *
+ * `degraded` is optional because a cached older deployment may not send it; when
+ * it is absent we fall back to the top-level status rather than re-deriving a
+ * per-row verdict this page is not entitled to make.
+ */
+function isDegraded(data: HealthResponse, key: string): boolean {
+  return data.degraded?.includes(key) ?? false;
+}
 
 // Human labels for the raw service keys returned by /api/health.
 const LABELS: Record<string, string> = {
   database: "Database",
   ai_router: "AI Router",
   payments: "Payments",
-  classifier: "CUI Classifier",
-  quarantine: "Quarantine",
-  audit_chain: "Audit Chain",
+  payments_webhook: "Payments Webhook",
+  reset_service_role: "Password Reset — service role",
+  reset_resend: "Password Reset — mail",
+  reset_app_url: "Password Reset — app URL",
+  reset_sender_domain: "Password Reset — sender domain",
+  founder_inbox: "Alert Inbox",
+  founder_inbox_domain: "Alert Inbox — domain",
+  rate_limit_store: "Rate Limiting",
+  auth_lockout_store: "Account Lockout",
+  captcha: "CAPTCHA",
+  quarantine_encryption: "Quarantine Encryption",
 };
 
 function StatusDot({ ok }: { ok: boolean }) {
@@ -61,10 +88,7 @@ export default function StatusPage() {
     return () => clearInterval(id);
   }, []);
 
-  const allOk =
-    data != null &&
-    data.status === "healthy" &&
-    Object.values(data.services).every((s) => OPERATIONAL.has(s));
+  const allOk = data != null && data.status === "healthy";
 
   return (
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
@@ -119,7 +143,7 @@ export default function StatusPage() {
                 </span>
                 <span className="flex min-w-0 max-w-full flex-wrap items-center gap-2 text-sm text-[var(--hs-ink-secondary)]">
                   {value.replace(/_/g, " ")}
-                  <StatusDot ok={OPERATIONAL.has(value)} />
+                  <StatusDot ok={!isDegraded(data, key)} />
                 </span>
               </li>
             ))}

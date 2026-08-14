@@ -94,7 +94,28 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              // 'unsafe-eval' REMOVED (audit #8b). It compounds with #2: the
+              // session cookie is httpOnly:false by @supabase/ssr design, so it
+              // is readable by JavaScript — meaning any XSS that lands is an
+              // immediate account takeover rather than a contained defacement.
+              // Of the two halves, tightening script-src is the tractable one
+              // (see lib/supabase/server.ts for why the flag cannot be flipped).
+              // Verified by measurement, not by reasoning: a production build
+              // was served and driven with the on-disk Chromium over CDP across
+              // /, /pricing, /login, /demo, /command-center/overview and
+              // /status — zero CSP violations from application code. The run
+              // carried its own control, because "no violations" is also what a
+              // deaf detector reports: each page was made to request a script
+              // from a forbidden origin, and all six refused it while quoting
+              // this directive back. (Note for whoever repeats this: eval()
+              // driven through DevTools is NOT a valid control — those contexts
+              // are CSP-exempt and report success whatever the policy says.)
+              // If a dependency ever needs eval again, put it back WITH THE
+              // OFFENDER NAMED here — a directive removed until something
+              // breaks is worse than one deliberately kept.
+              // 'unsafe-inline' stays: a genuine Next.js App Router constraint
+              // without nonce plumbing.
+              "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https:",
