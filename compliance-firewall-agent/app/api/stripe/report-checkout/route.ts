@@ -4,6 +4,7 @@ import { getStripeSecretKey } from '@/lib/stripe/env';
 import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
 import { REPORT_VERTICALS, reportPaymentLinkUrl } from '@/lib/stripe/report-payment-link';
+import { SITE_URL } from '@/lib/site-url';
 
 /**
  * POST /api/stripe/report-checkout
@@ -113,7 +114,10 @@ export async function POST(request: NextRequest) {
     }
 
     const stripe = new Stripe(key, { apiVersion: STRIPE_API_VERSION });
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://houndshield.com';
+    // SITE_URL, not a local apex fallback: Stripe's success/cancel redirects
+    // land the BUYER on this host, and the apex 308s to www — an extra hop on
+    // the one path where a redirect costing a beat is a lost sale.
+    const appUrl = SITE_URL;
 
     const configuredPriceId = process.env.STRIPE_REPORT_PRICE_ID;
 

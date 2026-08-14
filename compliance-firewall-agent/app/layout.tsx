@@ -5,14 +5,15 @@ import { displayFont, bodyFont, monoFont } from "./fonts";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ClientShell } from "@/components/ClientShell";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL } from "@/lib/site-url";
+
 import {
   softwareApplicationSchema,
   organizationSchema,
   websiteSchema,
 } from "@/lib/seo/structured-data";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://houndshield.com";
-
+const BASE_URL = SITE_URL;
 export const viewport: Viewport = {
   themeColor: "#FAFCFF",
   width: "device-width",

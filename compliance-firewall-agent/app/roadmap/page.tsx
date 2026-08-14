@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site-url";
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { NavV3 } from '@/components/layout/NavV3'
@@ -9,7 +11,7 @@ export const metadata: Metadata = {
   description:
     'What HoundShield has shipped, what we are building now, and what is coming next — browser extension, air-gapped mode, SSO, and more.',
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://houndshield.com'}/roadmap`,
+    canonical: `${SITE_URL}/roadmap`,
   },
 }
 
