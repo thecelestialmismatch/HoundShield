@@ -56,6 +56,33 @@ export interface HealthReport {
 const ENCRYPTION_KEY_HEX_LENGTH = 64;
 
 /**
+ * The tables and PRIMARY-KEY COLUMNS the probes below select.
+ *
+ * Named as constants, and pinned against the migration DDL by
+ * `__tests__/service-status.test.ts`, because getting one wrong is invisible:
+ * a bad column name makes PostgREST return an error, the probe catches it, and
+ * the endpoint reports the control as DEGRADED. The failure mode of a
+ * misspelled probe is therefore a false outage, which is a worse lie than the
+ * hardcoded "operational" this module was written to delete.
+ *
+ * That is not hypothetical. The first version of this file selected "key" from
+ * rate_limit_buckets, whose primary key is `bucket_key`. It shipped, and
+ * production reported `rate_limit_store: degraded_local` while shared rate
+ * limiting was working perfectly — caught only by reading the live endpoint
+ * after deploy.
+ */
+const RATE_LIMIT_TABLE = "rate_limit_buckets";
+const RATE_LIMIT_COLUMN = "bucket_key";
+const LOCKOUT_TABLE = "auth_lockouts";
+const LOCKOUT_COLUMN = "email_hash";
+
+/** Exposed so the guard can pin these against the migration DDL. */
+export const PROBED_TABLES = {
+  [RATE_LIMIT_TABLE]: RATE_LIMIT_COLUMN,
+  [LOCKOUT_TABLE]: LOCKOUT_COLUMN,
+} as const;
+
+/**
  * Can the shared rate-limit store be reached?
  *
  * Read-only on purpose. The obvious probe — calling the `consume_rate_limit`
@@ -74,8 +101,8 @@ async function rateLimitStore(): Promise<string> {
   if (!isSupabaseConfigured()) return "not_configured";
   try {
     const { error } = await createServiceClient()
-      .from("rate_limit_buckets")
-      .select("key", { count: "exact", head: true })
+      .from(RATE_LIMIT_TABLE)
+      .select(RATE_LIMIT_COLUMN, { count: "exact", head: true })
       .limit(1);
     if (error) throw new Error(error.message);
     return "shared";
@@ -92,8 +119,8 @@ async function authLockoutStore(): Promise<string> {
   if (!isSupabaseConfigured()) return "not_configured";
   try {
     const { error } = await createServiceClient()
-      .from("auth_lockouts")
-      .select("email_hash", { count: "exact", head: true })
+      .from(LOCKOUT_TABLE)
+      .select(LOCKOUT_COLUMN, { count: "exact", head: true })
       .limit(1);
     if (error) throw new Error(error.message);
     return "enforcing";
