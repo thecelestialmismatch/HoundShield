@@ -25,6 +25,8 @@ const ENV_KEYS = [
   "ENCRYPTION_KEY",
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "MARKETING_POSTAL_ADDRESS",
+  "UNSUBSCRIBE_SECRET",
 ] as const;
 
 let saved: Record<string, string | undefined>;
@@ -123,24 +125,50 @@ describe("every probed column exists in the migration that creates the table", (
    */
   const MIGRATIONS = join(process.cwd(), "supabase", "migrations");
 
-  it.each(Object.entries(PROBED_TABLES))(
-    "%s.%s is a real column",
-    (table, column) => {
-      const files = readdirSync(MIGRATIONS).filter((f) => f.endsWith(".sql"));
-      const ddl = files
-        .map((f) => readFileSync(join(MIGRATIONS, f), "utf8"))
-        .find((sql) => new RegExp(`create table[^;]*\\b${table}\\b`, "i").test(sql));
+  /**
+   * A column is real if ANY migration declares it — in the table's CREATE
+   * TABLE body, or added later by an ALTER TABLE.
+   *
+   * The create-table-only version of this check would have failed on
+   * `profiles.marketing_opt_out_at`, which migration 034 adds to a table
+   * created back in 001. Tightening the probe list would have been the wrong
+   * response: a guard that cannot see half the ways a column comes into
+   * existence pushes you toward not probing at all.
+   */
+  function columnIsDeclared(table: string, column: string): boolean {
+    const sqls = readdirSync(MIGRATIONS)
+      .filter((f) => f.endsWith(".sql"))
+      .map((f) => readFileSync(join(MIGRATIONS, f), "utf8"));
 
-      expect(ddl, `no migration creates ${table}`).toBeTruthy();
+    const addedByAlter = new RegExp(
+      `alter table[^;]*\\b${table}\\b[^;]*add column[^;]*\\b${column}\\b`,
+      "is",
+    );
+    if (sqls.some((sql) => addedByAlter.test(sql))) return true;
 
-      const body = ddl!.slice(ddl!.search(new RegExp(`create table[^(]*\\b${table}\\b`, "i")));
-      const columns = body.slice(body.indexOf("(") + 1, body.indexOf(");"));
-      expect(
-        new RegExp(`^\\s*${column}\\s`, "m").test(columns),
-        `${table} has no column "${column}" — the probe would report a FALSE outage`,
-      ).toBe(true);
-    },
-  );
+    const created = sqls.find((sql) =>
+      new RegExp(`create table[^;]*\\b${table}\\b`, "i").test(sql),
+    );
+    if (!created) return false;
+
+    const body = created.slice(created.search(new RegExp(`create table[^(]*\\b${table}\\b`, "i")));
+    const columns = body.slice(body.indexOf("(") + 1, body.indexOf(");"));
+    return new RegExp(`^\\s*${column}\\s`, "m").test(columns);
+  }
+
+  it.each(Object.entries(PROBED_TABLES))("%s.%s is a real column", (table, column) => {
+    expect(
+      columnIsDeclared(table, column),
+      `${table} has no column "${column}" — the probe would report a FALSE outage`,
+    ).toBe(true);
+  });
+
+  it("rejects a column no migration declares", () => {
+    // Both directions: without this, a regex that matched nothing would make
+    // every assertion above pass vacuously.
+    expect(columnIsDeclared("profiles", "column_that_does_not_exist")).toBe(false);
+    expect(columnIsDeclared("table_that_does_not_exist", "id")).toBe(false);
+  });
 });
 
 describe("buildHealthReport — controls are measured, not declared", () => {
@@ -183,6 +211,26 @@ describe("buildHealthReport — controls are measured, not declared", () => {
     expect((await build()).services.quarantine_encryption).toBe("enabled");
   });
 
+  it("reports the onboarding drip as disabled, and says which variable, when it cannot lawfully send", async () => {
+    // This one fails CLOSED — no address means no send, not an unlawful send.
+    // It is reported anyway because a silently dark drip looks identical to a
+    // working one from the outside, and the fix is a single env var.
+    delete process.env.MARKETING_POSTAL_ADDRESS;
+    const { services, degraded } = await build();
+    expect(services.marketing_email).toBe("disabled");
+    expect(degraded).toContain("marketing_email");
+    expect(services.marketing_email_hint).toMatch(/MARKETING_POSTAL_ADDRESS/);
+  });
+
+  it("reports the drip as enabled once the statutory elements are configured", async () => {
+    process.env.MARKETING_POSTAL_ADDRESS = "HoundShield, 1 Example St, Wilmington DE 19801";
+    process.env.UNSUBSCRIBE_SECRET = "test-unsubscribe-secret";
+    const { services, degraded } = await build();
+    expect(services.marketing_email).toBe("enabled");
+    expect(degraded).not.toContain("marketing_email");
+    expect(services.marketing_email_hint).toBeUndefined();
+  });
+
   it("never leaks a configured value into the public response", async () => {
     process.env.TURNSTILE_SECRET_KEY = "0xSUPERSECRETTURNSTILEVALUE";
     process.env.ENCRYPTION_KEY = "deadbeef".repeat(8);
@@ -198,8 +246,20 @@ describe("buildHealthReport — controls are measured, not declared", () => {
     const { services, degraded } = await build();
     expect(services.rate_limit_store).toBe("not_configured");
     expect(services.auth_lockout_store).toBe("not_configured");
+    expect(services.marketing_opt_out_store).toBe("not_configured");
     expect(degraded).toContain("rate_limit_store");
     expect(degraded).toContain("auth_lockout_store");
+    expect(degraded).toContain("marketing_opt_out_store");
+  });
+
+  it("names migration 034 and the ordering when an opt-out cannot be stored", async () => {
+    // The trap this closes: setting MARKETING_POSTAL_ADDRESS before applying
+    // 034 opens the CAN-SPAM gate onto a column that does not exist, so every
+    // drip run throws and sends nothing while looking configured.
+    delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+    delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const { services } = await build();
+    expect(services.marketing_opt_out_store_hint).toMatch(/cannot be recorded/i);
   });
 
   it("no longer publishes the three constants that could never go red", async () => {

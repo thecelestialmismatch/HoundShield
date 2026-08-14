@@ -1753,3 +1753,56 @@ something nothing renders.
 ### The 100x feature was already arriving and being thrown away
 **What:** Looking for a differentiating feature, the honest answer was not something to invent. Every AI coding agent — Claude Code, Cursor, Aider, Copilot, LangChain — is an OpenAI-compatible client, so agent traffic already flowed through the gateway with zero integration. What was missing is that the gateway read `req.headers` for auth and provider routing and discarded the rest, recording 400 anonymous events where a customer needed one attributable run. NIST 800-171 3.3.2 wants actions traceable to individual users; an autonomous run has no individual.
 **Rule:** Before designing a new capability, list what the system already receives and does not persist. The cheapest differentiated feature is usually data already crossing the boundary. Keep it descriptive: header-derived attribution is audit evidence, never an authorization input — the tenant boundary stays the server-resolved key.
+
+### A legal page can pass every guard, return 200, and still render nonsense
+**What:** `/terms` §12 wrapped `controllerDisclosure()` in its own lead-in plus an empty
+`<strong>` and a trailing comma. That function already returns a COMPLETE sentence, so
+production served: *"HoundShield is operated by HoundShield is operated by an independent sole
+proprietor. … regardless of entity status., ."* — a duplicated clause and a dangling ", ." on the
+section of a contract that names the counterparty, in a document sold to DoD subcontractors.
+Every guard passed: no bracketed placeholder, `controllerDisclosure()` itself was honest, the
+page returned 200. It was found by reading the JSX during a self-review, not by any test.
+**Rule:** For any page that COMPOSES a value into prose, evaluate the composed string, not the
+source. One `npx tsx -e "console.log(fn())"` showed it instantly. The generic tell is an empty
+inline element — a half-finished JSX slot — so that is now guarded across every legal page,
+alongside the specific double-prefix.
+
+### A guard reading its own explanatory comment, for the sixth time
+**What:** The new double-prefix check went red on the comment explaining the bug it guards —
+a comment that necessarily quotes the bad output. Same failure as the CSP drift check (matched
+comment prose), the accessibility overclaim check (read its own disclaimer), and three others
+this session.
+**Rule:** Any guard matching prose in source must strip comments FIRST, and needs a paired test
+proving the stripping did not neuter it (`withoutComments(bad)` matches, `withoutComments("{/* "
++ bad + " */}")` does not). Strip `//` only when not preceded by `:`, or every `https://` in a
+legal page vanishes with it.
+
+### A probe that does not bite is usually a bad probe, not a good guard
+**What:** Two of ten mutations came back GREEN. Neither was a weak guard. The first injected
+`blocking: true` next to an existing `blocking: false` on the following line — duplicate key,
+last wins, so the mutation never existed. The second asserted an unknown health *value* should
+fail, but an unknown value IS judged: it lands in `degraded`. What that guard protects is a key
+being EXCLUDED from judgement, so the corrected probe added the key to `INFORMATIONAL_KEYS`.
+**Rule:** On a GREEN probe, first prove the mutation actually changed behaviour — then re-read
+what the guard claims to assert. Declaring a guard toothless on a malformed mutation is how a
+working check gets deleted.
+
+### Compliance that depends on remembering to configure it is not compliance
+**What:** Three onboarding emails had no unsubscribe link and no postal address (15 U.S.C.
+7704(a)(3),(a)(5), assessed per message). The tempting fix is to add a footer and a `TODO: set
+the address`. That is the same defect class as the three security controls that were failing
+open in `/api/health`: correct-looking code whose safety depends on a human finishing the job.
+**Rule:** Make the unsafe state impossible rather than documented. `canSendMarketing()` returns
+false with no address, so the drip stays DARK instead of sending something unlawful — and
+`/api/health` names the missing variable, because a silently dark drip looks identical to a
+working one from outside.
+
+### The Supabase GitHub integration cannot see this repo's migrations either
+**What:** The Supabase bot on #292: *"no changes detected in `supabase` directory"* — on a PR
+that adds `compliance-firewall-agent/supabase/migrations/034`. It watches the REPO ROOT
+`supabase/`, which does not exist here. Exactly the same root cause as the Vercel Root Directory
+problem in #288 and the `crons` key the drip's cron never got.
+**Rule:** Migrations in this repo will NEVER auto-apply — every one is a manual founder step,
+which is why 029/030/033/034 sit unapplied. One deploy-topology mismatch has now silently
+disabled three separate subsystems; fix the topology once rather than working around it a third
+time.

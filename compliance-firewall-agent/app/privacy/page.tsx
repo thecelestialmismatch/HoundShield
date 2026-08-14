@@ -75,7 +75,18 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">5. Data Retention</h2>
-            <p>Compliance event data is retained based on your subscription tier (7 days free, 90 days Pro, unlimited Enterprise/Agency). You can request deletion of your account and associated data at any time by contacting us.</p>
+            <p>
+              We retain your account record and compliance event metadata for as long as your
+              account is open, and we delete it on request. We do <strong className="text-[var(--hs-ink-secondary)]">not</strong> currently run an
+              automatic purge, and we would rather tell you that than publish a schedule we do not
+              keep: this product exists to produce audit evidence, and silently shredding a
+              customer&apos;s C3PAO evidence on a timer would be the wrong default.
+            </p>
+            <p className="mt-2">
+              To request deletion, email us and we will confirm when it is done. In Mode B
+              (self-hosted) the question mostly does not arise — prompt content never reaches us,
+              so there is nothing on our side to delete beyond your account record.
+            </p>
           </section>
 
           <section>
@@ -86,7 +97,15 @@ export default function PrivacyPage() {
               <li>Export your data in a portable format</li>
               <li>Opt out of marketing communications</li>
               <li>Withdraw consent for data processing</li>
+              <li>Opt out of any sale or sharing of personal information — see below</li>
             </ul>
+            <p className="mt-2">
+              Residents of California, Virginia, Colorado, Connecticut, Utah, Texas and other
+              states with comprehensive privacy laws have these rights under their state statute.
+              We extend them to every user regardless of residence rather than checking where you
+              live first. Email us to exercise any of them; we will not charge you or degrade your
+              service for asking.
+            </p>
           </section>
 
           <section>
@@ -109,7 +128,50 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">9. Contact &amp; Data Controller</h2>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">9. We Do Not Sell or Share Your Personal Information</h2>
+            <p>
+              We do not sell personal information, and we do not share it for cross-context
+              behavioural advertising, as those terms are defined by the CCPA/CPRA. We run no
+              advertising, retargeting or data-broker integrations, so there is no opt-out to
+              offer — the answer is simply no. The complete list of third parties that process
+              data on our behalf, and what each one receives, is published on our{" "}
+              <Link href="/subprocessors" className="text-brand-700 hover:text-brand-700">
+                Sub-processors
+              </Link>{" "}
+              page.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">10. Children&apos;s Privacy</h2>
+            <p>
+              HoundShield is a business tool sold to organisations. It is not directed to children,
+              and we do not knowingly collect personal information from anyone under 13 (COPPA) or
+              knowingly process the data of a minor where state law sets a higher age. If you
+              believe a child has provided us information, email us and we will delete it.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">11. Security Incident Notification</h2>
+            <p>
+              If we become aware of a breach of security leading to the accidental or unlawful
+              destruction, loss, alteration, or unauthorised disclosure of your personal
+              information, we will notify affected customers without undue delay, with what we know
+              and what we are doing about it. Where we act as a processor for a customer, we notify
+              that customer so they can meet their own notification deadlines — the specifics are
+              in our{" "}
+              <Link href="/dpa" className="text-brand-700 hover:text-brand-700">
+                Data Processing Agreement
+              </Link>.
+            </p>
+            <p className="mt-2">
+              We will not wait for certainty before telling you something happened.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">12. Contact &amp; Data Controller</h2>
             <p>
               {controllerDisclosure()}
             </p>

@@ -102,11 +102,48 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">11. Company &amp; Contact</h2>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">11. Governing Law &amp; Disputes</h2>
             <p>
-              HoundShield is operated by <strong className="text-[var(--hs-ink-secondary)]">{controllerDisclosure()}</strong>,{" "}
-              <strong className="text-[var(--hs-ink-secondary)]"></strong>.
+              These Terms are governed by the laws of the State of Delaware, United States,
+              without regard to its conflict-of-laws rules. The state and federal courts located
+              in Delaware have exclusive jurisdiction over any dispute arising out of these Terms
+              or the Service, and both parties consent to that venue.
             </p>
+            <p className="mt-2">
+              HoundShield is offered to customers in the United States. We do not currently market
+              or sell the Service in the European Union or the United Kingdom, and nothing here is
+              intended to displace a protection you cannot waive under the law of your place of
+              residence.
+            </p>
+            <p className="mt-2">
+              Either party may bring an individual claim in small-claims court where it qualifies.
+              Nothing in these Terms prevents either party from seeking injunctive relief to
+              protect its intellectual property or confidential information.
+            </p>
+            <p className="mt-2">
+              If any provision of these Terms is held unenforceable, that provision is limited or
+              severed to the minimum extent necessary and the remaining provisions stay in force.
+              A failure to enforce a provision is not a waiver of it.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-[var(--hs-ink)] mb-3">12. Company &amp; Contact</h2>
+            {/*
+              Rendered bare, exactly as /privacy does. It used to be wrapped in
+              "HoundShield is operated by …" plus an empty <strong> and a
+              trailing comma, which shipped to production reading:
+
+                "HoundShield is operated by HoundShield is operated by an
+                 independent sole proprietor. … regardless of entity status., ."
+
+              controllerDisclosure() already returns a complete sentence — it
+              names the party or explains why it cannot yet — so the wrapper both
+              duplicated the clause and left a dangling ", .". On the section of
+              a contract that identifies who the customer is contracting with,
+              in a document sold to DoD subcontractors.
+            */}
+            <p>{controllerDisclosure()}</p>
             <p className="mt-2">Questions about these terms? Contact us at <a href="mailto:legal@houndshield.com" className="text-brand-700 hover:text-brand-700">legal@houndshield.com</a>.</p>
           </section>
         </div>

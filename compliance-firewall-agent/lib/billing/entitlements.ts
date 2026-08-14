@@ -65,7 +65,20 @@ export interface Entitlements {
   brainQueries: number;
   /** Included team seats. */
   seats: number;
-  /** Audit-log / evidence retention window in days. */
+  /**
+   * Audit-log / evidence retention window in days.
+   *
+   * ponytail: DECLARED, NOT ENFORCED. Nothing reads this field — there is no
+   * purge job, and the only cron is the email drip, so data is retained until a
+   * customer asks for deletion. `/privacy` was corrected on 2026-08-14 to say
+   * that rather than publish these windows, because a retention schedule in a
+   * privacy policy that nothing implements is a misrepresentation.
+   *
+   * Upgrade path: if these windows are ever meant to bind, they need a purge
+   * job AND a product decision first — this is an audit-evidence product, and
+   * automatically shredding a customer's C3PAO evidence on a timer is a
+   * different promise from the one they bought.
+   */
   retentionDays: number;
   /** Availability of each gated capability. */
   features: Record<FeatureKey, boolean>;
