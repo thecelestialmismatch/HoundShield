@@ -51,14 +51,26 @@ const nextConfig = {
   // Redirect old routes + HTTP → HTTPS
   async redirects() {
     return [
-      {
-        // Canonical host: consolidate www → non-www so search engines and
-        // AI crawlers index one URL (no duplicate-content split).
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.houndshield.com' }],
-        destination: 'https://houndshield.com/:path*',
-        permanent: true,
-      },
+      // REMOVED: a www -> apex redirect. It pointed the WRONG WAY and, the
+      // moment framework routing is restored, it is an infinite redirect loop
+      // on every URL of the site.
+      //
+      // Measured against production on 2026-08-14:
+      //   GET https://houndshield.com/api/health  ->  308  ->  www.houndshield.com
+      // Vercel's own domain configuration canonicalises apex -> WWW. This rule
+      // said www -> apex. Restoring the framework routing table (see
+      // docs/DEPLOYMENT-MIDDLEWARE.md) would have made both live at once:
+      // apex -> www -> apex -> www, forever, on every request.
+      //
+      // It has been dormant and therefore invisible only because the legacy
+      // repo-root vercel.json stops next.config redirects reaching the edge —
+      // the exact condition this PR removes. So deleting it is a PREREQUISITE
+      // of that change, not a tidy-up alongside it.
+      //
+      // Direction is not a coin flip: Vercel 308s to www, CLAUDE.md records
+      // `https://www.houndshield.com/` as canonical, and lib/gateway/base-url.ts
+      // prints the www host to every customer. This rule was the only thing
+      // claiming otherwise. Guard: app/__tests__/canonical-host.test.ts.
       {
         source: '/(.*)',
         has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
