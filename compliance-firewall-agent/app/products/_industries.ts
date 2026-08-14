@@ -203,7 +203,7 @@ export const INDUSTRIES: Industry[] = [
     faqs: [
       {
         q: "Do you receive our PHI? Is a BAA needed?",
-        a: "Detection runs on your hardware and we never receive PHI, so HoundShield isn't a typical cloud BAA exposure — and we still sign a BAA on paid plans.",
+        a: "In self-hosted Mode B, detection runs on your hardware and PHI never reaches us. Because we do not create, receive, maintain, or transmit PHI on your behalf, HoundShield is not acting as a business associate under 45 CFR 160.103, so no BAA with us is required. The hosted trial is for non-PHI evaluation only and is not covered by a BAA — see /hipaa for the full position.",
       },
       {
         q: "Will it block clinicians from working?",

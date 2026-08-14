@@ -52,3 +52,27 @@ export function hasAnalyticsConsent(): boolean {
 export function consentUndecided(): boolean {
   return getConsent() === null;
 }
+
+/**
+ * Forgets the stored choice, so the banner is shown again from scratch.
+ *
+ * GDPR Art. 7(3): withdrawing consent must be as easy as giving it. Giving it
+ * takes one click on the banner. Withdrawing it, before this existed, took
+ * knowing how to clear a specific site's localStorage in your browser.
+ *
+ * The gap was not theoretical. `/cookies` told visitors to "use the Cookie
+ * settings control in the consent banner" — but `CookieConsent` renders
+ * `null` once `consentUndecided()` is false, so for anyone who had already
+ * chosen (which is everyone reading a cookie policy) that control did not
+ * exist. Clearing the key and re-firing CONSENT_EVENT makes the banner
+ * reappear, which makes that published instruction true.
+ */
+export function clearConsent(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(CONSENT_KEY);
+  } catch {
+    // Best-effort: still fire the event so in-memory listeners update.
+  }
+  window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: null }));
+}

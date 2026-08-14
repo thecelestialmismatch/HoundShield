@@ -104,14 +104,14 @@ export const LAUNCH_BLOCKERS = [
   {
     id: "hipaa-posture",
     blocking: false,
-    summary: "DONE — /hipaa states the Mode B-only position for live PHI",
-    why: "Closed. app/hipaa/page.tsx:161 says the hosted trial 'is not covered by a BAA' and that live PHI must run self-hosted (Mode B). Under 45 CFR 160.103 that is the distinction that decides Business Associate status, and the site now states it rather than implying the safe posture while offering the unsafe one.",
+    summary: "RESOLVED 2026-08-13 — /hipaa states the Mode A/Mode B PHI boundary and the Business Associate position",
+    why: "Under 45 CFR 160.103 the hosted Mode A endpoint would make HoundShield a Business Associate; self-hosted Mode B does not. /hipaa now states both explicitly, and four surfaces that advertised an unbackable BAA were corrected. legal-contract.test.ts re-verifies the page still says so before trusting this entry.",
   },
   {
     id: "webhook-allowlist",
     blocking: false,
-    summary: "DONE — proxy/webhook.ts enforces the metadata-only contract (audit finding 14)",
-    why: "Closed by PR #286. The webhook is the only channel that can carry customer content out of a Mode B deployment, so it decides Business Associate status. It now strips to an enumerated field list with zod at enqueue, and the finding-14 test asserts containment instead of the leak.",
+    summary: "RESOLVED 2026-08-13 — metadata-only contract enforced in proxy/webhook.ts (audit finding 14)",
+    why: "The webhook is the only channel that can carry customer content back to houndshield.com in Mode B. A zod strip-mode allowlist now drops every non-enumerated field at enqueue (PR #286). legal-contract.test.ts re-verifies the schema still exists in the proxy source before trusting this entry.",
   },
   {
     id: "subprocessors",

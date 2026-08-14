@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 import { ScrollProgressBar } from "@/components/scroll-effects/ScrollProgressBarClient";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | HoundShield",
+  title: "Terms of Service",
   description: "Terms and conditions for using the HoundShield compliance platform.",
   alternates: { canonical: "/terms" },
 };

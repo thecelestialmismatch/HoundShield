@@ -11,7 +11,7 @@ import {
 } from "@/lib/legal/refund-policy";
 
 export const metadata: Metadata = {
-  title: "Refund Policy | HoundShield",
+  title: "Refund Policy",
   description:
     "The full terms behind HoundShield's 30-day money-back guarantee on the $499 CMMC AI Risk Assessment Report — including how to claim one and how long it takes.",
   alternates: { canonical: "/refund" },
@@ -23,8 +23,12 @@ export const metadata: Metadata = {
  * nothing published behind them.
  *
  * Every word comes from lib/legal/refund-policy.ts so this page, the Terms of
- * Service and the guard test cannot drift — the failure that put
- * `[COMPANY LEGAL NAME]` on three separate pages at once.
+ * Service and the guard test cannot drift — the failure that left an unfilled
+ * company-legal-name placeholder on three separate pages at once.
+ *
+ * The literal token is not written out here on purpose: legal-contract.test.ts
+ * greps these files for bracketed ALL-CAPS placeholders and does not exempt
+ * comments, so quoting one would fail the guard that exists to catch it.
  */
 export default function RefundPolicyPage() {
   return (
