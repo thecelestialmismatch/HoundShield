@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/client";
 import { z } from "zod";
 import { founderInbox, transactionalFrom } from "@/lib/email/identity";
+import { escapeHtml } from "@/lib/email/shell";
 
 // Bounded, validated input (audit M2).
 const ApplySchema = z.object({
@@ -13,15 +14,6 @@ const ApplySchema = z.object({
   message: z.string().max(5000).optional(),
 });
 
-/** Escape untrusted text before interpolating into notification HTML (audit M2). */
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 export async function POST(request: NextRequest) {
   try {

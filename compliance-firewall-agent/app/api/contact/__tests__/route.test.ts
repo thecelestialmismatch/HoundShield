@@ -78,10 +78,43 @@ describe("POST /api/contact — delivery", () => {
     const res = await POST(makeRequest(VALID_BODY));
     expect(res.status).toBe(200);
     expect((await res.json()).success).toBe(true);
-    expect(mockResendSend).toHaveBeenCalledTimes(1);
+    // Two sends now: the founder alert (call 0) and the visitor's
+    // acknowledgement (call 1). The founder alert stays first deliberately —
+    // it is the one that must not be displaced if the second ever throws.
+    expect(mockResendSend).toHaveBeenCalledTimes(2);
     const [email] = mockResendSend.mock.calls[0];
     expect(email.subject).toContain("Jane Smith");
     expect(email.replyTo).toBe("jane@acme.com");
+    delete process.env.RESEND_API_KEY;
+  });
+
+  it("acknowledges the visitor with a branded, topic-aware reply", async () => {
+    process.env.RESEND_API_KEY = "re_test_key";
+    await POST(makeRequest({ ...VALID_BODY, subject: "Sales" }));
+
+    const [ack] = mockResendSend.mock.calls[1];
+    expect(ack.to).toBe("jane@acme.com");
+    // Answers the topic they picked, and carries the links the reply is for.
+    expect(ack.subject).toContain("pricing");
+    expect(ack.html).toContain("/logo.png");
+    expect(ack.html).toContain("/pricing");
+    expect(ack.html).toContain("$499");
+    // Quotes their own message back.
+    expect(ack.html).toContain("I want the $499 report.");
+    expect(ack.text).toBeTruthy();
+    delete process.env.RESEND_API_KEY;
+  });
+
+  it("still reports success when the acknowledgement fails — the lead is already delivered", async () => {
+    process.env.RESEND_API_KEY = "re_test_key";
+    // Founder alert succeeds, auto-reply throws (e.g. the visitor's address
+    // bounces at Resend). Returning 500 here would tell a visitor whose message
+    // we are already holding that we could not send it.
+    mockResendSend.mockResolvedValueOnce({ id: "ok" }).mockRejectedValueOnce(new Error("bounce"));
+
+    const res = await POST(makeRequest(VALID_BODY));
+    expect(res.status).toBe(200);
+    expect((await res.json()).success).toBe(true);
     delete process.env.RESEND_API_KEY;
   });
 

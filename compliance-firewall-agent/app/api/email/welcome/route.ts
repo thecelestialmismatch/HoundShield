@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { transactionalFrom } from "@/lib/email/identity";
+import { emailHeader, manageNotificationsFooter } from "@/lib/email/shell";
 
 import { SITE_URL } from "@/lib/site-url";
 
@@ -52,10 +53,7 @@ export async function POST(req: NextRequest) {
   <div style="max-width: 580px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
 
     <!-- Header -->
-    <div style="background: #0f172a; padding: 32px 40px;">
-      <h1 style="color: #fff; margin: 0; font-size: 22px; font-weight: 700;">HoundShield</h1>
-      <p style="color: #ea580c; margin: 6px 0 0; font-size: 13px;">AI Compliance Firewall for Defense Contractors</p>
-    </div>
+${emailHeader()}
 
     <!-- Body -->
     <div style="padding: 40px;">
@@ -100,13 +98,7 @@ export async function POST(req: NextRequest) {
       </p>
     </div>
 
-    <!-- Footer -->
-    <div style="border-top: 1px solid #e2e8f0; padding: 24px 40px; text-align: center;">
-      <p style="color: #94a3b8; font-size: 12px; margin: 0;">
-        HoundShield &mdash; AI Compliance Firewall<br />
-        <a href="${APP_URL}/command-center/settings" style="color: #94a3b8;">Manage notifications</a>
-      </p>
-    </div>
+${manageNotificationsFooter()}
   </div>
 </body>
 </html>`;

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { GENERAL_INBOX, founderInbox, transactionalFrom } from "@/lib/email/identity";
+import { escapeHtml } from "@/lib/email/shell";
+import { contactReceivedEmail } from "@/lib/email/templates/contact-received";
 
 /**
  * POST /api/contact — delivers a website contact message to the founder inbox.
@@ -31,16 +33,6 @@ const ContactSchema = z.object({
   subject: z.string().max(120).optional(),
   message: z.string().min(1).max(5000),
 });
-
-/** Escape untrusted text before interpolating into notification HTML. */
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -89,6 +81,26 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       `,
       text: `New website contact message\n\nName: ${name}\nEmail: ${email}\nCompany: ${company || "Not specified"}\nSubject: ${topic}\n\n${message}`,
     });
+
+    // 2) Acknowledgement to the person who wrote in — branded, and answering the
+    // topic they actually picked. Best-effort ON PURPOSE: the lead is already
+    // delivered by this point, and letting an auto-reply failure throw would
+    // turn a successful capture into a 500, which the form shows the visitor as
+    // "we couldn't send that" — telling them to write again about a message we
+    // are already holding. Same reasoning as /api/partners/apply.
+    try {
+      await resend.emails.send({
+        from: contactReceivedEmail.from,
+        to: email,
+        // Replies land where a human is watching, not on the send-only address.
+        replyTo: contactTo(),
+        subject: contactReceivedEmail.subject(topic),
+        html: contactReceivedEmail.html(name, topic, message),
+        text: contactReceivedEmail.text(name, topic, message),
+      });
+    } catch (ackErr) {
+      console.error("Contact auto-reply failed (lead was delivered):", ackErr);
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
