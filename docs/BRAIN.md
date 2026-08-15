@@ -1,4 +1,16 @@
 # houndshield Brain AI — Architecture + Seed Content
+> **CMMC Phase 2 status — paused (verified 2026-08-15).** The Department of War
+> suspended Phase 2 enforcement on **2026-07-13** pending a Reform Task Force
+> review (RFI closed 2026-08-14; report due on or about 2026-09-13). The
+> 10 November 2026 date has **not** been replaced and remains the date to be
+> ready for. Nothing underneath it moved: DFARS 252.204-7012, all 110 NIST
+> SP 800-171 Rev 2 controls and the annual SPRS self-assessment are unaffected.
+> Any November date appearing below must be read against this.
+>
+> Canonical source: `compliance-firewall-agent/lib/compliance/cmmc-status.ts`.
+> Update the status there, never here.
+
+
 **File:** BRAIN.md | **Version:** 1.0
 
 ---

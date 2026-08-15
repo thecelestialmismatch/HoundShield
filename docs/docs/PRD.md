@@ -1,4 +1,16 @@
 # houndshield — Product Requirements Document
+> **CMMC Phase 2 status — paused (verified 2026-08-15).** The Department of War
+> suspended Phase 2 enforcement on **2026-07-13** pending a Reform Task Force
+> review (RFI closed 2026-08-14; report due on or about 2026-09-13). The
+> 10 November 2026 date has **not** been replaced and remains the date to be
+> ready for. Nothing underneath it moved: DFARS 252.204-7012, all 110 NIST
+> SP 800-171 Rev 2 controls and the annual SPRS self-assessment are unaffected.
+> Any November date appearing below must be read against this.
+>
+> Canonical source: `compliance-firewall-agent/lib/compliance/cmmc-status.ts`.
+> Update the status there, never here.
+
+
 *Version 2.0 | April 2026 | Manager-Mode Active*
 
 > **MANAGER MODE RULE:** If the founder deviates from the CMMC-first beachhead or starts building features not on this roadmap, this document and the Brain AI should flag it explicitly: "You're off-plan. Here's what we agreed the priority was and why. Do you want to update the plan or return to it?"
