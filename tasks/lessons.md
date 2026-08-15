@@ -1806,3 +1806,69 @@ problem in #288 and the `crons` key the drip's cron never got.
 which is why 029/030/033/034 sit unapplied. One deploy-topology mismatch has now silently
 disabled three separate subsystems; fix the topology once rather than working around it a third
 time.
+
+### A logo can pass every assertion and still be invisible
+**What:** The new email header asserted an `<img>`, the right URL, a shipping file, the
+wordmark beside it, pinned dimensions — all green. Rendered, the mark was a dark smudge on
+a dark navy band, because both brand assets are near-black. The "fix" of seating it in a
+small white chip (copying `drawBadge()` on the PDF cover) passed the same assertions and
+was still illegible: at 30px the shield's interior detail collapses.
+**Rule:** For anything whose failure mode is VISUAL, render it and look at it before
+claiming it works. Assertions test structure; they cannot see contrast or scale. The
+guard that now exists (`background:#ffffff`, `not.toContain("#0f172a")`) was only
+writable AFTER looking — it encodes a defect no amount of up-front test design found.
+
+### A guard whose regex stopped matching is worse than no guard
+**What:** `outreach.test.ts` asserted no bare-domain link via `/(?<!\/\/)\bhoundshield\.com\/demo/`.
+When the link moved to `www.houndshield.com`, the character before the domain became "."
+rather than "/", so the lookbehind passed — the check would no longer catch a genuinely
+scheme-less URL, while still reporting green. Same class as the seed-anchor pass that never
+executed and the `verifySeedChain` content check guarded on a column that did not exist.
+**Rule:** A guard built on a negative lookbehind breaks the moment the surrounding string
+changes shape. Prefer strip-then-assert (remove all valid forms, assert nothing remains)
+over a lookbehind that silently stops applying.
+
+### Four copies of an escape function is four different escape functions
+**What:** `escapeHtml` existed in `/api/contact`, `/api/report/snapshot-lead`,
+`/api/partners/apply` and as `esc()` in `report-order.ts`. They had drifted: `esc()` did
+not escape the apostrophe, so buyer names from Stripe were escaped differently from
+visitor names from a form.
+**Rule:** Security-relevant helpers get exactly one definition. Duplication is not a style
+problem there — it is a guarantee that the copies will diverge and that the weakest one
+will be the one handling the least-trusted input.
+
+### The repo had already decided, in a file I never opened
+**What:** Production could not deploy (`NEXT_NO_VERSION`) after #288 removed the repo-root
+`vercel.json`. I diagnosed it from the build log, proposed restoring that file in a modern
+`buildCommand`/`outputDirectory` form, got approval, shipped it — and the **Repo Structure Guard**
+failed the PR. `scripts/verify-structure.mjs` carries an explicit `FORBIDDEN` entry for exactly
+that path, whose comment predicts the PR verbatim: *"it is exactly the kind of file someone
+re-adds in good faith ('the repo has no Vercel config?')"*. `docs/DEPLOYMENT-MIDDLEWARE.md` had
+already recorded the root cause, the Root Directory value confirmed by `vercel project inspect`,
+and why the fix order was not optional. Both files were in the repo the whole time.
+**Rule:** Before proposing a fix for infrastructure that is already broken, grep `docs/` and
+`scripts/` for the filename and the error string. A repository that has hit a problem before has
+usually written down the answer, and re-deriving it from an error message means arguing with a
+teammate who is not in the room. Failing CI checks are worth reading by NAME — "Repo Structure
+Guard" said what it guarded before I looked at why it was red.
+
+### Declaring a dependency is not installing it, and Vercel checks the installed one
+**What:** The fix above also would not have worked on its own merits. I added `next` to the root
+`package.json` so Vercel's framework detection would find a version. The build still failed:
+*"Warning: Could not identify Next.js version, ensure it is defined as a project dependency."*
+Vercel's Next builder **resolves the installed package** from the project root, and my
+`installCommand` had installed into `compliance-firewall-agent/node_modules`. Declaration in
+package.json is not what it reads.
+**Rule:** For any "X not detected" build error, establish whether the detector reads the manifest
+or resolves the module before satisfying it. And note the shape of the failure: the local build
+passed with the exact command Vercel would run, so a green local build proved nothing about the
+step that was failing — it was failing *before* the build command ever ran.
+
+### A failed deploy is the safe kind of wrong
+**What:** Three separate production builds failed across this stretch and the site never went
+down once. Vercel keeps serving the last good deployment, so a failed build costs freshness, not
+availability. That property is what made it reasonable to *try* the fix above rather than only
+theorise about it — the downside was a red build, which was already the status quo.
+**Rule:** Distinguish "cannot deploy" from "production is broken" and say which one out loud. The
+first is an inconvenience with a widening repo/production gap; the second is an incident. Reporting
+the first in the language of the second burns credibility and urgency you will want later.

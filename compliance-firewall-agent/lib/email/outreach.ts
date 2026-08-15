@@ -26,6 +26,7 @@
  */
 
 import { founderAddress, founderFrom, founderSignature } from './identity';
+import { siteUrl } from '@/lib/site-url';
 
 /** A single step in the non-technical test guide. */
 export interface TestStep {
@@ -74,7 +75,9 @@ export const TEST_IT_YOURSELF_STEPS: readonly TestStep[] = [
     // clients guess: pasted into Gmail, "houndshield.com/demo" was rewritten to
     // a google.com/url redirect pointing at HTTP, so the buyer would see a
     // tracking link and take an extra insecure hop. Both read as bulk mail.
-    text: 'Open https://houndshield.com/demo in any web browser. There is nothing to install, no account to create, and no login.',
+    // Built from SITE_URL (www) rather than hardcoded apex: the apex 308s, and
+    // the first thing a cold buyer does with a redirect is distrust it.
+    text: `Open ${siteUrl('/demo')} in any web browser. There is nothing to install, no account to create, and no login.`,
   },
   {
     n: 2,

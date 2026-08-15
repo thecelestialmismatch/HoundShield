@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { GENERAL_INBOX, founderInbox, transactionalFrom } from "@/lib/email/identity";
+import { emailButton, emailFooter, emailShell, escapeHtml } from "@/lib/email/shell";
+import { siteUrl } from "@/lib/site-url";
 
 /**
  * POST /api/report/snapshot-lead
@@ -40,15 +42,6 @@ const LeadSchema = z
   })
   .strict(); // reject unknown keys — no smuggling of pasted text
 
-/** Escape untrusted text before interpolating into notification HTML. */
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -118,21 +111,47 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       to: email,
       replyTo: leadTo,
       subject: "Your HoundShield AI risk snapshot",
-      html: `
-        <h2>Your AI risk snapshot</h2>
-        <p>Hi ${escapeHtml(name)},</p>
-        <p>Here's the summary from the snapshot you generated in your browser:</p>
-        <p><strong>${escapeHtml(countsLine)}</strong></p>
-        <p>These findings map to NIST 800-171 controls: ${escapeHtml(controlList)}.</p>
-        <p>Your pasted text never left your device — this email contains counts only.</p>
-        <p>The <strong>$499 CMMC AI Risk Assessment Report</strong> runs HoundShield in your own
-        environment for 14 days and delivers a SHA-256-signed PDF your assessor accepts:
-        <a href="https://houndshield.com/assessment">houndshield.com/assessment</a>.</p>
-        <p>See a sample of the full report:
-        <a href="https://houndshield.com/api/reports/sample">sample report (PDF)</a>.</p>
-        <p>— HoundShield</p>
-      `,
-      text: `Your AI risk snapshot\n\nHi ${name},\n\nSummary: ${countsLine}\nNIST controls: ${controlList}\n\nYour pasted text never left your device — this email contains counts only.\n\nThe $499 CMMC AI Risk Assessment Report runs HoundShield in your environment for 14 days and delivers a signed PDF your assessor accepts: https://houndshield.com/assessment\nSample report: https://houndshield.com/api/reports/sample\n\n— HoundShield`,
+      // Branded like every other buyer-facing message, and pointed at SITE_URL
+      // rather than the apex host: both links here were hardcoded
+      // `https://houndshield.com/...`, which Vercel 308s to www. #290
+      // single-sourced twenty-nine such copies and missed these two, because
+      // they live inside a template literal in an API route rather than in a
+      // metadata block.
+      html: emailShell({
+        tagline: "Instant AI Risk Snapshot",
+        bodyHtml: `
+      <h2 style="color:#1e293b;font-size:20px;margin:0 0 16px;">Your AI risk snapshot, ${escapeHtml(name)}</h2>
+
+      <p style="color:#475569;line-height:1.6;margin:0 0 20px;">
+        Here's the summary from the snapshot you generated in your browser.
+      </p>
+
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:20px;margin:0 0 24px;">
+        <p style="color:#991b1b;font-weight:600;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">Findings</p>
+        <p style="color:#7f1d1d;font-size:16px;margin:0 0 8px;font-weight:700;">${escapeHtml(countsLine)}</p>
+        <p style="color:#991b1b;font-size:13px;margin:0;">Mapped to NIST 800-171 controls: ${escapeHtml(controlList)}.</p>
+      </div>
+
+      <p style="color:#475569;line-height:1.6;margin:0 0 20px;">
+        Your pasted text never left your device — this email contains counts only.
+      </p>
+
+      <p style="color:#475569;line-height:1.6;margin:0 0 8px;">
+        The <strong>$499 CMMC AI Risk Assessment Report</strong> runs HoundShield in your own
+        environment for 14 days and delivers a SHA-256-signed PDF your assessor accepts.
+      </p>
+${emailButton(siteUrl("/assessment"), "Start your $499 report →")}
+
+      <p style="color:#64748b;font-size:13px;line-height:1.6;">
+        Want to see the output first? Here's a
+        <a href="${siteUrl("/api/reports/sample")}" style="color:#ea580c;">sample report (PDF)</a> —
+        a real generated report, not a mockup. Reply to this email with any questions.
+      </p>`,
+        footerHtml: emailFooter(
+          `<br /><a href="${siteUrl("/security")}" style="color:#94a3b8;">Security &amp; deployment modes</a>`
+        ),
+      }),
+      text: `Your AI risk snapshot\n\nHi ${name},\n\nSummary: ${countsLine}\nNIST controls: ${controlList}\n\nYour pasted text never left your device — this email contains counts only.\n\nThe $499 CMMC AI Risk Assessment Report runs HoundShield in your environment for 14 days and delivers a signed PDF your assessor accepts: ${siteUrl("/assessment")}\nSample report: ${siteUrl("/api/reports/sample")}\n\n— HoundShield`,
     });
 
     return NextResponse.json({ success: true });
