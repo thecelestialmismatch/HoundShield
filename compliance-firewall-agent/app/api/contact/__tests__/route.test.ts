@@ -96,7 +96,7 @@ describe("POST /api/contact — delivery", () => {
     expect(ack.to).toBe("jane@acme.com");
     // Answers the topic they picked, and carries the links the reply is for.
     expect(ack.subject).toContain("pricing");
-    expect(ack.html).toContain("/logo.png");
+    expect(ack.html).toContain("/logo-mark-white.png");
     expect(ack.html).toContain("/pricing");
     expect(ack.html).toContain("$499");
     // Quotes their own message back.
