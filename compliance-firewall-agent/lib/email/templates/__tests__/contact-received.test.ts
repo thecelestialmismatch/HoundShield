@@ -1,7 +1,12 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { CONTACT_TOPICS, contactReceivedEmail, replyForTopic } from "../contact-received";
+import {
+  CONTACT_TOPICS,
+  brainAnswerFor,
+  contactReceivedEmail,
+  replyForTopic,
+} from "../contact-received";
 
 const APP_ROOT = join(__dirname, "..", "..", "..", "..");
 
@@ -106,9 +111,71 @@ describe("the reply answers the question that was asked", () => {
 
   it("carries the logo and a working demo and pricing link on the General reply", () => {
     const html = contactReceivedEmail.html("Dana", "General", "hi");
-    expect(html).toContain("/logo.png");
+    expect(html).toContain("/logo-mark-white.png");
     expect(html).toContain("/demo");
     expect(html).toContain("/pricing");
+  });
+});
+
+describe("Brain AI answers the sentence, not just the dropdown", () => {
+  it("answers a specific question even when the topic is General", () => {
+    // The exact case this exists for: a visitor picks "General" and then asks
+    // something specific. The dropdown must not outrank what they typed.
+    const html = contactReceivedEmail.html(
+      "Dana",
+      "General",
+      "Is ChatGPT HIPAA compliant for our clinic?"
+    );
+    expect(html).toContain("Answering your question directly");
+    expect(html).toMatch(/HIPAA/);
+  });
+
+  it.each([
+    ["How much does it cost?", /\$499/],
+    ["What is CUI?", /Controlled Unclassified Information/i],
+    ["Can I get a PDF report for my C3PAO?", /PDF/i],
+  ])("recognises %s", (question, expected) => {
+    const answer = brainAnswerFor(question);
+    expect(answer).not.toBeNull();
+    expect(answer as string).toMatch(expected);
+  });
+
+  it("returns null rather than guessing when it does not know", () => {
+    expect(brainAnswerFor("asdfgh qwerty zzz")).toBeNull();
+    expect(brainAnswerFor("")).toBeNull();
+  });
+
+  it("omits the block entirely on no match, leaving the topic answer intact", () => {
+    const html = contactReceivedEmail.html("Dana", "Sales", "asdfgh qwerty zzz");
+    expect(html).not.toContain("Answering your question directly");
+    expect(html).toContain("$499"); // the Sales topic block still answers
+  });
+
+  it("returns plain text, not the markdown the FAQ is authored in", () => {
+    const answer = brainAnswerFor("What is CUI?") as string;
+    expect(answer).not.toMatch(/\*\*/);
+    expect(answer).not.toMatch(/^#+ /m);
+  });
+
+  it("escapes the answer on its way into the email", () => {
+    // The FAQ is our own content, but it is interpolated into HTML like any
+    // other value — the escape is not conditional on trusting the source.
+    const html = contactReceivedEmail.html("Dana", "General", "What is CUI?");
+    expect(html).not.toMatch(/<script/i);
+  });
+
+  it("makes no network call and needs no LLM key", async () => {
+    // The load-bearing property. If this ever routes through OpenRouter, a
+    // stranger's message — possibly containing the PHI or CUI we sell
+    // protection against — leaves the building, and an unreviewed sentence can
+    // reach a buyer. Proven by the absence of a key, not by reading the code.
+    const saved = process.env.OPENROUTER_API_KEY;
+    delete process.env.OPENROUTER_API_KEY;
+    try {
+      expect(brainAnswerFor("How much does it cost?")).not.toBeNull();
+    } finally {
+      if (saved !== undefined) process.env.OPENROUTER_API_KEY = saved;
+    }
   });
 });
 
