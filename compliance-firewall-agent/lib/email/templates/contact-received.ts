@@ -1,3 +1,5 @@
+import { findFaqAnswer } from "@/lib/brain-ai/faq";
+import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { transactionalFrom } from "@/lib/email/identity";
 import { emailButton, emailFooter, emailShell, escapeHtml } from "@/lib/email/shell";
 import { siteUrl } from "@/lib/site-url";
@@ -170,6 +172,37 @@ export function replyForTopic(topic: string): TopicReply {
   return TOPIC_REPLIES[topic] ?? TOPIC_REPLIES.General;
 }
 
+/**
+ * Brain AI's answer to what the visitor ACTUALLY wrote, or null.
+ *
+ * The topic blocks above answer the dropdown. This answers the sentence. A
+ * visitor who picks "General" and then asks "is ChatGPT HIPAA compliant?"
+ * should get the HIPAA answer, not the generic one — and Brain AI's FAQ already
+ * holds that answer, written and reviewed.
+ *
+ * WHY THIS IS SAFE, when routing the message to an LLM would not be.
+ * `findFaqAnswer` is a pure, in-process keyword matcher over a fixed answer
+ * table (`lib/brain-ai/faq.ts`) — the same "zero API calls, pure in-memory
+ * lookup" path the knowledge graph documents. It makes NO network call, needs
+ * no `OPENROUTER_API_KEY`, and cannot invent a sentence: it either returns one
+ * of our own reviewed answers or null.
+ *
+ * That distinction is the whole point. Composing this reply through
+ * OpenRouter would put a stranger's message — possibly containing exactly the
+ * PHI or CUI we sell protection against — onto a commercial endpoint, and could
+ * put an unreviewed compliance claim in front of a buyer. Retrieval gives the
+ * founder what was asked for ("use Brain AI to respond") without either risk.
+ *
+ * Returns plain text: `cleanAnswer` strips the markdown the FAQ is authored in,
+ * because these answers are written for a chat pane, not an HTML email.
+ */
+export function brainAnswerFor(message: string): string | null {
+  const answer = findFaqAnswer(message);
+  if (!answer) return null;
+  const text = cleanAnswer(answer).trim();
+  return text.length > 0 ? text : null;
+}
+
 /** Every topic key, for tests and for callers that want to validate a subject. */
 export const CONTACT_TOPICS = Object.keys(TOPIC_REPLIES);
 
@@ -200,6 +233,18 @@ export const contactReceivedEmail = {
     const greeting = name && name.trim() ? escapeHtml(name.trim()) : "there";
     const quoted = escapeHtml(message).replace(/\n/g, "<br />");
 
+    // Brain AI's answer to their actual sentence, when it recognises one. Sits
+    // ABOVE the topic block: the specific question they typed outranks the
+    // category they picked from a dropdown.
+    const brain = brainAnswerFor(message);
+    const brainBlock = brain
+      ? `
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:20px;margin:0 0 24px;">
+        <p style="color:#1e40af;font-weight:600;margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;">Answering your question directly</p>
+        <p style="color:#1e3a8a;font-size:14px;margin:0;line-height:1.65;">${escapeHtml(brain).replace(/\n/g, "<br />")}</p>
+      </div>`
+      : "";
+
     return emailShell({
       tagline: "AI Compliance Firewall — local-only prompt scanning",
       bodyHtml: `
@@ -214,7 +259,7 @@ export const contactReceivedEmail = {
         <p style="color:#64748b;font-weight:600;margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;">You wrote</p>
         <p style="color:#475569;font-size:14px;margin:0;line-height:1.6;font-style:italic;">${quoted}</p>
       </div>
-
+${brainBlock}
       <p style="color:#475569;line-height:1.6;margin:0 0 24px;">${reply.answerHtml}
       </p>
 ${emailButton(reply.cta.href, reply.cta.label)}
@@ -239,6 +284,8 @@ ${renderLinks(reply.links)}
     const greeting = name && name.trim() ? name.trim() : "there";
     const stripped = reply.answerHtml.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
     const links = reply.links.map((l) => `- ${l.label} — ${l.note}\n  ${l.href}`).join("\n");
+    const brain = brainAnswerFor(message);
+    const brainBlock = brain ? `Answering your question directly:\n${brain}\n\n` : "";
 
     return `Thanks, ${greeting} — we've got your message
 
@@ -247,7 +294,7 @@ A real person reads every message and will reply within 4 business hours during 
 You wrote:
 ${message}
 
-${stripped}
+${brainBlock}${stripped}
 
 Where to go next:
 ${links}
