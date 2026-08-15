@@ -127,7 +127,6 @@ const HISTORICAL = /^(CHANGELOG|AUDIT-\d|PRE-LAUNCH-AUDIT-\d|DECISIONS)|-\d{4}-\
 
 function governingDocs(): string[] {
   const acc: string[] = [];
-  const roots = [REPO_ROOT, join(REPO_ROOT, "tasks"), join(REPO_ROOT, "docs")];
 
   const walk = (dir: string, depth: number) => {
     let entries: string[];
