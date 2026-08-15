@@ -93,3 +93,101 @@ describe("CMMC regulatory status", () => {
     expect(corrected.length).toBeGreaterThanOrEqual(5);
   });
 });
+
+/* ──────────────────────────────────────────────────────────────────────
+ * The same contract, for the documents that steer the NEXT session.
+ *
+ * The guard above scans app/, components/ and lib/ for .ts/.tsx only. That
+ * blind spot is not academic: it is exactly how CLAUDE.md — the brain doc
+ * every session reads FIRST, before any code — went on describing
+ * "Stage 3 (Nov 10 — Phase 2 enforcement day)" and a kill criterion keyed to
+ * the deadline being "extended", six weeks after the Department of War paused
+ * it. Shipped code told the buyer the truth while the governing document told
+ * the operator something else, and the operator writes the code.
+ *
+ * Scope is deliberately the GOVERNING docs — the ones that direct future
+ * decisions — not every markdown file in the repo. Dated historical records
+ * are excluded by name below, because a changelog entry written in June that
+ * names the then-live deadline is accurate history, and rewriting history to
+ * satisfy a guard is how an audit trail stops being evidence.
+ * ────────────────────────────────────────────────────────────────────── */
+
+const REPO_ROOT = join(ROOT, "..");
+
+/**
+ * Append-only or point-in-time records. Excluded because their value IS that
+ * they say what was true on the day they were written.
+ *
+ * The second pattern catches any date-stamped filename
+ * (VALIDATION-2026-07-12.md, written the day before the pause). Rewriting a
+ * dated record so it reflects facts that post-date it destroys the only thing
+ * it was keeping.
+ */
+const HISTORICAL = /^(CHANGELOG|AUDIT-\d|PRE-LAUNCH-AUDIT-\d|DECISIONS)|-\d{4}-\d{2}-\d{2}\.md$/;
+
+function governingDocs(): string[] {
+  const acc: string[] = [];
+
+  const walk = (dir: string, depth: number) => {
+    let entries: string[];
+    try {
+      entries = readdirSync(dir);
+    } catch {
+      return; // optional directory
+    }
+    for (const entry of entries) {
+      if (entry === "node_modules" || entry.startsWith(".")) continue;
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) {
+        if (depth > 0) walk(full, depth - 1);
+      } else if (entry.endsWith(".md") && !HISTORICAL.test(entry)) {
+        acc.push(full);
+      }
+    }
+  };
+
+  // Repo root itself is not recursed (depth 0) — only its own *.md files —
+  // so this never wanders into compliance-firewall-agent/ or skills/.
+  walk(REPO_ROOT, 0);
+  walk(join(REPO_ROOT, "tasks"), 1);
+  walk(join(REPO_ROOT, "docs"), 2);
+  return acc;
+}
+
+describe("CMMC regulatory status — governing documents", () => {
+  const docs = governingDocs();
+
+  it("finds the brain doc and the task queue", () => {
+    // Guards the guard twice over: a walker that finds nothing, or one that
+    // silently stops finding CLAUDE.md, would let the drift back in unseen.
+    const names = docs.map((d) => d.replace(REPO_ROOT + "/", ""));
+    expect(names).toContain("CLAUDE.md");
+    expect(names).toContain("tasks/todo.md");
+    expect(docs.length).toBeGreaterThan(5);
+  });
+
+  it("no governing doc cites the November 2026 date without naming the programme status", () => {
+    const violations: string[] = [];
+    for (const doc of docs) {
+      const src = readFileSync(doc, "utf8");
+      if (!NAMES_THE_DATE.test(src)) continue;
+      if (!NAMES_THE_SUSPENSION.test(src)) violations.push(doc.replace(REPO_ROOT + "/", ""));
+    }
+    expect(
+      violations,
+      `names 10 Nov 2026 without saying where CMMC Phase 2 stands: ${violations.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  it("the brain doc does not present a passed Stage 1 date as upcoming", () => {
+    // The 2026-06-25 Stage 1 checkpoint lapsed. A doc that still says
+    // "by June 25" produces a briefing block counting down to a date in the
+    // past, which is how a session starts by orienting to a fiction.
+    const brain = readFileSync(join(REPO_ROOT, "CLAUDE.md"), "utf8");
+    const claimsFutureJune = /\b(?:by|→)\s*(?:2026-06-25|June 25)\b/i.test(brain);
+    expect(
+      claimsFutureJune,
+      "CLAUDE.md still frames the lapsed 2026-06-25 checkpoint as a future deadline",
+    ).toBe(false);
+  });
+});

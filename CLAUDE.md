@@ -8,11 +8,22 @@
 
 **FIRST REVENUE, as fast as possible.**
 
-**Stage 1 milestone — by 2026-06-25:**
-- ≥3 paid **$499 CMMC AI Risk Assessment Reports** closed (any vertical: healthcare, defense, legal)
-- ≥1 **RPO/MSP signed referral agreement** (NOT a C3PAO — they are legally barred from endorsing tools they assess)
+**Stage 1 milestone — ⛔ LAPSED 2026-06-25, NOT MET. Awaiting founder re-baseline.**
+- ≥3 paid **$499 CMMC AI Risk Assessment Reports** closed (any vertical: healthcare, defense, legal) — **0 closed**
+- ≥1 **RPO/MSP signed referral agreement** (NOT a C3PAO — they are legally barred from endorsing tools they assess) — **0 signed**
 
-If the milestone hits → expand to recurring revenue (Stage 2). If it fails → run the kill criteria.
+The 2026-06-25 checkpoint passed without either trigger. It is recorded as
+lapsed rather than quietly moved: a milestone that slides on its own every time
+it is missed is not a milestone, and the kill criteria below are only
+meaningful if the dates they hang off are real.
+
+**Setting the replacement date is a founder decision and is deliberately not
+made here.** Two facts belong in it: production has not deployed since #288
+(see `tasks/todo.md`), so nothing shipped after that date has reached a buyer;
+and CMMC Phase 2 enforcement is paused (below), which removed the deadline
+urgency the original date leaned on.
+
+If the re-baselined milestone hits → expand to recurring revenue (Stage 2). If it fails → run the kill criteria.
 
 **Lead product is the $499 one-time report, NOT the subscription.** A $499 PO bypasses procurement review; a $199–$1,500/mo subscription does not. Prove the PDF sells before launching any subscription tier.
 
@@ -32,7 +43,8 @@ Every new session, in order:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 HERMES BRIEFING — [DATE]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DAYS TO JUNE 25 CHECKPOINT:    [X]
+STAGE 1 CHECKPOINT:            LAPSED 2026-06-25, not met — awaiting re-baseline
+DAYS TO KILL-CRITERIA REVIEW:  [X]  (2026-09-01)
 PAID GAP REPORTS CLOSED:       [X] / 3
 RPO/MSP REFERRAL AGREEMENTS:   [X] / 1
 ARCHITECTURE STATUS:           Vercel (trial) / Docker (CUI-safe) / [customer stack]
@@ -77,7 +89,7 @@ Lead with **Rachel** (fastest close, no FedRAMP blocker). Use **Jordan** wins as
 
 ## Pricing (REVISED — one grid, no contradictions)
 
-**Stage 1 (now → June 25):**
+**Stage 1 (checkpoint lapsed 2026-06-25; pricing unchanged and still current):**
 - **CMMC AI Risk Assessment Report — $499 one-time** (primary product). Run the proxy 14 days in the customer's environment → SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription, no MSA.
 - Co-branded RPO version — **$299 wholesale** (RPO charges client $499–$999, keeps the margin).
 
@@ -135,7 +147,7 @@ Each agent runs OODA loop. Self-corrects via `tasks/lessons.md`. No agent overri
 ## Manager Mode / Counter-Intelligence Protocol (ACTIVE)
 
 Before executing ANY new request, run all five checks:
-1. Does this help close 1+ paid gap report or RPO agreement by June 25?
+1. Does this help close 1+ paid gap report or RPO/MSP agreement inside the next 30 days?
 2. Does it map to a NIST 800-171 / HIPAA control the buyer needs evidence for?
 3. Under $500 and under 8 hours of solo-founder time?
 4. Is it on the NEVER DO list?
@@ -144,7 +156,7 @@ Before executing ANY new request, run all five checks:
 If any check fails:
 > **HERMES CHALLENGE:** [reason] / Cost: [tradeoff] / Recommendation: [drop/defer/modify] / Override? Y/N
 
-**Current stage:** Stage 1 — 3 paid $499 reports + 1 RPO referral agreement by June 25.
+**Current stage:** Stage 1, overrun — 3 paid $499 reports + 1 RPO/MSP referral agreement, target date lapsed 2026-06-25 and awaiting founder re-baseline. Both revenue triggers still read 0.
 
 ### NEVER DO List
 - ✗ Claim "10 customers by June 10" — impossible with an 84-day median cycle
@@ -163,18 +175,34 @@ If any check fails:
 
 - **Stage 1 (Jun 25):** ≥3 paid $499 reports · ≥1 RPO agreement · Docker image published · Brain AI CUI warning live · one pricing page · `/security` page live.
 - **Stage 2 (Aug 25):** $3K MRR run-rate · ≥5 paying logos · ≥1 channel partner generating inbound · SOC 2 Type I in progress · one adjacent-vertical page live.
-- **Stage 3 (Nov 10 — Phase 2 enforcement day):** $25K–$50K MRR · 25–60 logos · SOC 2 Type I complete · AWS GovCloud option in beta.
+- **Stage 3 (10 Nov 2026 — the date we prepare to; Phase 2 enforcement is PAUSED, not live):** $25K–$50K MRR · 25–60 logos · SOC 2 Type I complete · AWS GovCloud option in beta.
 
 **KILL CRITERIA — by Sep 1, 2026, if ANY TWO are true → shut down or pivot:**
 1. Fewer than 5 paid customers (any product, any price)
 2. No signed channel partner generating leads
-3. CMMC Nov 10 deadline officially extended ≥6 months by DoD
+3. CMMC Phase 2 officially deferred ≥6 months by DoD/DoW beyond 10 Nov 2026
+
+> ⚠️ **STATUS AS OF 2026-08-15 — TWO OF THREE ALREADY READ TRUE.**
+> (1) is true: **0 paid customers**. (2) is true: **0 signed channel partners**.
+> (3) is *not yet* true on its own terms — the 13 July pause is a suspension
+> pending a ~13 Sep review, not a ≥6-month deferral, and no replacement date
+> has been issued.
+>
+> On the rule as written, the Sep 1 gate is **already met and calls for shut
+> down or pivot**. That is a founder decision and is NOT executed here — but it
+> must not be discovered late, and it must not be dissolved by quietly editing
+> the criteria that caught it. Two things genuinely mitigate and both are
+> verifiable: production has not deployed since #288, so the current site has
+> never been in front of a buyer; and the pricing/positioning has never been
+> tested against the MSP buying model documented in
+> `docs/gtm/MSP-CHANNEL-RESEARCH.md`. Neither is evidence the market said no —
+> they are evidence the market was never asked.
 
 ---
 
 ## Market Numbers (quick reference — buyers verify everything)
 
-**CMMC / Defense:** 76,598 US DIB orgs need CMMC L2 (DoD, Feb 2026); ~1,042 (~1.4%) completed. ~83–97 authorized C3PAOs, <600 Certified Assessors vs 2,000–3,000 needed. Phase 2 enforcement Nov 10, 2026 (historically slips — don't bet the company on it). Assessment cost $30K–$150K → budget exists.
+**CMMC / Defense:** 76,598 US DIB orgs need CMMC L2 (DoD, Feb 2026); ~1,042 (~1.4%) completed. ~83–97 authorized C3PAOs, <600 Certified Assessors vs 2,000–3,000 needed. Phase 2 enforcement **paused 2026-07-13** by DoW pending a Reform Task Force review (RFI closed 2026-08-14, report due ~2026-09-13); 10 Nov 2026 was not replaced and stays the prep date. DFARS 252.204-7012, the 110 NIST 800-171 Rev 2 controls and the annual SPRS self-assessment are untouched — sell the DOJ False Claims Act liability, never the deadline. Canonical: `lib/compliance/cmmc-status.ts`. Assessment cost $30K–$150K → budget exists.
 **Healthcare / HIPAA:** ~6,000 US hospitals + tens of thousands of physician groups. 81% of healthcare data policy violations involve regulated data (Netskope, May 2025). ChatGPT is not HIPAA-compliant without a BAA (only Enterprise/API has one). No FedRAMP requirement for the vendor.
 **Legal:** Every state bar (NY/CA/FL min.) issued AI ethics opinions 2024–2025. Attorney-client privilege + Kovel doctrine = genuine monitoring requirement. AmLaw-200 mid-market firms (50–500 attorneys) = ideal first targets.
 **AEO:** 51% of B2B buyers start research with an AI chatbot (G2, Apr 2026).
