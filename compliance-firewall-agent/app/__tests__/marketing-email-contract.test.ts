@@ -44,6 +44,12 @@ const TRANSACTIONAL = new Set([
   "canceled.ts", // account status change
   "partner-welcome.ts", // acknowledges an application the recipient submitted
   "upgrade.ts", // payment receipt
+  // A direct reply to a message the recipient sent us through /contact —
+  // §7702(17)(A): its primary purpose is to respond to a request the recipient
+  // initiated. Same class as partner-welcome. Attaching marketingFooter() would
+  // also make it fail closed and send nothing while MARKETING_POSTAL_ADDRESS is
+  // unset, silently swallowing the acknowledgement it exists to deliver.
+  "contact-received.ts",
 ]);
 
 function templateFiles(): string[] {

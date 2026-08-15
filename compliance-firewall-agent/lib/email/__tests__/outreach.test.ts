@@ -15,6 +15,15 @@ import {
   mailboxSmokeTest,
 } from '../outreach';
 import { founderAddress, founderName } from '../identity';
+import { siteUrl } from '@/lib/site-url';
+
+/**
+ * The demo URL as the drafts now build it. These assertions used to hardcode
+ * `https://houndshield.com/demo` — the apex host, which Vercel 308s to www. The
+ * draft was corrected to build from SITE_URL, so the tests follow it rather
+ * than pinning the address that redirects.
+ */
+const DEMO_URL = siteUrl('/demo');
 
 /** Fully-specified real-looking vars, so render() succeeds. */
 const VARS = { firstName: 'Dana', organization: 'Ridgeview Family Medicine' };
@@ -49,7 +58,7 @@ describe('the non-technical test guide', () => {
   });
 
   it('points at the real demo URL', () => {
-    expect(renderTestGuide()).toContain('https://houndshield.com/demo');
+    expect(renderTestGuide()).toContain(DEMO_URL);
   });
 
   it('promises no install, no account and no IT involvement', () => {
@@ -90,7 +99,7 @@ describe('every buyer-facing draft carries the guide', () => {
   it.each(BUYER_DRAFTS.map((d) => [d.id, d] as const))('%s includes the step-by-step guide', (_id, draft) => {
     const { text } = render(draft, VARS);
     expect(text).toContain('How to try it yourself');
-    expect(text).toContain('https://houndshield.com/demo');
+    expect(text).toContain(DEMO_URL);
     expect(text).toContain(PREVIEW_CAVEAT);
   });
 });
@@ -272,8 +281,14 @@ describe('the test guide names a sample button that /demo actually has', () => {
     for (const d of OUTREACH_DRAFTS) {
       const vars = d.id === 'defense' ? { firstName: 'Jordan' } : VARS;
       const { text } = render(d, vars);
-      expect(text, `${d.id} must not contain a bare-domain URL`).not.toMatch(
-        /(?<!\/\/)\bhoundshield\.com\/demo/,
+      // Strip every fully-schemed URL, then assert no mention of the domain
+      // survives. The previous form — a lookbehind for "//" — silently stopped
+      // biting the moment the link moved to www: in "www.houndshield.com" the
+      // character before the domain is ".", not "/", so the negative lookbehind
+      // passed and a genuinely scheme-less link would no longer be caught.
+      const withoutUrls = text.replace(/https:\/\/[^\s)]+/g, '');
+      expect(withoutUrls, `${d.id} must not contain a bare-domain URL`).not.toMatch(
+        /houndshield\.com\//,
       );
       expect(text).not.toContain('http://houndshield');
     }

@@ -132,7 +132,10 @@ export default function ContactPage() {
                   <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
                     <CheckCircle2 className="w-14 h-14 text-[var(--hs-success)] mx-auto mb-4" />
                     <h3 className="text-2xl font-bold mb-2">Message sent</h3>
-                    <p className="text-[var(--hs-ink-secondary)] mb-8">We will respond within 4 business hours.</p>
+                    <p className="text-[var(--hs-ink-secondary)] mb-8">
+                      Check your inbox — we&apos;ve emailed you a confirmation with answers on
+                      what you asked about. A human replies within 4 business hours.
+                    </p>
                     <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-sm font-semibold transition-colors cursor-pointer">
                       Back to Home <ArrowRight className="w-4 h-4" />
                     </Link>
