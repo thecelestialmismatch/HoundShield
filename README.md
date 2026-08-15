@@ -36,6 +36,48 @@ You cannot scan regulated data for compliance by violating compliance.
 
 HoundShield scans locally. In self-hosted mode there is no "us" in the data path.
 
+## What it looks like
+
+Captured from a production build of this repo (`npm run build` → standalone
+server), not mockups. Regenerate them at any time — see
+[docs/assets/README.md](docs/assets/README.md).
+
+<div align="center">
+
+<img src="docs/assets/screenshots/home.png" width="820" alt="HoundShield homepage — local-only prompt scanning with a live AI monitor" />
+
+</div>
+
+| | |
+|---|---|
+| <img src="docs/assets/screenshots/pricing.png" width="400" alt="Pricing page" /> | <img src="docs/assets/screenshots/security.png" width="400" alt="Security page" /> |
+| **Pricing** — one grid, $499 report as the lead | **Security** — how prompt data is handled |
+| <img src="docs/assets/screenshots/how-it-works.png" width="400" alt="How it works page" /> | <img src="docs/assets/screenshots/partners.png" width="400" alt="Partner program page" /> |
+| **How it works** — the interception path | **Partners** — the RPO / MSP program |
+
+### Cookie consent
+
+Analytics stay off until the visitor opts in — the banner blocks nothing and
+sets no analytics cookie by default, and the choice is revocable from
+[/cookies](https://www.houndshield.com/cookies).
+
+<div align="center">
+
+<img src="docs/assets/screenshots/cookie-consent.png" width="820" alt="Cookie consent banner offering Accept essential, Accept all, and Cookie settings" />
+
+</div>
+
+### Demo
+
+**There is no recorded demo video in this repository yet** — the honest status,
+rather than a broken link. What exists today:
+
+- The live interactive scanner: [houndshield.com/demo](https://www.houndshield.com/demo#snapshot)
+- The verbatim script a recording should follow: [docs/DEMO-SCRIPT.md](docs/DEMO-SCRIPT.md)
+
+The demo ends on the generated PDF, every time. Recording it requires the proxy
+running against a real assistant session, which cannot be produced from CI.
+
 ## Verified numbers
 
 Not marketing figures — reproduce every one with the commands in
