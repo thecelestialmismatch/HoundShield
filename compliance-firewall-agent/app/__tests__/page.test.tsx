@@ -46,15 +46,13 @@ describe('HomePage — HERMES demo parity', () => {
   })
 
   // ── Hero ─────────────────────────────────────────────────────────
-  // Contract changed 2026-07-28: DoD suspended CMMC Phase 2 on 2026-07-13,
-  // removing the Nov 10 deadline the old CUI-first copy leaned on. The hero
-  // now leads with evidence ("prove what was pasted"), which sells to both a
-  // healthcare privacy officer and a contractor facing FCA/SPRS exposure.
-  it('H1 leads with the evidence promise, not the suspended CMMC deadline', () => {
+  // The hero leads with the control boundary rather than a claimed regulatory
+  // outcome or an unsupported assertion about every external AI provider.
+  it('H1 leads with the buyer-controlled boundary, not a compliance promise', () => {
     render(<HomePage />)
     const h1 = screen.getByRole('heading', { level: 1 })
-    expect(h1.textContent).toMatch(/Prove what your team pasted into/i)
-    expect(h1.textContent).toContain('ChatGPT')
+    expect(h1.textContent).toMatch(/Keep regulated data inside your control boundary/i)
+    expect(h1.textContent).not.toContain('ChatGPT')
   })
 
   it('hero pill leads with HIPAA and NIST, not a CMMC certification date', () => {
@@ -83,9 +81,9 @@ describe('HomePage — HERMES demo parity', () => {
     expect(screen.getByText('Live prompt scans')).toBeTruthy()
   })
 
-  it('hero trust row makes no free-tier promise (single $499 offer)', () => {
+  it('hero trust row distinguishes hosted evaluation from the self-hosted path', () => {
     const { container } = render(<HomePage />)
-    for (const t of ['One URL change', 'Runs on your hardware', 'Nothing transmitted', 'Audit-ready PDF']) {
+    for (const t of ['Hosted evaluation clearly labelled', 'Self-hosted path for sensitive workloads', 'Your deployment, your boundary', 'Evidence-oriented PDF']) {
       expect(container.textContent).toContain(t)
     }
     // The free tier was removed from /pricing; the hero must not re-promise it.
@@ -101,12 +99,12 @@ describe('HomePage — HERMES demo parity', () => {
     expect(screen.getByText('NIST 800-171 controls')).toBeTruthy()
   })
 
-  it('replaces the unverifiable "~80,000 contractors" stat with a sourced figure', () => {
+  it('replaces unverifiable market statistics with a concrete deployment distinction', () => {
     const { container } = render(<HomePage />)
     expect(container.textContent).not.toContain('~80,000')
-    // Netskope Threat Labs 2025: 89% of healthcare genAI data policy
-    // violations involve regulated data (vs 31% cross-industry).
-    expect(screen.getByText('89%')).toBeTruthy()
+    expect(container.textContent).not.toContain('89%')
+    expect(screen.getByText('2')).toBeTruthy()
+    expect(screen.getByText('deployment paths')).toBeTruthy()
   })
 
   // ── Compliance gate (deliberate addition to the demo) ────────────
@@ -116,9 +114,9 @@ describe('HomePage — HERMES demo parity', () => {
   })
 
   // ── Asymmetric advantage ─────────────────────────────────────────
-  it('renders the asymmetric-advantage headline (demo copy)', () => {
+  it('renders the evidence-first deployment-boundary headline', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Cloud DLP scans your CUI in their cloud/i)).toBeTruthy()
+    expect(screen.getByText(/Start with the boundary your assessor will ask about/i)).toBeTruthy()
   })
 
   it('renders the demo 3-card comparison (Nightfall & Strac / Purview / HoundShield)', () => {
@@ -184,13 +182,13 @@ describe('HomePage — HERMES demo parity', () => {
     expect(container.textContent).not.toMatch(/500\+\s*teams|2M\+\s*scans/i)
   })
 
-  it('matches the demo section order: hero → stats → asymmetric → platform → CTA', () => {
+  it('keeps the conversion order: boundary hero → proof → comparison → platform → CTA', () => {
     const { container } = render(<HomePage />)
     const text = container.textContent ?? ''
     const order = [
-      'Prove what your team pasted into',
+      'Keep regulated data inside',
       'Detection engines',
-      'Cloud DLP scans your CUI in their cloud',
+      'Start with the boundary your assessor will ask about',
       'Everything you need for CMMC Level 2',
       'Ready to protect your CUI?',
     ].map((s) => text.indexOf(s))

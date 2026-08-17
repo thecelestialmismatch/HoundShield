@@ -58,6 +58,8 @@ export const AUTH_LIMITS = {
   signupEmail: { limit: 5, windowMs: 900_000 },
   otpIp: { limit: 10, windowMs: 60_000 },
   otpEmail: { limit: 5, windowMs: 900_000 },
+  resetCompleteIp: { limit: 10, windowMs: 60_000 },
+  resetCompleteEmail: { limit: 5, windowMs: 900_000 },
 } as const satisfies Record<string, RateLimitOptions>;
 
 export interface GuardInput {
@@ -158,13 +160,16 @@ export async function guardCredentials(input: GuardInput): Promise<GuardResult> 
  * no redeploy.
  */
 export function isServerAuthEnabled(): boolean {
+  // Production must never silently fall back to browser-direct provider calls:
+  // that bypasses the timing, abuse-control, audit, and verification boundary.
+  if (process.env.NODE_ENV === 'production') return true;
   return (process.env.AUTH_SERVER_ROUTES ?? '').trim().toLowerCase() !== 'off';
 }
 
-/** The 501 that tells the browser to use its legacy direct-to-Supabase path. */
+/** Development-only compatibility response; production always keeps the server boundary enabled. */
 export function serverAuthDisabled(): NextResponse {
   return NextResponse.json(
-    { error: 'Server auth routes are disabled (AUTH_SERVER_ROUTES=off).' },
-    { status: 501 },
+    { error: 'Authentication is unavailable in this development environment.' },
+    { status: 503 },
   );
 }

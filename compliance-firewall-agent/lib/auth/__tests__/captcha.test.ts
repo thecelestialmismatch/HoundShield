@@ -2,8 +2,8 @@
  * Cloudflare Turnstile verification.
  *
  * Three properties, each of which has a wrong answer that ships silently:
- *   - unconfigured is OPEN, so a missing key never locks customers out and CI
- *     passes before the founder adds the secret;
+ *   - unconfigured is CLOSED once a challenge is necessary, so a missing key
+ *     becomes visible instead of silently removing a protection;
  *   - configured-and-failing is CLOSED, so a Cloudflare blip is not a bypass;
  *   - the challenge ESCALATES, so a customer who signs in correctly never sees
  *     one.
@@ -75,28 +75,22 @@ describe('isCaptchaConfigured', () => {
 });
 
 describe('captchaRequired', () => {
-  it('never demands a challenge while unconfigured — no dead-end for customers', () => {
-    for (const n of [0, 1, 3, 50]) expect(captchaRequired(n)).toBe(false);
-  });
-
-  it('demands one at and above the threshold once configured', () => {
-    configure('0xAAAA');
+  it('demands one at and above the threshold even when configuration is missing', () => {
     expect(captchaRequired(CAPTCHA_AFTER_FAILURES)).toBe(true);
     expect(captchaRequired(CAPTCHA_AFTER_FAILURES + 10)).toBe(true);
   });
 
   it('does not demand one below the threshold', () => {
-    configure('0xAAAA');
     expect(captchaRequired(CAPTCHA_AFTER_FAILURES - 1)).toBe(false);
     expect(captchaRequired(0)).toBe(false);
   });
 });
 
 describe('verifyCaptcha', () => {
-  it('is a safe no-op when unconfigured — the code ships before the key does', async () => {
+  it('fails closed when unconfigured — missing production configuration is not a bypass', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch');
-    expect(await verifyCaptcha(undefined)).toBe(true);
-    expect(await verifyCaptcha('anything')).toBe(true);
+    expect(await verifyCaptcha(undefined)).toBe(false);
+    expect(await verifyCaptcha('anything')).toBe(false);
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 

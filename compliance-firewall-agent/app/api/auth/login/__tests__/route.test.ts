@@ -258,10 +258,11 @@ describe('lockout', () => {
 });
 
 describe('rollback and configuration', () => {
-  it('answers 501 when AUTH_SERVER_ROUTES=off, without touching the provider', async () => {
+  it('answers a generic 503 when local server auth is disabled, without touching the provider', async () => {
     process.env.AUTH_SERVER_ROUTES = 'off';
     const res = await POST(req(creds));
-    expect(res.status).toBe(501);
+    expect(res.status).toBe(503);
+    expect((await res.json()).error).toBe('Authentication is unavailable in this development environment.');
     expect(mockSignIn).not.toHaveBeenCalled();
     expect(mockGuard).not.toHaveBeenCalled();
   });

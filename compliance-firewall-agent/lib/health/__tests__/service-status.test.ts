@@ -184,10 +184,9 @@ describe("buildHealthReport — controls are measured, not declared", () => {
     const { services, degraded } = await build();
     expect(services.captcha).toBe("not_configured");
     expect(degraded).toContain("captcha");
-    // The hint has to state the fail-open behaviour, not merely "not set" —
-    // an absent key means verifyCaptcha() answers TRUE, which is the opposite
-    // of "captcha is off".
-    expect(services.captcha_hint).toMatch(/returns true for every token/i);
+    // The hint must state that escalation is blocked rather than silently
+    // bypassed, so the operator knows this is a release configuration failure.
+    expect(services.captcha_hint).toMatch(/fail closed/i);
   });
 
   it("reports captcha as enforcing when the key is present", async () => {
