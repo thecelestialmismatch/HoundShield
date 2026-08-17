@@ -61,7 +61,7 @@ const WINDOWS: { value: TelemetryWindow; label: string }[] = [
   { value: 30, label: 'Last 30 days' },
 ]
 
-export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, checklistSlot, name }: {
+export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, checklistSlot, readinessSlot, name }: {
   prefs: DashboardPrefs
   editing: boolean
   onSource: (id: ProvenanceId) => void
@@ -82,6 +82,8 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
   brainSlot: React.ReactNode
   /** Likewise the first-run checklist, which drives activation to the PDF. */
   checklistSlot: React.ReactNode
+  /** Authenticated-shell-only control status. Never render tenant health in a public preview. */
+  readinessSlot?: React.ReactNode
 }) {
   const t = useOperatorTelemetry()
   const [filter, setFilter] = useState<'all' | EventOutcome>('all')
@@ -167,6 +169,13 @@ export function OperatorOverview({ prefs, editing, onSource, onTab, brainSlot, c
       )}
 
       <div className={`ovsections${editing ? ' editing' : ''}`}>
+        {/* Configuration truth comes before risk charts when this is the live,
+            authenticated shell. Public previews intentionally omit the slot. */}
+        {readinessSlot && (
+          <Section id="readiness" prefs={prefs} editing={editing}>
+            {readinessSlot}
+          </Section>
+        )}
         <Section id="kpis" prefs={prefs} editing={editing}>
           <OperatorKpis tel={t.tel} posture={t.posture} onSource={onSource} />
         </Section>

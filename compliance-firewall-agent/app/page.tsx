@@ -30,9 +30,9 @@ export const metadata: Metadata = {
 
 const STATS = [
   { n: String(ENGINE_COUNT), l: 'Detection engines',     s: `${PATTERN_COUNT} patterns · CUI · PHI · PII` },
-  { n: '89%',                l: 'of healthcare genAI',   s: 'violations involve regulated data' },
+  { n: '2',                  l: 'deployment paths',      s: 'Hosted evaluation · self-hosted control' },
   { n: '110',                l: 'NIST 800-171 controls', s: 'Mapped & SPRS-scored' },
-  { n: '<10ms',              l: 'Scan latency',          s: 'p99 0.49ms measured, fully local' },
+  { n: '<10ms',              l: 'Local scan target',     s: 'Measured locally; workload dependent' },
 ]
 
 const PLATFORM_CARDS = [
@@ -64,26 +64,24 @@ export default function HomePage() {
                   visitor would act on it. */}
               <UpcomingHeroBanner />
               <h1 className="display">
-                Prove what your team pasted into <span className="accent">ChatGPT, Claude and Gemini.</span>
+                Keep regulated data inside <span className="accent">your control boundary.</span>
               </h1>
               <p className="sub">
-                Staff paste patient records and contract data into AI tools every day. HoundShield
-                scans every prompt <b>on your own hardware</b> before it leaves your network, then
-                hands you a signed PDF mapped to HIPAA and NIST 800-171 — evidence you can give an
-                auditor. Your prompts are never transmitted to us, because there is no us in the
-                data path.
+                Evaluate AI prompt controls without pretending every workload is the same. HoundShield
+                scans compatible traffic <b>inside your environment</b>, helps you document the control
+                boundary, and produces an evidence-oriented assessment mapped to HIPAA and NIST 800-171.
               </p>
               <div className="hero-actions">
                 <Link className="btn btn-primary" href="/demo#snapshot">
-                  Scan a prompt now — free, in your browser <ArrowRight />
+                  Explore the control boundary <ArrowRight />
                 </Link>
                 <Link className="btn btn-ghost" href="/pricing">Get the $499 report</Link>
               </div>
               <div className="hero-trust">
-                <span><Check /> One URL change</span>
-                <span><Check /> Runs on your hardware</span>
-                <span><Check /> Nothing transmitted</span>
-                <span><Check /> Audit-ready PDF</span>
+                <span><Check /> Hosted evaluation clearly labelled</span>
+                <span><Check /> Self-hosted path for sensitive workloads</span>
+                <span><Check /> Your deployment, your boundary</span>
+                <span><Check /> Evidence-oriented PDF</span>
               </div>
             </div>
             <HeroDemoDashboard />
@@ -113,11 +111,11 @@ export default function HomePage() {
           <div className="container">
             <div className="section-head">
               <div className="eyebrow">The asymmetric advantage</div>
-              <h2 className="display">Cloud DLP scans your CUI in their cloud. That&apos;s the spill.</h2>
+              <h2 className="display">Start with the boundary your assessor will ask about.</h2>
               <p>
-                Every cloud-based AI DLP tool has to receive your data to inspect it. For a DoD
-                contractor, that transmission is itself a DFARS 7012 CUI exposure. HoundShield is
-                the only one that never sees your data.
+                Cloud controls, Microsoft governance and local proxy enforcement solve different problems.
+                HoundShield is designed for teams that need a self-hosted control path for AI traffic outside
+                their existing productivity suite. Validate the deployment model against your contract and SSP.
               </p>
             </div>
             <div className="grid-3">
@@ -125,24 +123,24 @@ export default function HomePage() {
                 <div className="ic"><Globe /></div>
                 <h3>Nightfall &amp; Strac</h3>
                 <p>
-                  Cloud DLP. To scan a prompt they must transmit your CUI to their servers — the
-                  exact exposure CMMC L2 forbids. Architecturally disqualified for the DIB.
+                  Broad cloud DLP can be a strong fit for SaaS data protection. Teams handling controlled
+                  data should document its data path and decide whether a cloud inspection model fits their boundary.
                 </p>
               </div>
               <div className="card">
                 <div className="ic"><Briefcase /></div>
                 <h3>Microsoft Purview</h3>
                 <p>
-                  M365-only. No API proxy. Your team&apos;s ChatGPT, Claude, Cursor and Copilot
-                  traffic outside Microsoft&apos;s walls goes completely unmonitored.
+                  Strong Microsoft 365 governance. It complements—not replaces—a deliberate control path for
+                  third-party AI services and developer tools outside the Microsoft productivity surface.
                 </p>
               </div>
               <div className="card" style={{ borderColor: 'var(--brand)' }}>
                 <div className="ic"><Shield /></div>
                 <h3>HoundShield</h3>
                 <p>
-                  Local-only. Detection runs on <b>your</b> hardware. Nothing reaches our servers —
-                  ever. The moat cloud vendors can&apos;t match without a full rebuild.
+                  A self-hosted enforcement option for compatible AI traffic. Detection runs in your environment;
+                  use the deployment guide to validate scope, integrations and data residency before rollout.
                 </p>
               </div>
             </div>

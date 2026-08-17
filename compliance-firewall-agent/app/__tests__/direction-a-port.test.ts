@@ -5,17 +5,18 @@ import { join } from 'node:path'
 /**
  * Content contract for the HERMES Direction-A exact-match port.
  * Reads page source directly so it stays fast and dependency-free, and locks in:
- *  1. the demo's verbatim copy on each ported view, and
- *  2. the legal/strategy guardrails that must NEVER regress to the demo's literal text.
+ *  1. the demo's visual-information architecture on each ported view, and
+ *  2. the legal/strategy guardrails that must NEVER regress to unsupported demo copy.
  * See docs/DIRECTION-A-PORT.md.
  */
 const root = process.cwd()
 const read = (p: string) => readFileSync(join(root, p), 'utf8')
 
-describe('Direction-A port — demo copy present', () => {
-  it('home: comparison, features and CTA use the demo headlines', () => {
+describe('Direction-A port — information architecture present', () => {
+  it('home: comparison, features and CTA retain the ported hierarchy without unsupported claims', () => {
     const home = read('app/page.tsx')
-    expect(home).toContain("Cloud DLP scans your CUI in their cloud")
+    expect(home).toContain('Start with the boundary your assessor will ask about')
+    expect(home).not.toContain("Cloud DLP scans your CUI in their cloud")
     expect(home).toContain('Everything you need for CMMC Level 2')
     expect(home).toContain('Ready to protect your CUI?')
     // demo comparison cards

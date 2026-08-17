@@ -93,9 +93,13 @@ describe('password reset does not distinguish a known address from an unknown on
     expect(src).toMatch(/const\s+ok\s*=\s*\(\)\s*=>\s*NextResponse\.json\(\{\s*ok:\s*true/);
   });
 
-  it('keeps the email send off the response path', () => {
+  it('keeps code email delivery off the response path', () => {
     // after() bounds the slow half; the timing floor bounds the fast half.
-    expect(src).toMatch(/after\(\(\)\s*=>\s*sendPasswordResetEmail/);
+    expect(src).toMatch(/after\(\(\)\s*=>\s*sendPasswordResetCodeEmail/);
+  });
+
+  it('does not construct or dispatch a URL-borne recovery token', () => {
+    expect(src).not.toMatch(/generateLink|buildRecoveryConfirmUrl|token_hash|auth\/confirm/);
   });
 
   it('never returns a 404 for an unknown account', () => {
