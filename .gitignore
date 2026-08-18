@@ -130,6 +130,12 @@ compass_artifact_*.md
 /docs/sdk/
 /docs/superpowers/
 /docs/reference-data/
+# Founder-only research output. Delivered to the founder directly rather than
+# committed, on an explicit "this is for me, do not push" instruction
+# (2026-08-18, YC Fall 2026 RFS analysis). Ignored rather than left untracked so
+# the repo-clean hook stops flagging it every session. Delete this line to start
+# tracking it — the files are on disk, nothing is lost either way.
+/docs/research/
 /docs/public/
 /docs/docs/
 /docs/market-research/
