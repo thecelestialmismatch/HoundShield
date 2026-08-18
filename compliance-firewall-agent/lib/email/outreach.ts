@@ -27,6 +27,7 @@
 
 import { founderAddress, founderFrom, founderSignature } from './identity';
 import { siteUrl } from '@/lib/site-url';
+import { PERSONAL_ACCOUNT_SENSITIVE, REGULATED_SHARE_GENAI } from '@/lib/market/netskope';
 
 /** A single step in the non-technical test guide. */
 export interface TestStep {
@@ -164,7 +165,7 @@ export const healthcareOutreach: OutreachDraft = {
 
 I build a tool that shows a Privacy Officer exactly what patient information staff have pasted into ChatGPT — scanned on your own hardware, so nothing leaves your network.
 
-Before I build more of it, I would rather find out whether this is a real problem for you or not. Netskope's 2025 data says 89% of healthcare policy violations involving generative AI touch regulated data, and 43% of healthcare workers use personal AI accounts at work — personal accounts being the ones a security team cannot see. But your reality is what matters, not their number.
+Before I build more of it, I would rather find out whether this is a real problem for you or not. Netskope's 2025 healthcare data says ${REGULATED_SHARE_GENAI.value} of healthcare data policy violations tied to generative AI involve regulated data, and ${PERSONAL_ACCOUNT_SENSITIVE.value} of healthcare genAI users send sensitive data through a personal AI account at work — personal accounts being the ones a security team cannot see. But your reality is what matters, not their number.
 
 Do you have 15 minutes this week? I am not selling anything on that call. I genuinely want to know if I am wrong about this.
 

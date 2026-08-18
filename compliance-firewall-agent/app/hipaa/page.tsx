@@ -17,6 +17,7 @@ import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { hipaaFaqs } from "@/lib/seo/faqs";
+import { CROSS_INDUSTRY_GENAI, REGULATED_SHARE_GENAI } from "@/lib/market/netskope";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 
 function FadeIn({
@@ -216,9 +217,9 @@ export default function HIPAAPage() {
                 detail: "Average cost of a healthcare data breach in 2025. Highest of any industry for 14 consecutive years.",
               },
               {
-                stat: "89%",
+                stat: REGULATED_SHARE_GENAI.value,
                 label: "involve regulated data",
-                detail: "Share of healthcare generative-AI data policy violations involving regulated data (Netskope), versus 31% across all industries.",
+                detail: `Share of healthcare data policy violations tied to generative AI that involve regulated data, versus ${CROSS_INDUSTRY_GENAI.value} across all industries (${REGULATED_SHARE_GENAI.source}, ${REGULATED_SHARE_GENAI.published}).`,
               },
             ].map(({ stat, label, detail }, i) => (
               <FadeIn key={label} delay={i * 0.1}>
