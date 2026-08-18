@@ -290,8 +290,9 @@ export const KNOWLEDGE_BASE: KnowledgeDomain[] = [
           "architecture moat is real and survived the regulatory shock. The old forcing function " +
           "(CMMC certification on 10 November 2026) was suspended on 13 July 2026 and is gone. " +
           "The beachhead is now HEALTHCARE — 50-300 provider groups and clinics, Privacy Officer " +
-          "as buyer, no FedRAMP blocker, no deadline dependency (Netskope 2025: 89% of healthcare " +
-          "genAI policy violations involve regulated data vs 31% cross-industry). Defense is " +
+          "as buyer, no FedRAMP blocker, no deadline dependency (Netskope Threat Labs: Healthcare " +
+          "2025 — 89% of healthcare data policy violations TIED TO GENERATIVE AI involve regulated " +
+          "data, against 31% across all industries; the all-violations figure is 81%). Defense is " +
           "channel two, re-messaged for False Claims Act exposure. Channel partners are RPOs and " +
           "MSPs, NEVER C3PAOs — 32 CFR Part 170 bars assessors from recommending products to " +
           "firms they assess.",
