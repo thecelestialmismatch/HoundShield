@@ -55,9 +55,14 @@ export function ReportOfferCard() {
       <div className="report-offer-buy">
         <div className="price-tag">$499</div>
         <div className="price-sub">one-time · per organization</div>
-        <ReportCheckoutButton className="btn btn-primary report-buy-btn" label="Get your report" />
+        {/* "Buy now" and not "Get your report": the whole argument for a $499
+            price is that it clears without procurement, and that argument dies
+            if the primary control reads like a lead form. The secondary link
+            below stays for buyers who want a conversation first — it must never
+            be the only path on the page. */}
+        <ReportCheckoutButton className="btn btn-primary report-buy-btn" label="Buy now — $499" />
         <Link className="talk-first" href="/contact?topic=assessment-report">
-          Talk to us first →
+          Or talk to us first →
         </Link>
         <p className="fine">
           Fixed price. Yours to keep.{" "}

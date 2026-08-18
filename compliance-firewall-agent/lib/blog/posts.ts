@@ -272,7 +272,7 @@ const posts: BlogPost[] = [
     description:
       "ChatGPT is not HIPAA-compliant without a BAA — and consumer ChatGPT has none. What Privacy Officers must do about staff pasting PHI into AI tools in 2026.",
     excerpt:
-      "Staff are pasting patient information into ChatGPT today, and the consumer product has no BAA. Netskope measured 81% of healthcare data policy violations involving regulated data. The Privacy Officer's playbook: what is permitted, what is a breach, and how to allow AI without exposure.",
+      "Staff are pasting patient information into ChatGPT today, and the consumer product has no BAA. Netskope measured 89% of healthcare genAI data policy violations involving regulated data. The Privacy Officer's playbook: what is permitted, what is a breach, and how to allow AI without exposure.",
     date: "2026-07-10",
     author: "HoundShield Security Team",
     authorTitle: "AI Compliance Engineers",
@@ -284,7 +284,7 @@ const posts: BlogPost[] = [
 <p><strong>Bottom line up front:</strong> ChatGPT is not HIPAA-compliant by default. Consumer and Plus versions offer no Business Associate Agreement (BAA), so entering protected health information (PHI) into them discloses PHI to a vendor with no HIPAA obligations — a potential reportable breach. OpenAI supports BAAs only for its API and enterprise offerings, and a BAA alone does not make workflows compliant. Your practical choices in 2026: block PHI from reaching AI tools, or route AI through a BAA-covered, safeguarded path.</p>
 
 <h2>The scale of the problem is measured, not hypothetical</h2>
-<p>Netskope's May 2025 healthcare analysis found that <strong>81% of data policy violations in healthcare organizations involved regulated data</strong> — overwhelmingly the kind of information staff paste into generative AI tools to summarize a chart, draft a letter, or translate discharge instructions. The intent is almost always good. The disclosure is still a disclosure.</p>
+<p>Netskope's May 2025 healthcare analysis found that <strong>81% of all data policy violations in healthcare organizations involved regulated data</strong>. Narrow it to the violations tied specifically to generative AI and the share rises to <strong>89%</strong> — against 31% across all industries. That is overwhelmingly the kind of information staff paste into AI tools to summarize a chart, draft a letter, or translate discharge instructions. The intent is almost always good. The disclosure is still a disclosure.</p>
 
 <h2>What HIPAA actually requires here</h2>
 <ul>
