@@ -8,6 +8,11 @@ import { AnswerText } from "@/components/brain/AnswerText";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { CMMC_STATUS, FCA_PITCH } from "@/lib/compliance/cmmc-status";
 import { PURCHASABLE_OFFER } from "@/lib/billing/entitlements";
+import {
+  CROSS_INDUSTRY_GENAI,
+  PERSONAL_ACCOUNT_SENSITIVE,
+  REGULATED_SHARE_GENAI,
+} from "@/lib/market/netskope";
 import { ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
 import { GATEWAY_BASE_URL } from "@/lib/gateway/base-url";
 
@@ -35,7 +40,7 @@ const HOUNDSHIELD_SYSTEM =
   "SOC 2, HIPAA, and CMMC Level 2 enforced simultaneously. 800+ models via OpenRouter. " +
   `INSTALLATION: Change baseURL to ${GATEWAY_BASE_URL} — works with any OpenAI-compatible SDK. 15 minutes. No agents. No network changes. That hosted URL is the Mode-A trial rail; a CUI workload must point at the customer's own self-hosted Docker gateway instead. ` +
   `LEAD PRODUCT: The ${PURCHASABLE_OFFER.name} — ${PURCHASABLE_OFFER.price}, per organization. Run the proxy 14 days in the customer's own environment, get a SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171 Rev 2 and HIPAA. This is what to recommend first. ` +
-  `LEAD BUYER: healthcare Privacy Officers and HIPAA Security Officers at 50-300 provider groups and clinics — 89% of healthcare genAI policy violations involve regulated data vs a 31% cross-industry average, and 43% of healthcare staff use personal genAI accounts at work (Netskope 2025). No FedRAMP requirement applies to them. Defense is the second market. ` +
+  `LEAD BUYER: healthcare Privacy Officers and HIPAA Security Officers at 50-300 provider groups and clinics — ${REGULATED_SHARE_GENAI.value} of healthcare data policy violations tied to generative AI involve regulated data, against ${CROSS_INDUSTRY_GENAI.value} across all industries, and ${PERSONAL_ACCOUNT_SENSITIVE.value} of healthcare genAI users send sensitive data through a personal AI account at work (Netskope 2025). Quote these numbers only with the denominators given here. No FedRAMP requirement applies to them. Defense is the second market. ` +
   `FREE PROOF: ${PURCHASABLE_OFFER.tryHref} runs the real detection engines in the visitor's own browser — no account, text never transmitted. Offer this to anyone who wants proof before paying. ` +
   "DEPLOYMENT MODES: (A) Hosted trial on Vercel — NOT FedRAMP-authorized, non-CUI evaluation only; (B) Self-hosted Docker on customer infra — CUI-safe, data never leaves their boundary; (C) Air-gapped. For any CUI workload, recommend Mode B. Never claim the hosted endpoint is CUI-safe. " +
   "PRICING HONESTY: the one-time report is the ONLY thing we sell today. There is no free tier, no trial, and no monthly plan — never quote one. If someone wants ongoing monitoring, say it is not yet sold and offer to talk. " +

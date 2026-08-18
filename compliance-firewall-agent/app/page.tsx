@@ -9,6 +9,7 @@ import { ReportOfferCard } from '@/components/ReportOfferCard'
 import { FaqSection } from '@/components/seo/FaqSection'
 import { homeFaqs } from '@/lib/seo/faqs'
 import { ENGINE_COUNT, PATTERN_COUNT } from '@/lib/detection/engines'
+import { CROSS_INDUSTRY_GENAI, REGULATED_SHARE_GENAI } from '@/lib/market/netskope'
 import type { Metadata } from 'next'
 
 // Self-referencing canonical for the homepage. The root layout no longer sets a
@@ -30,7 +31,10 @@ export const metadata: Metadata = {
 
 const STATS = [
   { n: String(ENGINE_COUNT), l: 'Detection engines',     s: `${PATTERN_COUNT} patterns · CUI · PHI · PII` },
-  { n: '89%',                l: 'of healthcare genAI',   s: 'violations involve regulated data' },
+  // Scope matters: this is the GENERATIVE-AI slice, not all healthcare
+  // violations (that figure is 81%). Both live in lib/market/netskope.ts with
+  // their denominators attached, so the tile cannot drift off its source.
+  { n: REGULATED_SHARE_GENAI.value, l: 'of healthcare genAI', s: `violations involve regulated data — vs ${CROSS_INDUSTRY_GENAI.value} across all industries` },
   { n: '110',                l: 'NIST 800-171 controls', s: 'Mapped & SPRS-scored' },
   { n: '<10ms',              l: 'Scan latency',          s: 'p99 0.49ms measured, fully local' },
 ]

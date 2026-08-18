@@ -15,6 +15,7 @@ import {
   mailboxSmokeTest,
 } from '../outreach';
 import { founderAddress, founderName } from '../identity';
+import { PERSONAL_ACCOUNT_SENSITIVE } from '@/lib/market/netskope';
 import { siteUrl } from '@/lib/site-url';
 
 /**
@@ -162,7 +163,53 @@ describe('draft-specific content', () => {
     expect(text).toMatch(/Netskope/);
     expect(text).toMatch(/2025/);
     expect(text).toContain('89%');
-    expect(text).toContain('43%');
+  });
+
+  /**
+   * REGRESSION GUARD. The draft shipped "43% of healthcare workers use personal
+   * AI accounts at work". 43% is Netskope's figure for organisations
+   * EXPERIMENTING WITH LOCAL GENAI INFRASTRUCTURE — it says nothing about
+   * personal accounts. A compliance buyer who checks the source finds the
+   * mismatch, and the credibility of every other number in the email dies with
+   * it. These assertions make that specific mistake unshippable.
+   */
+  it('healthcare never pairs 43% with personal accounts', () => {
+    const { text } = render(healthcareOutreach, VARS);
+    expect(text).not.toContain('43%');
+  });
+
+  it('healthcare states the personal-account claim with the correct figure', () => {
+    const { text } = render(healthcareOutreach, VARS);
+    expect(text).toContain(PERSONAL_ACCOUNT_SENSITIVE.value);
+    expect(text).toMatch(/personal AI account/i);
+  });
+
+  it('healthcare scopes 89% to generative AI, not to all violations', () => {
+    const { text } = render(healthcareOutreach, VARS);
+    const idx = text.indexOf('89%');
+    expect(idx).toBeGreaterThan(-1);
+    // The denominator must travel with the number, in the same sentence.
+    const sentence = text.slice(idx, text.indexOf('.', idx) + 1);
+    expect(sentence).toMatch(/generative AI/i);
+  });
+
+  it('no draft quotes a bare Netskope percentage without a denominator', () => {
+    for (const draft of OUTREACH_DRAFTS) {
+      let text = '';
+      try {
+        text = render(draft, VARS).text;
+      } catch {
+        continue; // draft needs vars this fixture does not supply
+      }
+      for (const pct of ['89%', '81%', '71%', '31%']) {
+        if (!text.includes(pct)) continue;
+        const idx = text.indexOf(pct);
+        const window = text.slice(idx, idx + 200);
+        expect(window).toMatch(
+          /violations|healthcare genAI users|organisations|organizations/i,
+        );
+      }
+    }
   });
 
   it('healthcare asks for time, not money', () => {
