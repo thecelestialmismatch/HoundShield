@@ -29,9 +29,10 @@ describe("pricing source of truth", () => {
     ]);
   });
 
-  it("leads with the $499 one-time report at $299 wholesale", () => {
+  it("leads with the $499 one-time report at $399 partner wholesale", () => {
     expect(RISK_REPORT.oneTimePrice).toBe(499);
-    expect(RISK_REPORT.wholesalePrice).toBe(299);
+    // Retail less the flat $100 partner discount — see partner-offer-coherence.test.ts.
+    expect(RISK_REPORT.wholesalePrice).toBe(399);
   });
 
   it("formats USD with thousands separators", () => {

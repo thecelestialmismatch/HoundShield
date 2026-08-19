@@ -4,6 +4,7 @@ import { ModeBNotice } from "@/components/ModeBNotice";
 import { OrderConfirmation } from "@/components/reports/OrderConfirmation";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site-url";
 import { CheckCircle2, ArrowRight, Server, FileText } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
   description:
     "Your $499 CMMC AI Risk Assessment Report is confirmed. Deploy the proxy in your own environment and receive a SHA-256-signed PDF mapped to NIST 800-171 in 14 days.",
   robots: { index: false, follow: false },
-  alternates: { canonical: "https://houndshield.com/report/thank-you" },
+  // siteUrl(), not the apex literal: houndshield.com 308s to www, so a hardcoded
+  // apex canonical names an address that refuses to serve the page.
+  alternates: { canonical: siteUrl("/report/thank-you") },
 };
 
 const STEPS = [

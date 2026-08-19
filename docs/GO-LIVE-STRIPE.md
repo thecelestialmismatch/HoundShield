@@ -138,7 +138,7 @@ you "go fulfill this,"** Stripe has to notify the app when a payment completes.
 
 In the **Stripe dashboard** → **Developers → Webhooks → Add endpoint**:
 
-- **Endpoint URL:** `https://houndshield.com/api/stripe/webhook`
+- **Endpoint URL:** `https://www.houndshield.com/api/stripe/webhook`
 - **Events to send:** at minimum `checkout.session.completed`. For the
   subscription tiers later, also add `customer.subscription.updated`,
   `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`.

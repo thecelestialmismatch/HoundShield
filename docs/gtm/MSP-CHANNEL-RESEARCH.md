@@ -87,6 +87,50 @@ channel economics by side effect. Note only that 20% sits below the 60–70%
 gross-margin expectation the sources describe for managed DLP, so the lower
 number is the likelier obstacle to a partner saying yes.
 
+> ### ✅ RESOLVED 2026-08-19 — founder ruling
+>
+> **Retail pays $499. Partners pay $399 — a flat $100 discount.**
+>
+> The premise above was half wrong, and naming that is part of the fix. These
+> were never two prices for one deal; the page carried a resale price and a
+> referral percentage and called both "revenue share". The ruling collapses them
+> into ONE instrument:
+>
+> | | Amount | Direction |
+> |---|---|---|
+> | Retail customer pays us | **$499** | in |
+> | Partner pays us | **$399** | in |
+> | We pay a partner | **$0** | — |
+>
+> **Stated in dollars, never a percentage.** A percentage ceiling forces a
+> rounding decision on every price — $499 × 0.80 = $399.20, and rounding down to
+> $399 is a 20.04% cut (over a published "20%") while rounding up to $400 is not
+> the price the founder set. $100 is exact, needs no rounding, and is easier for
+> a partner to hold in their head. `PARTNER_DISCOUNT_PCT` is derived for display
+> only; no percentage literal appears in copy.
+>
+> **No payout machinery.** A revenue share would mean collecting $499 and owing
+> $100 back, with tracking, schedules and 1099s. A discount means the $100 never
+> arrives. Same economics to the partner, none of the operational overhead.
+>
+> **Against this document's own evidence:** the Kitecyber source puts the MSP
+> target at a 60–70% gross margin on managed DLP. At $399 a partner clears 20%
+> reselling at $499 and **60% at $999** — the bottom of that band, reached only
+> at the top of the resale range. That is a real risk to channel conversion and
+> is accepted knowingly; it is the number to revisit first if partner sign-ups
+> stall, and it is one constant (`PARTNER_DISCOUNT_USD`) away from changing.
+>
+> **Retail stays $499 and NOT $500.** The sub-$500 figure is load-bearing: it
+> keeps the purchase under the common $500 procurement-approval threshold, which
+> is the report's entire positioning ("a $499 PO bypasses procurement review"),
+> and it keeps the live Stripe price (`price_1Tge3aQK7cyCnCHkfIfVDAGt`,
+> `unit_amount: 49900`) matching the site — so nothing has to be recreated in
+> Stripe and the Payment Link fallback rail keeps working.
+>
+> Canonical: `lib/pricing/plans.ts`. Guarded by
+> `lib/pricing/__tests__/partner-offer-coherence.test.ts`, which fails if any
+> retired figure reappears or the price stops being derived from the discount.
+
 ## 2. What this means for the current plan
 
 The `CLAUDE.md` channel priority — "RPO/MSP partnerships (primary — fastest path

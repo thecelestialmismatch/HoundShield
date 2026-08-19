@@ -7,6 +7,7 @@ import {
   contactReceivedEmail,
   replyForTopic,
 } from "../contact-received";
+import { RISK_REPORT, formatUSD } from "@/lib/pricing/plans";
 
 const APP_ROOT = join(__dirname, "..", "..", "..", "..");
 
@@ -100,7 +101,9 @@ describe("the reply answers the question that was asked", () => {
   });
 
   it("answers Partnership with the wholesale price, not the retail one alone", () => {
-    expect(contactReceivedEmail.html("A", "Partnership", "?")).toContain("$299");
+    expect(contactReceivedEmail.html("A", "Partnership", "?")).toContain(
+      formatUSD(RISK_REPORT.wholesalePrice),
+    );
   });
 
   it("quotes the visitor's own message back to them", () => {

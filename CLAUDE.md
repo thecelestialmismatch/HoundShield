@@ -91,7 +91,7 @@ Lead with **Rachel** (fastest close, no FedRAMP blocker). Use **Jordan** wins as
 
 **Stage 1 (checkpoint lapsed 2026-06-25; pricing unchanged and still current):**
 - **CMMC AI Risk Assessment Report — $499 one-time** (primary product). Run the proxy 14 days in the customer's environment → SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription, no MSA.
-- Co-branded RPO version — **$299 wholesale** (RPO charges client $499–$999, keeps the margin).
+- Co-branded RPO version — **$399 wholesale** = a flat **$100 off** retail (RPO charges client $499–$999 and keeps the margin: 20% at $499, 60% at $999). It is a DISCOUNT, not a payout — no money ever leaves. Canonical: `lib/pricing/plans.ts`.
 
 **Stage 2 (Jul–Sep 2026, only after Stage 1 triggers hit):**
 - Starter **$299/mo** — quarterly gap report, basic monitoring (this replaces the old $199 Pro tier)
@@ -105,7 +105,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 ## Channel Priority
 
-1. **RPO / MSP partnerships (primary — fastest path to volume).** Target 50 RPOs from the Cyber AB Marketplace. Offer 40–50% revenue share on the co-branded $499 report. Top targets: Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics. **RPOs/MSPs, NOT C3PAOs** — C3PAOs are legally prohibited (32 CFR Part 170, ISO 17020 cooling-off) from recommending products to clients they assess.
+1. **RPO / MSP partnerships (primary — fastest path to volume).** Target 50 RPOs from the Cyber AB Marketplace. Offer the co-branded $499 report at **$399 wholesale — a flat $100 off**. The partner pays us $399, bills their own client $499–$999, and keeps the spread. **We never pay a partner anything**: it is a discount, not a revenue share, so there is no payout to track. State it in DOLLARS, never a percentage — a percentage forces a rounding call ($499 × 0.80 = $399.20) and every rounding is a new number to drift. The retired figures (40–50%, and a separate "20% revenue share" on the same page) matched neither and are deleted. Canonical: `lib/pricing/plans.ts`, guarded by `lib/pricing/__tests__/partner-offer-coherence.test.ts`. Top targets: Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics. **RPOs/MSPs, NOT C3PAOs** — C3PAOs are legally prohibited (32 CFR Part 170, ISO 17020 cooling-off) from recommending products to clients they assess.
 2. **Direct outreach — HIPAA-first** (parallel, faster validation): healthcare Privacy Officers/CISOs, then law-firm IT directors, then defense (longer cycle — build pipeline now).
 3. **SEO + content** (builds over 3–6 months): "GCC High Copilot vs third-party AI firewall" is the highest-value article. Publish `llms.txt`, FAQ schema, write for Perplexity citations (AEO).
 
@@ -117,7 +117,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 |-------------|--------|-----------------|
 | Supabase auth + DB | ✅ Wired | Migrations through 034 in repo. Applied to prod: 001–027, plus **028 (rate-limit buckets), 031 (auth lockouts) and 032 (auth audit trail) applied 2026-08-12** — shared rate limiting, lockout, CAPTCHA escalation and the auth audit trail are now live. **Unapplied: 029 + 030** (seed-anchor chain — separate subsystem), **033** (restrictive deny-all on the Better Auth tables) and **034** (marketing opt-out column — CAN-SPAM). `/api/health` now reports the rate-limit and lockout stores as degraded when a migration is missing, instead of reporting green. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
-| Stripe webhook | ⚠️ Verify URL | Confirm `https://houndshield.com/api/stripe/webhook` |
+| Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
 | OpenRouter / Brain AI | ❌ Missing key | Set `OPENROUTER_API_KEY`; Brain AI CUI warning must be live regardless |
 | Resend (email) | ✅ Configured | — |

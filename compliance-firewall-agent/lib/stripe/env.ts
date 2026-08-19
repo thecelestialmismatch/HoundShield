@@ -130,7 +130,7 @@ export function stripeWebhookDiagnostic(): StripeWebhookDiagnostic {
     return {
       status: 'missing_secret',
       hint:
-        'STRIPE_WEBHOOK_SECRET is not set — this is the single highest-value knob, because the $499 report is already sellable via the Payment Link rail. A buyer CAN pay right now and you would never hear about it: no order recorded, no receipt to the buyer, no sale alert to you. This secret alone fixes that; it does not depend on STRIPE_SECRET_KEY. In Stripe: Developers → Webhooks → Add endpoint (https://houndshield.com/api/stripe/webhook), copy the whsec_ signing secret into Vercel project compliance-firewall-agent with the Production box checked, then redeploy.',
+        'STRIPE_WEBHOOK_SECRET is not set — this is the single highest-value knob, because the $499 report is already sellable via the Payment Link rail. A buyer CAN pay right now and you would never hear about it: no order recorded, no receipt to the buyer, no sale alert to you. This secret alone fixes that; it does not depend on STRIPE_SECRET_KEY. In Stripe: Developers → Webhooks → Add endpoint (https://www.houndshield.com/api/stripe/webhook — note the www; the apex 308-redirects and Stripe counts a non-2xx as a failed delivery, eventually disabling the endpoint), copy the whsec_ signing secret into Vercel project compliance-firewall-agent with the Production box checked, then redeploy.',
     };
   }
   const secret = getStripeWebhookSecret();

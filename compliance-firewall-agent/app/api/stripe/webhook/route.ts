@@ -9,6 +9,7 @@ import { reportOrderEmail } from '@/lib/email/templates/report-order';
 import { verticalFromClientReference } from '@/lib/stripe/report-payment-link';
 import { founderInbox } from '@/lib/email/identity';
 import { maskEmail } from '@/lib/reports/order-view';
+import { RISK_REPORT_RETAIL_CENTS, RISK_REPORT_WHOLESALE_CENTS } from '@/lib/pricing/plans';
 
 type ServiceClient = ReturnType<typeof createServiceClient>;
 
@@ -98,10 +99,31 @@ async function handleReportOrder(
   // it is recorded.
   const { data: existingOrder } = await supabase
     .from('report_orders')
-    .select('id')
+    .select('id, status')
     .eq('stripe_session_id', session.id)
     .maybeSingle();
-  const isNewOrder = !existingOrder;
+
+  // `checkout.session.completed` does NOT mean the money arrived. Delayed-notification
+  // payment methods (ACH Direct Debit, Bacs, SEPA, Klarna) fire it the moment the buyer
+  // authorises, with `payment_status: 'unpaid'` and funds still days out. Recording that
+  // as 'paid' puts an unfunded order into the fulfillment queue and into the founder
+  // revenue count — we would start a 14-day proxy engagement for money that may never
+  // land. Stripe re-delivers the same session as `checkout.session.async_payment_succeeded`
+  // once the funds clear, and this handler runs again to promote it.
+  const isPaid = session.payment_status !== 'unpaid';
+
+  // Never walk a status BACKWARDS. A late Stripe retry (or an async_payment_succeeded
+  // arriving after fulfillment began) must not reset 'proxy_deployed', 'report_delivered',
+  // or 'refunded' back to 'paid'.
+  const priorStatus = (existingOrder?.status as string | undefined) ?? null;
+  const status = isPaid
+    ? (priorStatus && priorStatus !== 'pending_payment' ? priorStatus : 'paid')
+    : 'pending_payment';
+
+  // Fulfillment emails fire exactly once: on the first delivery that is actually PAID.
+  // An unpaid first delivery records the row silently; the later async success promotes
+  // it and sends then. A plain retry of an already-paid order sends nothing.
+  const shouldNotify = isPaid && (!existingOrder || priorStatus === 'pending_payment');
 
   const { error } = await supabase.from('report_orders').upsert(
     {
@@ -111,11 +133,12 @@ async function handleReportOrder(
       stripe_session_id: session.id,
       stripe_payment_intent_id: (session.payment_intent as string) ?? null,
       stripe_customer_id: (session.customer as string) ?? null,
-      amount_cents: session.amount_total ?? (isWholesale ? 29900 : 49900),
+      amount_cents:
+        session.amount_total ?? (isWholesale ? RISK_REPORT_WHOLESALE_CENTS : RISK_REPORT_RETAIL_CENTS),
       currency: session.currency ?? 'usd',
       partner_ref: meta.partner_ref || null,
       is_wholesale: isWholesale,
-      status: 'paid',
+      status,
       user_id: linkedUserId,
     },
     { onConflict: 'stripe_session_id' },
@@ -132,14 +155,13 @@ async function handleReportOrder(
   // is retained because it is the actual correlation key for support, and it is
   // not personal data. Reuses the tested helper in lib/reports/order-view.ts.
   console.log(
-    `[Stripe Webhook] report order recorded: ${session.id} email=${maskEmail(email)} wholesale=${isWholesale}`,
+    `[Stripe Webhook] report order recorded: ${session.id} email=${maskEmail(email)} wholesale=${isWholesale} status=${status}`,
   );
 
-  // Fulfillment emails fire once — on first record only. A Stripe retry re-runs
-  // this handler (and idempotently re-upserts the row), but must not re-notify the
-  // buyer or the founder. The DB is the source of truth; the emails are not.
-  if (!isNewOrder) {
-    console.log(`[Stripe Webhook] report order ${session.id} already recorded — skipping duplicate fulfillment emails`);
+  if (!shouldNotify) {
+    console.log(
+      `[Stripe Webhook] report order ${session.id} not notifying (paid=${isPaid} prior=${priorStatus ?? 'none'})`,
+    );
     return;
   }
 
@@ -182,6 +204,40 @@ function getStripe(secretKey: string | null) {
   return new Stripe(secretKey ?? SIGNATURE_ONLY_PLACEHOLDER_KEY, {
     apiVersion: STRIPE_API_VERSION,
   });
+}
+
+/**
+ * The subscription id on an Invoice.
+ *
+ * Stripe MOVED this field in API version `2025-04-30.basil`: the top-level
+ * `invoice.subscription` was replaced by
+ * `invoice.parent.subscription_details.subscription`. This integration pins
+ * `2026-07-29.dahlia` (lib/stripe/api-version.ts) and the live event
+ * destination runs `2026-02-25.clover` — BOTH are past basil, so the old field
+ * is absent on every delivery in production.
+ *
+ * The two invoice handlers below read `invoice.subscription` directly and were
+ * therefore dead: a failed payment never moved a subscription to `past_due`,
+ * and a recovered one never moved it back to `active`. Nothing failed loudly
+ * because both handlers `as`-cast the invoice to `Record<string, unknown>`,
+ * which silences the compiler, and because their tests hand-build the
+ * pre-basil shape (`{ subscription: "sub_123" }`) — a payload Stripe no longer
+ * sends. Green tests over dead code.
+ *
+ * Read the new path first, then fall back to the legacy field so an endpoint
+ * still pinned to a pre-basil API version keeps working. The value may be
+ * expanded to a full Subscription object, so accept either form.
+ */
+function invoiceSubscriptionId(invoice: Record<string, unknown>): string | undefined {
+  const parent = invoice.parent as
+    | { subscription_details?: { subscription?: string | { id?: string } } }
+    | undefined;
+  const fromParent = parent?.subscription_details?.subscription;
+  if (typeof fromParent === 'string') return fromParent;
+  if (fromParent && typeof fromParent === 'object' && typeof fromParent.id === 'string') {
+    return fromParent.id;
+  }
+  return typeof invoice.subscription === 'string' ? invoice.subscription : undefined;
 }
 
 // Extract period dates from subscription (handles API version differences)
@@ -235,6 +291,11 @@ export async function POST(request: NextRequest) {
 
   try {
     switch (event.type) {
+      // `async_payment_succeeded` re-delivers the SAME session once a delayed
+      // payment method (ACH, Bacs, SEPA, Klarna) actually settles. It shares this
+      // branch so `handleReportOrder` can promote the pending row to 'paid' and
+      // send the fulfillment emails then — not at authorisation time.
+      case 'checkout.session.async_payment_succeeded':
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
 
@@ -350,7 +411,7 @@ export async function POST(request: NextRequest) {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as unknown as Record<string, unknown>;
-        const subscriptionId = invoice.subscription as string | undefined;
+        const subscriptionId = invoiceSubscriptionId(invoice);
         if (subscriptionId) {
           await supabase.from('subscriptions')
             .update({ status: 'past_due' })
@@ -364,13 +425,80 @@ export async function POST(request: NextRequest) {
         // Restores active status after a failed payment is resolved.
         // Belt-and-suspenders alongside customer.subscription.updated.
         const invoice = event.data.object as unknown as Record<string, unknown>;
-        const subscriptionId = invoice.subscription as string | undefined;
+        const subscriptionId = invoiceSubscriptionId(invoice);
         if (subscriptionId) {
           await supabase.from('subscriptions')
             .update({ status: 'active' })
             .eq('stripe_subscription_id', subscriptionId)
             .eq('status', 'past_due'); // only touch past_due rows
           console.log(`[Stripe Webhook] invoice.paid: sub=${subscriptionId} → active`);
+        }
+        break;
+      }
+
+      case 'checkout.session.async_payment_failed': {
+        // The bank declined after the fact. Leave the row for the record, but take
+        // it out of the fulfillment queue — nobody should start a 14-day engagement
+        // on money that bounced.
+        const session = event.data.object as Stripe.Checkout.Session;
+        const { error: failError } = await supabase
+          .from('report_orders')
+          .update({ status: 'payment_failed' })
+          .eq('stripe_session_id', session.id);
+        if (failError) {
+          console.error('[Stripe Webhook] async_payment_failed update failed:', failError);
+        } else {
+          console.log(`[Stripe Webhook] async_payment_failed: order ${session.id} → payment_failed`);
+        }
+        break;
+      }
+
+      case 'charge.refunded':
+      case 'charge.dispute.created': {
+        // Money leaving again. Without this, a refunded or charged-back $499 order
+        // sits at status 'paid' forever — and the admin revenue rollup counts paid
+        // orders as revenue and as paying customers. That is the exact number the
+        // Sep 1 kill-criteria review reads, so a stale 'paid' row does not just
+        // mis-report: it argues against shutting down using money that came back.
+        //
+        // The $499 buyer has no account, so there is no user to look up. A Charge
+        // (refund) and a Dispute (chargeback) both carry `payment_intent`, which is
+        // the only key linking either back to a report order.
+        const obj = event.data.object as unknown as {
+          payment_intent?: string | { id?: string } | null;
+          refunded?: boolean;
+          amount_refunded?: number;
+          amount?: number;
+        };
+        const paymentIntentId =
+          typeof obj.payment_intent === 'string' ? obj.payment_intent : obj.payment_intent?.id;
+
+        if (!paymentIntentId) {
+          console.warn(`[Stripe Webhook] ${event.type}: no payment_intent — cannot match an order`);
+          break;
+        }
+
+        // `charge.refunded` also fires for PARTIAL refunds (`refunded: false`). A
+        // partial refund on a fixed-price report is a support adjustment, not a
+        // reversal — flag it in the log but leave the order counted, rather than
+        // silently erasing a sale from revenue over a $50 goodwill credit.
+        if (event.type === 'charge.refunded' && obj.refunded === false) {
+          console.log(
+            `[Stripe Webhook] charge.refunded: PARTIAL refund on ${paymentIntentId} (${obj.amount_refunded}/${obj.amount}) — status left unchanged, review manually`,
+          );
+          break;
+        }
+
+        const newStatus = event.type === 'charge.refunded' ? 'refunded' : 'disputed';
+        const { error: reversalError } = await supabase
+          .from('report_orders')
+          .update({ status: newStatus })
+          .eq('stripe_payment_intent_id', paymentIntentId);
+
+        if (reversalError) {
+          console.error(`[Stripe Webhook] ${event.type}: report_orders update failed:`, reversalError);
+        } else {
+          console.log(`[Stripe Webhook] ${event.type}: order on ${paymentIntentId} → ${newStatus}`);
         }
         break;
       }
