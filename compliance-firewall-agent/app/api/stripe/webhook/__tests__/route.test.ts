@@ -583,7 +583,7 @@ describe("POST /api/stripe/webhook — report order idempotency", () => {
 
   // Wire the report_orders idempotency probe to a specific result. `existing`
   // truthy = the order was already recorded by a prior webhook delivery.
-  function setupWithExistingOrder(existing: { id: string } | null) {
+  function setupWithExistingOrder(existing: { id: string; status?: string } | null) {
     mockFrom.mockReturnValue({
       upsert: mockUpsert,
       update: mockUpdate,
@@ -645,6 +645,86 @@ describe("POST /api/stripe/webhook — report order idempotency", () => {
     const recipients = mockResendSend.mock.calls.map((c) => c[0].to);
     expect(recipients).toContain("rachel@clinic.com");
     expect(recipients).toContain("founder@houndshield.com");
+  });
+
+  // ── delayed-notification payment methods ────────────────────────────────
+  //
+  // `checkout.session.completed` does NOT mean the money arrived. ACH, Bacs, SEPA
+  // and Klarna fire it on AUTHORISATION, with `payment_status: 'unpaid'` and funds
+  // days away. Recording that as 'paid' starts a 14-day fulfillment engagement and
+  // books revenue for money that may never land.
+
+  const unpaidReportEvent = (id: string) => ({
+    type: "checkout.session.completed",
+    id,
+    data: {
+      object: {
+        id: "cs_report_dup",
+        mode: "payment",
+        payment_status: "unpaid",
+        customer_details: { email: "rachel@clinic.com", name: "Rachel H" },
+        amount_total: 49900,
+        currency: "usd",
+        metadata: { product: "cmmc_ai_risk_report", vertical: "healthcare", wholesale: "false" },
+      },
+    },
+  });
+
+  it("records an UNPAID session as pending_payment and sends nothing", async () => {
+    setupWithExistingOrder(null);
+    mockConstructEvent.mockReturnValueOnce(unpaidReportEvent("evt_unpaid"));
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "pending_payment" }),
+      expect.any(Object),
+    );
+    expect(mockResendSend).not.toHaveBeenCalled();
+  });
+
+  it("promotes pending_payment → paid and sends the emails when the funds land", async () => {
+    // The async success re-delivers the same session; the row already exists.
+    setupWithExistingOrder({ id: "existing-order-1", status: "pending_payment" });
+    mockConstructEvent.mockReturnValueOnce({
+      ...reportEvent("evt_async_ok"),
+      type: "checkout.session.async_payment_succeeded",
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "paid" }),
+      expect.any(Object),
+    );
+    // First time this order is actually funded → notify now, not before.
+    expect(mockResendSend).toHaveBeenCalledTimes(2);
+  });
+
+  it("never walks a status BACKWARDS on a late retry", async () => {
+    // Fulfillment already advanced; a delayed Stripe retry must not reset it to 'paid'.
+    setupWithExistingOrder({ id: "existing-order-1", status: "report_delivered" });
+    mockConstructEvent.mockReturnValueOnce(reportEvent("evt_late_retry"));
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "report_delivered" }),
+      expect.any(Object),
+    );
+    expect(mockResendSend).not.toHaveBeenCalled();
+  });
+
+  it("does not resurrect a refunded order", async () => {
+    setupWithExistingOrder({ id: "existing-order-1", status: "refunded" });
+    mockConstructEvent.mockReturnValueOnce(reportEvent("evt_after_refund"));
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "refunded" }),
+      expect.any(Object),
+    );
   });
 });
 
@@ -747,10 +827,50 @@ describe("POST /api/stripe/webhook — invoice.payment_failed", () => {
     vi.clearAllMocks();
   });
 
-  it("sets subscription status to past_due", async () => {
+  // THE SHAPE STRIPE ACTUALLY SENDS. `invoice.subscription` was removed in API
+  // version 2025-04-30.basil; this integration pins 2026-07-29.dahlia and the live
+  // endpoint runs 2026-02-25.clover, both past basil. The previous version of this
+  // test asserted the pre-basil shape, so it passed green over a handler that could
+  // never fire in production. If someone reverts `invoiceSubscriptionId`, THIS fails.
+  it("sets subscription status to past_due (post-basil parent shape)", async () => {
     mockConstructEvent.mockReturnValueOnce({
       type: "invoice.payment_failed",
       id: "evt_failed",
+      data: {
+        object: {
+          parent: {
+            type: "subscription_details",
+            subscription_details: { subscription: "sub_123" },
+          },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpdate).toHaveBeenCalledWith({ status: "past_due" });
+  });
+
+  it("reads an EXPANDED subscription object under parent", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "invoice.payment_failed",
+      id: "evt_expanded",
+      data: {
+        object: {
+          parent: { subscription_details: { subscription: { id: "sub_123" } } },
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpdate).toHaveBeenCalledWith({ status: "past_due" });
+  });
+
+  it("still reads the legacy pre-basil top-level field", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "invoice.payment_failed",
+      id: "evt_legacy",
       data: { object: { subscription: "sub_123" } },
     });
 
@@ -789,12 +909,83 @@ describe("POST /api/stripe/webhook — invoice.paid", () => {
     mockConstructEvent.mockReturnValueOnce({
       type: "invoice.paid",
       id: "evt_paid",
-      data: { object: { subscription: "sub_123" } },
+      data: {
+        object: {
+          parent: { subscription_details: { subscription: "sub_123" } },
+        },
+      },
     });
 
     const res = await POST(makeRequest());
     expect(res.status).toBe(200);
     expect(mockUpdate).toHaveBeenCalledWith({ status: "active" });
+  });
+});
+
+// ── charge.refunded / charge.dispute.created ──────────────────────────────
+//
+// Money leaving again. Without these, a refunded $499 order stays at status
+// 'paid' and keeps counting as revenue and as a paying customer in
+// lib/admin/founder-metrics.ts — the numbers the Sep 1 kill-criteria review reads.
+
+describe("POST /api/stripe/webhook — refunds and disputes", () => {
+  beforeEach(() => {
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    setupSupabase();
+    mockEq.mockResolvedValue({ error: null });
+  });
+
+  afterEach(() => {
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    vi.clearAllMocks();
+  });
+
+  it("marks a fully refunded order 'refunded'", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "charge.refunded",
+      id: "evt_refund",
+      data: { object: { payment_intent: "pi_123", refunded: true, amount: 49900, amount_refunded: 49900 } },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpdate).toHaveBeenCalledWith({ status: "refunded" });
+  });
+
+  it("leaves a PARTIAL refund counted — a goodwill credit is not a reversal", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "charge.refunded",
+      id: "evt_partial",
+      data: { object: { payment_intent: "pi_123", refunded: false, amount: 49900, amount_refunded: 5000 } },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpdate).not.toHaveBeenCalled();
+  });
+
+  it("marks a disputed order 'disputed'", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "charge.dispute.created",
+      id: "evt_dispute",
+      data: { object: { payment_intent: "pi_123" } },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpdate).toHaveBeenCalledWith({ status: "disputed" });
+  });
+
+  it("acknowledges (200) when there is no payment_intent to match on", async () => {
+    mockConstructEvent.mockReturnValueOnce({
+      type: "charge.dispute.created",
+      id: "evt_nopi",
+      data: { object: {} },
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockUpdate).not.toHaveBeenCalled();
   });
 });
 

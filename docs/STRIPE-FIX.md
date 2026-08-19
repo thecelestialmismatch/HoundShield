@@ -50,7 +50,7 @@ Without this, a customer's card can be charged and **no order is recorded and yo
 alert**. You would have their money and no idea who they are.
 
 1. Go to <https://dashboard.stripe.com/webhooks>
-2. **Add endpoint** → URL: `https://houndshield.com/api/stripe/webhook`
+2. **Add endpoint** → URL: `https://www.houndshield.com/api/stripe/webhook`
 3. Under events, select **`checkout.session.completed`**.
 4. Save, then open the endpoint and click **Reveal** under **Signing secret**.
    It starts with `whsec_`.

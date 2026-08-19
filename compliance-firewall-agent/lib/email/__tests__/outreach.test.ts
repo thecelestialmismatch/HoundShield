@@ -17,6 +17,7 @@ import {
 import { founderAddress, founderName } from '../identity';
 import { PERSONAL_ACCOUNT_SENSITIVE } from '@/lib/market/netskope';
 import { siteUrl } from '@/lib/site-url';
+import { RISK_REPORT, formatUSD, PARTNER_DISCOUNT_USD } from '@/lib/pricing/plans';
 
 /**
  * The demo URL as the drafts now build it. These assertions used to hardcode
@@ -148,11 +149,23 @@ describe('honesty guards — claims that would cost us the sale if false', () =>
     expect(allText()).not.toMatch(/\d+[KM]?\+\s*(teams|customers|scans|users|clients)/i);
   });
 
-  it('quotes only the $499 retail and $299 wholesale prices', () => {
-    // Anchor on a digit at the end so trailing prose punctuation ("$299, your
+  it('quotes only the canonical retail and wholesale prices', () => {
+    // Anchor on a digit at the end so trailing prose punctuation ("$399, your
     // client pays…") is not captured as part of the price.
+    //
+    // Derived from lib/pricing/plans.ts, not typed: this assertion previously
+    // hardcoded '$299' and went stale the moment the partner cut was re-ruled,
+    // which is the same drift the guard is here to catch.
     const prices = allText().match(/\$\d(?:[\d,]*\d)?(?:\.\d+)?[KM]?/g) ?? [];
-    const allowed = new Set(['$499', '$299', '$999', '$4.6M', '$507,144']);
+    const allowed = new Set([
+      formatUSD(RISK_REPORT.oneTimePrice),
+      formatUSD(RISK_REPORT.wholesalePrice),
+      formatUSD(RISK_REPORT.resaleHigh),
+      // The partner draft states the discount in dollars, so it is a price too.
+      formatUSD(PARTNER_DISCOUNT_USD),
+      '$4.6M',
+      '$507,144',
+    ]);
     for (const p of prices) expect(allowed).toContain(p);
   });
 });
@@ -220,8 +233,11 @@ describe('draft-specific content', () => {
 
   it('partner states the wholesale economics in real numbers', () => {
     const { text } = render(partnerOutreach, VARS);
-    expect(text).toContain('$299');
-    expect(text).toContain('$499');
+    expect(text).toContain(formatUSD(RISK_REPORT.wholesalePrice));
+    expect(text).toContain(formatUSD(RISK_REPORT.oneTimePrice));
+    // The discount is stated in dollars, never as a percentage that can drift.
+    expect(text).toContain(formatUSD(PARTNER_DISCOUNT_USD));
+    expect(text).not.toMatch(/\d+\s*%\s*(off|discount|revenue share)/i);
   });
 
   it('defense sells FCA liability with verifiable settlements', () => {

@@ -22,9 +22,14 @@ export const REPORT_FULFILLMENT_DAYS = 14;
 
 /** Fulfillment lifecycle, in order. Mirrors `report_orders.status`. */
 export type ReportOrderStatus =
+  | 'pending_payment'
   | 'paid'
   | 'proxy_deployed'
   | 'report_delivered'
+  // Terminal reversals — written by the Stripe webhook, outside the lifecycle.
+  | 'refunded'
+  | 'disputed'
+  | 'payment_failed'
   | (string & {});
 
 /**
@@ -150,6 +155,19 @@ export function statusMeta(status: string | null | undefined): { label: string; 
       return { label: 'Report delivered', step: 3 };
     case 'proxy_deployed':
       return { label: 'Proxy deployed — 14-day observation in progress', step: 2 };
+    // Delayed-notification payment methods (ACH, Bacs, SEPA, Klarna) authorise
+    // before the funds move. Saying "Payment received" then would be a false
+    // receipt on the buyer's own confirmation page.
+    case 'pending_payment':
+      return { label: 'Payment processing — bank confirmation pending', step: 0 };
+    // Terminal reversals. These previously fell through to the `default` and told
+    // a refunded buyer "Payment received — deployment pending".
+    case 'refunded':
+      return { label: 'Refunded', step: 0 };
+    case 'disputed':
+      return { label: 'Payment disputed — on hold', step: 0 };
+    case 'payment_failed':
+      return { label: 'Payment failed — please retry', step: 0 };
     case 'paid':
     default:
       return { label: 'Payment received — deployment pending', step: 1 };
