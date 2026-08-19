@@ -23,12 +23,11 @@ import { marketingBlockReason } from "@/lib/legal/marketing-email";
  * 2. Audit finding #20c — three security controls FAIL OPEN and say nothing:
  *      • lib/rate-limit-shared.ts:149  no bucket table  -> per-instance counting
  *      • lib/auth/lockout.ts:117,146   no lockout table -> no account lockout
- *      • lib/auth/captcha.ts:52        no Turnstile key -> verifyCaptcha() TRUE
- *    Each degradation is individually defensible (availability of a paid
- *    endpoint outranks perfect accounting during an outage) but together they
- *    mean three controls can be entirely absent while every health check stays
- *    green. That is precisely what happened. A control that fails open must be
- *    loud, or it is not a control.
+ *      • lib/auth/captcha.ts           no Turnstile key -> challenge fails CLOSED
+ *    The first two controls can degrade under datastore failure; CAPTCHA and
+ *    recovery-code configuration are release-critical and now fail closed once
+ *    reached. Every such condition is nevertheless reported here: an operator
+ *    needs a precise remediation signal, not a generic red health light.
  *
  * WHY `degraded` IS COMPUTED HERE AND NOT BY THE READER. `app/status/page.tsx`
  * used to decide what "operational" meant with its own local
@@ -164,12 +163,14 @@ async function marketingOptOutStore(): Promise<string> {
   }
 }
 
-/**
- * Turnstile. `verifyCaptcha()` returns TRUE for every token when the secret is
- * absent, so an unset key is not "captcha off", it is "captcha answers yes".
- */
+/** Turnstile is a required escalation control; a missing secret fails closed. */
 function captcha(): string {
   return (process.env.TURNSTILE_SECRET_KEY ?? "").trim() ? "enforcing" : "not_configured";
+}
+
+/** Recovery-code HMAC material is presence-only: values never reach this endpoint. */
+function resetCodePepper(): string {
+  return (process.env.AUTH_RESET_CODE_PEPPER ?? "").trim() ? "set" : "not_configured";
 }
 
 /**
@@ -254,6 +255,7 @@ export async function buildHealthReport(): Promise<HealthReport> {
     marketingOptOutStore(),
   ]);
   const captchaState = captcha();
+  const resetPepper = resetCodePepper();
   const marketingBlocked = marketingBlockReason();
   const encryptionState = quarantineEncryption();
 
@@ -266,6 +268,13 @@ export async function buildHealthReport(): Promise<HealthReport> {
     ...(webhook.hint ? { payments_webhook_hint: webhook.hint } : {}),
     reset_service_role: reset.service_role,
     reset_resend: reset.resend,
+    reset_code_pepper: resetPepper,
+    ...(resetPepper !== "set"
+      ? {
+          reset_code_pepper_hint:
+            "AUTH_RESET_CODE_PEPPER is not set. Password-reset code issuance is disabled rather than storing an unkeyed recovery secret. Add a 32-byte-or-more random value in Vercel before enabling production reset.",
+        }
+      : {}),
     reset_app_url: reset.app_url,
     ...(reset.app_url_hint ? { reset_app_url_hint: reset.app_url_hint } : {}),
     reset_sender_domain: reset.sender_domain,
@@ -302,7 +311,7 @@ export async function buildHealthReport(): Promise<HealthReport> {
     ...(captchaState !== "enforcing"
       ? {
           captcha_hint:
-            "TURNSTILE_SECRET_KEY is not set. verifyCaptcha() returns true for every token, so the CAPTCHA escalation step after repeated failures is a no-op.",
+            "TURNSTILE_SECRET_KEY is not set. Escalated authentication challenges fail closed; set the secret and matching NEXT_PUBLIC_TURNSTILE_SITE_KEY before release.",
         }
       : {}),
     // Onboarding email. NOT a control failing open — it fails CLOSED by design

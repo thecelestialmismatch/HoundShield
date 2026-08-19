@@ -258,17 +258,25 @@ describe('guardCredentials', () => {
   });
 });
 
-describe('isServerAuthEnabled — the no-rebuild rollback', () => {
+describe('isServerAuthEnabled — production server boundary', () => {
   it('is on by default, so the protections ship enabled', () => {
     delete process.env.AUTH_SERVER_ROUTES;
     expect(isServerAuthEnabled()).toBe(true);
   });
 
-  it('is off only for the exact opt-out value', () => {
+  it('permits an opt-out only outside production for local compatibility testing', () => {
     process.env.AUTH_SERVER_ROUTES = 'off';
     expect(isServerAuthEnabled()).toBe(false);
     process.env.AUTH_SERVER_ROUTES = ' OFF ';
     expect(isServerAuthEnabled()).toBe(false);
+  });
+
+  it('cannot disable the hardened route boundary in production', () => {
+    const previousNodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+    process.env.AUTH_SERVER_ROUTES = 'off';
+    expect(isServerAuthEnabled()).toBe(true);
+    process.env.NODE_ENV = previousNodeEnv;
   });
 
   it('is not disabled by an unrelated value — no accidental silent rollback', () => {
@@ -286,9 +294,9 @@ describe('isServerAuthEnabled — the no-rebuild rollback', () => {
 });
 
 describe('serverAuthDisabled', () => {
-  it('answers 501, the status the browser fallback keys on', async () => {
+  it('answers a generic 503 and does not invite a browser-direct fallback', async () => {
     const res = serverAuthDisabled();
-    expect(res.status).toBe(501);
-    expect((await res.json()).error).toMatch(/AUTH_SERVER_ROUTES/);
+    expect(res.status).toBe(503);
+    expect((await res.json()).error).toBe('Authentication is unavailable in this development environment.');
   });
 });

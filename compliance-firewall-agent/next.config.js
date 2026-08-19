@@ -30,10 +30,11 @@ const nextConfig = {
   },
 
   // Next 16 removed `next build` linting and the `eslint` config key — lint runs
-  // as its own CI step (`npm run lint` → eslint.config.mjs). TS errors are still
-  // ignored at build so a type slip can't block a deploy (CI's tsc step gates that).
+  // as its own CI step (`npm run lint` → eslint.config.mjs). TypeScript remains
+  // release-blocking here as well: a CI configuration mistake must not let a
+  // type error pass through `next build` into production.
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
 
   // Kill the "N" dev indicator

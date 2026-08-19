@@ -115,7 +115,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 | Integration | Status | Action Required |
 |-------------|--------|-----------------|
-| Supabase auth + DB | ✅ Wired | Migrations through 034 in repo. Applied to prod: 001–027, plus **028 (rate-limit buckets), 031 (auth lockouts) and 032 (auth audit trail) applied 2026-08-12** — shared rate limiting, lockout, CAPTCHA escalation and the auth audit trail are now live. **Unapplied: 029 + 030** (seed-anchor chain — separate subsystem), **033** (restrictive deny-all on the Better Auth tables) and **034** (marketing opt-out column — CAN-SPAM). `/api/health` now reports the rate-limit and lockout stores as degraded when a migration is missing, instead of reporting green. |
+| Supabase auth + DB | ✅ Wired | Migrations through 036 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, and **036 (revoke public execution of privileged RPCs)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
 | Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
@@ -334,7 +334,7 @@ compliance-firewall-agent/
   lib/brain-ai/                    — BM25 knowledge graph + query interface
   lib/gateway/                     — Core AI interception engine
   lib/classifier/                  — 53-pattern / 16-engine CUI/PII/IP/PHI detector
-  supabase/migrations/             — through 034 in repo (029, 030, 033, 034 not yet applied to prod)
+  supabase/migrations/             — through 036 in repo (verify production application before release; 035 enables code-only reset and 036 removes public privileged-RPC execution)
 
 proxy/
   server.ts                        — HTTPS proxy (the actual product)

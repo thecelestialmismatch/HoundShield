@@ -3,54 +3,41 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
-import { authClient, isBetterAuthClientEnabled } from "@/lib/auth/auth-client";
 import { Logo } from "@/components/Logo";
 import { TextLogo } from "@/components/TextLogo";
+import { TurnstileChallenge } from '@/components/auth/TurnstileChallenge';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [captchaRequired, setCaptchaRequired] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // Better Auth path: emails a single-use token linking to /reset-password.
-    // It intentionally reports success even for unknown emails (no account
-    // enumeration), so we always show the "check your email" state.
-    if (isBetterAuthClientEnabled()) {
-      try {
-        await authClient.requestPasswordReset({
-          email,
-          redirectTo: `${window.location.origin}/reset-password`,
-        });
-        setSent(true);
-      } catch {
-        setError("We couldn't reach the reset service. Please try again in a moment.");
-      }
-      setLoading(false);
-      return;
-    }
-
-    // Supabase path: send via our own /api/auth/reset-password, which mints the
-    // recovery link server-side and emails a BRANDED link pointing at
-    // /auth/confirm (same-origin → immune to the Supabase Redirect-URL allow-list
-    // "lands on the homepage" fallback, and no Supabase email template / SMTP
-    // config required). The route is enumeration-safe (always 200 for a
-    // well-formed email), so we show "check your email" on any ok response.
+    // Server-owned code delivery is the only production path. It gives the
+    // caller the same neutral result whether an account exists and never places
+    // a reset bearer credential in an email URL.
     try {
       const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, captchaToken: captchaToken || undefined }),
       });
+      const data = (await res.json().catch(() => ({}))) as { captchaRequired?: boolean };
       if (res.ok) {
         setSent(true);
+      } else if (data.captchaRequired) {
+        setCaptchaRequired(true);
+        setCaptchaToken("");
+        setError("");
       } else {
-        setError("We couldn't send the reset link. Please check the email and try again.");
+        setError("We couldn't start password reset. Please try again in a moment.");
       }
     } catch {
       setError("We couldn't reach the reset service. Please try again in a moment.");
@@ -82,10 +69,8 @@ export default function ForgotPasswordPage() {
             </div>
             <h1 className="text-xl font-bold text-[var(--hs-ink)]">Check your email</h1>
             <p className="text-sm text-[var(--hs-ink-secondary)] leading-relaxed">
-              We sent a password reset link to{" "}
-              <span className="text-[var(--hs-ink-secondary)] font-medium">{email}</span>.
-              <br />
-              Click the link in the email to reset your password.
+              If an account uses this address, a one-time reset code will arrive shortly.
+              Enter that code with your new password on the reset page.
             </p>
             <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
               Didn&apos;t get it? Check your spam folder, or{" "}
@@ -105,7 +90,7 @@ export default function ForgotPasswordPage() {
           <>
             <h1 className="text-xl font-bold text-[var(--hs-ink)] mb-1">Reset your password</h1>
             <p className="text-sm text-[var(--hs-ink-secondary)] mb-6">
-              Enter your email and we&apos;ll send you a reset link.
+              Enter your email and we&apos;ll send a one-time reset code. The code is never placed in a link.
             </p>
 
             {error && (
@@ -132,12 +117,19 @@ export default function ForgotPasswordPage() {
                 </div>
               </div>
 
+              {captchaRequired && (
+                <TurnstileChallenge
+                  onToken={(token) => setCaptchaToken(token)}
+                  onExpired={() => setCaptchaToken("")}
+                />
+              )}
+
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full py-3 rounded-xl bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)] text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                {loading ? "Sending..." : "Send reset link"}
+                {loading ? "Sending..." : "Send reset code"}
               </button>
             </form>
           </>
