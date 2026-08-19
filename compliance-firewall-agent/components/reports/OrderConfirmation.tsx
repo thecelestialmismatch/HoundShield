@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Receipt, CalendarClock, ShieldCheck, Loader2 } from "lucide-react";
+import { ReceiptPrinter } from "./ReceiptPrinter";
 
 /** Sanitized order shape returned by GET /api/reports/order. */
 interface OrderView {
@@ -93,7 +94,13 @@ export function OrderConfirmation({ sessionId }: { sessionId?: string }) {
   ];
 
   return (
-    <div className="mb-10 rounded-2xl border border-[var(--hs-border)] bg-white p-6 shadow-sm sm:p-7">
+    <>
+      {/* Printable receipt. Fed by the SAME fetched order — one request, one
+          source of truth, so the on-screen summary and the printed document
+          can never disagree about what was paid. */}
+      <ReceiptPrinter order={order} stage="complete" />
+
+    <div className="mb-10 rounded-2xl border border-[var(--hs-border)] bg-white p-6 shadow-sm sm:p-7 print:hidden">
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs font-mono uppercase tracking-[0.18em] text-[var(--hs-ink-secondary)]">
@@ -128,5 +135,6 @@ export function OrderConfirmation({ sessionId }: { sessionId?: string }) {
         </p>
       )}
     </div>
+    </>
   );
 }

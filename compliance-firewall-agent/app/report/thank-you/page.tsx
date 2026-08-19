@@ -43,9 +43,11 @@ export default async function ReportThankYouPage({
   const { session_id } = await searchParams;
   return (
     <div className="min-h-screen bg-[var(--hs-surface-0)]">
-      <NavV3 />
+      <div className="print:hidden">
+        <NavV3 />
+      </div>
       <main className="max-w-3xl mx-auto px-6 pt-16 pb-24">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-4 print:hidden">
           <div className="w-11 h-11 rounded-xl bg-[rgba(5,150,105,0.1)] border border-[rgba(5,150,105,0.2)] flex items-center justify-center">
             <CheckCircle2 className="w-6 h-6 text-[var(--hs-success)]" />
           </div>
@@ -54,17 +56,17 @@ export default async function ReportThankYouPage({
           </p>
         </div>
 
-        <h1 className="text-4xl font-bold text-[var(--hs-ink)] mb-4">
+        <h1 className="text-4xl font-bold text-[var(--hs-ink)] mb-4 print:hidden">
           Your CMMC AI Risk Assessment Report is on the way.
         </h1>
-        <p className="max-w-2xl text-base text-[var(--hs-ink-secondary)] leading-relaxed mb-10">
+        <p className="max-w-2xl text-base text-[var(--hs-ink-secondary)] leading-relaxed mb-10 print:hidden">
           A confirmation with deployment instructions is in your inbox. Here&apos;s the 14-day path
           from policy violation to C3PAO-ready evidence.
         </p>
 
         <OrderConfirmation sessionId={session_id} />
 
-        <div className="grid grid-cols-1 gap-4 mb-12">
+        <div className="grid grid-cols-1 gap-4 mb-12 print:hidden">
           {STEPS.map((step, i) => (
             <div
               key={step.title}
@@ -84,9 +86,9 @@ export default async function ReportThankYouPage({
           ))}
         </div>
 
-        <ModeBNotice variant="inline" className="mb-10" />
+        <ModeBNotice variant="inline" className="mb-10 print:hidden" />
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 print:hidden">
           <Link href="/docs/quickstart" className="btn-primary px-7 py-3">
             Deploy the proxy now <ArrowRight className="w-4 h-4" />
           </Link>
@@ -95,7 +97,9 @@ export default async function ReportThankYouPage({
           </a>
         </div>
       </main>
-      <FooterV3 />
+      <div className="print:hidden">
+        <FooterV3 />
+      </div>
     </div>
   );
 }
