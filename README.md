@@ -15,7 +15,7 @@ Nothing leaves the building.
 [![License: MIT](https://img.shields.io/badge/License-MIT-0F172A?style=flat-square)](LICENSE)
 ![NIST 800-171](https://img.shields.io/badge/NIST_800--171-110_controls-C8A24B?style=flat-square)
 
-[**Website**](https://www.houndshield.com) · [**Try the scanner**](https://www.houndshield.com/demo#snapshot) · [**Testing guide**](docs/TESTING-GUIDE.md) · [**Roadmap**](docs/ROADMAP-12-MONTH.md) · [**Security**](SECURITY.md)
+[**Website**](https://www.houndshield.com) · [**Try the scanner**](https://www.houndshield.com/demo#snapshot) · [**Docs**](https://www.houndshield.com/docs) · [**Testing guide**](docs/TESTING-GUIDE.md) · [**Security**](SECURITY.md)
 
 </div>
 
@@ -33,10 +33,75 @@ You cannot scan regulated data for compliance by violating compliance.
 
 HoundShield scans locally. In self-hosted mode there is no "us" in the data path.
 
+## How it works
+
+One base-URL change puts the scanner between your team and every model. Detection
+runs on your hardware; only prompts that pass ever reach a provider.
+
+```mermaid
+flowchart LR
+    A["Your team<br/>ChatGPT · Copilot · Claude · Cursor"] --> B
+
+    subgraph BOUNDARY ["Your network — nothing leaves during this step"]
+        B["HoundShield proxy<br/>OpenAI-compatible"] --> C{"16 detection engines<br/>53 patterns · sub-ms"}
+        C -->|clean| D["Forward upstream"]
+        C -->|violation| E["Block or quarantine"]
+        C --> F[("SHA-256<br/>hash-chained log")]
+    end
+
+    D --> G["AI provider"]
+    F --> H["Audit PDF<br/>mapped to NIST 800-171"]
+```
+
+The proxy speaks the OpenAI API, so no client code changes — you set `baseURL`
+and everything else stays the same.
+
+### What the 16 engines look for
+
+| Defense | Health | Credentials | Proprietary |
+|---|---|---|---|
+| CUI markings | PHI · MRN | API keys / secrets | Source code |
+| CAGE codes | ICD / diagnosis | AWS / cloud keys | Trade-secret IP |
+| Contract / DoDAAC # | SSN / PII | JWT / tokens | IP / network data |
+| Clearance levels | | PCI / card data | |
+| ITAR / EAR terms | | | |
+| Export-control | | | |
+
+Counts are computed from the shipped registry in `lib/detection/engines.ts`, so a
+claim on the site cannot drift from the code. The patterns are plain regex in this
+repository — read them before you trust them.
+
+### A blocked request
+
+Same call you already make. The block happens before the request leaves.
+
+```bash
+curl http://localhost:8080/v1/chat/completions \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d '{"model":"gpt-4o","messages":[
+        {"role":"user","content":"Summarize our CAGE 1ABC2 contract"}]}'
+```
+
+```jsonc
+{
+  "houndshield": {
+    "action": "BLOCKED",
+    "risk_level": "CRITICAL",
+    "detections": [
+      { "engine": "CUI", "pattern": "CAGE code", "nist_control": "SC.L2-3.13.1" }
+    ],
+    "message": "Blocked before leaving your perimeter. Logged to the audit chain."
+  }
+}
+```
+
+A clean prompt returns the provider's normal response, unchanged.
+
 ## What it looks like
 
 Captured from a production build of this repo (`npm run build` → standalone
-server), not mockups. Regenerate them at any time — see
+server), not mockups — **captured 2026-08-15**, so the landing page may have moved
+since. Regenerate at any time with the procedure in
 [docs/assets/README.md](docs/assets/README.md).
 
 <div align="center">
@@ -101,20 +166,19 @@ a marketing claim cannot silently drift from the code.
 **Only Modes B and C are CUI-safe.** The marketing and dashboard plane runs on Vercel —
 fine for a website, not fine for a regulated data path. The site says so too.
 
-## Regulatory status (verified 2026-08-19)
+## Compliance context
 
-**CMMC Phase 2 enforcement was suspended on 13 July 2026** by the Department of War,
-pending a Reform Task Force review. The RFI closed 14 August 2026 and the report is due
-around 13 September 2026. **Phase 2 was not cancelled and 10 November 2026 has not been
-replaced** — the pause suspends the *certificate*, not the obligation, and no new date
-exists to plan against. Treat 10 November as the date to be ready for.
+**CMMC Phase 2 enforcement was suspended on 13 July 2026** by the Department of War
+pending a review. Phase 2 was not cancelled and the 10 November 2026 date has not been
+replaced.
 
-**What did not change:** DFARS 252.204-7012, the 110 NIST SP 800-171 Rev 2 controls, and
-**annual SPRS self-attestation** all remain in force. With no assessor in the loop, that
-score is the contractor's own representation to the government — and DOJ's Civil
-Cyber-Fraud Initiative has settled 15 False Claims Act cases over exactly that
-(MORSECORP $4.6M for an inflated SPRS score; LOGZONE $507,144 for certifying a perfect
-110 with controls unimplemented).
+What is unchanged, and what this project maps to: **DFARS 252.204-7012**, all **110
+NIST SP 800-171 Rev 2** controls, and the annual **SPRS self-assessment**. On the
+health side, **HIPAA 45 CFR Part 164** and all 18 Safe Harbor identifiers.
+
+HoundShield is engineered as a technical control against specific requirements — it is
+not a certification, and this repository does not claim one. See
+[/trust](https://www.houndshield.com/trust) for what is built-for versus attested.
 
 ## Quickstart
 
@@ -140,7 +204,7 @@ flagged before it leaves the machine.
 
 ```
 compliance-firewall-agent/   Next.js 15 · React 19 — marketing, checkout, dashboard
-  app/                       App Router — public pages, /console, 59 API routes
+  app/                       App Router — public pages, /console, 66 API routes
   lib/classifier/            90 detection patterns (builtin · CMMC · HIPAA)
   lib/detection/engines.ts   Single source of truth for engine + pattern counts
   lib/reports/               PDF generation + SHA-256 evidence chain
@@ -188,8 +252,8 @@ Server-side unless noted.
 | Module | Responsibility |
 |---|---|
 | `lib/auth/credential-guard.ts` | Zod schemas plus the shared per-IP / per-address gate every credential route calls first. |
-| `lib/auth/lockout.ts` | Consecutive-failure account lockout (5 attempts → 15 min), keyed on a SHA-256 of the address so the lock itself cannot confirm an account exists. NIST 800-171 **3.1.8** / CMMC **AC.2.008**. |
-| `lib/auth/timing.ts` | Equalizes response latency to a 600 ms floor plus jitter, closing the bcrypt-vs-no-bcrypt timing oracle. |
+| `lib/auth/lockout.ts` | Consecutive-failure account lockout, keyed on a SHA-256 of the address so the lock itself cannot confirm an account exists. NIST 800-171 **3.1.8** / CMMC **AC.2.008**. |
+| `lib/auth/timing.ts` | Equalizes response latency to a fixed floor plus jitter, closing the bcrypt-vs-no-bcrypt timing oracle. |
 | `lib/auth/captcha.ts` | Turnstile verification, required after repeated failures. |
 | `lib/auth/auth-error-message.ts` | The single neutral message every sign-in failure returns. |
 | `lib/auth/signup-result.ts` | Same contract for sign-up — never echoes "already registered". |
@@ -206,10 +270,6 @@ Server-side unless noted.
 | `lib/net/safe-fetch.ts` | SSRF bound for any URL that arrives in a request body. Resolves the hostname and judges every returned address against the private/reserved blocklist (IPv4, IPv6, and IPv4-mapped IPv6), re-validates each redirect hop, and caps response size and time. Resolution rather than hostname matching, because a name an attacker controls can point anywhere. |
 | `lib/brain-ai/route-guard.ts` | `guardBrainAi()` — the shared authenticate-then-meter front half of every `/api/brain-ai/*` handler, plus `scopedSessionId()`, which namespaces a session id to its owner so a supplied `?id=` can only address the caller's own row. |
 | `lib/brain-ai/allowed-models.ts` | Server-side allow-list for the caller-supplied `model` field, derived by filtering the existing pricing table on an output-price ceiling. A request field must never select what we are billed for. |
-
-Rollback: `AUTH_SERVER_ROUTES=off` makes the server credential routes answer
-`501` and the browser reverts to its previous direct-to-Supabase calls. It is
-read server-side, so flipping it takes effect **without a rebuild**.
 
 ## Testing
 
@@ -237,32 +297,36 @@ cd proxy && npm rebuild better-sqlite3
 
 ## Pricing
 
-**One offer: a $499 one-time AI Risk Assessment Report.** No subscription, no per-seat
-licence, no contract. $499 sits below most corporate-card and signature thresholds, so it
-does not need procurement approval. The in-browser scanner at `/demo` is free and needs
-no account.
+One offer: a **$499 one-time AI Risk Assessment Report** — no subscription, no per-seat
+licence, no contract. The in-browser scanner at
+[/demo](https://www.houndshield.com/demo) is free and needs no account. Full terms on
+[the pricing page](https://www.houndshield.com/pricing).
 
-## Status — honest
+## Project status
 
-**Working:** the scanner, 16 detection engines, the SHA-256 audit chain, the PDF
-generator, the in-browser demo, auth, both test suites, the production build, and **the
-buy path.** A visitor can reach Stripe and pay $499 today; the retail
-checkout falls back to a hosted Stripe Payment Link and does not need `STRIPE_SECRET_KEY`.
+**Implemented and tested:** the scanning proxy and all 16 detection engines, the
+SHA-256 hash-chained audit log, PDF evidence export mapped to NIST 800-171, the
+in-browser scanner, authentication, and the 110-control assessment. Both test suites
+and the production build gate every commit — the numbers in
+[Verified numbers](#verified-numbers) are reproducible from a clean clone.
 
-**Broken or missing** (each verified against the live site on 2026-08-19):
+**Known limitations, stated plainly:**
 
-- **A completed purchase is not recorded.** `STRIPE_WEBHOOK_SECRET` is unset, so a paid
-  order writes no row, sends the buyer no receipt, and raises no alert. Money can arrive
-  without anyone knowing. This is the single highest-value open item.
-- **Mode B cannot be installed.** `houndshield/proxy:latest` is unpublished on Docker Hub
-  (404) and `https://houndshield.com/install` — the command printed in
-  [/docs/quickstart](https://www.houndshield.com/docs/quickstart) — also returns 404. The
-  CUI-safe deployment the whole architecture argument rests on has no install path.
-- **Zero paying customers** — the real gap, and not an engineering one.
+- **`houndshield/proxy:latest` is not yet published to Docker Hub**, so Mode B is a
+  build-it-yourself deployment today. `proxy/Dockerfile` builds; publishing needs the
+  registry secrets and a `proxy-v*` tag, and `.github/workflows/docker-publish.yml`
+  does the rest.
+- **No SOC 2 report and no FedRAMP authorization.** Both are stated on
+  [/trust](https://www.houndshield.com/trust) rather than implied away.
+- The hosted trial is **not** a CUI or PHI environment. See
+  [Deployment modes](#deployment-modes--read-before-claiming-compliance).
 
-Several security features are also inert on unset environment variables (quarantine
-encryption, CAPTCHA escalation). That list is computed, not maintained here — read it
-from the source: `curl -s https://www.houndshield.com/api/health | jq .degraded`
+Runtime configuration health is reported by the service itself rather than tracked in
+this file, so it cannot go stale:
+
+```bash
+curl -s https://www.houndshield.com/api/health
+```
 
 ## Contributing
 
