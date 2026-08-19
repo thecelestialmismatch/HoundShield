@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getSessionUser } from '@/lib/auth/session'
+import { IdleTimeout } from '@/components/auth/IdleTimeout'
 
 /**
  * THE authorization boundary for the whole after-login dashboard.
@@ -56,5 +57,12 @@ export default async function CommandCenterAuthLayout({
 }) {
   const user = await getSessionUser()
   if (!user) redirect('/login?redirect=%2Fcommand-center%2Foverview')
-  return <>{children}</>
+  // Idle-logout warning. The CONTROL is middleware.ts (NIST 800-171 3.1.11);
+  // this only warns before it fires so the user is not ejected mid-sentence.
+  return (
+    <>
+      {children}
+      <IdleTimeout />
+    </>
+  )
 }
