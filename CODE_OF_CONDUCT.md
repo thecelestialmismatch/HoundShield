@@ -59,9 +59,11 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-.
-All complaints will be reviewed and investigated promptly and fairly.
+reported privately to the community leaders responsible for enforcement at
+`security@houndshield.com` with the subject line **Code of Conduct report**.
+Technical security vulnerabilities must instead follow the private process in
+[SECURITY.md](SECURITY.md). All complaints will be reviewed and investigated
+promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.
