@@ -4,10 +4,10 @@
 
 # HoundShield
 
-**The local-only AI compliance firewall.**
+**Compliance evidence you can check yourself.**
 
-Scan every AI prompt for PHI, CUI, PII and secrets — on your own hardware.
-Nothing leaves the building.
+Every AI prompt scanned on your own hardware — nothing leaves the building.
+Every pattern, every number, readable in this repo before you spend a dollar.
 
 <br/>
 
