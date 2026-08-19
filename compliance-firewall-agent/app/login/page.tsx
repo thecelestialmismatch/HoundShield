@@ -23,6 +23,7 @@ import { Logo } from '@/components/Logo';
 import { TextLogo } from '@/components/TextLogo';
 import { AuthTabs } from '@/components/auth/AuthTabs';
 import { PasswordlessSignIn } from './PasswordlessSignIn';
+import { IDLE_LOGOUT_REASON, IDLE_TIMEOUT_MS } from '@/lib/auth/idle-session';
 
 function LoginForm() {
   const router = useRouter();
@@ -45,10 +46,15 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   // Surface auth-callback failures (app/auth/callback redirects here with
   // ?error=auth_failed when the OAuth code exchange fails).
+  // `reason=idle` is set by the middleware after it terminates a session for
+  // inactivity. Without this the user is dumped on a blank login form with no
+  // explanation and assumes something broke.
   const [error, setError] = useState(
     searchParams.get('error') === 'auth_failed'
       ? 'Sign-in could not be completed. Please try again.'
-      : '',
+      : searchParams.get('reason') === IDLE_LOGOUT_REASON
+        ? `You were signed out after ${Math.round(IDLE_TIMEOUT_MS / 60000)} minutes of inactivity. Please sign in again.`
+        : '',
   );
   const [loading, setLoading] = useState(false);
   // Supabase passwordless (email code / magic link) — swaps in over the password form.
