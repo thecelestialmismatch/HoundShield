@@ -1,6 +1,7 @@
 import { isSupabaseConfigured, createServiceClient } from "@/lib/supabase/client";
 import { isLlmConfigured } from "@/lib/agent/provider";
 import { stripeKeyDiagnostic, stripeWebhookDiagnostic } from "@/lib/stripe/env";
+import { idleEnforcementMode, IDLE_TIMEOUT_MS } from "@/lib/auth/idle-session";
 import { passwordResetDiagnostic } from "@/lib/auth/reset-diagnostics";
 import { founderInboxDiagnostic } from "@/lib/email/identity";
 import { marketingBlockReason } from "@/lib/legal/marketing-email";
@@ -258,6 +259,7 @@ export async function buildHealthReport(): Promise<HealthReport> {
   const resetPepper = resetCodePepper();
   const marketingBlocked = marketingBlockReason();
   const encryptionState = quarantineEncryption();
+  const idleState = idleEnforcementMode(process.env);
 
   const services: Services = {
     database: isSupabaseConfigured() ? "connected" : "demo_mode",
@@ -305,6 +307,17 @@ export async function buildHealthReport(): Promise<HealthReport> {
             lockout === "not_configured"
               ? "No database is configured, so repeated failed sign-ins are not counted and no account can lock."
               : "The lockout table is unreachable, so failed sign-ins are not counted and brute-force attempts are unbounded. Apply supabase/migrations/031_auth_lockouts.sql.",
+        }
+      : {}),
+    // Automatic logoff (NIST 800-171 3.1.11 / HIPAA §164.312(a)(2)(iii)).
+    // Reported for the same reason as `captcha` above: an access control that
+    // is silently not running is indistinguishable from one that is, and this
+    // one is evidence an assessor asks for.
+    idle_logout: idleState === "enforced" ? "enforcing" : idleState,
+    ...(idleState !== "enforced"
+      ? {
+          idle_logout_hint:
+            `No server secret is available to sign the activity stamp, so sessions are NOT terminated after ${Math.round(IDLE_TIMEOUT_MS / 60000)} minutes of inactivity. Set BETTER_AUTH_SECRET (or ensure SUPABASE_SERVICE_ROLE_KEY is set) and redeploy.`,
         }
       : {}),
     captcha: captchaState,

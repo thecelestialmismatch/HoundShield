@@ -2,6 +2,18 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { getSessionCookie } from 'better-auth/cookies';
+import {
+  IDLE_COOKIE,
+  IDLE_LOGOUT_REASON,
+  IDLE_TIMEOUT_MS,
+  countsAsActivity,
+  idleSecret,
+  isIdleExpired,
+  isIdleProtectedPath,
+  isSessionCookie,
+  signActivity,
+  verifyActivity,
+} from '@/lib/auth/idle-session';
 
 /**
  * Is Better Auth the active provider? Mirrors lib/auth/better-auth.ts
@@ -100,6 +112,85 @@ function needsAuth(pathname: string): boolean {
     pathname === '/login' ||
     pathname === '/signup'
   );
+}
+
+// ---------------------------------------------------------------------------
+// Idle session termination — NIST 800-171 3.1.11 / HIPAA §164.312(a)(2)(iii)
+//
+// The control has to live HERE. The founder's actual requirement was "close the
+// laptop, come back an hour later, refresh, and be asked to log in again" — and
+// that request never reaches a React component. Only the edge sees it. A
+// `setTimeout` in the dashboard dies with the tab and is trivially bypassed;
+// it is UX, not enforcement (components/auth/IdleTimeout.tsx is explicitly the
+// UX half).
+//
+// The stamp is HMAC-signed with a server secret, so a user cannot hand back a
+// forged "I was active one second ago". Verification failure is treated as NO
+// recorded activity, which expires the session — fail closed, never open.
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns a redirect when the session must be terminated for inactivity, or
+ * null to let the request continue. Refreshes the activity stamp as a side
+ * effect on `response` when the request counts as user activity.
+ */
+async function enforceIdleTimeout(
+  request: NextRequest,
+  response: NextResponse,
+  pathname: string,
+): Promise<NextResponse | null> {
+  if (!isIdleProtectedPath(pathname)) return null;
+
+  const secret = idleSecret(process.env);
+  // No server secret at all: we do NOT pretend to enforce (a control that
+  // always returns "pass" while looking configured is the TURNSTILE_SECRET_KEY
+  // failure), and we do NOT lock everyone out of a working deployment over an
+  // optional variable. /api/health reports the state so it is visible.
+  if (!secret) return null;
+
+  // Only a signed-in request can be idle-terminated. Signing an anonymous
+  // visitor out is meaningless, and stamping cookies for them is noise.
+  const hasSession = request.cookies.getAll().some((c) => isSessionCookie(c.name));
+  if (!hasSession) return null;
+
+  const last = await verifyActivity(request.cookies.get(IDLE_COOKIE)?.value, secret);
+
+  // A signed-in request with NO stamp at all is the first one after login (the
+  // cookie is set below). Only an existing, valid, STALE stamp terminates —
+  // otherwise every fresh login would bounce straight back to /login.
+  if (last !== null && isIdleExpired(last, Date.now(), IDLE_TIMEOUT_MS)) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('reason', IDLE_LOGOUT_REASON);
+    loginUrl.searchParams.set('redirect', pathname);
+    const redirect = NextResponse.redirect(loginUrl);
+    // Clear the session itself, not just the stamp. Clearing only the stamp
+    // would re-stamp on the next request and hand back a live session.
+    for (const cookie of request.cookies.getAll()) {
+      if (isSessionCookie(cookie.name) || cookie.name === IDLE_COOKIE) {
+        redirect.cookies.set(cookie.name, '', { path: '/', maxAge: 0 });
+      }
+    }
+    return redirect;
+  }
+
+  if (countsAsActivity(pathname, request.method)) {
+    response.cookies.set(IDLE_COOKIE, await signActivity(Date.now(), secret), {
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      // Readable by client JS on purpose — the countdown banner needs the
+      // deadline, and the timestamp is not a secret. Integrity comes from the
+      // HMAC, not from hiding it.
+      httpOnly: false,
+      // Outlives the idle window so the stamp is still THERE to be judged
+      // stale. A maxAge equal to the timeout would let the browser silently
+      // drop it, which reads as "no stamp" — i.e. a fresh login — and would
+      // renew the session forever instead of ending it.
+      maxAge: 60 * 60 * 24 * 7,
+    });
+  }
+
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -239,6 +330,9 @@ export async function middleware(request: NextRequest) {
   // See docs/DASHBOARD-AUTH-GATE.md for the founder remediation steps.
   //
   // Better Auth path (when active): cookie-based protection, no Supabase.
+  const idleRedirect = await enforceIdleTimeout(request, response, pathname);
+  if (idleRedirect) return idleRedirect;
+
   if (betterAuthEnabled()) {
     if (needsAuth(pathname)) {
       const sessionCookie = getSessionCookie(request);
