@@ -1,106 +1,48 @@
-# LeakWall — Admin Dashboard
+# HoundShield documentation
 
-AI data leakage prevention for teams of 5–50 people. This repo contains the admin dashboard, API routes, Supabase schema, and weekly email digest.
+This directory contains operational guidance, product reference material, planning records, and historical research. Use this page to find the document that matches your task; do not assume that an exploratory draft or dated audit is current operating guidance.
 
----
+> **For deployment and regulated-data decisions, start with the active operational documents below and validate the deployed configuration.** Documentation does not itself certify an environment or replace organizational security review.
 
-## File structure
+## Start here
 
-```
-leakwall/
-├── supabase/
-│   ├── schema.sql          ← Run first in Supabase SQL Editor
-│   └── seed.sql            ← Run second for dev data
-├── pages/
-│   ├── api/
-│   │   ├── dashboard/
-│   │   │   └── stats.js    ← GET /api/dashboard/stats?days=7
-│   │   └── weekly-digest.js ← POST (Vercel Cron, hourly)
-│   └── dashboard/
-│       └── index.jsx       ← Admin dashboard page
-├── components/dashboard/   ← Reusable dashboard components
-├── lib/
-│   ├── supabase.js         ← Client + typed query helpers
-│   └── buildDigestHtml.js  ← Email HTML builder
-├── emails/
-│   └── weekly-digest-preview.html ← Open in browser to preview email
-├── vercel.json             ← Cron: fires /api/weekly-digest hourly
-├── .env.example            ← Copy to .env.local
-└── README.md
-```
+| If you need to… | Read | Why it matters |
+|---|---|---|
+| Set up or validate a development environment | [Testing guide](TESTING-GUIDE.md) | Contains component-level test, benchmark, build, and smoke-check procedures. |
+| Prepare a release or production deployment | [Deployment guide](deploy-production.md) | Describes deployment steps and release considerations. |
+| Review security configuration and control design | [Security hardening](security-hardening.md) | Explains implementation and operating considerations for security-sensitive surfaces. |
+| Integrate a workflow with the product | [Integration guide](INTEGRATION_GUIDE.md) | Provides integration-oriented reference material. |
+| Run a product demonstration | [Demo script](DEMO-SCRIPT.md) | Supplies a reproducible demonstration sequence. |
+| Report a vulnerability | [Repository security policy](../SECURITY.md) | Explains private reporting channels and disclosure expectations. |
 
----
+## Operational and product references
 
-## Setup in 20 minutes
+| Area | Document |
+|---|---|
+| Testing, CI, benchmarks, and troubleshooting | [TESTING-GUIDE.md](TESTING-GUIDE.md) |
+| Production deployment | [deploy-production.md](deploy-production.md) |
+| Application and data-flow architecture | [ai-architecture.md](ai-architecture.md) |
+| Security design | [security-hardening.md](security-hardening.md) |
+| Integration | [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) |
+| Demo flow | [DEMO-SCRIPT.md](DEMO-SCRIPT.md) |
+| Design system | [design-tokens.md](design-tokens.md) |
+| Documentation assets and screenshots | [assets/README.md](assets/README.md) |
 
-### 1. Supabase (5 min)
-1. Create project at [supabase.com](https://supabase.com) (free)
-2. Dashboard → SQL Editor → New query
-3. Paste contents of `supabase/schema.sql` → Run
-4. Paste contents of `supabase/seed.sql` → Run
-5. Copy `Project URL` and `anon` key from Settings → API
+## Planning, research, and historical records
 
-### 2. Resend (2 min)
-1. Create account at [resend.com](https://resend.com) (free: 100 emails/day)
-2. Add and verify your domain (or use `onboarding@resend.dev` for testing)
-3. Copy API key
+The remaining documents include design explorations, market and outreach research, roadmap proposals, prior audits, and dated validation notes. They are useful context, but their presence does not make them binding product requirements. Before acting on them, check their date, source, and alignment with the current codebase and deployment guidance.
 
-### 3. Local dev (3 min)
-```bash
-cp .env.example .env.local
-# Fill in SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY
-npm install
-npm run dev
-# Open http://localhost:3000/dashboard
-```
+The most relevant collections are:
 
-### 4. Deploy to Vercel (5 min)
-```bash
-npx vercel
-# Add env vars in Vercel dashboard → Settings → Environment Variables
-```
+| Collection | Contents |
+|---|---|
+| [`market-research/`](market-research/) | Opportunity and market research. |
+| [`gtm/`](gtm/) | Go-to-market and production-audit material. |
+| [`superpowers/specs/`](superpowers/specs/) | Product and design specifications. |
+| [`legacy/`](legacy/) | Superseded or archived documentation. |
 
-The `vercel.json` cron fires `/api/weekly-digest` every hour. The route checks which orgs have a digest scheduled for this day + hour and sends only those.
+## Documentation maintenance
 
-### 5. Test the email
-Open `emails/weekly-digest-preview.html` in any browser to see the email design. To send a real test:
-```bash
-curl -X POST http://localhost:3000/api/weekly-digest \
-  -H "Authorization: Bearer your-CRON_SECRET"
-```
+Documentation changes should state what they describe, avoid unqualified security or compliance claims, and link to implementation or reproducible validation where practical. When a change affects deployment, identity, data handling, detection behavior, or audit evidence, update the relevant active guide in the same pull request.
 
----
-
-## Chrome extension → dashboard data flow
-
-```
-Employee pastes in ChatGPT
-  → Content script detects pattern (API key, SSN, etc.)
-  → Checks member's policy (block/warn/log)
-  → POSTs event to Supabase via service_role key:
-      POST https://your-project.supabase.co/rest/v1/leak_events
-      { org_id, member_id, ai_tool_name, severity, category,
-        category_label, char_count, was_blocked, was_warned }
-  → Admin opens dashboard
-  → /api/dashboard/stats fetches events, aggregates, returns JSON
-  → Dashboard renders: member table, event feed, chart, policies
-  → Monday 9am UTC: Vercel Cron fires weekly-digest API
-  → Admin email received with weekly summary
-```
-
----
-
-## Adding the extension token to each member
-
-When a new member joins (via invite link), the extension receives their `extension_token` from `organization_members`. The extension stores this in `chrome.storage.local` and sends it with every event POST. The API validates the token against Supabase to get `member_id` and `org_id` — no auth credentials stored in the extension.
-
----
-
-## Revenue milestones checklist
-
-- [ ] First team onboarded (Day 30) → $49/month Founder's Deal
-- [ ] 5 paying teams → $245/month
-- [ ] 20 paying teams → $980/month — switch to $9/user/month pricing
-- [ ] 100 paying teams × 10 avg seats → $9,000/month MRR
-- [ ] Add Stripe webhook → auto-provision seats, auto-suspend non-payers
-- [ ] Add annual plan at 20% discount → improves cash flow
+For contribution expectations, see [CONTRIBUTING.md](../CONTRIBUTING.md). For the public repository entry point, see the [root README](../README.md).
