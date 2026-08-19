@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { getStripeSecretKey } from '@/lib/stripe/env';
 import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { createClient } from '@/lib/supabase/server';
+import { SITE_URL } from '@/lib/site-url';
 
 function getStripe() {
   return new Stripe(getStripeSecretKey()!, {
@@ -46,11 +47,15 @@ export async function POST() {
     }
 
     const stripe = getStripe();
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
+    // SITE_URL, not `NEXT_PUBLIC_APP_URL || localhost`. That variable is UNSET in
+    // production (measured 2026-08-14 — see lib/site-url.ts), so this route was
+    // handing Stripe a `return_url` of `http://localhost:3000/command-center/settings`:
+    // a paying customer finishes managing their billing, clicks back, and lands on
+    // their own machine. SITE_URL still honours the override where it is set.
     const session = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
-      return_url: `${appUrl}/command-center/settings`,
+      return_url: `${SITE_URL}/command-center/settings`,
     });
 
     return NextResponse.json({ url: session.url });

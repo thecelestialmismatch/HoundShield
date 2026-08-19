@@ -154,7 +154,8 @@ const TOPIC_REPLIES: Record<string, TopicReply> = {
     subjectSuffix: "partnering with HoundShield",
     answerHtml: `
         We work with RPOs, MSPs and compliance consultants who already advise CMMC and HIPAA
-        clients. The co-branded version of the $499 report is <strong>$299 wholesale</strong> —
+        clients. The co-branded version of the $499 report is <strong>$399 wholesale</strong>
+        (a flat $100 partner discount) —
         you set your own client price and keep the margin — and recommending a local-only tool
         never creates a DFARS 7012 exposure for the client you're advising. Applying through the
         partner form is faster than this inbox: it routes straight into the partner queue.`,

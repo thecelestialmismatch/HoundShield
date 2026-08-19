@@ -89,7 +89,7 @@ The webhook handler at `/api/stripe/webhook` is already implemented and handles:
 Verify the webhook endpoint is registered:
 
 1. Go to https://dashboard.stripe.com/test/webhooks (test) or `/webhooks` (live)
-2. Find or create endpoint: `https://houndshield.com/api/stripe/webhook`
+2. Find or create endpoint: `https://www.houndshield.com/api/stripe/webhook`
 3. Events to listen for:
    - `checkout.session.completed`
    - `customer.subscription.created`
@@ -141,7 +141,7 @@ Critical ones (mark as **Production** + **Preview**):
 
 When ready to charge real money:
 1. Replace `sk_test_...` with `sk_live_...` in Vercel env vars
-2. Create a **new** webhook endpoint at `https://houndshield.com/api/stripe/webhook` in the **live** Stripe dashboard
+2. Create a **new** webhook endpoint at `https://www.houndshield.com/api/stripe/webhook` in the **live** Stripe dashboard
 3. Update `STRIPE_WEBHOOK_SECRET` with the live webhook signing secret
 4. Update all `STRIPE_*_PRICE_ID` vars with live price IDs
 

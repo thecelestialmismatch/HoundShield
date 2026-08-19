@@ -43,6 +43,7 @@ vi.mock("@/lib/supabase/client", () => ({
 
 import { POST } from "@/app/api/stripe/report-checkout/route";
 import { NextRequest } from "next/server";
+import { RISK_REPORT_WHOLESALE_CENTS } from "@/lib/pricing/plans";
 
 const APPROVED_UUID = "11111111-1111-4111-8111-111111111111";
 
@@ -150,14 +151,14 @@ describe("POST /api/stripe/report-checkout", () => {
     expect(args.metadata.wholesale).toBe("false");
   });
 
-  it("grants $299 wholesale only for a verified approved partner (H3)", async () => {
+  it("grants wholesale pricing only for a verified approved partner (H3)", async () => {
     process.env.STRIPE_SECRET_KEY = "sk_test";
     mockIsConfigured.mockReturnValue(true);
     mockPartnerLookup.mockResolvedValue({ data: { id: APPROVED_UUID, status: "approved" } });
 
     await POST(makeRequest({ wholesale: true, partner_ref: APPROVED_UUID }));
     const args = mockSessionsCreate.mock.calls[0][0];
-    expect(args.line_items[0].price_data.unit_amount).toBe(29900);
+    expect(args.line_items[0].price_data.unit_amount).toBe(RISK_REPORT_WHOLESALE_CENTS);
     expect(args.metadata.wholesale).toBe("true");
     expect(args.metadata.partner_ref).toBe(APPROVED_UUID);
   });

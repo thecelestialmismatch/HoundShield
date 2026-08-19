@@ -192,7 +192,7 @@ export const partnerOutreach: OutreachDraft = {
 
 You already advise clients on NIST 800-171. I built the piece that is hard to evidence: what staff paste into ChatGPT and Copilot, scanned locally, mapped to the controls, in a signed PDF.
 
-The offer for you is wholesale. You pay $299, your client pays $499–$999, you keep the margin and it carries your branding. No integration work — it runs in your client's environment as a Docker container, so their data never leaves their boundary.
+The offer for you is wholesale. You pay $399 — a flat $100 partner discount — your client pays $499–$999, you keep the margin and it carries your branding. No integration work — it runs in your client's environment as a Docker container, so their data never leaves their boundary.
 
 I am looking for a small number of first partners, and I would rather have one real conversation than send fifty of these. Worth 15 minutes?
 
