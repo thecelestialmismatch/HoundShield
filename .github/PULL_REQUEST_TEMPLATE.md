@@ -1,44 +1,58 @@
-## Description
+## Summary
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context.
+Describe the problem, the change, and the affected component(s). Link the related issue when one exists.
 
-Fixes # (issue)
+Closes #
 
-## Type of change
+## Change type
 
-Please delete options that are not relevant.
+- [ ] Bug fix
+- [ ] New capability
+- [ ] Security hardening
+- [ ] Documentation or developer-experience improvement
+- [ ] Refactor or maintenance
+- [ ] Breaking change
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
+## Impact and operating considerations
 
-## Jordan's Test Plan (CMMC Buyer — required before merge)
+Select every area affected and explain the change below.
 
-_Jordan = IT Security Manager at DoD contractor facing CMMC Level 2 deadline. These checks protect her deployment._
+- [ ] Authentication, sessions, identity, or authorization
+- [ ] Sensitive-data handling, logging, telemetry, or outbound requests
+- [ ] Proxy detection, policy evaluation, block/quarantine behavior, or performance
+- [ ] Database schema, migrations, retention, or access controls
+- [ ] Deployment, environment variables, integrations, or scheduled work
+- [ ] Evidence, reporting, or audit-chain behavior
+- [ ] None of the above
 
-- [ ] `npm run build` passes in `compliance-firewall-agent/`
-- [ ] Brain AI tests pass: `npx jest lib/brain-ai`
-- [ ] No hardcoded secrets (API keys, license keys, passwords)
-- [ ] Local-only data boundary preserved — prompt content never leaves customer machine
-- [ ] Compliance patterns untouched — 16 CUI categories still present in `proxy/patterns/`
-- [ ] SPRS scoring logic unchanged (or explicitly reviewed by compliance-specialist agent)
-- [ ] If proxy modified: `npm run bench:proxy` shows <10ms P99 latency
-- [ ] If Supabase referenced: confirmed NOT used for CUI data storage
+**Operational impact, threat-model note, and rollback plan:**
 
-## Verification
+<!-- State why this change is safe to operate. For a relevant change, include boundary assumptions, migration order, required configuration, and how to roll it back. -->
 
-Please describe the tests that you ran to verify your changes.
+## Validation
 
-- [ ] Local UI testing
-- [ ] `npm run build` succeeds locally
-- [ ] Linter passes (`npm run lint`)
-- [ ] Test suite passes: `npm test -- --run`
+List the commands and checks you actually ran, with meaningful outcomes.
 
-## Checklist:
+- [ ] Web plane: `npx tsc --noEmit`
+- [ ] Web plane: `npm run lint`
+- [ ] Web plane: `npm run test:coverage`
+- [ ] Web plane: `npm run build`
+- [ ] Proxy: `npm run lint`
+- [ ] Proxy: `npm run test:coverage`
+- [ ] Proxy: `npm run bench`
+- [ ] Manual verification (describe below)
+- [ ] Documentation-only validation (links, commands, and claims checked)
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] No TypeScript `any` types added in compliance-critical code
+**Results and manual verification:**
+
+<!-- Include failed or skipped checks and explain why. Do not state that a check passed unless you ran it. -->
+
+## Review checklist
+
+- [ ] The change is focused and does not include unrelated refactoring.
+- [ ] Tests cover changed behavior, or the omission is explained above.
+- [ ] No credentials, customer data, sensitive prompts, or production exports were added.
+- [ ] Public claims are scoped, evidence-based, and consistent with the selected deployment boundary.
+- [ ] Documentation and configuration guidance were updated where needed.
+- [ ] Database migrations, configuration changes, and rollout dependencies are documented where applicable.
+- [ ] I performed a self-review and addressed obvious failure paths.

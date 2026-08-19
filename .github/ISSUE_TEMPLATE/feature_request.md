@@ -1,19 +1,29 @@
 ---
-name: Feature Request
-about: Suggest an idea for the HoundShield platform
-title: 'feat: '
-labels: 'enhancement'
-assignees: ''
+name: Feature request
+about: Propose a problem worth solving in HoundShield
+labels: enhancement
 ---
 
-## Objective
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## Problem and audience
 
-## Proposed Solution
-A clear and concise description of what you want to happen.
+Describe the workflow, user or operator, and outcome that are not adequately supported today. Focus on the problem before proposing a solution.
 
-## Alternative Approaches
-A clear and concise description of any alternative solutions or features you've considered.
+## Deployment and boundary context
 
-## Additional Context
-Add any other context, API definitions, or mockups about the feature request here.
+State the context in which the capability would run: local development, hosted evaluation, customer-operated deployment, or a restricted environment. Explain any implications for sensitive data, identity, detection, audit evidence, performance, or integrations.
+
+## Proposed direction
+
+Describe the smallest useful behavior or interface change. Link mockups, interfaces, standards, or implementation references when available.
+
+## Alternatives considered
+
+Explain workarounds, competing approaches, or reasons the feature should not be implemented.
+
+## Success criteria
+
+Provide observable, testable outcomes that would show the proposal works for its intended audience.
+
+## Additional context
+
+Include relevant non-sensitive context, screenshots, examples, or research. Do not include credentials, customer data, or regulated prompts.
