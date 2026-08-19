@@ -64,10 +64,33 @@ describe("llms.txt stays in sync with the pricing source of truth", () => {
     expect(llms).toContain("$499 one-time");
   });
 
-  it("lists every canonical monthly price", () => {
-    for (const amount of ["$199/month", "$499/month", "$999/month", "$2,499/month"]) {
-      expect(llms, `llms.txt missing ${amount}`).toContain(amount);
+  /**
+   * INVERTED 2026-08-19. This assertion used to REQUIRE llms.txt to list every
+   * monthly tier, which is why the retired subscription grid survived every
+   * pricing correction: the guard made publishing it mandatory.
+   *
+   * PRICING_PLANS is dormant Stage-2 data — no page renders it (verified: no
+   * non-test importer of PRICING_PLANS/getPlan/ANNUAL_DISCOUNT exists). The one
+   * purchasable offer is RISK_REPORT. llms.txt is read by ChatGPT, Claude and
+   * Perplexity to describe what a buyer can buy, so publishing an unbuyable
+   * $199/month tier there sends every AI answer engine to the wrong product and
+   * undercuts the $499 anchor.
+   *
+   * Same failure mode as the Netskope "43%" assertion in tasks/lessons.md: a
+   * test that pins a wrong value converts an error into a requirement. Restore
+   * these prices here only when a subscription is genuinely purchasable.
+   */
+  it("does not advertise a monthly subscription that cannot be bought", () => {
+    for (const amount of ["$199/month", "$999/month", "$2,499/month", "$199/mo"]) {
+      expect(llms, `llms.txt still advertises the unbuyable ${amount}`).not.toContain(
+        amount,
+      );
     }
+  });
+
+  it("names exactly one offer — the one-time report, not a subscription ladder", () => {
+    expect(llms).toContain(formatUSD(RISK_REPORT.wholesalePrice));
+    expect(llms).not.toMatch(/subscription tiers?\s*\(secondary\)/i);
   });
 
   it("does not contain the retired $69 Pro price", () => {
