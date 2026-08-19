@@ -17,6 +17,7 @@ import { z } from 'zod';
  *  address canonical; 320 is the RFC 5321 max. */
 export const recoveryRequestSchema = z.object({
   email: z.string().trim().toLowerCase().email().max(320),
+  captchaToken: z.string().max(4096).optional(),
 });
 
 /**
