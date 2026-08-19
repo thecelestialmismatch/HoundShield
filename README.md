@@ -13,9 +13,6 @@ Nothing leaves the building.
 
 [![CI](https://github.com/thecelestialmismatch/HoundShield/actions/workflows/ci.yml/badge.svg)](https://github.com/thecelestialmismatch/HoundShield/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-0F172A?style=flat-square)](LICENSE)
-![tests](https://img.shields.io/badge/tests-2648_passing-3FB950?style=flat-square)
-![proxy](https://img.shields.io/badge/proxy_tests-61_passing-3FB950?style=flat-square)
-![latency](https://img.shields.io/badge/scan_p99-0.49ms-C8A24B?style=flat-square)
 ![NIST 800-171](https://img.shields.io/badge/NIST_800--171-110_controls-C8A24B?style=flat-square)
 
 [**Website**](https://www.houndshield.com) · [**Try the scanner**](https://www.houndshield.com/demo#snapshot) · [**Testing guide**](docs/TESTING-GUIDE.md) · [**Roadmap**](docs/ROADMAP-12-MONTH.md) · [**Security**](SECURITY.md)
@@ -85,10 +82,10 @@ Not marketing figures — reproduce every one with the commands in
 
 | Claim | Measured | Reproduce with |
 |---|---|---|
-| Scan latency | **p99 0.492 ms** (budget 10 ms) · mean 0.105 ms over 2,000 cold scans | `cd proxy && npm run bench` |
-| Detection coverage | **90 patterns** (53 builtin · 17 CMMC · 20 HIPAA) across **16 engines** | `lib/detection/engines.ts` |
-| App test suite | **2,648 passing** / 192 files | `cd compliance-firewall-agent && ./node_modules/.bin/vitest run` |
-| Proxy test suite | **61 passing** | `cd proxy && npx vitest run` |
+| Scan latency | **p99 0.65–0.89 ms** across runs, budget 10 ms · 2,000 cold scans | `cd proxy && npm run bench` |
+| Detection coverage | **53 patterns** across **16 engines** | `lib/detection/engines.ts` |
+| App test suite | **2,993 passing** / 212 files | `cd compliance-firewall-agent && ./node_modules/.bin/vitest run` |
+| Proxy test suite | **92 passing** / 4 files | `cd proxy && npx vitest run` |
 
 Engine and pattern counts shown in the UI are **computed from the shipped registries**, so
 a marketing claim cannot silently drift from the code.
@@ -104,16 +101,20 @@ a marketing claim cannot silently drift from the code.
 **Only Modes B and C are CUI-safe.** The marketing and dashboard plane runs on Vercel —
 fine for a website, not fine for a regulated data path. The site says so too.
 
-## Regulatory status (updated 2026-07-28)
+## Regulatory status (verified 2026-08-19)
 
-**CMMC Phase 2 was suspended on 13 July 2026** by the Department of War. The 10 November
-2026 third-party (C3PAO) certification gate no longer applies; Phases 3–4 are frozen
-pending a 60-day review.
+**CMMC Phase 2 enforcement was suspended on 13 July 2026** by the Department of War,
+pending a Reform Task Force review. The RFI closed 14 August 2026 and the report is due
+around 13 September 2026. **Phase 2 was not cancelled and 10 November 2026 has not been
+replaced** — the pause suspends the *certificate*, not the obligation, and no new date
+exists to plan against. Treat 10 November as the date to be ready for.
 
 **What did not change:** DFARS 252.204-7012, the 110 NIST SP 800-171 Rev 2 controls, and
 **annual SPRS self-attestation** all remain in force. With no assessor in the loop, that
 score is the contractor's own representation to the government — and DOJ's Civil
-Cyber-Fraud Initiative has settled 15 False Claims Act cases over exactly that.
+Cyber-Fraud Initiative has settled 15 False Claims Act cases over exactly that
+(MORSECORP $4.6M for an inflated SPRS score; LOGZONE $507,144 for certifying a perfect
+110 with controls unimplemented).
 
 ## Quickstart
 
@@ -171,7 +172,7 @@ Versions are the installed majors; `compliance-firewall-agent/package.json` and
 | Validation | **Zod 4** | Every credential route parses its body through a schema before the value is used. |
 | Email | **Resend** | Reset and verification mail is generated and sent by us (`generateLink` + Resend), so the flow needs no Supabase-dashboard template config. |
 | Payments | **Stripe 22** | The $499 one-time report. |
-| Tests | **Vitest 4** | 2,648 tests across 192 files. |
+| Tests | **Vitest 4** | Counts and reproduce commands live in Verified numbers above. |
 | Monitoring | **Sentry**, **PostHog** | PostHog is gated on cookie opt-in. |
 
 ### Proxy — `proxy/` (the shipped product)
@@ -213,8 +214,8 @@ read server-side, so flipping it takes effect **without a rebuild**.
 ## Testing
 
 ```bash
-cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # 2648 tests
-cd proxy && npx vitest run                                       # 61 tests
+cd compliance-firewall-agent && ./node_modules/.bin/vitest run   # app suite
+cd proxy && npx vitest run                                       # proxy suite
 cd proxy && npm run bench                                        # p99 < 10ms gate
 cd compliance-firewall-agent && npm run build                    # must pass pre-deploy
 curl -s https://www.houndshield.com/api/health                   # live smoke test
@@ -244,12 +245,24 @@ no account.
 ## Status — honest
 
 **Working:** the scanner, 16 detection engines, the SHA-256 audit chain, the PDF
-generator, the in-browser demo, auth, both test suites, the production build.
+generator, the in-browser demo, auth, both test suites, the production build, and **the
+buy path.** A visitor can reach Stripe and pay $499 today; the retail
+checkout falls back to a hosted Stripe Payment Link and does not need `STRIPE_SECRET_KEY`.
 
-**Broken or missing:**
-- **Checkout** — `/api/health` reports `payments: malformed_key`. Fix: [docs/STRIPE-FIX.md](docs/STRIPE-FIX.md)
-- **Distribution** — `houndshield/proxy:latest` unpublished, so a customer cannot install Mode B
-- **Zero paying customers** — the real gap, and not an engineering one
+**Broken or missing** (each verified against the live site on 2026-08-19):
+
+- **A completed purchase is not recorded.** `STRIPE_WEBHOOK_SECRET` is unset, so a paid
+  order writes no row, sends the buyer no receipt, and raises no alert. Money can arrive
+  without anyone knowing. This is the single highest-value open item.
+- **Mode B cannot be installed.** `houndshield/proxy:latest` is unpublished on Docker Hub
+  (404) and `https://houndshield.com/install` — the command printed in
+  [/docs/quickstart](https://www.houndshield.com/docs/quickstart) — also returns 404. The
+  CUI-safe deployment the whole architecture argument rests on has no install path.
+- **Zero paying customers** — the real gap, and not an engineering one.
+
+Several security features are also inert on unset environment variables (quarantine
+encryption, CAPTCHA escalation). That list is computed, not maintained here — read it
+from the source: `curl -s https://www.houndshield.com/api/health | jq .degraded`
 
 ## Contributing
 
