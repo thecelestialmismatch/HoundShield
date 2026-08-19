@@ -22,7 +22,7 @@ type PartnerType = "referral" | "reseller" | "technology";
 
 const PARTNER_TYPES: { value: PartnerType; label: string; hint: string }[] = [
   { value: "referral", label: "Referral partner", hint: "Refer clients, earn commission on each co-branded report" },
-  { value: "reseller", label: "Reseller", hint: "Co-brand and resell the $499 report at $299 wholesale" },
+  { value: "reseller", label: "Reseller", hint: "Co-brand and resell the $499 report at $399 wholesale ($100 off)" },
   { value: "technology", label: "Technology / integration", hint: "Embed the compliant AI gateway inside your own product" },
 ];
 
@@ -133,7 +133,7 @@ export function PartnerApplyForm() {
         Apply to the partner program
       </h2>
       <p className="mt-2 text-sm text-[var(--hs-ink-secondary)]">
-        Tell us about your firm and client base. No exclusivity, no minimums — published $299
+        Tell us about your firm and client base. No exclusivity, no minimums — published $399
         wholesale terms.
       </p>
 

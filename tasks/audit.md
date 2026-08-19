@@ -9,7 +9,7 @@
 - **Problem:** Webhook endpoint at dashboard.stripe.com still points to houndshield.com, not houndshield.com
 - **Impact:** Zero subscriptions complete in production. Every payment attempt = silent failure.
 - **File:** `compliance-firewall-agent/app/api/stripe/webhook/route.ts` (logic is correct, URL is wrong)
-- **Fix:** Manual step — update at dashboard.stripe.com/webhooks → `https://houndshield.com/api/stripe/webhook`
+- **Fix:** Manual step — update at dashboard.stripe.com/webhooks → `https://www.houndshield.com/api/stripe/webhook`
 - **Also:** Set `STRIPE_WEBHOOK_SECRET` in Vercel dashboard if not already set
 
 ### B2 — Three-Way Pricing Incoherence (CRITICAL)
@@ -84,7 +84,7 @@
 
 ## MANUAL STEPS (Cannot Automate — Require Credentials)
 
-1. **Stripe webhook URL** — dashboard.stripe.com/webhooks → update to `https://houndshield.com/api/stripe/webhook`
+1. **Stripe webhook URL** — dashboard.stripe.com/webhooks → update to `https://www.houndshield.com/api/stripe/webhook`
 2. **STRIPE_WEBHOOK_SECRET** — set in Vercel dashboard (required for webhook validation)
 3. **OPENROUTER_API_KEY** — set in Vercel dashboard (required for Brain AI)
 4. **Supabase push** — `cd compliance-firewall-agent && npx supabase db push` (with prod env vars)

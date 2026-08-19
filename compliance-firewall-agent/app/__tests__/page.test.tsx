@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
+import { CROSS_INDUSTRY_GENAI, REGULATED_SHARE_GENAI } from '@/lib/market/netskope'
 
 // ── Mocks ────────────────────────────────────────────────────────
 vi.mock('next/image', () => ({
@@ -99,12 +100,35 @@ describe('HomePage — HERMES demo parity', () => {
     expect(screen.getByText('NIST 800-171 controls')).toBeTruthy()
   })
 
-  it('replaces unverifiable market statistics with a concrete deployment distinction', () => {
+  /**
+   * Merge resolution (#302 <- main): this branch asserted a "2 / deployment
+   * paths" tile and the ABSENCE of 89%; main asserts the Netskope figure. The
+   * stat grid is a hard `repeat(4, 1fr)`, so only one tile fits and the source
+   * was resolved to main's. The deployment distinction is still asserted — by
+   * the Mode-B notice test below, which covers it more strictly than a stat
+   * tile ever did.
+   */
+  it('replaces unverifiable market statistics with a sourced figure', () => {
     const { container } = render(<HomePage />)
     expect(container.textContent).not.toContain('~80,000')
-    expect(container.textContent).not.toContain('89%')
-    expect(screen.getByText('2')).toBeTruthy()
-    expect(screen.getByText('deployment paths')).toBeTruthy()
+    expect(screen.getByText(REGULATED_SHARE_GENAI.value)).toBeTruthy()
+  })
+
+  /**
+   * The 89% tile is the GENERATIVE-AI slice. The all-violations figure is 81%,
+   * and the two shipped on the same site with no denominators, reading as a
+   * contradiction to any buyer who checked both. The tile must therefore carry
+   * its scope, not just its number.
+   */
+  it('states the denominator alongside the 89% figure', () => {
+    const { container } = render(<HomePage />)
+    expect(container.textContent).toMatch(/healthcare genAI/i)
+    expect(container.textContent).toContain(CROSS_INDUSTRY_GENAI.value)
+  })
+
+  it('never shows the bare 81% figure on the homepage, which has a different denominator', () => {
+    const { container } = render(<HomePage />)
+    expect(container.textContent).not.toContain('81%')
   })
 
   // ── Compliance gate (deliberate addition to the demo) ────────────

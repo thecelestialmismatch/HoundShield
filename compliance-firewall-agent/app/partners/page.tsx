@@ -44,7 +44,8 @@ export default function PartnersPage() {
                 <p>
                   Registered Provider Organizations and MSPs each serve dozens of clients who all
                   need this. One partner is worth fifty cold emails. Co-branded compliance reports
-                  at $299 wholesale, margin-first pricing, dedicated enablement.
+                  at $399 wholesale — a flat $100 partner discount. You set the retail
+                  and keep everything above it. Dedicated enablement.
                   (C3PAOs are excluded — assessors can&apos;t refer tools to clients they assess.)
                 </p>
               </div>
@@ -58,8 +59,8 @@ export default function PartnersPage() {
                 <div className="ic"><Users /></div>
                 <h3>MSP / Agency</h3>
                 <p>
-                  20% revenue share · white-label option. Manage every client&apos;s CMMC posture
-                  from one multi-tenant dashboard.
+                  Up to 20% revenue share on subscriptions · white-label option. Manage
+                  every client&apos;s CMMC posture from one multi-tenant dashboard.
                 </p>
               </div>
               <div className="card">

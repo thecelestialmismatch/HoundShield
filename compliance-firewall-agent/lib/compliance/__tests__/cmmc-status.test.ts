@@ -51,6 +51,29 @@ const NAMES_THE_DATE = /\b(?:10\s+)?nov(?:\.|ember)?\s*(?:10\s*,?\s*)?2026\b/i;
  */
 const NAMES_THE_SUSPENSION = /suspend|paus|2026-07-13|13 july 2026|july 13,? 2026|superseded/i;
 
+/**
+ * Does this document talk about CMMC at all?
+ *
+ * Added 2026-08-18. The governing-doc guard below fired on three files in
+ * docs/research/ that name "November 2026" as the **YC batch application
+ * deadline** and never mention CMMC once. That is not the failure mode this
+ * guard exists to catch — the guard's stated job is that a file may not cite
+ * the November date *as a live CMMC certification deadline*. A document with
+ * zero CMMC references cannot commit that error.
+ *
+ * This narrows the guard for precision, not for convenience, and it does not
+ * reduce its coverage of the real case: any file that discusses CMMC and names
+ * the date still has to say where the programme stands. The test immediately
+ * below this one proves that teeth are intact by running the guard's own logic
+ * against a synthetic offender.
+ *
+ * Deliberately does NOT match a bare "Phase 2" / "Phase II". That phrase is
+ * ordinary project vocabulary — build roadmaps in docs/research/ use it for
+ * their own phases — and matching it reintroduced the same false positive this
+ * predicate exists to remove. Only unambiguous CMMC identifiers count.
+ */
+const MENTIONS_CMMC = /\bcmmc\b|\bc3pao\b|32 cfr part 170|dfars 252\.204-7012/i;
+
 describe("CMMC regulatory status", () => {
   const files = SCAN_DIRS.flatMap((d) => sourceFiles(join(ROOT, d)));
 
@@ -171,12 +194,42 @@ describe("CMMC regulatory status — governing documents", () => {
     for (const doc of docs) {
       const src = readFileSync(doc, "utf8");
       if (!NAMES_THE_DATE.test(src)) continue;
+      // A doc that never mentions CMMC is naming some other November 2026 —
+      // a YC batch deadline, a conference, a renewal. See MENTIONS_CMMC.
+      if (!MENTIONS_CMMC.test(src)) continue;
       if (!NAMES_THE_SUSPENSION.test(src)) violations.push(doc.replace(REPO_ROOT + "/", ""));
     }
     expect(
       violations,
       `names 10 Nov 2026 without saying where CMMC Phase 2 stands: ${violations.join(", ")}`,
     ).toEqual([]);
+  });
+
+  /**
+   * Guards the guard. Narrowing a safety check is exactly how drift creeps
+   * back, so the narrowed predicate is exercised directly against a synthetic
+   * offender and a synthetic innocent.
+   */
+  it("the narrowed predicate still catches a bare CMMC November date", () => {
+    const offender =
+      "Get CMMC Level 2 certified before the November 10, 2026 deadline to stay eligible.";
+    expect(NAMES_THE_DATE.test(offender)).toBe(true);
+    expect(MENTIONS_CMMC.test(offender)).toBe(true);
+    expect(NAMES_THE_SUSPENSION.test(offender)).toBe(false); // -> would be flagged
+
+    const compliant =
+      "CMMC Phase 2 was suspended on 2026-07-13; 10 November 2026 remains the prep date.";
+    expect(NAMES_THE_DATE.test(compliant)).toBe(true);
+    expect(NAMES_THE_SUSPENSION.test(compliant)).toBe(true); // -> passes
+
+    const unrelated = "The Winter 2027 YC deadline should land in early November 2026.";
+    expect(NAMES_THE_DATE.test(unrelated)).toBe(true);
+    expect(MENTIONS_CMMC.test(unrelated)).toBe(false); // -> correctly skipped
+
+    // A build roadmap's own "Phase 2" must not be read as CMMC Phase 2.
+    const roadmap = "Phase 2 — Intelligence | weeks 4–6 | ships by November 2026.";
+    expect(NAMES_THE_DATE.test(roadmap)).toBe(true);
+    expect(MENTIONS_CMMC.test(roadmap)).toBe(false); // -> correctly skipped
   });
 
   it("the brain doc does not present a passed Stage 1 date as upcoming", () => {

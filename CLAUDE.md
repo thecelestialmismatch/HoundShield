@@ -81,7 +81,7 @@ Then ask: "What are we shipping today?"
 
 Lead with **Rachel** (fastest close, no FedRAMP blocker). Use **Jordan** wins as CMMC validation. Add **Marcus** when bandwidth exists.
 
-- **RACHEL H.** — Healthcare Privacy Officer / CISO at a 50–300 person physician group or clinic. Problem: nurses pasting patient data into ChatGPT (not HIPAA-compliant without a BAA). Budget $299–$799/mo. **No FedRAMP requirement.** Cycle: 30–90 days. Trigger: 81% of healthcare data policy violations involve regulated data (Netskope, May 2025).
+- **RACHEL H.** — Healthcare Privacy Officer / CISO at a 50–300 person physician group or clinic. Problem: nurses pasting patient data into ChatGPT (not HIPAA-compliant without a BAA). Budget $299–$799/mo. **No FedRAMP requirement.** Cycle: 30–90 days. Trigger: **89%** of healthcare data policy violations *tied to generative AI* involve regulated data, vs 31% across all industries (Netskope Threat Labs: Healthcare 2025, May 2025).
 - **JORDAN M.** — Defense IT Security Manager at a 50–500 person DoD subcontractor. *"My employees keep pasting CUI into ChatGPT and I have no audit trail."* Needs Docker mode, SHA-256 log, C3PAO PDF. Budget $500–$1,500/mo. Cycle 90–180 days. Blocker: needs SOC 2 Type I before mid-market DIB signs.
 - **MARCUS T.** — Law Firm IT Director at a 50–500 attorney firm. Problem: attorneys pasting privileged comms into ChatGPT (NY/CA/FL bar ethics opinions 2024–2025). Budget $500–$2,000/mo. **No FedRAMP requirement.** Cycle 45–90 days.
 
@@ -91,7 +91,7 @@ Lead with **Rachel** (fastest close, no FedRAMP blocker). Use **Jordan** wins as
 
 **Stage 1 (checkpoint lapsed 2026-06-25; pricing unchanged and still current):**
 - **CMMC AI Risk Assessment Report — $499 one-time** (primary product). Run the proxy 14 days in the customer's environment → SHA-256-signed PDF risk-scoring every AI prompt event against NIST 800-171. No subscription, no MSA.
-- Co-branded RPO version — **$299 wholesale** (RPO charges client $499–$999, keeps the margin).
+- Co-branded RPO version — **$399 wholesale** = a flat **$100 off** retail (RPO charges client $499–$999 and keeps the margin: 20% at $499, 60% at $999). It is a DISCOUNT, not a payout — no money ever leaves. Canonical: `lib/pricing/plans.ts`.
 
 **Stage 2 (Jul–Sep 2026, only after Stage 1 triggers hit):**
 - Starter **$299/mo** — quarterly gap report, basic monitoring (this replaces the old $199 Pro tier)
@@ -105,7 +105,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 ## Channel Priority
 
-1. **RPO / MSP partnerships (primary — fastest path to volume).** Target 50 RPOs from the Cyber AB Marketplace. Offer 40–50% revenue share on the co-branded $499 report. Top targets: Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics. **RPOs/MSPs, NOT C3PAOs** — C3PAOs are legally prohibited (32 CFR Part 170, ISO 17020 cooling-off) from recommending products to clients they assess.
+1. **RPO / MSP partnerships (primary — fastest path to volume).** Target 50 RPOs from the Cyber AB Marketplace. Offer the co-branded $499 report at **$399 wholesale — a flat $100 off**. The partner pays us $399, bills their own client $499–$999, and keeps the spread. **We never pay a partner anything**: it is a discount, not a revenue share, so there is no payout to track. State it in DOLLARS, never a percentage — a percentage forces a rounding call ($499 × 0.80 = $399.20) and every rounding is a new number to drift. The retired figures (40–50%, and a separate "20% revenue share" on the same page) matched neither and are deleted. Canonical: `lib/pricing/plans.ts`, guarded by `lib/pricing/__tests__/partner-offer-coherence.test.ts`. Top targets: Summit 7, MAD Security, CyberSheath, CompliancePoint, BEMO, Steel Root, Etactics. **RPOs/MSPs, NOT C3PAOs** — C3PAOs are legally prohibited (32 CFR Part 170, ISO 17020 cooling-off) from recommending products to clients they assess.
 2. **Direct outreach — HIPAA-first** (parallel, faster validation): healthcare Privacy Officers/CISOs, then law-firm IT directors, then defense (longer cycle — build pipeline now).
 3. **SEO + content** (builds over 3–6 months): "GCC High Copilot vs third-party AI firewall" is the highest-value article. Publish `llms.txt`, FAQ schema, write for Perplexity citations (AEO).
 
@@ -117,7 +117,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 |-------------|--------|-----------------|
 | Supabase auth + DB | ✅ Wired | Migrations through 036 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, and **036 (revoke public execution of privileged RPCs)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
-| Stripe webhook | ⚠️ Verify URL | Confirm `https://houndshield.com/api/stripe/webhook` |
+| Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
 | OpenRouter / Brain AI | ❌ Missing key | Set `OPENROUTER_API_KEY`; Brain AI CUI warning must be live regardless |
 | Resend (email) | ✅ Configured | — |
@@ -203,7 +203,7 @@ If any check fails:
 ## Market Numbers (quick reference — buyers verify everything)
 
 **CMMC / Defense:** 76,598 US DIB orgs need CMMC L2 (DoD, Feb 2026); ~1,042 (~1.4%) completed. ~83–97 authorized C3PAOs, <600 Certified Assessors vs 2,000–3,000 needed. Phase 2 enforcement **paused 2026-07-13** by DoW pending a Reform Task Force review (RFI closed 2026-08-14, report due ~2026-09-13); 10 Nov 2026 was not replaced and stays the prep date. DFARS 252.204-7012, the 110 NIST 800-171 Rev 2 controls and the annual SPRS self-assessment are untouched — sell the DOJ False Claims Act liability, never the deadline. Canonical: `lib/compliance/cmmc-status.ts`. Assessment cost $30K–$150K → budget exists.
-**Healthcare / HIPAA:** ~6,000 US hospitals + tens of thousands of physician groups. 81% of healthcare data policy violations involve regulated data (Netskope, May 2025). ChatGPT is not HIPAA-compliant without a BAA (only Enterprise/API has one). No FedRAMP requirement for the vendor.
+**Healthcare / HIPAA:** ~6,000 US hospitals + tens of thousands of physician groups. **Quote these with their denominators — they are different measures, not a contradiction** (Netskope Threat Labs: Healthcare 2025, May 2025; canonical: `lib/market/netskope.ts`): **89%** of healthcare data policy violations *tied to generative AI* involve regulated data, vs **31%** across all industries; **81%** of *all* healthcare data policy violations do; **71%** of healthcare genAI users use personal genAI accounts (down from 87%), and **more than two-thirds** send sensitive data through one at work. **43% is NOT a personal-account figure** — it is organisations experimenting with *local genAI infrastructure*, and misusing it shipped in the cold-outreach email until 2026-08-18. ChatGPT is not HIPAA-compliant without a BAA (only Enterprise/API has one). No FedRAMP requirement for the vendor.
 **Legal:** Every state bar (NY/CA/FL min.) issued AI ethics opinions 2024–2025. Attorney-client privilege + Kovel doctrine = genuine monitoring requirement. AmLaw-200 mid-market firms (50–500 attorneys) = ideal first targets.
 **AEO:** 51% of B2B buyers start research with an AI chatbot (G2, Apr 2026).
 

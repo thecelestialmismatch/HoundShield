@@ -107,7 +107,7 @@ picking one silently would set channel economics by side effect.
 Every item is a dashboard or SQL action. None requires a code change.
 
 1. **`STRIPE_WEBHOOK_SECRET`** → Stripe: Developers → Webhooks → Add endpoint
-   `https://houndshield.com/api/stripe/webhook`, copy the `whsec_` secret into
+   `https://www.houndshield.com/api/stripe/webhook`, copy the `whsec_` secret into
    Vercel (Production checked), redeploy. *Stops sales being lost. Highest value,
    no dependencies.*
 2. **Open the Payment Link in a browser** and confirm it is live at $499.

@@ -3,6 +3,7 @@ import { transactionalFrom } from '@/lib/email/identity';
 import { emailFooter, emailHeader, escapeHtml } from '@/lib/email/shell';
 
 import { SITE_URL } from "@/lib/site-url";
+import { RISK_REPORT, formatUSD } from "@/lib/pricing/plans";
 
 const FROM = transactionalFrom();
 
@@ -103,12 +104,11 @@ ${emailFooter(`<br /><a href="${APP_URL}/security" style="color:#94a3b8;">Securi
     isWholesale?: boolean;
     amountCents?: number;
   }): { from: string; subject: string; html: string } => {
+    // Derived, not typed. These literals went stale the moment wholesale moved.
     const dollars =
       typeof amountCents === "number" && amountCents > 0
-        ? `$${Math.round(amountCents / 100)}`
-        : isWholesale
-          ? "$299"
-          : "$499";
+        ? formatUSD(Math.round(amountCents / 100))
+        : formatUSD(isWholesale ? RISK_REPORT.wholesalePrice : RISK_REPORT.oneTimePrice);
     const safeEmail = esc(email);
     const buyer =
       name && name.trim() ? `${esc(name.trim())} &lt;${safeEmail}&gt;` : safeEmail;

@@ -218,7 +218,7 @@ export const ANSWERS: Answer[] = [
         heading: "Why consumer ChatGPT fails HIPAA",
         paragraphs: [
           "HIPAA requires a Business Associate Agreement before any third party creates, receives, maintains, or transmits PHI on a covered entity's behalf. Consumer ChatGPT has no BAA, and its terms do not contemplate PHI at all. The moment a nurse pastes a patient chart in to summarize it, PHI has been disclosed to OpenAI with no HIPAA protections attached.",
-          "This is not a fringe behavior problem. Netskope's May 2025 analysis found 81% of data policy violations in healthcare organizations involved regulated data — and generative AI prompts are one of the fastest-growing channels for it.",
+          "This is not a fringe behavior problem. Netskope's May 2025 healthcare analysis found 81% of ALL data policy violations in healthcare organizations involved regulated data — and for the violations tied specifically to generative AI, that share rises to 89%, against 31% across all industries.",
         ],
       },
       {
