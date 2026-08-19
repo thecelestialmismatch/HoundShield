@@ -88,7 +88,7 @@ const PRICING_TIERS = [
 ];
 
 const PARTNER_ITEMS = [
-  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "RPO / MSP",       desc: "Co-branded report at $299 wholesale · you set the retail",      href: "/partners/kit" },
+  { icon: Users,    color: "text-brand-400", bg: "bg-[rgba(129,166,198,0.10)]", label: "RPO / MSP",       desc: "Co-branded report at $399 wholesale · you set the retail",      href: "/partners/kit" },
   { icon: Plug,     color: "text-brand-500",bg: "bg-[rgba(129,166,198,0.08)]",label: "Integrations",    desc: "Drop-in proxy for ChatGPT, Copilot, Claude, Gemini, Llama",    href: "/docs#integrations" },
   { icon: DollarSign,color:"text-brand-400",  bg: "bg-[rgba(129,166,198,0.12)]",  label: "Reseller Program",desc: "Margin-first pricing · Co-branded compliance reports",           href: "/partners#reseller" },
 ];

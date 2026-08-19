@@ -138,7 +138,7 @@ Tests  2 failed | 23 skipped (25)
 ## Founder action
 
 Set **`STRIPE_WEBHOOK_SECRET`** in Vercel (Production) — Stripe → Developers →
-Webhooks → Add endpoint `https://houndshield.com/api/stripe/webhook` → copy the
+Webhooks → Add endpoint `https://www.houndshield.com/api/stripe/webhook` → copy the
 `whsec_` signing secret → redeploy. That single variable turns on order
 recording, the buyer receipt, and the sale alert. `STRIPE_SECRET_KEY` remains
 worth fixing (promo codes, branded thank-you page, subscription events) but no

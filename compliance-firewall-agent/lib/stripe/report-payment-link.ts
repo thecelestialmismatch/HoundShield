@@ -57,6 +57,30 @@ export function reportPaymentLinkUrl(vertical?: string): string {
 }
 
 /**
+ * Hydration-safe form of {@link reportPaymentLinkUrl}, for rendering an `href`
+ * inside a client component.
+ *
+ * Why a second function rather than reusing the first: `reportPaymentLinkUrl`
+ * reads `STRIPE_REPORT_PAYMENT_LINK`, which is a server-only variable. A client
+ * component is server-rendered first, so it would read the override during SSR
+ * and the bare constant after hydration — different `href` on each pass, which
+ * is exactly the mismatch React warns about and, worse, a buy link that changes
+ * under the buyer. This form never reads env, so both passes agree.
+ *
+ * The env override still applies where it matters: the dynamic checkout route
+ * (`/api/stripe/report-checkout`) runs on the server and uses the env-aware
+ * form. This static link is only the no-JS fallback target.
+ *
+ * The URL is public by design — Payment Links are meant to be shared.
+ */
+export function reportPaymentLinkUrlStatic(vertical?: string): string {
+  const ref = (REPORT_VERTICALS as readonly string[]).includes(vertical ?? '')
+    ? `${CLIENT_REF_PREFIX}${vertical}`
+    : `${CLIENT_REF_PREFIX}direct`;
+  return `${LIVE_REPORT_PAYMENT_LINK}?client_reference_id=${ref}`;
+}
+
+/**
  * Webhook-side reverse of `reportPaymentLinkUrl`: recover the vertical from a
  * session's `client_reference_id`. Returns null for absent/foreign refs and
  * for `report-direct` (rail marker, no vertical).

@@ -8,7 +8,7 @@ import { ENGINE_COUNT } from "@/lib/detection/engines";
 
 const TITLE = "RPO & MSP Partner Kit — Co-Branded CMMC AI Risk Assessments | HoundShield";
 const DESCRIPTION =
-  "Resell the CMMC AI Risk Assessment under your brand: $299 wholesale, you set the retail. The complete RPO/MSP partner kit — how it works, margins, and what your clients receive.";
+  "Resell the CMMC AI Risk Assessment under your brand: $399 wholesale ($100 off), you set the retail. The complete RPO/MSP partner kit — how it works, margins, and what your clients receive.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -44,7 +44,7 @@ const FAQS = [
   },
   {
     q: "What does the co-branded report cost?",
-    a: "$299 wholesale to partners. You set your own retail — partners typically deliver it at $499 to $999 as part of a broader readiness engagement, keeping the margin and the client relationship.",
+    a: "$399 wholesale to partners — a discount of $100 off the $499 retail. You set your own retail; partners typically deliver it at $499 to $999 as part of a broader readiness engagement, keeping the margin and the client relationship.",
   },
   {
     q: "Do our clients' prompts ever reach HoundShield?",
@@ -71,14 +71,14 @@ export default function PartnerKitPage() {
           Your clients&rsquo; employees are pasting sensitive data into ChatGPT today, and their next
           assessment will ask about it. The partner kit lets you answer with a deliverable: a
           14-day, locally run AI risk assessment producing a signed PDF mapped to NIST 800-171 —
-          under your brand, at $299 wholesale, retailing wherever you position it.
+          under your brand, at $399 wholesale ($100 off), retailing wherever you position it.
         </p>
 
         {/* Economics strip */}
         <div className="mt-8 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-[var(--hs-border)] bg-[var(--hs-surface-1)] p-5">
             <Percent className="h-5 w-5 text-[var(--hs-steel-dark)]" />
-            <p className="mt-2 text-2xl font-bold text-[var(--hs-ink)]">$299</p>
+            <p className="mt-2 text-2xl font-bold text-[var(--hs-ink)]">$399</p>
             <p className="text-sm text-[var(--hs-ink-secondary)]">wholesale per report — you set the retail</p>
           </div>
           <div className="rounded-2xl border border-[var(--hs-border)] bg-[var(--hs-surface-1)] p-5">

@@ -27,6 +27,7 @@
 
 import { founderAddress, founderFrom, founderSignature } from './identity';
 import { siteUrl } from '@/lib/site-url';
+import { PERSONAL_ACCOUNT_SENSITIVE, REGULATED_SHARE_GENAI } from '@/lib/market/netskope';
 
 /** A single step in the non-technical test guide. */
 export interface TestStep {
@@ -164,7 +165,7 @@ export const healthcareOutreach: OutreachDraft = {
 
 I build a tool that shows a Privacy Officer exactly what patient information staff have pasted into ChatGPT — scanned on your own hardware, so nothing leaves your network.
 
-Before I build more of it, I would rather find out whether this is a real problem for you or not. Netskope's 2025 data says 89% of healthcare policy violations involving generative AI touch regulated data, and 43% of healthcare workers use personal AI accounts at work — personal accounts being the ones a security team cannot see. But your reality is what matters, not their number.
+Before I build more of it, I would rather find out whether this is a real problem for you or not. Netskope's 2025 healthcare data says ${REGULATED_SHARE_GENAI.value} of healthcare data policy violations tied to generative AI involve regulated data, and ${PERSONAL_ACCOUNT_SENSITIVE.value} of healthcare genAI users send sensitive data through a personal AI account at work — personal accounts being the ones a security team cannot see. But your reality is what matters, not their number.
 
 Do you have 15 minutes this week? I am not selling anything on that call. I genuinely want to know if I am wrong about this.
 
@@ -191,7 +192,7 @@ export const partnerOutreach: OutreachDraft = {
 
 You already advise clients on NIST 800-171. I built the piece that is hard to evidence: what staff paste into ChatGPT and Copilot, scanned locally, mapped to the controls, in a signed PDF.
 
-The offer for you is wholesale. You pay $299, your client pays $499–$999, you keep the margin and it carries your branding. No integration work — it runs in your client's environment as a Docker container, so their data never leaves their boundary.
+The offer for you is wholesale. You pay $399 — a flat $100 partner discount — your client pays $499–$999, you keep the margin and it carries your branding. No integration work — it runs in your client's environment as a Docker container, so their data never leaves their boundary.
 
 I am looking for a small number of first partners, and I would rather have one real conversation than send fifty of these. Worth 15 minutes?
 

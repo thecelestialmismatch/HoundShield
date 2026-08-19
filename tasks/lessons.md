@@ -1872,3 +1872,56 @@ theorise about it — the downside was a red build, which was already the status
 **Rule:** Distinguish "cannot deploy" from "production is broken" and say which one out loud. The
 first is an inconvenience with a widening repo/production gap; the second is an incident. Reporting
 the first in the language of the second burns credibility and urgency you will want later.
+
+### A statistic without its denominator is a liability, not a claim
+**What:** Two Netskope figures — 89% and 81% — shipped across eight files with no scope
+attached, reading as a contradiction on our own site. They were never contradictory: 81% is
+*all* healthcare data policy violations involving regulated data, 89% is the slice *tied to
+generative AI* (vs 31% cross-industry). Both correct, different denominators.
+
+Worse, a third figure was simply wrong. "43% of healthcare staff use personal genAI accounts
+at work" was in the homepage chat context, the Brain AI knowledge graph, and — the expensive
+one — the cold outreach email. Netskope's 43% is *organisations experimenting with local genAI
+infrastructure*. The real personal-account numbers are 71% (use them) and more than two-thirds
+(send sensitive data through one). The email was days from going to healthcare Privacy
+Officers, who verify claims for a living.
+
+**Why it survived:** the outreach test *asserted* `toContain('43%')`. A test that pins a wrong
+number makes it permanent — it converts an error into a requirement. Coverage was never the
+problem; the test encoded the mistake.
+
+**Rule:** A market statistic is a value **plus its denominator plus its source**, and the type
+system should make it impossible to have one without the others. `lib/market/netskope.ts` now
+holds each figure as `{ value, scope, source, url, published }`, `stat()` refuses to render a
+number without them, and `lib/market/__tests__/no-unscoped-stats.test.ts` scans every
+buyer-facing source file for a bare percentage or the 43%/personal-account pairing. Same
+doctrine as `lib/detection/engines.ts`: a claim about the product is computed from the product,
+so a claim about the market must carry the market's own scope.
+
+**Second-order rule:** when a test asserts a specific external fact, the assertion needs a
+comment naming the source. `expect(text).toContain('43%')` looked like diligence and was
+actually a lock on an error.
+
+### Narrowing a guard is fine; narrowing it silently is not
+**What:** The CMMC governing-doc guard fired on three research files that name "November 2026"
+as the *YC batch deadline* and never mention CMMC. Fixing it meant narrowing the predicate —
+exactly the move that lets real drift back in. First attempt over-corrected the other way:
+matching a bare "Phase 2" caught those files' own build-roadmap phases.
+
+**Rule:** When narrowing a safety check, add a test that runs the narrowed predicate against a
+synthetic offender AND a synthetic innocent, in the same file, so the next reader can see the
+teeth are intact without reconstructing the reasoning. Done in
+`cmmc-status.test.ts` → "the narrowed predicate still catches a bare CMMC November date".
+
+### A `<button>` is invisible to everything that reads instead of executes
+**What:** The $499 buy control was a `<button>` whose only path to Stripe was an onClick fetch.
+A live read of /pricing on 2026-08-18 extracted the price, then "Talk to us first", and **no
+purchase path at all** — because text extractors, crawlers and AI answer engines see markup,
+not behaviour. For a product whose distribution plan leans on AEO citations, that is the same
+as having no buy button. It also meant no-JS visitors had no path, and a transient network
+error on the pre-flight fetch became a lost $499 impulse sale.
+
+**Rule:** Anything that takes money is an `<a href>` to a working checkout URL first, and
+JavaScript only *enhances* it. The invariant, now locked by
+`components/__tests__/ReportCheckoutButton.test.tsx`: every code path ends in either a redirect
+or a navigation — the buyer always reaches a checkout page.

@@ -15,7 +15,9 @@ import {
   mailboxSmokeTest,
 } from '../outreach';
 import { founderAddress, founderName } from '../identity';
+import { PERSONAL_ACCOUNT_SENSITIVE } from '@/lib/market/netskope';
 import { siteUrl } from '@/lib/site-url';
+import { RISK_REPORT, formatUSD, PARTNER_DISCOUNT_USD } from '@/lib/pricing/plans';
 
 /**
  * The demo URL as the drafts now build it. These assertions used to hardcode
@@ -147,11 +149,23 @@ describe('honesty guards — claims that would cost us the sale if false', () =>
     expect(allText()).not.toMatch(/\d+[KM]?\+\s*(teams|customers|scans|users|clients)/i);
   });
 
-  it('quotes only the $499 retail and $299 wholesale prices', () => {
-    // Anchor on a digit at the end so trailing prose punctuation ("$299, your
+  it('quotes only the canonical retail and wholesale prices', () => {
+    // Anchor on a digit at the end so trailing prose punctuation ("$399, your
     // client pays…") is not captured as part of the price.
+    //
+    // Derived from lib/pricing/plans.ts, not typed: this assertion previously
+    // hardcoded '$299' and went stale the moment the partner cut was re-ruled,
+    // which is the same drift the guard is here to catch.
     const prices = allText().match(/\$\d(?:[\d,]*\d)?(?:\.\d+)?[KM]?/g) ?? [];
-    const allowed = new Set(['$499', '$299', '$999', '$4.6M', '$507,144']);
+    const allowed = new Set([
+      formatUSD(RISK_REPORT.oneTimePrice),
+      formatUSD(RISK_REPORT.wholesalePrice),
+      formatUSD(RISK_REPORT.resaleHigh),
+      // The partner draft states the discount in dollars, so it is a price too.
+      formatUSD(PARTNER_DISCOUNT_USD),
+      '$4.6M',
+      '$507,144',
+    ]);
     for (const p of prices) expect(allowed).toContain(p);
   });
 });
@@ -162,7 +176,53 @@ describe('draft-specific content', () => {
     expect(text).toMatch(/Netskope/);
     expect(text).toMatch(/2025/);
     expect(text).toContain('89%');
-    expect(text).toContain('43%');
+  });
+
+  /**
+   * REGRESSION GUARD. The draft shipped "43% of healthcare workers use personal
+   * AI accounts at work". 43% is Netskope's figure for organisations
+   * EXPERIMENTING WITH LOCAL GENAI INFRASTRUCTURE — it says nothing about
+   * personal accounts. A compliance buyer who checks the source finds the
+   * mismatch, and the credibility of every other number in the email dies with
+   * it. These assertions make that specific mistake unshippable.
+   */
+  it('healthcare never pairs 43% with personal accounts', () => {
+    const { text } = render(healthcareOutreach, VARS);
+    expect(text).not.toContain('43%');
+  });
+
+  it('healthcare states the personal-account claim with the correct figure', () => {
+    const { text } = render(healthcareOutreach, VARS);
+    expect(text).toContain(PERSONAL_ACCOUNT_SENSITIVE.value);
+    expect(text).toMatch(/personal AI account/i);
+  });
+
+  it('healthcare scopes 89% to generative AI, not to all violations', () => {
+    const { text } = render(healthcareOutreach, VARS);
+    const idx = text.indexOf('89%');
+    expect(idx).toBeGreaterThan(-1);
+    // The denominator must travel with the number, in the same sentence.
+    const sentence = text.slice(idx, text.indexOf('.', idx) + 1);
+    expect(sentence).toMatch(/generative AI/i);
+  });
+
+  it('no draft quotes a bare Netskope percentage without a denominator', () => {
+    for (const draft of OUTREACH_DRAFTS) {
+      let text = '';
+      try {
+        text = render(draft, VARS).text;
+      } catch {
+        continue; // draft needs vars this fixture does not supply
+      }
+      for (const pct of ['89%', '81%', '71%', '31%']) {
+        if (!text.includes(pct)) continue;
+        const idx = text.indexOf(pct);
+        const window = text.slice(idx, idx + 200);
+        expect(window).toMatch(
+          /violations|healthcare genAI users|organisations|organizations/i,
+        );
+      }
+    }
   });
 
   it('healthcare asks for time, not money', () => {
@@ -173,8 +233,11 @@ describe('draft-specific content', () => {
 
   it('partner states the wholesale economics in real numbers', () => {
     const { text } = render(partnerOutreach, VARS);
-    expect(text).toContain('$299');
-    expect(text).toContain('$499');
+    expect(text).toContain(formatUSD(RISK_REPORT.wholesalePrice));
+    expect(text).toContain(formatUSD(RISK_REPORT.oneTimePrice));
+    // The discount is stated in dollars, never as a percentage that can drift.
+    expect(text).toContain(formatUSD(PARTNER_DISCOUNT_USD));
+    expect(text).not.toMatch(/\d+\s*%\s*(off|discount|revenue share)/i);
   });
 
   it('defense sells FCA liability with verifiable settlements', () => {

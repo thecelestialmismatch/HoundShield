@@ -9,6 +9,7 @@ import { ReportOfferCard } from '@/components/ReportOfferCard'
 import { FaqSection } from '@/components/seo/FaqSection'
 import { homeFaqs } from '@/lib/seo/faqs'
 import { ENGINE_COUNT, PATTERN_COUNT } from '@/lib/detection/engines'
+import { CROSS_INDUSTRY_GENAI, REGULATED_SHARE_GENAI } from '@/lib/market/netskope'
 import type { Metadata } from 'next'
 
 // Self-referencing canonical for the homepage. The root layout no longer sets a
@@ -30,7 +31,22 @@ export const metadata: Metadata = {
 
 const STATS = [
   { n: String(ENGINE_COUNT), l: 'Detection engines',     s: `${PATTERN_COUNT} patterns · CUI · PHI · PII` },
-  { n: '2',                  l: 'deployment paths',      s: 'Hosted evaluation · self-hosted control' },
+  // Resolved in the #302 <- main merge. Both sides rewrote this same tile:
+  // this branch put "2 / deployment paths" here, main put the Netskope figure.
+  // The grid is a hard `repeat(4, 1fr)` (app/hermes.css:263), so a fifth tile
+  // orphans on its own row — it is genuinely one or the other.
+  //
+  // Main's tile wins because keeping it loses nothing: <ModeBNotice> renders
+  // IMMEDIATELY below this row and already says "CUI-safe = Mode B (Docker on
+  // your infrastructure); the hosted trial runs on Vercel and is not
+  // FedRAMP-authorized" — the same two paths, with the honesty the NEVER-DO
+  // list requires. The Netskope figure has no such second home, and it is the
+  // market proof for Rachel, the fastest-closing buyer.
+  //
+  // Scope matters: this is the GENERATIVE-AI slice, not all healthcare
+  // violations (that figure is 81%). Both live in lib/market/netskope.ts with
+  // their denominators attached, so the tile cannot drift off its source.
+  { n: REGULATED_SHARE_GENAI.value, l: 'of healthcare genAI', s: `violations involve regulated data — vs ${CROSS_INDUSTRY_GENAI.value} across all industries` },
   { n: '110',                l: 'NIST 800-171 controls', s: 'Mapped & SPRS-scored' },
   { n: '<10ms',              l: 'Local scan target',     s: 'Measured locally; workload dependent' },
 ]

@@ -450,8 +450,12 @@ HTTPS interception uses mitmproxy-compatible certificate.`,
       "Market size and revenue path",
       `Lead market is HEALTHCARE, not defense -- CMMC Phase 2 was suspended 2026-07-13 and the
 deadline that drove the old defense plan is gone. Healthcare needs no deadline: 89% of
-healthcare genAI policy violations involve regulated data vs 31% cross-industry, and 43% of
-healthcare staff use personal genAI accounts at work (Netskope 2025). Serviceable: 50-300
+healthcare data policy violations TIED TO GENERATIVE AI involve regulated data, against 31%
+across all industries, and more than two-thirds of healthcare genAI users send sensitive data
+through a personal AI account at work (Netskope Threat Labs: Healthcare 2025). Those
+denominators are load-bearing -- 81% is the figure for ALL healthcare violations, and 43% is
+organisations experimenting with LOCAL genAI infrastructure, not personal accounts.
+See lib/market/netskope.ts. Serviceable: 50-300
 provider physician groups and clinics; buyer is the Privacy Officer.
 Defense is channel two, re-messaged for False Claims Act exposure.
 Price: one offer, $499 one-time per organization. No subscription is sold today.

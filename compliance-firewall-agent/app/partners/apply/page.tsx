@@ -7,7 +7,7 @@ import { PartnerApplyForm } from "./PartnerApplyForm";
 
 const TITLE = "Apply to the HoundShield Partner Program — RPO / MSP Co-Sell | HoundShield";
 const DESCRIPTION =
-  "Apply to co-brand and resell the $499 CMMC AI Risk Assessment. $299 wholesale, you set the retail, no exclusivity. For RPOs, MSPs, MSSPs & compliance consultancies.";
+  "Apply to co-brand and resell the $499 CMMC AI Risk Assessment. $399 wholesale — $100 off — you set the retail, no exclusivity. For RPOs, MSPs, MSSPs & compliance consultancies.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 const PROOF = [
-  { icon: Percent, stat: "$299", label: "wholesale per report — you set the retail" },
+  { icon: Percent, stat: "$399", label: "wholesale per report ($100 off) — you set the retail" },
   { icon: Timer, stat: "14 days", label: "from deployment to a signed PDF in the client’s hands" },
   { icon: HandshakeIcon, stat: "No exclusivity", label: "keep your clients, your brand, your margin" },
   { icon: ShieldCheck, stat: "Local-only", label: "client CUI never leaves their network — referring us is safe" },
@@ -42,7 +42,7 @@ export default function PartnerApplyPage() {
         <p className="answer-lead mt-6 rounded-2xl border border-[var(--hs-border)] bg-[var(--hs-surface-2)] p-6 text-lg leading-relaxed text-[var(--hs-ink)]">
           Your clients&rsquo; employees are pasting sensitive data into ChatGPT today, and their next
           CMMC assessment will ask about it. Co-brand the 14-day, locally run AI risk assessment and
-          hand them a signed PDF mapped to NIST 800-171 — under your brand, at $299 wholesale.
+          hand them a signed PDF mapped to NIST 800-171 — under your brand, at $399 wholesale.
           Apply below and we&rsquo;ll send the kit, the wholesale agreement, and a sample report the
           same week.
         </p>

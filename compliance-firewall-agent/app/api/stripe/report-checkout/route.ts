@@ -4,6 +4,7 @@ import { getStripeSecretKey } from '@/lib/stripe/env';
 import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { isSupabaseConfigured, createServiceClient } from '@/lib/supabase/client';
 import { REPORT_VERTICALS, reportPaymentLinkUrl } from '@/lib/stripe/report-payment-link';
+import { RISK_REPORT_RETAIL_CENTS, RISK_REPORT_WHOLESALE_CENTS } from '@/lib/pricing/plans';
 import { SITE_URL } from '@/lib/site-url';
 
 /**
@@ -18,7 +19,8 @@ import { SITE_URL } from '@/lib/site-url';
  * and sends fulfillment instructions.
  *
  * Pricing is anchored at $499 and must never drop below it (it anchors value).
- * RPO/MSP co-brand wholesale is $299 — passed via `partner_ref` + `wholesale`.
+ * RPO/MSP co-brand wholesale is retail less the partner cut (see
+ * lib/pricing/plans.ts) — passed via `partner_ref` + `wholesale`.
  *
  * Env:
  *   STRIPE_SECRET_KEY        (required for dynamic checkout — see fallback)
@@ -29,12 +31,15 @@ import { SITE_URL } from '@/lib/site-url';
  * Fallback rail: when the key is missing/unusable or the Stripe call fails,
  * RETAIL buyers get the Stripe-hosted Payment Link for the same $499 price
  * (lib/stripe/report-payment-link.ts) instead of an error — a bad env paste
- * must never turn a buyer away. Wholesale ($299) cannot be served by the
+ * must never turn a buyer away. Wholesale cannot be served by the
  * $499 link, so it keeps the honest error.
  */
 
-const RETAIL_CENTS = 49900;     // $499 — never lower (anchors value)
-const WHOLESALE_CENTS = 29900;  // $299 — RPO/MSP co-brand wholesale only
+// Both DERIVED from lib/pricing/plans.ts. Hardcoding them here is how the
+// wholesale price and the published partner percentage drifted apart: the page
+// said one thing and the card was charged another.
+const RETAIL_CENTS = RISK_REPORT_RETAIL_CENTS;     // $499 — never lower (anchors value)
+const WHOLESALE_CENTS = RISK_REPORT_WHOLESALE_CENTS; // retail less the partner cut
 
 /**
  * A key that cannot possibly authenticate (the classic pastes: publishable
@@ -49,7 +54,7 @@ function usableSecretKey(): string | null {
 const VALID_VERTICALS = new Set<string>(REPORT_VERTICALS);
 
 /**
- * Wholesale ($299) is only valid for a real, approved partner (audit H3).
+ * Wholesale is only valid for a real, approved partner (audit H3).
  * `partner_ref` must be the id of a partner_applications row whose status is
  * 'approved' or 'active'. Any unverified ref falls back to the $499 retail price
  * so the $499 anchor can never be self-served away.
@@ -84,7 +89,7 @@ export async function POST(request: NextRequest) {
       wholesale = false,
     } = body as { vertical?: string; partner_ref?: string; wholesale?: boolean };
 
-    // Wholesale ($299) is only valid for a verified, approved partner — the
+    // Wholesale is only valid for a verified, approved partner — the
     // ref is checked against the DB server-side (audit H3). A client cannot
     // self-serve the wholesale price by passing an arbitrary partner_ref.
     const isWholesale = Boolean(wholesale) && (await isApprovedPartner(partner_ref));
@@ -160,7 +165,7 @@ export async function POST(request: NextRequest) {
     } catch (err) {
       // A plausibly-usable key still failed (revoked key, Stripe outage…).
       // Same rescue: retail rides the payment link; wholesale stays an
-      // honest error rather than silently upcharging $299 → $499.
+      // honest error rather than silently upcharging wholesale → retail.
       console.error('[Stripe Report Checkout] session create failed:', err);
       if (!isWholesale) {
         return NextResponse.json({
