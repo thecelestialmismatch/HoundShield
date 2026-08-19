@@ -2,8 +2,9 @@
 
 `screenshots/*.png` are captured from a **production build of this repository**,
 not designed mockups. They are committed so the README renders on GitHub without
-depending on the live site — which matters here, because production has not
-deployed since #288 and the live site does not currently reflect `main`.
+depending on the live site. Re-capture them whenever the landing page changes —
+a screenshot that predates a redesign is worse than none, because it still looks
+authoritative.
 
 ## Regenerate
 
