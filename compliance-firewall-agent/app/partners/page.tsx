@@ -59,8 +59,9 @@ export default function PartnersPage() {
                 <div className="ic"><Users /></div>
                 <h3>MSP / Agency</h3>
                 <p>
-                  Up to 20% revenue share on subscriptions · white-label option. Manage
-                  every client&apos;s CMMC posture from one multi-tenant dashboard.
+                  Buy the $499 report at $399 — a flat $100 off, kept as your spread ·
+                  white-label option. Manage every client&apos;s CMMC posture from one
+                  multi-tenant dashboard.
                 </p>
               </div>
               <div className="card">

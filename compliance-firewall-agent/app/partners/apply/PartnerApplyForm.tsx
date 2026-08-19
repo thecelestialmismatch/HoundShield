@@ -21,7 +21,7 @@ import { Send, CheckCircle2, ArrowRight } from "lucide-react";
 type PartnerType = "referral" | "reseller" | "technology";
 
 const PARTNER_TYPES: { value: PartnerType; label: string; hint: string }[] = [
-  { value: "referral", label: "Referral partner", hint: "Refer clients, earn commission on each co-branded report" },
+  { value: "referral", label: "Referral partner", hint: "Refer clients, buy each co-branded report at $100 off and keep the spread" },
   { value: "reseller", label: "Reseller", hint: "Co-brand and resell the $499 report at $399 wholesale ($100 off)" },
   { value: "technology", label: "Technology / integration", hint: "Embed the compliant AI gateway inside your own product" },
 ];
