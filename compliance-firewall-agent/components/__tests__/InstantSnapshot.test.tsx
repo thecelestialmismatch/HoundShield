@@ -19,12 +19,16 @@ beforeEach(() => {
   mockSave.mockClear();
 });
 
-function loadExampleAndScan(): void {
+async function loadExampleAndScan(): Promise<void> {
   // The single "Load an example" button became four named scenarios. Drive the
   // DEFENSE one by name from the shared module rather than a literal, so a
   // rename shows up as a compile-time change here instead of a runtime miss.
   fireEvent.click(screen.getByText(sampleForAudience("defense")));
   fireEvent.click(screen.getByRole("button", { name: /scan locally/i }));
+  // The scan is awaited now: it runs INSIDE the network-witness window, which
+  // wraps fetch/XHR/sendBeacon/WebSocket for its duration so the proof panel can
+  // report what it observed. Results therefore land a microtask later.
+  await screen.findByText(/finding type/i);
 }
 
 describe("InstantSnapshot — the money-path climax", () => {
@@ -35,9 +39,9 @@ describe("InstantSnapshot — the money-path climax", () => {
     ).toBeTruthy();
   });
 
-  it("scans locally and surfaces NIST-mapped findings (no raw content shown)", () => {
+  it("scans locally and surfaces NIST-mapped findings (no raw content shown)", async () => {
     render(<InstantSnapshot />);
-    loadExampleAndScan();
+    await loadExampleAndScan();
 
     // Findings surface with a control id and severity, but not the matched strings.
     expect(screen.getAllByText("SC.L2-3.13.1").length).toBeGreaterThan(0);
@@ -49,7 +53,7 @@ describe("InstantSnapshot — the money-path climax", () => {
 
   it("ends on the PDF: generating a snapshot calls the downloader with snapshot data", async () => {
     render(<InstantSnapshot />);
-    loadExampleAndScan();
+    await loadExampleAndScan();
 
     // jsPDF is lazy-loaded on click, so the downloader is invoked asynchronously.
     fireEvent.click(screen.getByRole("button", { name: /generate my gap-report pdf/i }));
@@ -61,9 +65,9 @@ describe("InstantSnapshot — the money-path climax", () => {
     expect(await screen.findByText(/generated on this device/i)).toBeTruthy();
   });
 
-  it("frames the PDF as a preview, not the signed assessment", () => {
+  it("frames the PDF as a preview, not the signed assessment", async () => {
     render(<InstantSnapshot />);
-    loadExampleAndScan();
+    await loadExampleAndScan();
     expect(screen.getByText(/not the tamper-evident 14-day signed report/i)).toBeTruthy();
     expect(screen.getByText(/\$499 CMMC AI Risk Assessment Report/i)).toBeTruthy();
   });
@@ -73,7 +77,7 @@ describe("InstantSnapshot — the money-path climax", () => {
     vi.stubGlobal("fetch", fetchMock);
     try {
       render(<InstantSnapshot />);
-      loadExampleAndScan();
+      await loadExampleAndScan();
 
       const form = screen.getByText(/Email me this snapshot/i).closest("form")!;
       fireEvent.change(within(form).getByPlaceholderText("Name"), { target: { value: "Jane" } });

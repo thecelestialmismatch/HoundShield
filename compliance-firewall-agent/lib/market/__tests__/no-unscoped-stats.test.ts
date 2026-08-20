@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
 /**
@@ -27,7 +27,11 @@ function copyFiles(): string[] {
     .split('\n')
     .filter(Boolean)
     .filter((f) => !f.includes('__tests__'))
-    .filter((f) => !f.startsWith('lib/market/'));
+    .filter((f) => !f.startsWith('lib/market/'))
+    // Tracked-but-deleted files are still listed by `git ls-files` until the
+    // deletion is staged; reading one throws ENOENT and fails this guard for a
+    // reason unrelated to market statistics.
+    .filter((f) => existsSync(f));
 }
 
 const FILES = copyFiles();
