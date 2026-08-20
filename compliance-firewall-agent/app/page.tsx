@@ -132,15 +132,16 @@ export default function HomePage() {
               <div className="eyebrow">The asymmetric advantage</div>
               <h2 className="display">Start with the boundary your assessor will ask about.</h2>
               <p>
-                Cloud controls, Microsoft governance and local proxy enforcement solve different problems.
-                HoundShield is designed for teams that need a self-hosted control path for AI traffic outside
-                their existing productivity suite. Validate the deployment model against your contract and SSP.
+                Cloud DLP, productivity-suite governance and local proxy enforcement solve different
+                problems. HoundShield is designed for teams that need a self-hosted control path for AI
+                traffic outside their existing productivity suite. Validate the deployment model against
+                your contract and SSP.
               </p>
             </div>
             <div className="grid-3">
               <div className="card">
                 <div className="ic"><Globe /></div>
-                <h3>Nightfall &amp; Strac</h3>
+                <h3>Cloud-routed DLP</h3>
                 <p>
                   Broad cloud DLP can be a strong fit for SaaS data protection. Teams handling controlled
                   data should document its data path and decide whether a cloud inspection model fits their boundary.
@@ -148,10 +149,10 @@ export default function HomePage() {
               </div>
               <div className="card">
                 <div className="ic"><Briefcase /></div>
-                <h3>Microsoft Purview</h3>
+                <h3>Productivity-suite governance</h3>
                 <p>
-                  Strong Microsoft 365 governance. It complements—not replaces—a deliberate control path for
-                  third-party AI services and developer tools outside the Microsoft productivity surface.
+                  Strong governance inside your productivity suite. It complements—not replaces—a deliberate
+                  control path for third-party AI services and developer tools outside that surface.
                 </p>
               </div>
               <div className="card" style={{ borderColor: 'var(--brand)' }}>

@@ -153,10 +153,17 @@ describe('HomePage — HERMES demo parity', () => {
     expect(screen.getByText(/Start with the boundary your assessor will ask about/i)).toBeTruthy()
   })
 
-  it('renders the demo 3-card comparison (Nightfall & Strac / Purview / HoundShield)', () => {
+  it('renders the 3-card comparison by CATEGORY, never by competitor name', () => {
+    /*
+     * This used to assert the two competitors by name. Repository and
+     * user-facing copy now describe the CATEGORY a product belongs to instead,
+     * so the page never advertises a rival's brand — the comparison is just as
+     * informative, and the claim is about architecture rather than about them.
+     */
     render(<HomePage />)
-    expect(screen.getByText(/Nightfall & Strac/i)).toBeTruthy()
-    expect(screen.getByText('Microsoft Purview')).toBeTruthy()
+    expect(screen.getByRole('heading', { name: /Cloud-routed DLP/i })).toBeTruthy()
+    // Heading only — the intro paragraph mentions the same phrase in prose.
+    expect(screen.getByRole('heading', { name: /Productivity-suite governance/i })).toBeTruthy()
     expect(screen.getByText('HoundShield')).toBeTruthy()
   })
 
