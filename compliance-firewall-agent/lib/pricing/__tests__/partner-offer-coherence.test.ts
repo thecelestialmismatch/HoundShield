@@ -128,4 +128,29 @@ describe('partner offer — one revenue share, one wholesale price', () => {
     }
     expect(wrongPrices).toEqual([]);
   });
+
+  it('never frames the offer as a payout on a partner surface', () => {
+    // The offer is a DISCOUNT: the partner pays us $399 and keeps their own
+    // spread. No money ever leaves, so there is nothing to share or commission.
+    // The 2026-08-15 audit found "Up to 20% revenue share on subscriptions" on
+    // /partners eleven lines below the correct "$399 wholesale — a flat $100
+    // partner discount", and the stale-PRICE check above could not see it: the
+    // contradiction was a percentage, not a dollar figure. A percentage also
+    // forces a rounding call ($499 x 0.80 = $399.20), which is how the numbers
+    // drifted apart in the first place — hence dollars only, in copy.
+    const PAYOUT = /(revenue\s*share|rev[- ]?share|commission|\d+\s*%\s*(of|share|cut|back))/i;
+    const offenders: string[] = [];
+    for (const rel of PARTNER_SURFACES) {
+      const full = path.join(APP_ROOT, rel);
+      if (!fs.existsSync(full)) continue;
+      if (PAYOUT.test(fs.readFileSync(full, 'utf8'))) offenders.push(rel);
+    }
+    expect(offenders).toEqual([]);
+
+    // Teeth intact: the predicate still catches the exact string that shipped.
+    expect(PAYOUT.test('Up to 20% revenue share on subscriptions')).toBe(true);
+    expect(PAYOUT.test('earn commission on each co-branded report')).toBe(true);
+    // ...and does not fire on the correct, dollar-denominated framing.
+    expect(PAYOUT.test('at $399 wholesale — a flat $100 partner discount')).toBe(false);
+  });
 });
