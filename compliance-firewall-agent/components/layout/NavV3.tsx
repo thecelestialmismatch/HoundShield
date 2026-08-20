@@ -54,7 +54,7 @@ const INDUSTRIES: MenuItem[] = [
 const FEATURES: MenuItem[] = [
   { icon: Eye,       label: 'AI Prompt Interception', body: 'Every LLM request inspected before it leaves the network.', href: '/features#interception' },
   { icon: Zap,       label: '16 Detection Engines',   body: 'CUI, PII, IP, PHI, secrets, CAGE codes, clearances.',       href: '/features#engines' },
-  { icon: FileCheck, label: 'Immutable Audit Trail',  body: 'SHA-256 tamper-evident logs. C3PAO-ready.',                 href: '/features#audit' },
+  { icon: FileCheck, label: 'Immutable Audit Trail',  body: 'SHA-256 tamper-evident logs. assessor-reviewable.',                 href: '/features#audit' },
   { icon: FileCheck, label: 'Evidence Intake',         body: 'Review selected PDFs locally with human approval.',          href: '/evidence-intake' },
   // Points at the PUBLIC demo, not the dashboard. The dashboard moved behind
   // login on 2026-07-29, so a prospect clicking a FEATURES flyout item would
@@ -69,7 +69,7 @@ const PARTNERS: MenuItem[] = [
 ]
 
 const DOCS: MenuItem[] = [
-  { icon: Zap,        label: 'Quickstart',    body: 'One URL change → full compliance.',        href: '/docs#quickstart' },
+  { icon: Zap,        label: 'Quickstart',    body: 'One URL change → scoped control coverage.',        href: '/docs#quickstart' },
   { icon: Terminal,   label: 'API Reference', body: 'Gateway, classifier & audit endpoints.',   href: '/docs#api' },
   { icon: HelpCircle, label: 'FAQ',           body: 'Searchable answers — pricing, HIPAA, CUI.', href: '/faq' },
 ]

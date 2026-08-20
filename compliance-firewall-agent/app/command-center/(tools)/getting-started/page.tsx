@@ -7,7 +7,7 @@
  * the real page that already does the work (SDK integration, the Shield
  * onboarding wizard, the Docker quickstart, reports, the audit log), so a new
  * user always has a clear "what do I do next" path from prompt-leak risk to
- * C3PAO-ready evidence.
+ * assessor-reviewable evidence.
  *
  * Dark dashboard conventions only: bg-[#0a0a0a], brand-400/500 accents,
  * white/[0.0x] glass cards, template-literal class strings, no new colors.
@@ -82,7 +82,7 @@ const STEPS: Step[] = [
   {
     n: 6,
     icon: FileBarChart,
-    title: "Generate the C3PAO-ready PDF",
+    title: "Generate the assessor-reviewable PDF",
     body: "One click turns your scan window into a formatted, SHA-256-signed PDF mapped to NIST 800-171 Rev 2 — the deliverable your C3PAO assessor can accept the day of the visit.",
     href: "/command-center/shield/reports",
     cta: "Generate a report",
@@ -132,7 +132,7 @@ export default function GettingStartedPage() {
           <div>
             <h1 className="text-xl font-semibold text-white">Getting Started</h1>
             <p className="text-sm text-white/40">
-              From an AI prompt-leak risk to C3PAO-ready evidence — in six steps.
+              From an AI prompt-leak risk to assessor-reviewable evidence — in six steps.
             </p>
           </div>
         </div>

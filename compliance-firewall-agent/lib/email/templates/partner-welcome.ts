@@ -41,7 +41,7 @@ ${emailHeader("Partner Program")}
           • <strong>Local-only by design</strong> — your clients' CUI never leaves their network, so recommending us never creates a DFARS 7012 spill.
         </p>
         <p style="color:#7c2d12;font-size:14px;margin:0 0 8px;line-height:1.6;">
-          • <strong>C3PAO-ready evidence</strong> — tamper-evident PDF reports your assessors can use directly.
+          • <strong>assessor-reviewable evidence</strong> — tamper-evident PDF reports your assessors can use directly.
         </p>
         <p style="color:#7c2d12;font-size:14px;margin:0;line-height:1.6;">
           • <strong>Recurring referral commission</strong> — aligned with the clients you already serve.

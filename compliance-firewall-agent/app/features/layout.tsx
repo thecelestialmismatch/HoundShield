@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "AI DLP features",
     "local AI proxy",
     "NIST 800-171 controls",
-    "C3PAO evidence",
+    "assessor-review evidence",
   ],
   alternates: { canonical: `${BASE_URL}/features` },
   openGraph: {

@@ -59,7 +59,7 @@ export default function FeaturesPage() {
                 <div className="ic"><FileText /></div>
                 <h3>Immutable Audit Trail</h3>
                 <p>
-                  Every decision is hashed into a SHA-256 tamper-evident log. Export as C3PAO-ready
+                  Every decision is hashed into a SHA-256 tamper-evident log. Export as assessor-reviewable
                   evidence on demand.
                 </p>
               </div>

@@ -149,7 +149,7 @@ export default async function AnswerPage({
           </h2>
           <p className="mx-auto mt-2 max-w-xl text-[var(--hs-ink-secondary)]">
             HoundShield scans every AI prompt locally and blocks CUI before it leaves your network.
-            One URL change. Under 10 minutes. C3PAO-ready.
+            One URL change. Under 10 minutes. assessor-reviewable.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link

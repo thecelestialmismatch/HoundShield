@@ -149,7 +149,7 @@ export function RiskRadar({ posture, onAssess }: { posture: SprsPosture; onAsses
       </div>
       <p className="ph-sub">
         How much of each NIST 800-171 family you have in place. The outer ring is
-        full compliance; the dip is where an assessor looks first.
+        scoped control coverage; the dip is where an assessor looks first.
       </p>
       <div className="pad" style={{ paddingTop: 6 }}>
         {!posture.assessed ? (

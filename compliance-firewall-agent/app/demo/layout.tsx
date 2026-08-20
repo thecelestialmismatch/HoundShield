@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Live Demo | HoundShield AI Compliance Firewall",
     description:
-      "See real-time AI prompt scanning, CUI/PHI detection, and C3PAO-ready compliance reporting. Interactive demo — no signup required.",
+      "See real-time AI prompt scanning, CUI/PHI detection, and assessor-reviewable compliance reporting. Interactive demo — no signup required.",
     url: `${BASE_URL}/demo`,
     type: "website",
   },

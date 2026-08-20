@@ -239,7 +239,7 @@ export const featuresFaqs: FaqItem[] = [
   {
     question: "Does HoundShield generate audit logs for compliance?",
     answer:
-      "Yes. Every scan decision is written to a tamper-evident audit trail secured with a SHA-256 hash chain, so records cannot be altered without detection. The logs map to NIST 800-171 controls and export as C3PAO-ready PDF evidence, giving assessors and auditors a defensible record of every AI interaction.",
+      "Yes. Every scan decision is written to a tamper-evident audit trail secured with a SHA-256 hash chain, so records cannot be altered without detection. The logs map to NIST 800-171 controls and export as assessor-reviewable PDF evidence, giving assessors and auditors a defensible record of every AI interaction.",
   },
   {
     question: "What is SPRS scoring and does HoundShield calculate it?",
@@ -290,7 +290,7 @@ export const brainAiFaqs: FaqItem[] = [
   {
     question: "Can Brain AI automate CMMC compliance work?",
     answer:
-      "Brain AI continuously scores your environment against all 110 NIST 800-171 controls, flags which controls are met or missing, drafts remediation steps, and assembles C3PAO-ready evidence. It automates the repetitive assessment and documentation work so your team focuses on closing real gaps before the deadline.",
+      "Brain AI continuously scores your environment against all 110 NIST 800-171 controls, flags which controls are met or missing, drafts remediation steps, and assembles assessor-reviewable evidence. It automates the repetitive assessment and documentation work so your team focuses on closing real gaps before the deadline.",
   },
   {
     question: "Is Brain AI safe to use with CUI and regulated data?",

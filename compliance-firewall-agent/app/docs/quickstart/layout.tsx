@@ -9,7 +9,7 @@ const BASE_URL = SITE_URL;
 export const metadata: Metadata = {
   title: "Quickstart | HoundShield Setup in 10 Minutes",
   description:
-    "Get HoundShield running in under 10 minutes: change one proxy URL, deploy the Docker image on your own infrastructure, and start generating C3PAO-ready compliance evidence.",
+    "Get HoundShield running in under 10 minutes: change one proxy URL, deploy the Docker image on your own infrastructure, and start generating assessor-reviewable compliance evidence.",
   keywords: [
     "HoundShield quickstart",
     "AI compliance firewall setup",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Quickstart | HoundShield",
     description:
-      "Change one URL, deploy Docker on your own infrastructure, and generate C3PAO-ready evidence in minutes.",
+      "Change one URL, deploy Docker on your own infrastructure, and generate assessor-reviewable evidence in minutes.",
     url: `${BASE_URL}/docs/quickstart`,
     type: "website",
   },

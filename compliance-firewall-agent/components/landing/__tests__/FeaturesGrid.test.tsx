@@ -48,7 +48,7 @@ describe('FeaturesGrid', () => {
   it('card title visible without hover', () => {
     render(<FeaturesGrid />)
     expect(screen.getByText('Local Scanning')).toBeTruthy()
-    expect(screen.getByText('C3PAO-Ready PDF')).toBeTruthy()
+    expect(screen.getByText('Assessor-reviewable PDF')).toBeTruthy()
     expect(screen.getByText('Zero-Friction Deploy')).toBeTruthy()
     expect(screen.getByText('OODA Engine')).toBeTruthy()
     expect(screen.getByText('16 CUI Patterns')).toBeTruthy()

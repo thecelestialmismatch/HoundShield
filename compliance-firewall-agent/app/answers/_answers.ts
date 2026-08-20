@@ -134,7 +134,7 @@ export const ANSWERS: Answer[] = [
         heading: "The local-only rule",
         paragraphs: [
           "The defensible architecture is simple: the scan must happen before the data leaves, on a system you control. That means an on-prem or in-network proxy that inspects every AI prompt locally, blocks CUI, and logs the decision — with nothing transmitted to a vendor.",
-          "This is also the cheapest path to evidence: a local firewall maps directly to NIST 800-171 controls 3.1 (Access Control), 3.13 (System & Communications Protection), and 3.14 (System & Information Integrity), and can export a C3PAO-ready audit trail.",
+          "This is also the cheapest path to evidence: a local firewall maps directly to NIST 800-171 controls 3.1 (Access Control), 3.13 (System & Communications Protection), and 3.14 (System & Information Integrity), and can export a assessor-reviewable audit trail.",
         ],
       },
     ],
@@ -177,7 +177,7 @@ export const ANSWERS: Answer[] = [
             ["Does CUI leave your boundary to be scanned?", "No", "Yes — to be inspected"],
             ["Self-hosted / air-gapped option", "Yes (Docker, on-prem, air-gapped)", "Cloud-dependent by design"],
             ["Covers ChatGPT, Copilot, Claude, Cursor", "Yes — OpenAI-compatible proxy", "Varies by integration"],
-            ["C3PAO evidence (SSP / POA&M / SPRS)", "Built-in, SHA-256 signed", "Not a CMMC evidence tool"],
+            ["assessor-review evidence (SSP / POA&M / SPRS)", "Built-in, SHA-256 signed", "Not a CMMC evidence tool"],
           ],
         },
       },

@@ -62,7 +62,7 @@ const FEATURE_META: Record<FeatureKey, FeatureMeta> = {
   },
   pdfReports: {
     href: '/command-center/shield/reports',
-    description: 'Generate the C3PAO-ready PDF mapped to NIST 800-171 Rev 2.',
+    description: 'Generate the assessor-reviewable PDF mapped to NIST 800-171 Rev 2.',
   },
   c3paoCoordination: {
     href: '/command-center/shield/reports',

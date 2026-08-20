@@ -76,7 +76,7 @@ export interface Entitlements {
    *
    * Upgrade path: if these windows are ever meant to bind, they need a purge
    * job AND a product decision first — this is an audit-evidence product, and
-   * automatically shredding a customer's C3PAO evidence on a timer is a
+   * automatically shredding a customer's assessor-review evidence on a timer is a
    * different promise from the one they bought.
    */
   retentionDays: number;

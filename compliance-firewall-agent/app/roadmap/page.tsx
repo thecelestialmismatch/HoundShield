@@ -38,7 +38,7 @@ const COLUMNS: RoadmapColumn[] = [
       { title: 'AI gateway proxy', body: 'One URL change intercepts every prompt to ChatGPT, Copilot, Claude, Gemini, and 800+ models.' },
       { title: '16-engine detection matrix', body: 'CUI, PHI (all 18 HIPAA identifiers), PII, API keys, source code, and financial data — under 10ms.' },
       { title: 'Tamper-evident audit trail', body: 'SHA-256 hash chain on every compliance event, with Base L2 blockchain anchoring.' },
-      { title: 'C3PAO-ready PDF reports', body: 'One-click evidence packages covering all 110 NIST 800-171 Rev 2 controls.' },
+      { title: 'Assessor-reviewable PDF reports', body: 'One-click evidence packages covering all 110 NIST 800-171 Rev 2 controls.' },
       { title: 'Live SPRS scoring', body: 'Real-time score (−203 to +110) with per-control gap analysis and remediation priorities.' },
       { title: 'Slack, Teams & SIEM alerts', body: 'Block Kit / Adaptive Cards plus Splunk HEC and Azure Sentinel forwarding.' },
       { title: 'Docker self-host deploy', body: 'Three commands to a hardened, non-root deployment on your own hardware.' },

@@ -234,9 +234,9 @@ export const INDUSTRIES: Industry[] = [
     sub: "Roughly 80,000 DoD contractors must reach CMMC Level 2 to keep their contracts, and AI prompt leakage is the most common unaddressed gap in the defense industrial base. HoundShield blocks CUI, CAGE codes and contract data locally — the only architecture that doesn't itself create a DFARS 7012 spill — and generates the SSP, POA&M and SPRS evidence your assessor needs.",
     metaTitle: "CMMC Level 2 AI Firewall for Defense Contractors | HoundShield",
     metaDescription:
-      "Defense contractors can use AI without failing CMMC. HoundShield blocks CUI, CAGE codes and contract data locally before prompts leave the network — and exports C3PAO-ready SSP, POA&M and SPRS evidence.",
+      "Defense contractors can use AI without failing CMMC. HoundShield blocks CUI, CAGE codes and contract data locally before prompts leave the network — and exports assessor-reviewable SSP, POA&M and SPRS evidence.",
     whatItIs:
-      "A local-only AI firewall plus a full CMMC suite: 110-control assessment, live SPRS scoring and C3PAO-ready document export.",
+      "A local-only AI firewall plus a full CMMC suite: 110-control assessment, live SPRS scoring and assessor-reviewable document export.",
     whoFor:
       "ISSOs and IT security managers at 50–500 person defense contractors preparing for a C3PAO assessment.",
     howUse:
@@ -261,7 +261,7 @@ export const INDUSTRIES: Industry[] = [
         body: "Nothing leaves your network — so HoundShield itself can never cause a DFARS 7012 spill.",
       },
       {
-        title: "Export C3PAO evidence",
+        title: "Export assessor-review evidence",
         body: "Generate your SSP, POA&M and SPRS attestation as SHA-256 signed PDFs on demand.",
       },
     ],
@@ -294,7 +294,7 @@ export const INDUSTRIES: Industry[] = [
         a: "No — and that's the entire point. Detection is local; CUI never transits to us. Cloud DLP tools that scan in their own cloud can't make that claim.",
       },
       {
-        q: "Does it generate C3PAO evidence?",
+        q: "Does it generate assessor-review evidence?",
         a: "Yes. Your SSP, POA&M and SPRS attestation export as SHA-256-signed PDFs, mapped to all 110 controls.",
       },
       {
@@ -308,7 +308,7 @@ export const INDUSTRIES: Industry[] = [
     ],
     cta: {
       title: "A C3PAO assessment is estimated at $31k–$150k",
-      body: "Industry estimates put a Level 2 assessment in the tens to low hundreds of thousands. Don't fail it on an AI leak. One URL change. 10 minutes. C3PAO-ready.",
+      body: "Industry estimates put a Level 2 assessment in the tens to low hundreds of thousands. Don't fail it on an AI leak. One URL change. 10 minutes. assessor-reviewable.",
       button: "Protect your CUI",
       href: "/signup",
     },

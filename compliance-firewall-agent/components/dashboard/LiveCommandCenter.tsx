@@ -15,7 +15,7 @@
  * Security/Vanta/Drata):
  *  - Evidence-chain SPINE: a persistent header showing the SHA-256 audit chain
  *    being built live on the customer's own hardware, one click from the $499
- *    C3PAO-ready PDF. Structurally uncopyable by cloud-routed rivals.
+ *    assessor-reviewable PDF. Structurally uncopyable by cloud-routed rivals.
  *  - Brain AI carries the Doberman mark on its panel + a quick-ask card on the
  *    Overview tab, keyless (FAQ keyword layer), with the mandatory CUI warning.
  *  - First-run checklist that ends on the PDF (activation driver).
@@ -198,7 +198,7 @@ export function brainAnswer(qRaw: string, ctx?: BrainContext): [string, string] 
     if (e && !hasFeature(e, 'pdfReports')) {
       return [`${hi}signed <b>PDF</b> compliance reports (SSP + POA&M, NIST 800-171 mapped) come with the <b>${PURCHASABLE_OFFER.price} ${PURCHASABLE_OFFER.name}</b> — you're on ${e.name}. On ${e.name} you can still export full JSON evidence from Reports, and your audit chain is already being signed on-device. Want the report?`, 'reports · entitlements']
     }
-    return [`${hi}head to <b>Reports</b> — your SSP, POA&M and C3PAO evidence pack are generated across all 110 controls and SHA-256 signed on your own hardware. One click and the PDF is on screen.`, 'reports · brain-core']
+    return [`${hi}head to <b>Reports</b> — your SSP, POA&M and assessor-review evidence pack are generated across all 110 controls and SHA-256 signed on your own hardware. One click and the PDF is on screen.`, 'reports · brain-core']
   }
   if (/chang|this week|trend|since last|delta|improv/.test(q)) {
     if (own) {
@@ -869,7 +869,7 @@ export function LiveCommandCenter({ viewer, authenticated }: {
 
           {/* Evidence-chain spine — persistent on every tab. A live SHA-256 audit
               chain built on the customer's OWN hardware; one click from the $499
-              C3PAO-ready PDF. The differentiator no cloud-routed rival can show. */}
+              assessor-reviewable PDF. The differentiator no cloud-routed rival can show. */}
           <div className="spine">
             <ShieldCheck className="spine-ic" />
             <span className="spine-txt" aria-hidden="true">

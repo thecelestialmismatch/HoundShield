@@ -94,7 +94,7 @@ const PARTNER_ITEMS = [
 ];
 
 const DOC_ITEMS = [
-  { icon: Zap,      color: "text-brand-500", bg: "bg-[rgba(129,166,198,0.08)]", label: "5-min Quickstart",         desc: "One URL change → full compliance", href: "/docs#quickstart" },
+  { icon: Zap,      color: "text-brand-500", bg: "bg-[rgba(129,166,198,0.08)]", label: "5-min Quickstart",         desc: "One URL change → scoped control coverage", href: "/docs#quickstart" },
   { icon: Terminal, color: "text-brand-400",  bg: "bg-[rgba(129,166,198,0.10)]",  label: "API Reference",            desc: "Gateway, classifier, and audit endpoints", href: "/docs#api" },
   { icon: Shield,   color: "text-brand-600",   bg: "bg-[rgba(129,166,198,0.12)]",   label: "CMMC Configuration Guide", desc: "NIST 800-171 pattern reference", href: "/docs#cmmc" },
   { icon: BookOpen, color: "text-brand-700",  bg: "bg-[rgba(129,166,198,0.14)]",  label: "Detection Engine Docs",    desc: "16 engine patterns, thresholds, overrides", href: "/docs#detection" },

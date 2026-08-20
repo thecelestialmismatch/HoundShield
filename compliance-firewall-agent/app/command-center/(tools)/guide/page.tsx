@@ -22,7 +22,7 @@ export default function GuidePage() {
       <h1 className="mb-1 text-2xl font-semibold text-[var(--hs-ink)]">Your Guide</h1>
       <p className="mb-6 text-sm text-[var(--hs-ink-secondary)]">
         Where your account stands right now, and the next step toward a
-        C3PAO-ready report.
+        assessor-reviewable report.
       </p>
       <CustomerStatusPanel />
     </div>

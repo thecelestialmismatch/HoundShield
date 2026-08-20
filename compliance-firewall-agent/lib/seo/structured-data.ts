@@ -51,16 +51,14 @@ const PRODUCT_OFFERS: readonly OfferInput[] = [
 ];
 
 const PRODUCT_FEATURES: readonly string[] = [
-  "Sub-10ms AI prompt scanning",
-  "CUI detection and blocking",
-  "PHI and PII detection",
-  "CMMC Level 2 control mapping",
-  "HIPAA-compliant audit trails",
-  "SOC 2 compliance monitoring",
-  "Tamper-evident audit logs",
-  "C3PAO-ready PDF evidence",
-  "Local-only deployment (data never leaves your network)",
-  "NIST 800-171 assessment support",
+  "Customer-operated AI request inspection",
+  "Configurable CUI, PHI, and PII pattern detection",
+  "NIST SP 800-171 control mapping support",
+  "Evidence-oriented assessment workflow support",
+  "Tamper-evident audit artifacts where configured",
+  "Exportable records for human review",
+  "Self-hosted deployment option for customer-controlled prompt handling",
+  "Human-reviewed readiness planning; not a certification or assessor decision",
 ];
 
 /** Site-wide product entity. Rendered once in the root layout. */
@@ -72,7 +70,7 @@ export function softwareApplicationSchema(): JsonLdSchema {
     applicationCategory: "SecurityApplication",
     operatingSystem: "Docker, Linux, macOS, Windows Server",
     description:
-      "Local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. Intercepts AI prompts before they leave your network, scans for CUI/PHI/PII, generates tamper-proof audit logs, and produces C3PAO-ready PDF compliance reports.",
+      "AI traffic security controls and evidence-workflow support for organizations evaluating CMMC-aligned, HIPAA, and SOC 2 program needs. In supported customer-operated deployments, HoundShield can inspect AI requests before forwarding them, detect selected CUI, PHI, and PII patterns, and produce audit artifacts for human review. It does not provide certification or assessor determinations.",
     url: BASE_URL,
     offers: PRODUCT_OFFERS.map((offer) => ({
       "@type": "Offer",

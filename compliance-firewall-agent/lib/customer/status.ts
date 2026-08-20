@@ -270,7 +270,7 @@ export function buildCustomerStatus(input: CustomerStatusInput): CustomerStatus 
     nextStep = {
       title: 'Lock in your evidence',
       detail:
-        'Order your $499 CMMC AI Risk Assessment Report, or move to continuous monitoring, so you have C3PAO-ready evidence on file.',
+        'Order your $499 CMMC AI Risk Assessment Report, or move to continuous monitoring, so you have assessor-reviewable evidence on file.',
       action: { label: 'Get your evidence report', href: PRICING_HREF },
     };
   }

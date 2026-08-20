@@ -139,7 +139,7 @@ export default function CmmcPhase2Page() {
             <div className="hero-trust">
               <span><Check /> Runs on your hardware</span>
               <span><Check /> Nothing transmitted</span>
-              <span><Check /> C3PAO-ready PDF</span>
+              <span><Check /> assessor-reviewable PDF</span>
             </div>
           </div>
         </div>

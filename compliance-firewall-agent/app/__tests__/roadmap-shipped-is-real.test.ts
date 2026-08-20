@@ -29,7 +29,7 @@ const EVIDENCE: Record<string, string> = {
   'AI gateway proxy': 'compliance-firewall-agent/app/api/v1/chat/completions/route.ts',
   '16-engine detection matrix': 'compliance-firewall-agent/lib/detection/engines.ts',
   'Tamper-evident audit trail': 'compliance-firewall-agent/lib/audit/seed-anchor.ts',
-  'C3PAO-ready PDF reports': 'compliance-firewall-agent/app/api/reports/generate/route.ts',
+  'Assessor-reviewable PDF reports': 'compliance-firewall-agent/app/api/reports/generate/route.ts',
   'Live SPRS scoring': 'compliance-firewall-agent/lib/shieldready',
   'Slack, Teams & SIEM alerts': 'compliance-firewall-agent/lib/integrations/slack.ts',
   'Docker self-host deploy': 'proxy/Dockerfile',
