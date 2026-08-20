@@ -1,141 +1,90 @@
-# Hound Shield — SaaS Launch Checklist
+# HoundShield — Launch Checklist
 
-**68 items · 10 categories · Updated: 2026-03-28**
-Status key:  Done ·  Needed · ️ Partial ·  Needs key/config
+> **Rewritten 2026-08-20.** This supersedes `LAUNCH-CHECKLIST-2026-06.md`, which
+> was not merely stale — it was **dangerous**. It directed a *"C3PAO outreach
+> wave (10 from marketplace.cmmcab.org)"*, and C3PAOs are **legally prohibited**
+> from recommending tools to clients they assess (32 CFR Part 170, ISO 17020
+> cooling-off). `CLAUDE.md` lists that on the NEVER-DO list. The old file also
+> sold **$159/mo**, listed eight Stripe price-IDs for subscription tiers that do
+> not exist, and cited "409/409 tests" against a suite that now runs 3,072.
+>
+> A launch checklist is a document someone *executes*. Treat a wrong one the way
+> you would treat a wrong `.claude/rules/*` file.
 
----
+**What we sell today: one product.** The **$499 one-time CMMC AI Risk Assessment
+Report**. No subscription. Do not add a second pricing grid.
 
-##  Analytics & Tracking
-
--  Product analytics installed — PostHog (NEXT_PUBLIC_POSTHOG_KEY set)
-- ️ Key activation & retention events defined — pageviews only; funnel events (signup→activation→upgrade) not yet defined
--  Google Search Console verified and sitemap submitted
--  Bing Webmaster Tools set up
--  Session replay enabled — PostHog session replay
--  Funnel tracking: signup → activation → conversion — PostHog funnels not configured
-
----
-
-##  SEO & Discoverability
-
--  XML sitemap generated and submitted
-- ️ robots.txt — check if exists at /public/robots.txt
--  OpenGraph images for all key pages
--  Twitter / X card meta tags
--  Structured data / JSON-LD (Organization, Product, FAQ)
--  Canonical URLs on every page
-- ️ Meta titles & descriptions — homepage has them; other pages need audit
--  Social previews tested
+**Who we sell through: RPOs and MSPs.** Never C3PAOs. The co-branded offer is
+**$399 wholesale — a flat $100 discount**, stated in dollars, never as a
+percentage. Canonical: `lib/pricing/plans.ts`.
 
 ---
 
-##  Branding & Assets
+## 1 · Hard blockers — nothing ships until these are true
 
--  Favicon — Logo component used (check /public/favicon.ico exists)
--  Apple Touch Icon (180×180)
--  Web App Manifest
--  Custom 404 page — using Next.js default
-- ️ Loading skeletons — some pages have them
-- ️ Empty states — Command Center needs first-time user empty states
-- ️ Images optimized — Next.js image optimization on (unoptimized: true in config — fix this)
+| # | Item | How to check it is done |
+|---|---|---|
+| 1 | **Publish the Mode B Docker image** | `git tag -l` currently returns **zero tags**, and `.github/workflows/docker-publish.yml` fires only on `push: tags: proxy-v*`. Until a tag exists, the CUI-safe deployment mode has never been built for a customer and a defense buyer has nothing to install. → `git tag proxy-v0.1.0 && git push --tags`, then confirm the workflow published. |
+| 2 | **Open the Stripe Payment Link in a browser and confirm $499** | `buy.stripe.com` is blocked from every automated context, so this has genuinely never been verified. A dead or mispriced link makes every other item on this page pointless. 60 seconds. |
+| 3 | **Incorporate, then fill in `lib/legal/entity.ts`** | The only `blocking: true` entry in `LAUNCH_BLOCKERS`. GDPR Art. 13(1)(a) and CCPA both require a named, contactable controller; until then it is unlimited personal liability. |
 
----
+## 2 · Configuration — the order matters
 
-## ️ Legal & Compliance
+Set in Vercel → project `compliance-firewall-agent` → Environment Variables,
+**Production** checked, then redeploy. `/api/health` names every one of these by
+variable while it is missing, so it is the check, not this list.
 
--  Privacy Policy — /privacy page exists (linked from signup)
--  Terms of Service — /terms page exists (linked from signup)
--  Cookie consent banner (GDPR) — not implemented
--  Data Processing Agreement — needed for B2B defense/healthcare clients
--  GDPR data export / deletion flow
--  Acceptable Use Policy
+1. **Apply migration `034`, THEN set `MARKETING_POSTAL_ADDRESS`.** Reversed, the
+   CAN-SPAM gate opens onto a column that does not exist and every drip run
+   throws while looking healthy from outside.
+2. **Apply migration `037`** — until then every free-demo lead is captured by
+   email only, and a Resend failure loses it with no record.
+3. `ENCRYPTION_KEY` = `openssl rand -hex 32`. Quarantine **fails closed** today,
+   so the feature is dead until this exists.
+4. `TURNSTILE_SECRET_KEY` — while unset, `verifyCaptcha()` returns **true for
+   every token**. The control looks enabled and is not.
+5. `AUTH_RESET_CODE_PEPPER` — while unset, password reset is disabled.
+6. `STRIPE_SECRET_KEY` — **optional for selling.** Buys promo codes and the
+   branded `/report/thank-you`; the $499 checkout already works without it via
+   the hosted Payment Link.
 
----
+**Already done — do not redo:** `STRIPE_WEBHOOK_SECRET` is set
+(`/api/health` → `payments_webhook: "configured"`), so a completed purchase is
+recorded, receipted and alerted.
 
-##  Security
+## 3 · Pre-demo runbook — run it the day you start demos
 
--  HTTPS everywhere — Vercel handles HTTPS + HSTS in middleware
--  Security headers — CSP, HSTS, X-Frame-Options, X-XSS in middleware.ts + next.config.js
--  Input validation — password length check, email type validation
--  Rate limiting — middleware.ts rate limiter (60 req/min)
--  security.txt — add to /public/.well-known/security.txt
--  Secrets in env vars — .gitignore hardened, no secrets in code
--  Dependency vulnerability scanning — run npm audit
+1. `curl https://www.houndshield.com/api/health` → read the `degraded` array.
+   It names what is missing; nothing else needs interpreting.
+2. **`/demo`** → click a sample scenario → **Scan locally**. Confirm findings
+   appear with NIST controls, that the **"network calls during this scan"**
+   counter reads **0**, and that no pasted value is echoed back on screen.
+3. Same page → **Generate my gap-report PDF** → open it. The demo script
+   mandates the demo always ends on the PDF.
+4. **Disconnect from the network and scan again.** It still works. This is the
+   single most persuasive thing in the product — do it live, on the call.
+5. `/pricing` → **Buy now** → confirm Stripe opens at **$499**.
+6. Log in → **Command Center → Scanner** → same scan, same zero-network proof,
+   inside the dashboard.
+7. Repeat 2–3 at **375px** width.
 
----
+## 4 · Known gaps — say these before a buyer finds them
 
-## ️ Email & Communications
+- **Vercel is not FedRAMP-authorized.** The hosted trial is for **non-CUI
+  evaluation only**. CUI-safe means **Mode B (Docker in the customer's
+  environment)**. State this before every defense conversation.
+- **SOC 2 is not started.** Mid-market DIB buyers will ask. Stage 2 item.
+- **The Supabase GitHub integration has never validated a real migration.** It
+  watches the repo-root `supabase/` directory, which holds one file with four
+  `date_trunc`-in-index-expression errors, while the real 37 migrations live in
+  `compliance-firewall-agent/supabase/migrations/`. Repoint it or delete the
+  stale directory.
+- **Brain AI routes to a commercial cloud endpoint.** The CUI warning is live on
+  both surfaces; do not remove it.
 
--  Support email — no support@houndshield.com routing visible
--  Transactional email — Resend (RESEND_API_KEY set in production)
--  SPF, DKIM, DMARC records — check DNS configuration
-- ️ Welcome email — /api/email/welcome route exists; verify it fires on signup
--  Password reset — /forgot-password page linked from login
--  Email templates tested across clients
--  Unsubscribe link in marketing emails
+## 5 · After the first sale
 
----
-
-##  Monitoring & Reliability
-
--  Error tracking — Sentry (NEXT_PUBLIC_SENTRY_DSN set, sentry.client.config.ts exists)
--  Uptime monitoring — no BetterStack/UptimeRobot configured
--  Structured logging in production — Sentry captures errors but no structured request logs
--  Public status page
--  Alerting (Slack/email/PagerDuty)
--  Database backup strategy — Supabase has daily backups on Pro plan; verify plan
-
----
-
-##  Billing & Payments
-
--  Stripe integrated — STRIPE_SECRET_KEY + price IDs all set in production
-- ️ Upgrade/downgrade flows — implemented; needs E2E test
--  Failed payment & dunning — STRIPE_WEBHOOK_SECRET set 4d ago; webhook endpoint /api/stripe/webhook exists; needs production test
-- ️ Cancellation flow — webhook handles subscription.deleted; no in-app cancel button
--  Invoice generation — Stripe auto-generates invoices
-- ️ Free trial edge cases — gating implemented; needs test
--  Tax handling — Stripe Tax not configured
-
----
-
-##  Performance
-
--  Lighthouse score > 90 — not measured; images.unoptimized: true hurts score
--  Core Web Vitals passing — not measured
--  CDN for static assets — Vercel Edge Network
-- ️ Lazy loading — PlatformDashboard is dynamic/ssr:false; other heavy components need audit
--  Compression — compress: true in next.config.js
-
----
-
-##  Launch Day
-
--  Changelog / What's New page
--  Feedback widget (Canny/Featurebase/plain form)
--  Documentation — /docs page with CMMC quickstart exists
--  Onboarding flow tested with a real person
--  Production smoke test E2E — BLOCKER: signup "Failed to fetch" must be fixed first
--  Social sharing copy & visuals prepared
--  Launch post ready (Product Hunt, HN, Reddit, X)
--  Rollback plan — Vercel instant rollback via dashboard
-
----
-
-##  IMMEDIATE BLOCKERS (Fix Before Any Launch)
-
-1. **Signup "Failed to fetch"** — Go to Supabase → Auth → URL Configuration → add `https://houndshield.com` and `https://houndshield.com/**` to Redirect URLs
-2. **Supabase migrations 003+004** — Run `npx supabase db push` to apply to production DB
-3. **Cookie consent banner** — Required for GDPR compliance (EU users)
-4. **SPF/DKIM/DMARC** — Email deliverability for confirmation/welcome emails
-5. **Stripe webhook E2E test** — Confirm invoice.paid → subscription upgrade flow works
-
-##  WEEK 2 PRIORITIES
-
-1. XML sitemap + Google Search Console
-2. OG images for all pages
-3. Uptime monitoring (BetterStack free tier)
-4. Lighthouse audit + fix images.unoptimized
-5. PostHog funnel events for activation tracking
-6. Support email routing (support@houndshield.com)
-7. Cancellation in-app flow
+- Record the demo video (`docs/DEMO-SCRIPT.md`).
+- RPO/MSP outreach wave — Cyber AB Marketplace, **RPOs only**.
+- `npm audit --omit=dev --audit-level=high` in both packages.
+- Begin SOC 2 Type I.

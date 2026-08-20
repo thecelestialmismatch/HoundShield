@@ -358,15 +358,25 @@ describe('the test guide names a sample button that /demo actually has', () => {
   });
 
   it('every scenario the emails can name is reachable on /demo', () => {
-    // /demo renders <InstantSnapshot/>, which maps over SAMPLE_SCENARIOS. Assert
-    // the wiring rather than the rendered string, so this survives a re-layout.
-    const snapshot = readFileSync(
+    /*
+     * Assert the WIRING, not a rendered string, so this survives a re-layout —
+     * and read the UNIT the invariant is about rather than whichever file the
+     * code sits in today. The scenario buttons moved from InstantSnapshot into
+     * the shared LocalScanPanel when the same scanner was mounted in the
+     * dashboard; the invariant ("a scenario an email names is on the page") did
+     * not change, so the guard should not have broken. Concatenating the chain
+     * is the same fix `helpers/shell-source.ts` already applies.
+     */
+    const chain = [
+      join(process.cwd(), 'app', 'demo', 'page.tsx'),
       join(process.cwd(), 'components', 'InstantSnapshot.tsx'),
-      'utf8',
-    );
-    expect(snapshot).toContain('SAMPLE_SCENARIOS.map');
-    const demo = readFileSync(join(process.cwd(), 'app', 'demo', 'page.tsx'), 'utf8');
-    expect(demo).toContain('<InstantSnapshot />');
+      join(process.cwd(), 'components', 'scan', 'LocalScanPanel.tsx'),
+    ]
+      .map((f) => readFileSync(f, 'utf8'))
+      .join('\n');
+
+    expect(chain, '/demo must mount the snapshot').toContain('<InstantSnapshot />');
+    expect(chain, 'the panel must render every sample scenario').toContain('SAMPLE_SCENARIOS.map');
   });
 
   it('links with an explicit https:// scheme, never a bare domain', () => {
