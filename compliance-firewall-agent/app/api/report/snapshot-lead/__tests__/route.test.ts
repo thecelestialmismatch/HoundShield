@@ -19,10 +19,24 @@ vi.mock("resend", () => ({
 import { POST } from "@/app/api/report/snapshot-lead/route";
 import { NextRequest } from "next/server";
 
-function makeRequest(body: unknown): NextRequest {
+/*
+ * Each request gets its own client IP by default.
+ *
+ * The route is rate limited (5/min per IP), and NextRequest carries no address
+ * of its own, so every call in this file otherwise shares one bucket and the
+ * sixth test onward 429s — testing the limiter by accident instead of the
+ * behaviour under test. Mocking the limiter away would hide it entirely, so
+ * the limiter stays live and callers are simply distinct, exactly as real
+ * visitors are. `ip` is passed explicitly by the test that asserts it bites.
+ */
+let ipSeq = 0;
+function makeRequest(body: unknown, ip?: string): NextRequest {
   return new NextRequest("http://localhost/api/report/snapshot-lead", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": ip ?? `203.0.113.${++ipSeq % 250}`,
+    },
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
 }
@@ -111,5 +125,27 @@ describe("POST /api/report/snapshot-lead — delivery honesty", () => {
     await POST(makeRequest(VALID_BODY));
     const founderCall = mockResendSend.mock.calls.find((c) => c[0].to === "founder@houndshield.com");
     expect(founderCall).toBeTruthy();
+  });
+});
+
+describe("POST /api/report/snapshot-lead — abuse limits", () => {
+  it("rate limits a single caller, because the route is unauthenticated and sends two emails per call", async () => {
+    process.env.RESEND_API_KEY = "re_test";
+    const ip = "198.51.100.7";
+    const statuses: number[] = [];
+    // One over the 5/min ceiling.
+    for (let i = 0; i < 6; i++) {
+      statuses.push((await POST(makeRequest(VALID_BODY, ip))).status);
+    }
+    expect(
+      statuses.filter((s) => s === 429).length,
+      `expected the 6th call from one IP to be limited, got ${statuses.join(",")}`,
+    ).toBeGreaterThan(0);
+  });
+
+  it("does not limit a different caller", async () => {
+    process.env.RESEND_API_KEY = "re_test";
+    const res = await POST(makeRequest(VALID_BODY, "198.51.100.99"));
+    expect(res.status).not.toBe(429);
   });
 });

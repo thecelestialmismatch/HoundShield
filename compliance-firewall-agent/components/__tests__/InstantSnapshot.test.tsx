@@ -13,13 +13,17 @@ vi.mock("@/components/ReportCheckoutButton", () => ({
 }));
 
 import { InstantSnapshot } from "../InstantSnapshot";
+import { sampleForAudience } from "@/components/snapshot/samples";
 
 beforeEach(() => {
   mockSave.mockClear();
 });
 
 function loadExampleAndScan(): void {
-  fireEvent.click(screen.getByText("Load an example"));
+  // The single "Load an example" button became four named scenarios. Drive the
+  // DEFENSE one by name from the shared module rather than a literal, so a
+  // rename shows up as a compile-time change here instead of a runtime miss.
+  fireEvent.click(screen.getByText(sampleForAudience("defense")));
   fireEvent.click(screen.getByRole("button", { name: /scan locally/i }));
 }
 

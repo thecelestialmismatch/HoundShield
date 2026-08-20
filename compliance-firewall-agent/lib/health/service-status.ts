@@ -78,12 +78,15 @@ const LOCKOUT_TABLE = "auth_lockouts";
 const LOCKOUT_COLUMN = "email_hash";
 const OPT_OUT_TABLE = "profiles";
 const OPT_OUT_COLUMN = "marketing_opt_out_at";
+const SNAPSHOT_LEAD_TABLE = "snapshot_leads";
+const SNAPSHOT_LEAD_COLUMN = "email";
 
 /** Exposed so the guard can pin these against the migration DDL. */
 export const PROBED_TABLES = {
   [RATE_LIMIT_TABLE]: RATE_LIMIT_COLUMN,
   [LOCKOUT_TABLE]: LOCKOUT_COLUMN,
   [OPT_OUT_TABLE]: OPT_OUT_COLUMN,
+  [SNAPSHOT_LEAD_TABLE]: SNAPSHOT_LEAD_COLUMN,
 } as const;
 
 /**
@@ -164,6 +167,29 @@ async function marketingOptOutStore(): Promise<string> {
   }
 }
 
+/**
+ * Can a lead from the free /demo#snapshot be recorded?
+ *
+ * The snapshot is the only ungated lead capture on the site, and until
+ * migration 037 the route stored nothing at all — email was the single rail.
+ * Now that a table exists, an UNAPPLIED migration would put the funnel straight
+ * back into that state while looking healthy from outside, which is precisely
+ * the silence this module exists to break.
+ */
+async function snapshotLeadStore(): Promise<string> {
+  if (!isSupabaseConfigured()) return "not_configured";
+  try {
+    const { error } = await createServiceClient()
+      .from(SNAPSHOT_LEAD_TABLE)
+      .select(SNAPSHOT_LEAD_COLUMN, { count: "exact", head: true })
+      .limit(1);
+    if (error) throw new Error(error.message);
+    return "enforcing";
+  } catch {
+    return "missing_migration";
+  }
+}
+
 /** Turnstile is a required escalation control; a missing secret fails closed. */
 function captcha(): string {
   return (process.env.TURNSTILE_SECRET_KEY ?? "").trim() ? "enforcing" : "not_configured";
@@ -208,6 +234,22 @@ const OPERATIONAL_VALUES = new Set([
   "shared",
   "enforcing",
   "enabled",
+  /*
+   * "configured" is the HEALTHY status of stripeWebhookDiagnostic() — the one
+   * that means a paid order is actually recorded and alerted. It was missing
+   * from this set, so the moment STRIPE_WEBHOOK_SECRET was finally set,
+   * /api/health began reporting `payments_webhook` as degraded and forced the
+   * whole endpoint to `status: "degraded"` — while publishing
+   * `payments_webhook: "configured"` two lines above, contradicting itself.
+   *
+   * Third time this module has been bitten by a value its own vocabulary did
+   * not know (the misspelled rate_limit_buckets probe; the /status page's local
+   * Set). For a module whose entire job is reporting degradation, the
+   * false-positive direction is the dangerous one: a lying alarm teaches the
+   * operator to ignore the page. `__tests__/service-status.test.ts` now closes
+   * the class rather than this one instance — see the vocabulary-closure test.
+   */
+  "configured",
 ]);
 
 /** Keys that carry operator prose rather than a control state. */
@@ -224,10 +266,28 @@ const INFORMATIONAL_KEYS = new Set([
   "reset_sender_domain",
   "founder_inbox",
   "founder_inbox_domain",
+  /*
+   * "set" or "default" — both working states, exactly like founder_inbox above.
+   * NEXT_PUBLIC_APP_URL being unset means links fall back to the canonical site
+   * URL, which lib/site-url.ts already resolves correctly; the live audit
+   * classes it as cosmetic. Reporting it as a degraded CONTROL put a permanent
+   * warning on the public /status page for a deployment that is working.
+   */
+  "reset_app_url",
 ]);
 
 export function isOperationalValue(value: string): boolean {
   return OPERATIONAL_VALUES.has(value);
+}
+
+/**
+ * Exported so the guard can assert the exclusion without RETYPING the list.
+ * The test used to carry its own copy of these key names, which is how a
+ * one-line change here turned a passing guard red for the wrong reason — two
+ * copies of a rule is one copy plus a future contradiction.
+ */
+export function isInformationalKey(key: string): boolean {
+  return INFORMATIONAL_KEYS.has(key);
 }
 
 /** The service keys whose control is not doing its job. */
@@ -250,10 +310,11 @@ export async function buildHealthReport(): Promise<HealthReport> {
 
   // All three probes hit the same database; run them together rather than
   // serially — this endpoint is polled by uptime monitors.
-  const [rateLimit, lockout, optOut] = await Promise.all([
+  const [rateLimit, lockout, optOut, snapshotLeads] = await Promise.all([
     rateLimitStore(),
     authLockoutStore(),
     marketingOptOutStore(),
+    snapshotLeadStore(),
   ]);
   const captchaState = captcha();
   const resetPepper = resetCodePepper();
@@ -342,6 +403,18 @@ export async function buildHealthReport(): Promise<HealthReport> {
             optOut === "not_configured"
               ? "No database is configured, so an unsubscribe cannot be recorded."
               : `The ${OPT_OUT_TABLE}.${OPT_OUT_COLUMN} column is unreachable, so unsubscribe requests cannot be recorded and the onboarding drip will fail on every run once it is enabled. Apply supabase/migrations/034_marketing_opt_out.sql BEFORE setting MARKETING_POSTAL_ADDRESS.`,
+        }
+      : {}),
+    // The free snapshot is the only ungated lead capture on the site. Before
+    // migration 037 a lead was email-only; if this reads missing_migration the
+    // funnel is back to one rail and a Resend failure loses the lead.
+    snapshot_lead_store: snapshotLeads,
+    ...(snapshotLeads !== "enforcing"
+      ? {
+          snapshot_lead_store_hint:
+            snapshotLeads === "not_configured"
+              ? "No database is configured, so a snapshot lead is captured by email only."
+              : `The ${SNAPSHOT_LEAD_TABLE} table is unreachable, so /demo#snapshot leads are captured by email ONLY — a Resend outage loses them with no record. Apply supabase/migrations/037_snapshot_leads.sql.`,
         }
       : {}),
     quarantine_encryption: encryptionState,

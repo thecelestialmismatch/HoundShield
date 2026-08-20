@@ -10,6 +10,15 @@ import { FooterV3 } from '@/components/layout/FooterV3'
  * barred from referring/endorsing tools for clients they assess
  * (32 CFR Part 170 / ISO 17020) — NEVER-DO list, guard-tested.
  * Layout, classes and structure are the demo's, 1:1.
+ *
+ * SECOND deliberate deviation (2026-08-20): the MSP / Agency card offered
+ * "Up to 20% revenue share on subscriptions". HoundShield sells NO subscription
+ * — Stage 1 is the single $499 one-time report — so that clause advertised a
+ * cut of a product that does not exist, sitting one card below the offer that
+ * does (the $399 wholesale / flat $100 discount in the highlight card above).
+ * Same defect as /terms §4 describing refunds for monthly plans we never sold.
+ * The multi-tenant dashboard and white-label claims are TRUE and stay:
+ * app/partner/{clients,billing,deploy} exists.
  * ───────────────────────────────────────────────────────────────── */
 
 export default function PartnersPage() {
@@ -59,8 +68,8 @@ export default function PartnersPage() {
                 <div className="ic"><Users /></div>
                 <h3>MSP / Agency</h3>
                 <p>
-                  Up to 20% revenue share on subscriptions · white-label option. Manage
-                  every client&apos;s CMMC posture from one multi-tenant dashboard.
+                  White-label option. Manage every client&apos;s CMMC posture from one
+                  multi-tenant dashboard.
                 </p>
               </div>
               <div className="card">
