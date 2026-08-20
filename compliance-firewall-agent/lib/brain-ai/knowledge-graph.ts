@@ -359,7 +359,7 @@ CMMC compliance: CANNOT claim CMMC-compliant scanning because CUI leaves the net
 Strengths: polished UI, broad integration set, enterprise sales team.
 Weaknesses: cloud architecture is itself a DFARS 7012 risk. No CMMC-specific patterns. No PDF audit report.
 Pricing: enterprise ($$$+). Not accessible to 50-person defense contractors.
-HoundShield differentiation: local-only, CMMC-specific patterns, PDF C3PAO evidence.`,
+HoundShield differentiation: local-only, CMMC-specific patterns, PDF assessor-review evidence.`,
       ["nightfall", "cloud", "dlp", "dfars", "enterprise", "competitor", "saas"]
     ),
     node(
@@ -373,7 +373,7 @@ Strengths: MCP DLP (first mover there), developer-friendly API, active product t
 Weaknesses: no on-premise option, no CMMC-specific patterns, no PDF C3PAO report.
 Threat level: MEDIUM. If Strac ships an on-premise SKU with CMMC patterns they compete directly.
 Watch: Strac's GitHub and product blog monthly.
-HoundShield advantage: CMMC-specific C3PAO evidence package is not on Strac's roadmap.`,
+HoundShield advantage: CMMC-specific assessor-review evidence package is not on Strac's roadmap.`,
       ["strac", "mcp", "dlp", "on-premise", "competitor", "threat"]
     ),
     node(

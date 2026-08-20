@@ -4,6 +4,7 @@ import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { ModeBNotice } from '@/components/ModeBNotice'
 import { HeroDemoDashboard } from '@/components/landing/HeroDemoDashboard'
+import { EvidenceReadinessPath } from '@/components/landing/EvidenceReadinessPath'
 import { UpcomingHeroBanner } from '@/components/landing/UpcomingHeroBanner'
 import { ReportOfferCard } from '@/components/ReportOfferCard'
 import { FaqSection } from '@/components/seo/FaqSection'
@@ -54,10 +55,10 @@ const STATS = [
 const PLATFORM_CARDS = [
   { Icon: Shield,   chip: '110 controls', title: 'CMMC Self-Assessment',    body: 'Guided questionnaires across all 110 NIST SP 800-171 controls. Your SPRS score updates live as you complete each practice.' },
   { Icon: Brain,    chip: 'Prioritized',  title: 'AI-Powered Gap Analysis', body: 'Brain AI flags unmet controls and generates a remediation roadmap ranked by risk severity and cost — on-device, your key.' },
-  { Icon: FileText, chip: '1-click',      title: 'SSP & POA&M Export',      body: 'Auto-generate your System Security Plan and Plan of Action & Milestones as C3PAO-ready PDFs with SHA-256 signed evidence.' },
-  { Icon: Eye,      chip: null,           title: 'AI Prompt Interception',  body: 'Every LLM request inspected before it leaves the perimeter. Works with ChatGPT, Copilot, Claude, Gemini — all at once.' },
+  { Icon: FileText, chip: 'Reviewable',   title: 'SSP & POA&M Export',      body: 'Generate draft System Security Plan and Plan of Action & Milestones materials with integrity metadata for your review process.' },
+  { Icon: Eye,      chip: null,           title: 'Configured AI Gateway',  body: 'Inspect compatible requests intentionally routed through HoundShield before they reach an approved upstream AI service.' },
   { Icon: Zap,      chip: null,           title: `${ENGINE_COUNT} Detection Engines`, body: `PHI, CUI, PII, IP, secrets, CAGE codes, contract numbers and clearance markers — ${PATTERN_COUNT} shipped patterns, flagged, blocked or quarantined.` },
-  { Icon: Activity, chip: null,           title: 'Live Threat Dashboard',   body: 'Real-time blocked prompts, risk scores and compliance posture for every employee, in one command center.' },
+  { Icon: Activity, chip: null,           title: 'Decision Dashboard',      body: 'Review configured policy outcomes, risk context, and evidence records for the workflows intentionally routed through the deployment.' },
 ]
 
 export default function HomePage() {
@@ -74,7 +75,7 @@ export default function HomePage() {
                   certification we hold, and we have not started SOC 2 — the pitch
                   deck says so in as many words. Claiming it to an RPO principal who
                   asks for the report costs the relationship, not just the deal. */}
-              <div className="pill"><i className="live-dot" /> Local-only · HIPAA · NIST 800-171</div>
+              <div className="pill"><i className="live-dot" /> Customer-operated controls · HIPAA &amp; NIST 800-171 mapping</div>
               {/* Renders nothing today. Flip one item's `promote` in
                   lib/product/upcoming.ts when it is close enough that a
                   visitor would act on it. */}
@@ -91,7 +92,7 @@ export default function HomePage() {
                 <Link className="btn btn-primary" href="/demo#snapshot">
                   Explore the control boundary <ArrowRight />
                 </Link>
-                <Link className="btn btn-ghost" href="/pricing">Get the $499 report</Link>
+                <Link className="btn btn-ghost" href="/pricing">Review assessment options</Link>
               </div>
               <div className="hero-trust">
                 <span><Check /> Hosted evaluation clearly labelled</span>
@@ -121,6 +122,8 @@ export default function HomePage() {
         <div className="container" style={{ paddingBottom: 10 }}>
           <ModeBNotice variant="inline" />
         </div>
+
+        <EvidenceReadinessPath />
 
         {/* ── ASYMMETRIC ADVANTAGE ─────────────────────────────── */}
         <div className="section tight">
@@ -168,10 +171,10 @@ export default function HomePage() {
           <div className="container">
             <div className="section-head">
               <div className="eyebrow">One platform</div>
-              <h2 className="display">Everything you need for CMMC Level 2</h2>
+              <h2 className="display">A clearer path from assessment to evidence</h2>
               <p>
-                Map, assess and close gaps across all 110 NIST 800-171 controls — with AI-driven
-                remediation and C3PAO-ready evidence.
+                Map a self-assessment to NIST 800-171 controls, prioritise remediation work, and organise supporting
+                evidence for your internal review and assessment process.
               </p>
             </div>
             <div className="grid-3">
@@ -209,13 +212,12 @@ export default function HomePage() {
         <div className="section tight">
           <div className="container">
             <div className="cta-band">
-              <h2 className="display">Ready to protect your CUI?</h2>
+              <h2 className="display">Ready to validate your AI control boundary?</h2>
               <p>
-                No credit card required. Assess all 110 controls and see your SPRS score in under
-                30 minutes.
+                Start with the deployment path, compatible traffic, and evidence workflow that fit your environment.
               </p>
-              <Link className="btn btn-primary" href="/signup">
-                Get started free <ArrowRight />
+              <Link className="btn btn-primary" href="/demo">
+                Explore the control boundary <ArrowRight />
               </Link>
             </div>
           </div>

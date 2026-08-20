@@ -121,7 +121,7 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["hipaa", "phi", "health", "medical", "protected health", "healthcare", "patient"],
     answer:
-      "HoundShield detects all **18 HIPAA Safe Harbor PHI identifiers**: SSNs, DOBs, phone numbers, medical record IDs, device identifiers, IP addresses, and more. When your team pastes patient data into ChatGPT or Copilot, HoundShield blocks it before it reaches the AI provider, logs the incident, and generates a HIPAA-compliant audit report.",
+      "HoundShield detects all **18 HIPAA Safe Harbor PHI identifiers**: SSNs, DOBs, phone numbers, medical record IDs, device identifiers, IP addresses, and more. When your team pastes patient data into ChatGPT or Copilot, HoundShield blocks it before it reaches the AI provider, logs the incident, and can generate an audit report to support HIPAA-aligned workflow review.",
   },
 
   // ── SOC 2 ────────────────────────────────────────────────────────────
@@ -190,7 +190,7 @@ const FAQ_DB: FaqEntry[] = [
   {
     keywords: ["pdf", "report", "export", "download", "generate report", "compliance report"],
     answer:
-      "HoundShield generates **one-click PDF compliance reports** covering:\n- SOC 2: AI data handling controls, audit evidence timeline\n- HIPAA: PHI detection events, breach risk summary\n- CMMC Level 2: SPRS score, 110-control gap analysis, remediation priorities\n\nReports are C3PAO-ready and include your company letterhead. Available on Growth+ plans. Generate from your dashboard at any time.",
+      "HoundShield generates **one-click PDF compliance reports** covering:\n- SOC 2: AI data handling controls, audit evidence timeline\n- HIPAA: PHI detection events, breach risk summary\n- CMMC Level 2: SPRS score, 110-control gap analysis, remediation priorities\n\nReports are assessor-reviewable and include your company letterhead. Available on Growth+ plans. Generate from your dashboard at any time.",
   },
 
   // ── ALERTS / NOTIFICATIONS ───────────────────────────────────────────

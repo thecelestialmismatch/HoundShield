@@ -1,24 +1,22 @@
 'use client'
 
 /**
- * Hero "live demo dashboard" — the floating product window on the marketing
- * hero. Redesigned 2026-07-18 (founder direction) into the soft AURORA skin:
+ * Hero illustrative product preview — the floating product window on the
+ * marketing hero. Redesigned 2026-07-18 (founder direction) into the soft AURORA skin:
  * a cool slate-blue → pale-sage gradient stage with glass "ghost" cards behind
  * a light, rounded product window — the same language as the after-login
  * console, so the hero and the real dashboard read as one family.
  *
- * Still a pure demo: every value (ticking KPIs, a streaming scan FEED, a pastel
- * detection DONUT, per-engine + destination BARS and an SPRS coverage
- * gauge) is driven by ONE timer — no network, no
- * real data. Styles are scoped under `.hs-demo` and injected inline so the
- * skin can't leak into or be overridden by the surrounding hero.
+ * This is a fixed illustrative example: no network request, customer telemetry,
+ * live score, or real-time event stream is represented. Styles are scoped under
+ * `.hs-demo` and injected inline so the skin cannot leak into the surrounding hero.
  *
  * Identity is never colour-alone: every bar/segment carries its own label and
- * number, and every panel has a plain-English caption. All data is simulated
- * and the window is explicitly badged "Live demo".
+ * number, and every panel has a plain-English caption. The window is explicitly
+ * labelled illustrative rather than live.
  */
 
-import { useEffect, useState, type CSSProperties } from 'react'
+import { type CSSProperties } from 'react'
 import { Activity, Shield, Gauge, AlertTriangle, Search, Settings, Plus } from 'lucide-react'
 import { Logo } from '@/components/Logo'
 import { DESIGN_THEMES, heroThemeVars } from '@/lib/dashboard/design-themes'
@@ -60,42 +58,20 @@ const DESTS: [string, string, number][] = [
 // 3 rows ≈ the 84px the throughput chart used to occupy, so the feed card and
 // the donut card beside it still balance.
 const FEED = 3
-const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
-const drift = (v: number, d: number, lo: number, hi: number) =>
-  clamp(v + Math.round((Math.random() - 0.5) * d), lo, hi)
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 
 export function HeroDemoDashboard() {
-  const [scans, setScans] = useState(142690)
-  const [blocked, setBlocked] = useState(2218)
-  const [quar, setQuar] = useState(14)
-  const [sprs, setSprs] = useState(84)
-  const [mix, setMix] = useState<number[]>([34, 24, 27, 15]) // CUI · Secrets · PII · PHI
-  const [bars, setBars] = useState<number[]>(ENGINES.map((e) => e[2]))
-  const [feed, setFeed] = useState<Row[]>(() =>
-    Array.from({ length: FEED }, (_, i) => SCRIPT[i % SCRIPT.length]),
-  )
+  // Fixed samples prevent marketing UI from implying live customer telemetry.
+  const scans = 120
+  const blocked = 8
+  const quar = 2
+  const sprs = 84
+  const mix = [34, 24, 27, 15] // CUI · Secrets · PII · PHI
+  const bars = ENGINES.map(([, , value]) => value)
+  const feed = SCRIPT.slice(0, FEED)
 
   // Aurora only — the hero wears the single signature skin (no design switcher).
   const activeTheme = DESIGN_THEMES[0]
-
-  useEffect(() => {
-    let step = 0
-    const id = setInterval(() => {
-      step++
-      setScans((v) => v + 2 + Math.floor(Math.random() * 12))
-      setBars((b) => b.map((v) => drift(v, 14, 8, 98)))
-      setMix((m) => m.map((v) => drift(v, 3, 8, 45)))
-      setSprs((v) => drift(v, 1, 82, 92))
-      // every other tick, push a feed row + bump the matching KPI
-      if (step % 2 === 0) {
-        const r = SCRIPT[Math.floor(Math.random() * SCRIPT.length)]
-        setFeed((f) => [r, ...f].slice(0, FEED))
-        if (r.verdict === 'BLOCKED') setBlocked((v) => v + 1)
-        if (r.verdict === 'QUAR') setQuar((v) => v + 1)
-      }
-    }, 1500)
-    return () => clearInterval(id)
-  }, [])
 
   // ── Donut geometry (pastel aurora sweep) ──
   const mt = mix.reduce((a, b) => a + b, 0)
@@ -114,7 +90,7 @@ export function HeroDemoDashboard() {
     <div
       className="hs-demo"
       style={heroThemeVars(activeTheme) as CSSProperties}
-      aria-label="HoundShield live dashboard demonstration"
+      aria-label="HoundShield illustrative product preview"
     >
       <style dangerouslySetInnerHTML={{ __html: DEMO_CSS }} />
 
@@ -130,7 +106,7 @@ export function HeroDemoDashboard() {
             <span className="hd-name">Hound<b>Shield</b></span>
           </div>
           <div className="hd-bar-r">
-            <span className="hd-live"><i /> Live demo</span>
+            <span className="hd-live">Illustrative preview</span>
             <button type="button" className="hd-icobtn" aria-label="Settings" tabIndex={-1}><Settings /></button>
             <button type="button" className="hd-icobtn" aria-label="Search" tabIndex={-1}><Search /></button>
             <span className="hd-avatar" aria-hidden="true">AD</span>
@@ -140,43 +116,43 @@ export function HeroDemoDashboard() {
         <div className="hd-body">
           {/* Heading row — mirrors the reference's "My … + Add" band */}
           <div className="hd-head">
-            <h3 className="hd-h">Live AI Monitor</h3>
-            <button type="button" className="hd-add" tabIndex={-1}><Plus /> New scan</button>
+            <h3 className="hd-h">Example AI control flow</h3>
+            <button type="button" className="hd-add" tabIndex={-1}><Plus /> Static example</button>
           </div>
 
           {/* KPI tiles — circular icon badge + big number + green delta */}
           <div className="hd-kpis">
             <div className="hd-kpi">
               <span className="hd-kpi-ic lime"><Activity /></span>
-              <div className="k">Scans 24h</div>
+              <div className="k">Sample events</div>
               <div className="v">{scans.toLocaleString()}</div>
-              <div className="delta up">▲ ~46/min</div>
+              <div className="delta">illustrative only</div>
             </div>
             <div className="hd-kpi">
               <span className="hd-kpi-ic peach"><Shield /></span>
-              <div className="k">Blocked</div>
+              <div className="k">Blocked sample</div>
               <div className="v">{blocked.toLocaleString()}</div>
-              <div className="delta up">▲ CUI · PII · secrets</div>
+              <div className="delta">policy outcome</div>
             </div>
             <div className="hd-kpi">
               <span className="hd-kpi-ic peri"><Gauge /></span>
-              <div className="k">SPRS</div>
+              <div className="k">Example score</div>
               <div className="v">{sprs}</div>
-              <div className="delta up">▲ NIST 800-171</div>
+              <div className="delta">not a customer score</div>
             </div>
             <div className="hd-kpi">
               <span className="hd-kpi-ic amber"><AlertTriangle /></span>
-              <div className="k">Quarantine</div>
+              <div className="k">Sample review</div>
               <div className="v">{quar}</div>
-              <div className="delta">awaiting review</div>
+              <div className="delta">illustrative queue</div>
             </div>
           </div>
 
           {/* Line chart + donut */}
           <div className="hd-grid">
             <div className="hd-card">
-              <div className="hd-ph"><span>Live prompt scans</span><span className="live"><i /> on-device</span></div>
-              <p className="hd-cap">Every prompt scanned on your own hardware in &lt;10ms — verdict, then latency.</p>
+              <div className="hd-ph"><span>Sample policy decisions</span><span className="mono">static example</span></div>
+              <p className="hd-cap">Illustrative outcomes for compatible requests intentionally routed through a configured gateway.</p>
               <div className="hd-feed">
                 {feed.map((r, i) => (
                   <div className="hd-row" key={`${r.label}-${i}-${scans}`}>
@@ -189,8 +165,8 @@ export function HeroDemoDashboard() {
             </div>
 
             <div className="hd-card">
-              <div className="hd-ph"><span>Detection mix</span><span className="mono">today</span></div>
-              <p className="hd-cap">What the blocks were — CUI, secrets, PII and PHI.</p>
+              <div className="hd-ph"><span>Example classification mix</span><span className="mono">sample</span></div>
+              <p className="hd-cap">Illustrative categories: CUI, secrets, PII and PHI.</p>
               <div className="hd-donut-wrap">
                 <div className="hd-donut" style={{ background: donut }}><div className="hd-donut-c"><b>{blocked.toLocaleString()}</b><span>blocked</span></div></div>
                 <div className="hd-legend">
@@ -205,8 +181,8 @@ export function HeroDemoDashboard() {
           {/* Engine bars + AI destinations, side by side */}
           <div className="hd-grid hd-grid-even">
             <div className="hd-card">
-              <div className="hd-ph"><span>Detections by engine</span><span className="live"><i /> live</span></div>
-              <p className="hd-cap">Which of the 16 detection engines are firing right now.</p>
+              <div className="hd-ph"><span>Example policy categories</span><span className="mono">static sample</span></div>
+              <p className="hd-cap">Illustrative pattern categories available in a configured deployment.</p>
               <div className="hd-bars">
                 {ENGINES.map(([label, colour], i) => (
                   <div className="hd-bar-row" key={label}>
@@ -218,8 +194,8 @@ export function HeroDemoDashboard() {
               </div>
             </div>
             <div className="hd-card">
-              <div className="hd-ph"><span>Where prompts go</span><span className="mono">24h</span></div>
-              <p className="hd-cap">The AI tools your team uses — every prompt scanned locally first.</p>
+              <div className="hd-ph"><span>Illustrative routing</span><span className="mono">example</span></div>
+              <p className="hd-cap">Configured destinations vary by the workflow, provider, and deployment you approve.</p>
               <div className="hd-bars">
                 {DESTS.map(([label, colour, share]) => (
                   <div className="hd-bar-row" key={label}>
@@ -234,7 +210,7 @@ export function HeroDemoDashboard() {
 
           {/* SPRS coverage gauge */}
           <div className="hd-gauge">
-            <div className="hd-gauge-top"><span>CMMC Level 2 coverage — DoD supplier score, live from the assessment</span><span className="val">SPRS {sprs} · {coverage}%</span></div>
+            <div className="hd-gauge-top"><span>Illustrative assessment posture — not a customer score</span><span className="val">Example {sprs} · {coverage}%</span></div>
             <div className="hd-gauge-track"><i style={{ width: `${coverage}%` }} /></div>
           </div>
 

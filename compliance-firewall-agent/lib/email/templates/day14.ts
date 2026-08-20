@@ -9,7 +9,7 @@ const FROM = transactionalFrom();
 /**
  * Day 14 onboarding finale.
  *
- * Per the prime objective, the C3PAO-ready PDF evidence report is the purchase
+ * Per the prime objective, the assessor-reviewable PDF evidence report is the purchase
  * unlock — not the dashboard. By day 14 the user has data; this email pushes
  * them to generate the report a C3PAO assessor accepts, which is the moment
  * value becomes undeniable and the upgrade conversation starts.

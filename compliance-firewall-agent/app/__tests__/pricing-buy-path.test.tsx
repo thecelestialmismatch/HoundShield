@@ -29,7 +29,7 @@ describe('/pricing always exposes a purchase path', () => {
   it('the primary control reads as a purchase, not as a lead form', () => {
     render(<PricingPage />);
     const buy = screen.getByTestId('report-checkout');
-    expect(buy.textContent).toMatch(/buy/i);
+    expect(buy.textContent).toMatch(/assessment engagement/i);
     expect(buy.textContent).toContain('$499');
   });
 
@@ -37,7 +37,7 @@ describe('/pricing always exposes a purchase path', () => {
     const { container } = render(<PricingPage />);
     const talk = container.querySelector('a.talk-first');
     expect(talk).not.toBeNull();
-    expect(talk?.textContent).toMatch(/talk to us/i);
+    expect(talk?.textContent).toMatch(/confirm scope before purchase/i);
     // The buy control must exist alongside it.
     expect(screen.getByTestId('report-checkout')).toBeTruthy();
   });

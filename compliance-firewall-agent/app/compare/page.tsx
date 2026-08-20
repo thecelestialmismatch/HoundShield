@@ -32,7 +32,7 @@ const WHY_LOCAL = [
   {
     icon: FileText,
     title: "Evidence, not just alerts",
-    body: "A $499 one-time CMMC AI Risk Assessment PDF mapped to NIST 800-171 Rev 2 — the artifact a C3PAO accepts. Dashboards don't pass assessments.",
+    body: "A $499 one-time CMMC AI Risk Assessment PDF mapped to NIST 800-171 Rev 2 — the artifact a an assessor may review. Dashboards don't pass assessments.",
   },
   {
     icon: Radar,

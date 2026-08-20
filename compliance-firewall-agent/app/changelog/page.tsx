@@ -57,7 +57,7 @@ const releases: Release[] = [
     items: [
       { tag: "Feature", text: "Complete 110-control CMMC Level 2 mapping with practice-level detail" },
       { tag: "Feature", text: "SPRS score calculator with real-time gap weighting" },
-      { tag: "Feature", text: "C3PAO-ready report export (PDF + JSON)" },
+      { tag: "Feature", text: "assessor-reviewable report export (PDF + JSON)" },
       { tag: "Improvement", text: "HoundShield assessment engine refactored for sub-200ms scoring" },
     ],
   },

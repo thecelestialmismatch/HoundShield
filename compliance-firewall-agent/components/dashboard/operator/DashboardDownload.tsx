@@ -81,7 +81,7 @@ export function DashboardDownload({ windowDays }: { windowDays: number }) {
       <div className="op-dl-menu" role="menu">
         <button type="button" role="menuitem" disabled={busy} onClick={() => download('pdf')}>
           <b>PDF report</b>
-          <span>Signed, C3PAO-ready. Mapped to NIST 800-171.</span>
+          <span>Signed, assessor-reviewable. Mapped to NIST 800-171.</span>
         </button>
         <button type="button" role="menuitem" disabled={busy} onClick={() => download('json')}>
           <b>JSON data</b>

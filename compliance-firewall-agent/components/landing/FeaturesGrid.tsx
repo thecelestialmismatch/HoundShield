@@ -19,8 +19,8 @@ const FEATURES: Feature[] = [
   },
   {
     icon: <FileText className="w-5 h-5" />,
-    title: 'C3PAO-Ready PDF',
-    body: 'One-click audit export your assessor can accept the day of the visit. Evidence-ready, formatted for DIBCAC review.',
+    title: 'Assessor-reviewable PDF',
+    body: 'One-click audit export for human review and evidence preparation. It does not provide a certification or assessor determination.',
     control: 'CA.3.162',
   },
   {

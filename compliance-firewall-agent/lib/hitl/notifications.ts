@@ -6,7 +6,7 @@
  *   2. Microsoft Teams (via lib/integrations/teams.ts — Adaptive Cards, retry)
  *   3. Console logging (always-on fallback)
  *
- * For full compliance event forwarding to SIEM platforms (Splunk, Sentinel),
+ * For scoped control coverage event forwarding to SIEM platforms (Splunk, Sentinel),
  * use lib/integrations/siem/ directly from your audit logger.
  */
 

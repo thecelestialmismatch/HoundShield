@@ -61,7 +61,7 @@ export default async function ReportThankYouPage({
         </h1>
         <p className="max-w-2xl text-base text-[var(--hs-ink-secondary)] leading-relaxed mb-10 print:hidden">
           A confirmation with deployment instructions is in your inbox. Here&apos;s the 14-day path
-          from policy violation to C3PAO-ready evidence.
+          from policy violation to assessor-reviewable evidence.
         </p>
 
         <OrderConfirmation sessionId={session_id} />

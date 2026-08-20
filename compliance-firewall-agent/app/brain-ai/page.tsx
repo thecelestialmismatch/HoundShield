@@ -12,7 +12,7 @@ import { ModeBNotice } from '@/components/ModeBNotice'
 export const metadata: Metadata = {
   title: 'Brain AI — Autonomous Compliance Copilot',
   description:
-    'Brain AI is HoundShield’s built-in compliance copilot. It scores all 110 NIST 800-171 controls, explains your SPRS score, drafts remediation, and assembles C3PAO-ready evidence — built for the CUI workloads cloud assistants legally cannot touch in self-hosted (Docker) and air-gapped deployments.',
+    'Brain AI is HoundShield’s built-in compliance copilot. It scores all 110 NIST 800-171 controls, explains your SPRS score, drafts remediation, and assembles assessor-reviewable evidence — built for the CUI workloads cloud assistants legally cannot touch in self-hosted (Docker) and air-gapped deployments.',
   alternates: { canonical: '/brain-ai' },
 }
 
@@ -25,7 +25,7 @@ const CAPABILITIES = [
   {
     icon: FileCheck2,
     title: 'Drafts your evidence',
-    body: 'It turns raw scan results into remediation steps and assembles C3PAO-ready PDF evidence. The repetitive assessment and documentation work happens automatically so your team closes real gaps instead of formatting reports.',
+    body: 'It turns raw scan results into remediation steps and assembles assessor-reviewable PDF evidence. The repetitive assessment and documentation work happens automatically so your team closes real gaps instead of formatting reports.',
   },
   {
     icon: ShieldCheck,

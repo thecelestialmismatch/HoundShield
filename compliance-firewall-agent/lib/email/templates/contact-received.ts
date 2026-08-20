@@ -128,7 +128,7 @@ const TOPIC_REPLIES: Record<string, TopicReply> = {
       },
       {
         href: siteUrl("/answers/what-evidence-does-a-c3pao-accept-for-ai-usage"),
-        label: "What evidence a C3PAO accepts",
+        label: "What evidence a an assessor may review",
         note: "why the signed log is the part that matters",
       },
     ],

@@ -273,7 +273,7 @@ describe('LiveCommandCenter — signed-in strip-down (founder: "strip it way dow
     expect(screen.queryByText('Live threat feed')).toBeNull()
     expect(screen.queryByText('Detections by engine · last hour')).toBeNull()
     // …while the real next action — the activation checklist that ends on the PDF — stays.
-    expect(screen.getByText('Get to your first C3PAO-ready PDF')).toBeTruthy()
+    expect(screen.getByText('Get to your first assessor-reviewable PDF')).toBeTruthy()
   })
 
   it('the public demo still shows every panel (marketing preview)', () => {

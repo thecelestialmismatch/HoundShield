@@ -62,7 +62,7 @@ describe("softwareApplicationSchema", () => {
   it("lists product features", () => {
     const features = schema.featureList as string[];
     expect(features.length).toBeGreaterThan(0);
-    expect(features).toContain("CUI detection and blocking");
+    expect(features).toContain("Configurable CUI, PHI, and PII pattern detection");
   });
 });
 

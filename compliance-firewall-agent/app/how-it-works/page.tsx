@@ -11,7 +11,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'How It Works — AI Compliance Firewall in 4 Steps',
   description:
-    'Point your AI tool at the HoundShield proxy, scan every prompt locally in under 10ms across 16 detection engines, and export C3PAO-ready audit evidence. No agents, no installs.',
+    'Point your AI tool at the HoundShield proxy, scan every prompt locally in under 10ms across 16 detection engines, and export assessor-reviewable audit evidence. No agents, no installs.',
   alternates: { canonical: 'https://houndshield.com/how-it-works' },
 }
 
@@ -40,7 +40,7 @@ const STEPS = [
     number: '04',
     icon: FileText,
     title: 'Sign the evidence',
-    body: 'Every decision is written to a SHA-256 tamper-evident audit log. Export a C3PAO-ready PDF mapped to all 110 NIST 800-171 controls whenever your assessor asks.',
+    body: 'Every decision is written to a SHA-256 tamper-evident audit log. Export a assessor-reviewable PDF mapped to all 110 NIST 800-171 controls whenever your assessor asks.',
   },
 ]
 

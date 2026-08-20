@@ -17,8 +17,8 @@ describe('Direction-A port — information architecture present', () => {
     const home = read('app/page.tsx')
     expect(home).toContain('Start with the boundary your assessor will ask about')
     expect(home).not.toContain("Cloud DLP scans your CUI in their cloud")
-    expect(home).toContain('Everything you need for CMMC Level 2')
-    expect(home).toContain('Ready to protect your CUI?')
+    expect(home).toContain('A clearer path from assessment to evidence')
+    expect(home).toContain('Ready to validate your AI control boundary?')
     // demo comparison cards
     expect(home).toContain('Nightfall')
     expect(home).toContain('Microsoft Purview')
@@ -51,7 +51,7 @@ describe('Direction-A port — information architecture present', () => {
     const hero = read('components/landing/HeroDemoDashboard.tsx')
     expect(hero).toContain('CAGE 1ABC2')
     expect(hero).toMatch(/BLOCKED|PASSED/)
-    expect(hero).toContain('Live demo')
+    expect(hero).toContain('Illustrative preview')
   })
 
   it('footer: demo columns + badges', () => {

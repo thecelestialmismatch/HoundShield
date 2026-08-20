@@ -84,7 +84,7 @@ export function buildIdentityAnswer(ctx: BrainUserContext | null | undefined): s
   if (tier && tier !== "free") {
     s +=
       ` You're on the ${tier} plan, so you have the full CMMC assessment, AI gateway, ` +
-      "and C3PAO-ready reporting available.";
+      "and assessor-reviewable reporting available.";
   } else if (tier === "free") {
     s +=
       " You're on the free plan, which covers the CMMC self-assessment and your SPRS score.";

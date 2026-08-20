@@ -130,7 +130,7 @@ export function SectionIndex({
       },
       {
         href: '/command-center/shield/reports', label: 'Reports',
-        hint: 'Generate a C3PAO-ready PDF', value: null, tone: 'idle',
+        hint: 'Generate a assessor-reviewable PDF', value: null, tone: 'idle',
       },
       {
         href: '/command-center/audit-export', label: 'Export Audit Log',

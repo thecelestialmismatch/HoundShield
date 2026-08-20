@@ -80,7 +80,7 @@ export default function PrivacyPage() {
               account is open, and we delete it on request. We do <strong className="text-[var(--hs-ink-secondary)]">not</strong> currently run an
               automatic purge, and we would rather tell you that than publish a schedule we do not
               keep: this product exists to produce audit evidence, and silently shredding a
-              customer&apos;s C3PAO evidence on a timer would be the wrong default.
+              customer&apos;s assessor-review evidence on a timer would be the wrong default.
             </p>
             <p className="mt-2">
               To request deletion, email us and we will confirm when it is done. In Mode B

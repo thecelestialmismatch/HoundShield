@@ -91,7 +91,7 @@ export const COMPARISONS: Comparison[] = [
         body: "In Mode B (self-hosted Docker) HoundShield inspects every prompt on your own infrastructure in <10ms. Nightfall transmits prompt content to its cloud to scan it — for CUI or PHI, that transit can itself be the spill under DFARS 7012 / HIPAA.",
       },
       {
-        title: "A C3PAO-ready evidence artifact, not just blocking",
+        title: "A assessor-reviewable evidence artifact, not just blocking",
         body: "HoundShield generates a $499 one-time CMMC AI Risk Assessment PDF mapped to NIST 800-171 Rev 2 — the evidence an assessor accepts. Nightfall gives you dashboards and alerts, not a control-mapped assessment report.",
       },
       {
@@ -190,7 +190,7 @@ export const COMPARISONS: Comparison[] = [
     chooseUsWhen: [
       "You need CUI/PHI inspected locally, never cloud-routed",
       "Per-seat pricing doesn't fit a 50–500 person org",
-      "You need a C3PAO-ready assessment PDF, not just a gateway",
+      "You need a assessor-reviewable assessment PDF, not just a gateway",
     ],
     faqs: [
       {

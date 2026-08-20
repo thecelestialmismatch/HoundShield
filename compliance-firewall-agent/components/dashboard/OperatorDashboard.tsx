@@ -38,7 +38,7 @@ import { LCC_CSS } from './lccStyles'
 import { OperatorOverview } from './OperatorOverview'
 import { ProvenancePanel } from './ProvenancePanel'
 import { BrainQuickAsk, FirstRunChecklist } from './operator/OperatorSlots'
-import { OperationalReadiness } from './operator/OperationalReadiness'
+import { EvidenceReadiness } from './operator/EvidenceReadiness'
 import { getThemeById, consoleThemeVars } from '@/lib/dashboard/design-themes'
 import { useDashboardPrefs, SIGNED_IN_STRIPPED_HIDDEN } from '@/lib/dashboard/use-dashboard-prefs'
 import type { ProvenanceId } from './dataProvenance'
@@ -123,7 +123,7 @@ export function OperatorDashboard({ name, connected = false }: {
         onTab={go}
         brainSlot={<BrainQuickAsk name={name} onAsk={(q) => router.push(`${BRAIN_ROUTE}?q=${encodeURIComponent(q)}`)} />}
         checklistSlot={<FirstRunChecklist connected={connected} onStep={go} />}
-        readinessSlot={<OperationalReadiness onOpenSettings={() => go('settings')} />}
+        readinessSlot={<EvidenceReadiness onOpenSettings={() => go('settings')} />}
       />
 
       {/* live: this dashboard only ever renders behind the auth gate, so every

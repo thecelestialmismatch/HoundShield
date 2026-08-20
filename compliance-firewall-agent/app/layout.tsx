@@ -22,11 +22,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "HoundShield | AI Compliance Firewall for CMMC, HIPAA & SOC 2",
+    default: "HoundShield | Customer-Operated AI Control Workflows",
     template: "%s | HoundShield",
   },
   description:
-    "The local-only AI compliance firewall for defense contractors, healthcare, and technology. CMMC Level 2, HIPAA, SOC 2 — real-time AI prompt scanning, tamper-proof audit trails, and audit-ready PDF evidence. $499 one-time.",
+    "Customer-operated AI control workflows for compatible traffic. Document a deployment boundary, review configured policy outcomes, and organise evidence-oriented assessment materials mapped to HIPAA and NIST 800-171 considerations.",
   keywords: [
     "AI compliance firewall",
     "CMMC compliance",
@@ -60,9 +60,9 @@ export const metadata: Metadata = {
   // `alternates.canonical` in its metadata. Pages without one self-canonicalize
   // to their own URL (correct, since each route has a single clean URL).
   openGraph: {
-    title: "HoundShield | AI Compliance Firewall for CMMC, HIPAA & SOC 2",
+    title: "HoundShield | Customer-Operated AI Control Workflows",
     description:
-      "The local-only AI compliance firewall for defense contractors and regulated industries. CMMC Level 2, HIPAA, SOC 2 — real-time AI scanning, tamper-proof audit trails, C3PAO-ready PDF evidence.",
+      "A self-hosted control path for compatible AI traffic. Validate the selected deployment boundary, policy workflow, and evidence materials against your own requirements.",
     type: "website",
     url: BASE_URL,
     siteName: "HoundShield",
@@ -78,9 +78,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "HoundShield | AI Compliance Firewall",
+    title: "HoundShield | AI Control Workflow",
     description:
-      "Local-only AI compliance firewall for CMMC Level 2, HIPAA, and SOC 2. Real-time prompt scanning, tamper-proof audit trails, C3PAO-ready evidence.",
+      "Customer-operated controls for compatible AI traffic, with a defined deployment boundary and evidence-oriented assessment workflow.",
     images: [`${BASE_URL}/og-image.png`],
     creator: "@houndshield",
   },

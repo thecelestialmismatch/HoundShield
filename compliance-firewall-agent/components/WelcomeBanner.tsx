@@ -25,7 +25,7 @@ function WelcomeBannerInner() {
         <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-[var(--hs-success,#059669)]" />
         <span>
           Your account is ready. New here? The Getting Started guide walks you from setup to
-          C3PAO-ready evidence.
+          assessor-reviewable evidence.
         </span>
       </div>
       <div className="flex flex-shrink-0 items-center gap-1">

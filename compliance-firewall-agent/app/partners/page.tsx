@@ -76,7 +76,7 @@ export default function PartnersPage() {
                 <div className="ic"><DollarSign /></div>
                 <h3>Reseller</h3>
                 <p>
-                  Margin-first pricing and co-branded compliance reports (C3PAO-ready). Sell
+                  Margin-first pricing and co-branded compliance reports (assessor-reviewable). Sell
                   HoundShield as part of your compliance practice.
                 </p>
               </div>

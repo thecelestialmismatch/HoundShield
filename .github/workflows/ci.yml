@@ -29,7 +29,7 @@ jobs:
           # with "webidl.util.markAsUncloneable is not a function" — reported as
           # 125 errors / no tests, which looks like a test failure but is a
           # runtime-version mismatch. The Proxy job below is already on 22.
-          node-version: "22"
+          node-version: "22.22.2"
           cache: "npm"
           cache-dependency-path: compliance-firewall-agent/package-lock.json
 
@@ -72,7 +72,7 @@ jobs:
         with:
           # better-sqlite3@13 requires Node >=22 (its native binding won't load
           # on 20 → vitest workers crash). Match the proxy's engines field.
-          node-version: "22"
+          node-version: "22.22.2"
           cache: "npm"
           cache-dependency-path: proxy/package-lock.json
 

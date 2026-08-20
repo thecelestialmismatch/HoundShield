@@ -75,7 +75,7 @@ export function StepRow({ n, title, detail, cta, onClick, done }: {
 
 /**
  * The activation path to the thing the customer actually bought: a
- * C3PAO-ready PDF.
+ * assessor-reviewable PDF.
  *
  * `connected` is deliberately a real signal (does this operator's gateway have
  * any events?) rather than a constant. Ticking steps 1 and 2 for someone who has
@@ -88,7 +88,7 @@ export function FirstRunChecklist({ connected, onStep }: {
 }) {
   return (
     <div className="panel">
-      <div className="ph"><h3>Get to your first C3PAO-ready PDF</h3><span className="mono">3 steps</span></div>
+      <div className="ph"><h3>Get to your first assessor-reviewable PDF</h3><span className="mono">3 steps</span></div>
       <div className="pad steps">
         {/* Names the action that now exists. This step used to read "View proxy
             URL", which was all it could offer: there was no way to mint a

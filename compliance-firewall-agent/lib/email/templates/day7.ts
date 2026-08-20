@@ -16,7 +16,7 @@ export const day7Email = {
     const upgradeBlock = isFreeTier ? `
       <div style="background:#f0fdf4;border-radius:10px;padding:20px;margin:24px 0;border:1px solid #bbf7d0;">
         <p style="color:#14532d;font-weight:600;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">
-          Unlock full compliance coverage
+          Unlock scoped control coverage coverage
         </p>
         <p style="color:#166534;font-size:14px;margin:0 0 16px;line-height:1.6;">
           Turn this week's activity into evidence an auditor accepts: 14 days of your real AI

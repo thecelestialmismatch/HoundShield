@@ -208,7 +208,7 @@ export const KNOWLEDGE_BASE: KnowledgeDomain[] = [
         tags: ["perplexity", "grok", "mistral", "meta", "providers", "roadmap"],
       },
       {
-        claim: "Sprint 1 MVP goal: Jordan deploys HoundShield in under 10 minutes and exports a C3PAO-ready PDF audit report (event log + NIST control mapping + SPRS improvement estimate).",
+        claim: "Sprint 1 MVP goal: Jordan deploys HoundShield in under 10 minutes and exports a assessor-reviewable PDF audit report (event log + NIST control mapping + SPRS improvement estimate).",
         evidence: "Sprint 1 definition, CLAUDE.md, April 2026",
         confidence: "high",
         source: "internal",

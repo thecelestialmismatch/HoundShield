@@ -117,7 +117,7 @@ export default function QuickstartPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-brand-400/30 bg-brand-400/5 mb-6">
             <Shield className="w-3.5 h-3.5 text-brand-700" />
             <span className="text-xs font-mono font-semibold text-brand-700 uppercase tracking-wider">
-              Quickstart — 15 minutes to C3PAO-ready
+              Quickstart — 15 minutes to assessor-reviewable
             </span>
           </div>
           <h1 className="text-4xl font-bold tracking-tight mb-4">
