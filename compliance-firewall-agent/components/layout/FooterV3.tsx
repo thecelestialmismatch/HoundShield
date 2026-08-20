@@ -4,8 +4,9 @@ import { Shield } from 'lucide-react'
 
 const FOOTER_LINKS = {
   Product: [
-    { label: 'Features',      href: '/features' },
-    { label: 'How it works',  href: '/how-it-works' },
+    { label: 'Features',        href: '/features' },
+    { label: 'Evidence Intake', href: '/evidence-intake' },
+    { label: 'How it works',    href: '/how-it-works' },
     { label: 'Pricing',       href: '/pricing' },
     { label: 'Compare',       href: '/compare' },
     { label: 'Dashboard',     href: '/command-center' },

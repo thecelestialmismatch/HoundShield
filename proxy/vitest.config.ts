@@ -33,6 +33,11 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: false,
+    // better-sqlite3 is native stateful code; a single fork prevents worker
+    // teardown races and reproduces the stable local and CI test contract.
+    pool: "forks",
+    fileParallelism: false,
+    maxWorkers: 1,
     include: ["**/__tests__/**/*.test.ts"],
     env: { HOUNDSHIELD_DATA_DIR: TEST_DATA_DIR },
     coverage: {

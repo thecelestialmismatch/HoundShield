@@ -55,8 +55,8 @@ describe("hero demo window — the new light SubTracker-style skin", () => {
   });
   it("carries the reference chrome: ghost cards, monitor heading, add button, KPI icon badges", () => {
     expect(d).toContain("hd-ghost");
-    expect(d).toContain("Live AI Monitor");
-    expect(d).toMatch(/hd-add[^>]*>[\s\S]{0,40}New scan/);
+    expect(d).toContain("Example AI control flow");
+    expect(d).toMatch(/hd-add[^>]*>[\s\S]{0,40}Static example/);
     expect(d).toContain("hd-kpi-ic");
   });
   it("draws the donut with the pastel aurora sweep (shared with the console)", () => {

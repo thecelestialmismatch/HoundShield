@@ -58,7 +58,7 @@ describe('HomePage — HERMES demo parity', () => {
 
   it('hero pill leads with HIPAA and NIST, not a CMMC certification date', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Local-only · HIPAA · NIST 800-171/i)).toBeTruthy()
+    expect(screen.getByText(/Customer-operated controls · HIPAA & NIST 800-171 mapping/i)).toBeTruthy()
   })
 
   it('never badges SOC 2 in the hero — it is not started', () => {
@@ -71,15 +71,16 @@ describe('HomePage — HERMES demo parity', () => {
     expect(pill?.textContent).not.toMatch(/SOC\s?2/i)
   })
 
-  it('hero sub keeps the local-scan emphasis "on your own hardware"', () => {
+  it('hero sub scopes controls to compatible traffic inside the customer environment', () => {
     const { container } = render(<HomePage />)
-    expect(container.textContent).toMatch(/on your own hardware/i)
+    expect(container.textContent).toMatch(/scans compatible traffic inside your environment/i)
   })
 
-  it('renders the live demo dashboard in the hero', () => {
+  it('labels the hero dashboard as an illustrative preview rather than live customer telemetry', () => {
     render(<HomePage />)
-    expect(screen.getByText('Live demo')).toBeTruthy()
-    expect(screen.getByText('Live prompt scans')).toBeTruthy()
+    expect(screen.getByText('Illustrative preview')).toBeTruthy()
+    expect(screen.getByText('Sample policy decisions')).toBeTruthy()
+    expect(screen.getByText('not a customer score')).toBeTruthy()
   })
 
   it('hero trust row distinguishes hosted evaluation from the self-hosted path', () => {
@@ -137,6 +138,15 @@ describe('HomePage — HERMES demo parity', () => {
     expect(screen.getByTestId('mode-b-notice')).toBeTruthy()
   })
 
+  // ── Evidence readiness path ───────────────────────────────────────
+  it('renders the illustrative Route, Verify, and Evidence workflow', () => {
+    render(<HomePage />)
+    expect(screen.getByText('Evidence readiness path')).toBeTruthy()
+    expect(screen.getByText('Choose the boundary deliberately')).toBeTruthy()
+    expect(screen.getByText('Keep a human in the decision loop')).toBeTruthy()
+    expect(screen.getByText('Build a reviewable record')).toBeTruthy()
+  })
+
   // ── Asymmetric advantage ─────────────────────────────────────────
   it('renders the evidence-first deployment-boundary headline', () => {
     render(<HomePage />)
@@ -151,9 +161,9 @@ describe('HomePage — HERMES demo parity', () => {
   })
 
   // ── One platform ─────────────────────────────────────────────────
-  it('renders the demo features section "Everything you need for CMMC Level 2"', () => {
+  it('renders the evidence-oriented platform section', () => {
     render(<HomePage />)
-    expect(screen.getByText('Everything you need for CMMC Level 2')).toBeTruthy()
+    expect(screen.getByText('A clearer path from assessment to evidence')).toBeTruthy()
   })
 
   it('renders all six demo platform cards', () => {
@@ -162,26 +172,26 @@ describe('HomePage — HERMES demo parity', () => {
       'CMMC Self-Assessment',
       'AI-Powered Gap Analysis',
       'SSP & POA&M Export',
-      'AI Prompt Interception',
+      'Configured AI Gateway',
       `${ENGINE_COUNT} Detection Engines`,
-      'Live Threat Dashboard',
+      'Decision Dashboard',
     ]) {
       expect(screen.getByText(title)).toBeTruthy()
     }
   })
 
-  it('renders the demo card chips (110 controls / Prioritized / 1-click)', () => {
+  it('renders the platform card chips without certification framing', () => {
     render(<HomePage />)
     expect(screen.getByText('110 controls')).toBeTruthy()
     expect(screen.getByText('Prioritized')).toBeTruthy()
-    expect(screen.getByText('1-click')).toBeTruthy()
+    expect(screen.getByText('Reviewable')).toBeTruthy()
   })
 
   // ── CTA band ─────────────────────────────────────────────────────
-  it('final CTA band uses the demo copy "Ready to protect your CUI?"', () => {
+  it('final CTA invites visitors to validate a defined control boundary', () => {
     render(<HomePage />)
-    expect(screen.getByText(/Ready to protect your CUI\?/i)).toBeTruthy()
-    expect(screen.getByText(/see your SPRS score in under 30 minutes/i)).toBeTruthy()
+    expect(screen.getByText(/Ready to validate your AI control boundary\?/i)).toBeTruthy()
+    expect(screen.getByText(/deployment path, compatible traffic, and evidence workflow/i)).toBeTruthy()
   })
 
   it('hero CTAs drive to the self-serve proof and the paid report, not a dead free tier', () => {
@@ -212,9 +222,10 @@ describe('HomePage — HERMES demo parity', () => {
     const order = [
       'Keep regulated data inside',
       'Detection engines',
+      'From control boundary to reviewable evidence.',
       'Start with the boundary your assessor will ask about',
-      'Everything you need for CMMC Level 2',
-      'Ready to protect your CUI?',
+      'A clearer path from assessment to evidence',
+      'Ready to validate your AI control boundary?',
     ].map((s) => text.indexOf(s))
     expect(order.every((i) => i >= 0)).toBe(true)
     expect([...order].sort((a, b) => a - b)).toEqual(order)

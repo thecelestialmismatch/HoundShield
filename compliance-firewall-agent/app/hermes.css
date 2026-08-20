@@ -459,3 +459,66 @@
   .hermes .live-dot { animation: none; }
   .hermes .brand-mark, .hermes .btn, .hermes .card, .hermes .step { transition: none; }
 }
+
+/* Browser-local Evidence Intake & Verification */
+.evidence-intake { overflow: hidden; }
+.evidence-intake-head { align-items: flex-start; }
+.evidence-local-chip { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); background: color-mix(in srgb, var(--ok) 9%, transparent); gap: 5px; }
+.evidence-local-chip svg { width: 13px; height: 13px; }
+.evidence-proof, .evidence-processing, .evidence-footnote { display: flex; gap: 10px; align-items: flex-start; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--brand) 5%, transparent); }
+.evidence-proof > svg, .evidence-processing > svg, .evidence-footnote > svg { width: 17px; height: 17px; color: var(--brand); flex: 0 0 auto; margin-top: 2px; }
+.evidence-proof strong, .evidence-processing strong { display: block; font-size: 13px; }
+.evidence-proof span, .evidence-processing span, .evidence-footnote { display: block; margin-top: 3px; font-size: 12px; line-height: 1.5; opacity: .82; }
+.evidence-drop { min-height: 192px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 9px; text-align: center; border: 1px dashed color-mix(in srgb, var(--brand) 55%, var(--line)); border-radius: 12px; padding: 26px; background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 7%, transparent), transparent 62%); transition: border-color .16s ease, background .16s ease, transform .16s ease; }
+.evidence-drop.is-dragging { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 14%, transparent); transform: translateY(-1px); }
+.evidence-drop > svg { width: 28px; height: 28px; color: var(--brand); }
+.evidence-drop strong { font-size: 14px; }
+.evidence-drop > span:not(.mono) { font-size: 12px; opacity: .8; }
+.evidence-drop .mono { font-size: 11px; opacity: .68; }
+.evidence-drop .btn { margin-top: 5px; }
+.evidence-spin { animation: evidence-spin .8s linear infinite; }
+@keyframes evidence-spin { to { transform: rotate(360deg); } }
+.evidence-summary { display: flex; justify-content: space-between; gap: 18px; align-items: center; border-top: 1px solid var(--line); }
+.evidence-file { display: flex; min-width: 0; gap: 9px; align-items: center; }
+.evidence-file > svg { width: 18px; height: 18px; color: var(--brand); flex: 0 0 auto; }
+.evidence-file strong, .evidence-file span { display: block; }
+.evidence-file strong { max-width: 46ch; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; }
+.evidence-file .mono { margin-top: 3px; font-size: 11px; opacity: .72; }
+.evidence-digest { text-align: right; min-width: 0; }
+.evidence-digest .mono { display: block; font-size: 10px; opacity: .65; }
+.evidence-digest code { font-size: 11px; letter-spacing: .02em; color: var(--text); }
+.evidence-stage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; border-top: 1px solid var(--line); }
+.evidence-step { display: flex; gap: 8px; align-items: flex-start; min-width: 0; }
+.evidence-step > span { display: grid; place-items: center; width: 19px; height: 19px; border: 1px solid var(--line); border-radius: 50%; flex: 0 0 auto; margin-top: 1px; }
+.evidence-step.is-done > span { border-color: var(--ok); color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, transparent); }
+.evidence-step svg { width: 12px; height: 12px; }
+.evidence-step-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+.evidence-step strong, .evidence-step small { display: block; }
+.evidence-step strong { font-size: 12px; }
+.evidence-step small { font-size: 11px; line-height: 1.35; opacity: .7; margin-top: 2px; }
+.evidence-review-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; border-top: 1px solid var(--line); }
+.evidence-review-head strong, .evidence-review-head span { display: block; }
+.evidence-review-head > div > strong { font-size: 13px; }
+.evidence-review-head .mono { margin-top: 3px; font-size: 11px; opacity: .7; }
+.evidence-fields { border-top: 1px solid var(--line); }
+.evidence-field { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 14px var(--pad, 16px); border-bottom: 1px solid var(--line); }
+.evidence-field[data-decision="accepted"] { background: color-mix(in srgb, var(--ok) 5%, transparent); }
+.evidence-field[data-decision="rejected"] { background: color-mix(in srgb, var(--bad) 5%, transparent); }
+.evidence-field-title { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.evidence-field-title > strong { font-size: 13px; }
+.evidence-confidence { font-size: 10px; text-transform: capitalize; }
+.evidence-confidence.high { color: var(--ok); }
+.evidence-confidence.medium { color: var(--brand); }
+.evidence-confidence.review { color: var(--warn); }
+.evidence-field p { margin: 5px 0; font-size: 12px; line-height: 1.5; opacity: .85; }
+.evidence-field .mono { font-size: 11px; opacity: .68; }
+.evidence-field details { margin-top: 8px; }
+.evidence-field summary { cursor: pointer; color: var(--brand); font-size: 12px; }
+.evidence-snippet { white-space: pre-wrap; overflow-wrap: anywhere; padding: 9px; border-left: 2px solid var(--brand); background: color-mix(in srgb, var(--panel) 86%, transparent); }
+.evidence-field-actions { display: flex; align-items: flex-start; gap: 7px; }
+.evidence-field-actions .btn { white-space: nowrap; }
+.evidence-field-actions .is-selected { border-color: var(--ok); color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, transparent); }
+.evidence-field-actions .is-rejected { border-color: var(--bad); color: var(--bad); background: color-mix(in srgb, var(--bad) 9%, transparent); }
+.evidence-actions { display: flex; flex-wrap: wrap; gap: 8px; border-top: 1px solid var(--line); }
+.evidence-footnote { border-top: 1px solid var(--line); }
+@media (max-width: 760px) { .evidence-summary, .evidence-review-head { align-items: flex-start; flex-direction: column; } .evidence-digest { text-align: left; } .evidence-stage { grid-template-columns: 1fr; } .evidence-field { grid-template-columns: 1fr; gap: 11px; } .evidence-field-actions { align-items: center; } }

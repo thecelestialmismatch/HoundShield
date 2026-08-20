@@ -55,6 +55,7 @@ const FEATURES: MenuItem[] = [
   { icon: Eye,       label: 'AI Prompt Interception', body: 'Every LLM request inspected before it leaves the network.', href: '/features#interception' },
   { icon: Zap,       label: '16 Detection Engines',   body: 'CUI, PII, IP, PHI, secrets, CAGE codes, clearances.',       href: '/features#engines' },
   { icon: FileCheck, label: 'Immutable Audit Trail',  body: 'SHA-256 tamper-evident logs. C3PAO-ready.',                 href: '/features#audit' },
+  { icon: FileCheck, label: 'Evidence Intake',         body: 'Review selected PDFs locally with human approval.',          href: '/evidence-intake' },
   // Points at the PUBLIC demo, not the dashboard. The dashboard moved behind
   // login on 2026-07-29, so a prospect clicking a FEATURES flyout item would
   // otherwise land on a login wall — /demo scans a real prompt with no signup.

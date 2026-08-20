@@ -15,20 +15,20 @@ import { HeroDemoDashboard } from '../HeroDemoDashboard';
 describe('HeroDemoDashboard — the hero-page dashboard window', () => {
   it('renders the full visual set: KPIs, feed, donut, engines, destinations, gauge', () => {
     render(<HeroDemoDashboard />);
-    expect(screen.getByText('Scans 24h')).toBeTruthy();
-    expect(screen.getByText('Detection mix')).toBeTruthy();
-    expect(screen.getByText(/Detections by engine/)).toBeTruthy();
-    expect(screen.getByText('Where prompts go')).toBeTruthy();
-    expect(screen.getByText(/CMMC Level 2 coverage/)).toBeTruthy();
-    expect(screen.getByText('Live prompt scans')).toBeTruthy();
+    expect(screen.getByText('Sample events')).toBeTruthy();
+    expect(screen.getByText('Sample policy decisions')).toBeTruthy();
+    expect(screen.getByText(/Example policy categories/)).toBeTruthy();
+    expect(screen.getByText('Illustrative routing')).toBeTruthy();
+    expect(screen.getByText(/Illustrative assessment posture/)).toBeTruthy();
+    expect(screen.getByText('Example AI control flow')).toBeTruthy();
   });
 
   it('every chart panel carries a self-explanatory caption', () => {
     render(<HeroDemoDashboard />);
-    expect(screen.getByText(/scanned on your own hardware in <10ms/)).toBeTruthy();
-    expect(screen.getByText(/What the blocks were/)).toBeTruthy();
-    expect(screen.getByText(/16 detection engines/)).toBeTruthy();
-    expect(screen.getByText(/every prompt scanned locally first/)).toBeTruthy();
+    expect(screen.getByText(/Illustrative assessment posture/)).toBeTruthy();
+    expect(screen.getByText(/Sample policy decisions/)).toBeTruthy();
+    expect(screen.getByText(/static example/)).toBeTruthy();
+    expect(screen.getAllByText(/not a customer score/).length).toBeGreaterThanOrEqual(2);
   });
 
   it('destination shares are directly labeled and sum to 100%', () => {
@@ -42,6 +42,6 @@ describe('HeroDemoDashboard — the hero-page dashboard window', () => {
 
   it('is explicitly labeled a demo (no fabricated-metrics ambiguity)', () => {
     render(<HeroDemoDashboard />);
-    expect(screen.getByText(/Live demo/)).toBeTruthy();
+    expect(screen.getByText('Illustrative preview')).toBeTruthy();
   });
 });
