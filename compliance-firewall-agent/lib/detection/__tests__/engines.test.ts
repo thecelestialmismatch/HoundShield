@@ -110,4 +110,55 @@ describe('detection engine counts', () => {
       `engine count disagrees with ENGINE_COUNT (${ENGINE_COUNT}): ${violations.join(' | ')}`,
     ).toEqual([])
   })
+
+  it('every hardcoded PATTERN count in the source is a number we actually ship', () => {
+    /*
+     * The sibling of the check above, and the gap that let the double-count
+     * survive its own deletion. "16 detection engines across 90 local patterns"
+     * was live on /demo and "90 shipped patterns" on /features — in a file that
+     * already imports PATTERN_COUNT and whose header comment says never to
+     * retype the number. The engines half passed the check above. The patterns
+     * half was never checked by anything.
+     *
+     * Why this accepts TWO values rather than pinning PATTERN_COUNT: "16
+     * detection pattern families" and "16 pattern types" are CORRECT English
+     * for the engine list, and several surfaces say it that way on purpose. A
+     * guard that forces correct copy to change is measuring the wrong thing
+     * (lessons.md, 2026-08-14). So the assertion is the honest one: a pattern
+     * count must be a number the product can actually produce. 90 is neither,
+     * which is exactly what makes it a fabrication.
+     *
+     * Comments are stripped first. Six guards in this repo have flagged their
+     * own explanatory prose; the paragraph you are reading names "90 local
+     * patterns" and must not trip the check that exists because of it.
+     */
+    const violations: string[] = []
+    // Lookbehind mirrors the engine check: keeps "NIST 800-171 pattern
+    // reference" from reading as "171 patterns".
+    const CLAIM = /(?<![\d-])(\d+)[- ](?:local |shipped |detection |regex )?patterns?\b/gi
+    const ALLOWED = new Set([PATTERN_COUNT, ENGINE_COUNT])
+
+    /** Strip block and line comments so the guard reads code, not prose. */
+    const stripComments = (src: string): string =>
+      src.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:])\/\/[^\n]*/g, '$1 ')
+
+    for (const file of sourceFiles(join(ROOT, 'app'))
+      .concat(sourceFiles(join(ROOT, 'components')), sourceFiles(join(ROOT, 'lib')))) {
+      // Blog posts are dated records of what was true when written; the
+      // doc-counts guard draws the same line for changelogs.
+      if (file.includes(join('app', 'blog'))) continue
+      const src = stripComments(readFileSync(file, 'utf8'))
+      for (const match of src.matchAll(CLAIM)) {
+        const claimed = Number(match[1])
+        if (!ALLOWED.has(claimed)) {
+          violations.push(`${file.replace(ROOT + '/', '')}: "${match[0].trim()}"`)
+        }
+      }
+    }
+
+    expect(
+      violations,
+      `pattern count is neither PATTERN_COUNT (${PATTERN_COUNT}) nor ENGINE_COUNT (${ENGINE_COUNT}): ${violations.join(' | ')}`,
+    ).toEqual([])
+  })
 })

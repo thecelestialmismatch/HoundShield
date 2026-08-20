@@ -14,6 +14,7 @@ import {
   Eye,
   Trash2,
 } from "lucide-react";
+import { ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
 
 interface ScanResult {
   risk_level: string;
@@ -115,7 +116,7 @@ export function LiveScanner() {
         </div>
         <div className="flex items-center gap-2 text-[10px] text-slate-400">
           <Zap className="w-3 h-3" />
-          16 detection patterns • 4 risk categories
+          {ENGINE_COUNT} detection engines · {PATTERN_COUNT} patterns • 4 risk categories
         </div>
       </div>
 

@@ -115,7 +115,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 | Integration | Status | Action Required |
 |-------------|--------|-----------------|
-| Supabase auth + DB | ✅ Wired | Migrations through 036 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, and **036 (revoke public execution of privileged RPCs)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
+| Supabase auth + DB | ✅ Wired | Migrations through 037 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, and **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
 | Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
@@ -219,7 +219,30 @@ If any check fails:
 | Polymer | $5/user/mo, transparent pricing | Active in SMB |
 | WitnessAI | Carahsoft channel, ex-NSA director on board | Not in SMB |
 | Knostic | Markets CMMC/FedRAMP for Copilot oversharing | Watch closely |
-| Vanta/Drata/FutureFeed | Docs only, no AI gateway | Complementary |
+| Vanta/Drata/FutureFeed | No prompt-content inspection, cloud-routed (no Mode-B claim) | **Re-scoped 2026-08-20** — see below |
+
+**Vanta is no longer "docs only" — corrected 2026-08-20 from their live site.**
+Two changes since this map was written, both verified by reading vanta.com:
+1. `/products/cmmc` now ships **SPRS score monitoring, SSP generation and POA&M
+   management**, and Vanta partners with **Cyber AB-listed RPOs for readiness and
+   C3PAOs (A-LIGN, Schellman) for audit** — the exact channel Stage 1's "≥1
+   RPO/MSP referral agreement" depends on. They are already inside it.
+2. `/products/ai-governance` does **agent discovery** — "maps AI agents across
+   developer laptops, production code and vendor platforms", "know what every
+   agent can reach — down to models, prompts, and data", plus guardrails.
+
+**The moat holds, but state the line precisely.** Vanta does *inventory and
+posture* — which agents exist, what they can reach. HoundShield does *inline
+content inspection* — what is inside this specific prompt, blocked before it
+leaves, with a hash-chained per-event record. Vanta produces no prompt-level
+evidence and is cloud-routed, so it cannot make the Mode-B claim at all. Their
+AI Governance CTA is also **"Join the waitlist"**, i.e. not generally available.
+
+So "complementary" is now an argument for **co-selling into their RPO channel**
+(they do the docs, we produce the AI prompt evidence they cannot), not a reason
+to treat them as absent. Their funnel is 100% "Request a demo" with an email
+gate before any value — HoundShield's `/demo#snapshot` gives a NIST-mapped PDF
+before asking for anything, which is the asymmetry to press.
 
 **Win when:** buyer handles actual CUI (needs Docker/on-prem), <200 employees (below GCC High threshold), needs PDF evidence in weeks. **Lose when:** buyer already has E5/GCC High, OR demands SOC 2 Type II from the vendor before signing.
 
@@ -334,7 +357,7 @@ compliance-firewall-agent/
   lib/brain-ai/                    — BM25 knowledge graph + query interface
   lib/gateway/                     — Core AI interception engine
   lib/classifier/                  — 53-pattern / 16-engine CUI/PII/IP/PHI detector
-  supabase/migrations/             — through 036 in repo (verify production application before release; 035 enables code-only reset and 036 removes public privileged-RPC execution)
+  supabase/migrations/             — through 037 in repo (verify production application before release; 035 enables code-only reset, 036 removes public privileged-RPC execution, 037 persists free-demo leads)
 
 proxy/
   server.ts                        — HTTPS proxy (the actual product)

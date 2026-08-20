@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { SAMPLE_SCENARIOS, SNAPSHOT_CONTROLS } from '@/components/snapshot/samples';
 import { join } from 'node:path';
 import {
   DEMO_SAMPLES,
@@ -73,8 +74,12 @@ describe('the non-technical test guide', () => {
   it('names the real on-page controls a reader will look for', () => {
     // If the page's button label changes, this guide is wrong and must change too.
     const guide = renderTestGuide();
-    expect(guide).toContain('Scan for Threats');
-    expect(guide).toContain('Patient Record');
+    // Read the labels from the page's own module — naming them here again is
+    // how the guide came to say 'Scan for Threats', a control that had been
+    // deleted with the canned scanner.
+    expect(guide).toContain(SNAPSHOT_CONTROLS.scan);
+    expect(guide).toContain(SNAPSHOT_CONTROLS.generatePdf);
+    expect(guide).toContain(DEMO_SAMPLES.healthcare);
   });
 
   it('includes the offline proof — the step that lets a buyer verify local-only themselves', () => {
@@ -318,22 +323,50 @@ describe('render() — refuses template residue (the "no flukes" rule)', () => {
 });
 
 describe('the test guide names a sample button that /demo actually has', () => {
-  // Reads the page source rather than importing it: app/demo/page.tsx is a
-  // client component and importing it would pull the whole scanner into this
-  // suite. The invariant is about what the page SAYS, so the test reads that.
-  const demo = readFileSync(join(process.cwd(), 'app', 'demo', 'page.tsx'), 'utf8');
+  /*
+   * This used to grep `app/demo/page.tsx` for `name: "..."`, because the
+   * scenarios lived inside that client component and outreach.ts kept its own
+   * hardcoded copy of the names. The guard worked — it fired the moment the
+   * buttons were renamed — but it was policing a duplication that should not
+   * have existed. The scenarios now live in `components/snapshot/samples.ts`
+   * and BOTH surfaces import them, so the names cannot disagree by
+   * construction. What is still worth asserting is that the derivation covers
+   * every audience an email addresses, and that the guide's stated count
+   * matches the list.
+   */
+  it.each(Object.entries(DEMO_SAMPLES))('%s → "%s" is a real scenario', (_audience, sample) => {
+    expect(
+      SAMPLE_SCENARIOS.map((x) => x.name),
+      `no sample scenario named "${sample}"`,
+    ).toContain(sample);
+  });
 
-  it.each(Object.entries(DEMO_SAMPLES))('%s → "%s" is really on /demo', (_audience, sample) => {
-    expect(demo, `no sample button named "${sample}" in app/demo/page.tsx`).toContain(
-      `name: "${sample}"`,
+  it('names a DIFFERENT scenario for each audience', () => {
+    // The point of the mapping: a DoD manager must not be told to click
+    // "Healthcare · patient record". If two audiences collapse onto one
+    // scenario, the tailoring is gone and the emails read as a mail-merge.
+    const names = Object.values(DEMO_SAMPLES);
+    expect(new Set(names).size, `audiences share a scenario: ${names.join(', ')}`).toBe(
+      names.length,
     );
   });
 
   it('offers exactly the four buttons the guide claims are there', () => {
     // Step 1 tells the reader there are "four sample buttons". Add a fifth and
     // every outreach email becomes wrong — fail here, not in a buyer's inbox.
-    const count = [...demo.matchAll(/name: "[^"]+",\s*\n\s*icon:/g)].length;
-    expect(count, 'the guide promises four sample buttons').toBe(4);
+    expect(SAMPLE_SCENARIOS.length, 'the guide promises four sample buttons').toBe(4);
+  });
+
+  it('every scenario the emails can name is reachable on /demo', () => {
+    // /demo renders <InstantSnapshot/>, which maps over SAMPLE_SCENARIOS. Assert
+    // the wiring rather than the rendered string, so this survives a re-layout.
+    const snapshot = readFileSync(
+      join(process.cwd(), 'components', 'InstantSnapshot.tsx'),
+      'utf8',
+    );
+    expect(snapshot).toContain('SAMPLE_SCENARIOS.map');
+    const demo = readFileSync(join(process.cwd(), 'app', 'demo', 'page.tsx'), 'utf8');
+    expect(demo).toContain('<InstantSnapshot />');
   });
 
   it('links with an explicit https:// scheme, never a bare domain', () => {

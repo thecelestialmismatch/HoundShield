@@ -3,6 +3,8 @@ import { z } from "zod";
 import { GENERAL_INBOX, founderInbox, transactionalFrom } from "@/lib/email/identity";
 import { emailButton, emailFooter, emailShell, escapeHtml } from "@/lib/email/shell";
 import { siteUrl } from "@/lib/site-url";
+import { clientIp, enforceRateLimit, identifierFor } from "@/lib/rate-limit-shared";
+import { createServiceClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 /**
  * POST /api/report/snapshot-lead
@@ -18,12 +20,28 @@ import { siteUrl } from "@/lib/site-url";
  * device, and this route upholds it. The zod schema is `.strict()` so any
  * attempt to smuggle raw content is rejected, not silently forwarded.
  *
- * Delivery is email-only (Resend) — same rail as /api/contact. No new DB table.
- * If Resend is unconfigured we return 503 + a fallback address; we never fake
- * success and never drop the lead silently.
+ * TWO INDEPENDENT RAILS. The lead is written to `snapshot_leads` (migration
+ * 037) FIRST, then emailed. This route previously did email only and stored
+ * nothing, so a Resend outage — or an unset RESEND_API_KEY, which returned 503
+ * before doing anything at all — lost the lead with no record anywhere. That is
+ * the Stripe-webhook defect ("a buyer can pay and you would never hear about
+ * it") one step earlier in the funnel. Losing a lead now takes both rails.
+ *
+ * The database write is deliberately NOT fatal: if Postgres is unreachable we
+ * still send the emails, and vice versa. Failing the whole request because one
+ * rail is down would turn a degraded path into a lost lead, which is the
+ * outcome this change exists to prevent.
  */
 
 const NOTIFY_FROM = transactionalFrom();
+
+/**
+ * Unauthenticated and it sends two emails per call, so it is a spam amplifier
+ * as well as a database write. Shared Postgres buckets, deliberately not
+ * dependent on middleware — the same reasoning `/api/scan` records.
+ * Lower than scan's 15/min because a human filling in a form does it once.
+ */
+const LEAD_RATE_LIMIT = { limit: 5, windowMs: 60_000 };
 
 const nonNegInt = z.number().int().min(0).max(100000);
 
@@ -44,6 +62,14 @@ const LeadSchema = z
 
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  // Before the body is read — a rejected caller should cost us nothing.
+  const blocked = await enforceRateLimit(
+    "snapshot-lead",
+    identifierFor({ ip: clientIp(request) }),
+    LEAD_RATE_LIMIT,
+  );
+  if (blocked) return blocked;
+
   try {
     const raw = await request.json();
     const parsed = LeadSchema.safeParse(raw);
@@ -70,16 +96,50 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } = parsed.data;
 
     const leadTo = founderInbox();
+    const industry = vertical ?? "defense";
+
+    /*
+     * RAIL 1 — persist. Runs BEFORE the Resend check so that an unconfigured or
+     * failing mailer cannot lose the lead: the 503 below used to return without
+     * recording anything at all.
+     *
+     * COUNTS ONLY. Every field written here comes from the .strict() schema
+     * above, which has no field for prompt text. Do not add one.
+     */
+    let stored = false;
+    if (isSupabaseConfigured()) {
+      try {
+        const { error } = await createServiceClient().from("snapshot_leads").insert({
+          email,
+          full_name: name,
+          company: company ?? null,
+          vertical: vertical ?? null,
+          critical_count: criticalCount,
+          high_count: highCount,
+          medium_count: mediumCount,
+          total_matches: totalMatches,
+          prompts_scanned: promptsScanned,
+          controls: controls ?? [],
+        });
+        if (error) throw new Error(error.message);
+        stored = true;
+      } catch (err) {
+        // Log and continue. A database outage must not cost us the email rail —
+        // that trade is the entire point of having two.
+        console.error("Snapshot lead: persistence failed, continuing to email:", err);
+      }
+    }
 
     if (!process.env.RESEND_API_KEY) {
+      // The lead is not lost if rail 1 caught it; say which happened rather
+      // than reporting a blanket failure over a row that was actually written.
       return NextResponse.json(
         // Published to the browser → the generic inbox, never the routing address.
-        { error: "email_unconfigured", fallbackEmail: GENERAL_INBOX },
-        { status: 503 }
+        { error: "email_unconfigured", fallbackEmail: GENERAL_INBOX, stored },
+        { status: stored ? 202 : 503 }
       );
     }
 
-    const industry = vertical ?? "defense";
     const controlList = controls && controls.length > 0 ? controls.join(", ") : "None";
     const countsLine = `${criticalCount} critical · ${highCount} high · ${mediumCount} medium · ${totalMatches} total across ${promptsScanned} prompt(s)`;
 
@@ -154,7 +214,7 @@ ${emailButton(siteUrl("/assessment"), "Start your $499 report →")}
       text: `Your AI risk snapshot\n\nHi ${name},\n\nSummary: ${countsLine}\nNIST controls: ${controlList}\n\nYour pasted text never left your device — this email contains counts only.\n\nThe $499 CMMC AI Risk Assessment Report runs HoundShield in your environment for 14 days and delivers a signed PDF your assessor accepts: ${siteUrl("/assessment")}\nSample report: ${siteUrl("/api/reports/sample")}\n\n— HoundShield`,
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, stored });
   } catch (err) {
     console.error("Snapshot lead error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

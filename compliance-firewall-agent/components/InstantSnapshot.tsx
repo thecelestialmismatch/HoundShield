@@ -10,7 +10,6 @@ import {
   Download,
   Loader2,
   CheckCircle2,
-  Mail,
 } from "lucide-react";
 import {
   scanForSnapshot,
@@ -19,21 +18,18 @@ import {
   splitPrompts,
   type SnapshotFinding,
 } from "@/lib/reports/snapshot-from-scan";
-import { CATEGORY_LABEL, CATEGORY_NIST_MAP } from "@/lib/reports/category-nist-map";
+import {
+  CATEGORY_LABEL,
+  CATEGORY_NIST_MAP,
+  CATEGORY_REMEDIATION,
+} from "@/lib/reports/category-nist-map";
 import { ReportCheckoutButton } from "@/components/ReportCheckoutButton";
 
-type Vertical = "defense" | "healthcare" | "legal";
+import { LeadCapture } from "@/components/snapshot/LeadCapture";
+import type { Vertical } from "@/components/snapshot/types";
+import { SAMPLE_SCENARIOS, SNAPSHOT_CONTROLS } from "@/components/snapshot/samples";
+
 type Phase = "idle" | "scanned" | "generated";
-type LeadStatus = "idle" | "sending" | "sent" | "error" | "unconfigured";
-
-/** A defense-flavoured example that trips the real CMMC/PII/secret engines. */
-const EXAMPLE_PROMPT = `Draft a status email to the PM about our Navy contract N00024-25-C-1234.
-Reference CAGE code 1ABC2 and note the SPRS score.
-
-The subcontractor sent employee John Smith (SSN 123-45-6789) for the ITAR-controlled
-avionics work. Our AWS deploy key is AKIA1234567890ABCD12 — put it in the runbook.
-
-CUI//SP-CTI: the radar cross-section figures must not leave the enclave.`;
 
 function severityStyle(risk: SnapshotFinding["risk"]): { badge: string; dot: string } {
   if (risk === "CRITICAL") {
@@ -49,144 +45,6 @@ function wouldLabel(action: SnapshotFinding["action"]): string {
   return action === "BLOCK" ? "Would be blocked" : "Would be flagged";
 }
 
-interface LeadCaptureProps {
-  vertical: Vertical;
-  counts: {
-    criticalCount: number;
-    highCount: number;
-    mediumCount: number;
-    totalMatches: number;
-    promptsScanned: number;
-    controls: string[];
-  };
-}
-
-/**
- * Opt-in: emails the visitor their summary and alerts the founder to a warm
- * lead. Sends COUNTS ONLY — the pasted text and matched strings are never
- * transmitted (there is no field for them), preserving the local-only boundary.
- */
-function LeadCapture({ vertical, counts }: LeadCaptureProps) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
-  const [status, setStatus] = useState<LeadStatus>("idle");
-  const [fallbackEmail, setFallbackEmail] = useState<string | null>(null);
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim()) return;
-    setStatus("sending");
-    setFallbackEmail(null);
-    try {
-      const res = await fetch("/api/report/snapshot-lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // Counts only — never the pasted text.
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          company: company.trim() || undefined,
-          vertical,
-          criticalCount: counts.criticalCount,
-          highCount: counts.highCount,
-          mediumCount: counts.mediumCount,
-          totalMatches: counts.totalMatches,
-          promptsScanned: counts.promptsScanned,
-          controls: counts.controls,
-        }),
-      });
-      if (res.ok) {
-        setStatus("sent");
-        return;
-      }
-      const data = await res.json().catch(() => ({}));
-      if (res.status === 503 && data?.fallbackEmail) {
-        setFallbackEmail(String(data.fallbackEmail));
-        setStatus("unconfigured");
-        return;
-      }
-      setStatus("error");
-    } catch {
-      setStatus("error");
-    }
-  };
-
-  if (status === "sent") {
-    return (
-      <div className="glass-card p-5 border-[rgba(5,150,105,0.25)]">
-        <div className="flex items-center gap-2 text-[var(--hs-success)]">
-          <CheckCircle2 className="w-5 h-5" />
-          <p className="text-sm font-bold">Sent — check your inbox.</p>
-        </div>
-        <p className="text-xs text-[var(--hs-ink-secondary)] mt-2">
-          We emailed you this summary and gave our team a heads-up. Your pasted text was never sent.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={submit} className="glass-card p-5 space-y-3">
-      <div className="flex items-center gap-2">
-        <Mail className="w-4 h-4 text-brand-700" />
-        <p className="text-sm font-bold text-[var(--hs-ink)]">Email me this snapshot + a human review</p>
-      </div>
-      <p className="text-xs text-[var(--hs-ink-secondary)]">
-        We send you the summary above and alert our team to reach out.{" "}
-        <strong className="text-[var(--hs-ink-secondary)]">Your pasted text is never transmitted</strong> — only the finding counts.
-      </p>
-      <div className="grid sm:grid-cols-2 gap-2">
-        <label className="sr-only" htmlFor="lead-name">Name</label>
-        <input
-          id="lead-name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
-          required
-          className="bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/50"
-        />
-        <label className="sr-only" htmlFor="lead-email">Work email</label>
-        <input
-          id="lead-email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Work email"
-          required
-          className="bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/50"
-        />
-      </div>
-      <label className="sr-only" htmlFor="lead-company">Company</label>
-      <input
-        id="lead-company"
-        value={company}
-        onChange={(e) => setCompany(e.target.value)}
-        placeholder="Company (optional)"
-        className="w-full bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/50"
-      />
-      <button
-        type="submit"
-        disabled={status === "sending"}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-all disabled:opacity-60"
-      >
-        {status === "sending" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
-        {status === "sending" ? "Sending…" : "Email me the snapshot"}
-      </button>
-      {status === "error" && (
-        <p className="text-xs text-rose-600" role="alert">
-          Something went wrong. Please try again or email us directly.
-        </p>
-      )}
-      {status === "unconfigured" && fallbackEmail && (
-        <p className="text-xs text-[var(--hs-ink-secondary)]" role="alert">
-          Email delivery is briefly unavailable — reach us at{" "}
-          <a className="text-brand-700 font-medium" href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a>.
-        </p>
-      )}
-    </form>
-  );
-}
 
 /**
  * Instant AI Risk Snapshot — the money-path climax of the demo.
@@ -239,6 +97,17 @@ export function InstantSnapshot() {
   const resetOnEdit = (value: string) => {
     setInputText(value);
     if (phase !== "idle") setPhase("idle");
+  };
+
+  /**
+   * Load a scenario AND switch the industry selector to match it, so the PDF
+   * and the $499 CTA describe the same vertical the visitor just chose. Picking
+   * a healthcare sample while the form still says "defense" would put the wrong
+   * framing on the artifact the demo is supposed to end on.
+   */
+  const loadSample = (sample: (typeof SAMPLE_SCENARIOS)[number]) => {
+    resetOnEdit(sample.text);
+    setVertical(sample.vertical);
   };
 
   return (
@@ -295,17 +164,23 @@ export function InstantSnapshot() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between mb-1">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
         <label htmlFor="snapshot-input" className="text-xs font-semibold text-[var(--hs-ink-secondary)]">
           Prompt text
         </label>
-        <button
-          type="button"
-          onClick={() => resetOnEdit(EXAMPLE_PROMPT)}
-          className="text-xs text-brand-700 hover:text-brand-800 font-medium"
-        >
-          Load an example
-        </button>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[11px] text-[var(--hs-ink-tertiary)]">Try a real scenario:</span>
+          {SAMPLE_SCENARIOS.map((sample) => (
+            <button
+              key={sample.name}
+              type="button"
+              onClick={() => loadSample(sample)}
+              className="text-[11px] font-medium px-2 py-1 rounded-lg border border-[var(--hs-border)] text-brand-700 hover:border-brand-500/40 hover:bg-brand-500/5 transition-colors"
+            >
+              {sample.name}
+            </button>
+          ))}
+        </div>
       </div>
       <textarea
         id="snapshot-input"
@@ -323,7 +198,7 @@ export function InstantSnapshot() {
           disabled={!inputText.trim()}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-bold hover:bg-brand-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Radar className="w-4 h-4" /> Scan locally
+          <Radar className="w-4 h-4" /> {SNAPSHOT_CONTROLS.scan}
         </button>
       </div>
 
@@ -356,16 +231,44 @@ export function InstantSnapshot() {
                 {summary.findings.map((f) => {
                   const s = severityStyle(f.risk);
                   const control = CATEGORY_NIST_MAP[f.category];
+                  const fix = CATEGORY_REMEDIATION[f.category];
                   return (
-                    <li key={f.patternName} className="glass-card p-3 flex flex-wrap items-center gap-2">
-                      <span className={`w-2 h-2 rounded-full ${s.dot}`} aria-hidden="true" />
-                      <span className="text-sm font-semibold text-[var(--hs-ink)]">{f.patternName}</span>
-                      <span className="text-[11px] text-[var(--hs-ink-tertiary)]">×{f.count}</span>
-                      <span className="text-[11px] text-[var(--hs-ink-secondary)]">{CATEGORY_LABEL[f.category]}</span>
-                      <span className="text-[11px] font-mono text-brand-700">{control.control}</span>
-                      <span className={`ml-auto text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${s.badge}`}>
-                        {wouldLabel(f.action)}
-                      </span>
+                    <li key={f.patternName} className="glass-card p-0 overflow-hidden">
+                      {/* Native <details> rather than a useState toggle — the
+                          browser already does disclosure, including keyboard
+                          and screen-reader semantics. */}
+                      <details className="group">
+                        <summary className="p-3 flex flex-wrap items-center gap-2 cursor-pointer list-none">
+                          <span className={`w-2 h-2 rounded-full ${s.dot}`} aria-hidden="true" />
+                          <span className="text-sm font-semibold text-[var(--hs-ink)]">{f.patternName}</span>
+                          <span className="text-[11px] text-[var(--hs-ink-tertiary)]">×{f.count}</span>
+                          <span className="text-[11px] text-[var(--hs-ink-secondary)]">{CATEGORY_LABEL[f.category]}</span>
+                          <span className="text-[11px] font-mono text-brand-700">{control.control}</span>
+                          <span className={`ml-auto text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${s.badge}`}>
+                            {wouldLabel(f.action)}
+                          </span>
+                          <span className="text-[11px] text-brand-700 font-medium group-open:hidden">How to fix</span>
+                          <span className="text-[11px] text-[var(--hs-ink-tertiary)] font-medium hidden group-open:inline">Hide</span>
+                        </summary>
+                        <div className="px-3 pb-3 pt-0 space-y-2 border-t border-[var(--hs-border)] mt-0">
+                          <p className="text-[11px] text-[var(--hs-ink-tertiary)] pt-2">
+                            <strong className="text-[var(--hs-ink-secondary)]">Control · {control.control}</strong>{" "}
+                            {control.name}
+                          </p>
+                          <p className="text-[11px] text-[var(--hs-ink-secondary)] leading-relaxed">
+                            <strong className="text-[var(--hs-ink-secondary)]">Why it matters. </strong>
+                            {fix.impact}
+                          </p>
+                          <p className="text-[11px] text-[var(--hs-ink-secondary)] leading-relaxed">
+                            <strong className="text-[var(--hs-ink-secondary)]">Quick fix. </strong>
+                            {fix.quickFix}
+                          </p>
+                          <p className="text-[11px] text-[var(--hs-ink-secondary)] leading-relaxed">
+                            <strong className="text-[var(--hs-ink-secondary)]">Permanent fix. </strong>
+                            {fix.permanentFix}
+                          </p>
+                        </div>
+                      </details>
                     </li>
                   );
                 })}
@@ -392,7 +295,7 @@ export function InstantSnapshot() {
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--hs-ink)] text-white text-sm font-bold hover:opacity-90 transition-all disabled:opacity-60"
                     >
                       {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-                      {phase === "generated" ? "Download again" : "Generate my gap-report PDF"}
+                      {phase === "generated" ? "Download again" : SNAPSHOT_CONTROLS.generatePdf}
                     </button>
                   </div>
                   {phase === "generated" && (
