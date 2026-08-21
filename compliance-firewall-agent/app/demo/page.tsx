@@ -192,7 +192,7 @@ function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) 
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(5,150,105,0.2)] text-[var(--hs-success)] border border-[rgba(5,150,105,0.2)] font-semibold">OPTIONAL</span>
             </div>
             <p className="text-xs text-[var(--hs-ink-secondary)] mb-4">Tag your scan results with your company name. No data leaves your browser.</p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
@@ -350,7 +350,7 @@ export default function FreeDemoPage() {
                         {[
                             { step: "1", title: "Connect (optional)", desc: "Tag scans with your company name", icon: Building2, color: "text-brand-700" },
                             { step: "2", title: "Paste Your Prompt", desc: "Or pick from our sample scenarios", icon: FileText, color: "text-[var(--hs-steel)]" },
-                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-brand-700" },
+                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <10ms", icon: Radar, color: "text-brand-700" },
                             { step: "4", title: "Get Fix Reports", desc: "Detailed impact + remediation tips", icon: Lightbulb, color: "text-[var(--hs-success)]" },
                         ].map((s) => {
                             const Icon = s.icon;
@@ -604,7 +604,7 @@ export default function FreeDemoPage() {
                             <h3 className="text-sm font-bold text-brand-700 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-700" /> The $499 Report</h3>
                             <ul className="space-y-2.5">
                                 {[
-                                    "16 detection engines across 90 local patterns",
+                                    "16 detection engines across 53 local patterns",
                                     "Inline gateway — blocks before AI sees the data",
                                     "Every finding mapped to a NIST 800-171 control",
                                     "Immutable SHA-256 hash-chained audit trail",
@@ -629,7 +629,7 @@ export default function FreeDemoPage() {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
                             {[
                                 { label: "Patterns Checked", value: "9" },
-                                { label: "Scan Speed", value: "<50ms" },
+                                { label: "Scan Speed", value: "<10ms" },
                                 { label: "Your Data Sent", value: "Nowhere" },
                                 { label: "Cost", value: "$0" },
                             ].map((s) => (

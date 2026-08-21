@@ -20,6 +20,18 @@ HoundShield is an open-source project for placing inspectable controls in front 
 
 > **Important:** This repository is software, not a compliance certification or an authorization to process regulated data in every deployment. Validate the selected deployment, its configuration, its upstream providers, and your organization’s policies before handling CUI, PHI, or other sensitive data.
 
+## See it in 60 seconds
+
+- **Run the proxy on your own machine** (self-hosted / Mode B — prompt content never leaves your network):
+  ```bash
+  curl -sSL https://houndshield.com/install | bash
+  ```
+- **Try the in-browser scanner** — paste a real prompt, watch it get classified against NIST 800-171 locally, no signup: [houndshield.com/demo](https://www.houndshield.com/demo)
+- **See the deliverable** — a sample of the $499 CMMC AI Risk Assessment Report (PDF): [houndshield.com/api/reports/sample](https://www.houndshield.com/api/reports/sample)
+- **Count the detection patterns yourself** — every rule is plain regex in the repo, no model, no black box: [`proxy/patterns/index.ts`](proxy/patterns/index.ts) and [`compliance-firewall-agent/lib/classifier/`](compliance-firewall-agent/lib/classifier/)
+
+The install script pulls a container image published from this repository; if the image is not yet available for your platform, `docker pull` reports it clearly rather than failing silently.
+
 ## What is in this repository
 
 | Component | Location | Purpose |

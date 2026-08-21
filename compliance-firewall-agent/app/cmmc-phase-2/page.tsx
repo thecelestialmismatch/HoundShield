@@ -74,7 +74,7 @@ const READINESS = [
   {
     n: '03',
     title: 'Score it before someone else does',
-    body: `The ${PURCHASABLE_OFFER.name} runs 14 days in your environment and hands you a signed PDF risk-scoring every AI prompt event against NIST 800-171 Rev 2. ${PURCHASABLE_OFFER.price}, one time, no subscription.`,
+    body: `The ${PURCHASABLE_OFFER.name} runs 14 days in your environment and hands you a signed PDF risk-scoring every AI prompt event against NIST 800-171 Rev 2. ${PURCHASABLE_OFFER.price}, no subscription.`,
   },
 ]
 

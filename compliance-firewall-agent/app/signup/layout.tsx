@@ -4,16 +4,16 @@ import { SITE_URL } from "@/lib/site-url";
 
 const BASE_URL = SITE_URL;
 export const metadata: Metadata = {
-  title: "Start Free",
+  title: "Create your account",
   description:
-    "Create your HoundShield account. Free CMMC self-assessment, SPRS score, and local-only AI prompt firewall — no credit card required.",
+    "Create your HoundShield account for the CMMC self-assessment, live SPRS score, and local-only AI prompt firewall.",
   alternates: { canonical: `${BASE_URL}/signup` },
   // Conversion page, not an SEO surface — keep it out of the index.
   robots: { index: false, follow: false },
   openGraph: {
-    title: "Start Free | HoundShield",
+    title: "Create your account | HoundShield",
     description:
-      "Free CMMC self-assessment, SPRS score, and local-only AI prompt firewall. No credit card required.",
+      "The CMMC self-assessment, live SPRS score, and local-only AI prompt firewall.",
     url: `${BASE_URL}/signup`,
     type: "website",
   },

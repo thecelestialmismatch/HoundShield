@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${SITE_URL}/roadmap`,
   },
+  openGraph: { title: 'Roadmap | HoundShield' },
 }
 
 type ItemStatus = 'shipped' | 'building' | 'planned'

@@ -73,9 +73,8 @@ const releases: Release[] = [
   {
     version: "2.3.0", date: "January 2026", title: "Stripe Integration & Pricing", icon: CreditCard,
     items: [
-      { tag: "Feature", text: "4-tier pricing: Free, Pro, Business, Enterprise" },
-      { tag: "Feature", text: "14-day trial with automatic downgrade" },
-      { tag: "Feature", text: "Promo code engine with usage-based metering" },
+      { tag: "Feature", text: "Stripe checkout for the $499 one-time AI Risk Assessment Report" },
+      { tag: "Feature", text: "Promo code support at checkout" },
       { tag: "Fix", text: "Webhook idempotency for duplicate Stripe events" },
     ],
   },
@@ -234,7 +233,7 @@ export default function ChangelogPage() {
           <div className="max-w-3xl mx-auto text-center border border-[var(--hs-border)] bg-white backdrop-blur-sm rounded-2xl py-14 px-8">
             <Sparkles className="w-6 h-6 text-[var(--hs-success)] mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-3">Ship with confidence</h3>
-            <p className="text-sm text-[var(--hs-ink-secondary)] mb-6 max-w-md mx-auto">Start protecting your AI pipeline today. Free tier available with no credit card required.</p>
+            <p className="text-sm text-[var(--hs-ink-secondary)] mb-6 max-w-md mx-auto">Start with the free in-browser scan — no signup required.</p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-600 hover:bg-brand-500 text-sm font-semibold transition-colors cursor-pointer">
               Get started <ArrowRight className="w-4 h-4" />
             </Link>

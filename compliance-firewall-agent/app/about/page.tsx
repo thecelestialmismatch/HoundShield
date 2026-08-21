@@ -94,7 +94,7 @@ const timeline = [
     { date: "2024 Q3", title: "Founded", desc: "HoundShield launched with a singular mission: make CMMC compliance accessible to every defense contractor." },
     { date: "2024 Q4", title: "First Beta", desc: "Closed early-access program. Validated the core assessment engine against real contractor workflows." },
     { date: "2025 Q1", title: "NIST 800-171 Engine", desc: "Full mapping of all 110 security controls with automated evidence collection." },
-    { date: "2025 Q3", title: "Public Launch", desc: "General availability with AI-powered gap analysis, remediation plans, and audit trail generation." },
+    { date: "2025 Q3", title: "Public Preview", desc: "Opened the product publicly with AI-powered gap analysis, remediation plans, and audit trail generation." },
     { date: "2026 Q1", title: "CMMC Level 2 Mapping", desc: "Complete alignment with CMMC 2.0 assessment objectives and C3PAO preparation workflows." },
 ];
 
@@ -119,7 +119,7 @@ export default function AboutPage() {
                             <span className="text-gradient-brand">Defense Compliance</span>
                         </h1>
                         <p className="text-lg text-[var(--hs-ink-secondary)] max-w-2xl mx-auto leading-relaxed">
-                            87,000 defense contractors need CMMC certification. Most can&apos;t afford six-figure consulting fees.
+                            76,598 defense contractors need CMMC certification. Most can&apos;t afford six-figure consulting fees.
                             We built HoundShield to change that.
                         </p>
                     </AnimatedSection>
@@ -226,7 +226,7 @@ export default function AboutPage() {
             <section className="py-16 px-6">
                 <div className="max-w-3xl mx-auto">
                     <AnimatedSection className="text-center mb-12">
-                        <h2 className="text-3xl font-bold tracking-tight">Our Journey</h2>
+                        <h2 className="text-3xl font-bold tracking-tight">Product milestones</h2>
                     </AnimatedSection>
                     <div className="space-y-0">
                         {timeline.map((t, i) => (

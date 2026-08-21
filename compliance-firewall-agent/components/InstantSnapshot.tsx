@@ -6,8 +6,6 @@ import {
   FileText,
   Radar,
   Lock,
-  AlertTriangle,
-  Download,
   Loader2,
   CheckCircle2,
   Mail,
@@ -15,7 +13,6 @@ import {
 import {
   scanForSnapshot,
   summarizeFindings,
-  buildSnapshotReportData,
   splitPrompts,
   type SnapshotFinding,
 } from "@/lib/reports/snapshot-from-scan";
@@ -23,7 +20,7 @@ import { CATEGORY_LABEL, CATEGORY_NIST_MAP } from "@/lib/reports/category-nist-m
 import { ReportCheckoutButton } from "@/components/ReportCheckoutButton";
 
 type Vertical = "defense" | "healthcare" | "legal";
-type Phase = "idle" | "scanned" | "generated";
+type Phase = "idle" | "scanned";
 type LeadStatus = "idle" | "sending" | "sent" | "error" | "unconfigured";
 
 /** A defense-flavoured example that trips the real CMMC/PII/secret engines. */
@@ -204,7 +201,6 @@ export function InstantSnapshot() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [findings, setFindings] = useState<SnapshotFinding[]>([]);
   const [scanMs, setScanMs] = useState(0);
-  const [generating, setGenerating] = useState(false);
 
   const summary = findings.length > 0 ? summarizeFindings(findings) : null;
   const promptsScanned = splitPrompts(inputText).length;
@@ -217,23 +213,6 @@ export function InstantSnapshot() {
     setFindings(found);
     setScanMs(elapsed);
     setPhase("scanned");
-  };
-
-  const generatePdf = async () => {
-    setGenerating(true);
-    try {
-      // jsPDF (~130 kB) is loaded on demand — only when the visitor actually
-      // generates a PDF — so the top-of-funnel /demo page stays light.
-      const { saveComplianceReport } = await import("@/lib/reports/download");
-      const data = buildSnapshotReportData(inputText, {
-        organization: org,
-        scanMs,
-      });
-      saveComplianceReport(data, "HoundShield-AI-Risk-Snapshot.pdf");
-      setPhase("generated");
-    } finally {
-      setGenerating(false);
-    }
   };
 
   const resetOnEdit = (value: string) => {
@@ -254,7 +233,7 @@ export function InstantSnapshot() {
           <p className="text-sm text-[var(--hs-ink-tertiary)] mt-1 max-w-2xl">
             Paste a real prompt your team sends to ChatGPT, Claude or Copilot. HoundShield&apos;s
             detection engines scan it <strong className="text-[var(--hs-ink-secondary)]">locally, in your browser</strong>,
-            map every finding to a NIST 800-171 control, and produce a preview gap-report PDF.
+            map every finding to a NIST 800-171 control, and preview exactly what the full $499 report contains.
           </p>
         </div>
       </div>
@@ -372,50 +351,11 @@ export function InstantSnapshot() {
               </ul>
             )}
 
-            {/* The mandated climax: end on the PDF. */}
-            <div className="glass-card p-5 border-brand-500/20">
-              <div className="flex items-start gap-3">
-                <FileText className="w-6 h-6 text-brand-700 shrink-0" />
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-[var(--hs-ink)]">Your gap-report PDF</p>
-                  <p className="text-xs text-[var(--hs-ink-secondary)] mt-1">
-                    A branded preview mapped to NIST 800-171 — built in your browser.{" "}
-                    <span className="text-[var(--hs-ink-tertiary)]">
-                      This is a preview, not the tamper-evident 14-day signed report an assessor accepts.
-                    </span>
-                  </p>
-                  <div className="mt-3">
-                    <button
-                      type="button"
-                      onClick={generatePdf}
-                      disabled={generating}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--hs-ink)] text-white text-sm font-bold hover:opacity-90 transition-all disabled:opacity-60"
-                    >
-                      {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-                      {phase === "generated" ? "Download again" : "Generate my gap-report PDF"}
-                    </button>
-                  </div>
-                  {phase === "generated" && (
-                    <p className="mt-2 text-xs text-[var(--hs-success)] flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Your snapshot PDF was generated on this device.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* $499 CTA — the real deliverable */}
-            <div className="glass-card p-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
-              <div className="flex items-start gap-2">
-                <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                <p className="text-sm text-[var(--hs-ink-secondary)]">
-                  This preview shows exposure. The{" "}
-                  <strong className="text-[var(--hs-ink)]">$499 CMMC AI Risk Assessment Report</strong>{" "}
-                  runs 14 days in your environment and delivers the SHA-256-signed PDF your assessor accepts.
-                </p>
-              </div>
-              <ReportCheckoutButton vertical={vertical} label="Get the $499 report" className="shrink-0" />
-            </div>
+            {/* The full report, locked. The teaser above is free; the
+                assessor-ready deliverable is what the $499 unlocks. */}
+            {summary.findings.length > 0 && (
+              <LockedReportPreview vertical={vertical} summary={summary} org={org} />
+            )}
 
             {summary.findings.length > 0 && (
               <LeadCapture
@@ -434,6 +374,84 @@ export function InstantSnapshot() {
         )}
       </div>
     </section>
+  );
+}
+
+type SnapshotSummary = NonNullable<ReturnType<typeof summarizeFindings>>;
+
+/**
+ * The full assessor-ready report, shown on-screen but LOCKED. The free scan
+ * above is the teaser; this is what the $499 unlocks. The blurred layer behind
+ * the lock is a faux render of the deliverable's structure (built from the
+ * visitor's own findings so it feels personal) — no real signed report is
+ * produced in the browser, and nothing is downloadable here.
+ */
+function LockedReportPreview({
+  vertical,
+  summary,
+  org,
+}: {
+  vertical: Vertical;
+  summary: SnapshotSummary;
+  org: string;
+}) {
+  const orgLabel = org.trim() || "Your Organization";
+  const rows = summary.findings.slice(0, 5);
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-[var(--hs-border)]">
+      {/* Blurred faux full report */}
+      <div aria-hidden="true" className="pointer-events-none select-none blur-[5px] opacity-70 p-6 space-y-4 bg-white">
+        <div className="flex items-center justify-between border-b border-[var(--hs-border)] pb-3">
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-brand-700">CMMC Level 2 · AI Gateway Audit</p>
+            <p className="text-lg font-black text-[var(--hs-ink)]">AI Risk Assessment Report</p>
+            <p className="text-xs text-[var(--hs-ink-secondary)]">{orgLabel} · 14-day assessment window</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] uppercase text-[var(--hs-ink-secondary)]">SPRS impact</p>
+            <p className="text-2xl font-black text-rose-600">{summary.estimatedSprsImpact} pts</p>
+          </div>
+        </div>
+        <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--hs-ink-secondary)]">NIST 800-171 control mapping</p>
+        <table className="w-full text-[11px]">
+          <tbody>
+            {rows.map((f) => {
+              const control = CATEGORY_NIST_MAP[f.category];
+              return (
+                <tr key={f.patternName} className="border-b border-[var(--hs-border-subtle)]">
+                  <td className="py-1.5 pr-2 font-semibold text-[var(--hs-ink)]">{f.patternName}</td>
+                  <td className="py-1.5 pr-2 text-[var(--hs-ink-secondary)]">{CATEGORY_LABEL[f.category]}</td>
+                  <td className="py-1.5 pr-2 font-mono text-brand-700">{control.control}</td>
+                  <td className="py-1.5 text-right text-rose-600">{wouldLabel(f.action)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--hs-ink-secondary)] pt-1">Tamper-evident audit trail · SHA-256 Merkle root</p>
+        <div className="h-2 rounded bg-[var(--hs-mist)]" />
+        <div className="h-2 w-3/4 rounded bg-[var(--hs-mist)]" />
+        <div className="h-2 w-1/2 rounded bg-[var(--hs-mist)]" />
+      </div>
+
+      {/* Lock overlay + $499 unlock */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center bg-gradient-to-b from-white/50 via-white/80 to-white/95">
+        <div className="w-12 h-12 rounded-2xl bg-[var(--hs-ink)] text-white flex items-center justify-center">
+          <Lock className="w-5 h-5" />
+        </div>
+        <p className="text-base font-black text-[var(--hs-ink)]">Your full CMMC AI Risk Assessment Report</p>
+        <p className="text-xs text-[var(--hs-ink-secondary)] max-w-md">
+          Every finding mapped to NIST 800-171, your SPRS impact, a SHA-256 tamper-evident audit
+          trail, and a prioritized remediation plan — the assessor-ready PDF, generated from a
+          14-day run in your own environment.
+        </p>
+        <ReportCheckoutButton vertical={vertical} label="Unlock the full report — $499" />
+        <p className="text-[11px] text-[var(--hs-ink-tertiary)] max-w-sm flex items-center gap-1.5 justify-center">
+          <FileText className="w-3.5 h-3.5 shrink-0" />
+          The scan above is a local preview — not the tamper-evident 14-day signed report an assessor accepts.
+        </p>
+      </div>
+    </div>
   );
 }
 

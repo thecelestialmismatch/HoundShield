@@ -485,8 +485,8 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
             <LiveShieldBadge />
             <Link href="/login" className={signInClass}>Sign in</Link>
             <ThemeToggle />
-            <Link href="/signup" className="btn-primary text-sm px-5 py-2.5">
-              Start Free <ChevronRight className="w-3.5 h-3.5" />
+            <Link href="/demo" className="btn-primary text-sm px-5 py-2.5">
+              Scan free <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
@@ -525,7 +525,7 @@ export function Navbar({ variant = "light" }: { variant?: "light" | "dark" }) {
               ))}
               <div className={mobileDivider}>
                 <Link href="/login" className="btn-ghost text-center w-full">Sign in</Link>
-                <Link href="/signup" className="btn-primary text-center w-full">Start Free</Link>
+                <Link href="/demo" className="btn-primary text-center w-full">Scan free</Link>
               </div>
             </div>
           </motion.div>

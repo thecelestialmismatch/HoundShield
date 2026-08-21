@@ -76,6 +76,21 @@ export function controllerDisclosure(): string {
 }
 
 /**
+ * Short party identifier for inline use where a contract names a party — e.g.
+ * "between the Controller and <PARTY> (“Processor”)". This is NOT the
+ * full disclosure sentence: dropping `controllerDisclosure()` into that slot
+ * (as `/dpa` did) renders a whole paragraph mid-clause and a dangling comma,
+ * which makes the contract read as broken. Keep the full disclosure as its own
+ * sentence; use this where only a name belongs.
+ */
+export function controllerPartyName(): string {
+  if (isEntityEstablished()) {
+    return LEGAL_ENTITY.name as string;
+  }
+  return `the operator of ${LEGAL_ENTITY.tradingName} (an independent sole proprietor)`;
+}
+
+/**
  * Pre-launch legal blockers, in the order they must be cleared.
  *
  * Surfaced as data rather than prose so `__tests__/legal-contract.test.ts` can
