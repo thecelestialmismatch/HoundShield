@@ -37,6 +37,9 @@ import {
   RISK_REPORT_WHOLESALE_CENTS,
   RISK_REPORT_RETAIL_CENTS,
   partnerMarginPct,
+  PARTNER_ENGAGEMENT,
+  PARTNER_ENGAGEMENT_MARGIN_LOW_PCT,
+  PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT,
 } from '../plans';
 
 const APP_ROOT = path.resolve(__dirname, '../../..');
@@ -71,6 +74,33 @@ describe('partner offer — one revenue share, one wholesale price', () => {
     // stops matching the live Stripe price (unit_amount 49900).
     expect(RISK_REPORT.oneTimePrice).toBe(499);
     expect(RISK_REPORT.oneTimePrice).toBeLessThan(500);
+  });
+
+  it('the co-branded ENGAGEMENT clears the margin floor a channel will carry', () => {
+    // Market research 2026-08-21: MSP compliance assessments list at $500–$2,000
+    // (ScalePad) and MSSPs target 60–75% gross margin (ContraForce). Reselling
+    // the identical $499 artifact clears only 20% — which is why no partner
+    // signed. The engagement wraps the report in partner-delivered work, so the
+    // band must stay inside what a channel actually carries.
+    expect(PARTNER_ENGAGEMENT_MARGIN_LOW_PCT).toBeGreaterThanOrEqual(60);
+    expect(PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT).toBeLessThanOrEqual(80);
+    expect(PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT).toBeGreaterThan(PARTNER_ENGAGEMENT_MARGIN_LOW_PCT);
+  });
+
+  it('funds the engagement margin from partner labour, never from a bigger discount', () => {
+    // The whole point of the 2026-08-21 ruling: wholesale does NOT move. If a
+    // future edit "fixes" margin by cutting the price instead of adding partner
+    // scope, this fails — that is the drift it exists to catch.
+    expect(PARTNER_ENGAGEMENT.wholesaleCost).toBe(RISK_REPORT.wholesalePrice);
+    expect(PARTNER_ENGAGEMENT.wholesaleCost).toBe(399);
+    expect(PARTNER_ENGAGEMENT.partnerDelivers.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('never implies the engagement is a different or deeper scan', () => {
+    // Honesty guard. The engines and the artifact are identical to the $499
+    // self-serve product; only the partner's interpretation work differs.
+    expect(PARTNER_ENGAGEMENT.identicalToDirect).toMatch(/exactly the same|identical/i);
+    expect(PARTNER_ENGAGEMENT.identicalToDirect).toMatch(/not a different or deeper scan/i);
   });
 
   it('leaves the partner a real margin at their own retail', () => {

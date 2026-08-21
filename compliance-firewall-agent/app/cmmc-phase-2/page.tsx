@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { ArrowRight, Check, AlertTriangle, Gavel, CalendarClock } from 'lucide-react'
+import { ArrowRight, Check, AlertTriangle, Gavel, CalendarClock, Scale } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
 import { FaqSection } from '@/components/seo/FaqSection'
-import { CMMC_STATUS, PHASE2_TARGET_DATE, daysToPhase2 } from '@/lib/compliance/cmmc-status'
+import { CMMC_STATUS, NDAA_AI, PHASE2_TARGET_DATE, daysToPhase2 } from '@/lib/compliance/cmmc-status'
 import { PURCHASABLE_OFFER } from '@/lib/billing/entitlements'
 
 /**
@@ -93,6 +93,11 @@ const FAQS = [
     question: 'What is actually enforceable today?',
     answer:
       'DFARS 252.204-7012, all 110 NIST SP 800-171 Rev 2 controls, and your annual SPRS self-assessment score. None of those paused. DOJ has settled fifteen False Claims Act cases under its Civil Cyber-Fraud Initiative over exactly this — MORSECORP paid $4.6M over an inflated SPRS score.',
+  },
+  {
+    question: 'Does the Phase 2 pause affect the AI requirements Congress passed?',
+    answer:
+      `No. ${NDAA_AI.framework.section} of the ${NDAA_AI.act} directs the Department of War to build a cybersecurity framework for AI and machine-learning systems and incorporate it into the DFARS and CMMC. ${NDAA_AI.framework.deadlineNote} Separately, ${NDAA_AI.prohibition.section} bars contractors from using covered, adversary-linked AI on defense work — that is not a restriction on ChatGPT, Claude or Copilot, but demonstrating compliance with it still requires knowing which AI tools your people actually used. The 13 July memo paused a certification programme; it did not and could not repeal a statute.`,
   },
   {
     question: 'Does AI prompt monitoring map to specific NIST 800-171 controls?',
@@ -204,6 +209,31 @@ export default function CmmcPhase2Page() {
                   <p>{c.body}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── THE STATUTE THE PAUSE CANNOT TOUCH ───────────────── */}
+        <div className="section tight">
+          <div className="container">
+            <div className="section-head">
+              <div className="eyebrow">Written into law</div>
+              <h2 className="display">A memo paused the certificate. It cannot repeal a statute.</h2>
+              <p>{NDAA_AI.blurb}</p>
+            </div>
+            <div className="grid-2">
+              <div className="card">
+                <div className="ic"><Scale /></div>
+                <h3>{NDAA_AI.act} {NDAA_AI.framework.section}</h3>
+                <p>{NDAA_AI.framework.summary}</p>
+                <p style={{ opacity: 0.75 }}>{NDAA_AI.framework.deadlineNote}</p>
+              </div>
+              <div className="card">
+                <div className="ic"><Scale /></div>
+                <h3>{NDAA_AI.act} {NDAA_AI.prohibition.section}</h3>
+                <p>{NDAA_AI.prohibition.summary}</p>
+                <p style={{ opacity: 0.75 }}>{NDAA_AI.prohibition.scopeCaveat}</p>
+              </div>
             </div>
           </div>
         </div>

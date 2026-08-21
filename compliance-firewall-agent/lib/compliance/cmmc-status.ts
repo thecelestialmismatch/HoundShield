@@ -112,3 +112,89 @@ export const CMMC_STATUS = {
  */
 export const FCA_PITCH =
   "You personally attested an SPRS score. With no assessor in the loop, that score is your own representation to the government — and DOJ has settled fifteen False Claims Act cases over exactly that. Can you evidence yours before November?";
+
+/**
+ * Scale of the enforcement trend, for surfaces that want a number rather than a
+ * case list. Sourced 2026-08-21: DOJ's cyber-specific False Claims Act
+ * settlements reached $51.8M in 2025, a 233% year-over-year rise, inside record
+ * overall FCA recoveries of $6.8B (Fluet; PreVeil; Mintz FCA year-in-review).
+ *
+ * Prefer this over the raw case count when arguing the trend is ACCELERATING —
+ * "fifteen settlements" sounds static, "+233% in a year" does not.
+ */
+export const FCA_SCALE = {
+  cyberSettlementsUsd2025: "$51.8M",
+  cyberSettlementsYoyPct: 233,
+  totalFcaRecoveries2025: "$6.8B",
+  blurb:
+    "DOJ's cyber-specific False Claims Act settlements reached $51.8M in 2025 — a 233% increase year over year, inside record overall FCA recoveries of $6.8B. The pause removed the assessor, not the prosecutor.",
+} as const;
+
+/**
+ * THE STATUTORY AI MANDATE — the part of this story a memo cannot pause.
+ *
+ * WHY THIS BLOCK EXISTS
+ * ---------------------
+ * Market research on 2026-08-21 found the site leaning entirely on a
+ * certification date that the 13 July memo removed, while ignoring the fact
+ * that Congress had ALREADY written AI requirements for defense contractors
+ * into law in the FY2026 NDAA. A memo from the Department of War can pause its
+ * own certification programme; it cannot repeal a statute. That asymmetry is
+ * the strongest honest argument HoundShield has after the pause, and it was
+ * nowhere on the property.
+ *
+ * PRECISION MATTERS MORE THAN PUNCH HERE
+ * --------------------------------------
+ * Both provisions are easy to overstate, and overstating a regulation to a
+ * compliance buyer is the fastest way to lose one. The exact scope:
+ *
+ *   § 1513 — directs DoW to DEVELOP a physical and cybersecurity framework for
+ *     AI/ML systems and to incorporate it into the DFARS and CMMC. It is a
+ *     direction to build a framework, NOT a control set that binds a contractor
+ *     today, and Crowell confirms it carries NO implementation deadline. Say
+ *     "Congress has already pointed the AI requirement at CMMC"; never say
+ *     "AI controls are required now."
+ *
+ *   § 1532 — prohibits DoD and its contractors from using "covered artificial
+ *     intelligence" on DoD work. "Covered AI" means AI from covered (adversary-
+ *     linked) AI companies. It is NOT a restriction on ChatGPT, Claude or
+ *     Copilot, and any copy implying that is false. The honest and still-strong
+ *     consequence: a prohibition you cannot evidence compliance with is a
+ *     prohibition you are exposed on — and no contractor can show which AI
+ *     their staff used without a record of AI usage. That record is the
+ *     product. Sell the evidence gap, never a fake ban.
+ *
+ * Guard: `__tests__/cmmc-status.test.ts` pins the scope wording so a future
+ * edit cannot quietly promote either provision into a live control set.
+ */
+export const NDAA_AI = {
+  act: "FY2026 National Defense Authorization Act",
+
+  framework: {
+    section: "§ 1513",
+    /** What it actually does — a direction to build, not a control set. */
+    summary:
+      "Directs the Department of War to develop a physical and cybersecurity framework for AI and machine-learning systems, and to incorporate it into both the DFARS and CMMC.",
+    /** Stated plainly so no surface invents one. */
+    implementationDeadline: null,
+    deadlineNote:
+      "Section 1513 sets no implementation deadline; it directs a plan with timelines and milestones.",
+  },
+
+  prohibition: {
+    section: "§ 1532",
+    summary:
+      "Prohibits the Department of War and its contractors from using “covered artificial intelligence” — AI from covered, adversary-linked AI companies — in the performance of defense contracts.",
+    /** The scope correction that keeps this claim honest. */
+    scopeCaveat:
+      "This is not a restriction on mainstream commercial assistants such as ChatGPT, Claude or Copilot. It is a prohibition on a defined class of AI, and the practical exposure is evidentiary: demonstrating compliance requires knowing which AI tools your people actually used.",
+  },
+
+  /** One sentence for tight spaces. */
+  headline:
+    "Congress has already written AI requirements for defense contractors into law — the FY2026 NDAA directs an AI security framework into the DFARS and CMMC, and the Phase 2 pause does not touch a statute.",
+
+  /** Reusable paragraph — drop into prose, prompts or email bodies verbatim. */
+  blurb:
+    "While CMMC Phase 2 enforcement sits paused, the statutory direction did not move. Section 1513 of the FY2026 NDAA directs the Department of War to build a cybersecurity framework for AI and machine-learning systems and to incorporate it into the DFARS and CMMC — no implementation deadline is set, but the direction is law, and a departmental memo cannot repeal it. Section 1532 separately bars contractors from using covered, adversary-linked AI on defense work; it does not restrict mainstream commercial assistants, but demonstrating compliance with it requires knowing which AI tools your people actually used. Both point at the same missing artifact: a record of AI usage.",
+} as const;
