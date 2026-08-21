@@ -28,6 +28,7 @@
 import { founderAddress, founderFrom, founderSignature } from './identity';
 import { siteUrl } from '@/lib/site-url';
 import { PERSONAL_ACCOUNT_SENSITIVE, REGULATED_SHARE_GENAI } from '@/lib/market/netskope';
+import { sampleForAudience, SNAPSHOT_CONTROLS } from '@/components/snapshot/samples';
 
 /** A single step in the non-technical test guide. */
 export interface TestStep {
@@ -43,14 +44,19 @@ export interface TestStep {
  *
  * Pointing a reader at a button by name only works if the button is there, and
  * only lands if it is the one they care about — telling a DoD security manager
- * to click "Patient Record" reads as a mail-merge. `outreach.test.ts` asserts
- * every name here is really present in `app/demo/page.tsx`, so renaming a
- * sample button fails the suite instead of quietly breaking the emails.
+ * to click "Patient Record" reads as a mail-merge.
+ *
+ * DERIVED, not retyped. This used to be its own hardcoded copy of the names,
+ * kept honest by a guard that grepped `app/demo/page.tsx` for `name: "..."`.
+ * That guard was right to exist and did fire — but the underlying shape was two
+ * copies of one fact, so renaming a button broke live emails and was caught
+ * only by a string search. Both surfaces now read
+ * `components/snapshot/samples.ts`.
  */
 export const DEMO_SAMPLES = {
-  healthcare: 'Patient Record',
-  technical: 'AWS Config',
-  defense: 'Network Scan',
+  healthcare: sampleForAudience('healthcare'),
+  technical: sampleForAudience('technical'),
+  defense: sampleForAudience('defense'),
 } as const;
 
 /**
@@ -58,7 +64,8 @@ export const DEMO_SAMPLES = {
  * manager with no technical background. No install, no account, no IT ticket.
  *
  * Every step describes what the live /demo page ACTUALLY does (verified against
- * production 2026-07-29): the sample-scenario buttons, the Scan action, the
+ * production 2026-08-20): the sample-scenario buttons, the Scan action, the
+ * PDF generation step (the demo script mandates ending on the PDF), the
  * per-finding severity + remediation, and the in-browser guarantee.
  *
  * Step 5 is the point of the whole guide: it lets a non-technical person PROVE
@@ -86,14 +93,18 @@ export const TEST_IT_YOURSELF_STEPS: readonly TestStep[] = [
   },
   {
     n: 3,
-    text: 'Click "Scan for Threats". Your results appear in under a second.',
+    text: `Click "${SNAPSHOT_CONTROLS.scan}". Your results appear in a few milliseconds — the page shows you the real measured time.`,
   },
   {
     n: 4,
-    text: 'Read each finding: it names what was detected, how serious it is, and what to do about it.',
+    text: 'Read each finding: it names what was detected, how serious it is, and the NIST 800-171 control it maps to. Click a finding to see why it matters and how to fix it. Note what is NOT there — the page never shows the sensitive value back to you, only the name of what it found.',
   },
   {
     n: 5,
+    text: `Click "${SNAPSHOT_CONTROLS.generatePdf}". That is the gap report, built by your own browser and never uploaded.`,
+  },
+  {
+    n: 6,
     text: 'Here is the part worth doing — once the page has loaded, turn off your Wi-Fi and scan again. It still works, because the scan runs inside your own browser. Nothing was ever sent to us. That is the same reason the paid version can run inside your network.',
   },
 ] as const;

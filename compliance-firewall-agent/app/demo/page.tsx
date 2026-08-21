@@ -1,323 +1,40 @@
-"use client";
-
-import { useState, useRef } from "react";
 import Link from "next/link";
 import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { ScrollProgressBar } from "@/components/scroll-effects";
 import { InstantSnapshot } from "@/components/InstantSnapshot";
-import {
-    ShieldCheck, AlertTriangle, Lock, ArrowRight, CheckCircle2,
-    Key, Mail, CreditCard, Globe, Database, Fingerprint,
-    Eye, Zap, Shield, RotateCcw, ChevronRight, Building2,
-    FileText, Lightbulb, BookOpen, Radar,
-    Server, ChevronDown, Package
-} from "lucide-react";
+import { ENGINES, ENGINE_COUNT, PATTERN_COUNT } from "@/lib/detection/engines";
+import { ArrowRight, CheckCircle2, Zap, Shield, BookOpen } from "lucide-react";
 
-/* ═══════════════════════════════════════════════════════
-   THREAT PATTERNS — what the scanner checks for
-   ═══════════════════════════════════════════════════════ */
-const THREAT_PATTERNS = [
-    {
-        pattern: /sk-[a-zA-Z0-9_-]{20,}/g,
-        label: "OpenAI API Key",
-        icon: Key,
-        severity: "critical" as const,
-        tip: "Rotate this key immediately in your OpenAI dashboard. Never hardcode API keys in source code — use environment variables or a secrets vault (e.g., AWS Secrets Manager, HashiCorp Vault).",
-        impact: "An exposed API key lets anyone make API calls billed to your account and access your fine-tuned models.",
-        fix: "Store keys in env vars, use .gitignore for .env files, and enable key rotation policies."
-    },
-    {
-        pattern: /AKIA[0-9A-Z]{16}/g,
-        label: "AWS Access Key",
-        icon: Key,
-        severity: "critical" as const,
-        tip: "Deactivate and rotate this key in IAM immediately. Use IAM Roles instead of long-lived access keys wherever possible.",
-        impact: "Leaked AWS keys can be used to spin up resources, exfiltrate data from S3, or compromise your entire cloud infrastructure.",
-        fix: "Use IAM roles for EC2/Lambda, enable MFA, set up AWS Config rules to detect exposed keys."
-    },
-    {
-        pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
-        label: "Social Security Number (SSN)",
-        icon: Fingerprint,
-        severity: "critical" as const,
-        tip: "SSNs must never appear in AI prompts. Tokenize or mask them before processing. This is a HIPAA/PII violation.",
-        impact: "SSN exposure leads to identity theft, regulatory fines (up to $50K per violation under HIPAA), and lawsuits.",
-        fix: "Implement PII tokenization — replace SSNs with tokens like [SSN-REDACTED] before sending to any LLM."
-    },
-    {
-        pattern: /\b4\d{3}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/g,
-        label: "Credit Card Number",
-        icon: CreditCard,
-        severity: "high" as const,
-        tip: "Never send card numbers to external AI. Use payment tokens from Stripe/Braintree instead. This violates PCI-DSS.",
-        impact: "Credit card exposure triggers PCI-DSS non-compliance fines ($5K–$100K/month) and mandatory forensic audits.",
-        fix: "Use payment processor tokenization. Never store or transmit raw card numbers."
-    },
-    {
-        pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-        label: "Email Address",
-        icon: Mail,
-        severity: "medium" as const,
-        tip: "Emails are PII under GDPR. Anonymize them (e.g., j***@company.com) before including in AI prompts.",
-        impact: "Email exposure enables phishing attacks and violates GDPR Article 5 (data minimization principle).",
-        fix: "Use email masking patterns: first letter + *** + @domain. Implement DLP rules."
-    },
-    {
-        pattern: /\b(?:password|passwd|pwd)\s*[=:]\s*\S+/gi,
-        label: "Password / Credential Leak",
-        icon: Lock,
-        severity: "critical" as const,
-        tip: "Change this password immediately. Use a password manager and never include credentials in code or prompts.",
-        impact: "Exposed passwords enable unauthorized access to systems, lateral movement, and data exfiltration.",
-        fix: "Use secrets management (Vault, AWS SM), enforce password rotation, enable MFA."
-    },
-    {
-        pattern: /\b(?:192\.168|10\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01]))\.\d{1,3}\.\d{1,3}\b/g,
-        label: "Internal IP Address",
-        icon: Globe,
-        severity: "medium" as const,
-        tip: "Internal IPs reveal your network topology. Strip them from prompts to prevent reconnaissance attacks.",
-        impact: "Attackers can use internal IPs to map your network, identify targets, and plan lateral movement.",
-        fix: "Replace IPs with aliases like [INTERNAL-SERVER-1]. Block private ranges from outbound traffic."
-    },
-    {
-        pattern: /(?:BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY)/g,
-        label: "Private Key",
-        icon: Lock,
-        severity: "critical" as const,
-        tip: "This private key is compromised. Revoke it and generate a new keypair immediately.",
-        impact: "Private key exposure lets attackers impersonate your servers, decrypt traffic, and forge signatures.",
-        fix: "Store private keys in HSMs or KMS. Never commit key files to repos."
-    },
-    {
-        pattern: /(?:mongodb|postgres|mysql):\/\/[^\s]+/gi,
-        label: "Database Connection String",
-        icon: Database,
-        severity: "critical" as const,
-        tip: "Rotate the DB password and restrict access. Use connection poolers and IAM auth instead of password strings.",
-        impact: "Leaked DB strings give direct access to your database — attackers can dump, modify, or delete all data.",
-        fix: "Use IAM database auth, rotate credentials, restrict network access with VPC security groups."
-    },
-];
-
-const SAMPLE_PROMPTS = [
-    {
-        name: "API Key Leak",
-        icon: Key,
-        text: `Help me debug this code:\nconst apiKey = "sk-proj-abc123xyz456def789ghi012jkl345mno";\nfetch("https://api.openai.com/v1/chat/completions", {\n  headers: { "Authorization": "Bearer " + apiKey }\n});`
-    },
-    {
-        name: "Patient Record",
-        icon: FileText,
-        text: `Please summarize this patient record:\nPatient: John Smith, SSN: 123-45-6789\nDOB: 03/15/1985\nDiagnosis: Type 2 Diabetes\nEmail: john.smith@acmecorp.com`
-    },
-    {
-        name: "AWS Config",
-        icon: Server,
-        text: `Review this config for our production deploy:\nAWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\nAWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCY\nDB_URL=postgres://admin:SuperSecret123@prod-db.internal:5432/maindb`
-    },
-    {
-        name: "Network Scan",
-        icon: Radar,
-        text: `Our internal network scan found these:\n192.168.1.100 - File Server\n10.0.0.50 - CI/CD Pipeline\npassword=admin123\nCard: 4111-1111-1111-1111`
-    },
-];
-
-type ScanResult = {
-    label: string;
-    severity: "critical" | "high" | "medium";
-    matches: string[];
-    icon: typeof Key;
-    tip: string;
-    impact: string;
-    fix: string;
-};
-
-function scanText(text: string): ScanResult[] {
-    const results: ScanResult[] = [];
-    for (const tp of THREAT_PATTERNS) {
-        const matches = text.match(tp.pattern);
-        if (matches) {
-            results.push({ label: tp.label, severity: tp.severity, matches, icon: tp.icon, tip: tp.tip, impact: tp.impact, fix: tp.fix });
-        }
-    }
-    return results;
-}
-
-const severityColor = {
-    critical: { bg: "bg-rose-500/10", border: "border-rose-500/30", text: "text-rose-400", dot: "bg-rose-500", badge: "bg-rose-500/20 text-rose-300 border-rose-500/30" },
-    high: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-700", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-700 border-brand-500/30" },
-    medium: { bg: "bg-brand-500/10", border: "border-brand-500/30", text: "text-brand-700", dot: "bg-brand-500", badge: "bg-brand-500/20 text-brand-700 border-brand-500/30" },
-};
-
-/* ═══════════════════════════════════════════════════════
-   COMPANY CONNECTOR COMPONENT
-   ═══════════════════════════════════════════════════════ */
-function CompanyConnector({ onConnect }: { onConnect: (name: string) => void }) {
-    const [companyName, setCompanyName] = useState("");
-    const [companyDomain, setCompanyDomain] = useState("");
-    const [connected, setConnected] = useState(false);
-
-    const handleConnect = () => {
-        if (!companyName.trim()) return;
-        setConnected(true);
-        onConnect(companyName);
-    };
-
-    if (connected) {
-        return (
-            <div className="glass-card p-5 border-[rgba(5,150,105,0.2)]">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[rgba(5,150,105,0.2)] border border-[rgba(5,150,105,0.3)] flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-[var(--hs-success)]" />
-                    </div>
-                    <div>
-                        <p className="text-sm font-bold text-[var(--hs-ink)]">{companyName}</p>
-                        <p className="text-xs text-[var(--hs-success)]">Connected — Scanning as {companyName}</p>
-                    </div>
-                    <button onClick={() => { setConnected(false); setCompanyName(""); setCompanyDomain(""); }} className="ml-auto text-xs text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] transition-colors">
-                        Disconnect
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="glass-card p-5">
-            <div className="flex items-center gap-3 mb-4">
-                <Building2 className="w-5 h-5 text-brand-700" />
-                <h3 className="text-sm font-bold text-[var(--hs-ink-secondary)]">Connect Your Company</h3>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(5,150,105,0.2)] text-[var(--hs-success)] border border-[rgba(5,150,105,0.2)] font-semibold">OPTIONAL</span>
-            </div>
-            <p className="text-xs text-[var(--hs-ink-secondary)] mb-4">Tag your scan results with your company name. No data leaves your browser.</p>
-            <div className="grid grid-cols-2 gap-3">
-                <input
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
-                    placeholder="Company Name"
-                    className="bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/40"
-                />
-                <input
-                    value={companyDomain}
-                    onChange={(e) => setCompanyDomain(e.target.value)}
-                    placeholder="Domain (optional)"
-                    className="bg-white border border-[var(--hs-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/40"
-                />
-            </div>
-            <button onClick={handleConnect} disabled={!companyName.trim()} className={`mt-3 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${companyName.trim() ? "bg-brand-500/20 text-brand-700 border border-brand-500/30 hover:bg-brand-500/30" : "bg-white text-[var(--hs-ink-secondary)] border border-[var(--hs-border)] cursor-not-allowed"}`}>
-                <Building2 className="w-4 h-4" /> Connect
-            </button>
-        </div>
-    );
-}
-
-/* ═══════════════════════════════════════════════════════
-   EXPANDED RESULT CARD WITH FIX DETAILS
-   ═══════════════════════════════════════════════════════ */
-function ThreatCard({ result, companyName }: { result: ScanResult; companyName: string }) {
-    const [expanded, setExpanded] = useState(false);
-    const color = severityColor[result.severity];
-    const Icon = result.icon;
-
-    return (
-        <div className={`rounded-xl ${color.bg} border ${color.border} overflow-hidden`}>
-            <button onClick={() => setExpanded(!expanded)} className="w-full p-4 text-left">
-                <div className="flex items-center gap-3">
-                    <Icon className={`w-5 h-5 ${color.text}`} />
-                    <span className={`text-sm font-bold ${color.text}`}>{result.label}</span>
-                    <span className={`ml-auto text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${color.badge}`}>{result.severity}</span>
-                    <ChevronDown className={`w-4 h-4 text-[var(--hs-ink-secondary)] transition-transform ${expanded ? "rotate-180" : ""}`} />
-                </div>
-                {result.matches.map((m, j) => (
-                    <div key={j} className="text-xs font-mono bg-[var(--hs-mist)] rounded-lg px-3 py-2 mt-3 text-[var(--hs-ink-tertiary)] break-all">
-                        {m.length > 80 ? m.slice(0, 80) + "…" : m}
-                    </div>
-                ))}
-            </button>
-
-            {expanded && (
-                <div className="px-4 pb-4 space-y-3 border-t border-[var(--hs-border)] pt-3">
-                    {/* Impact */}
-                    <div className="flex gap-3">
-                        <AlertTriangle className={`w-4 h-4 ${color.text} mt-0.5 shrink-0`} />
-                        <div>
-                            <p className="text-xs font-bold text-[var(--hs-ink-secondary)] mb-1">Impact</p>
-                            <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.impact}</p>
-                        </div>
-                    </div>
-                    {/* Quick Fix */}
-                    <div className="flex gap-3">
-                        <Lightbulb className="w-4 h-4 text-brand-700 mt-0.5 shrink-0" />
-                        <div>
-                            <p className="text-xs font-bold text-[var(--hs-ink-secondary)] mb-1">Quick Fix</p>
-                            <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.tip}</p>
-                        </div>
-                    </div>
-                    {/* Recommended Action */}
-                    <div className="flex gap-3">
-                        <CheckCircle2 className="w-4 h-4 text-[var(--hs-success)] mt-0.5 shrink-0" />
-                        <div>
-                            <p className="text-xs font-bold text-[var(--hs-ink-secondary)] mb-1">Permanent Fix</p>
-                            <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">{result.fix}</p>
-                        </div>
-                    </div>
-                    {/* What the deployed proxy does with this finding */}
-                    <div className="bg-brand-500/10 border border-brand-500/20 rounded-lg p-3 mt-2">
-                        <p className="text-[11px] text-brand-700 leading-relaxed">
-                            <strong>With HoundShield deployed:</strong> This {result.severity === "critical" ? "would have been blocked" : "would have been flagged for review"} inline — before{companyName ? ` ${companyName}'s` : " your"} data reached any AI provider — and written to a hash-chained audit log.
-                        </p>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-}
-
-/* ═══════════════════════════════════════════════════════
-   MAIN PAGE
-   ═══════════════════════════════════════════════════════ */
+/**
+ * /demo — the free, ungated, in-browser risk snapshot.
+ *
+ * This page used to run TWO scanners that shared no code: a canned 9-regex
+ * demo with a hardcoded 1400ms `setTimeout` at the top, and `InstantSnapshot`
+ * (the real engine, ending on the PDF) below it. The canned one was deleted.
+ *
+ * Three reasons, all of which apply to whatever replaces this next:
+ *
+ *   1. It was a SECOND pattern registry, and it drifted. The page said
+ *      "9 categories" three times before mentioning the real 53, and the
+ *      comparison table shipped "90 local patterns" — a double-counted figure
+ *      `lib/detection/engines.ts` was written to delete, which survived here as
+ *      a string literal where that module's guard could not see it.
+ *   2. The fake `setTimeout` manufactured latency on a product whose entire
+ *      claim is a sub-10ms local scan. `InstantSnapshot` reports a real
+ *      `performance.now()` measurement instead.
+ *   3. Its "Connect Your Company" step connected to nothing.
+ *
+ * Every number on this page is now computed from the shipped engine list.
+ * Do not hardcode a count here; import it.
+ *
+ * This is a SERVER component. It was `"use client"` only because the deleted
+ * scanner held useState; nothing here is interactive any more, so the engine
+ * import is evaluated on the server rather than shipped. (`InstantSnapshot`
+ * carries its own "use client" and pulls the pattern regexes into the browser
+ * deliberately — that local scan is the product demo.)
+ */
 export default function FreeDemoPage() {
-    const [inputText, setInputText] = useState("");
-    const [results, setResults] = useState<ScanResult[]>([]);
-    const [isScanning, setIsScanning] = useState(false);
-    const [scanComplete, setScanComplete] = useState(false);
-    const [totalScans, setTotalScans] = useState(0);
-    const [companyName, setCompanyName] = useState("");
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-    const runScan = () => {
-        if (!inputText.trim()) return;
-        setIsScanning(true);
-        setScanComplete(false);
-        setResults([]);
-        setTimeout(() => {
-            const found = scanText(inputText);
-            setResults(found);
-            setIsScanning(false);
-            setScanComplete(true);
-            setTotalScans((prev) => prev + 1);
-        }, 1400);
-    };
-
-    const loadSample = (idx: number) => {
-        setInputText(SAMPLE_PROMPTS[idx].text);
-        setScanComplete(false);
-        setResults([]);
-    };
-
-    const clearAll = () => {
-        setInputText("");
-        setResults([]);
-        setScanComplete(false);
-        textareaRef.current?.focus();
-    };
-
-    const criticalCount = results.filter((r) => r.severity === "critical").length;
-    const highCount = results.filter((r) => r.severity === "high").length;
-    const mediumCount = results.filter((r) => r.severity === "medium").length;
-
     return (
         <div className="min-h-screen bg-[var(--hs-surface-0)] text-[var(--hs-ink)] font-sans overflow-x-hidden">
             <ScrollProgressBar />
@@ -332,11 +49,17 @@ export default function FreeDemoPage() {
                     {/* ═══ HEADER ═══ */}
                     <div className="text-center mb-12">
                         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-                            Test Your AI Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)]">Right Now</span>
+                            Test Your AI Security{" "}
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--hs-steel-dark)] to-[var(--hs-steel)]">Right Now</span>
                         </h1>
                         <p className="text-lg text-[var(--hs-ink-tertiary)] max-w-3xl mx-auto leading-relaxed">
-                            Paste any prompt, code, or message your team sends to AI tools like ChatGPT, Claude, or Copilot.
-                            Our scanner instantly checks for <strong className="text-[var(--hs-ink-secondary)]">9 categories</strong> of sensitive data leaks — and tells you exactly how to fix them.
+                            Paste a prompt your team sends to ChatGPT, Claude or Copilot. The same{" "}
+                            <strong className="text-[var(--hs-ink-secondary)]">{PATTERN_COUNT} detection patterns</strong>{" "}
+                            that ship in the product scan it here — in your browser, on this device — and map every
+                            finding to a NIST 800-171 control.
+                        </p>
+                        <p className="text-sm text-[var(--hs-ink-tertiary)] max-w-3xl mx-auto mt-3">
+                            No signup. No email. Nothing uploaded.
                         </p>
                     </div>
 
@@ -345,253 +68,107 @@ export default function FreeDemoPage() {
                         <InstantSnapshot />
                     </div>
 
-                    {/* ═══ HOW TO USE (Step-by-step) ═══ */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-                        {[
-                            { step: "1", title: "Connect (optional)", desc: "Tag scans with your company name", icon: Building2, color: "text-brand-700" },
-                            { step: "2", title: "Paste Your Prompt", desc: "Or pick from our sample scenarios", icon: FileText, color: "text-[var(--hs-steel)]" },
-                            { step: "3", title: "Scan for Threats", desc: "We check 9 threat patterns in <50ms", icon: Radar, color: "text-brand-700" },
-                            { step: "4", title: "Get Fix Reports", desc: "Detailed impact + remediation tips", icon: Lightbulb, color: "text-[var(--hs-success)]" },
-                        ].map((s) => {
-                            const Icon = s.icon;
-                            return (
-                                <div key={s.step} className="glass-card p-4 text-center group hover:border-brand-500/20 transition-all">
-                                    <div className={`text-xs font-black ${s.color} mb-2`}>STEP {s.step}</div>
-                                    <Icon className={`w-6 h-6 ${s.color} mx-auto mb-2 group-hover:scale-110 transition-transform`} />
-                                    <p className="text-sm font-bold text-[var(--hs-ink)] mb-1">{s.title}</p>
-                                    <p className="text-[11px] text-[var(--hs-ink-secondary)]">{s.desc}</p>
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* ═══ COMPANY CONNECTOR ═══ */}
-                    <div className="mb-6">
-                        <CompanyConnector onConnect={setCompanyName} />
-                    </div>
-
-                    {/* ═══ MAIN SCANNER LAYOUT ═══ */}
-                    <div className="grid lg:grid-cols-5 gap-6">
-                        {/* Left: Input */}
-                        <div className="lg:col-span-3 space-y-4">
-                            {/* Sample Buttons */}
-                            <div className="flex flex-wrap gap-2 items-center">
-                                <span className="text-xs text-[var(--hs-ink-secondary)]">Try a sample:</span>
-                                {SAMPLE_PROMPTS.map((sample, i) => {
-                                    const SIcon = sample.icon;
-                                    return (
-                                        <button key={sample.name} onClick={() => loadSample(i)} className="text-xs px-3 py-1.5 rounded-lg bg-white border border-[var(--hs-border)] text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] hover:bg-[var(--hs-mist)] hover:border-[var(--hs-border)] transition-all flex items-center gap-1.5">
-                                            <SIcon className="w-3 h-3" /> {sample.name}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Textarea */}
-                            <div className="relative">
-                                <textarea
-                                    ref={textareaRef}
-                                    value={inputText}
-                                    onChange={(e) => { setInputText(e.target.value); setScanComplete(false); }}
-                                    placeholder="Paste your AI prompt, code, or message here to scan for sensitive data..."
-                                    rows={12}
-                                    className="w-full bg-white border border-[var(--hs-border)] rounded-xl p-5 text-sm font-mono text-[var(--hs-ink)] placeholder:text-[var(--hs-ink-tertiary)] focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30 resize-none transition-all"
-                                />
-                                {inputText && (
-                                    <button onClick={clearAll} className="absolute top-3 right-3 p-1.5 rounded-lg bg-white text-[var(--hs-ink-secondary)] hover:text-[var(--hs-ink)] hover:bg-[var(--hs-mist)] transition-all" title="Clear">
-                                        <RotateCcw className="w-4 h-4" />
-                                    </button>
-                                )}
-                            </div>
-
-                            {/* Scan Button */}
-                            <button
-                                onClick={runScan}
-                                disabled={!inputText.trim() || isScanning}
-                                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 transition-all ${isScanning ? "bg-brand-500/30 text-brand-700 cursor-wait" : inputText.trim() ? "btn-primary" : "bg-white text-[var(--hs-ink-secondary)] cursor-not-allowed border border-[var(--hs-border)]"}`}
-                            >
-                                {isScanning ? (
-                                    <>
-                                        <div className="w-5 h-5 border-2 border-brand-400/30 border-t-brand-400 rounded-full animate-spin" />
-                                        Scanning 9 Threat Categories...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Zap className="w-5 h-5" />
-                                        Scan for Data Leaks
-                                    </>
-                                )}
-                            </button>
-                        </div>
-
-                        {/* Right: Results */}
-                        <div className="lg:col-span-2 space-y-4">
-                            <div className="glass-card p-5 min-h-[400px] flex flex-col">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-sm font-bold text-[var(--hs-ink-secondary)] uppercase tracking-wider">
-                                        {companyName ? `${companyName} — Scan Results` : "Scan Results"}
-                                    </h3>
-                                    {totalScans > 0 && <span className="text-xs text-[var(--hs-ink-secondary)]">{totalScans} scan{totalScans !== 1 ? "s" : ""}</span>}
-                                </div>
-
-                                {/* Empty State */}
-                                {!scanComplete && !isScanning && (
-                                    <div className="flex-1 flex flex-col items-center justify-center text-[var(--hs-ink-secondary)] py-8">
-                                        <Eye className="w-10 h-10 mb-3 opacity-30" />
-                                        <p className="text-sm mb-1">Paste text and click Scan</p>
-                                        <p className="text-[11px] text-[var(--hs-ink-secondary)]">Results will appear here with fix recommendations</p>
-                                    </div>
-                                )}
-
-                                {/* Scanning */}
-                                {isScanning && (
-                                    <div className="flex-1 flex flex-col items-center justify-center py-8">
-                                        <div className="w-12 h-12 border-2 border-brand-500/20 border-t-brand-500 rounded-full animate-spin mb-4" />
-                                        <p className="text-sm text-brand-700 animate-pulse">Checking 9 categories...</p>
-                                        <p className="text-[11px] text-[var(--hs-ink-secondary)] mt-1">API Keys • SSN • Credit Cards • Passwords • IPs • DB Strings</p>
-                                    </div>
-                                )}
-
-                                {/* All Clear */}
-                                {scanComplete && results.length === 0 && (
-                                    <div className="flex-1 flex flex-col items-center justify-center py-8">
-                                        <div className="w-16 h-16 rounded-full bg-[rgba(5,150,105,0.2)] border-2 border-[rgba(5,150,105,0.4)] flex items-center justify-center mb-4">
-                                            <ShieldCheck className="w-8 h-8 text-[var(--hs-success)]" />
-                                        </div>
-                                        <p className="text-[var(--hs-success)] font-bold text-lg mb-1">All Clear!</p>
-                                        <p className="text-[var(--hs-ink-secondary)] text-sm text-center">No sensitive data detected. This prompt is safe to send to AI.</p>
-                                    </div>
-                                )}
-
-                                {/* Threats Found */}
-                                {scanComplete && results.length > 0 && (
-                                    <div className="space-y-3 flex-1 overflow-y-auto">
-                                        {/* Summary */}
-                                        <div className="flex flex-wrap gap-2 mb-3">
-                                            {criticalCount > 0 && (
-                                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/10 border border-rose-500/20">
-                                                    <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-                                                    <span className="text-[11px] font-bold text-rose-400">{criticalCount} Critical</span>
-                                                </div>
-                                            )}
-                                            {highCount > 0 && (
-                                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20">
-                                                    <div className="w-2 h-2 rounded-full bg-brand-500" />
-                                                    <span className="text-[11px] font-bold text-brand-700">{highCount} High</span>
-                                                </div>
-                                            )}
-                                            {mediumCount > 0 && (
-                                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20">
-                                                    <div className="w-2 h-2 rounded-full bg-brand-500" />
-                                                    <span className="text-[11px] font-bold text-brand-700">{mediumCount} Medium</span>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <p className="text-xs text-[var(--hs-ink-secondary)] mb-2">Click each threat to see its impact and how to fix it ↓</p>
-
-                                        {results.map((r, i) => (
-                                            <ThreatCard key={i} result={r} companyName={companyName} />
-                                        ))}
-
-                                        {/* CTA */}
-                                        <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-brand-500/15 to-[rgba(129,166,198,0.15)] border border-brand-500/25">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Package className="w-4 h-4 text-brand-700" />
-                                                <p className="text-sm font-bold text-[var(--hs-ink)]">CMMC AI Risk Assessment Report — $499</p>
-                                            </div>
-                                            <p className="text-xs text-[var(--hs-ink-tertiary)] mb-3 leading-relaxed">
-                                                This free scan shows you one prompt. The <strong className="text-[var(--hs-ink-secondary)]">$499 report</strong> is 14 days of monitoring inside your own environment, every finding mapped to a NIST 800-171 control, in a signed PDF you can hand to an assessor.
-                                            </p>
-                                            <Link href="/assessment" className="btn-primary w-full text-center text-sm !py-3 mb-2">
-                                                Get the $499 Report <ArrowRight className="w-4 h-4" />
-                                            </Link>
-                                            <Link href="/pricing" className="btn-ghost w-full text-center text-xs !py-2.5">
-                                                See what&apos;s included <ChevronRight className="w-3 h-3" />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* ═══ AI CAPABILITIES SECTION ═══ */}
+                    {/* ═══ WHAT THE ENGINE SCANS FOR ═══ */}
                     <div className="mt-20">
                         <div className="text-center mb-10">
-                            <h2 className="text-3xl font-bold tracking-tight mb-3">What Our AI Scans For</h2>
-                            <p className="text-sm text-[var(--hs-ink-secondary)] max-w-2xl mx-auto">This free scanner checks 9 threat patterns in your browser. The deployed product ships 16 detection engines across 53 patterns — CUI markings, CAGE codes, ITAR terms, PHI and more — all matched locally, with no prompt text ever leaving your network.</p>
+                            <h2 className="text-3xl font-bold tracking-tight mb-3">What the engine scans for</h2>
+                            <p className="text-sm text-[var(--hs-ink-secondary)] max-w-2xl mx-auto">
+                                {ENGINE_COUNT} detection engines across {PATTERN_COUNT} patterns — CUI markings, CAGE
+                                codes, ITAR terms, PHI and more. The scan above runs this same set locally, so no
+                                prompt text ever leaves your network.
+                            </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-                            {THREAT_PATTERNS.map((tp) => {
-                                const Icon = tp.icon;
-                                const color = severityColor[tp.severity];
-                                return (
-                                    <div key={tp.label} className="glass-card p-4 group hover:border-brand-500/20 transition-all">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <Icon className={`w-5 h-5 ${color.text}`} />
-                                            <span className="text-sm font-bold text-[var(--hs-ink-secondary)]">{tp.label}</span>
-                                            <span className={`ml-auto text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full border ${color.badge}`}>{tp.severity}</span>
-                                        </div>
-                                        <p className="text-[11px] text-[var(--hs-ink-secondary)] leading-relaxed">{tp.tip.slice(0, 120)}{tp.tip.length > 120 ? "…" : ""}</p>
-                                    </div>
-                                );
-                            })}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
+                            {ENGINES.map((engine) => (
+                                <div
+                                    key={engine}
+                                    className="glass-card p-3 flex items-center gap-2 hover:border-brand-500/20 transition-all"
+                                >
+                                    <CheckCircle2 className="w-4 h-4 text-brand-700 shrink-0" />
+                                    <span className="text-xs font-semibold text-[var(--hs-ink-secondary)]">{engine}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* ═══ HOW TO TAKE THE TEST (DETAILED GUIDE) ═══ */}
+                    {/* ═══ HOW TO TAKE THE TEST ═══ */}
                     <div className="mt-16 glass-card p-8 md:p-10">
                         <div className="flex items-center gap-3 mb-6">
                             <BookOpen className="w-6 h-6 text-brand-700" />
-                            <h2 className="text-2xl font-bold">How to Take the Test — Step by Step</h2>
+                            <h2 className="text-2xl font-bold">How to take the test — step by step</h2>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8">
                             <div className="space-y-5">
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-700 mb-2">1. Connect Your Company (Optional)</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Enter your company name to tag scan results. This is purely for your reference — no data leaves your browser. If you skip this, scans still work normally.</p>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">1. Paste a real prompt</h3>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
+                                        Use text your team actually sends to an AI tool — a code snippet, a support
+                                        ticket, a config file, a draft email. The more realistic it is, the more
+                                        honest the result. It stays on your device either way.
+                                    </p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-700 mb-2">2. Paste Real Prompts</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Copy any text your team typically sends to ChatGPT, Claude, Copilot, or other AI tools. This could be code snippets, Slack messages, emails, support tickets, or config files. The more realistic, the better.</p>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">2. Or load a scenario</h3>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
+                                        Four one-click scenarios cover defense (CUI, CAGE codes, ITAR), healthcare
+                                        (a patient record), legal (an M&amp;A memo) and DevOps (a config paste with
+                                        live credentials). Each one selects its industry automatically.
+                                    </p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-700 mb-2">3. Or Use Sample Scenarios</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Not sure what to test? Click one of the 4 sample buttons (API Key Leak, Patient Record, AWS Config, Network Scan) to load a realistic scenario and see the scanner in action.</p>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">3. Read the findings</h3>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
+                                        Every finding names the pattern, the data category, the NIST 800-171 control it
+                                        implicates, and whether the proxy would block or flag it. Expand any finding for
+                                        why it matters, a quick fix and a permanent one.
+                                    </p>
                                 </div>
                             </div>
                             <div className="space-y-5">
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-700 mb-2">4. Review the Threat Report</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Each detected threat shows the exact match, severity level (Critical/High/Medium), impact assessment, and two levels of fix recommendations — a quick fix and a permanent solution.</p>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">4. Check what is NOT shown</h3>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
+                                        Findings deliberately show the pattern <em>name</em>, never the matched text.
+                                        Your SSN, key or CAGE code is detected and never echoed back — on screen or in
+                                        the PDF. That constraint is the product, demonstrated rather than asserted.
+                                    </p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-brand-700 mb-2">5. Understand What You Need</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">This free scanner checks 9 patterns on one prompt you paste. The deployed proxy checks all 16 engines on <em>every</em> prompt your team sends, blocks the violations, and records each one in a hash-chained audit log — which is the part an assessor asks to see.</p>
+                                    <h3 className="text-sm font-bold text-brand-700 mb-2">5. Generate the PDF</h3>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
+                                        A branded gap-report preview, built by your browser and never uploaded. It is
+                                        marked as a preview, because a one-paste snapshot is not the tamper-evident
+                                        artifact an assessor accepts.
+                                    </p>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-[var(--hs-success)] mb-2">6. Get the Full Package</h3>
-                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">Ready to see your real exposure? The $499 CMMC AI Risk Assessment Report runs the proxy in your own environment for 14 days and returns a signed PDF mapped to NIST 800-171, backed by an immutable audit trail.</p>
+                                    <h3 className="text-sm font-bold text-[var(--hs-success)] mb-2">6. Get the real thing</h3>
+                                    <p className="text-xs text-[var(--hs-ink-tertiary)] leading-relaxed">
+                                        The $499 CMMC AI Risk Assessment Report runs the proxy in your own environment
+                                        for 14 days and returns a signed PDF mapped to NIST 800-171, backed by an
+                                        immutable audit trail.
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* ═══ WHY FREE SCANNER ≠ FULL PROTECTION ═══ */}
+                    {/* ═══ PREVIEW vs THE REPORT ═══ */}
                     <div className="mt-10 grid md:grid-cols-2 gap-6">
                         <div className="glass-card p-6">
-                            <h3 className="text-sm font-bold text-[var(--hs-ink-tertiary)] mb-4 flex items-center gap-2"><Zap className="w-4 h-4 text-brand-700" /> This Free Demo</h3>
+                            <h3 className="text-sm font-bold text-[var(--hs-ink-tertiary)] mb-4 flex items-center gap-2">
+                                <Zap className="w-4 h-4 text-brand-700" /> This free preview
+                            </h3>
                             <ul className="space-y-2.5">
                                 {[
-                                    "9 regex-based threat patterns",
-                                    "Runs in your browser (no server)",
-                                    "Basic quick fix tips",
+                                    `All ${PATTERN_COUNT} patterns, on one prompt you paste`,
+                                    "Runs in your browser — no server, no upload",
+                                    "NIST 800-171 control per finding, plus remediation",
+                                    "Preview PDF, generated on your device",
                                     "No real-time interception",
-                                    "No audit logs",
-                                    "No compliance reports",
+                                    "No audit log — nothing an assessor can verify",
                                 ].map(item => (
                                     <li key={item} className="flex items-start gap-2 text-xs text-[var(--hs-ink-secondary)]">
                                         <CheckCircle2 className="w-3.5 h-3.5 text-[var(--hs-ink-secondary)] mt-0.5 shrink-0" />
@@ -601,11 +178,13 @@ export default function FreeDemoPage() {
                             </ul>
                         </div>
                         <div className="glass-card-glow p-6 border-brand-500/20">
-                            <h3 className="text-sm font-bold text-brand-700 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-brand-700" /> The $499 Report</h3>
+                            <h3 className="text-sm font-bold text-brand-700 mb-4 flex items-center gap-2">
+                                <Shield className="w-4 h-4 text-brand-700" /> The $499 report
+                            </h3>
                             <ul className="space-y-2.5">
                                 {[
-                                    "16 detection engines across 90 local patterns",
-                                    "Inline gateway — blocks before AI sees the data",
+                                    `The same ${ENGINE_COUNT} engines and ${PATTERN_COUNT} patterns, on EVERY prompt for 14 days`,
+                                    "Inline gateway — blocks before the model sees the data",
                                     "Every finding mapped to a NIST 800-171 control",
                                     "Immutable SHA-256 hash-chained audit trail",
                                     "Signed PDF you can hand to a C3PAO assessor",
@@ -617,20 +196,28 @@ export default function FreeDemoPage() {
                                     </li>
                                 ))}
                             </ul>
-                            <Link href="/pricing" className="btn-primary w-full mt-5 text-center text-sm !py-3">
-                                View Pricing <ArrowRight className="w-4 h-4" />
+                            <Link href="/assessment" className="btn-primary w-full mt-5 text-center text-sm !py-3">
+                                Get the $499 report <ArrowRight className="w-4 h-4" />
+                            </Link>
+                            <Link
+                                href="/pricing"
+                                className="block w-full mt-2 text-center text-xs text-[var(--hs-ink-secondary)] hover:text-brand-700"
+                            >
+                                See full pricing
                             </Link>
                         </div>
                     </div>
 
                     {/* ═══ BOTTOM STATS ═══ */}
                     <div className="mt-14 text-center">
-                        <p className="text-sm text-[var(--hs-ink-secondary)] mb-6"> This demo runs 100% in your browser. No data is sent to any server.</p>
+                        <p className="text-sm text-[var(--hs-ink-secondary)] mb-6">
+                            This demo runs 100% in your browser. No data is sent to any server.
+                        </p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
                             {[
-                                { label: "Patterns Checked", value: "9" },
-                                { label: "Scan Speed", value: "<50ms" },
-                                { label: "Your Data Sent", value: "Nowhere" },
+                                { label: "Patterns checked", value: String(PATTERN_COUNT) },
+                                { label: "Detection engines", value: String(ENGINE_COUNT) },
+                                { label: "Your data sent", value: "Nowhere" },
                                 { label: "Cost", value: "$0" },
                             ].map((s) => (
                                 <div key={s.label} className="glass-card p-4 text-center">

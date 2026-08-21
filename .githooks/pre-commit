@@ -28,7 +28,23 @@ DIFF=$(git diff --cached -U0)
 # Patterns: AWS keys, Stripe keys, Supabase service role, OpenAI keys, generic tokens
 PATTERNS='(AKIA[0-9A-Z]{16}|sk_live_[a-zA-Z0-9]{20,}|sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|service_role.*eyJ[a-zA-Z0-9])'
 
-FOUND=$(echo "$DIFF" | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "$PATTERNS" || true)
+# Known-synthetic values that MUST be allowed through.
+#
+# The product's own CUI/secret detector uses the same AKIA[0-9A-Z]{16} regex as
+# the rule above — that is not a coincidence, it is the same job. So any demo
+# fixture that exists to DEMONSTRATE AWS-key detection necessarily trips this
+# guard. Blocking them means every change to the /demo scenarios needs
+# --no-verify, which teaches the habit of bypassing the secrets gate; a guard
+# people routinely skip protects nothing.
+#
+# Narrow on purpose: two exact literals, not a relaxed pattern.
+#   AKIAIOSFODNN7EXAMPLE  — AWS's own published documentation example key
+#   AKIA1234567890ABCD12  — sequential digits, self-evidently fabricated
+# They are REMOVED from the line before matching rather than the line being
+# skipped, so a real key sharing a line with one of these is still caught.
+KNOWN_SYNTHETIC='AKIAIOSFODNN7EXAMPLE|AKIA1234567890ABCD12'
+
+FOUND=$(echo "$DIFF" | grep -E '^\+' | grep -vE '^\+\+\+' | sed -E "s/$KNOWN_SYNTHETIC//g" | grep -iE "$PATTERNS" || true)
 if [ -n "$FOUND" ]; then
   echo "${RED}❌ BLOCKED: Possible secrets detected in staged changes:${NC}"
   echo "$FOUND" | head -5

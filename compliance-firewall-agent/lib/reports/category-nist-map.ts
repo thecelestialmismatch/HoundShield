@@ -117,3 +117,67 @@ export function blockEventFromFinding(
     dcsa_reportable: isDcsaReportable(finding.category, finding.risk),
   };
 }
+
+/**
+ * Remediation guidance per data category, shown beside each finding and in the
+ * demo. Keyed by CATEGORY rather than by individual pattern for a reason: the
+ * engine ships 53 patterns and grows, so per-pattern copy would rot the moment
+ * a pattern is added. Category is the axis the NIST control already hangs off,
+ * so guidance and control stay in step by construction.
+ *
+ * Ported from the remediation tips that used to live in the demo page's own
+ * 9-pattern scanner. That scanner was deleted because it duplicated — and
+ * understated — the real engine on the same page; this content was the one part
+ * worth keeping, so it moved here rather than being thrown away with it.
+ */
+export interface CategoryRemediation {
+  /** What goes wrong if this reaches a third-party model. */
+  impact: string;
+  /** Something the reader can do today. */
+  quickFix: string;
+  /** The control that stops it recurring. */
+  permanentFix: string;
+}
+
+export const CATEGORY_REMEDIATION: Record<RuleCategory, CategoryRemediation> = {
+  IP: {
+    impact:
+      "Controlled technical data and credentials in a third-party prompt leave your control boundary. For a DoD contractor that is a DFARS 252.204-7012 exposure with no audit trail to show an assessor.",
+    quickFix:
+      "Rotate any exposed key immediately, and strip CUI markings, CAGE codes and contract numbers before pasting. Never paste a key to test whether it is still valid.",
+    permanentFix:
+      "Route AI traffic through an inline proxy that blocks the request before it leaves the network, and keep a hash-chained record of every block as evidence.",
+  },
+  HIPAA_PHI: {
+    impact:
+      "PHI sent to a general-purpose model is a disclosure to a party with no BAA. ChatGPT is not HIPAA-compliant without one (only Enterprise/API carry a BAA), so the paste itself is the reportable event.",
+    quickFix:
+      "De-identify before pasting — remove names, dates, MRNs and SSNs. A summary written without the identifiers usually gets the same answer.",
+    permanentFix:
+      "Enforce de-identification at the gateway rather than by policy memo, and log each intercepted disclosure so a Privacy Officer can evidence the control.",
+  },
+  PII: {
+    impact:
+      "Names, SSNs, dates of birth, emails and card numbers are regulated identifiers. Exposure drives breach-notification duties, and card data additionally puts PCI-DSS scope on a system you never intended to bring in scope.",
+    quickFix:
+      "Tokenize or mask identifiers before the prompt — replace with placeholders such as [SSN] or j***@company.com.",
+    permanentFix:
+      "Apply tokenization at the boundary so masking does not depend on each person remembering, and alert on repeat offenders.",
+  },
+  FINANCIAL: {
+    impact:
+      "Account numbers, routing numbers and revenue figures in a prompt become third-party retained data, and the paste is invisible to the audit logging your framework requires.",
+    quickFix:
+      "Replace real figures with representative ones — a model reasons the same way about $10M as about your actual number.",
+    permanentFix:
+      "Create and retain audit records for AI egress the same way you do for any other system that touches financial data.",
+  },
+  STRATEGIC: {
+    impact:
+      "M&A terms, pricing strategy and roadmap detail are trade secrets. Disclosure to a third party can weaken trade-secret protection, which depends on demonstrating reasonable steps to keep the information secret.",
+    quickFix:
+      "Anonymize the deal — drop counterparty names and real numbers before asking for help with the wording.",
+    permanentFix:
+      "Encrypt or block strategic content in transit, and keep the block record — that log is itself the evidence of reasonable steps.",
+  },
+};

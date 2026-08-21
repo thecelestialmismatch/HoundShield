@@ -169,9 +169,12 @@ describe('/demo tells the truth about the product', () => {
 
   it('quotes the engine and pattern counts that engines.ts computes', () => {
     /*
-     * Hardcoded in the page on purpose: importing engines.ts would pull every
-     * pattern regex into this client bundle. This assertion is what keeps the
-     * literal honest, so a 17th engine fails here instead of shipping a lie.
+     * UPDATE 2026-08-20: /demo now IMPORTS these from engines.ts rather than
+     * hardcoding them, and is a server component, so the bundle concern this
+     * comment used to describe no longer applies. The assertion is kept and
+     * broadened below — it now accepts either the literal or the interpolation,
+     * because what matters is that the page cannot state a number the product
+     * does not produce, however it renders it.
      *
      * It previously asserted `PATTERN_COUNT === 90` — and did its job
      * perfectly, right up to the point where the number itself was wrong.
@@ -185,8 +188,26 @@ describe('/demo tells the truth about the product', () => {
      * second copy of it here just creates another thing to be wrong.
      */
     expect(ENGINE_COUNT).toBe(16);
-    expect(demo).toContain(`${ENGINE_COUNT} detection engines`);
-    expect(demo).toContain(`${PATTERN_COUNT} patterns`);
+    const statesEngines =
+      demo.includes(`${ENGINE_COUNT} detection engines`) ||
+      demo.includes("{ENGINE_COUNT} detection engines");
+    const statesPatterns =
+      demo.includes(`${PATTERN_COUNT} patterns`) ||
+      demo.includes("{PATTERN_COUNT} patterns") ||
+      demo.includes("{PATTERN_COUNT} detection patterns");
+    expect(statesEngines, "/demo must state the engine count from engines.ts").toBe(true);
+    expect(statesPatterns, "/demo must state the pattern count from engines.ts").toBe(true);
+    // Whichever form it uses, a WRONG literal must still fail. engines.test.ts
+    // owns that check across every surface; assert here that /demo carries no
+    // stale hardcoded count of its own.
+    //
+    // Comments stripped first: the page's own header comment explains the "90
+    // local patterns" bug it was written to fix, and naming the bug must not
+    // trip the check that exists because of it.
+    const demoCode = demo
+      .replace(/\/\*[\s\S]*?\*\//g, " ")
+      .replace(/(^|[^:])\/\/[^\n]*/g, "$1 ");
+    expect(demoCode).not.toMatch(/\b(?:90|9)\s+(?:local |shipped |detection )?patterns?\b/);
   });
 
   it('funnels to the one purchasable offer', () => {
