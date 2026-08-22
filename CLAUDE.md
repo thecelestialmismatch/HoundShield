@@ -115,7 +115,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 | Integration | Status | Action Required |
 |-------------|--------|-----------------|
-| Supabase auth + DB | ✅ Wired | Migrations through 037 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, and **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
+| Supabase auth + DB | ✅ Wired | Migrations through 038 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**, and **038 (seed_anchors.seq — until applied the audit chain orders by `created_at`, a transaction timestamp two concurrent anchors can share, which `verifySeedChain` can report as CHAIN_BROKEN on an intact chain)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
 | Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
@@ -357,7 +357,7 @@ compliance-firewall-agent/
   lib/brain-ai/                    — BM25 knowledge graph + query interface
   lib/gateway/                     — Core AI interception engine
   lib/classifier/                  — 53-pattern / 16-engine CUI/PII/IP/PHI detector
-  supabase/migrations/             — through 037 in repo (verify production application before release; 035 enables code-only reset, 036 removes public privileged-RPC execution, 037 persists free-demo leads)
+  supabase/migrations/             — through 038 in repo (verify production application before release; 035 enables code-only reset, 036 removes public privileged-RPC execution, 037 persists free-demo leads, 038 gives the audit chain a total order)
 
 proxy/
   server.ts                        — HTTPS proxy (the actual product)

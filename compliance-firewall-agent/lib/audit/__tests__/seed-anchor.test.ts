@@ -11,6 +11,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 interface AnchorRow {
   id: string;
   created_at: string;
+  /** Monotonic insert order (migration 038). */
+  seq: number;
   entity_type: string;
   entity_id: string;
   content: Record<string, unknown> | null;
@@ -33,6 +35,14 @@ interface PostgrestErrorLike {
   message: string;
 }
 
+type OrderColumn = "seq" | "created_at";
+
+/** What Postgres returns when migration 038 has not been applied. */
+const UNDEFINED_COLUMN_ERROR: PostgrestErrorLike = {
+  code: "42703",
+  message: 'column seed_anchors.seq does not exist',
+};
+
 const BASE_TIME = Date.UTC(2026, 7, 4, 12, 0, 0);
 
 /**
@@ -52,6 +62,10 @@ class FakeSeedAnchors {
   readError: PostgrestErrorLike | null = null;
   eventsReadError: PostgrestErrorLike | null = null;
   alwaysConflict = false;
+  /** Simulates a database where migration 038 has not run. */
+  missingSeqColumn = false;
+  /** Every order() column the code under test asked for, in call order. */
+  orderColumns: OrderColumn[] = [];
 
   private seq = 0;
 
@@ -59,12 +73,13 @@ class FakeSeedAnchors {
 
   /** Appends a row directly, bypassing the writer under test. */
   seed(
-    row: Omit<AnchorRow, "id" | "created_at" | "verification_status" | "content"> &
-      Partial<Pick<AnchorRow, "content">>
+    row: Omit<AnchorRow, "id" | "created_at" | "seq" | "verification_status" | "content"> &
+      Partial<Pick<AnchorRow, "content" | "created_at">>
   ): AnchorRow {
     const stored: AnchorRow = {
       id: `anchor-${this.seq}`,
       created_at: new Date(BASE_TIME + this.seq).toISOString(),
+      seq: this.seq,
       verification_status: "VALID",
       content: null,
       ...row,
@@ -94,12 +109,22 @@ class FakeSeedAnchors {
     this.events[index] = { ...this.events[index], ...patch };
   }
 
-  /** Rows newest-first, the order `order("created_at", { ascending: false })` gives. */
-  private read(entityType: string, limit: number): AnchorRow[] {
-    return this.rows
-      .filter((row) => row.entity_type === entityType)
-      .sort((a, b) => b.created_at.localeCompare(a.created_at))
-      .slice(0, limit);
+  /**
+   * Rows newest-first under the requested ordering.
+   *
+   * `seq` is a total order. `created_at` is not: equal timestamps compare 0,
+   * and Array#sort is stable, so tied rows keep insertion order — which is
+   * OLDEST-first and therefore backwards for a newest-first read. That is
+   * precisely the production hazard migration 038 removes, so the double
+   * reproduces it rather than smoothing it over.
+   */
+  private read(entityType: string, limit: number, orderBy: OrderColumn): AnchorRow[] {
+    const rows = this.rows.filter((row) => row.entity_type === entityType);
+    const sorted =
+      orderBy === "seq"
+        ? [...rows].sort((a, b) => b.seq - a.seq)
+        : [...rows].sort((a, b) => b.created_at.localeCompare(a.created_at));
+    return sorted.slice(0, limit);
   }
 
   /**
@@ -175,22 +200,34 @@ class FakeSeedAnchors {
           select: () => {
             let entityType = "";
             let limit = Number.MAX_SAFE_INTEGER;
+            let orderBy: OrderColumn = "created_at";
+            const orderingError = (): PostgrestErrorLike | null =>
+              orderBy === "seq" && this.missingSeqColumn ? UNDEFINED_COLUMN_ERROR : null;
             const builder = {
               eq: (_column: string, value: string) => {
                 entityType = value;
                 return builder;
               },
-              order: () => builder,
+              order: (column: OrderColumn) => {
+                orderBy = column;
+                this.orderColumns.push(column);
+                return builder;
+              },
               limit: (n: number) => {
                 limit = n;
                 return builder;
               },
-              maybeSingle: async () =>
-                this.readError
+              maybeSingle: async () => {
+                const missing = orderingError();
+                if (missing) return { data: null, error: missing };
+                return this.readError
                   ? { data: null, error: this.readError }
-                  : { data: this.read(entityType, limit)[0] ?? null, error: null },
+                  : { data: this.read(entityType, limit, orderBy)[0] ?? null, error: null };
+              },
               single: async () => {
-                const rows = this.read(entityType, limit);
+                const missing = orderingError();
+                if (missing) return { data: null, error: missing };
+                const rows = this.read(entityType, limit, orderBy);
                 if (this.readError) return { data: null, error: this.readError };
                 return rows.length
                   ? { data: rows[0], error: null }
@@ -198,9 +235,11 @@ class FakeSeedAnchors {
               },
               then: (resolve: (value: unknown) => unknown) =>
                 Promise.resolve(
-                  this.readError
-                    ? { data: null, error: this.readError }
-                    : { data: this.read(entityType, limit), error: null }
+                  orderingError()
+                    ? { data: null, error: orderingError() }
+                    : this.readError
+                      ? { data: null, error: this.readError }
+                      : { data: this.read(entityType, limit, orderBy), error: null }
                 ).then(resolve),
             };
             return builder;
@@ -580,5 +619,99 @@ describe("regression: the anchor records what it hashed", () => {
     // The precise defect: `content` was never persisted, so `seed.content` was
     // always undefined and the content pass skipped every row in silence.
     expect(table.rows[0].content).toEqual(content);
+  });
+});
+
+describe("regression: chain order is a total order, not a timestamp", () => {
+  /**
+   * Builds a two-link chain whose anchors share one `created_at`.
+   *
+   * Concurrent inserts do this routinely: `now()` in Postgres is the
+   * TRANSACTION timestamp, so two transactions that begin in the same tick
+   * carry the same value. Seeded oldest-first, which is the order a stable
+   * sort preserves when the keys tie — and therefore backwards for a
+   * newest-first read.
+   */
+  function seedTiedChain(): { genesisHash: string; childHash: string } {
+    const tied = new Date(BASE_TIME).toISOString();
+    const genesisHash = legacyHash({ n: 1 }, "GENESIS");
+    const childHash = legacyHash({ n: 2 }, genesisHash);
+
+    table.seed({
+      entity_type: "EVENT",
+      entity_id: "event-1",
+      content: { n: 1 },
+      content_hash: genesisHash,
+      previous_hash: null,
+      created_at: tied,
+    });
+    table.seed({
+      entity_type: "EVENT",
+      entity_id: "event-2",
+      content: { n: 2 },
+      content_hash: childHash,
+      previous_hash: genesisHash,
+      created_at: tied,
+    });
+
+    table.seedEvent({ id: "event-1" });
+    table.seedEvent({ id: "event-2" });
+    return { genesisHash, childHash };
+  }
+
+  it("does NOT report tampering when two anchors tie on created_at", async () => {
+    seedTiedChain();
+
+    // Pass 1 asserts row N's previous_hash equals row N+1's content_hash, so
+    // the ordering IS the test. Under `seq` the chain reads newest-first and
+    // verifies; this is the false-positive that would otherwise put a
+    // CHAIN_BROKEN verdict in front of an assessor on an intact chain.
+    const result = await verifySeedChain("EVENT");
+
+    expect(result.error_type).toBeUndefined();
+    expect(result.valid).toBe(true);
+    expect(table.orderColumns).toContain("seq");
+  });
+
+  it("proves the tie really is ambiguous under created_at", async () => {
+    seedTiedChain();
+    table.missingSeqColumn = true; // a database without migration 038
+
+    // Same intact chain, ordered the pre-038 way: the tie resolves backwards
+    // and verification calls it tampering. This asserts the bug exists, so the
+    // test above is measuring a real fix rather than a tautology.
+    const result = await verifySeedChain("EVENT");
+
+    expect(result.valid).toBe(false);
+    expect(result.error_type).toBe("CHAIN_BROKEN");
+  });
+
+  it("keeps anchoring when migration 038 is not applied", async () => {
+    table.missingSeqColumn = true;
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    // The downgrade is cached per process so the warning fires once rather
+    // than on every anchor. That makes it order-dependent across tests, so
+    // take a fresh copy of the module with the cache back at its default.
+    vi.resetModules();
+    const fresh = await import("../seed-anchor");
+
+    try {
+      // The tip read is on the audit WRITE path. A hard dependency on an
+      // unapplied migration would stop compliance events being anchored at
+      // all, which is a worse failure than the ordering it fixes.
+      const hash = await fresh.createSeedAnchor({
+        entity_type: "EVENT",
+        entity_id: "event-1",
+        content: { n: 1 },
+      });
+
+      expect(hash).toMatch(/^[0-9a-f]{64}$/);
+      expect(table.rows).toHaveLength(1);
+      // Downgrading silently would reintroduce the defect invisibly.
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining("migration 038"));
+    } finally {
+      warn.mockRestore();
+    }
   });
 });

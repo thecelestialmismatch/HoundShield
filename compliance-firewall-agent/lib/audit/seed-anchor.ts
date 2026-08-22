@@ -26,6 +26,42 @@ export interface SeedData {
 /** Postgres unique_violation — another writer claimed this parent first. */
 const UNIQUE_VIOLATION = "23505";
 
+/** Postgres undefined_column — migration 038 is not applied on this database. */
+const UNDEFINED_COLUMN = "42703";
+
+/**
+ * The column that gives the chain a total order.
+ *
+ * `seq` (migration 038) is monotonic and assigned by the database. `created_at`
+ * is a TRANSACTION timestamp, so two anchors written concurrently can tie and
+ * then sort against the true chain order — which `verifySeedChain` pass 1
+ * reports as CHAIN_BROKEN on a chain that is perfectly intact. A false
+ * tampering signal is the worst failure mode this product has.
+ *
+ * WHY THIS IS PROBED RATHER THAN ASSUMED. Migrations in this repo have
+ * repeatedly sat unapplied in production (see `/api/health`, which reports
+ * missing control stores for exactly this reason). Ordering by a column that
+ * does not exist fails the query, and this read is on the audit WRITE path —
+ * a hard dependency would stop compliance events being anchored at all. So the
+ * first query optimistically uses `seq`, and a 42703 downgrades to `created_at`
+ * with a loud warning rather than taking audit logging down.
+ *
+ * Cached per process. A deploy or cold start re-probes, so applying 038
+ * upgrades every instance without a code change.
+ */
+let chainOrderColumn: "seq" | "created_at" = "seq";
+
+function downgradeChainOrder(): void {
+  if (chainOrderColumn === "created_at") return;
+  chainOrderColumn = "created_at";
+  console.warn(
+    "[seed-anchor] seed_anchors.seq is missing — ordering the audit chain by " +
+      "created_at instead. Apply migration 038. Until then, concurrent anchors " +
+      "can tie on created_at and verifySeedChain can report CHAIN_BROKEN on an " +
+      "intact chain."
+  );
+}
+
 /**
  * Attempts before giving up rather than spinning on a contended chain.
  *
@@ -62,16 +98,23 @@ export async function createSeedAnchor(data: SeedData): Promise<string> {
     // Get the most recent seed to chain from. A read failure must never be
     // read as "the chain is empty" — that would start a second genesis
     // mid-chain, which verification reports as tampering.
-    // ponytail: `created_at` is not a total order, so simultaneous writes can
-    // return a non-tip and burn a retry. Add a monotonic sequence column if
-    // contention ever shows up in practice.
-    const { data: lastSeed, error: readError } = await supabase
-      .from("seed_anchors")
-      .select("content_hash")
-      .eq("entity_type", data.entity_type)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+    const readTip = (column: "seq" | "created_at") =>
+      supabase
+        .from("seed_anchors")
+        .select("content_hash")
+        .eq("entity_type", data.entity_type)
+        .order(column, { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+    let { data: lastSeed, error: readError } = await readTip(chainOrderColumn);
+
+    // Migration 038 not applied here — retry on the pre-038 ordering rather
+    // than failing the write. See `chainOrderColumn`.
+    if (readError?.code === UNDEFINED_COLUMN) {
+      downgradeChainOrder();
+      ({ data: lastSeed, error: readError } = await readTip(chainOrderColumn));
+    }
 
     if (readError) {
       console.error("Failed to read seed chain tip:", readError);
@@ -223,12 +266,23 @@ export async function verifySeedChain(
 ): Promise<SeedChainVerification> {
   const supabase = createServiceClient();
 
-  const { data: seeds, error } = await supabase
-    .from("seed_anchors")
-    .select("*")
-    .eq("entity_type", entityType)
-    .order("created_at", { ascending: false })
-    .limit(limit);
+  // Pass 1 asserts row N's previous_hash equals row N+1's content_hash, so the
+  // ORDER IS THE TEST. Ordering by anything that can tie turns ordinary
+  // concurrency into a CHAIN_BROKEN verdict on an intact chain.
+  const readChain = (column: "seq" | "created_at") =>
+    supabase
+      .from("seed_anchors")
+      .select("*")
+      .eq("entity_type", entityType)
+      .order(column, { ascending: false })
+      .limit(limit);
+
+  let { data: seeds, error } = await readChain(chainOrderColumn);
+
+  if (error?.code === UNDEFINED_COLUMN) {
+    downgradeChainOrder();
+    ({ data: seeds, error } = await readChain(chainOrderColumn));
+  }
 
   if (error || !seeds) {
     return {
