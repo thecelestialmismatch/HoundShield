@@ -7,7 +7,7 @@ import {
 } from '@/lib/auth/password-reset-codes';
 import { enforceRateLimit, identifierFor, clientIp } from '@/lib/rate-limit-shared';
 import { lockoutKey } from '@/lib/auth/lockout';
-import { captchaRequired, verifyCaptcha } from '@/lib/auth/captcha';
+import { verifyCaptcha } from '@/lib/auth/captcha';
 import { AUTH_CAPTCHA_REQUIRED } from '@/lib/auth/auth-error-message';
 import { settleAuthTiming } from '@/lib/auth/timing';
 import { recordAuthEvent } from '@/lib/auth/audit-log';
