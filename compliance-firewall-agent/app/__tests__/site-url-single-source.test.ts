@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SITE_URL, siteUrl } from "@/lib/site-url";
 
@@ -32,7 +32,11 @@ function sourceFiles(): string[] {
     .split("\n")
     .filter((f) => /\.(ts|tsx)$/.test(f))
     .filter((f) => !f.includes("__tests__"))
-    .filter((f) => f !== "lib/site-url.ts");
+    .filter((f) => f !== "lib/site-url.ts")
+    // `git ls-files` lists TRACKED paths, which still includes a file deleted
+    // in the working tree but not yet staged. Reading one throws ENOENT and
+    // fails the guard for a reason that has nothing to do with what it guards.
+    .filter((f) => existsSync(join(APP, f)));
 }
 
 describe("the base URL is single-sourced", () => {

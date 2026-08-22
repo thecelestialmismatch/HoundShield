@@ -13,14 +13,22 @@ vi.mock("@/components/ReportCheckoutButton", () => ({
 }));
 
 import { InstantSnapshot } from "../InstantSnapshot";
+import { sampleForAudience } from "@/components/snapshot/samples";
 
 beforeEach(() => {
   mockSave.mockClear();
 });
 
-function loadExampleAndScan(): void {
-  fireEvent.click(screen.getByText("Load an example"));
+async function loadExampleAndScan(): Promise<void> {
+  // The single "Load an example" button became four named scenarios. Drive the
+  // DEFENSE one by name from the shared module rather than a literal, so a
+  // rename shows up as a compile-time change here instead of a runtime miss.
+  fireEvent.click(screen.getByText(sampleForAudience("defense")));
   fireEvent.click(screen.getByRole("button", { name: /scan locally/i }));
+  // The scan is awaited now: it runs INSIDE the network-witness window, which
+  // wraps fetch/XHR/sendBeacon/WebSocket for its duration so the proof panel can
+  // report what it observed. Results therefore land a microtask later.
+  await screen.findByText(/finding type/i);
 }
 
 describe("InstantSnapshot — the money-path climax", () => {
@@ -31,9 +39,9 @@ describe("InstantSnapshot — the money-path climax", () => {
     ).toBeTruthy();
   });
 
-  it("scans locally and surfaces NIST-mapped findings (no raw content shown)", () => {
+  it("scans locally and surfaces NIST-mapped findings (no raw content shown)", async () => {
     render(<InstantSnapshot />);
-    loadExampleAndScan();
+    await loadExampleAndScan();
 
     // Findings surface with a control id and severity, but not the matched strings.
     expect(screen.getAllByText("SC.L2-3.13.1").length).toBeGreaterThan(0);
@@ -43,23 +51,23 @@ describe("InstantSnapshot — the money-path climax", () => {
     expect(region.textContent).not.toContain("John Smith");
   });
 
-  it("does not hand over a downloadable report — the full report is locked behind $499", () => {
+  it("does not hand over a downloadable report — the full report is locked behind $499", async () => {
     render(<InstantSnapshot />);
-    loadExampleAndScan();
+    await loadExampleAndScan();
 
-    // The free give-away download is gone; nothing is saved to the device.
+    // The free give-away download is gone; nothing is ever saved to the device.
     expect(screen.queryByRole("button", { name: /generate my gap-report pdf/i })).toBeNull();
     expect(mockSave).not.toHaveBeenCalled();
 
-    // Instead the full report is shown locked, with a single $499 unlock CTA.
+    // Instead the full report is shown LOCKED, with a single $499 unlock CTA.
     expect(screen.getByText(/your full cmmc ai risk assessment report/i)).toBeTruthy();
     expect(screen.getByRole("button", { name: /unlock the full report/i })).toBeTruthy();
   });
 
-  it("frames the on-screen report as a preview, not the signed assessment", () => {
+  it("frames the on-screen scan as a preview, not the signed assessment", async () => {
     render(<InstantSnapshot />);
-    loadExampleAndScan();
-    expect(screen.getByText(/not the tamper-evident 14-day signed report/i)).toBeTruthy();
+    await loadExampleAndScan();
+    expect(screen.getByText(/not the tamper-evident 14-day signed/i)).toBeTruthy();
     expect(screen.getByText(/your full cmmc ai risk assessment report/i)).toBeTruthy();
   });
 
@@ -68,7 +76,7 @@ describe("InstantSnapshot — the money-path climax", () => {
     vi.stubGlobal("fetch", fetchMock);
     try {
       render(<InstantSnapshot />);
-      loadExampleAndScan();
+      await loadExampleAndScan();
 
       const form = screen.getByText(/Email me this snapshot/i).closest("form")!;
       fireEvent.change(within(form).getByPlaceholderText("Name"), { target: { value: "Jane" } });

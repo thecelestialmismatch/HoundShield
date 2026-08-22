@@ -4,6 +4,7 @@ import { join } from "node:path";
 import {
   degradedKeys,
   isHintKey,
+  isInformationalKey,
   isOperationalValue,
   PROBED_TABLES,
   type Services,
@@ -276,10 +277,102 @@ describe("buildHealthReport — controls are measured, not declared", () => {
         isHintKey(key) ||
         isOperationalValue(value) ||
         degraded.includes(key) ||
-        // Informational keys are excluded by design; assert that exclusion is
-        // deliberate by naming them, so a NEW unjudged key fails here.
-        ["reset_sender_domain", "founder_inbox", "founder_inbox_domain"].includes(key);
+        // Informational keys are excluded by design. Ask the MODULE which
+        // those are rather than keeping a second copy of the list here.
+        isInformationalKey(key);
       expect(judged, `service key "${key}" (value "${value}") is not classified`).toBe(true);
+    }
+  });
+});
+
+/* ──────────────────────────────────────────────────────────────────
+ * Vocabulary closure.
+ *
+ * Three times now, a producer has emitted a state string this module's
+ * OPERATIONAL_VALUES set had never heard of, and every time the result was a
+ * FALSE degradation on a working control:
+ *
+ *   1. rate_limit_store: the probe selected a column that does not exist, so
+ *      the catch reported degraded_local while sharing worked fine.
+ *   2. /status: the page re-derived operational-ness from its own local Set,
+ *      which the vocabulary had outgrown, and showed a permanent warning.
+ *   3. payments_webhook: "configured" — the webhook's HEALTHY status — was not
+ *      in the set, so setting STRIPE_WEBHOOK_SECRET turned the endpoint red.
+ *
+ * Fixing the third instance alone would leave the fourth to be found in
+ * production again. This asserts the PROPERTY: every state string the health
+ * producers can return must be deliberately classified as either operational or
+ * a known degraded state. A new value fails here instead of on the live site.
+ * ────────────────────────────────────────────────────────────────── */
+describe("state vocabulary is closed — an unclassified value is a future false alarm", () => {
+  /**
+   * Degraded states this module knowingly emits. Each one means a control is
+   * genuinely not doing its job, so each must be ABSENT from OPERATIONAL_VALUES.
+   */
+  const KNOWN_DEGRADED = [
+    "not_configured",
+    "degraded_local",
+    "degraded_open",
+    "missing_migration",
+    "missing_key",
+    "malformed_key",
+    "missing_secret",
+    "malformed_secret",
+    "unavailable",
+    "disabled",
+    "demo_mode",
+  ];
+
+  it("classifies every state literal the producers can return", () => {
+    // Read the literals out of the producers themselves rather than retyping
+    // them, so adding a `return "brand_new_state"` is caught by this test.
+    // Strip comments FIRST. The paragraph above this test names
+    // `status: "degraded"` while explaining the bug, and the first draft of
+    // this scan dutifully flagged its own prose — the seventh guard in this
+    // repo to do so.
+    const stripComments = (src: string): string =>
+      src.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/(^|[^:])\/\/[^\n]*/g, "$1 ");
+
+    const sources = [
+      readFileSync(join(__dirname, "..", "service-status.ts"), "utf8"),
+      readFileSync(join(__dirname, "..", "..", "stripe", "env.ts"), "utf8"),
+    ]
+      .map(stripComments)
+      .join("\n");
+
+    const emitted = new Set<string>();
+    // `return "x"` and `status: 'x'` — the two shapes these producers use.
+    for (const m of sources.matchAll(/return\s+["']([a-z_]{3,})["']/g)) emitted.add(m[1]);
+    for (const m of sources.matchAll(/status:\s*["']([a-z_]{3,})["']/g)) emitted.add(m[1]);
+
+    expect(emitted.size, "found no state literals — the scan is broken").toBeGreaterThan(5);
+
+    const unclassified = [...emitted].filter(
+      (v) => !isOperationalValue(v) && !KNOWN_DEGRADED.includes(v),
+    );
+
+    expect(
+      unclassified,
+      `unclassified health state(s): ${unclassified.join(", ")}. Add each to ` +
+        `OPERATIONAL_VALUES (if it means the control is working) or to ` +
+        `KNOWN_DEGRADED in this test (if it means the control is not).`,
+    ).toEqual([]);
+  });
+
+  it("keeps the healthy Stripe webhook status out of the degraded list", () => {
+    // The exact regression: `configured` is the webhook's working state.
+    expect(isOperationalValue("configured")).toBe(true);
+    expect(degradedKeys({ payments_webhook: "configured" })).toEqual([]);
+  });
+
+  it("still reports a webhook that is genuinely missing", () => {
+    // The other direction — this must NOT go quiet.
+    expect(degradedKeys({ payments_webhook: "missing_secret" })).toEqual(["payments_webhook"]);
+  });
+
+  it("no known degraded state is accidentally treated as operational", () => {
+    for (const state of KNOWN_DEGRADED) {
+      expect(isOperationalValue(state), `${state} must not read as healthy`).toBe(false);
     }
   });
 });

@@ -16,8 +16,11 @@ import { ENGINES, ENGINE_COUNT, PATTERN_COUNT } from '@/lib/detection/engines'
 
 export const metadata: Metadata = {
   title: 'Features — Everything Inside the Firewall Engine',
+  // Interpolated, not retyped. This description shipped "90 shipped patterns"
+  // — the double-counted figure engines.ts exists to kill — in the same file
+  // whose header comment says never to retype the number.
   description:
-    'Sixteen detection engines built from 90 shipped patterns, 110 mapped NIST 800-171 controls and tamper-evident evidence — all running on your hardware in under 10ms.',
+    `${ENGINE_COUNT} detection engines built from ${PATTERN_COUNT} shipped patterns, 110 mapped NIST 800-171 controls and tamper-evident evidence — all running on your hardware in under 10ms.`,
   alternates: { canonical: 'https://houndshield.com/features' },
 }
 
