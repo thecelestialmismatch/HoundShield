@@ -66,10 +66,20 @@ const MONTHLY_PRICE_ALLOWED = new Map<string, string>([
     "components/dashboard/ReportsPanel.tsx",
     "Authenticated in-product upsell. Telling a logged-in user which tier unlocks a locked feature is the honest form of a paywall — it quotes a tier, it does not promise a public price.",
   ],
-  [
-    "app/partner/billing/page.tsx",
-    "Authenticated partner billing, which uses a separate per-client rate card ($75/client/mo) unrelated to the public offer. Flagged for reconciliation against the $299 wholesale model — see tasks/todo.md.",
-  ],
+  // app/partner/billing/page.tsx was allowlisted here for "a separate per-client
+  // rate card ($75/client/mo) unrelated to the public offer", flagged for
+  // reconciliation and then left alone. The entry was doing the opposite of its
+  // job: it made a whole invented recurring pricing model — $75/$65/$55 volume
+  // tiers, a "Next Invoice" date computed as today + 1 month, "billed
+  // automatically via Stripe" — permanently invisible to this guard, on the one
+  // surface read by a partner who has already signed something else. Its own
+  // reason text had gone stale too, citing a "$299 wholesale model" that the
+  // 2026-08-19 founder ruling replaced with the flat $100 discount.
+  //
+  // Reconciled 2026-08-22: the page now reads its numbers from
+  // lib/pricing/plans.ts and quotes one-time-per-report economics only, so
+  // nothing needs excusing. `partner-offer-coherence.test.ts` bans the recurring
+  // shape from every partner surface, dashboard included.
 ]);
 
 /*

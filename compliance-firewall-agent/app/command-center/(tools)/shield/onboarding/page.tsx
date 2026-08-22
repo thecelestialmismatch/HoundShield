@@ -180,7 +180,7 @@ export default function OnboardingPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-3">Employee Count *</label>
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {EMPLOYEE_RANGES.map((range) => (
                         <button
                           key={range.value}
@@ -199,7 +199,7 @@ export default function OnboardingPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-3">Contract Type *</label>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {CONTRACT_TYPES.map((type) => (
                         <button
                           key={type}
@@ -216,7 +216,7 @@ export default function OnboardingPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <button
                       onClick={() => setHandlesCUI(!handlesCUI)}
                       className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
@@ -340,7 +340,7 @@ const response = await client.chat.completions.create({
                     <p className="text-slate-400">Choose the certification level you need to achieve.</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <button
                       onClick={() => setCmmcLevel(1)}
                       className={`relative p-6 rounded-2xl border text-left transition-all ${

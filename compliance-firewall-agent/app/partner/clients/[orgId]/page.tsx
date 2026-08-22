@@ -203,7 +203,7 @@ export default function ClientDetailPage() {
       </div>
 
       {/* Event log */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.08] overflow-hidden">
+      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.08] overflow-x-auto">
         <div className="px-6 py-4 border-b border-white/[0.06]">
           <h3 className="text-sm font-semibold text-white">Recent Proxy Events</h3>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -224,7 +224,7 @@ export default function ClientDetailPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: i * 0.02 }}
-                className="grid grid-cols-12 gap-3 items-center px-6 py-3 hover:bg-white/[0.02] transition-colors"
+                className="grid grid-cols-12 gap-3 items-center px-6 py-3 min-w-[640px] hover:bg-white/[0.02] transition-colors"
               >
                 {/* Action */}
                 <div className="col-span-2 flex items-center gap-1.5 text-xs font-medium">

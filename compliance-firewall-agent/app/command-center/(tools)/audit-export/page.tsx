@@ -180,7 +180,7 @@ export default function AuditExportPage() {
           ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             { label: "From", value: fromDate, setter: setFromDate },
             { label: "To", value: toDate, setter: setToDate },
@@ -207,7 +207,7 @@ export default function AuditExportPage() {
           Filters
         </h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
               Risk Level

@@ -380,8 +380,8 @@ function RuleModal({
           </div>
 
           {/* Pattern + type */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="col-span-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="sm:col-span-2">
               <label className={labelClass}>Pattern *</label>
               <input
                 className={`${inputClass} font-mono text-xs ${patternError ? "border-red-400/50" : ""}`}
@@ -412,7 +412,7 @@ function RuleModal({
           </div>
 
           {/* Category + Risk Level + Action */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className={labelClass}>Category</label>
               <select

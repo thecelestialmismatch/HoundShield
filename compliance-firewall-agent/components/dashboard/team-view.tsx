@@ -177,7 +177,7 @@ export default function TeamView() {
         <p className="text-sm text-slate-500 mt-0.5">Your AI workforce at a glance</p>
 
         {/* Top Stats */}
-        <div className="mt-4 grid grid-cols-4 gap-4">
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: 'Total Agents', value: AGENTS.length, icon: Users, color: '#6366f1' },
             { label: 'Active Now', value: activeCount, icon: Activity, color: '#3b82f6' },

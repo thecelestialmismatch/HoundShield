@@ -83,9 +83,9 @@ export default function ClientsPage() {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.08] overflow-hidden">
+      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.08] overflow-x-auto">
         {/* Column headers */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-3 border-b border-white/[0.06] text-[11px] text-slate-500 font-semibold uppercase tracking-wider">
+        <div className="grid grid-cols-12 gap-4 px-6 py-3 min-w-[640px] border-b border-white/[0.06] text-[11px] text-slate-500 font-semibold uppercase tracking-wider">
           <div className="col-span-4">Organization</div>
           <div className="col-span-2 text-center">Status</div>
           <div className="col-span-2 text-right">Blocked</div>
@@ -115,7 +115,7 @@ export default function ClientsPage() {
               >
                 <Link
                   href={`/partner/clients/${client.client_org_id}`}
-                  className="grid grid-cols-12 gap-4 items-center px-6 py-4 hover:bg-white/[0.02] transition-colors group"
+                  className="grid grid-cols-12 gap-4 items-center px-6 py-4 min-w-[640px] hover:bg-white/[0.02] transition-colors group"
                 >
                   {/* Name + created */}
                   <div className="col-span-4 flex items-center gap-3">

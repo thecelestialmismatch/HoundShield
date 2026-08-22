@@ -53,6 +53,21 @@ const PARTNER_SURFACES = [
   'app/partners/apply/PartnerApplyForm.tsx',
   'lib/email/outreach.ts',
   'lib/email/templates/contact-received.ts',
+  /*
+   * Added 2026-08-22. This list covered only the PUBLIC /partners/* funnel, and
+   * the hole was exactly the shape of the signed-in dashboard: for as long as
+   * these guards have existed, `app/partner/billing/page.tsx` advertised a
+   * recurring "$75/client/month, invoiced monthly via Stripe" over a $75/$65/$55
+   * volume table, with a "Next Invoice" date computed as today + 1 month.
+   *
+   * A third pricing model, on the one surface read by a partner who has already
+   * signed an agreement saying something else — and every guard here passed,
+   * because none of them looked at it. A guard is only as wide as its list.
+   */
+  'app/partner/page.tsx',
+  'app/partner/billing/page.tsx',
+  'app/partner/clients/page.tsx',
+  'app/partner/deploy/page.tsx',
 ];
 
 describe('partner offer — one revenue share, one wholesale price', () => {
@@ -157,6 +172,34 @@ describe('partner offer — one revenue share, one wholesale price', () => {
       if (STALE.test(src)) wrongPrices.push(rel);
     }
     expect(wrongPrices).toEqual([]);
+  });
+
+  it('never quotes a recurring partner rate — the offer is one-time, per report', () => {
+    /*
+     * The partner pays once, per report, at purchase. There is no per-seat, no
+     * per-client and no monthly partner charge, and no Stripe SKU for one.
+     *
+     * This is a DIFFERENT failure from the payout check above: "$75/client/month"
+     * is not a revenue share and not a stale wholesale price, so both existing
+     * predicates read it as clean. It is a whole invented billing model, which is
+     * the form the drift actually took.
+     */
+    const RECURRING = /\$\s*\d[\d,]*\s*(?:\/|\s+per\s+)\s*(?:client|seat|user|endpoint|org)\b|\bper[- ](?:client|seat|user)[- ]?(?:\/|per\s+)?month\b/i;
+    const offenders: string[] = [];
+    for (const rel of PARTNER_SURFACES) {
+      const full = path.join(APP_ROOT, rel);
+      if (!fs.existsSync(full)) continue;
+      if (RECURRING.test(fs.readFileSync(full, 'utf8'))) offenders.push(rel);
+    }
+    expect(offenders).toEqual([]);
+
+    // Teeth: the exact strings that shipped on /partner/billing must trip it.
+    expect(RECURRING.test('$75/client/month, invoiced monthly via Stripe')).toBe(true);
+    expect(RECURRING.test('{ range: "6-20 clients", rate: "$65/client/mo" }')).toBe(true);
+    expect(RECURRING.test('$75 per client per month')).toBe(true);
+    // ...and the correct one-time framing passes.
+    expect(RECURRING.test('You pay $399 per report, at the moment you order it.')).toBe(false);
+    expect(RECURRING.test('$1,200 - $1,500 per engagement')).toBe(false);
   });
 
   it('never frames the offer as a payout on a partner surface', () => {

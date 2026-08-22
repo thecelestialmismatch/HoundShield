@@ -204,7 +204,7 @@ export function RealtimeFeed() {
 
       {/* Metrics Bar */}
       {metrics && metrics.total_requests > 0 && (
-        <div className="grid grid-cols-5 gap-px bg-zinc-800 border-b border-zinc-800">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-zinc-800 border-b border-zinc-800">
           <MetricCell
             icon={<Zap className="h-3.5 w-3.5 text-brand-400" />}
             label="Total"

@@ -240,7 +240,7 @@ export function PlatformDashboard() {
         </div>
 
         {/* ── Metrics strip ─────────────────────────────── */}
-        <div className="grid grid-cols-4 divide-x divide-white/[0.04] border-b border-white/[0.04]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-white/[0.04] border-b border-white/[0.04]">
           {[
             { label: "Blocked today", value: totalBlocked.toLocaleString(), color: "text-red-400"     },
             { label: "SOC 2",         value: "Active",                       color: "text-brand-500"   },

@@ -14,6 +14,7 @@ import {
   Clock,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { RISK_REPORT, formatUSD } from "@/lib/pricing/plans";
 
 interface ClientSummary {
   client_org_id: string;
@@ -244,7 +245,7 @@ export default function PartnerDashboard() {
             href: "/partner/billing",
             icon: TrendingUp,
             title: "Partner Billing",
-            desc: "$75/client/month — view invoices and usage",
+            desc: `${formatUSD(RISK_REPORT.wholesalePrice)} per report — no subscription. View your economics and receipts.`,
           },
         ].map(({ href, icon: Icon, title, desc }) => (
           <Link
