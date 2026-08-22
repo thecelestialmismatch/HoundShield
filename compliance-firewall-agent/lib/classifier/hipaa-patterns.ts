@@ -24,7 +24,12 @@ export const HIPAA_PATTERNS: DetectionPattern[] = [
     name: "Patient name in medical context",
     category: "HIPAA_PHI",
     regex:
-      /\b(?:patient|pt|client|resident|member)\s*(?:name|:)\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}\b/gi,
+      // `name` may be followed by its own colon: "patient name: Sarah Whitfield".
+      // Without the optional `:?` the group consumed "name", then required a
+      // capital letter and met the colon — so the most common phrasing in a real
+      // chart note was the one this pattern could not see. Verified by
+      // lib/detection/__tests__/hipaa-safe-harbor.test.ts.
+      /\b(?:patient|pt|client|resident|member)\s*(?:name\s*:?|:)\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}\b/gi,
     risk_level: "CRITICAL",
     action: "BLOCK",
   },
@@ -160,7 +165,12 @@ export const HIPAA_PATTERNS: DetectionPattern[] = [
     name: "URL in medical context",
     category: "HIPAA_PHI",
     regex:
-      /\b(?:patient\s*portal|EHR|EMR|health\s*record)\s*(?:URL|link|address)\s*[:=]?\s*https?:\/\/[^\s]+/gi,
+      // The "URL"/"link"/"address" label is now OPTIONAL. Requiring it meant
+      // "patient portal https://mychart.example.org/p/44821" — how a link is
+      // actually pasted — matched nothing. The context word (patient portal /
+      // EHR / EMR / health record) still has to be immediately before the URL,
+      // so an ordinary link in ordinary prose is untouched.
+      /\b(?:patient\s*portal|EHR|EMR|health\s*record)\s*(?:(?:URL|link|address)\s*)?[:=]?\s*https?:\/\/[^\s]+/gi,
     risk_level: "MEDIUM",
     action: "QUARANTINE",
   },
@@ -211,6 +221,24 @@ export const HIPAA_PATTERNS: DetectionPattern[] = [
       /\b(?:encounter\s*(?:ID|number|#)|visit\s*(?:ID|number|#)|case\s*(?:ID|number|#))\s*[:=]?\s*[A-Z0-9]{4,15}\b/gi,
     risk_level: "HIGH",
     action: "QUARANTINE",
+  },
+  {
+    /*
+     * Ported verbatim from `proxy/patterns/index.ts` ("Medical diagnosis / ICD
+     * code"). `lib/detection/engines.ts` advertised 'ICD / diagnosis' as one of
+     * the sixteen engines, and nothing in this registry matched an ICD code:
+     * the only thing recognising the word was the PHI_CONTEXT expression, which
+     * requires a literal "ICD-10" and never looks at the code itself. The proxy
+     * had a working pattern the whole time — the two registries had simply
+     * drifted, so the free /demo and the $499 report detected less than the
+     * Docker proxy a customer deploys.
+     */
+    name: "Medical diagnosis / ICD code",
+    category: "HIPAA_PHI",
+    regex:
+      /\b(?:diagnosis|dx|icd[-\s]?(?:9|10|11)?(?:[-\s]?cm)?)\s*[:#]?\s*[A-Z]\d{2}(?:\.\d{1,4})?\b/gi,
+    risk_level: "HIGH",
+    action: "BLOCK",
   },
 ];
 

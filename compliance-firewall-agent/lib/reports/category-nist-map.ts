@@ -121,7 +121,7 @@ export function blockEventFromFinding(
 /**
  * Remediation guidance per data category, shown beside each finding and in the
  * demo. Keyed by CATEGORY rather than by individual pattern for a reason: the
- * engine ships 53 patterns and grows, so per-pattern copy would rot the moment
+ * engine ships 56 patterns and grows, so per-pattern copy would rot the moment
  * a pattern is added. Category is the axis the NIST control already hangs off,
  * so guidance and control stay in step by construction.
  *

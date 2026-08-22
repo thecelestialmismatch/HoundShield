@@ -301,6 +301,99 @@ const PII_PATTERNS: DetectionPattern[] = [
     risk_level: "HIGH",
     action: "BLOCK",
   },
+
+  /*
+   * ADDED 2026-08-22 — credential and trade-secret coverage the proxy did not
+   * have. EXTENDED ONLY: nothing above this comment is modified, per the
+   * extend-never-replace rule on this registry.
+   *
+   * A behavioural audit against the sixteen engines advertised on the site
+   * (`lib/detection/__tests__/engine-backing.test.ts`) found the proxy blocking
+   * none of these, while the app registry — which powers only the free /demo and
+   * the report generator — caught all of them:
+   *
+   *   AWS access key id   AKIA…              only the 40-char SECRET was caught
+   *   generic api_key =   <20+ char token>   no pattern at all
+   *   PEM private key     -----BEGIN …       no pattern at all
+   *   trade-secret terms  pricing strategy   no pattern at all
+   *   separated card no.  4111 1111 1111 …   see the note on that entry below
+   *
+   * The direction of that gap is the serious part. The proxy IS the product: it
+   * is what runs in Mode B on the customer's own infrastructure and what a
+   * DFARS 7012 claim rests on. The demo detecting more than the deployment is
+   * backwards — an evaluator sees a credential blocked in the browser, buys,
+   * deploys, and the same paste goes straight through to OpenAI.
+   *
+   * Every expression here is lifted from `lib/classifier/patterns.ts`, where it
+   * has been shipping, rather than written fresh.
+   */
+  {
+    name: "AWS access key id",
+    category: "CREDENTIAL",
+    regex: /\b(?:AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}\b/g,
+    risk_level: "CRITICAL",
+    action: "BLOCK",
+    nist_controls: ["IA.L2-3.5.2", "SC.L2-3.13.16"],
+  },
+  {
+    name: "API key / access token assignment",
+    category: "CREDENTIAL",
+    regex: /(?:api[_-]?key|secret[_-]?key|access[_-]?token)\s*[:=]\s*["']?[\w\-]{20,}/gi,
+    risk_level: "CRITICAL",
+    action: "BLOCK",
+    nist_controls: ["IA.L2-3.5.2", "SC.L2-3.13.16"],
+  },
+  {
+    name: "Private key block",
+    category: "CREDENTIAL",
+    regex: /-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----/g,
+    risk_level: "CRITICAL",
+    action: "BLOCK",
+    nist_controls: ["IA.L2-3.5.2", "SC.L2-3.13.16"],
+  },
+  {
+    name: "Database connection string",
+    category: "CREDENTIAL",
+    regex: /\b(?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?|redis|amqp):\/\/[^\s"'<>]+:[^\s"'<>]+@[^\s"'<>]+/gi,
+    risk_level: "CRITICAL",
+    action: "BLOCK",
+    nist_controls: ["IA.L2-3.5.2", "SC.L2-3.13.16"],
+  },
+  {
+    /*
+     * A SEPARATE entry rather than a widening of "Credit card number" above.
+     * That one requires an unbroken run of digits, so it misses the spaced and
+     * hyphenated forms people actually paste off a card. Editing it would be a
+     * replace; adding this is an extend. Both fire on the unseparated form,
+     * which the scanner already dedupes by pattern name.
+     */
+    name: "Credit card number (separated)",
+    category: "PII",
+    regex: /\b(?:\d{4}[-\s]){3}\d{4}\b/g,
+    risk_level: "CRITICAL",
+    action: "BLOCK",
+    nist_controls: ["SC.L2-3.13.16"],
+  },
+  {
+    name: "Trade-secret / strategic terms",
+    category: "IP",
+    regex: /\b(?:pricing strategy|product roadmap|merger and acquisition|M&A target|trade secret|proprietary formula|customer list)\b/gi,
+    risk_level: "MEDIUM",
+    action: "QUARANTINE",
+    nist_controls: ["SC.L2-3.13.16"],
+  },
+  {
+    /*
+     * LOW/ALLOW, matching the app registry. Source-code shape is a signal for
+     * the audit trail, not grounds for blocking a developer's prompt — this
+     * product sits in front of Copilot.
+     */
+    name: "Source code markers",
+    category: "IP",
+    regex: /(?:(?:function|class|const|let|var|def|public|private)\s+\w+\s*(?:\(|=|\{))/g,
+    risk_level: "LOW",
+    action: "ALLOW",
+  },
 ];
 
 // ── Merged + sorted registry ───────────────────────────────────────────────

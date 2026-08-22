@@ -675,7 +675,7 @@ review. These are verified against actual file states, not assumptions.
 **Verified working (read directly from source):**
 - proxy/scanner.ts: LRU cache (256 entries, 5-min TTL), early-exit on CRITICAL BLOCK,
   obfuscation decode (base64, hex), scan_ms measurement. No I/O, no Supabase dependency.
-- proxy/patterns/index.ts: 33 patterns across CMMC/CUI, HIPAA/PHI, and PII/CREDENTIAL
+- proxy/patterns/index.ts: 40 patterns across CMMC/CUI, HIPAA/PHI, and PII/CREDENTIAL
   categories. CAGE code, DoD contract number, CUI marking, ITAR, SF-86, NIPRNet all present
   with correct NIST 800-171 control citations. Sorted CRITICAL-first.
 - proxy/server.ts: Complete OpenAI-compatible proxy. Blocks on BLOCK action, quarantines on

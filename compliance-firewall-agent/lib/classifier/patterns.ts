@@ -143,6 +143,49 @@ export const BUILTIN_PATTERNS: DetectionPattern[] = [
     action: "ALLOW",
   },
 
+  /*
+   * THREE ENGINES THAT WERE ADVERTISED AND NOT IMPLEMENTED.
+   *
+   * `lib/detection/engines.ts` publishes ENGINES to the homepage, /features and
+   * the products data, and "16 detection engines" is computed from its length so
+   * the marketing number cannot drift from the list. That makes the number
+   * honest only if every LISTED engine actually detects something — and three
+   * did not:
+   *
+   *   'ICD / diagnosis'    no pattern matched "patient diagnosis E11.9 noted"
+   *   'JWT / tokens'       no pattern matched an Authorization: Bearer JWT
+   *   'IP / network data'  no pattern matched 10.0.4.17 or 192.168.1.44
+   *
+   * All three DO work in `proxy/patterns/index.ts`. The gap was between the two
+   * registries: the shipped Node proxy detected them, the app scanner behind the
+   * free /demo and the $499 report did not. A buyer who pastes a prompt with an
+   * ICD code into the demo, sees nothing flagged, and then reads "16 detection
+   * engines" has been given a number that does not describe what just ran.
+   *
+   * The regexes below are the proxy's, verbatim, with only the category mapped
+   * onto this module's narrower RuleCategory union (the proxy has PHI/CREDENTIAL,
+   * this has HIPAA_PHI/IP). Copied rather than reinvented so the two registries
+   * agree by construction on these three, and so nothing here is a new,
+   * unproven expression.
+   *
+   * `__tests__/engine-backing.test.ts` now fails the build if any advertised
+   * engine stops detecting its representative sample.
+   */
+  {
+    name: "IPv4 private range",
+    category: "IP",
+    regex: /\b(?:10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(?:1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3})\b/g,
+    risk_level: "MEDIUM",
+    action: "QUARANTINE",
+  },
+  {
+    name: "Generic bearer token",
+    category: "IP",
+    regex: /\bBearer\s+[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\b/g,
+    risk_level: "HIGH",
+    action: "BLOCK",
+  },
+
   // ── CMMC / DEFENSE CONTRACTING ────────────────────────────────────────────
   ...CMMC_PATTERNS,
 

@@ -29,6 +29,6 @@ return NextResponse.json({ success: false, error: message }, { status: 4xx })
 
 ## Compliance Engine (NEVER degrade)
 - Stream scanner: 500-char window, 256-char overlap, <10ms latency
-- CUI classifier: minimum 33 proxy patterns / 53 app patterns — never reduce
+- CUI classifier: minimum 40 proxy patterns / 56 app patterns — never reduce
 - SPRS scoring: all 110 NIST 800-171 Rev 2 controls required
 - Audit trail: SHA-256, append-only, atomic writes

@@ -37,7 +37,7 @@ const ALL_PATTERNS = [...BUILTIN_PATTERNS, ...CMMC_PATTERNS, ...HIPAA_PATTERNS];
  * Hard input ceiling. MEASURED, not guessed.
  *
  * Realistic text scans linearly and cheaply — 100,000 characters of prose with
- * ordinary whitespace sweeps all 53 patterns in ~38ms.
+ * ordinary whitespace sweeps all 56 patterns in ~38ms.
  *
  * The first draft of this file set the ceiling at 200,000 and the test suite
  * caught it: the scan blew past a 5-second timeout. Benchmarking showed size

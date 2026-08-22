@@ -10,10 +10,10 @@ const REPO = join(APP, '..')
  *
  * HoundShield maintains TWO independent pattern registries:
  *
- *   proxy/patterns/index.ts        — 33 patterns. The shipped product;
+ *   proxy/patterns/index.ts        — 40 patterns. The shipped product;
  *                                    what actually runs in Mode B on the
  *                                    customer's own infrastructure.
- *   lib/classifier/*-patterns.ts   — 53 patterns. What the hosted app,
+ *   lib/classifier/*-patterns.ts   — 56 patterns. What the hosted app,
  *                                    the gateway and the PDF evidence
  *                                    generator scan with.
  *
@@ -34,6 +34,21 @@ const REPO = join(APP, '..')
  * patterns sharing a name with different regexes still pass. Upgrade
  * path: extract a shared `packages/detection` both sides import, at
  * which point this file deletes itself.
+ *
+ * That ceiling was not theoretical. On 2026-08-22 a behavioural audit of
+ * the sixteen engines advertised on the site found EIGHT unbacked:
+ * ICD / diagnosis, JWT and IPv4 detected nothing in the classifier, and
+ * API keys, AWS access key ids, PEM private keys, card numbers in their
+ * separated form and trade-secret terms detected nothing in the proxy.
+ * All eight were invisible here for the same two reasons — this file
+ * compares names, and a missing pattern has no name to compare; and
+ * MUST_EXIST_IN_BOTH covered only the CMMC/CUI family, while every gap
+ * was PHI, CREDENTIAL or IP.
+ *
+ * `engine-backing.test.ts` is the behavioural half. It runs realistic
+ * input through both compiled registries and fails when an advertised
+ * engine detects nothing. Keep both: this one catches a removal, that
+ * one catches an absence.
  * ────────────────────────────────────────────────────────────────── */
 
 const PROXY_PATTERNS = join(REPO, 'proxy', 'patterns', 'index.ts')
@@ -93,16 +108,27 @@ const MUST_EXIST_IN_BOTH = [
   'Security clearance level',
   'Task order / delivery order',
   'Technical data package references',
+  /*
+   * Added 2026-08-22, when the two registries were reconciled on the engines
+   * the site advertises. Each of these existed on exactly ONE side, so the
+   * demo and the deployment disagreed about whether a credential, an ICD code
+   * or a private IP was a finding at all. Pinned here so the reconciliation
+   * cannot quietly come apart — the names were deliberately made identical on
+   * both sides for that purpose.
+   */
+  'Medical diagnosis / ICD code',
+  'Generic bearer token',
+  'Source code markers',
 ] as const
 
 describe('detection registries — neither may shrink', () => {
-  it('the proxy still ships at least 33 patterns', () => {
+  it('the proxy still ships at least 40 patterns', () => {
     // Mirrors the floor enforced by the Compliance Pattern Guard in CI.
-    expect(proxyNames.size).toBeGreaterThanOrEqual(33)
+    expect(proxyNames.size).toBeGreaterThanOrEqual(40)
   })
 
-  it('the classifier still ships at least 53 patterns', () => {
-    expect(classifierNames.size).toBeGreaterThanOrEqual(53)
+  it('the classifier still ships at least 56 patterns', () => {
+    expect(classifierNames.size).toBeGreaterThanOrEqual(56)
   })
 })
 

@@ -357,13 +357,13 @@ compliance-firewall-agent/
   app/api/admin/health/route.ts    — Admin-gated control report (lib/health/service-status.ts)
   lib/brain-ai/                    — BM25 knowledge graph + query interface
   lib/gateway/                     — Core AI interception engine
-  lib/classifier/                  — 53-pattern / 16-engine CUI/PII/IP/PHI detector
+  lib/classifier/                  — 56-pattern / 16-engine CUI/PII/IP/PHI detector
   supabase/migrations/             — through 038 in repo (verify production application before release; 035 enables code-only reset, 036 removes public privileged-RPC execution, 037 persists free-demo leads, 038 gives the audit chain a total order)
 
 proxy/
   server.ts                        — HTTPS proxy (the actual product)
   scanner.ts                       — Pattern scanner (do not modify)
-  patterns/index.ts                — 33 patterns (extend only)
+  patterns/index.ts                — 40 patterns (extend only)
 
 tasks/
   todo.md                          — Stage queue (read first every session)

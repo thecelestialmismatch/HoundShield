@@ -5,7 +5,7 @@ Code explains what. This explains why.
 
 ---
 
-## ADR-001: Regex-first Detection Engine, AI-second (16 engines / 33 proxy patterns)
+## ADR-001: Regex-first Detection Engine, AI-second (16 engines / 40 proxy patterns)
 
 **Decision:** Run regex patterns before any AI model.
 

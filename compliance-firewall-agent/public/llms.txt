@@ -55,11 +55,16 @@ requires no account.
 
 ## Verified product facts
 
-- **16 detection engines, 53 shipped regex patterns** covering CUI markings,
-  CAGE codes, DoD contract numbers, clearance and ITAR terms, all 18 HIPAA
-  Safe Harbor identifiers, PII, API keys and cloud credentials, source code
-  and internal network data. Counts are computed from the shipped registry.
-- **Scan latency p99 under 1 ms** (0.648 ms measured over 2,000 cold scans
+- **16 detection engines**, implemented by **56 regex patterns in the app
+  scanner** and **40 in the self-hosted proxy** — covering CUI markings, CAGE
+  codes, DoD contract numbers, clearance and ITAR terms, all 18 HIPAA Safe
+  Harbor identifiers (45 CFR 164.514(b)(2)), PII, API keys and cloud
+  credentials, source code and internal network data.
+  Both counts are computed from the shipped registries, and a test fails the
+  build if any advertised engine stops detecting its sample input on either
+  side. The two registries differ because they are separate deployments, not
+  because one is a subset: the proxy is what runs inside a customer boundary.
+- **Scan latency p99 under 1 ms** (0.933 ms measured over 2,000 cold scans
   against a 10 ms budget). The benchmark runs in CI and can be reproduced by
   anyone from the repository.
 - **All 110 NIST SP 800-171 Rev 2 controls** mapped, with SPRS scoring.
