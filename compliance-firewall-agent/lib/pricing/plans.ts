@@ -110,6 +110,79 @@ export function partnerMarginPct(retail: number): number {
   return Math.round(((retail - RISK_REPORT.wholesalePrice) / retail) * 100);
 }
 
+/**
+ * THE PARTNER ENGAGEMENT — a distinct SKU, not a resale of the $499 report.
+ *
+ * THE PROBLEM THIS SOLVES (market research, 2026-08-21)
+ * ----------------------------------------------------
+ * Zero partners had signed, and the reason was arithmetic, not sales effort.
+ * MSP compliance assessments list at $500–$2,000 (ScalePad's compliance pricing
+ * calculator) and MSSPs target 60–75% gross margin (ContraForce). A partner
+ * buying at $399 and reselling the SAME artifact at its PUBLISHED $499 clears
+ * 20% — far below the floor a channel will carry.
+ *
+ * The trap is the published price itself: HoundShield sells direct at a public
+ * $499, so a partner cannot quote $999 for the identical deliverable. Their
+ * client finds the vendor's own price in one search. You cannot tell a partner
+ * "you set the retail" while advertising the retail to their client.
+ *
+ * THE FIX — SELL A DIFFERENT THING, NOT A CHEAPER THING
+ * ----------------------------------------------------
+ * Founder ruling (2026-08-21): do NOT cut wholesale and do NOT hide the direct
+ * price. The $499 self-serve artifact and the $399 flat partner discount both
+ * stand exactly as the 2026-08-19 ruling set them. What changes is what the
+ * partner SELLS: a scoped engagement that WRAPS the report in work only the
+ * partner can do — their branding, a remediation roadmap sequenced for that
+ * client, and a live readout with the client's team.
+ *
+ * That is ordinary channel economics: the vendor supplies the artifact, the
+ * partner supplies the service, and the spread is the partner's own labour
+ * rather than a discount HoundShield funds. No money leaves; nothing is
+ * rebated. It also removes the comparison — a $1,250 advisory engagement is
+ * not the $499 self-serve PDF, so there is no published price undercutting it.
+ *
+ * HONESTY CONSTRAINT: never imply the engagement is a different SCAN. The
+ * detection engines and the evidence artifact are identical. What the client
+ * pays more for is the interpretation and the remediation work around it, and
+ * partner-facing copy must say so plainly.
+ */
+export const PARTNER_ENGAGEMENT = {
+  name: "Co-Branded AI Risk Engagement",
+
+  /** What the partner pays HoundShield — unchanged from the flat-$100 ruling. */
+  wholesaleCost: RISK_REPORT.wholesalePrice,
+
+  /** Suggested list band for the partner's own client. Guidance, not a rule. */
+  suggestedListLow: 1200,
+  suggestedListHigh: 1500,
+
+  /**
+   * What the PARTNER adds on top of the artifact. This is the whole basis for
+   * the price difference — if a partner does none of it, they are reselling the
+   * $499 report and should price it accordingly.
+   */
+  partnerDelivers: [
+    "Their firm's branding on the assessment report",
+    "A remediation roadmap sequenced for that client's environment",
+    "A live findings readout with the client's team",
+    "Ongoing advisory follow-up against the identified gaps",
+  ] as const,
+
+  /** Identical to the direct product — stated so no surface can imply otherwise. */
+  identicalToDirect:
+    "The detection engines, the scan and the evidence artifact are exactly the same as the $499 self-serve report. The engagement price reflects the partner's interpretation and remediation work, not a different or deeper scan.",
+} as const;
+
+/** Partner gross margin at the low end of the suggested engagement band. */
+export const PARTNER_ENGAGEMENT_MARGIN_LOW_PCT = partnerMarginPct(
+  PARTNER_ENGAGEMENT.suggestedListLow,
+);
+
+/** Partner gross margin at the high end of the suggested engagement band. */
+export const PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT = partnerMarginPct(
+  PARTNER_ENGAGEMENT.suggestedListHigh,
+);
+
 /** Format a whole-dollar USD amount, e.g. 2499 -> "$2,499". */
 export function formatUSD(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;

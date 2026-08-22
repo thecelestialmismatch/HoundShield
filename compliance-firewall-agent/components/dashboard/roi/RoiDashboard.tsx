@@ -99,6 +99,11 @@ export function RoiDashboard() {
 
         {/* Body */}
         <main className="mx-auto max-w-5xl space-y-5 px-4 py-5 sm:px-6 sm:py-7">
+          <div className="rounded-xl border border-warning/25 bg-warning-muted px-4 py-2.5 text-[12px] text-warning">
+            <span className="font-semibold">Modeled estimate — not measured customer telemetry.</span>{" "}
+            Figures illustrate a sample organization against planned pricing that is not yet purchasable.
+            Replace them with your own numbers via the $499 report.
+          </div>
           <RoiStatCards snapshot={snapshot} />
 
           <div id="trend" className="grid grid-cols-1 gap-5 scroll-mt-20 lg:grid-cols-5">

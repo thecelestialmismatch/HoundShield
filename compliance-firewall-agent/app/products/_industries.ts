@@ -231,7 +231,7 @@ export const INDUSTRIES: Industry[] = [
     navLabel: "Defense",
     eyebrow: "Defense · CMMC Level 2 · NIST 800-171",
     h1: "Leak CUI into ChatGPT and you've failed your C3PAO assessment.",
-    sub: "Roughly 80,000 DoD contractors must reach CMMC Level 2 to keep their contracts, and AI prompt leakage is the most common unaddressed gap in the defense industrial base. HoundShield blocks CUI, CAGE codes and contract data locally — the only architecture that doesn't itself create a DFARS 7012 spill — and generates the SSP, POA&M and SPRS evidence your assessor needs.",
+    sub: "More than 76,000 DoD contractors must reach CMMC Level 2 to keep their contracts, and AI prompt leakage is the most common unaddressed gap in the defense industrial base. HoundShield blocks CUI, CAGE codes and contract data locally — the only architecture that doesn't itself create a DFARS 7012 spill — and generates the SSP, POA&M and SPRS evidence your assessor needs.",
     metaTitle: "CMMC Level 2 AI Firewall for Defense Contractors | HoundShield",
     metaDescription:
       "Defense contractors can use AI without failing CMMC. HoundShield blocks CUI, CAGE codes and contract data locally before prompts leave the network — and exports assessor-reviewable SSP, POA&M and SPRS evidence.",

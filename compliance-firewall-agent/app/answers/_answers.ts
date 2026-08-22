@@ -134,7 +134,7 @@ export const ANSWERS: Answer[] = [
         heading: "The local-only rule",
         paragraphs: [
           "The defensible architecture is simple: the scan must happen before the data leaves, on a system you control. That means an on-prem or in-network proxy that inspects every AI prompt locally, blocks CUI, and logs the decision — with nothing transmitted to a vendor.",
-          "This is also the cheapest path to evidence: a local firewall maps directly to NIST 800-171 controls 3.1 (Access Control), 3.13 (System & Communications Protection), and 3.14 (System & Information Integrity), and can export a assessor-reviewable audit trail.",
+          "This is also the cheapest path to evidence: a local firewall maps directly to NIST 800-171 controls 3.1 (Access Control), 3.13 (System & Communications Protection), and 3.14 (System & Information Integrity), and can export an assessor-reviewable audit trail.",
         ],
       },
     ],
@@ -446,7 +446,7 @@ export const ANSWERS: Answer[] = [
     faqs: [
       {
         q: "Is there a free way to monitor AI usage for CMMC?",
-        a: "A written AI policy is free, and HoundShield's free tier includes the 110-control self-assessment and SPRS calculator. But monitoring that satisfies an assessor needs enforcement plus tamper-evident logs — that's the $499 assessment's job, and it's the cheapest evidence-producing option on the market.",
+        a: "A written AI policy is free, and HoundShield's free in-browser scan plus the 110-control self-assessment and SPRS calculator cost nothing to run. But monitoring that satisfies an assessor needs enforcement plus tamper-evident logs — that's the $499 assessment's job, and it's the cheapest evidence-producing option on the market.",
       },
       {
         q: "Why is the report $499 when subscriptions exist?",

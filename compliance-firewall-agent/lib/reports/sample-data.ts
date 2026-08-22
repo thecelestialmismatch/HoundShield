@@ -61,7 +61,11 @@ export function buildSampleReportData(now: Date = new Date()): ReportData {
       period: { start: start.toISOString(), end: end.toISOString() },
       total_events: 4187,
       total_violations: 63,
-      violation_rate: 0.015,
+      // 63 / 4187 = 1.5%. This field is a percentage (rendered as "N%"), so it
+      // must be 1.5, not 0.015 — the old value was 100x low, which also forced
+      // the cover "Compliance Score" to a suspicious flat 100% via
+      // round(100 - violation_rate). At 1.5 the score reads a believable 98%.
+      violation_rate: 1.5,
       avg_processing_time_ms: 7,
     },
     breakdown: {
@@ -70,7 +74,11 @@ export function buildSampleReportData(now: Date = new Date()): ReportData {
       by_action: { BLOCKED: 49, QUARANTINED: 14, ALLOWED: 4124 },
     },
     integrity: {
-      merkle_root: null, // demo
+      // Illustrative Merkle root so the sample looks like the real signed
+      // deliverable rather than printing "N/A". The PDF is watermarked as a
+      // sample throughout, so this is representative, not a claim of a
+      // verifiable chain for this document.
+      merkle_root: "b7e4c1a90f2d6835e1c4a7d0f93b2e5c8a1d4f60b3e9c72a5d8f1b0c46e2a9d37",
       events_with_seeds: 63,
       events_without_seeds: 0,
     },

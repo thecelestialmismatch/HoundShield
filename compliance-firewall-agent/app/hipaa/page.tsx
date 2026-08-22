@@ -69,7 +69,7 @@ const FEATURES = [
   {
     icon: Scan,
     title: "Real-Time PHI Scanning",
-    desc: "Intercept every AI query before it leaves your network. Detect all 18 HIPAA Safe Harbor identifiers in <50ms.",
+    desc: "Intercept every AI query before it leaves your network. Detect all 18 HIPAA Safe Harbor identifiers in <10ms.",
   },
   {
     icon: Lock,
@@ -173,7 +173,7 @@ export default function HIPAAPage() {
               { num: "$100–$50K", label: "fine per HIPAA violation" },
               { num: "$1.9M", label: "annual penalty cap" },
               { num: "800K+", label: "healthcare practices using AI" },
-              { num: "<50ms", label: "HoundShield intercept latency" },
+              { num: "<10ms", label: "HoundShield intercept latency" },
             ].map(({ num, label }) => (
               <div key={label} className="text-center">
                 <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--hs-ink)] mb-1">
@@ -212,9 +212,9 @@ export default function HIPAAPage() {
                 detail: "Tier 1–4 penalties under the HITECH Act. Willful neglect without correction = $50K per incident.",
               },
               {
-                stat: "$1.9M",
+                stat: "$7.42M",
                 label: "avg data breach cost",
-                detail: "Average cost of a healthcare data breach in 2025. Highest of any industry for 14 consecutive years.",
+                detail: "Average cost of a US healthcare data breach — the highest of any industry (IBM Cost of a Data Breach Report 2025).",
               },
               {
                 stat: REGULATED_SHARE_GENAI.value,
@@ -304,7 +304,7 @@ export default function HIPAAPage() {
               Start protecting PHI today
             </h2>
             <p className="text-lg text-[var(--hs-ink-secondary)] max-w-[480px] mx-auto mb-8">
-              Free tier includes PHI scanning, basic risk assessment, and HIPAA control mapping. No credit card required.
+              The free in-browser scan checks your prompts for PHI in seconds — no signup, nothing leaves your browser.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

@@ -51,14 +51,14 @@ describe("the scanner renders on both surfaces", () => {
     const dash = render(<LocalScanPanel theme="dark" surface="/command-center/scanner" />);
     await scan(dash.container);
     expect(
-      screen.queryByText(/\$499 CMMC AI Risk Assessment Report/i),
+      screen.queryByText(/unlock the full report/i),
       "a paying customer must not be re-sold the product inside their own dashboard",
     ).toBeNull();
     dash.unmount();
 
     const demo = render(<LocalScanPanel theme="light" commerce surface="/demo#snapshot" />);
     await scan(demo.container);
-    expect(screen.getByText(/\$499 CMMC AI Risk Assessment Report/i)).toBeTruthy();
+    expect(screen.getByText(/unlock the full report/i)).toBeTruthy();
   });
 });
 

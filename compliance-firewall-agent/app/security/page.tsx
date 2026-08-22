@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description:
     "How HoundShield protects your data: local-only scanning, AES-256 encryption, SHA-256 audit trails, TLS 1.3, and a published vulnerability disclosure policy. Nothing leaves your network.",
   alternates: { canonical: "https://houndshield.com/security" },
+  openGraph: { title: "Security & Trust | HoundShield" },
 };
 
 const PILLARS = [

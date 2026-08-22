@@ -163,6 +163,11 @@ export function ControlMap() {
 
           {/* Body */}
           <main className="flex-1 space-y-5 p-5 lg:p-8">
+            <div className="rounded-xl border border-warning/25 bg-warning-muted px-4 py-2.5 text-[12px] text-warning">
+              <span className="font-semibold">Sample portfolio — illustrative data.</span>{" "}
+              Client counts, assessments and scores on this page are a demonstration of the
+              multi-client console, not live customer data.
+            </div>
             <StatCards snapshot={snapshot} />
 
             <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">

@@ -2,6 +2,12 @@ import Link from 'next/link'
 import { ArrowRight, Shield, Users, Plug, DollarSign } from 'lucide-react'
 import { NavV3 } from '@/components/layout/NavV3'
 import { FooterV3 } from '@/components/layout/FooterV3'
+import {
+  PARTNER_ENGAGEMENT,
+  PARTNER_ENGAGEMENT_MARGIN_LOW_PCT,
+  PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT,
+  formatUSD,
+} from '@/lib/pricing/plans'
 
 /* ─────────────────────────────────────────────────────────────────
  * /partners — verbatim port of the HERMES demo partners view
@@ -43,9 +49,13 @@ export default function PartnersPage() {
                 <h3 style={{ fontSize: '1.3rem' }}>RPO / MSP Referral Partner — co-brand the $499 report</h3>
                 <p>
                   Registered Provider Organizations and MSPs each serve dozens of clients who all
-                  need this. One partner is worth fifty cold emails. Co-branded compliance reports
-                  at $399 wholesale — a flat $100 partner discount. You set the retail
-                  and keep everything above it. Dedicated enablement.
+                  need this. One partner is worth fifty cold emails. You pay{' '}
+                  {formatUSD(PARTNER_ENGAGEMENT.wholesaleCost)} per report and deliver it as a{' '}
+                  {PARTNER_ENGAGEMENT.name} under your own brand — engagements typically list at{' '}
+                  {formatUSD(PARTNER_ENGAGEMENT.suggestedListLow)}–
+                  {formatUSD(PARTNER_ENGAGEMENT.suggestedListHigh)}, leaving you{' '}
+                  {PARTNER_ENGAGEMENT_MARGIN_LOW_PCT}–{PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT}% gross
+                  margin. Dedicated enablement.
                   (C3PAOs are excluded — assessors can&apos;t refer tools to clients they assess.)
                 </p>
               </div>
@@ -59,8 +69,8 @@ export default function PartnersPage() {
                 <div className="ic"><Users /></div>
                 <h3>MSP / Agency</h3>
                 <p>
-                  Buy the $499 report at $399 — a flat $100 off, kept as your spread ·
-                  white-label option. Manage every client&apos;s CMMC posture from one
+                  Buy the report at {formatUSD(PARTNER_ENGAGEMENT.wholesaleCost)}, sell the
+                  engagement · white-label option. Manage every client&apos;s CMMC posture from one
                   multi-tenant dashboard.
                 </p>
               </div>

@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import {
-  AlertTriangle, Download, FileText, Loader2, Lock, Radar, ShieldCheck,
+  FileText, Lock, Radar, ShieldCheck,
 } from "lucide-react";
 import { scanLocal, MAX_INPUT_CHARS, type LocalScanResult } from "@/lib/scan/local-engine";
-import { buildSnapshotReportData } from "@/lib/reports/snapshot-from-scan";
 import { SAMPLE_SCENARIOS, SNAPSHOT_CONTROLS } from "@/components/snapshot/samples";
 import type { Vertical } from "@/components/snapshot/types";
 import { LeadCapture } from "@/components/snapshot/LeadCapture";
@@ -18,19 +17,19 @@ import { useNetworkWitness, type NetworkWitnessReport } from "./useNetworkWitnes
 /**
  * The local scanner, rendered on BOTH surfaces.
  *
- * Public `/demo` passes `commerce` so the visitor lands on the PDF and the $499
- * CTA — the demo script mandates the demo always end on the PDF. The after-login
+ * Public `/demo` passes `commerce` so the visitor lands on the locked report and
+ * the $499 CTA — the demo script mandates the demo always end on the report. The after-login
  * `/command-center/scanner` omits it: a paying customer does not need to be sold
  * the thing they bought, and the page is a tool rather than a funnel.
  *
  * The engine, the proof panel and every finding row are identical in both.
  */
 
-type Phase = "idle" | "scanned" | "generated";
+type Phase = "idle" | "scanned";
 
 interface LocalScanPanelProps {
   theme: ScanTheme;
-  /** Show the PDF download, $499 CTA and lead capture. Public demo only. */
+  /** Show the locked full-report preview, $499 CTA and lead capture. Public demo only. */
   commerce?: boolean;
   heading?: string;
   intro?: string;
@@ -50,7 +49,6 @@ export function LocalScanPanel({
   const [phase, setPhase] = useState<Phase>("idle");
   const [result, setResult] = useState<LocalScanResult | null>(null);
   const [witness, setWitness] = useState<NetworkWitnessReport | null>(null);
-  const [generating, setGenerating] = useState(false);
   const [showRedacted, setShowRedacted] = useState(false);
 
   const runScan = async () => {
@@ -63,21 +61,6 @@ export function LocalScanPanel({
     setPhase("scanned");
   };
 
-  const generatePdf = async () => {
-    if (!result) return;
-    setGenerating(true);
-    try {
-      // jsPDF (~130 kB) is loaded on demand so the top-of-funnel route stays light.
-      const { saveComplianceReport } = await import("@/lib/reports/download");
-      saveComplianceReport(
-        buildSnapshotReportData(inputText, { organization: org, scanMs: result.scanMs }),
-        "HoundShield-AI-Risk-Snapshot.pdf",
-      );
-      setPhase("generated");
-    } finally {
-      setGenerating(false);
-    }
-  };
 
   const resetOnEdit = (value: string) => {
     setInputText(value);
@@ -105,14 +88,14 @@ export function LocalScanPanel({
           </h2>
           <p className={`text-sm mt-1 max-w-2xl ${t.inkTertiary}`}>
             {intro ??
-              "Paste a real prompt your team sends to ChatGPT, Claude or Copilot. HoundShield's detection engines scan it locally, in your browser, map every finding to a NIST 800-171 control, and produce a preview gap-report PDF."}
+              "Paste a real prompt your team sends to ChatGPT, Claude or Copilot. HoundShield's detection engines scan it locally, in your browser, map every finding to a NIST 800-171 control, and preview exactly what the full $499 report contains."}
           </p>
         </div>
       </div>
 
       <div className={`flex items-center gap-2 text-xs mb-4 ${t.inkSecondary}`}>
         <Lock className="w-3.5 h-3.5 text-[var(--hs-success)]" />
-        Your text is never sent anywhere — the scan and the PDF are generated entirely on this device.
+        Your text is never sent anywhere — the scan runs entirely on this device.
       </div>
 
       {commerce && (
@@ -265,56 +248,69 @@ export function LocalScanPanel({
 
             {commerce && (
               <>
-                <div className="glass-card p-5 border-brand-500/20">
-                  <div className="flex items-start gap-3">
-                    <FileText className={`w-6 h-6 shrink-0 ${t.accent}`} />
-                    <div className="flex-1">
-                      <p className={`text-sm font-bold ${t.ink}`}>Your gap-report PDF</p>
-                      <p className={`text-xs mt-1 ${t.inkSecondary}`}>
-                        A branded preview mapped to NIST 800-171 — built in your browser.{" "}
-                        <span className={t.inkTertiary}>
-                          This is a preview, not the tamper-evident 14-day signed report an assessor
-                          accepts.
-                        </span>
-                      </p>
-                      <div className="mt-3">
-                        <button
-                          type="button"
-                          onClick={generatePdf}
-                          disabled={generating}
-                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-60 ${
-                            theme === "light" ? "bg-[var(--hs-ink)] text-white" : "bg-white text-slate-900"
-                          } hover:opacity-90`}
-                        >
-                          {generating ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <Download className="w-4 h-4" />
-                          )}
-                          {phase === "generated" ? "Download again" : SNAPSHOT_CONTROLS.generatePdf}
-                        </button>
-                      </div>
-                      {phase === "generated" && (
-                        <p className="mt-2 text-xs text-[var(--hs-success)] flex items-center gap-1.5">
-                          <ShieldCheck className="w-3.5 h-3.5" /> Your snapshot PDF was generated on
-                          this device.
+                {/* The scan above is the free teaser. The assessor-ready report is
+                    shown but LOCKED — the buyer sees exactly what $499 unlocks
+                    rather than being handed a report-shaped PDF for nothing. */}
+                <div className="relative overflow-hidden rounded-2xl border border-[var(--hs-border)]">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none select-none blur-[5px] opacity-70 p-6 space-y-4 bg-white"
+                  >
+                    <div className="flex items-center justify-between border-b border-[var(--hs-border)] pb-3">
+                      <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-brand-700">
+                          CMMC Level 2 · AI Gateway Audit
                         </p>
-                      )}
+                        <p className="text-lg font-black text-[var(--hs-ink)]">
+                          AI Risk Assessment Report
+                        </p>
+                        <p className="text-xs text-[var(--hs-ink-secondary)]">
+                          {org.trim() || "Your Organization"} · 14-day assessment window
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[10px] uppercase text-[var(--hs-ink-secondary)]">
+                          SPRS impact
+                        </p>
+                        <p className="text-2xl font-black text-rose-600">
+                          {summary.estimatedSprsImpact} pts
+                        </p>
+                      </div>
                     </div>
+                    <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--hs-ink-secondary)]">
+                      NIST 800-171 control mapping
+                    </p>
+                    <div className="h-2 rounded bg-[var(--hs-mist)]" />
+                    <div className="h-2 w-3/4 rounded bg-[var(--hs-mist)]" />
+                    <div className="h-2 w-1/2 rounded bg-[var(--hs-mist)]" />
+                    <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--hs-ink-secondary)] pt-1">
+                      Tamper-evident audit trail · SHA-256 Merkle root
+                    </p>
+                    <div className="h-2 w-2/3 rounded bg-[var(--hs-mist)]" />
                   </div>
-                </div>
 
-                <div className="glass-card p-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
-                  <div className="flex items-start gap-2">
-                    <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                    <p className={`text-sm ${t.inkSecondary}`}>
-                      This preview shows exposure. The{" "}
-                      <strong className={t.ink}>$499 CMMC AI Risk Assessment Report</strong> runs 14
-                      days in your environment and delivers the SHA-256-signed PDF your assessor
-                      accepts.
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center bg-gradient-to-b from-white/50 via-white/80 to-white/95">
+                    <div className="w-12 h-12 rounded-2xl bg-[var(--hs-ink)] text-white flex items-center justify-center">
+                      <Lock className="w-5 h-5" />
+                    </div>
+                    <p className="text-base font-black text-[var(--hs-ink)]">
+                      Your full CMMC AI Risk Assessment Report
+                    </p>
+                    <p className="text-xs text-[var(--hs-ink-secondary)] max-w-md">
+                      Every finding mapped to NIST 800-171, your SPRS impact, a SHA-256
+                      tamper-evident audit trail, and a prioritized remediation plan — the
+                      assessor-ready PDF, generated from a 14-day run in your own environment.
+                    </p>
+                    <ReportCheckoutButton
+                      vertical={vertical}
+                      label="Unlock the full report — $499"
+                    />
+                    <p className="text-[11px] text-[var(--hs-ink-tertiary)] max-w-sm flex items-center gap-1.5 justify-center">
+                      <FileText className="w-3.5 h-3.5 shrink-0" />
+                      The scan above is a local preview — not the tamper-evident 14-day signed
+                      report an assessor accepts.
                     </p>
                   </div>
-                  <ReportCheckoutButton vertical={vertical} label="Get the $499 report" className="shrink-0" />
                 </div>
 
                 {result.findings.length > 0 && (

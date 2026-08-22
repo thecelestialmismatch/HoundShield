@@ -51,25 +51,24 @@ describe("InstantSnapshot — the money-path climax", () => {
     expect(region.textContent).not.toContain("John Smith");
   });
 
-  it("ends on the PDF: generating a snapshot calls the downloader with snapshot data", async () => {
+  it("does not hand over a downloadable report — the full report is locked behind $499", async () => {
     render(<InstantSnapshot />);
     await loadExampleAndScan();
 
-    // jsPDF is lazy-loaded on click, so the downloader is invoked asynchronously.
-    fireEvent.click(screen.getByRole("button", { name: /generate my gap-report pdf/i }));
-    await waitFor(() => expect(mockSave).toHaveBeenCalledTimes(1));
-    const [data, filename] = mockSave.mock.calls[0];
-    expect(data.snapshot).toBe(true);
-    expect(data.demo).toBe(false);
-    expect(String(filename)).toMatch(/snapshot/i);
-    expect(await screen.findByText(/generated on this device/i)).toBeTruthy();
+    // The free give-away download is gone; nothing is ever saved to the device.
+    expect(screen.queryByRole("button", { name: /generate my gap-report pdf/i })).toBeNull();
+    expect(mockSave).not.toHaveBeenCalled();
+
+    // Instead the full report is shown LOCKED, with a single $499 unlock CTA.
+    expect(screen.getByText(/your full cmmc ai risk assessment report/i)).toBeTruthy();
+    expect(screen.getByRole("button", { name: /unlock the full report/i })).toBeTruthy();
   });
 
-  it("frames the PDF as a preview, not the signed assessment", async () => {
+  it("frames the on-screen scan as a preview, not the signed assessment", async () => {
     render(<InstantSnapshot />);
     await loadExampleAndScan();
-    expect(screen.getByText(/not the tamper-evident 14-day signed report/i)).toBeTruthy();
-    expect(screen.getByText(/\$499 CMMC AI Risk Assessment Report/i)).toBeTruthy();
+    expect(screen.getByText(/not the tamper-evident 14-day signed/i)).toBeTruthy();
+    expect(screen.getByText(/your full cmmc ai risk assessment report/i)).toBeTruthy();
   });
 
   it("lead capture posts counts only — never the pasted text", async () => {

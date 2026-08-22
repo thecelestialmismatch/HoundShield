@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   description:
     'Brain AI is HoundShield’s built-in compliance copilot. It scores all 110 NIST 800-171 controls, explains your SPRS score, drafts remediation, and assembles assessor-reviewable evidence — built for the CUI workloads cloud assistants legally cannot touch in self-hosted (Docker) and air-gapped deployments.',
   alternates: { canonical: '/brain-ai' },
+  openGraph: { title: 'Brain AI — Autonomous Compliance Copilot | HoundShield' },
 }
 
 const CAPABILITIES = [
@@ -140,11 +141,11 @@ export default function BrainAiPage() {
             Let Brain AI run your assessment
           </h2>
           <p className="text-[var(--hs-ink-secondary)] mb-8">
-            No credit card required. See your SPRS score across all 110 controls in under
+            See your SPRS score across all 110 controls in under
             30 minutes.
           </p>
-          <Link href="/pricing" className="btn-primary">
-            Get started free
+          <Link href="/demo" className="btn-primary">
+            Scan free
           </Link>
         </div>
       </section>

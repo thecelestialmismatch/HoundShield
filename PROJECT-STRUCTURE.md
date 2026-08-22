@@ -146,11 +146,10 @@ from. Active, curated copies live under `.claude/`.
 | `docs/` | 100+ docs (PRD, roadmap, SEO, launch checklists) |
 | `advisory/` · `research/` | Architecture advisory + codebase analysis |
 | `ROADMAP.md` · `BACKLOG.md` · `DECISIONS.md` · `DESIGN.md` · `RULES.md` | Planning & decisions |
-| `STATE.md` · `WORKING-CONTEXT.md` · `LEARNED-RULES.md` | Working state / accumulated context |
+| `WORKING-CONTEXT.md` · `LEARNED-RULES.md` | Working state / accumulated context |
 | `CHANGELOG.md` · `VERSION` | Release history |
 | `CONTRIBUTING.md` · `CODE_OF_CONDUCT.md` · `SECURITY.md` · `LICENSE` | Project governance |
 | `COMMANDS-QUICK-REF.md` · `TROUBLESHOOTING.md` | Quick references |
-| `SPONSORS.md` · `SPONSORING.md` | Sponsorship |
 | `SKILL.md` · `caveman.skill` | Top-level skill manifests |
 | `tasks/` | `todo.md` (sprint queue) + `lessons.md` (correction log) — read first each session |
 | `brain/` | Brain AI knowledge data (`BrainData.md`) |

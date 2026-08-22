@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   description:
     'Point your AI tool at the HoundShield proxy, scan every prompt locally in under 10ms across 16 detection engines, and export assessor-reviewable audit evidence. No agents, no installs.',
   alternates: { canonical: 'https://houndshield.com/how-it-works' },
+  openGraph: { title: 'How It Works — AI Compliance Firewall in 4 Steps | HoundShield' },
 }
 
 /* Verbatim port of the HERMES demo "how" view (Direction A). */
@@ -40,7 +41,7 @@ const STEPS = [
     number: '04',
     icon: FileText,
     title: 'Sign the evidence',
-    body: 'Every decision is written to a SHA-256 tamper-evident audit log. Export a assessor-reviewable PDF mapped to all 110 NIST 800-171 controls whenever your assessor asks.',
+    body: 'Every decision is written to a SHA-256 tamper-evident audit log. Export an assessor-reviewable PDF mapped to all 110 NIST 800-171 controls whenever your assessor asks.',
   },
 ]
 
@@ -79,8 +80,8 @@ export default function HowItWorksPage() {
             </div>
 
             <div style={{ textAlign: 'center', marginTop: 40 }}>
-              <Link className="btn btn-primary" href="/signup">
-                Get started free <ArrowRight />
+              <Link className="btn btn-primary" href="/demo">
+                Scan free <ArrowRight />
               </Link>
             </div>
           </div>

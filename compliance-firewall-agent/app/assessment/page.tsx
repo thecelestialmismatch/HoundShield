@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   description:
     "A $499 one-time CMMC AI Risk Assessment Report. We scan your AI usage locally, map findings to NIST 800-171, and deliver a tamper-evident PDF your assessor accepts. Data never leaves your network.",
   alternates: { canonical: "https://houndshield.com/assessment" },
+  openGraph: { title: "CMMC AI Risk Assessment Report — $499 | HoundShield" },
 };
 
 const INCLUDES = [

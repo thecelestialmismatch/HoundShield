@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "HoundShield Pricing | $499 One-Time AI Risk Assessment Report",
     description:
-      "$499 one-time. Scans AI prompts locally — your data never leaves your network — and produces a PDF mapped to NIST 800-171. No subscription.",
+      "$499 one-time. Runs in your own environment (Mode B) — prompt content never leaves your network — and produces a PDF mapped to NIST 800-171. No subscription.",
     url: `${BASE_URL}/pricing`,
     type: "website",
   },

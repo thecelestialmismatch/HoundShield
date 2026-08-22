@@ -738,7 +738,7 @@ export default function AgentsPage() {
                   Deploy Your AI <span className="text-gradient-brand">Agent Army</span>
                 </h2>
                 <p className="text-[var(--hs-ink-tertiary)] max-w-xl mx-auto mb-8">
-                  Start with our free tier — 18 templates, 8 tools, and 8 free AI models.
+                  The agent workspace ships 18 templates, 8 tools, and 8 AI models.
                   Scale to unlimited custom agents on Pro.
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4">

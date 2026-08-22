@@ -5,10 +5,16 @@ import { NavV3 } from "@/components/layout/NavV3";
 import { FooterV3 } from "@/components/layout/FooterV3";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { ENGINE_COUNT } from "@/lib/detection/engines";
+import {
+  PARTNER_ENGAGEMENT,
+  PARTNER_ENGAGEMENT_MARGIN_LOW_PCT,
+  PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT,
+  formatUSD,
+} from "@/lib/pricing/plans";
 
 const TITLE = "RPO & MSP Partner Kit — Co-Branded CMMC AI Risk Assessments | HoundShield";
 const DESCRIPTION =
-  "Resell the CMMC AI Risk Assessment under your brand: $399 wholesale ($100 off), you set the retail. The complete RPO/MSP partner kit — how it works, margins, and what your clients receive.";
+  "Deliver the CMMC AI Risk Assessment as a co-branded engagement: $399 wholesale, engagements typically list at $1,200–$1,500 for 67–73% gross margin. The complete RPO/MSP partner kit — how it works, margins, and what your clients receive.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -44,7 +50,7 @@ const FAQS = [
   },
   {
     q: "What does the co-branded report cost?",
-    a: "$399 wholesale to partners — a discount of $100 off the $499 retail. You set your own retail; partners typically deliver it at $499 to $999 as part of a broader readiness engagement, keeping the margin and the client relationship.",
+    a: `You pay ${formatUSD(PARTNER_ENGAGEMENT.wholesaleCost)} per report — a flat $100 off the $499 direct price. Most partners do not resell the PDF on its own: they deliver it as a ${PARTNER_ENGAGEMENT.name}, adding their branding, a remediation roadmap and a findings readout, which typically lists at ${formatUSD(PARTNER_ENGAGEMENT.suggestedListLow)}–${formatUSD(PARTNER_ENGAGEMENT.suggestedListHigh)} and leaves you ${PARTNER_ENGAGEMENT_MARGIN_LOW_PCT}–${PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT}% gross margin. To be explicit: ${PARTNER_ENGAGEMENT.identicalToDirect}`,
   },
   {
     q: "Do our clients' prompts ever reach HoundShield?",
@@ -71,15 +77,22 @@ export default function PartnerKitPage() {
           Your clients&rsquo; employees are pasting sensitive data into ChatGPT today, and their next
           assessment will ask about it. The partner kit lets you answer with a deliverable: a
           14-day, locally run AI risk assessment producing a signed PDF mapped to NIST 800-171 —
-          under your brand, at $399 wholesale ($100 off), retailing wherever you position it.
+          wrapped in your branding, your remediation roadmap and your client readout, and sold as
+          a <strong>{PARTNER_ENGAGEMENT.name}</strong> rather than a resold PDF.
         </p>
 
         {/* Economics strip */}
         <div className="mt-8 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-[var(--hs-border)] bg-[var(--hs-surface-1)] p-5">
             <Percent className="h-5 w-5 text-[var(--hs-steel-dark)]" />
-            <p className="mt-2 text-2xl font-bold text-[var(--hs-ink)]">$399</p>
-            <p className="text-sm text-[var(--hs-ink-secondary)]">wholesale per report — you set the retail</p>
+            <p className="mt-2 text-2xl font-bold text-[var(--hs-ink)]">
+              {PARTNER_ENGAGEMENT_MARGIN_LOW_PCT}–{PARTNER_ENGAGEMENT_MARGIN_HIGH_PCT}%
+            </p>
+            <p className="text-sm text-[var(--hs-ink-secondary)]">
+              your gross margin — you pay {formatUSD(PARTNER_ENGAGEMENT.wholesaleCost)}, engagements
+              typically list at {formatUSD(PARTNER_ENGAGEMENT.suggestedListLow)}–
+              {formatUSD(PARTNER_ENGAGEMENT.suggestedListHigh)}
+            </p>
           </div>
           <div className="rounded-2xl border border-[var(--hs-border)] bg-[var(--hs-surface-1)] p-5">
             <Timer className="h-5 w-5 text-[var(--hs-steel-dark)]" />
