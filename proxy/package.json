@@ -17,7 +17,7 @@
     "better-sqlite3": "^13.0.3",
     "express": "^5.2.1",
     "node-fetch": "^3.3.2",
-    "uuid": "^14.0.1",
+    "uuid": "^14.0.2",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -25,7 +25,7 @@
     "@types/express": "^5.0.1",
     "@types/node": "^26.2.0",
     "@types/uuid": "^11.0.0",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.11",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"
