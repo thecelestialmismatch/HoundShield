@@ -27,3 +27,4 @@ Append-only. [P0] ships this week. [P1] this month. [P2] someday. Operator works
 - [P2] 2026-04-19 — HIPAA BAA + HITRUST control mapping (pivot artifact for Option 2)
 - [P2] 2026-04-19 — Mobile / desktop-native AI client coverage (beyond web + browser extension)
 - [P2] 2026-04-19 — Auto-tuning ML policy recommendations
+- [P2] 2026-08-31 — Tier-1 SEO article "Is DeepSeek Harness allowed on a CMMC L2 network?" — coding agents (`dsh`, 174k stars, MIT, dev preview) read source files and shell out, default-routed to a PRC-hosted API; map to AC.L2-3.1.20 / SC.L2-3.13.1 + SPRS, close on the $499 report. GUARDRAIL: never claim `dsh` itself is banned — H.R.1121 and the state bans target the DeepSeek app/service, not MIT-licensed local code; that distinction *is* the article. Usable as a one-line cold-email hook before the article exists. (4h)
