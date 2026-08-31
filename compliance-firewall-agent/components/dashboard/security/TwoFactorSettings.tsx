@@ -107,7 +107,9 @@ export function TwoFactorSettings({
         setError(otpErrorMessage(err.code, err.message));
         return;
       }
-      setPendingCodes(data?.backupCodes ?? []);
+      // better-auth types `enable` as a union: only the `totp` variant carries
+      // backup codes, so narrow before reading them.
+      setPendingCodes(data?.method === 'totp' ? data.backupCodes : []);
       setPassword('');
       if (await sendCode()) setStep({ name: 'verify' });
     } catch {

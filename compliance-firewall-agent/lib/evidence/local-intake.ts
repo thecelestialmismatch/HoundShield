@@ -99,9 +99,11 @@ function pageTextFromItems(items: unknown[]): string {
 export async function extractLocalPdfText(file: File): Promise<{ pageCount: number; pageText: string[] }> {
   const bytes = new Uint8Array(await file.arrayBuffer())
   const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+  // `isEvalSupported: false` was dropped with pdfjs-dist v6: the eval-based
+  // rendering path it disabled is gone from the build, so there is nothing left
+  // to opt out of and the option is no longer a valid parameter.
   const loadingTask = pdfjs.getDocument({
     data: bytes,
-    isEvalSupported: false,
     useSystemFonts: true,
     stopAtErrors: true,
   })
@@ -122,7 +124,8 @@ export async function extractLocalPdfText(file: File): Promise<{ pageCount: numb
     }
     return { pageCount: document.numPages, pageText }
   } finally {
-    await document.destroy()
+    // v6 moved teardown to the loading task; PDFDocumentProxy no longer has destroy().
+    await loadingTask.destroy()
   }
 }
 
