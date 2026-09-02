@@ -36,7 +36,12 @@ If the re-baselined milestone hits → expand to recurring revenue (Stage 2). If
 Every new session, in order:
 1. Read `tasks/todo.md` — Stage 1 queue and active tasks
 2. Read `tasks/lessons.md` — what went wrong and corrections
-3. Check integration health: `curl https://www.houndshield.com/api/health`
+3. Check integration health: `curl -H "x-health-token: $HEALTH_DIAGNOSTIC_TOKEN" https://www.houndshield.com/api/health/ready`
+   (`/api/health` is a bare liveness probe — it returns `{"status":"ok"}` under
+   every failure condition and is locked that way by
+   `app/__tests__/health-liveness-contract.test.ts`. The readiness diagnostic is
+   the token-gated route above, which 404s without the token. Set
+   `HEALTH_DIAGNOSTIC_TOKEN` in Vercel to turn it on.)
 4. Output the HERMES BRIEFING block (below), then start the next `## Active` task.
 
 ```
@@ -115,7 +120,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 | Integration | Status | Action Required |
 |-------------|--------|-----------------|
-| Supabase auth + DB | ✅ Wired | Migrations through 037 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, and **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
+| Supabase auth + DB | ✅ Wired | Migrations through 037 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, and **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**. `/api/health/ready` (token-gated) reports missing control stores and reset-code configuration as degraded rather than green; the public `/api/health` deliberately reports nothing but liveness. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
 | Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |

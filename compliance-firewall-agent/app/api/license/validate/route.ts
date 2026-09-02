@@ -85,7 +85,8 @@ function deny(): NextResponse {
 
 export async function POST(request: NextRequest) {
   const blocked = await enforceRateLimit(
-    identifierFor("license-validate", clientIp(request)),
+    "license-validate",
+    identifierFor({ ip: clientIp(request) }),
     LICENSE_RATE_LIMIT
   );
   if (blocked) return blocked;

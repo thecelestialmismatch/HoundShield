@@ -8,6 +8,48 @@ const nextConfig = {
   // Silence "inferred workspace root" warning — explicit root anchors file tracing
   outputFileTracingRoot: require("path").join(__dirname, "../"),
 
+  /*
+   * The tracing root above is the REPOSITORY root, not this app. That is
+   * correct — the app resolves `next` from a tree above itself — but it also
+   * points the file tracer at 26 MB of material the application never imports:
+   *
+   *   docs/          6.2 MB   incl. 2.5 MB of vendored third-party docs
+   *   skills/        4.6 MB   251 directories of agent tooling
+   *   integrations/  772 KB
+   *   rules/         624 KB
+   *   agents/        532 KB
+   *   examples/      252 KB
+   *
+   * (measured with `du -sh` at commit b88b7ee)
+   *
+   * Tracing only copies what an import graph reaches, so this is a bound on the
+   * work rather than a guarantee of waste — but the tracer still has to walk
+   * every one of those files to decide, on every build, and a single stray
+   * `require` of a fixture under `examples/` would pull it into a serverless
+   * bundle with nothing to catch it. Naming the exclusions makes the boundary
+   * explicit instead of incidental.
+   *
+   * `supabase/migrations/` is excluded for a different reason: 37 SQL files
+   * belong in the repo and in `supabase db push`, and nothing under app/ or
+   * lib/ imports a .sql file, so they have no business in a runtime image.
+   */
+  outputFileTracingExcludes: {
+    "*": [
+      "../docs/**",
+      "../skills/**",
+      "../integrations/**",
+      "../rules/**",
+      "../agents/**",
+      "../examples/**",
+      "../browser-extension/**",
+      "../research/**",
+      "../advisory/**",
+      "../design-md/**",
+      "../proxy/**",
+      "./supabase/migrations/**",
+    ],
+  },
+
   // Dev server origins (allow all local access)
   allowedDevOrigins: [
     "http://127.0.0.1:3000",
