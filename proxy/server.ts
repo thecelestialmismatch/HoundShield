@@ -15,12 +15,14 @@
  * All prompt content stays local. Only metadata reaches houndshield.com dashboard.
  */
 
+import { timingSafeEqual } from "node:crypto";
+
 import express, { type Request, type Response, type NextFunction } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { ChatRequestSchema } from "./schema.js";
-import { queryEvents, getStats } from "./storage.js";
+import { queryEvents, getStats, verifyChain } from "./storage.js";
 import { setWebhookLicenseKey, flushWebhook } from "./webhook.js";
 import { validateLicense } from "./license.js";
 import { runOODALoop } from "./ooda/loop.js";
@@ -72,10 +74,30 @@ const OrgPolicyUpdateSchema = z.object({
   lockout_duration_minutes: z.number().int().min(1).max(10080).optional(),
 });
 
-// Admin token for management routes (quarantine release, policy changes).
-// Defaults to the license key so single-tenant Docker deployments work out of
-// the box, but can be set independently for stronger separation.
+/*
+ * Admin token for management and audit routes.
+ *
+ * This used to default to HOUNDSHIELD_LICENSE_KEY "so single-tenant Docker
+ * deployments work out of the box". The cost of that convenience: ONE secret
+ * both authenticated the product and administered it, so a licence key shared
+ * with a contractor, pasted into a ticket, or read out of `docker inspect` also
+ * released quarantined CUI and rewrote the customer's detection policy.
+ *
+ * The fallback is kept — removing it would break every existing install on
+ * upgrade — but it is no longer silent. `credentialsAreSeparated` is reported
+ * by /health so an assessor can see the control state, and startup warns once.
+ */
 const ADMIN_TOKEN = process.env.HOUNDSHIELD_ADMIN_TOKEN ?? LICENSE_KEY;
+const ADMIN_TOKEN_IS_SHARED_WITH_LICENSE =
+  !process.env.HOUNDSHIELD_ADMIN_TOKEN && LICENSE_KEY !== "";
+
+if (ADMIN_TOKEN_IS_SHARED_WITH_LICENSE) {
+  console.warn(
+    "[houndshield] HOUNDSHIELD_ADMIN_TOKEN not set — falling back to the licence key. " +
+      "One secret now both licenses and administers this proxy. Set HOUNDSHIELD_ADMIN_TOKEN " +
+      "to a separate value so a leaked licence key cannot release quarantined CUI."
+  );
+}
 
 // ── App ─────────────────────────────────────────────────────────────────────
 
@@ -95,21 +117,50 @@ function requireAdmin(req: Request, res: Response, next: NextFunction): void {
     (req.headers["x-admin-token"] as string | undefined) ??
     (req.headers["x-license-key"] as string | undefined) ??
     "";
-  if (!ADMIN_TOKEN || provided !== ADMIN_TOKEN) {
+  if (!ADMIN_TOKEN || !safeEqual(provided, ADMIN_TOKEN)) {
     res.status(401).json({ error: { message: "Unauthorized — x-admin-token required" } });
     return;
   }
   next();
 }
 
+/**
+ * Constant-time string compare.
+ *
+ * `provided !== ADMIN_TOKEN` short-circuits on the first differing byte, which
+ * leaks the token prefix to anyone who can time the 401. The proxy is bound to
+ * loopback by default, but "bound to loopback" is a deployment property the
+ * customer controls, not a property of this code — so the comparison does not
+ * rely on it. Lengths are compared first because timingSafeEqual throws on a
+ * length mismatch; the length of an admin token is not the secret.
+ */
+function safeEqual(a: string, b: string): boolean {
+  const ab = Buffer.from(a, "utf8");
+  const bb = Buffer.from(b, "utf8");
+  if (ab.length !== bb.length) return false;
+  return timingSafeEqual(ab, bb);
+}
+
 // ── Health ──────────────────────────────────────────────────────────────────
 
-app.get("/health", (_req: Request, res: Response) => {
+/*
+ * Liveness AND the control state an assessor asks about, with nothing that
+ * identifies the customer: no org id, no counts, no hostnames, no key material.
+ * `licence_source` names HOW entitlement was established, which is exactly the
+ * question "is this box actually licensed, or is it coasting on an unplugged
+ * network?" — the question the old offline branch made unanswerable.
+ */
+app.get("/health", async (_req: Request, res: Response) => {
+  const license = await validateLicense(LICENSE_KEY);
   res.json({
     status: "ok",
     version: "2.0.0",
     source: "houndshield-proxy",
     ooda: true,
+    licence_source: license.source ?? "unknown",
+    licence_valid: license.valid,
+    audit_chain: "sha256-linked",
+    admin_credentials_separated: !ADMIN_TOKEN_IS_SHARED_WITH_LICENSE,
   });
 });
 
@@ -118,9 +169,35 @@ app.get("/health", (_req: Request, res: Response) => {
 app.post("/v1/chat/completions", async (req: Request, res: Response) => {
   const requestId = uuidv4();
 
-  // Validate license
+  /*
+   * Validate licence — and ACT on the result.
+   *
+   * This read `license.org_id` and never looked at `license.valid`, so the
+   * field was computed on every request and discarded. Combined with the
+   * offline branch in license.ts that minted `plan: "pro"` on any network
+   * failure, entitlement was unenforceable by construction.
+   *
+   * The split below is the one that matters: NO key configured is evaluation
+   * mode and still serves (the free demo and Mode C trials depend on it, and
+   * hard-gating the open-source proxy is a pricing decision, not a security
+   * fix). A key that is configured but does not verify is refused — someone
+   * who set a licence key expects it to mean something.
+   */
   const license = await validateLicense(LICENSE_KEY);
-  const orgId = license.org_id;
+  if (LICENSE_KEY && !license.valid) {
+    res.status(402).json({
+      error: {
+        message:
+          "Licence could not be verified. Check HOUNDSHIELD_LICENSE_KEY, or for an " +
+          "air-gapped deployment set HOUNDSHIELD_OFFLINE_LICENSE and HOUNDSHIELD_LICENSE_PUBLIC_KEY.",
+        code: "LICENSE_UNVERIFIED",
+        licence_source: license.source ?? "unknown",
+      },
+    });
+    return;
+  }
+  const orgId = license.org_id || (LICENSE_KEY ? "unknown" : "evaluation");
+  res.setHeader("X-HoundShield-Licence", license.source ?? "unknown");
 
   // Determine upstream provider and credentials
   const providerHeader = req.headers["x-provider"] as Provider | undefined;
@@ -172,8 +249,27 @@ app.get("/v1/events", requireAdmin, (req: Request, res: Response) => {
   res.json({ success: true, data: queryEvents({ limit, offset, action, since }) });
 });
 
-app.get("/v1/stats", (_req: Request, res: Response) => {
+/*
+ * Guarded (audit 1.3). This route and /v1/baselines were the only two reads
+ * with no auth: every other management route already required the admin token.
+ * Event volume, block counts and last-seen leak the customer's AI usage
+ * profile, and the behavioural baseline route leaked it per entity id.
+ */
+app.get("/v1/stats", requireAdmin, (_req: Request, res: Response) => {
   res.json({ success: true, data: getStats() });
+});
+
+/**
+ * GET /v1/audit/verify — recompute the whole hash chain.
+ *
+ * This is the endpoint that makes the tamper-evident claim checkable by the
+ * party who cares: the customer, inside their own boundary, without sending a
+ * single event to us. `tip_hash` is the value to anchor externally (print it,
+ * mail it, commit it) if they want evidence the log has not been rewound.
+ */
+app.get("/v1/audit/verify", requireAdmin, (_req: Request, res: Response) => {
+  const result = verifyChain();
+  res.status(result.ok ? 200 : 409).json({ success: result.ok, data: result });
 });
 
 // ── Quarantine management ───────────────────────────────────────────────────
@@ -205,7 +301,7 @@ app.put("/v1/quarantine/:requestId", requireAdmin, (req: Request, res: Response)
 
 // ── Behavioral baseline ─────────────────────────────────────────────────────
 
-app.get("/v1/baselines/:entityId", (req: Request, res: Response) => {
+app.get("/v1/baselines/:entityId", requireAdmin, (req: Request, res: Response) => {
   const entityId = req.params.entityId as string;
   const baseline = getBaselineRow(entityId);
   if (!baseline) {

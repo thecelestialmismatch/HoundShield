@@ -12,16 +12,17 @@
  *   1. A NON-OK response is never cached. Only a 2xx result is. That means a
  *      transient 500 cannot pin the proxy into an "invalid" state for an hour.
  *
- *   2. A network failure with NO cache returns `{ valid: true, plan: "pro",
- *      org_id: "offline" }`. Read in isolation that is a licence bypass: block
- *      houndshield.com at DNS and you mint yourself an unlimited Pro licence.
- *      It is here because Mode C (air-gapped) is a documented deployment mode
- *      and there is no other offline-licensing path in the proxy — so this
- *      branch IS how an air-gapped install gets a working proxy, and
- *      `org_id: "offline"` is the sentinel webhook.ts stamps on every event.
- *      These tests DOCUMENT that behaviour; they do not endorse it. Replacing
- *      it with a signed offline token is a product decision, and the test that
- *      changes is `offline with no cache …` below.
+ *   2. A network failure with NO cache USED TO return `{ valid: true, plan:
+ *      "pro", org_id: "offline" }`. That was a licence bypass: block
+ *      houndshield.com at DNS and you minted yourself an unlimited Pro licence
+ *      that never expired and never re-checked. The previous version of this
+ *      file documented the branch and named the replacement — "a signed offline
+ *      token" — as the test that would have to change. It has changed.
+ *
+ *      Offline operation is now GRANTED rather than achieved: an Ed25519-signed
+ *      `HOUNDSHIELD_OFFLINE_LICENSE`, verified locally against a public key the
+ *      install already holds. Mode C keeps working with no network at all; what
+ *      stops working is inferring entitlement from unreachability.
  *
  * What is NOT negotiable, and is asserted: the raw licence key never leaves
  * the process. Only its SHA-256 hash is transmitted.
@@ -47,7 +48,7 @@ const VALID_LICENSE = {
   expires_at: "2027-01-01T00:00:00.000Z",
 };
 
-const INVALID = { valid: false, org_id: "", plan: "trial", expires_at: "" };
+const INVALID = { valid: false, org_id: "", plan: "trial", expires_at: "", source: "online" };
 
 /** A 2xx response carrying `body` as JSON. */
 function ok(body: unknown) {
@@ -76,8 +77,18 @@ afterEach(() => {
 });
 
 describe("validateLicense — missing key", () => {
-  it("returns an invalid trial licence and never calls the network", async () => {
-    await expect(validateLicense("")).resolves.toEqual(INVALID);
+  it("reports named evaluation mode and never calls the network", async () => {
+    // Not "invalid" in the sense that matters: no key configured is the free
+    // demo and the evaluation path, and server.ts still serves it. What changed
+    // is that it is now NAMED, instead of being indistinguishable from a paid
+    // Pro licence — which is what the old offline branch made it.
+    await expect(validateLicense("")).resolves.toEqual({
+      valid: false,
+      org_id: "",
+      plan: "trial",
+      expires_at: "",
+      source: "evaluation",
+    });
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
@@ -115,7 +126,10 @@ describe("validateLicense — the key itself never leaves the process", () => {
 describe("validateLicense — successful validation", () => {
   it("returns the server's licence verbatim", async () => {
     fetchMock.mockResolvedValueOnce(ok(VALID_LICENSE));
-    await expect(validateLicense(KEY)).resolves.toEqual(VALID_LICENSE);
+    await expect(validateLicense(KEY)).resolves.toMatchObject({
+      ...VALID_LICENSE,
+      source: "online",
+    });
   });
 
   it("caches the result, so a second call inside the TTL makes no request", async () => {
@@ -124,7 +138,10 @@ describe("validateLicense — successful validation", () => {
 
     vi.setSystemTime(new Date(Date.now() + 59 * 60 * 1000)); // 59 min: still fresh
 
-    await expect(validateLicense(KEY)).resolves.toEqual(VALID_LICENSE);
+    await expect(validateLicense(KEY)).resolves.toMatchObject({
+      ...VALID_LICENSE,
+      source: "cache",
+    });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
@@ -152,7 +169,7 @@ describe("validateLicense — server rejects the key", () => {
 
     // Same instant — a cached rejection would short-circuit this call.
     fetchMock.mockResolvedValueOnce(ok(VALID_LICENSE));
-    await expect(validateLicense(KEY)).resolves.toEqual(VALID_LICENSE);
+    await expect(validateLicense(KEY)).resolves.toMatchObject(VALID_LICENSE);
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
@@ -166,34 +183,39 @@ describe("validateLicense — houndshield.com unreachable", () => {
     vi.setSystemTime(new Date(Date.now() + 24 * HOUR_MS));
     fetchMock.mockRejectedValueOnce(new Error("ENOTFOUND"));
 
-    await expect(validateLicense(KEY)).resolves.toEqual(VALID_LICENSE);
+    await expect(validateLicense(KEY)).resolves.toMatchObject({
+      ...VALID_LICENSE,
+      source: "cache",
+    });
   });
 
-  it("falls back to the offline licence once the cache is older than 72h", async () => {
+  it("refuses once the cache is older than the 72h grace", async () => {
+    // The grace window is a bounded courtesy for a transient outage, not an
+    // indefinite entitlement. Past it, a stale cache stops being evidence.
     fetchMock.mockResolvedValueOnce(ok(VALID_LICENSE));
     await validateLicense(KEY);
 
     vi.setSystemTime(new Date(Date.now() + 73 * HOUR_MS));
     fetchMock.mockRejectedValueOnce(new Error("ENOTFOUND"));
 
-    await expect(validateLicense(KEY)).resolves.toEqual({
-      valid: true,
-      org_id: "offline",
-      plan: "pro",
-      expires_at: "",
+    await expect(validateLicense(KEY)).resolves.toMatchObject({
+      valid: false,
+      plan: "trial",
+      source: "unverified",
     });
   });
 
-  it("offline with no cache returns a valid Pro licence — the Mode C path", async () => {
-    // Documents current behaviour, and is the test to change if entitlement
-    // stops being inferred from network unreachability. See the file header.
+  it("offline with no cache is UNVERIFIED — unplugging the network is not a licence", async () => {
+    // The bypass, asserted closed. Blocking houndshield.com at DNS used to
+    // return plan:"pro"; it now returns nothing usable, and the supported
+    // offline path is the signed token exercised further down.
     fetchMock.mockRejectedValueOnce(new Error("ECONNREFUSED"));
 
-    await expect(validateLicense(KEY)).resolves.toEqual({
-      valid: true,
-      org_id: "offline",
-      plan: "pro",
-      expires_at: "",
+    await expect(validateLicense(KEY)).resolves.toMatchObject({
+      valid: false,
+      org_id: "",
+      plan: "trial",
+      source: "unverified",
     });
   });
 
@@ -202,7 +224,7 @@ describe("validateLicense — houndshield.com unreachable", () => {
     await validateLicense(KEY);
 
     fetchMock.mockResolvedValueOnce(ok(VALID_LICENSE));
-    await expect(validateLicense(KEY)).resolves.toEqual(VALID_LICENSE);
+    await expect(validateLicense(KEY)).resolves.toMatchObject(VALID_LICENSE);
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
