@@ -1992,3 +1992,61 @@ retraction stays visible in the document, because a finding that quietly changes
 finding no reader can audit. Corollary now open in `todo.md`: branch protection requiring the CI
 type check is the one setting that would have stopped all three, and CLAUDE.md already carried
 the rule it broke ("Build must pass before commit").
+
+### A capability cannot be deleted for security; it has to be replaced
+**What:** `proxy/license.ts` returned `{valid:true, plan:"pro"}` on any network failure
+with no cache, so blocking houndshield.com at DNS minted an unlimited Pro licence. The
+obvious fix — delete the branch — would have broken Mode C, because air-gapped is a
+documented deployment mode and that branch was its ONLY licensing path. Its own test file
+said so, and named the replacement it was waiting for: "a signed offline token".
+
+Deleting it would have traded a monetization leak for a broken deployment mode and called
+it a security win. What shipped instead is an Ed25519-signed `HOUNDSHIELD_OFFLINE_LICENSE`
+verified locally with no network, bound to the licence key's hash and carrying a mandatory
+expiry — plus the script that issues one, so the capability is usable and not just
+declared. Offline operation is now granted rather than achieved by unplugging a cable.
+
+**Rule:** Before removing a permissive branch, name every legitimate caller it serves. If
+one exists, the work is replacing the capability, not deleting it — and the replacement
+ships in the same change or the change does not ship. A "fix" that closes a hole by
+removing a supported deployment mode is a regression wearing a security label.
+
+**Second-order rule:** when a test documents a behaviour it does not endorse, it should
+name the successor that would replace it. That comment is what made this a thirty-minute
+design decision instead of an archaeology exercise.
+
+### Hand-verified invariants recorded in prose are not guards
+**What:** Three separate cases in one session, all the same shape.
+
+`lib/detection/engines.ts` deleted a bad number from a CONSTANT while two consumers went on
+computing it by hand; `engines.test.ts` was green throughout because it asserted the
+constant. `lib/pricing/__tests__/plans.test.ts` said "no page renders it (verified: no
+non-test importer exists)" — true when written, and silently false the moment anyone
+imported it. `lib/health/service-status.ts` was written for `/api/health`, the route was
+later narrowed to a bare probe, and the module was left with no consumer but its own test.
+
+Each was a real verification, performed carefully, and recorded where nothing could check
+it again.
+
+**Rule:** If a comment asserts a property of the codebase — "nothing imports this",
+"this is the only registry", "this module feeds that route" — it is a test, and writing it
+as a sentence instead is choosing to find out the hard way. All three are assertions now,
+and all three were self-tested by introducing the violation and watching the guard name the
+offending file.
+
+### Two right answers can produce one wrong document
+**What:** CLAUDE.md said `/api/health` reports degraded state. The route returns
+`{status:"ok"}` unconditionally, and `health-liveness-contract.test.ts` locks it that way
+because a public unauthenticated probe should not publish per-control state. Both positions
+were defensible; the operating procedure built on the documented one was the casualty, and
+it had been returning green under the exact condition that was losing $499 sales.
+
+The reflex is to change the code to match the doc. The right move was to add the missing
+capability where it belongs — a token-gated `/api/health/ready` that 404s a wrong token and
+an unset token identically — leave the deliberate boundary untouched, and fix the sentence
+that was wrong.
+
+**Rule:** When code and documentation disagree, establish which one a deliberate decision
+stands behind before changing either. A test guarding the current behaviour is that
+evidence. Then ask what NEED the documentation was describing, and satisfy it without
+dismantling the guard.
