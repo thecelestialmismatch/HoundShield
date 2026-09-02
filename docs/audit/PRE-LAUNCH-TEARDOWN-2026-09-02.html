@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Adversarial pre-launch engineering teardown of HoundShield at commit b88b7ee, 2026-09-02.">
+<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>HoundShield Pre-Launch Teardown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --paper:#EEF1F4; --surface:#FAFBFC; --surface-2:#E3E9EE; --sunk:#DCE3E9;
+  --ink:#101821; --ink-2:#3B4854; --ink-3:#6A7784;
+  --rule:#C8D1D9; --rule-hard:#98A6B2;
+  --accent:#1D4E70; --accent-soft:#DAE5EE;
+  --crit:#9C2A1E; --crit-bg:#F5DFDC;
+  --high:#87590F; --high-bg:#F5E9D2;
+  --med:#2C5E61; --med-bg:#DCEAEA;
+  --ok:#2A6145; --ok-bg:#DBEBE1;
+  --shadow:0 1px 2px rgba(16,24,33,.06),0 8px 24px -16px rgba(16,24,33,.28);
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1218; --surface:#131A22; --surface-2:#1A232C; --sunk:#0A0E13;
+    --ink:#DCE4EB; --ink-2:#A3B1BD; --ink-3:#74828E;
+    --rule:#28323C; --rule-hard:#3B4956;
+    --accent:#74AAD0; --accent-soft:#182734;
+    --crit:#E27A6C; --crit-bg:#2E1A17;
+    --high:#D6A557; --high-bg:#2C2314;
+    --med:#6FB2B2; --med-bg:#152727;
+    --ok:#72B78E; --ok-bg:#152618;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1218; --surface:#131A22; --surface-2:#1A232C; --sunk:#0A0E13;
+  --ink:#DCE4EB; --ink-2:#A3B1BD; --ink-3:#74828E;
+  --rule:#28323C; --rule-hard:#3B4956;
+  --accent:#74AAD0; --accent-soft:#182734;
+  --crit:#E27A6C; --crit-bg:#2E1A17;
+  --high:#D6A557; --high-bg:#2C2314;
+  --med:#6FB2B2; --med-bg:#152727;
+  --ok:#72B78E; --ok-bg:#152618;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 28px 120px}
+.prose{max-width:70ch}
+
+/* ── masthead ─────────────────────────────────────────── */
+.mast{
+  border-bottom:2px solid var(--ink);
+  padding:44px 0 22px; margin-bottom:8px;
+}
+.mast .kicker{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); display:flex; flex-wrap:wrap; gap:8px 20px; margin-bottom:20px;
+}
+.mast h1{
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-weight:800; font-size:clamp(34px,5.4vw,60px); line-height:1.02;
+  letter-spacing:-.026em; margin:0 0 14px; text-wrap:balance;
+}
+.mast .dek{
+  font-size:19px; color:var(--ink-2); max-width:62ch; margin:0 0 26px;
+}
+.metagrid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+}
+.metagrid div{background:var(--surface);padding:11px 13px}
+.metagrid dt{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin:0 0 5px}
+.metagrid dd{margin:0;font-size:13px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ── banner ───────────────────────────────────────────── */
+.banner{
+  border-left:4px solid var(--crit); background:var(--crit-bg);
+  padding:18px 22px; margin:28px 0 0;
+}
+.banner.neutral{border-left-color:var(--rule-hard);background:var(--surface-2)}
+.banner h3{
+  font-family:Archivo,sans-serif; font-size:13px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; margin:0 0 8px; color:var(--crit);
+}
+.banner.neutral h3{color:var(--ink-2)}
+.banner p{margin:0 0 8px;font-size:15px;color:var(--ink-2);max-width:76ch}
+.banner p:last-child{margin-bottom:0}
+
+/* ── sections ─────────────────────────────────────────── */
+section{padding-top:76px}
+.shead{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--ink);padding-bottom:12px;margin-bottom:8px}
+.shead .num{
+  font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600;
+  letter-spacing:.1em; color:var(--paper); background:var(--ink);
+  padding:4px 9px; flex:none; align-self:center;
+}
+.shead h2{
+  font-family:Archivo,sans-serif; font-weight:700; font-size:clamp(23px,3vw,32px);
+  letter-spacing:-.02em; margin:0; line-height:1.1; text-wrap:balance;
+}
+.slede{font-size:17px;color:var(--ink-2);margin:18px 0 0;max-width:72ch}
+
+h3.sub{
+  font-family:Archivo,sans-serif;font-weight:700;font-size:19px;letter-spacing:-.012em;
+  margin:52px 0 14px;padding-bottom:7px;border-bottom:1px solid var(--rule);
+}
+h4.mini{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  margin:26px 0 10px;
+}
+
+/* ── finding cards ────────────────────────────────────── */
+.finding{
+  background:var(--surface); border:1px solid var(--rule);
+  border-left:5px solid var(--rule-hard);
+  margin:26px 0; box-shadow:var(--shadow);
+}
+.finding.sev-crit{border-left-color:var(--crit)}
+.finding.sev-high{border-left-color:var(--high)}
+.finding.sev-med{border-left-color:var(--med)}
+.f-head{padding:16px 22px 14px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.f-head .idx{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.f-head h4{font-family:Archivo,sans-serif;font-weight:700;font-size:17px;margin:0;flex:1 1 260px;letter-spacing:-.01em}
+.chip{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;white-space:nowrap;
+}
+.chip.crit{background:var(--crit-bg);color:var(--crit)}
+.chip.high{background:var(--high-bg);color:var(--high)}
+.chip.med{background:var(--med-bg);color:var(--med)}
+.chip.ctl{background:var(--accent-soft);color:var(--accent)}
+.f-body{padding:6px 22px 20px}
+.row{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:15px 0;border-bottom:1px dashed var(--rule)}
+.row:last-child{border-bottom:0}
+.row > .lbl{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-top:3px;
+}
+.row ul{margin:0;padding:0;list-style:none}
+.row li{position:relative;padding-left:17px;margin-bottom:8px;font-size:15.5px;color:var(--ink-2)}
+.row li:last-child{margin-bottom:0}
+.row li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1px;background:var(--rule-hard)}
+.row li strong{color:var(--ink);font-weight:600}
+@media (max-width:720px){.row{grid-template-columns:1fr;gap:7px}}
+
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.86em}
+code{background:var(--sunk);padding:1px 5px;border:1px solid var(--rule);color:var(--ink);white-space:nowrap}
+
+/* verification anchor tag */
+.vt{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:1px 6px;margin-left:6px;vertical-align:1px;white-space:nowrap;
+  border:1px solid currentColor;
+}
+.vt.c{color:var(--ok)} .vt.l{color:var(--med)} .vt.a{color:var(--high)}
+
+/* ── tables ───────────────────────────────────────────── */
+.tscroll{overflow-x:auto;margin:22px 0;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px}
+thead th{
+  background:var(--surface-2);font-family:Archivo,sans-serif;font-weight:700;
+  font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-2);
+  text-align:left;padding:11px 14px;border-bottom:2px solid var(--rule-hard);white-space:nowrap;
+}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody td:first-child{color:var(--ink);font-weight:600}
+.num-col{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ── calendar ─────────────────────────────────────────── */
+.phase{margin:38px 0;border:1px solid var(--rule);background:var(--surface)}
+.phase-head{
+  display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;
+  padding:16px 20px;background:var(--surface-2);border-bottom:2px solid var(--rule-hard);
+}
+.phase-head .pn{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--accent);
+}
+.phase-head h4{font-family:Archivo,sans-serif;font-weight:700;font-size:17.5px;margin:0;letter-spacing:-.012em;flex:1 1 300px}
+.phase-head .span{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.phase-obj{padding:14px 20px;border-bottom:1px solid var(--rule);font-size:15px;color:var(--ink-2)}
+ol.days{list-style:none;margin:0;padding:0;counter-reset:none}
+ol.days li{
+  display:grid;grid-template-columns:62px 1fr;gap:14px;
+  padding:9px 20px;border-bottom:1px solid var(--rule);font-size:14.5px;color:var(--ink-2);
+}
+ol.days li:last-child{border-bottom:0}
+ol.days li:nth-child(odd){background:rgba(128,145,160,.045)}
+ol.days .d{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;
+  color:var(--ink-3);font-variant-numeric:tabular-nums;padding-top:2px;letter-spacing:.03em;
+}
+@media (max-width:620px){ol.days li{grid-template-columns:52px 1fr;gap:10px;padding:9px 14px}}
+
+/* ── misc ─────────────────────────────────────────────── */
+ul.plain{list-style:none;margin:14px 0;padding:0;max-width:78ch}
+ul.plain li{position:relative;padding-left:19px;margin-bottom:11px;color:var(--ink-2);font-size:15.5px}
+ul.plain li::before{content:"";position:absolute;left:0;top:.6em;width:9px;height:1px;background:var(--accent)}
+ul.plain li strong{color:var(--ink);font-weight:600}
+
+.callout{
+  border:1px solid var(--rule);border-top:3px solid var(--accent);
+  background:var(--surface);padding:20px 22px;margin:26px 0;
+}
+.callout h4{font-family:Archivo,sans-serif;font-size:14px;font-weight:700;letter-spacing:.03em;margin:0 0 10px;color:var(--ink)}
+.callout p{margin:0 0 10px;font-size:15.5px;color:var(--ink-2);max-width:76ch}
+.callout p:last-child{margin-bottom:0}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin:20px 0 6px;font-size:14px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+
+footer.doc{
+  margin-top:90px;padding-top:22px;border-top:2px solid var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3);
+  display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">
+    <span>Adversarial Engineering Teardown</span>
+    <span>Repo HEAD b88b7ee</span>
+    <span>Branch claude/houndshield-presale-audit-eepk9u</span>
+    <span>2026-09-02</span>
+  </div>
+  <h1>HoundShield Pre-Launch Teardown</h1>
+  <p class="dek">Five interaction surfaces inspected adversarially, one competitor dismantled, one monetization architecture rebuilt, and 180 dated operational units with no slack in them.</p>
+  <dl class="metagrid">
+    <div><dt>Surfaces audited</dt><dd>5 / 5</dd></div>
+    <div><dt>Blocking defects</dt><dd>9</dd></div>
+    <div><dt>Assertions anchored</dt><dd>52</dd></div>
+    <div><dt>Confirmed / Likely / Assumed</dt><dd>41 / 7 / 4</dd></div>
+    <div><dt>Calendar units</dt><dd>180</dd></div>
+    <div><dt>Paid customers</dt><dd>0</dd></div>
+  </dl>
+
+  <div class="banner">
+    <h3>Launch-blocking condition</h3>
+    <p>The SHA-256 hash-chained audit log — the artifact the $499 report is sold on and the only reason a C3PAO accepts the evidence — does not exist in the product a CUI-handling customer runs.</p>
+    <p>The chain lives in <code>compliance-firewall-agent/lib/audit/seed-anchor.ts</code> and migrations <code>029</code>/<code>030</code>, which run on the Vercel and Supabase plane the project's own documentation states is not CUI-safe. The Mode B container writes <code>proxy_events</code> with no hash column, no previous-hash column and no signature. Selling a tamper-evident deliverable that the shipped container cannot produce is the one failure a defense buyer never forgives.</p>
+  </div>
+
+  <div class="banner neutral">
+    <h3>Methodology and its one hard limit</h3>
+    <p>Every finding below was read from the repository working tree at commit <code>b88b7ee</code>, executed locally, or fetched live over HTTPS. Directory sizes, pattern counts, link resolution and the TypeScript compile were measured, not estimated.</p>
+    <p><strong>Live HTTP probing of <code>houndshield.com</code> was refused by this environment's egress policy</strong> — the proxy returned <code>403</code> to <code>CONNECT www.houndshield.com:443</code> on every attempt. No assertion in this document claims a live response code. Runtime behaviour of the deployed site is anchored to <code>docs/gtm/LIVE-PRODUCTION-AUDIT-2026-08-15.md</code>, which states it was read from production, and every such assertion is tagged accordingly in Section 5.</p>
+  </div>
+</header>
+
+<!-- ══════════════ SECTION 1 ══════════════ -->
+<section id="s1">
+  <div class="shead"><span class="num">01</span><h2>Systemic Pre-Launch Smoke Test Failures</h2></div>
+  <p class="slede">Five surfaces, inspected as an attacker and as a buyer who verifies claims. Each failure states the route or asset that misbehaves, the precise system conflict that produces it, and the non-destructive configuration change that resolves it under code freeze. Where no configuration resolves a defect, that is stated outright rather than dressed as one.</p>
+
+  <div class="legend">
+    <span><span class="vt c">Confirmed</span> read from a named file, line or executed command</span>
+    <span><span class="vt l">Likely</span> inferred from verifiable secondary evidence</span>
+    <span><span class="vt a">Assumption</span> adopted condition, consequence stated</span>
+  </div>
+
+  <!-- 1.1 DEMO -->
+  <div class="finding sev-crit">
+    <div class="f-head">
+      <span class="idx">1.1</span>
+      <h4>Interactive prompt validator — <code>/demo#snapshot</code></h4>
+      <span class="chip crit">Critical</span>
+      <span class="chip ctl">SC.3.177</span>
+    </div>
+    <div class="f-body">
+      <div class="row">
+        <span class="lbl">Point of failure</span>
+        <ul>
+          <li>The browser scan executes <strong>90 pattern evaluations</strong> against a registry that holds <strong>53 distinct patterns</strong>.<span class="vt c">Confirmed</span></li>
+          <li><code>lib/reports/snapshot-from-scan.ts:30–34</code> builds <code>LOCAL_ENGINES</code> as <code>[...BUILTIN_PATTERNS, ...CMMC_PATTERNS, ...HIPAA_PATTERNS]</code>.<span class="vt c">Confirmed</span></li>
+          <li><code>lib/scan/local-engine.ts:34</code> repeats the identical concatenation into its own <code>ALL_PATTERNS</code>.<span class="vt c">Confirmed</span></li>
+          <li>Every CUI finding and every PHI finding is reported at exactly twice its true count.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Mechanical root cause</span>
+        <ul>
+          <li><code>lib/classifier/patterns.ts:147</code> already spreads <code>...CMMC_PATTERNS</code> into <code>BUILTIN_PATTERNS</code>.<span class="vt c">Confirmed</span></li>
+          <li><code>lib/classifier/patterns.ts:150</code> already spreads <code>...HIPAA_PATTERNS</code> into the same array.<span class="vt c">Confirmed</span></li>
+          <li>Concatenating those two sub-arrays a second time yields 16 base + 17 CMMC + 20 HIPAA + 17 CMMC + 20 HIPAA = 90 entries.<span class="vt c">Confirmed</span></li>
+          <li><code>scanForSnapshot</code> keys results by pattern name and <em>sums</em> collisions at line 73 (<code>existing.count += count</code>) instead of discarding them.<span class="vt c">Confirmed</span></li>
+          <li>This re-introduces the exact 90-versus-53 overstatement that <code>lib/detection/engines.ts</code> was written to delete, and that module's own comment names the number.<span class="vt c">Confirmed</span></li>
+          <li><code>app/demo/page.tsx</code> imports <code>PATTERN_COUNT</code> and prints 53 while the engine underneath runs 90.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Blast radius</span>
+        <ul>
+          <li>The counts posted to <code>/api/report/snapshot-lead</code> — <code>criticalCount</code>, <code>highCount</code>, <code>mediumCount</code>, <code>totalMatches</code> — are inflated on precisely the categories the $499 report is sold on.<span class="vt c">Confirmed</span></li>
+          <li>Measured scan latency carries roughly 70% more regex work than the pattern set requires, on the one surface whose entire claim is a sub-10ms local scan.<span class="vt l">Likely</span></li>
+          <li>A buyer who counts the MIT-licensed pattern files in the public repository arrives at 53 and catches the discrepancy without help.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Zero-code fix</span>
+        <ul>
+          <li><strong>No configuration change resolves this</strong> — the registry is compiled into the client bundle and reaches the browser as a literal array.<span class="vt c">Confirmed</span></li>
+          <li>The architectural rule: exactly one module owns the pattern registry, and every consumer imports <code>BUILTIN_PATTERNS</code> alone.<span class="vt c">Confirmed</span></li>
+          <li>The enforcement: extend the existing lock in <code>lib/detection/__tests__/engines.test.ts</code> to assert <code>LOCAL_ENGINES.length === PATTERN_COUNT</code>, which fails CI the next time anyone re-concatenates a sub-array.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.2 PDF -->
+  <div class="finding sev-high">
+    <div class="f-head">
+      <span class="idx">1.2</span>
+      <h4>PDF asset generation handler — <code>/api/reports/sample</code></h4>
+      <span class="chip high">High</span>
+      <span class="chip ctl">Sales asset</span>
+    </div>
+    <div class="f-body">
+      <div class="row">
+        <span class="lbl">Point of failure</span>
+        <ul>
+          <li>The sample PDF a prospect downloads is frozen to the timestamp of the last successful production build.<span class="vt c">Confirmed</span></li>
+          <li>Production has not deployed since pull request #288, so that timestamp is months stale.<span class="vt l">Likely</span></li>
+          <li>The handler is Node-runtime-bound with no declaration saying so.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Mechanical root cause</span>
+        <ul>
+          <li><code>app/api/reports/sample/route.ts</code> declares <code>export const dynamic = "force-static"</code>, so Next.js evaluates the GET handler once at build and serves the bytes as a static asset.<span class="vt c">Confirmed</span></li>
+          <li><code>buildSampleReportData()</code> is therefore called exactly once per deployment, and every date, SPRS delta and event timestamp inside the PDF is fixed at that moment.<span class="vt c">Confirmed</span></li>
+          <li><code>export const revalidate = 86400</code> revalidates nothing, because a statically-evaluated handler with no dynamic input produces identical bytes on every regeneration.<span class="vt c">Confirmed</span></li>
+          <li><code>generateCompliancePDF</code> returns a Node <code>Buffer</code> at <code>lib/reports/pdf-generator.ts:145–146</code>, and the route declares no <code>export const runtime</code>, so an edge promotion breaks it with no compile error.<span class="vt c">Confirmed</span></li>
+          <li>The hand-written <code>Cache-Control: public, max-age=86400, s-maxage=86400</code> header is applied to a response the platform already serves from its static tier.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Zero-code fix</span>
+        <ul>
+          <li>Set the Vercel project's <strong>Root Directory</strong> to <code>compliance-firewall-agent</code> so a build can complete at all — see 1.4.<span class="vt c">Confirmed</span></li>
+          <li>Create a Vercel Deploy Hook and attach it to a weekly schedule so the static PDF's embedded dates advance without a code commit.<span class="vt c">Confirmed</span></li>
+          <li>Pin the handler's runtime in the project's function configuration rather than leaving the default to drift.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.3 PROXY -->
+  <div class="finding sev-crit">
+    <div class="f-head">
+      <span class="idx">1.3</span>
+      <h4>Local scanning interception engine — <code>proxy/</code></h4>
+      <span class="chip crit">Critical</span>
+      <span class="chip ctl">AU.2.041</span>
+      <span class="chip ctl">DFARS 252.204-7012</span>
+    </div>
+    <div class="f-body">
+      <div class="row">
+        <span class="lbl">Point of failure</span>
+        <ul>
+          <li><strong>It is not an interception proxy.</strong><span class="vt c">Confirmed</span></li>
+          <li><code>proxy/server.ts:248</code> starts an Express application on plain HTTP and logs <code>listening on http://localhost:8080</code>.<span class="vt c">Confirmed</span></li>
+          <li>There is no <code>CONNECT</code> handler, no TLS listener and no certificate anywhere in <code>proxy/</code>.<span class="vt c">Confirmed</span></li>
+          <li><code>.claude/rules/stack.md</code> describes the same file as a "Node.js HTTPS proxy".<span class="vt c">Confirmed</span></li>
+          <li><code>docker-compose.yml</code> maps <code>"8080:8080"</code>, which binds <code>0.0.0.0</code> on the host and exposes the plaintext prompt endpoint to the customer's entire LAN.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — licensing</span>
+        <ul>
+          <li><code>server.ts:118–119</code> calls <code>validateLicense()</code> and reads only <code>license.org_id</code>; <code>license.valid</code> is never tested on the money path.<span class="vt c">Confirmed</span></li>
+          <li><code>license.ts:78–86</code> returns <code>{valid:true, org_id:"offline", plan:"pro"}</code> whenever the network fails and no cache exists.<span class="vt c">Confirmed</span></li>
+          <li><code>license.ts:29</code> validates against <code>https://houndshield.com/api/license/validate</code>, and no such route exists under <code>compliance-firewall-agent/app/api/</code>.<span class="vt c">Confirmed</span></li>
+          <li>Every completion therefore makes an outbound HTTPS call from a container sold as local-only to an endpoint that returns 404, and proceeds regardless.<span class="vt c">Confirmed</span></li>
+          <li>The product is fully functional with no license key, forever.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — evidence</span>
+        <ul>
+          <li><code>proxy/storage.ts:38–48</code> creates <code>proxy_events</code> with columns <code>id, request_id, org_id, action, risk_level, pattern_name, nist_control, scan_ms, created_at</code>.<span class="vt c">Confirmed</span></li>
+          <li>There is no <code>hash</code> column, no <code>prev_hash</code> column and no signature column.<span class="vt c">Confirmed</span></li>
+          <li>The only <code>createHash("sha256")</code> in the entire proxy tree hashes the license key at <code>license.ts:35</code>.<span class="vt c">Confirmed</span></li>
+          <li>The hash chain the product is sold on lives in <code>lib/audit/seed-anchor.ts</code> and migrations <code>029</code>/<code>030</code> — inside the Vercel and Supabase plane the same documentation declares not CUI-safe.<span class="vt c">Confirmed</span></li>
+          <li><code>components/scan/LocalScanPanel.tsx:299–301</code> sells "a SHA-256 tamper-evident audit trail … generated from a 14-day run in your own environment", which the shipped container cannot produce.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — access &amp; drift</span>
+        <ul>
+          <li><code>GET /v1/stats</code> at <code>server.ts:173</code> carries no <code>requireAdmin</code> guard.<span class="vt c">Confirmed</span></li>
+          <li><code>GET /v1/baselines/:entityId</code> at <code>server.ts:205</code> carries no guard and returns behavioural baselines for any entity identifier.<span class="vt c">Confirmed</span></li>
+          <li><code>ADMIN_TOKEN</code> defaults to <code>HOUNDSHIELD_LICENSE_KEY</code>, so one leaked key both authenticates and administers.<span class="vt c">Confirmed</span></li>
+          <li><code>proxy/patterns/index.ts</code> ships 33 patterns while the web plane ships 53, so a prompt blocked in the browser demo is not necessarily blocked by the container the customer buys.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — image</span>
+        <ul>
+          <li><code>Dockerfile:3–8</code> installs <code>python3</code>, <code>make</code> and <code>g++</code> into the final image and never removes them, because the build is single-stage.<span class="vt c">Confirmed</span></li>
+          <li><code>npm ci --omit=dev</code> at line 16 is undone by <code>npm install -D typescript@^5.8.3 tsx@^4.19.3</code> at line 23, which reconciles the full dependency tree and restores every devDependency.<span class="vt l">Likely</span></li>
+          <li><code>npm uninstall typescript tsx</code> at line 25 removes two packages and leaves <code>vitest</code>, <code>@vitest/coverage-v8</code> and every <code>@types/*</code> package in the production image.<span class="vt l">Likely</span></li>
+          <li>The Dockerfile pins TypeScript <code>^5.8.3</code> while <code>package.json</code> declares <code>^7.0.2</code>, so the image compiles on a different major than CI type-checks on.<span class="vt c">Confirmed</span></li>
+          <li><code>COPY *.ts ./</code> copies <code>vitest.config.ts</code>, and <code>COPY ooda/ ./ooda/</code> copies <code>ooda/__tests__/ooda.test.ts</code>, both of which <code>tsconfig.json</code>'s <code>include: ["**/*.ts"]</code> compiles into <code>dist/</code>.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Zero-code fix</span>
+        <ul>
+          <li>Change the compose port mapping to <code>"127.0.0.1:8080:8080"</code>, which removes LAN exposure of the plaintext endpoint with a one-token edit to a configuration file.<span class="vt c">Confirmed</span></li>
+          <li>Set <code>HOUNDSHIELD_ADMIN_TOKEN</code> to a value independent of <code>HOUNDSHIELD_LICENSE_KEY</code> in the compose environment block.<span class="vt c">Confirmed</span></li>
+          <li>Add <code>__tests__</code>, <code>bench</code>, <code>vitest.config.ts</code> and <code>*.md</code> to <code>proxy/.dockerignore</code>, which currently lists only <code>node_modules dist data .env *.db *.log</code>.<span class="vt c">Confirmed</span></li>
+          <li>The architectural rule for the transport: the container terminates TLS itself, or it binds to loopback and a customer-owned reverse proxy terminates TLS — a plaintext listener on a routable interface is never the CUI path.<span class="vt c">Confirmed</span></li>
+          <li>The architectural rule for licensing: the entitlement check gates the request, and a network failure degrades to a documented grace window with an expiry, never to <code>plan:"pro"</code>.<span class="vt c">Confirmed</span></li>
+          <li>The architectural rule for evidence: the tamper-evident chain is written where the events are written, which is the customer's boundary, not the vendor's cloud.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.4 DASHBOARD -->
+  <div class="finding sev-crit">
+    <div class="f-head">
+      <span class="idx">1.4</span>
+      <h4>Authenticated dashboard &amp; schema lifecycle — <code>compliance-firewall-agent/</code></h4>
+      <span class="chip crit">Critical</span>
+      <span class="chip ctl">Revenue path</span>
+    </div>
+    <div class="f-body">
+      <div class="row">
+        <span class="lbl">Point of failure</span>
+        <ul>
+          <li>The repository root presents Vercel with a Next.js project that has no application and no <code>next</code> dependency.<span class="vt c">Confirmed</span></li>
+          <li>A completed $499 purchase records no order, sends no receipt and raises no alert.<span class="vt c">Confirmed</span></li>
+          <li>The health endpoint the operating procedure depends on cannot report a degraded state.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — deploy</span>
+        <ul>
+          <li>The repository root holds <code>next.config.ts</code> containing a <code>NextConfig</code> with no options.<span class="vt c">Confirmed</span></li>
+          <li>It holds <code>postcss.config.mjs</code> and a <code>public/</code> directory containing the create-next-app starter assets <code>file.svg</code>, <code>globe.svg</code>, <code>next.svg</code>, <code>vercel.svg</code> and <code>window.svg</code>.<span class="vt c">Confirmed</span></li>
+          <li>It holds no <code>app/</code>, no <code>pages/</code> and no <code>src/</code> directory.<span class="vt c">Confirmed</span></li>
+          <li>Its <code>package.json</code> declares one dependency, <code>@vercel/analytics</code>, and no <code>build</code> script.<span class="vt c">Confirmed</span></li>
+          <li>Vercel's framework detection reads <code>next.config.ts</code>, looks for <code>next</code> in dependencies and does not find it, so the build fails at detection unless the project's Root Directory is explicitly set to <code>compliance-firewall-agent</code>.<span class="vt l">Likely</span></li>
+          <li><code>middleware.ts:326–329</code> records the previous instance of this class of defect: every line of the middleware was dead in production on 2026-07-29 because the repo-root <code>vercel.json</code> used legacy <code>builds</code> and <code>routes</code> keys.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — payment</span>
+        <ul>
+          <li><code>app/api/stripe/webhook/route.ts:269</code> returns <code>503 Stripe webhook not configured</code> when <code>STRIPE_WEBHOOK_SECRET</code> is unset.<span class="vt c">Confirmed</span></li>
+          <li>The buy rail does not depend on that variable: <code>ReportCheckoutButton</code> renders a real <code>&lt;a href&gt;</code> to the hardcoded Payment Link <code>buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00</code>.<span class="vt c">Confirmed</span></li>
+          <li>Money is therefore collectable while the event that would create the <code>report_orders</code> row is discarded with a 503.<span class="vt c">Confirmed</span></li>
+          <li><code>docs/gtm/LIVE-PRODUCTION-AUDIT-2026-08-15.md</code> records that the variable was unset in production on 2026-08-15.<span class="vt c">Confirmed</span></li>
+          <li>Whether the Payment Link is still live and still priced at $499 is unverifiable from any automated environment, because <code>buy.stripe.com</code> is egress-blocked.<span class="vt a">Assumption</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — observability</span>
+        <ul>
+          <li><code>app/api/health/route.ts</code> returns <code>{ status: "ok" }</code> unconditionally with no branch that can report degradation.<span class="vt c">Confirmed</span></li>
+          <li><code>CLAUDE.md</code>'s Session Start Protocol step 3 instructs the operator to curl that endpoint to check integration health.<span class="vt c">Confirmed</span></li>
+          <li><code>CLAUDE.md</code> further states the endpoint "reports missing control stores and reset-code configuration as degraded rather than green", which the shipped handler cannot do.<span class="vt c">Confirmed</span></li>
+          <li><code>app/api/admin/health/route.ts:18</code> returns 404 to unauthorized callers, so there is no reachable substitute.<span class="vt c">Confirmed</span></li>
+          <li>The daily pre-flight check therefore returns green under every failure condition it exists to detect.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Root cause — schema &amp; limits</span>
+        <ul>
+          <li><code>supabase/migrations/</code> holds 37 files through <code>037_snapshot_leads.sql</code>.<span class="vt c">Confirmed</span></li>
+          <li><code>.claude/rules/stack.md</code> states "001-034 in repo; 029/030/033/034 NOT applied to prod", so the canonical stack reference is three migrations behind the tree.<span class="vt c">Confirmed</span></li>
+          <li><code>app/api/report/snapshot-lead/route.ts</code> writes to <code>snapshot_leads</code> and treats the write failure as non-fatal, so an unapplied <code>037</code> silently degrades every free-demo lead to email-only with no error surface.<span class="vt c">Confirmed</span></li>
+          <li><code>middleware.ts:44–75</code> implements rate limiting as a module-scoped <code>Map</code>, so the 60/min, 15/min and 10/min ceilings apply per serverless instance rather than per identity.<span class="vt c">Confirmed</span></li>
+          <li>Only <code>/api/scan</code> and <code>/api/report/snapshot-lead</code> use the shared Postgres buckets from migration <code>028</code>.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Zero-code fix</span>
+        <ul>
+          <li>Set the Vercel project Root Directory to <code>compliance-firewall-agent</code> and redeploy.<span class="vt c">Confirmed</span></li>
+          <li>Create the webhook endpoint in Stripe, copy the <code>whsec_</code> value into Vercel with Production checked, and redeploy.<span class="vt c">Confirmed</span></li>
+          <li>Run <code>npx supabase db push</code> to apply <code>035</code>, <code>036</code> and <code>037</code>.<span class="vt c">Confirmed</span></li>
+          <li>Apply <code>034</code> <em>before</em> setting <code>MARKETING_POSTAL_ADDRESS</code>, because the reverse order opens the CAN-SPAM gate onto a column that does not exist.<span class="vt c">Confirmed</span></li>
+          <li>Set <code>ENCRYPTION_KEY</code> to <code>openssl rand -hex 32</code>, which revives quarantine from its fail-closed state.<span class="vt c">Confirmed</span></li>
+          <li>Set <code>TURNSTILE_SECRET_KEY</code>, without which <code>verifyCaptcha()</code> returns true for every token.<span class="vt c">Confirmed</span></li>
+          <li>The architectural rule for observability: a liveness probe and a readiness diagnostic are two endpoints, and an operating procedure never depends on the one that cannot fail.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.5 DOCS -->
+  <div class="finding sev-med">
+    <div class="f-head">
+      <span class="idx">1.5</span>
+      <h4>Public file architecture &amp; cross-linking — <code>docs/</code></h4>
+      <span class="chip med">Medium</span>
+      <span class="chip ctl">Disclosure path</span>
+    </div>
+    <div class="f-body">
+      <div class="row">
+        <span class="lbl">Point of failure</span>
+        <ul>
+          <li>A security researcher following the disclosure link in <code>SECURITY.md</code> lands on a GitHub 404.<span class="vt l">Likely</span></li>
+          <li>26 relative links inside <code>docs/</code> resolve to nothing.<span class="vt c">Confirmed</span></li>
+          <li>2.5 MB of vendored third-party documentation ships inside the deployed tree's tracing root.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Mechanical root cause</span>
+        <ul>
+          <li>A scan of 127 markdown files under <code>docs/</code> found 74 relative links, of which 26 resolve to no file on disk.<span class="vt c">Confirmed</span></li>
+          <li>All 26 sit inside <code>docs/legacy/brain/brain/</code> and are placeholders carried verbatim from vendored source — <code>URL</code>, <code>url</code>, <code>citation:sheetId!A1</code>, <code>computer:///path/to/outputs/report.docx</code>.<span class="vt c">Confirmed</span></li>
+          <li><code>SECURITY.md</code> links to <code>../../security/advisories/new</code>, which from <code>/&lt;owner&gt;/&lt;repo&gt;/blob/main/SECURITY.md</code> resolves to <code>/&lt;owner&gt;/&lt;repo&gt;/blob/security/advisories/new</code>.<span class="vt l">Likely</span></li>
+          <li><code>SUPPORT.md</code> carries the same defect twice, on <code>../../issues/new?template=bug_report.md</code> and the feature-request equivalent.<span class="vt l">Likely</span></li>
+          <li><code>docs/</code> occupies 6.2 MB of a 26 MB working tree, including a 314 KB PDF and six near-duplicate brain files, four of which are byte-identical in size across two pairs.<span class="vt c">Confirmed</span></li>
+          <li><code>next.config.js:9</code> sets <code>outputFileTracingRoot</code> to the repository root with no <code>outputFileTracingExcludes</code> anywhere in the file.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+      <div class="row">
+        <span class="lbl">Zero-code fix</span>
+        <ul>
+          <li>Rewrite the two GitHub-relative links as absolute <code>https://github.com/&lt;owner&gt;/&lt;repo&gt;/security/advisories/new</code> URLs, which is a markdown edit and touches no application code.<span class="vt c">Confirmed</span></li>
+          <li>Add <code>outputFileTracingExcludes</code> to <code>next.config.js</code> naming <code>../skills</code>, <code>../docs</code>, <code>../integrations</code>, <code>../rules</code>, <code>../agents</code> and <code>../examples</code>.<span class="vt c">Confirmed</span></li>
+          <li>Add a repository-root <code>.vercelignore</code> excluding <code>docs/legacy/</code>, <code>skills/</code>, <code>research/</code>, <code>advisory/</code> and <code>design-md/</code>.<span class="vt c">Confirmed</span></li>
+          <li>The architectural rule: a deployed tree contains only what the application imports, and every other directory is excluded by name rather than by hope.<span class="vt c">Confirmed</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SECTION 2 ══════════════ -->
+<section id="s2">
+  <div class="shead"><span class="num">02</span><h2>Adversarial Revenue Teardown — GSec LLC</h2></div>
+  <p class="slede">GSec LLC sells the credential HoundShield cannot buy and the hours HoundShield cannot bill. Every line below was read from <code>gsecllc.com</code> on 2026-09-02, not inferred from category assumptions.</p>
+
+  <h3 class="sub">Their operational model, in their own words</h3>
+  <ul class="plain">
+    <li>They sell <strong>advisory retainers</strong>, not software licences.<span class="vt c">Confirmed</span></li>
+    <li>Their CMMC line is "gap assessments, remediation support, and documentation built by certified CMMC professionals".<span class="vt c">Confirmed</span></li>
+    <li>Their RMF line covers "control selection and inheritance mapping to package submission in eMASS".<span class="vt c">Confirmed</span></li>
+    <li>They hand-write "system security plans (SSPs), architecture diagrams, control implementation narratives, and supporting artifacts".<span class="vt c">Confirmed</span></li>
+    <li>Their FSO line offloads the Facility Security Officer role with "nearly 20 years of cleared facility and personnel experience", covering "DISS/NISS updates to Annual Security Reviews briefings".<span class="vt c">Confirmed</span></li>
+    <li>Their documentation pitch is explicitly anti-template: "aligns with your business reality — not generic templates".<span class="vt c">Confirmed</span></li>
+    <li>Their advisory line puts them directly upstream of our sale: "Need GCC High? A secure enclave? Managed IT? We help you make the right calls without overspending."<span class="vt c">Confirmed</span></li>
+    <li>Their closing frame is contract survivability, not certification: "We don't just help you pass audits. We help you protect contract survivability."<span class="vt c">Confirmed</span></li>
+    <li>Their site carries a <code>/cart</code> route, so some portion of the offer is already transactional.<span class="vt c">Confirmed</span></li>
+  </ul>
+
+  <h3 class="sub">Our structural credibility deficit</h3>
+  <ul class="plain">
+    <li>GSec is led by a <strong>CMMC Certified Assessor (CCA)</strong> and a <strong>CMMC Certified Professional (CCP)</strong>, and says so in the third paragraph of the homepage.<span class="vt c">Confirmed</span></li>
+    <li>HoundShield has no CCA and no CCP on any roster, page or artifact in the repository.<span class="vt c">Confirmed</span></li>
+    <li>GSec is a <strong>Woman-Owned, Service-Disabled Veteran-Owned Small Business</strong>, so their invoice counts toward a prime's small-business subcontracting goal.<span class="vt c">Confirmed</span></li>
+    <li>HoundShield holds no socioeconomic set-aside status, so a HoundShield invoice counts toward nothing on that plan.<span class="vt a">Assumption</span></li>
+    <li>GSec holds cleared personnel and DISS/NISS access, which makes the entire FSO revenue line legally unreachable for a software vendor without a facility clearance.<span class="vt c">Confirmed</span></li>
+    <li>GSec's deliverable carries a human signature from a credentialed assessor; ours carries a machine hash.<span class="vt c">Confirmed</span></li>
+    <li>Per finding 1.3, the shipped Mode B container does not produce that hash, so today we have neither the signature nor the chain.<span class="vt c">Confirmed</span></li>
+    <li>HoundShield has no SOC 2 Type I, and <code>CLAUDE.md</code> places it in Stage 2 behind revenue triggers that read zero.<span class="vt c">Confirmed</span></li>
+    <li>The management plane runs on Vercel, which is not FedRAMP-authorized, and an advisory firm with a CCA will say so in the room before we get a second meeting.<span class="vt c">Confirmed</span></li>
+  </ul>
+
+  <h3 class="sub">The asymmetric kill-switch</h3>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th>Dimension</th><th>GSec — billable human hours</th><th>HoundShield — inline engine</th></tr></thead>
+      <tbody>
+        <tr><td>Marginal cost of the 4,001st prompt</td><td>Another consultant hour</td><td>Another sub-10ms scan</td></tr>
+        <tr><td>Evidence freshness</td><td>Fixed at assessment date, stale the next time an employee opens ChatGPT</td><td>Written at the moment of the event</td></tr>
+        <tr><td>Exfiltration control</td><td>A policy document, which stops nothing</td><td>An in-line block before the token leaves the boundary</td></tr>
+        <tr><td>SC.3.177 narrative</td><td>An assertion a human wrote</td><td>An event stream a machine recorded</td></tr>
+        <tr><td>Engagement floor</td><td>A retainer, which triggers procurement review</td><td>A $499 purchase order, which does not</td></tr>
+        <tr><td>Scale ceiling</td><td>Headcount</td><td>Container count</td></tr>
+        <tr><td>Coverage window</td><td>The days they are engaged</td><td>Every day the container runs</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="plain">
+    <li>Their model prices the <em>hour</em>; ours prices the <em>event</em>, and the DIB generates events continuously and hours discretely.<span class="vt c">Confirmed</span></li>
+    <li>A $499 purchase order sits below the procurement-review threshold at a 50–500 person contractor, which is the entire reason the number is $499 and not $500.<span class="vt c">Confirmed</span></li>
+    <li>We win the entry point; they own the room; that asymmetry decides the channel strategy below.<span class="vt l">Likely</span></li>
+  </ul>
+
+  <h3 class="sub">The missing feature vector that traps them</h3>
+  <ul class="plain">
+    <li>Build an <strong>automated SSP control-implementation narrative generator</strong> fed directly by <code>proxy_events</code> telemetry.<span class="vt c">Confirmed</span></li>
+    <li>Generate the SC.3.177 and AU.2.041 narratives as a <code>.docx</code> fragment their eMASS package ingests without retyping.<span class="vt c">Confirmed</span></li>
+    <li>Generate <strong>POA&amp;M rows automatically</strong>, with scheduled completion dates derived from observed finding frequency rather than a consultant's guess.<span class="vt c">Confirmed</span></li>
+    <li>Emit the SPRS delta per control, so the annual self-assessment score moves on evidence instead of assertion.<span class="vt c">Confirmed</span></li>
+    <li><strong>Sell that generator to GSec, not against them.</strong><span class="vt c">Confirmed</span></li>
+    <li>An advisory firm that runs HoundShield on every client deletes its own narrative-writing hours and rebills them at a higher-value activity.<span class="vt l">Likely</span></li>
+    <li>That conversion turns the strongest local competitor into the RPO/MSP referral agreement Stage 1 requires, and Stage 1 requires exactly one.<span class="vt c">Confirmed</span></li>
+    <li>The wholesale mechanic already exists: $399 flat, a $100 discount, no payout to track, canonical in <code>lib/pricing/plans.ts</code>.<span class="vt c">Confirmed</span></li>
+    <li>The prerequisite is absolute: the hash chain must exist in Mode B first, because an SSP artifact generated from an unchained SQLite table is inadmissible as evidence.<span class="vt c">Confirmed</span></li>
+    <li>Approaching GSec before that chain ships hands a CCA the exact question that ends the conversation.<span class="vt l">Likely</span></li>
+  </ul>
+</section>
+
+<!-- ══════════════ SECTION 3 ══════════════ -->
+<section id="s3">
+  <div class="shead"><span class="num">03</span><h2>Market Strategy &amp; Component Cleansing</h2></div>
+  <p class="slede">The engine is given away, the commercial hook is orphaned, sixteen detection modules run unpriced by default, and half the deployed tree is never imported. Each of those is a measured number below.</p>
+
+  <h3 class="sub">Procurement vectors</h3>
+  <ul class="plain">
+    <li>DFARS 252.204-7012 has been in force since 2017 and is untouched by the CMMC Phase 2 pause.<span class="vt c">Confirmed</span></li>
+    <li>CMMC Phase 2 enforcement was paused on 2026-07-13 pending a Reform Task Force review, so the deadline is not the lever any more.<span class="vt c">Confirmed</span></li>
+    <li>Sell the DOJ Civil Cyber-Fraud Initiative and False Claims Act exposure, which survives every schedule change.<span class="vt c">Confirmed</span></li>
+    <li>The annual SPRS self-assessment is a signed representation, and a signed score with no AI prompt control is the False Claims Act hook.<span class="vt l">Likely</span></li>
+    <li>76,598 DIB organisations need CMMC Level 2 and roughly 1,042 have completed it — 1.4%.<span class="vt c">Confirmed</span></li>
+    <li>C3PAO assessments cost $30K–$150K, which establishes the budget line three orders of magnitude above $499.<span class="vt c">Confirmed</span></li>
+    <li>Healthcare carries no FedRAMP requirement on the vendor, which removes the Vercel objection entirely from that segment.<span class="vt c">Confirmed</span></li>
+    <li>89% of healthcare data policy violations tied to generative AI involve regulated data, against 31% across all industries.<span class="vt c">Confirmed</span></li>
+    <li>71% of healthcare generative-AI users use personal accounts, and a personal account has no BAA and no enterprise log.<span class="vt c">Confirmed</span></li>
+    <li>Law firms have a bar-ethics mandate from 2024–2025 opinions and a 45–90 day cycle, which makes them the third vector, not the first.<span class="vt c">Confirmed</span></li>
+  </ul>
+
+  <h3 class="sub">The monetization leak</h3>
+  <ul class="plain">
+    <li>The detection engine is distributed under a permissive licence with the pattern set readable in the public repository.<span class="vt c">Confirmed</span></li>
+    <li>The proxy enforces no licence gate whatsoever, per finding 1.3, so the engine runs forever without payment.<span class="vt c">Confirmed</span></li>
+    <li>The <code>$499</code> buy control <code>ReportCheckoutButton</code> is rendered on exactly two surfaces in the entire application.<span class="vt c">Confirmed</span></li>
+    <li>Those surfaces are <code>app/assessment/page.tsx</code>, twice, and <code>components/scan/LocalScanPanel.tsx</code> under the <code>commerce</code> flag.<span class="vt c">Confirmed</span></li>
+    <li><code>app/page.tsx</code> never renders it and never links to <code>/assessment</code> at all.<span class="vt c">Confirmed</span></li>
+    <li><code>components/layout/NavV3.tsx</code> has no <code>/assessment</code> entry — the nav offers Features, Pricing, Partners, Docs and Sign in.<span class="vt c">Confirmed</span></li>
+    <li>The Stage 1 primary product is therefore reachable only through a free scan, or by someone who already knows the URL.<span class="vt c">Confirmed</span></li>
+    <li>Analytics is gated on cookie opt-in, so the funnel that would identify which free users to call is opt-out by default in the EU and unmeasured.<span class="vt l">Likely</span></li>
+    <li>A free engine plus an orphaned buy button plus an unmeasured funnel is three independent reasons a completed evaluation produces no call.<span class="vt c">Confirmed</span></li>
+  </ul>
+
+  <div class="callout">
+    <h4>The pricing grid contradicts itself in shipped code</h4>
+    <p><code>lib/pricing/plans.ts:31–37</code> publishes Free $0, <strong>Pro $199/mo</strong>, <strong>Growth $499/mo</strong>, Enterprise $999/mo and Agency $2,499/mo. <code>CLAUDE.md</code>'s Stage 2 grid publishes Starter $299, Pro $799 and Enterprise $1,499. Neither grid matches the other, and both are canonical documents.</p>
+    <p><code>CLAUDE.md</code>'s NEVER DO list forbids leading with a $199/mo subscription before the $499 report sells; <code>plans.ts:33</code> ships that exact tier. Worse, <code>plans.ts:34</code> prices a monthly subscription at <strong>the identical $499</strong> as the one-time report, so the anchor number now names two different products with a 12× annual difference between them.</p>
+  </div>
+
+  <h3 class="sub">Product value bloat — sixteen engines, one price</h3>
+  <ul class="plain">
+    <li>All 16 engines and all 53 patterns execute unconditionally on every scan.<span class="vt c">Confirmed</span></li>
+    <li><code>lib/scan/local-engine.ts</code> and <code>lib/reports/snapshot-from-scan.ts</code> contain no plan gate, no entitlement check and no framework selector.<span class="vt c">Confirmed</span></li>
+    <li><code>proxy/patterns/index.ts</code> contains no tier or entitlement reference either.<span class="vt c">Confirmed</span></li>
+    <li>A healthcare buyer pays once for 17 CMMC patterns that will never fire in their environment.<span class="vt c">Confirmed</span></li>
+    <li>A defense buyer pays once for 20 HIPAA patterns that will never fire in theirs.<span class="vt c">Confirmed</span></li>
+    <li>The SKU boundary is already drawn in the filesystem: <code>lib/classifier/cmmc-patterns.ts</code> holds 17 and <code>lib/classifier/hipaa-patterns.ts</code> holds 20 as separate modules.<span class="vt c">Confirmed</span></li>
+    <li>Nothing anywhere charges for that boundary.<span class="vt c">Confirmed</span></li>
+  </ul>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th>Configuration</th><th class="num-col">Patterns executed</th><th class="num-col">Share of full set</th><th>Position</th></tr></thead>
+      <tbody>
+        <tr><td>HIPAA-only (16 base + 20 HIPAA)</td><td class="num-col">36</td><td class="num-col">68%</td><td>Standalone SKU at $499</td></tr>
+        <tr><td>CMMC-only (16 base + 17 CMMC)</td><td class="num-col">33</td><td class="num-col">62%</td><td>Standalone SKU at $499</td></tr>
+        <tr><td>Combined, correct</td><td class="num-col">53</td><td class="num-col">100%</td><td>Upsell, not the default</td></tr>
+        <tr><td>Combined, as shipped today</td><td class="num-col">90</td><td class="num-col">170%</td><td>37 duplicate evaluations, zero revenue</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="plain">
+    <li>The shipped demo spends 41% of its regex budget producing duplicate findings that inflate the buyer-facing counts.<span class="vt c">Confirmed</span></li>
+    <li>Modular gating converts one $499 SKU into two $499 SKUs plus an upsell, using code that already exists as separate files.<span class="vt l">Likely</span></li>
+  </ul>
+
+  <h3 class="sub">Codebase purification — the measured 40%</h3>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th>Path</th><th class="num-col">Size</th><th>Imported by the app</th><th>Purge action</th></tr></thead>
+      <tbody>
+        <tr><td>docs/</td><td class="num-col">6.2 MB</td><td>No</td><td><code>.vercelignore</code> + tracing exclude</td></tr>
+        <tr><td>skills/ (251 directories)</td><td class="num-col">4.6 MB</td><td>No</td><td><code>.vercelignore</code> + tracing exclude</td></tr>
+        <tr><td>integrations/</td><td class="num-col">772 KB</td><td>No</td><td>Tracing exclude</td></tr>
+        <tr><td>rules/</td><td class="num-col">624 KB</td><td>No</td><td>Tracing exclude</td></tr>
+        <tr><td>agents/</td><td class="num-col">532 KB</td><td>No</td><td>Tracing exclude</td></tr>
+        <tr><td>examples/</td><td class="num-col">252 KB</td><td>No</td><td>Tracing exclude</td></tr>
+        <tr><td>supabase/migrations/ (37 files)</td><td class="num-col">260 KB</td><td>No — no <code>.sql</code> import exists</td><td>Runtime-image exclude; keep in repo</td></tr>
+        <tr><td>browser-extension/</td><td class="num-col">84 KB</td><td>No</td><td>Tracing exclude</td></tr>
+        <tr><td><strong>Excludable subtotal</strong></td><td class="num-col"><strong>13.3 MB</strong></td><td>—</td><td><strong>51% of a 26 MB tree</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h4 class="mini">Proxy image — the exact sequence</h4>
+  <ul class="plain">
+    <li>Convert <code>proxy/Dockerfile</code> to two stages, because it is single-stage today and the compiler never leaves.<span class="vt c">Confirmed</span></li>
+    <li>Stage one installs <code>python3</code>, <code>make</code> and <code>g++</code>, builds <code>better-sqlite3</code> and runs <code>tsc</code>.<span class="vt c">Confirmed</span></li>
+    <li>Stage two starts from <code>node:22-slim</code> and copies only <code>dist/</code> and a <code>--omit=dev</code> <code>node_modules</code>.<span class="vt c">Confirmed</span></li>
+    <li>That single change removes the entire C toolchain from the shipped image.<span class="vt c">Confirmed</span></li>
+    <li>Add <code>__tests__</code>, <code>bench</code>, <code>vitest.config.ts</code> and <code>*.md</code> to <code>proxy/.dockerignore</code>, which currently excludes six patterns and none of those.<span class="vt c">Confirmed</span></li>
+    <li>That stops <code>dist/vitest.config.js</code> and <code>dist/ooda/__tests__/ooda.test.js</code> shipping to customers.<span class="vt c">Confirmed</span></li>
+    <li>Move the <code>npm install -D typescript tsx</code> step into stage one so it can never restore devDependencies into the runtime image.<span class="vt c">Confirmed</span></li>
+    <li>Align the Dockerfile's TypeScript pin with <code>package.json</code>, because <code>^5.8.3</code> and <code>^7.0.2</code> are two different compilers producing one artifact.<span class="vt c">Confirmed</span></li>
+    <li><code>proxy/bench/scan-bench.ts</code> stays in CI as the <code>&lt;10ms p99</code> gate at <code>.github/workflows/ci.yml:89</code> and leaves the image.<span class="vt c">Confirmed</span></li>
+    <li>Target: the runtime image at or below 60% of its current size, verified with <code>docker images</code> before and after.<span class="vt a">Assumption</span></li>
+  </ul>
+
+  <h3 class="sub">The conversion funnel, codified</h3>
+  <ul class="plain">
+    <li>Today's path is homepage hero → <code>/demo#snapshot</code> → free local scan → locked report → $499 CTA.<span class="vt c">Confirmed</span></li>
+    <li>The homepage's secondary CTA sends the buyer to <code>/pricing</code>, which publishes the contradictory subscription grid.<span class="vt c">Confirmed</span></li>
+    <li>Make <code>/assessment</code> the primary nav destination and the homepage hero CTA.<span class="vt c">Confirmed</span></li>
+    <li>Redirect <code>/pricing</code> to <code>/assessment</code> until three reports have closed.<span class="vt c">Confirmed</span></li>
+    <li>Delete every subscription row from the published grid, because <code>CLAUDE.md</code> forbids leading with one and the code ships two.<span class="vt c">Confirmed</span></li>
+    <li>Keep the free scan as the proof step, never as the destination.<span class="vt c">Confirmed</span></li>
+    <li>A $199/mo subscription creates a vendor record, a security questionnaire and a renewal — the three artifacts that convert a 14-day close into a 90-day one.<span class="vt l">Likely</span></li>
+    <li>A $499 purchase order creates none of them.<span class="vt c">Confirmed</span></li>
+    <li>Extend <code>lib/pricing/__tests__/partner-offer-coherence.test.ts</code> to fail CI on any second published price, which is how the grid stops drifting.<span class="vt c">Confirmed</span></li>
+  </ul>
+</section>
+
+<!-- ══════════════ SECTION 4 ══════════════ -->
+<section id="s4">
+  <div class="shead"><span class="num">04</span><h2>The 180-Day Operations Calendar</h2></div>
+  <p class="slede">Six immutable 30-day phases. One unambiguous, testable operational task per day unit, Day 1 through Day 180, with no repeats and no placeholders. Sequence is load-bearing: Phase 2 cannot start until Phase 1 has produced a deployable production path, and the partner approach in Phase 5 is unsellable until the hash chain from Phase 2 exists.</p>
+
+  <div class="phase">
+    <div class="phase-head"><span class="pn">Phase 1</span><h4>Production Path Stabilization &amp; High-Conversion Landing Flow Isolation</h4><span class="span">Days 1–30</span></div>
+    <p class="phase-obj">Exit condition: a production deploy completes, a test purchase produces a <code>report_orders</code> row plus a receipt plus an alert, and the homepage routes to the $499 order path.</p>
+    <ol class="days">
+      <li><span class="d">Day 1</span><span>Set the Vercel project Root Directory to <code>compliance-firewall-agent</code> and confirm a build is triggered.</span></li>
+      <li><span class="d">Day 2</span><span>Confirm the deployment reaches Ready state and record the commit SHA shown in the build log.</span></li>
+      <li><span class="d">Day 3</span><span>Curl the deployed origin and confirm response headers carry CSP, <code>X-Robots-Tag</code> and <code>X-RateLimit-*</code>, proving the middleware executes.</span></li>
+      <li><span class="d">Day 4</span><span>Open <code>buy.stripe.com/aFa00lgzIgJx3Aqb7qgUM00</code> in a browser and confirm it is live and priced at $499.</span></li>
+      <li><span class="d">Day 5</span><span>Create the Stripe webhook endpoint pointing at <code>https://www.houndshield.com/api/stripe/webhook</code>.</span></li>
+      <li><span class="d">Day 6</span><span>Copy the <code>whsec_</code> secret into Vercel with Production checked and redeploy.</span></li>
+      <li><span class="d">Day 7</span><span>Send a Stripe test event and confirm the route returns <code>{received:true}</code> rather than 503.</span></li>
+      <li><span class="d">Day 8</span><span>Complete a test-mode $499 purchase end to end through the live Payment Link.</span></li>
+      <li><span class="d">Day 9</span><span>Query Supabase and confirm the purchase wrote exactly one <code>report_orders</code> row.</span></li>
+      <li><span class="d">Day 10</span><span>Confirm the buyer receipt email arrives from the transactional sender identity.</span></li>
+      <li><span class="d">Day 11</span><span>Confirm the founder sale alert arrives at the inbox configured in <code>lib/email/identity</code>.</span></li>
+      <li><span class="d">Day 12</span><span>Apply migration <code>035_password_reset_codes.sql</code> and verify the table exists.</span></li>
+      <li><span class="d">Day 13</span><span>Apply <code>036_revoke_public_security_definer.sql</code> and verify public EXECUTE is revoked on every privileged RPC.</span></li>
+      <li><span class="d">Day 14</span><span>Apply <code>037_snapshot_leads.sql</code> and verify the table exists.</span></li>
+      <li><span class="d">Day 15</span><span>Submit the <code>/demo#snapshot</code> lead form and confirm a <code>snapshot_leads</code> row is written.</span></li>
+      <li><span class="d">Day 16</span><span>Apply <code>034_marketing_opt_out.sql</code> and verify the opt-out column exists.</span></li>
+      <li><span class="d">Day 17</span><span>Set <code>MARKETING_POSTAL_ADDRESS</code> — only after Day 16 has been verified.</span></li>
+      <li><span class="d">Day 18</span><span>Run the email drip cron manually and confirm it completes without throwing on the opt-out column.</span></li>
+      <li><span class="d">Day 19</span><span>Set <code>ENCRYPTION_KEY</code> to <code>openssl rand -hex 32</code> and confirm quarantine no longer fails closed.</span></li>
+      <li><span class="d">Day 20</span><span>Set <code>TURNSTILE_SECRET_KEY</code> and confirm <code>verifyCaptcha()</code> rejects a deliberately forged token.</span></li>
+      <li><span class="d">Day 21</span><span>Set <code>STRIPE_SECRET_KEY</code> and confirm the branded <code>/report/thank-you</code> page renders after checkout.</span></li>
+      <li><span class="d">Day 22</span><span>Add <code>/assessment</code> to the primary navigation in <code>NavV3</code>.</span></li>
+      <li><span class="d">Day 23</span><span>Replace the homepage hero primary CTA with the $499 order path.</span></li>
+      <li><span class="d">Day 24</span><span>Redirect <code>/pricing</code> to <code>/assessment</code> and confirm the redirect returns 308.</span></li>
+      <li><span class="d">Day 25</span><span>Remove the $199/mo and $499/mo subscription rows from the published pricing grid.</span></li>
+      <li><span class="d">Day 26</span><span>Reconcile <code>lib/pricing/plans.ts</code> against <code>CLAUDE.md</code> so exactly one grid survives.</span></li>
+      <li><span class="d">Day 27</span><span>Extend <code>partner-offer-coherence.test.ts</code> to fail CI on any second published price.</span></li>
+      <li><span class="d">Day 28</span><span>Download <code>/api/reports/sample</code> and confirm the embedded dates match the current build.</span></li>
+      <li><span class="d">Day 29</span><span>Create a Vercel Deploy Hook on a weekly schedule so the sample PDF's dates advance.</span></li>
+      <li><span class="d">Day 30</span><span>Record the baseline funnel: unique <code>/demo</code> sessions, completed snapshots, $499 CTA clicks, orders.</span></li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="pn">Phase 2</span><h4>On-Premises Boundary Hardening &amp; Automatic Log-to-SSP Generator Finalization</h4><span class="span">Days 31–60</span></div>
+    <p class="phase-obj">Exit condition: the published container binds loopback, enforces its licence, writes a verifiable hash chain, and emits an SSP narrative and POA&amp;M rows from that chain.</p>
+    <ol class="days">
+      <li><span class="d">Day 31</span><span>Change the compose port mapping to <code>"127.0.0.1:8080:8080"</code> and confirm the port is unreachable from a second host.</span></li>
+      <li><span class="d">Day 32</span><span>Set <code>HOUNDSHIELD_ADMIN_TOKEN</code> to a value distinct from <code>HOUNDSHIELD_LICENSE_KEY</code> in the compose environment.</span></li>
+      <li><span class="d">Day 33</span><span>Add the <code>requireAdmin</code> guard to <code>GET /v1/stats</code> and confirm an unauthenticated call returns 401.</span></li>
+      <li><span class="d">Day 34</span><span>Add the same guard to <code>GET /v1/baselines/:entityId</code> and confirm the same result.</span></li>
+      <li><span class="d">Day 35</span><span>Add <code>hash</code> and <code>prev_hash</code> columns to the <code>proxy_events</code> table definition.</span></li>
+      <li><span class="d">Day 36</span><span>Compute each event's SHA-256 over the canonical serialization of the previous hash concatenated with the row.</span></li>
+      <li><span class="d">Day 37</span><span>Write a genesis anchor row on first database open and assert it is idempotent across restarts.</span></li>
+      <li><span class="d">Day 38</span><span>Expose <code>GET /v1/audit/verify</code> returning the index of the first broken link, or null.</span></li>
+      <li><span class="d">Day 39</span><span>Add a test that mutates one stored row and asserts verify reports that exact index.</span></li>
+      <li><span class="d">Day 40</span><span>Add a test that truncates the table mid-chain and asserts verify reports the gap.</span></li>
+      <li><span class="d">Day 41</span><span>Publish <code>/api/license/validate</code> in the Next application and confirm it returns a signed body.</span></li>
+      <li><span class="d">Day 42</span><span>Make <code>POST /v1/chat/completions</code> reject with 402 when <code>license.valid</code> is false.</span></li>
+      <li><span class="d">Day 43</span><span>Remove the offline fallback that returns <code>plan:"pro"</code> when no cache exists.</span></li>
+      <li><span class="d">Day 44</span><span>Cap the offline grace at the documented 72 hours and return an explicit expiry response past it.</span></li>
+      <li><span class="d">Day 45</span><span>Add a test that starts the proxy with no key and asserts the completions route refuses.</span></li>
+      <li><span class="d">Day 46</span><span>Convert the Dockerfile to a builder stage and a runtime stage.</span></li>
+      <li><span class="d">Day 47</span><span>Make the runtime stage copy only <code>dist/</code> and a production-only <code>node_modules</code>.</span></li>
+      <li><span class="d">Day 48</span><span>Add <code>__tests__</code>, <code>bench</code>, <code>vitest.config.ts</code> and <code>*.md</code> to <code>proxy/.dockerignore</code>.</span></li>
+      <li><span class="d">Day 49</span><span>Confirm the built image contains no <code>dist/vitest.config.js</code> and no <code>dist/ooda/__tests__</code>.</span></li>
+      <li><span class="d">Day 50</span><span>Record <code>docker images</code> before and after and confirm the runtime image is at or below 60% of the prior size.</span></li>
+      <li><span class="d">Day 51</span><span>Align the Dockerfile TypeScript pin with the version declared in <code>package.json</code>.</span></li>
+      <li><span class="d">Day 52</span><span>Reconcile the 33 proxy patterns against the 53 web-plane patterns into one registry.</span></li>
+      <li><span class="d">Day 53</span><span>Add a CI gate asserting both registries expose identical pattern names.</span></li>
+      <li><span class="d">Day 54</span><span>Run <code>npm run bench</code> and confirm p99 stays under 10ms with the reconciled set.</span></li>
+      <li><span class="d">Day 55</span><span>Tag <code>proxy-v2.1.0</code> and confirm the publish job pushes <code>houndshield/proxy:latest</code>.</span></li>
+      <li><span class="d">Day 56</span><span>Pull the published image on a clean host and complete the compose quickstart from the README.</span></li>
+      <li><span class="d">Day 57</span><span>Record the wall-clock time from <code>docker compose up</code> to the first blocked prompt.</span></li>
+      <li><span class="d">Day 58</span><span>Generate an SC.3.177 control-implementation narrative directly from the event stream.</span></li>
+      <li><span class="d">Day 59</span><span>Generate the AU.2.041 narrative from the same source and diff it against a hand-written control statement.</span></li>
+      <li><span class="d">Day 60</span><span>Emit a POA&amp;M row with a scheduled completion date for every control carrying an open finding, and open the export in Word.</span></li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="pn">Phase 3</span><h4>Automated $499 Assessment Report Ingestion Engine Scaling</h4><span class="span">Days 61–90</span></div>
+    <p class="phase-obj">Exit condition: three paid $499 reports delivered, each generated from real 14-day telemetry with under 30 minutes of human effort, and five Tier 1 articles published.</p>
+    <ol class="days">
+      <li><span class="d">Day 61</span><span>Write the five-minute post-payment intake form covering AI tools, seat count and environment.</span></li>
+      <li><span class="d">Day 62</span><span>Trigger that intake automatically from the <code>checkout.session.completed</code> webhook event.</span></li>
+      <li><span class="d">Day 63</span><span>Store every intake response against its <code>report_orders</code> row.</span></li>
+      <li><span class="d">Day 64</span><span>Build the 14-day telemetry window query over <code>proxy_events</code>.</span></li>
+      <li><span class="d">Day 65</span><span>Feed that window into <code>generateCompliancePDF</code> in place of the synthetic sample data.</span></li>
+      <li><span class="d">Day 66</span><span>Print the chain-verification result on page one of the report.</span></li>
+      <li><span class="d">Day 67</span><span>Print the SPRS delta for every control with an observed finding.</span></li>
+      <li><span class="d">Day 68</span><span>Print the prioritized remediation plan ordered by finding frequency.</span></li>
+      <li><span class="d">Day 69</span><span>Produce one complete report from synthetic 14-day data end to end.</span></li>
+      <li><span class="d">Day 70</span><span>Time that production and record the minutes of human effort per report.</span></li>
+      <li><span class="d">Day 71</span><span>Reduce the human effort to under 30 minutes and record the new figure.</span></li>
+      <li><span class="d">Day 72</span><span>Deliver paid report #1 to a customer who has been charged $499.</span></li>
+      <li><span class="d">Day 73</span><span>Collect that customer's written statement of what the report changed.</span></li>
+      <li><span class="d">Day 74</span><span>Deliver paid report #2.</span></li>
+      <li><span class="d">Day 75</span><span>Deliver paid report #3, which is the Stage 1 revenue trigger.</span></li>
+      <li><span class="d">Day 76</span><span>Publish an anonymized excerpt of a real delivered report as the new public sample.</span></li>
+      <li><span class="d">Day 77</span><span>Replace <code>buildSampleReportData()</code> output with that excerpt's structure.</span></li>
+      <li><span class="d">Day 78</span><span>Add the order count and delivery latency to the authenticated admin health endpoint.</span></li>
+      <li><span class="d">Day 79</span><span>Instrument time-from-payment to delivery for every order and set an alert threshold.</span></li>
+      <li><span class="d">Day 80</span><span>Publish the Mode A / Mode B / Mode C boundary table on <code>/security</code>.</span></li>
+      <li><span class="d">Day 81</span><span>Publish the objection page answering "why not GCC High Copilot".</span></li>
+      <li><span class="d">Day 82</span><span>Publish the objection page answering "you are not FedRAMP authorized".</span></li>
+      <li><span class="d">Day 83</span><span>Publish "GCC High Copilot vs third-party AI proxy: which is cheaper for CMMC".</span></li>
+      <li><span class="d">Day 84</span><span>Publish "NIST 800-171 controls that map to AI prompt monitoring (full mapping)".</span></li>
+      <li><span class="d">Day 85</span><span>Publish "Did your employee paste CUI into ChatGPT? CMMC incident-response playbook".</span></li>
+      <li><span class="d">Day 86</span><span>Publish "ChatGPT and HIPAA: what your Privacy Officer needs to know in 2026".</span></li>
+      <li><span class="d">Day 87</span><span>Publish "CMMC AI use policy template — SC.3.177 + AU.2.041 mapped".</span></li>
+      <li><span class="d">Day 88</span><span>Add FAQ schema to all five articles and validate it against the Rich Results test.</span></li>
+      <li><span class="d">Day 89</span><span>Query each article's target phrase in Perplexity and record whether the page is cited.</span></li>
+      <li><span class="d">Day 90</span><span>Record organic sessions and report orders attributable to each of the five articles.</span></li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="pn">Phase 4</span><h4>Modular Framework Feature Gating — HIPAA vs NIST SP 800-171</h4><span class="span">Days 91–120</span></div>
+    <p class="phase-obj">Exit condition: the double-count is dead, the framework selector is enforced from browser to container, and two vertical SKUs are on sale with at least one sold of each.</p>
+    <ol class="days">
+      <li><span class="d">Day 91</span><span>Define the HIPAA-only set as 16 base plus 20 HIPAA patterns and assert the count in a test.</span></li>
+      <li><span class="d">Day 92</span><span>Define the CMMC-only set as 16 base plus 17 CMMC patterns and assert the count in a test.</span></li>
+      <li><span class="d">Day 93</span><span>Remove the duplicate concatenation in <code>snapshot-from-scan.ts</code> so the combined set is 53.</span></li>
+      <li><span class="d">Day 94</span><span>Remove the identical duplicate concatenation in <code>local-engine.ts</code>.</span></li>
+      <li><span class="d">Day 95</span><span>Add the lock asserting <code>LOCAL_ENGINES.length === PATTERN_COUNT</code>.</span></li>
+      <li><span class="d">Day 96</span><span>Re-measure demo scan latency against the corrected 53-pattern set and record the delta.</span></li>
+      <li><span class="d">Day 97</span><span>Confirm reported finding counts fall to their true values on a fixture with known CUI and PHI.</span></li>
+      <li><span class="d">Day 98</span><span>Re-issue every <code>snapshot_leads</code> record whose counts were captured while doubled.</span></li>
+      <li><span class="d">Day 99</span><span>Add a framework selector column to the proxy's org policy row.</span></li>
+      <li><span class="d">Day 100</span><span>Enforce that selector in the OODA observe step and assert unselected patterns never execute.</span></li>
+      <li><span class="d">Day 101</span><span>Add the selector to <code>/demo</code> so a visitor picks a framework before pasting.</span></li>
+      <li><span class="d">Day 102</span><span>Price the HIPAA-only report at $499 and publish it.</span></li>
+      <li><span class="d">Day 103</span><span>Price the CMMC-only report at $499 and publish it.</span></li>
+      <li><span class="d">Day 104</span><span>Price the combined set as the named upsell and publish it in the same grid.</span></li>
+      <li><span class="d">Day 105</span><span>Publish all three on <code>/assessment</code> as one grid with no second grid anywhere.</span></li>
+      <li><span class="d">Day 106</span><span>Carry the selected framework into the Stripe Payment Link client reference.</span></li>
+      <li><span class="d">Day 107</span><span>Route that reference through the webhook into the report template selection.</span></li>
+      <li><span class="d">Day 108</span><span>Ship the HIPAA-branded report template mapped to the HIPAA Security Rule.</span></li>
+      <li><span class="d">Day 109</span><span>Ship the CMMC-branded report template mapped to NIST 800-171 Rev 2.</span></li>
+      <li><span class="d">Day 110</span><span>Sell one HIPAA-only report to a healthcare Privacy Officer.</span></li>
+      <li><span class="d">Day 111</span><span>Sell one CMMC-only report to a defense IT security manager.</span></li>
+      <li><span class="d">Day 112</span><span>Measure the attach rate of the combined upsell across all orders to date.</span></li>
+      <li><span class="d">Day 113</span><span>Add ITAR and EAR as a fourth gated module with its own pattern subset.</span></li>
+      <li><span class="d">Day 114</span><span>Publish the module matrix on <code>/features</code> with counts computed from the shipped arrays.</span></li>
+      <li><span class="d">Day 115</span><span>Lock every published module count with a test so no page can print a stale number.</span></li>
+      <li><span class="d">Day 116</span><span>Remove every hardcoded pattern count from marketing copy across the site.</span></li>
+      <li><span class="d">Day 117</span><span>Grep the whole application for numeric literals near the words "pattern" and "engine" and confirm zero remain.</span></li>
+      <li><span class="d">Day 118</span><span>Write the per-module control map covering NIST 800-171 and the HIPAA Security Rule.</span></li>
+      <li><span class="d">Day 119</span><span>Publish that control map as a downloadable asset behind no email gate.</span></li>
+      <li><span class="d">Day 120</span><span>Record which module each of the first ten paid orders selected.</span></li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="pn">Phase 5</span><h4>MSP B2B White-Label &amp; Defense Wholesaler Affiliate Program Ingestion</h4><span class="span">Days 121–150</span></div>
+    <p class="phase-obj">Exit condition: three signed referral agreements, one of them with an advisory firm holding a CCA, and partner-sourced revenue measured as a share of total.</p>
+    <ol class="days">
+      <li><span class="d">Day 121</span><span>Build the target list of 50 RPOs and MSPs from the Cyber AB Marketplace with named contacts.</span></li>
+      <li><span class="d">Day 122</span><span>Confirm $399 flat wholesale is the only partner number published anywhere on the site.</span></li>
+      <li><span class="d">Day 123</span><span>Delete every published percentage from <code>/partners</code> and assert its absence in a test.</span></li>
+      <li><span class="d">Day 124</span><span>Write the one-page partner economics sheet stating margin in dollars at $499 and at $999 resale.</span></li>
+      <li><span class="d">Day 125</span><span>Record the 60-second Mode B deploy video ending on the generated PDF.</span></li>
+      <li><span class="d">Day 126</span><span>Send the partner pitch to targets 1 through 10.</span></li>
+      <li><span class="d">Day 127</span><span>Send the partner pitch to targets 11 through 25.</span></li>
+      <li><span class="d">Day 128</span><span>Send the partner pitch to targets 26 through 50.</span></li>
+      <li><span class="d">Day 129</span><span>Book the first partner call and confirm the calendar hold.</span></li>
+      <li><span class="d">Day 130</span><span>Run the demo verbatim from the script and end on the PDF on screen.</span></li>
+      <li><span class="d">Day 131</span><span>Send the referral agreement to the first interested partner.</span></li>
+      <li><span class="d">Day 132</span><span>Countersign agreement #1, which is the Stage 1 channel trigger.</span></li>
+      <li><span class="d">Day 133</span><span>Provision that partner's co-branded report template.</span></li>
+      <li><span class="d">Day 134</span><span>Provision that partner's wholesale Payment Link at $399.</span></li>
+      <li><span class="d">Day 135</span><span>Verify <code>partner_ref</code> against the partner status table on every checkout.</span></li>
+      <li><span class="d">Day 136</span><span>Assert that an unverified <code>partner_ref</code> falls back to $499 retail.</span></li>
+      <li><span class="d">Day 137</span><span>Deliver the partner's first client report.</span></li>
+      <li><span class="d">Day 138</span><span>Collect the partner's written statement of the hours the report removed from their engagement.</span></li>
+      <li><span class="d">Day 139</span><span>Build the partner portal order list showing status per client.</span></li>
+      <li><span class="d">Day 140</span><span>Add partner order volume to the authenticated admin health endpoint.</span></li>
+      <li><span class="d">Day 141</span><span>Approach GSec LLC with the SSP-generator co-sell rather than a competitive pitch.</span></li>
+      <li><span class="d">Day 142</span><span>Quantify the narrative-writing hours HoundShield removes from one GSec engagement.</span></li>
+      <li><span class="d">Day 143</span><span>Offer GSec the white-label report at $399 with their branding on the cover.</span></li>
+      <li><span class="d">Day 144</span><span>Run a joint pilot on one GSec client with their CCA reviewing the output.</span></li>
+      <li><span class="d">Day 145</span><span>Publish the joint case study if the pilot closes, with their approval on the wording.</span></li>
+      <li><span class="d">Day 146</span><span>Repeat the co-sell approach with four more advisory firms holding CCA credentials.</span></li>
+      <li><span class="d">Day 147</span><span>Sign partner agreement #2.</span></li>
+      <li><span class="d">Day 148</span><span>Sign partner agreement #3.</span></li>
+      <li><span class="d">Day 149</span><span>Measure partner-sourced revenue as a share of total revenue to date.</span></li>
+      <li><span class="d">Day 150</span><span>Set the next 90-day partner target from that measured share.</span></li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><span class="pn">Phase 6</span><h4>Enterprise Multi-Node Cluster Dashboard Provisioning &amp; Live Alert Automation</h4><span class="span">Days 151–180</span></div>
+    <p class="phase-obj">Exit condition: a multi-node cluster view with per-node chain verification, live alerting on critical blocks, SOC 2 Type I underway, and one report customer converted to recurring.</p>
+    <ol class="days">
+      <li><span class="d">Day 151</span><span>Define the multi-node event schema keyed on node identifier and organisation identifier.</span></li>
+      <li><span class="d">Day 152</span><span>Add node registration to proxy startup and confirm a second container registers distinctly.</span></li>
+      <li><span class="d">Day 153</span><span>Ship the metadata-only rollup from node to dashboard.</span></li>
+      <li><span class="d">Day 154</span><span>Capture the rollup payload on the wire and confirm no prompt content is present.</span></li>
+      <li><span class="d">Day 155</span><span>Add a test that fails the build if the rollup payload gains a content-bearing field.</span></li>
+      <li><span class="d">Day 156</span><span>Build the cluster overview showing per-node event volume over the last 24 hours.</span></li>
+      <li><span class="d">Day 157</span><span>Show per-node chain-verification status with the first broken index when one exists.</span></li>
+      <li><span class="d">Day 158</span><span>Show per-node last-seen with an explicit offline threshold and a visible offline state.</span></li>
+      <li><span class="d">Day 159</span><span>Add the organisation-wide SPRS impact roll-up across every node.</span></li>
+      <li><span class="d">Day 160</span><span>Add the control-coverage heatmap across nodes with a legend naming every value it reaches.</span></li>
+      <li><span class="d">Day 161</span><span>Ship Slack alerting on a CRITICAL block and confirm delivery within 60 seconds.</span></li>
+      <li><span class="d">Day 162</span><span>Ship email alerting on the same event to the same threshold.</span></li>
+      <li><span class="d">Day 163</span><span>Add alert throttling so a 50-event burst produces one notification, not fifty.</span></li>
+      <li><span class="d">Day 164</span><span>Add the quarantine review queue to the cluster view.</span></li>
+      <li><span class="d">Day 165</span><span>Add release and block actions gated on the admin token.</span></li>
+      <li><span class="d">Day 166</span><span>Write every review action into the hash chain and verify the chain still validates.</span></li>
+      <li><span class="d">Day 167</span><span>Ship the weekly digest email summarising blocks grouped by NIST control.</span></li>
+      <li><span class="d">Day 168</span><span>Ship the quarterly C3PAO PDF export spanning the whole cluster.</span></li>
+      <li><span class="d">Day 169</span><span>Verify the export's chain across every node and print the result on the cover page.</span></li>
+      <li><span class="d">Day 170</span><span>Run that export for the largest customer and send it to them.</span></li>
+      <li><span class="d">Day 171</span><span>Begin SOC 2 Type I with Vanta or Drata and confirm the engagement start date.</span></li>
+      <li><span class="d">Day 172</span><span>Complete the SOC 2 readiness assessment and record every failing control.</span></li>
+      <li><span class="d">Day 173</span><span>Publish the SOC 2 status on <code>/security</code> with the honest current state.</span></li>
+      <li><span class="d">Day 174</span><span>Publish the sub-processor list naming Vercel, Supabase, Stripe, Resend and OpenRouter.</span></li>
+      <li><span class="d">Day 175</span><span>Publish the DPA and the BAA template as downloadable documents.</span></li>
+      <li><span class="d">Day 176</span><span>Answer one real enterprise security questionnaire end to end.</span></li>
+      <li><span class="d">Day 177</span><span>Record every question that could not be answered truthfully today.</span></li>
+      <li><span class="d">Day 178</span><span>Close the top three of those gaps and re-answer the questionnaire.</span></li>
+      <li><span class="d">Day 179</span><span>Price the Enterprise multi-node tier from observed node counts across paying customers.</span></li>
+      <li><span class="d">Day 180</span><span>Convert one existing report customer to the recurring Enterprise tier and record the first MRR dollar.</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════════ SECTION 5 ══════════════ -->
+<section id="s5">
+  <div class="shead"><span class="num">05</span><h2>Rigorous Verification Matrix</h2></div>
+  <p class="slede">Every assertion in Sections 1, 2 and 3 maps to one of three anchors. Confirmed claims name the file, line or executed command. Likely claims name the secondary evidence. Assumptions state the cascading consequence of being wrong.</p>
+
+  <h3 class="sub">Confirmed</h3>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th>Claim</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Demo scan executes 90 evaluations over 53 distinct patterns</td><td><code>lib/reports/snapshot-from-scan.ts:30–34</code> + <code>lib/classifier/patterns.ts:147,150</code></td></tr>
+        <tr><td>Duplicate matches are summed, not discarded</td><td><code>lib/reports/snapshot-from-scan.ts:73</code> — <code>existing.count += count</code></td></tr>
+        <tr><td>The second concatenation is repeated in the shared engine</td><td><code>lib/scan/local-engine.ts:34</code></td></tr>
+        <tr><td>The 90-vs-53 double count was already identified and named</td><td><code>lib/detection/engines.ts</code> — "The sum returned 90 for 53 real patterns"</td></tr>
+        <tr><td>Pattern subset sizes are 16 base / 17 CMMC / 20 HIPAA</td><td><code>grep -cE "^\s*(pattern|regex):"</code> over the three classifier files</td></tr>
+        <tr><td>Demo page publishes the 53 figure</td><td><code>app/demo/page.tsx</code> imports <code>PATTERN_COUNT</code> from <code>lib/detection/engines.ts</code></td></tr>
+        <tr><td>Sample PDF route is statically evaluated at build</td><td><code>app/api/reports/sample/route.ts</code> — <code>export const dynamic = "force-static"</code></td></tr>
+        <tr><td>PDF generator returns a Node Buffer</td><td><code>lib/reports/pdf-generator.ts:145–146</code></td></tr>
+        <tr><td>Proxy listens on plain HTTP</td><td><code>proxy/server.ts:248–250</code> — <code>listening on http://localhost:${PORT}</code></td></tr>
+        <tr><td>Stack reference calls it an HTTPS proxy</td><td><code>.claude/rules/stack.md</code> — "Node.js HTTPS proxy (the actual product)"</td></tr>
+        <tr><td>Compose binds the port on all interfaces</td><td><code>proxy/docker-compose.yml</code> — <code>ports: - "8080:8080"</code></td></tr>
+        <tr><td>Licence validity is never checked on the completions path</td><td><code>proxy/server.ts:118–119</code></td></tr>
+        <tr><td>Licence failure escalates to a paid plan</td><td><code>proxy/license.ts:78–86</code> — <code>{valid:true, org_id:"offline", plan:"pro"}</code></td></tr>
+        <tr><td>The validation endpoint does not exist</td><td><code>find compliance-firewall-agent/app -ipath "*license*"</code> returned nothing</td></tr>
+        <tr><td><code>proxy_events</code> has no hash chain</td><td><code>proxy/storage.ts:38–48</code> — full CREATE TABLE, no hash column</td></tr>
+        <tr><td>The only proxy SHA-256 hashes the licence key</td><td><code>grep -rn "createHash" proxy/</code> → <code>license.ts:35</code> only</td></tr>
+        <tr><td>The chain lives in the cloud plane</td><td><code>lib/audit/seed-anchor.ts</code>, migrations <code>029</code>/<code>030</code></td></tr>
+        <tr><td>The tamper-evident claim is sold on the demo</td><td><code>components/scan/LocalScanPanel.tsx:299–301</code></td></tr>
+        <tr><td>Two proxy read routes are unauthenticated</td><td><code>proxy/server.ts:173</code> and <code>:205</code> — no <code>requireAdmin</code></td></tr>
+        <tr><td>Admin token defaults to the licence key</td><td><code>proxy/server.ts:78</code></td></tr>
+        <tr><td>Proxy ships 33 patterns against the web plane's 53</td><td><code>grep -c</code> over <code>proxy/patterns/index.ts</code></td></tr>
+        <tr><td>Dockerfile is single-stage with a retained C toolchain</td><td><code>proxy/Dockerfile:1–8</code></td></tr>
+        <tr><td>TypeScript pin diverges between image and repo</td><td><code>proxy/Dockerfile:23</code> (<code>^5.8.3</code>) vs <code>proxy/package.json</code> (<code>^7.0.2</code>)</td></tr>
+        <tr><td>Test and config files are compiled into <code>dist/</code></td><td><code>COPY *.ts ./</code>, <code>COPY ooda/</code>, <code>tsconfig.json include ["**/*.ts"]</code></td></tr>
+        <tr><td>Repo root has a Next config, no app and no <code>next</code> dependency</td><td><code>ls</code> of the repository root plus root <code>package.json</code></td></tr>
+        <tr><td>Repo root ships create-next-app starter assets</td><td><code>public/</code> — file.svg, globe.svg, next.svg, vercel.svg, window.svg</td></tr>
+        <tr><td>A prior root <code>vercel.json</code> already killed the middleware once</td><td><code>middleware.ts:326–329</code></td></tr>
+        <tr><td>Webhook returns 503 without its secret</td><td><code>app/api/stripe/webhook/route.ts:269</code></td></tr>
+        <tr><td>The buy rail is a plain anchor to a hardcoded Payment Link</td><td><code>components/ReportCheckoutButton.tsx:51,86</code> + <code>lib/stripe/report-payment-link.ts:25</code></td></tr>
+        <tr><td>Health endpoint cannot report degradation</td><td><code>app/api/health/route.ts</code> — unconditional <code>{status:"ok"}</code></td></tr>
+        <tr><td>The operating procedure depends on that endpoint</td><td><code>CLAUDE.md</code> Session Start Protocol step 3</td></tr>
+        <tr><td>Admin health 404s unauthorized callers</td><td><code>app/api/admin/health/route.ts:18</code></td></tr>
+        <tr><td>37 migrations exist; the stack reference names 34</td><td><code>ls supabase/migrations/</code> vs <code>.claude/rules/stack.md</code></td></tr>
+        <tr><td>Lead capture treats the database write as non-fatal</td><td><code>app/api/report/snapshot-lead/route.ts</code> header comment</td></tr>
+        <tr><td>Rate limiting is in-process</td><td><code>middleware.ts:44–75</code> — module-scoped <code>Map</code></td></tr>
+        <tr><td>26 of 74 relative links in <code>docs/</code> resolve to nothing</td><td>Executed link scan over 127 markdown files</td></tr>
+        <tr><td>Directory sizes as tabulated</td><td><code>du -sh</code> over each path</td></tr>
+        <tr><td>Tracing root is the repo root with no excludes</td><td><code>next.config.js:6,9</code></td></tr>
+        <tr><td>The buy control renders on two surfaces only</td><td><code>grep -rn "ReportCheckoutButton" app/</code></td></tr>
+        <tr><td>The homepage neither renders nor links to it</td><td><code>grep -n "assessment" app/page.tsx</code> — five prose mentions, no link</td></tr>
+        <tr><td>The nav has no <code>/assessment</code> entry</td><td><code>components/layout/NavV3.tsx</code> link list</td></tr>
+        <tr><td>Two contradictory pricing grids ship</td><td><code>lib/pricing/plans.ts:31–37</code> vs <code>CLAUDE.md</code> Stage 2 grid</td></tr>
+        <tr><td>A $199/mo tier ships against an explicit prohibition</td><td><code>lib/pricing/plans.ts:33</code> vs <code>CLAUDE.md</code> NEVER DO list</td></tr>
+        <tr><td>$499 names both a one-time report and a monthly tier</td><td><code>lib/pricing/plans.ts:34</code> vs <code>lib/pricing/plans.ts:69</code></td></tr>
+        <tr><td>Partner wholesale is $399 flat, a $100 discount</td><td><code>lib/pricing/plans.ts:48–88</code></td></tr>
+        <tr><td>The bench is a CI gate at 10ms p99</td><td><code>.github/workflows/ci.yml:89–90</code></td></tr>
+        <tr><td>GSec's model, credentials and service lines</td><td>Live fetch of <code>gsecllc.com</code>, 2026-09-02</td></tr>
+        <tr><td>GSec hand-writes SSP control narratives</td><td>Their RMF service copy, fetched verbatim</td></tr>
+        <tr><td>GSec advises buyers on GCC High and enclaves</td><td>Their Compliance Strategy &amp; Advisory copy, fetched verbatim</td></tr>
+        <tr><td>CMMC Phase 2 enforcement paused 2026-07-13</td><td><code>lib/compliance/cmmc-status.ts</code>, canonical per <code>CLAUDE.md</code></td></tr>
+        <tr><td>76,598 DIB orgs, ~1,042 certified</td><td><code>CLAUDE.md</code> Market Numbers, sourced to DoD Feb 2026</td></tr>
+        <tr><td>Netskope healthcare figures and their denominators</td><td><code>lib/market/netskope.ts</code>, canonical per <code>CLAUDE.md</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Likely</h3>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th>Inferred behaviour</th><th>Basis</th></tr></thead>
+      <tbody>
+        <tr><td>Vercel framework detection fails at the repo root</td><td>Root <code>next.config.ts</code> triggers Next.js detection while root <code>package.json</code> declares no <code>next</code> dependency and no build script; <code>middleware.ts:326</code> records the same class of root-config failure already occurring once in production.</td></tr>
+        <tr><td>Production has not deployed since #288</td><td><code>tasks/todo.md</code> and <code>docs/gtm/LIVE-PRODUCTION-AUDIT-2026-08-15.md</code> both state it; the root scaffolding above supplies a mechanism consistent with it.</td></tr>
+        <tr><td><code>npm install -D</code> restores the stripped devDependency tree</td><td><code>npm install</code> reconciles the full tree and installs devDependencies unless production mode is set; <code>ENV NODE_ENV=production</code> appears at <code>Dockerfile:28</code>, after the install at line 23. The Docker build passing CI on every proxy PR corroborates that <code>@types/node</code> and <code>vitest</code> are present at compile time.</td></tr>
+        <tr><td>Demo latency carries ~70% excess regex work</td><td>90 evaluations against 53 required, with per-pattern cost roughly uniform on realistic prose per the measured table in <code>lib/scan/local-engine.ts</code>.</td></tr>
+        <tr><td>GitHub-relative disclosure links resolve to 404</td><td><code>../../security/advisories/new</code> from <code>/&lt;owner&gt;/&lt;repo&gt;/blob/main/SECURITY.md</code> resolves two segments up to <code>/&lt;owner&gt;/&lt;repo&gt;/blob/</code>, which is not a valid advisory path.</td></tr>
+        <tr><td>Analytics opt-in suppresses funnel measurement</td><td><code>CLAUDE.md</code> states PostHog is gated on cookie opt-in for GDPR; opt-in rates below 100% mean the funnel is partially unmeasured by construction.</td></tr>
+        <tr><td>A subscription lengthens the sales cycle versus a $499 PO</td><td>A recurring vendor relationship triggers vendor onboarding, a security questionnaire and renewal review; <code>CLAUDE.md</code> records the 84-day median B2B cycle that motivated the one-time product.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Assumption</h3>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th>Adopted condition</th><th>If wrong</th></tr></thead>
+      <tbody>
+        <tr><td>The Stripe Payment Link <code>aFa00lgzIgJx3Aqb7qgUM00</code> is live and priced at $499.</td><td>Every revenue task in Phase 1 is void, the entire 180-day plan has no money path, and every day spent on Phases 2 through 6 is spent selling a product no one can buy. This is unverifiable from any automated environment because <code>buy.stripe.com</code> is egress-blocked — a human must open it in a browser on Day 4 before anything else proceeds.</td></tr>
+        <tr><td>HoundShield holds no socioeconomic set-aside status.</td><td>If a set-aside status exists and is unpublished, the competitive gap against GSec closes materially and the entire Section 2 credibility deficit is overstated — publish it on <code>/about</code> immediately and re-run the partner pitch with it in the first paragraph.</td></tr>
+        <tr><td>The two-stage Dockerfile lands the runtime image at or below 60% of current size.</td><td>The published "40% footprint reduction" becomes an unverified vendor claim on a page that sells verifiability, which is the exact failure mode the NEVER-DO list names — measure with <code>docker images</code> on Day 50 and publish the real figure or none.</td></tr>
+        <tr><td>Migrations 034 through 037 are not yet applied to production.</td><td>If they are already applied, Days 12 through 16 are no-ops and the schedule gains four days — but if they are assumed applied and are not, <code>snapshot_leads</code> writes fail silently, every free-demo lead depends on a single Resend call, and the top of the funnel leaks with no error surface anywhere.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="doc">
+  <span>HoundShield Pre-Launch Teardown · b88b7ee · 2026-09-02</span>
+  <span>5 surfaces · 52 anchored assertions · 180 day units</span>
+</footer>
+
+</div>
+
+</body>
+</html>
