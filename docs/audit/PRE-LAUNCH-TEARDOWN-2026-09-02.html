@@ -251,8 +251,8 @@ footer.doc{
   <dl class="metagrid">
     <div><dt>Surfaces audited</dt><dd>5 / 5</dd></div>
     <div><dt>Blocking defects</dt><dd>9</dd></div>
-    <div><dt>Assertions anchored</dt><dd>52</dd></div>
-    <div><dt>Confirmed / Likely / Assumed</dt><dd>41 / 7 / 4</dd></div>
+    <div><dt>Assertions anchored</dt><dd>58</dd></div>
+    <div><dt>Confirmed / Likely / Assumed</dt><dd>49 / 5 / 4</dd></div>
     <div><dt>Calendar units</dt><dd>180</dd></div>
     <div><dt>Paid customers</dt><dd>0</dd></div>
   </dl>
@@ -267,6 +267,7 @@ footer.doc{
     <h3>Methodology and its one hard limit</h3>
     <p>Every finding below was read from the repository working tree at commit <code>b88b7ee</code>, executed locally, or fetched live over HTTPS. Directory sizes, pattern counts, link resolution and the TypeScript compile were measured, not estimated.</p>
     <p><strong>Live HTTP probing of <code>houndshield.com</code> was refused by this environment's egress policy</strong> — the proxy returned <code>403</code> to <code>CONNECT www.houndshield.com:443</code> on every attempt. No assertion in this document claims a live response code. Runtime behaviour of the deployed site is anchored to <code>docs/gtm/LIVE-PRODUCTION-AUDIT-2026-08-15.md</code>, which states it was read from production, and every such assertion is tagged accordingly in Section 5.</p>
+    <p>The Vercel control plane <em>was</em> reachable, and it overturned a finding. An earlier draft of 1.4 inferred from the repository alone that framework detection was failing at the repo root and that nothing had deployed since #288. The API shows commit <code>b88b7ee</code> live in production and three <em>different</em> production deployments failing on a type check. That inference is retracted in place rather than quietly softened, and the finding it became is stronger, because a deploy pipeline that works but accepts un-built merges is a repeatable failure while a broken setting is a one-time fix.</p>
   </div>
 </header>
 
@@ -342,7 +343,7 @@ footer.doc{
         <span class="lbl">Point of failure</span>
         <ul>
           <li>The sample PDF a prospect downloads is frozen to the timestamp of the last successful production build.<span class="vt c">Confirmed</span></li>
-          <li>Production has not deployed since pull request #288, so that timestamp is months stale.<span class="vt l">Likely</span></li>
+          <li>That build is <code>b88b7ee</code>, the production deployment live today, so every date inside the sample PDF is pinned to the last merge to <code>main</code> rather than to the day the prospect downloads it.<span class="vt c">Confirmed</span></li>
           <li>The handler is Node-runtime-bound with no declaration saying so.<span class="vt c">Confirmed</span></li>
         </ul>
       </div>
@@ -359,8 +360,8 @@ footer.doc{
       <div class="row">
         <span class="lbl">Zero-code fix</span>
         <ul>
-          <li>Set the Vercel project's <strong>Root Directory</strong> to <code>compliance-firewall-agent</code> so a build can complete at all — see 1.4.<span class="vt c">Confirmed</span></li>
           <li>Create a Vercel Deploy Hook and attach it to a weekly schedule so the static PDF's embedded dates advance without a code commit.<span class="vt c">Confirmed</span></li>
+          <li>The architectural rule: an asset whose content includes a date is either generated per request or regenerated on a schedule, never frozen at build and served for a quarter.<span class="vt c">Confirmed</span></li>
           <li>Pin the handler's runtime in the project's function configuration rather than leaving the default to drift.<span class="vt c">Confirmed</span></li>
         </ul>
       </div>
@@ -452,7 +453,7 @@ footer.doc{
       <div class="row">
         <span class="lbl">Point of failure</span>
         <ul>
-          <li>The repository root presents Vercel with a Next.js project that has no application and no <code>next</code> dependency.<span class="vt c">Confirmed</span></li>
+          <li>Three production deployments in one 25-minute window failed their type check and never shipped.<span class="vt c">Confirmed</span></li>
           <li>A completed $499 purchase records no order, sends no receipt and raises no alert.<span class="vt c">Confirmed</span></li>
           <li>The health endpoint the operating procedure depends on cannot report a degraded state.<span class="vt c">Confirmed</span></li>
         </ul>
@@ -460,12 +461,18 @@ footer.doc{
       <div class="row">
         <span class="lbl">Root cause — deploy</span>
         <ul>
-          <li>The repository root holds <code>next.config.ts</code> containing a <code>NextConfig</code> with no options.<span class="vt c">Confirmed</span></li>
-          <li>It holds <code>postcss.config.mjs</code> and a <code>public/</code> directory containing the create-next-app starter assets <code>file.svg</code>, <code>globe.svg</code>, <code>next.svg</code>, <code>vercel.svg</code> and <code>window.svg</code>.<span class="vt c">Confirmed</span></li>
-          <li>It holds no <code>app/</code>, no <code>pages/</code> and no <code>src/</code> directory.<span class="vt c">Confirmed</span></li>
-          <li>Its <code>package.json</code> declares one dependency, <code>@vercel/analytics</code>, and no <code>build</code> script.<span class="vt c">Confirmed</span></li>
-          <li>Vercel's framework detection reads <code>next.config.ts</code>, looks for <code>next</code> in dependencies and does not find it, so the build fails at detection unless the project's Root Directory is explicitly set to <code>compliance-firewall-agent</code>.<span class="vt l">Likely</span></li>
-          <li><code>middleware.ts:326–329</code> records the previous instance of this class of defect: every line of the middleware was dead in production on 2026-07-29 because the repo-root <code>vercel.json</code> used legacy <code>builds</code> and <code>routes</code> keys.<span class="vt c">Confirmed</span></li>
+          <li><strong>Correction, made against the Vercel API rather than the repository:</strong> production deploys, and the current <code>main</code> is live.<span class="vt c">Confirmed</span></li>
+          <li>Deployment <code>dpl_5aN5WbocU36ow…</code> carries <code>target: production</code>, <code>state: READY</code> and commit <code>b88b7ee</code> — the exact HEAD this teardown was written against.<span class="vt c">Confirmed</span></li>
+          <li>The project's Root Directory is therefore already set to <code>compliance-firewall-agent</code>, and the repo-root scaffold is not blocking anything today.<span class="vt c">Confirmed</span></li>
+          <li>An earlier draft of this section inferred the opposite from the repository alone; the API disproved it, and the inference is retracted rather than softened.<span class="vt c">Confirmed</span></li>
+          <li><strong>The real defect is upstream of the deploy: <code>main</code> shipped type errors to production three times in 25 minutes.</strong><span class="vt c">Confirmed</span></li>
+          <li><code>dpl_8c5WRb1rjLVQ…</code> (commit <code>bfcbe54</code>), <code>dpl_EXWymKuPU6fo…</code> (<code>9c9f2b9</code>) and <code>dpl_8gJMNKSPXecH…</code> (<code>ba8bf29</code>) all carry <code>target: production</code> and <code>state: ERROR</code>.<span class="vt c">Confirmed</span></li>
+          <li>The build log for the last of them ends <code>Failed to type check</code> on three errors: <code>TwoFactorSettings.tsx(110,29) TS2339 backupCodes</code>, and <code>local-intake.ts</code> at <code>(104,5) TS2353 isEvalSupported</code> and <code>(125,20) TS2339 destroy</code>.<span class="vt c">Confirmed</span></li>
+          <li>Each of those three merges fired a production deploy that could not build, so production served a stale bundle for that window while <code>main</code> read as merged.<span class="vt c">Confirmed</span></li>
+          <li>Merging a branch whose <code>npm run build</code> has not passed is what produced all three, and CLAUDE.md already names the rule it broke: "Build must pass before commit".<span class="vt c">Confirmed</span></li>
+          <li>The repo-root Next.js scaffold is still a live trap rather than a live failure: <code>next.config.ts</code> with no options, <code>postcss.config.mjs</code>, <code>public/</code> holding the create-next-app starter SVGs, no <code>app/</code>, and a <code>package.json</code> whose only dependency is <code>@vercel/analytics</code> with no <code>build</code> script.<span class="vt c">Confirmed</span></li>
+          <li>If the Root Directory setting is ever lost or the project re-created, framework detection reads that scaffold, finds no <code>next</code> dependency, and the deploy fails with nothing in the repository to explain why.<span class="vt l">Likely</span></li>
+          <li><code>middleware.ts:326–329</code> records that exact class of defect happening once already: every line of the middleware was dead in production on 2026-07-29 because the repo-root <code>vercel.json</code> used legacy <code>builds</code> and <code>routes</code> keys.<span class="vt c">Confirmed</span></li>
         </ul>
       </div>
       <div class="row">
@@ -501,7 +508,7 @@ footer.doc{
       <div class="row">
         <span class="lbl">Zero-code fix</span>
         <ul>
-          <li>Set the Vercel project Root Directory to <code>compliance-firewall-agent</code> and redeploy.<span class="vt c">Confirmed</span></li>
+          <li>Turn on the repository's branch protection so <code>main</code> cannot take a merge whose CI type check has not passed, which is the one setting that would have stopped all three failed production builds.<span class="vt c">Confirmed</span></li>
           <li>Create the webhook endpoint in Stripe, copy the <code>whsec_</code> value into Vercel with Production checked, and redeploy.<span class="vt c">Confirmed</span></li>
           <li>Run <code>npx supabase db push</code> to apply <code>035</code>, <code>036</code> and <code>037</code>.<span class="vt c">Confirmed</span></li>
           <li>Apply <code>034</code> <em>before</em> setting <code>MARKETING_POSTAL_ADDRESS</code>, because the reverse order opens the CAN-SPAM gate onto a column that does not exist.<span class="vt c">Confirmed</span></li>
@@ -1013,7 +1020,11 @@ footer.doc{
         <tr><td>A $199/mo tier ships against an explicit prohibition</td><td><code>lib/pricing/plans.ts:33</code> vs <code>CLAUDE.md</code> NEVER DO list</td></tr>
         <tr><td>$499 names both a one-time report and a monthly tier</td><td><code>lib/pricing/plans.ts:34</code> vs <code>lib/pricing/plans.ts:69</code></td></tr>
         <tr><td>Partner wholesale is $399 flat, a $100 discount</td><td><code>lib/pricing/plans.ts:48–88</code></td></tr>
-        <tr><td>The bench is a CI gate at 10ms p99</td><td><code>.github/workflows/ci.yml:89–90</code></td></tr>
+        <tr><td>The bench is a CI gate at 10ms p99</td><td><code>.github/workflows/ci.yml:89–90</code>; executed — p99 1.050 ms over 2000 cold scans</td></tr>
+        <tr><td>Commit <code>b88b7ee</code> is live in production</td><td>Vercel API — <code>dpl_5aN5WbocU36ow…</code>, <code>target: production</code>, <code>state: READY</code></td></tr>
+        <tr><td>Three production deploys failed their type check in one 25-minute window</td><td>Vercel API — <code>dpl_8c5WRb1rjLVQ…</code>, <code>dpl_EXWymKuPU6fo…</code>, <code>dpl_8gJMNKSPXecH…</code>, all <code>target: production</code>, <code>state: ERROR</code></td></tr>
+        <tr><td>Those builds ended on three named TypeScript errors</td><td>Vercel build log for <code>dpl_8gJMNKSPXecH…</code> — <code>TS2339 backupCodes</code>, <code>TS2353 isEvalSupported</code>, <code>TS2339 destroy</code>, then <code>Failed to type check</code></td></tr>
+        <tr><td>The 90-vs-53 double count doubled real finding counts</td><td>Executed — reintroducing either call site takes the CAGE and ZIP counts from 1 to 2 in <code>engine-registry-single-source.test.ts</code></td></tr>
         <tr><td>GSec's model, credentials and service lines</td><td>Live fetch of <code>gsecllc.com</code>, 2026-09-02</td></tr>
         <tr><td>GSec hand-writes SSP control narratives</td><td>Their RMF service copy, fetched verbatim</td></tr>
         <tr><td>GSec advises buyers on GCC High and enclaves</td><td>Their Compliance Strategy &amp; Advisory copy, fetched verbatim</td></tr>
@@ -1029,8 +1040,7 @@ footer.doc{
     <table>
       <thead><tr><th>Inferred behaviour</th><th>Basis</th></tr></thead>
       <tbody>
-        <tr><td>Vercel framework detection fails at the repo root</td><td>Root <code>next.config.ts</code> triggers Next.js detection while root <code>package.json</code> declares no <code>next</code> dependency and no build script; <code>middleware.ts:326</code> records the same class of root-config failure already occurring once in production.</td></tr>
-        <tr><td>Production has not deployed since #288</td><td><code>tasks/todo.md</code> and <code>docs/gtm/LIVE-PRODUCTION-AUDIT-2026-08-15.md</code> both state it; the root scaffolding above supplies a mechanism consistent with it.</td></tr>
+        <tr><td>Losing the Root Directory setting would break the deploy with nothing in the repo to explain it</td><td>Root <code>next.config.ts</code> triggers Next.js framework detection while root <code>package.json</code> declares no <code>next</code> dependency and no build script. This is the trap, not the current state — see the retraction in Section 1.4.</td></tr>
         <tr><td><code>npm install -D</code> restores the stripped devDependency tree</td><td><code>npm install</code> reconciles the full tree and installs devDependencies unless production mode is set; <code>ENV NODE_ENV=production</code> appears at <code>Dockerfile:28</code>, after the install at line 23. The Docker build passing CI on every proxy PR corroborates that <code>@types/node</code> and <code>vitest</code> are present at compile time.</td></tr>
         <tr><td>Demo latency carries ~70% excess regex work</td><td>90 evaluations against 53 required, with per-pattern cost roughly uniform on realistic prose per the measured table in <code>lib/scan/local-engine.ts</code>.</td></tr>
         <tr><td>GitHub-relative disclosure links resolve to 404</td><td><code>../../security/advisories/new</code> from <code>/&lt;owner&gt;/&lt;repo&gt;/blob/main/SECURITY.md</code> resolves two segments up to <code>/&lt;owner&gt;/&lt;repo&gt;/blob/</code>, which is not a valid advisory path.</td></tr>
@@ -1056,7 +1066,7 @@ footer.doc{
 
 <footer class="doc">
   <span>HoundShield Pre-Launch Teardown · b88b7ee · 2026-09-02</span>
-  <span>5 surfaces · 52 anchored assertions · 180 day units</span>
+  <span>5 surfaces · 58 anchored assertions · 180 day units</span>
 </footer>
 
 </div>

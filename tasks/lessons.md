@@ -1970,3 +1970,25 @@ every failure condition it exists to detect.
 **Rule:** Liveness and readiness are two endpoints, never one. An operating procedure never
 depends on the endpoint that cannot fail. If a diagnostic is narrowed to a probe, the procedure
 that consumed the diagnostic is updated in the same commit or the narrowing is not done.
+
+### A repository can only tell you what was written, never what is running
+**What:** The teardown's deploy finding was inferred from the repo alone: the root holds a Next.js
+scaffold (`next.config.ts`, `postcss.config.mjs`, create-next-app starter SVGs) with no `app/` and
+no `next` dependency, and `middleware.ts:326` records a root-config change having killed the
+middleware in production once already. The chain was sound and the conclusion — "framework
+detection fails, which is why nothing has deployed since #288" — was wrong. One call to the Vercel
+API showed `b88b7ee` live in production, `state: READY`.
+
+The evidence the API *did* surface is worse and was invisible from the repository: three
+deployments with `target: production` and `state: ERROR` inside one 25-minute window
+(`bfcbe54`, `9c9f2b9`, `ba8bf29`), each ending on `Failed to type check`. `main` took three merges
+whose build had not passed, and production served a stale bundle throughout while the branch read
+as merged.
+
+**Rule:** Any claim about what is *deployed* is checked against the deploy provider before it
+ships, never derived from configuration files. The repo states intent; the control plane states
+fact. When the two disagree the control plane wins and the inference is retracted in place — the
+retraction stays visible in the document, because a finding that quietly changes shape is a
+finding no reader can audit. Corollary now open in `todo.md`: branch protection requiring the CI
+type check is the one setting that would have stopped all three, and CLAUDE.md already carried
+the rule it broke ("Build must pass before commit").
