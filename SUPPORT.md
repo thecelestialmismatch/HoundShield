@@ -5,8 +5,8 @@ Use the right channel for the kind of help you need. Public GitHub threads must 
 | Need | Where to start |
 |---|---|
 | Installation, testing, or local-development help | [Documentation index](docs/README.md) and [testing guide](docs/TESTING-GUIDE.md) |
-| A reproducible defect | [Open a bug report](../../issues/new?template=bug_report.md) after reviewing its privacy guidance |
-| A product or workflow proposal | [Open a feature request](../../issues/new?template=feature_request.md) |
+| A reproducible defect | [Open a bug report](https://github.com/thecelestialmismatch/HoundShield/issues/new?template=bug_report.md) after reviewing its privacy guidance |
+| A product or workflow proposal | [Open a feature request](https://github.com/thecelestialmismatch/HoundShield/issues/new?template=feature_request.md) |
 | A suspected vulnerability or data-boundary failure | **Do not open a public issue.** Follow [SECURITY.md](SECURITY.md). |
 | Product, deployment, or commercial information | [HoundShield website](https://www.houndshield.com) |
 
