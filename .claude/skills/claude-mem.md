@@ -26,8 +26,9 @@ Queryable BM25 knowledge graph. TTL-aware. Best for:
 - Jordan persona data
 - Market intelligence from firecrawl ingestion
 
-### Tier 4 — Memory DNA (lib/agent/memory-dna.ts)
-Compressed in-session state. ~10x token reduction for long conversations.
+### Tier 4 — Memory DNA — REMOVED 2026-09-03
+`lib/agent/memory-dna.ts` was deleted: written, documented, imported by nothing.
+Session state lives in `lib/agent/memory.ts` (Tier 3 above).
 
 ## Memory Write Protocol
 

@@ -43,7 +43,7 @@ paths:
 - Functional components + hooks only
 - shadcn/ui for primitives — never build from scratch
 - Framer Motion for animations (landing + onboarding only)
-- `PlatformDashboard` MUST stay `dynamic(..., {ssr: false})` — Recharts crashes on SSR
+- Any Recharts component MUST be `dynamic(..., {ssr: false})` — Recharts crashes on SSR
 - `transformStyle: "preserve-3d"` + Framer Motion `motion.div` = crash — never combine
 - Components max 500 lines — split into co-located files if larger
 - Every new feature: error boundary + loading state

@@ -17,7 +17,7 @@
  *     shape. On a product whose deliverable is C3PAO audit evidence, a chart
  *     that looks like a measurement but isn't is the worst possible bug.
  *  2. Charts are hand-rolled SVG, matching the demo panels. Recharts is avoided
- *     deliberately — it crashes on SSR (see CLAUDE.md on PlatformDashboard), and
+ *     deliberately — it crashes on SSR (see the Recharts rule in CLAUDE.md), and
  *     these panels render inside the server-rendered dashboard shell.
  *
  * Colour system is inherited from the demo panels so the two never disagree.

@@ -56,7 +56,7 @@ const HOUNDSHIELD_SUBSYSTEMS: Subsystem[] = [
     name: "Components",
     path: "components/",
     fileCount: 35,
-    notes: "Landing, dashboard, UI primitives, Logo, Navbar, PostHogProvider, ClientShell",
+    notes: "Landing, dashboard, UI primitives, Logo, NavV3, PostHogProvider, ClientShell",
   },
   {
     name: "Client SDK",

@@ -79,7 +79,11 @@ export const CMMC_PATTERNS: DetectionPattern[] = [
   {
     name: "Task order / delivery order",
     category: "IP",
-    regex: /\b(?:task order|delivery order|TO|DO)\s*(?:no\.?|#)?\s*[A-Z0-9]{4,}/gi,
+    // Kept byte-identical to proxy/patterns/index.ts — see the note there.
+    // Bare TO/DO needed a closing \b (they were matching inside "tomorrow",
+    // "document", "download") and the identifier needs a digit, or the `i`
+    // flag lets [A-Z0-9]{4,} match any ordinary word.
+    regex: /\b(?:task\s*order|delivery\s*order|TO|DO)\b\s*(?:no\.?|#)?\s*(?=[A-Z0-9]*\d)[A-Z0-9]{4,}\b/gi,
     risk_level: "HIGH",
     action: "QUARANTINE",
   },
@@ -128,8 +132,24 @@ export const CMMC_PATTERNS: DetectionPattern[] = [
   {
     name: "Program office / DoD system identifier",
     category: "IP",
-    // PEO, PM, PMS (Program Executive Office / Program Manager)
-    regex: /\b(?:PEO|PM|PMS|ACAT|Milestone [ABC]|SRR|PDR|CDR|TRR)\s+[A-Z0-9]+/gi,
+    // PEO, PMS (Program Executive Office / Program Manager, Ship).
+    //
+    // `PM` is deliberately NOT in this alternation. The rule carries the `i`
+    // flag, which makes `[A-Z0-9]` match lowercase too, so a bare `PM` branch
+    // fires on every clock time — "move the standup to 4 PM tomorrow" would
+    // QUARANTINE on "PM tomorrow". Program-manager designators are caught by
+    // the case-sensitive "Program manager designator" rule below instead.
+    regex: /\b(?:PEO|PMS|ACAT|Milestone [ABC]|SRR|PDR|CDR|TRR)\s+[A-Z0-9]+/gi,
+    risk_level: "HIGH",
+    action: "QUARANTINE",
+  },
+  {
+    name: "Program manager designator",
+    category: "IP",
+    // Case-SENSITIVE by design (no `i` flag): a real designator is written
+    // "PM Stryker", never "pm stryker". The negative lookbehind drops clock
+    // times, which are the dominant false positive for a two-letter token.
+    regex: /(?<!\d\s)(?<!\d)\bPM\s+[A-Z][A-Za-z0-9-]{2,}/g,
     risk_level: "HIGH",
     action: "QUARANTINE",
   },
@@ -167,8 +187,11 @@ export const CMMC_PATTERNS: DetectionPattern[] = [
   {
     name: "NIPRNet / SIPRNet references",
     category: "IP",
+    // The leading dots are escaped: unescaped, `.` is a wildcard and the rule
+    // matches any character before `smil.mil`, which is looser than intended
+    // and disagreed with the proxy's copy of this same rule.
     regex:
-      /\b(?:NIPRNet|SIPRNet|JWICS|SIPR|NIPR|.smil\.mil|.sgov\.gov)\b/gi,
+      /\b(?:NIPRNet|SIPRNet|JWICS|SIPR|NIPR|\.smil\.mil|\.sgov\.gov)\b/gi,
     risk_level: "HIGH",
     action: "BLOCK",
   },

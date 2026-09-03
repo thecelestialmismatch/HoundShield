@@ -1,6 +1,15 @@
 /**
  * Zero-Trust Mode — Deny by Default, Allowlist per Team
  *
+ * ponytail: BUILT, TESTED, NOT WIRED (confirmed 2026-09-03). No request path
+ * imports this module, and HOUNDSHIELD_ZERO_TRUST is not in .env.example, so
+ * an operator following the docs cannot switch it on. It is kept rather than
+ * deleted because a deny-by-default access control is a product capability,
+ * not tidy-up: removing it is a founder decision, and wiring it into the live
+ * gateway is a behaviour change that needs its own PR and its own risk review.
+ * Decide one way or the other — an unwired security control that reads as
+ * shipped is the worst of both.
+ *
  * When HOUNDSHIELD_ZERO_TRUST=true, ALL AI requests are blocked by default.
  * Access is granted only to explicitly allowlisted:
  *   - AI providers (e.g. "openai", "anthropic")

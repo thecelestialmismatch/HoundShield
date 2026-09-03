@@ -290,8 +290,8 @@ reading computed style, not by reading class names.
 - Never let a component exceed **500 lines** — split into co-located files.
 - Never ship chrome that implies state nothing feeds: no permanent unread dots, no green
   health pills that are string literals, no search field that isn't wired to search.
-- Never combine `preserve-3d` with Framer Motion. Never SSR Recharts —
-  `PlatformDashboard` stays `dynamic(..., { ssr: false })`.
+- Never combine `preserve-3d` with Framer Motion. Never SSR Recharts — any
+  Recharts component stays `dynamic(..., { ssr: false })`.
 
 ---
 

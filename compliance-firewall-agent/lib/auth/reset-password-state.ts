@@ -1,4 +1,11 @@
 /**
+ * ponytail: NOT WIRED (confirmed 2026-09-03) — no page imports this. The
+ * reset flow it decides for is gated on migration 035 (hash-only, one-time
+ * reset codes), listed in CLAUDE.md as a release prerequisite. Kept because it
+ * is the pending feature's logic, not a corpse. When 035 lands and
+ * /reset-password is enabled, import this rather than re-deriving the
+ * Better-Auth-vs-Supabase branch in the page.
+ *
  * Reset-password view state — the one pure decision the /reset-password page
  * makes: given the active auth provider and what arrived in the URL / session,
  * do we show the "set a new password" form, an "expired link" message, or a

@@ -6,7 +6,7 @@ import type { OverviewTelemetry } from '@/lib/dashboard/overview-telemetry'
  * The source-level guard next to this file proves the fabricated series are
  * gone. It cannot prove the page mounts: this route now renders Recharts-backed
  * panels, and Recharts has crashed this codebase on render before (which is why
- * PlatformDashboard is pinned to ssr:false). So this actually mounts it.
+ * Recharts components are pinned to ssr:false). So this actually mounts it.
  *
  * The assertions are the founder's requirement stated literally — click a
  * number, land on the records that produced it.

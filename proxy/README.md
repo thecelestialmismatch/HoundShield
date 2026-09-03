@@ -87,7 +87,7 @@ HOUNDSHIELD_LICENSE_KEY=your-key UPSTREAM_API_KEY=sk-... npm start
 |-----------|---------|-------------|
 | `proxy/server.ts` | MIT | HTTPS proxy server |
 | `proxy/scanner.ts` | MIT | Pattern scanner engine |
-| `proxy/patterns/index.ts` | MIT | 33 CMMC/HIPAA/PII detection patterns |
+| `proxy/patterns/index.ts` | MIT | 34 CMMC/HIPAA/PII detection patterns |
 | `proxy/storage.ts` | MIT | Local audit log (SHA-256 chained) |
 | `proxy/webhook.ts` | MIT | Webhook delivery for alerts |
 
@@ -115,7 +115,7 @@ HoundShield runs entirely on your infrastructure. The proxy never transmits prom
 
 ## Detection patterns
 
-See [PATTERNS.md](./PATTERNS.md) for the full list of 33 detection patterns with NIST control mappings.
+See [PATTERNS.md](./PATTERNS.md) for the full list of 34 detection patterns with NIST control mappings.
 
 ---
 

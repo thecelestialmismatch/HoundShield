@@ -188,3 +188,6 @@ docs/decks/
 # root would be wrong here — each package produces its own.
 coverage/
 .lighthouseci/
+
+# Claire worktree fragments — never belong in the repo
+.claire/

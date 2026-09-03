@@ -36,7 +36,10 @@ If the re-baselined milestone hits → expand to recurring revenue (Stage 2). If
 Every new session, in order:
 1. Read `tasks/todo.md` — Stage 1 queue and active tasks
 2. Read `tasks/lessons.md` — what went wrong and corrections
-3. Check integration health: `curl https://www.houndshield.com/api/health`
+3. Check integration health: `GET /api/admin/health` **as a signed-in admin** —
+   it reports `status: degraded` plus the failing keys. `/api/health` is a bare
+   liveness probe and always answers `{"status":"ok"}`, by design: it must not
+   disclose deployment topology. Do not read it as an integration check.
 4. Output the HERMES BRIEFING block (below), then start the next `## Active` task.
 
 ```
@@ -115,7 +118,7 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 
 | Integration | Status | Action Required |
 |-------------|--------|-----------------|
-| Supabase auth + DB | ✅ Wired | Migrations through 037 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, and **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**. `/api/health` reports missing control stores and reset-code configuration as degraded rather than green. |
+| Supabase auth + DB | ✅ Wired | Migrations through 037 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, and **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**. `/api/admin/health` reports missing control stores and reset-code configuration as degraded rather than green (admin-gated; `/api/health` is liveness only). |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
 | Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
 | STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
@@ -331,7 +334,7 @@ Landing page is **light mode**. Dashboard is dark mode. Both coexist via `html.d
 
 ## Critical Rules (Never Violate)
 
-- `PlatformDashboard` MUST stay `dynamic(..., {ssr: false})` — Recharts crashes on SSR.
+- Any Recharts component MUST be `dynamic(..., {ssr: false})` — Recharts crashes on SSR.
 - `transformStyle: "preserve-3d"` + Framer Motion `motion.div` = crash. Never combine.
 - HMR error: `rm -rf .next && npm run dev`
 - Never `git push origin main`. Develop on the assigned feature branch.
@@ -353,16 +356,17 @@ compliance-firewall-agent/
   app/api/stripe/checkout/route.ts — Stripe checkout (needs $499 one-time report SKU)
   app/api/stripe/webhook/route.ts  — Stripe webhook
   app/api/brain/query/route.ts     — Brain AI API (OpenRouter — needs key + CUI warning)
-  app/api/health/houndshield.ts    — Integration health check
+  app/api/health/route.ts          — Public liveness probe (constant `ok`, no topology)
+  app/api/admin/health/route.ts    — Admin-gated integration health (buildHealthReport)
   lib/brain-ai/                    — BM25 knowledge graph + query interface
   lib/gateway/                     — Core AI interception engine
-  lib/classifier/                  — 53-pattern / 16-engine CUI/PII/IP/PHI detector
+  lib/classifier/                  — 54-pattern / 16-engine CUI/PII/IP/PHI detector
   supabase/migrations/             — through 037 in repo (verify production application before release; 035 enables code-only reset, 036 removes public privileged-RPC execution, 037 persists free-demo leads)
 
 proxy/
   server.ts                        — HTTPS proxy (the actual product)
   scanner.ts                       — Pattern scanner (do not modify)
-  patterns/index.ts                — 33 patterns (extend only)
+  patterns/index.ts                — 34 patterns (extend only)
 
 tasks/
   todo.md                          — Stage queue (read first every session)

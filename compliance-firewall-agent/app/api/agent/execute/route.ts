@@ -24,10 +24,14 @@ export async function POST(req: NextRequest) {
   // This endpoint runs an agentic ReAct loop — up to 15 LLM iterations — and
   // falls back to the SERVER's OPENROUTER_API_KEY when the caller supplies none.
   // It previously had no auth of any kind, so anonymous traffic could bill the
-  // founder's OpenRouter account, and the middleware limiter that nominally
-  // covered /api/* does not execute in production (legacy vercel.json `builds`
-  // mode — see docs/DEPLOYMENT-MIDDLEWARE.md). .claude/rules/api.md requires a
-  // session check on every route; this route was the exception.
+  // founder's OpenRouter account. At the time the middleware limiter that
+  // nominally covered /api/* did NOT execute in production (legacy vercel.json
+  // `builds` mode). That was fixed on 2026-08-15 — Vercel's Root Directory now
+  // points at compliance-firewall-agent and middleware runs, confirmed against
+  // the live site (see docs/DEPLOYMENT-MIDDLEWARE.md and tasks/todo.md).
+  // The session check below stays regardless: .claude/rules/api.md requires one
+  // on every route, and defence in depth at the route is not made redundant by
+  // a limiter one layer up.
   // Both in-repo callers are dashboard components behind /command-center, which
   // is login-gated, so requiring a session matches how it is actually used.
   let userId: string | null = null;

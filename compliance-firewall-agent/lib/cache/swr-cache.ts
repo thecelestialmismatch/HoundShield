@@ -1,6 +1,13 @@
 /**
  * Single-flight, stale-while-revalidate in-process cache with a circuit breaker.
  *
+ * ponytail: BUILT, TESTED, NOT WIRED (confirmed 2026-09-03). Nothing calls
+ * `cached()`. It is real, working stampede protection with no stampede behind
+ * it. Kept because the first expensive shared read — the dashboard overview or
+ * the coverage map — should use it rather than have it rewritten. If no caller
+ * appears, delete it; do not let it sit here indefinitely reporting coverage
+ * for a code path production never executes.
+ *
  * This is the application-layer answer to "a million people hit the same thing
  * at the same instant." The expensive scenario is not a million *different*
  * reads — it is a million *identical* reads stampeding the database. This cache

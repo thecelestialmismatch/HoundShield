@@ -43,7 +43,7 @@ Do NOT invoke me for:
 - Landing pages: light mode (no `.dark` on `<html>`)
 - Dashboard: dark mode (`.dark` class on wrapper)
 - Brand accent: `brand-400` CSS variable. Never `amber-*`, `yellow-*`, `indigo-*`
-- `PlatformDashboard` stays `dynamic(..., {ssr: false})` — Recharts SSR crash
+- Any Recharts component stays `dynamic(..., {ssr: false})` — Recharts SSR crash
 - `transformStyle: "preserve-3d"` + `motion.div` = crash. Never combine.
 - Components max 500 lines. Split if larger.
 - `cn()` for conditional classes. No ternary strings in JSX class attributes.
