@@ -7,8 +7,6 @@ import {
   type SnapshotSummary,
 } from "@/lib/reports/snapshot-from-scan";
 import { BUILTIN_PATTERNS } from "@/lib/classifier/patterns";
-import { CMMC_PATTERNS } from "@/lib/classifier/cmmc-patterns";
-import { HIPAA_PATTERNS } from "@/lib/classifier/hipaa-patterns";
 import { CATEGORY_LABEL } from "@/lib/reports/category-nist-map";
 
 /**
@@ -30,8 +28,25 @@ import { CATEGORY_LABEL } from "@/lib/reports/category-nist-map";
  * ──────────────────────────────────────────────────────────────────────────
  */
 
-/** Every local pattern, in the same combination `scanForSnapshot` uses. */
-const ALL_PATTERNS = [...BUILTIN_PATTERNS, ...CMMC_PATTERNS, ...HIPAA_PATTERNS];
+/**
+ * Every local pattern, in the same combination `scanForSnapshot` uses.
+ *
+ * `BUILTIN_PATTERNS` IS that combination: `lib/classifier/patterns.ts` spreads
+ * `...CMMC_PATTERNS` and `...HIPAA_PATTERNS` into it, so it holds all 53.
+ *
+ * This was `[...BUILTIN_PATTERNS, ...CMMC_PATTERNS, ...HIPAA_PATTERNS]` — 90
+ * entries for 53 patterns, every CMMC and HIPAA regex executed twice. The cost
+ * was not only latency on the one surface whose claim is a sub-10ms local scan:
+ * `ALL_PATTERNS.length` is reported to the UI as `patternsChecked`, so the
+ * public `/demo` published "90" as a shipped-pattern count. CLAUDE.md's
+ * NEVER-DO list names that failure exactly — the pattern files are in the
+ * public repo and a buyer who counts them arrives at 53.
+ *
+ * Do not re-concatenate a sub-registry that is already inside this one.
+ * `lib/detection/__tests__/engine-registry-single-source.test.ts` fails the
+ * build if anyone does, here or in `lib/reports/snapshot-from-scan.ts`.
+ */
+const ALL_PATTERNS = BUILTIN_PATTERNS;
 
 /**
  * Hard input ceiling. MEASURED, not guessed.

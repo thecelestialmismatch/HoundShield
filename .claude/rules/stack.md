@@ -17,14 +17,25 @@ compliance-firewall-agent/          Next.js 16, React 19, Tailwind, Framer Motio
   lib/agent/memory-dna.ts           Compressed memory pattern
   lib/brain-ai/knowledge-graph.ts   BM25-indexed knowledge graph (queryable, token-efficient)
   lib/brain-ai/brain-query.ts       Public query interface (ask(), addKnowledge(), marketCheck())
-  supabase/migrations/              001-034 in repo; 029/030/033/034 NOT applied to prod
+  supabase/migrations/              001-037 in repo; verify applied-to-prod per release record
 
-proxy/                              Node.js HTTPS proxy (the actual product)
-  server.ts                         HTTP proxy server
+proxy/                              Local OpenAI-compatible DLP gateway (the actual product)
+  server.ts                         Express app on PLAIN HTTP, default :8080. NOT an HTTPS
+                                    intercept proxy — there is no CONNECT handler and no TLS
+                                    listener. Clients point baseURL at http://localhost:8080/v1.
+                                    Bind it to loopback and terminate TLS in front of it.
   scanner.ts                        Pattern scanner (COMPLETE — reuse as-is)
-  patterns/index.ts                 33 detection patterns (extend, never replace)
-  storage.ts, webhook.ts            Audit log + webhook delivery
-  license.ts                        License validation (hash only, zero prompt content)
+  patterns/index.ts                 33 detection patterns (extend, never replace).
+                                    The web plane ships 53 — the split is guarded by
+                                    lib/detection/__tests__/registry-drift.test.ts, not merged.
+  storage.ts, webhook.ts            Audit log + webhook delivery. proxy_events carries NO hash
+                                    chain; the SHA-256 chain lives in the Vercel/Supabase plane
+                                    (lib/audit/seed-anchor.ts, migrations 029/030). Do not sell
+                                    a tamper-evident Mode B artifact until that gap closes.
+  license.ts                        License validation (hash only, zero prompt content).
+                                    Enforcement is NOT wired: server.ts reads license.org_id and
+                                    never checks license.valid, and the offline path returns
+                                    plan:"pro". /api/license/validate does not exist yet.
 
 brain/
   research.md                       Append-only research log (human-readable)

@@ -1926,6 +1926,73 @@ JavaScript only *enhances* it. The invariant, now locked by
 `components/__tests__/ReportCheckoutButton.test.tsx`: every code path ends in either a redirect
 or a navigation — the buyer always reaches a checkout page.
 
+---
+
+## 2026-09-02 (pre-launch teardown — the constant was fixed, the callers were not)
+
+Full report: `docs/audit/PRE-LAUNCH-TEARDOWN-2026-09-02.html` (5 surfaces, GSec LLC teardown,
+monetization rebuild, 180-day calendar). Two lessons came out of it that generalise.
+
+### Deleting a bad number from the constant does not delete it from the callers
+**What:** `lib/detection/engines.ts` was written specifically to kill a 90-vs-53 double count —
+its comment names the number and says "derived from the one array that holds them all, so it
+cannot drift again". It could not, and did not. But the two consumers that did the same
+arithmetic by hand were never touched: `lib/reports/snapshot-from-scan.ts` and
+`lib/scan/local-engine.ts` both built `[...BUILTIN_PATTERNS, ...CMMC_PATTERNS,
+...HIPAA_PATTERNS]`, and `BUILTIN_PATTERNS` already spreads both of those into itself.
+
+Ninety pattern evaluations for fifty-three patterns. `scanForSnapshot` keys findings by pattern
+name and **sums** collisions (`existing.count += count`), so nothing deduped them: every CUI and
+PHI finding on the public `/demo` was reported at exactly 2x, and those doubled counts were
+POSTed to `/api/report/snapshot-lead` as the lead's risk profile. `local-engine.ts` published
+the array length to the UI as `patternsChecked`, so the page printed "90" a few hundred pixels
+below its own header printing "53" from `PATTERN_COUNT`.
+
+`engines.test.ts` was green throughout. It asserts the CONSTANT is right. Nothing asserted the
+CONSUMERS use it.
+
+**Rule:** When a fix replaces a computation with a derived constant, the same commit greps for
+every other site that performs that computation. A guard on the constant is not a guard on the
+codebase. Locked now by `lib/detection/__tests__/engine-registry-single-source.test.ts`, which
+holds the line three ways — on the shipped arrays, on observed scan output (2 became 1), and on
+the source text, so the next re-concatenation fails the build before anyone measures it. Both
+directions were self-tested: reintroducing each site individually fails the guard.
+
+### A liveness probe wearing a readiness probe's name disarms the daily check
+**What:** `CLAUDE.md`'s Session Start Protocol step 3 is `curl .../api/health`, and CLAUDE.md
+states that endpoint "reports missing control stores and reset-code configuration as degraded
+rather than green". `docs/gtm/LIVE-PRODUCTION-AUDIT-2026-08-15.md` quotes it returning a full
+sentence about lost sales. The shipped `app/api/health/route.ts` returns `{status:"ok"}` with no
+branch that can report anything else, and `app/api/admin/health/route.ts` 404s unauthorised
+callers — so there is no reachable substitute. The pre-flight check now returns green under
+every failure condition it exists to detect.
+
+**Rule:** Liveness and readiness are two endpoints, never one. An operating procedure never
+depends on the endpoint that cannot fail. If a diagnostic is narrowed to a probe, the procedure
+that consumed the diagnostic is updated in the same commit or the narrowing is not done.
+
+### A repository can only tell you what was written, never what is running
+**What:** The teardown's deploy finding was inferred from the repo alone: the root holds a Next.js
+scaffold (`next.config.ts`, `postcss.config.mjs`, create-next-app starter SVGs) with no `app/` and
+no `next` dependency, and `middleware.ts:326` records a root-config change having killed the
+middleware in production once already. The chain was sound and the conclusion — "framework
+detection fails, which is why nothing has deployed since #288" — was wrong. One call to the Vercel
+API showed `b88b7ee` live in production, `state: READY`.
+
+The evidence the API *did* surface is worse and was invisible from the repository: three
+deployments with `target: production` and `state: ERROR` inside one 25-minute window
+(`bfcbe54`, `9c9f2b9`, `ba8bf29`), each ending on `Failed to type check`. `main` took three merges
+whose build had not passed, and production served a stale bundle throughout while the branch read
+as merged.
+
+**Rule:** Any claim about what is *deployed* is checked against the deploy provider before it
+ships, never derived from configuration files. The repo states intent; the control plane states
+fact. When the two disagree the control plane wins and the inference is retracted in place — the
+retraction stays visible in the document, because a finding that quietly changes shape is a
+finding no reader can audit. Corollary now open in `todo.md`: branch protection requiring the CI
+type check is the one setting that would have stopped all three, and CLAUDE.md already carried
+the rule it broke ("Build must pass before commit").
+
 ### A number nobody can observe is not a number
 **What:** The kill criteria turn on "fewer than 5 paid customers", and the answer has
 been recorded as 0 in every session since. But `STRIPE_WEBHOOK_SECRET` has never been

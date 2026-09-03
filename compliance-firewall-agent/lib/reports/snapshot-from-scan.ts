@@ -1,7 +1,5 @@
 import type { RiskLevel, RuleAction } from "@/lib/supabase/types";
 import { BUILTIN_PATTERNS, type DetectionPattern } from "@/lib/classifier/patterns";
-import { CMMC_PATTERNS } from "@/lib/classifier/cmmc-patterns";
-import { HIPAA_PATTERNS } from "@/lib/classifier/hipaa-patterns";
 import type { ReportData } from "./pdf-generator";
 import {
   CATEGORY_NIST_MAP,
@@ -13,9 +11,10 @@ import {
  * In-browser "Instant AI Risk Snapshot" engine.
  *
  * Scans pasted text with the SAME local pattern engines the product uses
- * (`BUILTIN_PATTERNS` + `CMMC_PATTERNS` + `HIPAA_PATTERNS` — all pure regex, no
- * network, no cloud), then shapes the findings into a `ReportData` for a
- * PREVIEW snapshot PDF. Everything here runs client-side: the pasted text never
+ * (`BUILTIN_PATTERNS`, which already contains the CMMC and HIPAA sets — all
+ * pure regex, no network, no cloud), then shapes the findings into a
+ * `ReportData` for a PREVIEW snapshot PDF. Everything here runs client-side:
+ * the pasted text never
  * leaves the browser, which is both the honest implementation and a live proof
  * of the core "nothing leaves your network" claim.
  *
@@ -25,13 +24,31 @@ import {
 
 export type { SnapshotFinding } from "./category-nist-map";
 
-// The local engines, combined once. Type-only import of RuleCategory etc. is
-// erased at build, so this pulls no server/supabase runtime into the bundle.
-const LOCAL_ENGINES: DetectionPattern[] = [
-  ...BUILTIN_PATTERNS,
-  ...CMMC_PATTERNS,
-  ...HIPAA_PATTERNS,
-];
+/**
+ * The local engines. `BUILTIN_PATTERNS` IS the whole set — it already spreads
+ * `...CMMC_PATTERNS` and `...HIPAA_PATTERNS` into itself (see
+ * `lib/classifier/patterns.ts`), so it is 53 patterns, not 16.
+ *
+ * This was `[...BUILTIN_PATTERNS, ...CMMC_PATTERNS, ...HIPAA_PATTERNS]`, which
+ * evaluated 90 patterns for 53 real ones and re-ran every CMMC and HIPAA regex
+ * a second time. The loop below sums collisions by name (`existing.count +=
+ * count`), so it did not dedupe them — it DOUBLED the reported count of exactly
+ * the CUI and PHI findings the $499 report is sold on, and shipped those
+ * doubled numbers to `/api/report/snapshot-lead`.
+ *
+ * That is the same double-count `lib/detection/engines.ts` was written to
+ * delete: it names the number ("the sum returned 90 for 53 real patterns") and
+ * derives `PATTERN_COUNT` from the one array that holds them all. The constant
+ * was fixed; the two consumers that re-did the arithmetic by hand were not.
+ *
+ * Do not re-concatenate a sub-registry that is already inside this one.
+ * `__tests__/engine-registry-single-source.test.ts` fails the build if anyone
+ * does, in this file or in `lib/scan/local-engine.ts`.
+ *
+ * Type-only import of RuleCategory etc. is erased at build, so this pulls no
+ * server/supabase runtime into the bundle.
+ */
+const LOCAL_ENGINES: DetectionPattern[] = BUILTIN_PATTERNS;
 
 const RISK_RANK: Record<RiskLevel, number> = {
   CRITICAL: 4,
