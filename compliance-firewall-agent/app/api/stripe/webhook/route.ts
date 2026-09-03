@@ -5,11 +5,10 @@ import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
 import { createServiceClient } from '@/lib/supabase/client';
 import { upgradeEmail } from '@/lib/email/templates/upgrade';
 import { canceledEmail } from '@/lib/email/templates/canceled';
-import { reportOrderEmail } from '@/lib/email/templates/report-order';
-import { verticalFromClientReference } from '@/lib/stripe/report-payment-link';
-import { founderInbox } from '@/lib/email/identity';
-import { maskEmail } from '@/lib/reports/order-view';
-import { RISK_REPORT_RETAIL_CENTS, RISK_REPORT_WHOLESALE_CENTS } from '@/lib/pricing/plans';
+// ONE definition of what a $499 report order is. The daily reconciler
+// (app/api/cron/reconcile-orders) replays missed sales through the same
+// function, so the two rails cannot drift.
+import { recordReportOrder, isReportSession } from '@/lib/stripe/report-fulfillment';
 
 type ServiceClient = ReturnType<typeof createServiceClient>;
 
@@ -38,154 +37,6 @@ async function sendTransactional(
   } catch (err) {
     console.error('[Stripe Webhook] transactional email failed (non-fatal):', err);
   }
-}
-
-/**
- * Send a transactional email to a raw address (no account required). Used for
- * the one-time $499 report buyer, who purchases without signing up. Best-effort:
- * never throws, never blocks the webhook's core job.
- */
-async function sendTransactionalToEmail(
-  to: string,
-  build: { from: string; subject: string; html: string },
-): Promise<void> {
-  try {
-    if (!process.env.RESEND_API_KEY || !to) return;
-    const { Resend } = await import('resend');
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({ from: build.from, to, subject: build.subject, html: build.html });
-  } catch (err) {
-    console.error('[Stripe Webhook] report email failed (non-fatal):', err);
-  }
-}
-
-/**
- * Record + fulfill a one-time $499 CMMC AI Risk Assessment Report purchase.
- * Best-effort fulfillment email; the order row is the source of truth. Never
- * throws — billing has already succeeded by the time Stripe calls us.
- */
-async function handleReportOrder(
-  supabase: ServiceClient,
-  session: Stripe.Checkout.Session,
-): Promise<void> {
-  const email =
-    session.customer_details?.email ?? session.customer_email ?? '';
-  const fullName = session.customer_details?.name ?? '';
-  const meta = session.metadata ?? {};
-  const isWholesale = meta.wholesale === 'true';
-  // Payment-link sales (the fallback rail) carry no metadata — the vertical,
-  // when known, rides in client_reference_id (lib/stripe/report-payment-link.ts).
-  const vertical =
-    meta.vertical || verticalFromClientReference(session.client_reference_id) || null;
-
-  // Reconcile the purchase to an existing account by email, if one exists, so
-  // the buyer sees their order once they sign in (migration 017 adds user_id).
-  let linkedUserId: string | null = null;
-  if (email) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('id')
-      .ilike('email', email)
-      .limit(1)
-      .maybeSingle();
-    linkedUserId = profile?.id ?? null;
-  }
-
-  // Idempotency guard. Stripe retries webhooks (delivery timeout / any non-2xx),
-  // so the same checkout.session.completed can arrive more than once. The upsert
-  // below is idempotent (onConflict: stripe_session_id), but the fulfillment
-  // emails are NOT — a naive retry re-sends both the buyer receipt AND the founder
-  // sale alert. Probe for an existing order first so we email only the first time
-  // it is recorded.
-  const { data: existingOrder } = await supabase
-    .from('report_orders')
-    .select('id, status')
-    .eq('stripe_session_id', session.id)
-    .maybeSingle();
-
-  // `checkout.session.completed` does NOT mean the money arrived. Delayed-notification
-  // payment methods (ACH Direct Debit, Bacs, SEPA, Klarna) fire it the moment the buyer
-  // authorises, with `payment_status: 'unpaid'` and funds still days out. Recording that
-  // as 'paid' puts an unfunded order into the fulfillment queue and into the founder
-  // revenue count — we would start a 14-day proxy engagement for money that may never
-  // land. Stripe re-delivers the same session as `checkout.session.async_payment_succeeded`
-  // once the funds clear, and this handler runs again to promote it.
-  const isPaid = session.payment_status !== 'unpaid';
-
-  // Never walk a status BACKWARDS. A late Stripe retry (or an async_payment_succeeded
-  // arriving after fulfillment began) must not reset 'proxy_deployed', 'report_delivered',
-  // or 'refunded' back to 'paid'.
-  const priorStatus = (existingOrder?.status as string | undefined) ?? null;
-  const status = isPaid
-    ? (priorStatus && priorStatus !== 'pending_payment' ? priorStatus : 'paid')
-    : 'pending_payment';
-
-  // Fulfillment emails fire exactly once: on the first delivery that is actually PAID.
-  // An unpaid first delivery records the row silently; the later async success promotes
-  // it and sends then. A plain retry of an already-paid order sends nothing.
-  const shouldNotify = isPaid && (!existingOrder || priorStatus === 'pending_payment');
-
-  const { error } = await supabase.from('report_orders').upsert(
-    {
-      email,
-      full_name: fullName || null,
-      vertical,
-      stripe_session_id: session.id,
-      stripe_payment_intent_id: (session.payment_intent as string) ?? null,
-      stripe_customer_id: (session.customer as string) ?? null,
-      amount_cents:
-        session.amount_total ?? (isWholesale ? RISK_REPORT_WHOLESALE_CENTS : RISK_REPORT_RETAIL_CENTS),
-      currency: session.currency ?? 'usd',
-      partner_ref: meta.partner_ref || null,
-      is_wholesale: isWholesale,
-      status,
-      user_id: linkedUserId,
-    },
-    { onConflict: 'stripe_session_id' },
-  );
-
-  if (error) {
-    console.error('[Stripe Webhook] report_orders upsert failed:', error);
-  }
-  // Masked, not raw. This line wrote a paying customer's address into Vercel's
-  // log retention in plaintext, where it is readable by anyone with project
-  // access and outlives the request by weeks. For a compliance product whose
-  // pitch is "prompts never leave your network", leaking buyer PII into a
-  // third-party log store is the wrong side of our own argument. The session id
-  // is retained because it is the actual correlation key for support, and it is
-  // not personal data. Reuses the tested helper in lib/reports/order-view.ts.
-  console.log(
-    `[Stripe Webhook] report order recorded: ${session.id} email=${maskEmail(email)} wholesale=${isWholesale} status=${status}`,
-  );
-
-  if (!shouldNotify) {
-    console.log(
-      `[Stripe Webhook] report order ${session.id} not notifying (paid=${isPaid} prior=${priorStatus ?? 'none'})`,
-    );
-    return;
-  }
-
-  // Buyer receipt + fulfillment kickoff (best-effort).
-  await sendTransactionalToEmail(email, {
-    from: reportOrderEmail.from,
-    subject: reportOrderEmail.subject,
-    html: reportOrderEmail.html(fullName),
-  });
-
-  // Founder alert — actionable "go fulfill this" notification for the
-  // manually-delivered product, beyond Stripe's generic payment receipt.
-  // Best-effort; billing already succeeded, so this never blocks or throws.
-  const founderEmail = founderInbox();
-  await sendTransactionalToEmail(
-    founderEmail,
-    reportOrderEmail.founderAlert({
-      email,
-      name: fullName,
-      vertical: meta.vertical,
-      isWholesale,
-      amountCents: session.amount_total ?? undefined,
-    }),
-  );
 }
 
 /**
@@ -293,7 +144,7 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       // `async_payment_succeeded` re-delivers the SAME session once a delayed
       // payment method (ACH, Bacs, SEPA, Klarna) actually settles. It shares this
-      // branch so `handleReportOrder` can promote the pending row to 'paid' and
+      // branch so `recordReportOrder` can promote the pending row to 'paid' and
       // send the fulfillment emails then — not at authorisation time.
       case 'checkout.session.async_payment_succeeded':
       case 'checkout.session.completed': {
@@ -301,8 +152,8 @@ export async function POST(request: NextRequest) {
 
         // One-time $499 report (mode: 'payment') — Stage 1 primary product.
         // No subscription, and the buyer may not have an account. Handle and stop.
-        if (session.mode === 'payment' || session.metadata?.product === 'cmmc_ai_risk_report') {
-          await handleReportOrder(supabase, session);
+        if (isReportSession(session)) {
+          await recordReportOrder(supabase, session, 'webhook');
           break;
         }
 

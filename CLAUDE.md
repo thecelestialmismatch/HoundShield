@@ -18,10 +18,10 @@ it is missed is not a milestone, and the kill criteria below are only
 meaningful if the dates they hang off are real.
 
 **Setting the replacement date is a founder decision and is deliberately not
-made here.** Two facts belong in it: production has not deployed since #288
-(see `tasks/todo.md`), so nothing shipped after that date has reached a buyer;
-and CMMC Phase 2 enforcement is paused (below), which removed the deadline
-urgency the original date leaned on.
+made here.** Two facts belong in it: **production IS live and current** —
+corrected 2026-09-02, see the status note below — and CMMC Phase 2 enforcement
+is paused (below), which removed the deadline urgency the original date leaned
+on.
 
 If the re-baselined milestone hits → expand to recurring revenue (Stage 2). If it fails → run the kill criteria.
 
@@ -42,6 +42,10 @@ Every new session, in order:
    `app/__tests__/health-liveness-contract.test.ts`. The readiness diagnostic is
    the token-gated route above, which 404s without the token. Set
    `HEALTH_DIAGNOSTIC_TOKEN` in Vercel to turn it on.)
+   Its `payments` / `payments_webhook` fields say whether the money path is
+   CONFIGURED. Whether a sale was actually missed is a different question, and
+   only `/api/cron/reconcile-orders` answers it — see
+   `docs/RUNBOOK-MONEY-PATH.md`.
 4. Output the HERMES BRIEFING block (below), then start the next `## Active` task.
 
 ```
@@ -53,6 +57,7 @@ DAYS TO KILL-CRITERIA REVIEW:  [X]  (2026-09-01)
 PAID GAP REPORTS CLOSED:       [X] / 3
 RPO/MSP REFERRAL AGREEMENTS:   [X] / 1
 ARCHITECTURE STATUS:           Vercel (trial) / Docker (CUI-safe) / [customer stack]
+MONEY PATH:                    webhook [set/UNSET] · reconciler [on/off] · last recovery [X]
 BRAIN AI STATUS:               ON (non-CUI only) / OFF
 TODAY'S PRIORITY:              [derive from stage]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -122,8 +127,9 @@ Annual discount 17%. 30-day money-back. ONE pricing grid. No Federal tier until 
 |-------------|--------|-----------------|
 | Supabase auth + DB | ✅ Wired | Migrations through 037 are in the repo. Applied-to-production status must be verified in the release record. **Release prerequisites:** 028 (shared rate-limit buckets), 031 (auth lockouts), 032 (auth audit trail), 034 (marketing opt-out column before commercial outreach), **035 (hash-only, one-time password-reset codes before reset is enabled)**, **036 (revoke public execution of privileged RPCs)**, and **037 (snapshot_leads — until applied, every free-demo lead is captured by email ONLY and a Resend failure loses it)**. `/api/health/ready` (token-gated) reports missing control stores and reset-code configuration as degraded rather than green; the public `/api/health` deliberately reports nothing but liveness. |
 | Stripe checkout | ✅ Wired | Add a **$499 one-time** report SKU (Stage 1 primary product) |
-| Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` |
-| STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard |
+| Stripe webhook | ⚠️ Verify URL | Confirm `https://www.houndshield.com/api/stripe/webhook` (note the `www` — the apex 308s and Stripe counts that a failed delivery) |
+| STRIPE_WEBHOOK_SECRET | ❌ Verify | Confirm set in Vercel dashboard. **No longer the single point of failure** as of 2026-09-02: `/api/cron/reconcile-orders` re-reads paid Stripe sessions daily and records anything the webhook missed. Still set it — recovery is ≤24h late, real-time is not. |
+| Order reconciler (cron) | ✅ Shipped | `/api/cron/reconcile-orders`, daily 15:00 UTC. Needs `STRIPE_SECRET_KEY` + `CRON_SECRET`. Emails a weekly alert while the money path is degraded. Full failure map: `docs/RUNBOOK-MONEY-PATH.md`. |
 | OpenRouter / Brain AI | ❌ Missing key | Set `OPENROUTER_API_KEY`; Brain AI CUI warning must be live regardless |
 | Resend (email) | ✅ Configured | — |
 | PostHog analytics | ✅ Active | Gated on cookie opt-in (GDPR) |
@@ -187,7 +193,7 @@ If any check fails:
 2. No signed channel partner generating leads
 3. CMMC Phase 2 officially deferred ≥6 months by DoD/DoW beyond 10 Nov 2026
 
-> ⚠️ **STATUS AS OF 2026-08-15 — TWO OF THREE ALREADY READ TRUE.**
+> ⚠️ **STATUS AS OF 2026-09-02 (gate date now PAST) — TWO OF THREE READ TRUE.**
 > (1) is true: **0 paid customers**. (2) is true: **0 signed channel partners**.
 > (3) is *not yet* true on its own terms — the 13 July pause is a suspension
 > pending a ~13 Sep review, not a ≥6-month deferral, and no replacement date
@@ -196,12 +202,33 @@ If any check fails:
 > On the rule as written, the Sep 1 gate is **already met and calls for shut
 > down or pivot**. That is a founder decision and is NOT executed here — but it
 > must not be discovered late, and it must not be dissolved by quietly editing
-> the criteria that caught it. Two things genuinely mitigate and both are
-> verifiable: production has not deployed since #288, so the current site has
-> never been in front of a buyer; and the pricing/positioning has never been
-> tested against the MSP buying model documented in
-> `docs/gtm/MSP-CHANNEL-RESEARCH.md`. Neither is evidence the market said no —
-> they are evidence the market was never asked.
+> the criteria that caught it.
+>
+> ⚠️ **CORRECTION 2026-09-02 — one of the two mitigations was FALSE, and it was
+> the load-bearing one.** "Production has not deployed since #288, so the
+> current site has never been in front of a buyer" is not true and has not been
+> true for two weeks. Read from the Vercel API rather than inferred:
+> deployment `dpl_5aN5WbocU36owaNevDV8WM7pcXWm`, state READY, target
+> production, commit `b88b7ee` (PR #322), **2026-08-31T05:27Z**. The prior
+> production deployment was `dpl_EQJ5hbo…` on 2026-08-18 (PR #317). Production
+> has tracked `main` continuously since 2026-08-18. The site HAS been in front
+> of whoever visited it.
+>
+> That correction makes the gate **harder** to argue with, not easier, which is
+> exactly why it is recorded here rather than dropped. One mitigation survives
+> and is still verifiable: the pricing/positioning has never been tested against
+> the MSP buying model documented in `docs/gtm/MSP-CHANNEL-RESEARCH.md`, and no
+> outreach has gone out. Nobody was ever *asked* to buy — that remains the
+> honest read of "0 customers", and a live site nobody was driven to is not a
+> market verdict.
+>
+> **Second correction, same date:** until 2026-09-02 a completed purchase was
+> recorded only by the Stripe webhook, and `STRIPE_WEBHOOK_SECRET` has never
+> been set. So "0 paid customers" was, strictly, "0 paid customers *that the
+> system was capable of noticing*". `docs/RUNBOOK-MONEY-PATH.md` and the daily
+> reconciler (`/api/cron/reconcile-orders`) close that: run it once over a
+> 90-day window before treating the 0 as measured. Check Stripe → Payments by
+> hand as well — that is the only source of truth no app-side bug can hide.
 
 ---
 
@@ -356,7 +383,9 @@ compliance-firewall-agent/
   app/pricing/page.tsx             — Pricing (one grid — $499 report is the hero)
   app/partner/page.tsx             — RPO/MSP referral page
   app/api/stripe/checkout/route.ts — Stripe checkout (needs $499 one-time report SKU)
-  app/api/stripe/webhook/route.ts  — Stripe webhook
+  app/api/stripe/webhook/route.ts  — Stripe webhook (money rail 1 — real-time)
+  app/api/cron/reconcile-orders/   — Daily Stripe reconciler (money rail 2 — safety net)
+  lib/stripe/report-fulfillment.ts — THE one definition of a $499 order; both rails call it
   app/api/brain/query/route.ts     — Brain AI API (OpenRouter — needs key + CUI warning)
   app/api/health/houndshield.ts    — Integration health check
   lib/brain-ai/                    — BM25 knowledge graph + query interface

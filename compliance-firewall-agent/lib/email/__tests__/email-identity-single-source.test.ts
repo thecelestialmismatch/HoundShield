@@ -101,9 +101,17 @@ describe('the founder inbox is resolved in exactly one place', () => {
     ).toEqual([]);
   });
 
-  it('the four human-actionable routes all import founderInbox', () => {
+  it('every human-actionable send path resolves its recipient through founderInbox', () => {
+    // The $499 sale alert used to live in the Stripe webhook route. It now
+    // lives in lib/stripe/report-fulfillment.ts, because the daily reconciler
+    // (app/api/cron/reconcile-orders) sends the same alert for a sale the
+    // webhook never delivered, and one alert must not become two definitions
+    // of who the founder is. The list follows the send paths, not the routes:
+    // pinning the old four would have kept passing while the alert that
+    // matters most moved out from under it.
     const routes = [
-      join(APP_DIR, 'api', 'stripe', 'webhook', 'route.ts'),
+      join(LIB_DIR, 'stripe', 'report-fulfillment.ts'), // $499 sale alert (both rails)
+      join(APP_DIR, 'api', 'cron', 'reconcile-orders', 'route.ts'), // degraded-money-path alert
       join(APP_DIR, 'api', 'contact', 'route.ts'),
       join(APP_DIR, 'api', 'report', 'snapshot-lead', 'route.ts'),
       join(APP_DIR, 'api', 'partners', 'apply', 'route.ts'),

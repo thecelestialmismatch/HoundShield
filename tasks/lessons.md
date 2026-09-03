@@ -2050,3 +2050,70 @@ that was wrong.
 stands behind before changing either. A test guarding the current behaviour is that
 evidence. Then ask what NEED the documentation was describing, and satisfy it without
 dismantling the guard.
+
+### A number nobody can observe is not a number
+**What:** The kill criteria turn on "fewer than 5 paid customers", and the answer has
+been recorded as 0 in every session since. But `STRIPE_WEBHOOK_SECRET` has never been
+set, so `POST /api/stripe/webhook` answered **503 to every Stripe delivery**, while the
+Stripe-hosted Payment Link stayed live and sellable the whole time. The honest reading
+of that 0 was never "nobody bought" — it was "nobody bought *that the system was capable
+of noticing*". Two months of strategy, including a shut-down-or-pivot gate, rested on a
+measurement the instrument could not take.
+**Rule:** Before a metric is allowed to drive a decision, establish that something in the
+system can actually observe it, and say which component does. "We have no record of X" and
+"X did not happen" are different sentences, and the gap between them is exactly where a
+company convinces itself of the wrong thing. The fix is not a better dashboard — it is a
+second, independent path to the same fact (`/api/cron/reconcile-orders` reads the money
+back out of Stripe rather than waiting to be told about it).
+
+### A diagnostic nobody receives is decoration
+**What:** `stripeKeyDiagnostic()` and `stripeWebhookDiagnostic()` are genuinely excellent
+— they name the exact mis-paste ("that is your PUBLISHABLE key"), the exact dashboard
+path, the exact consequence. They have been correct and unread for months, because they
+render into a JSON body behind an admin session and into Vercel log lines. The #1 revenue
+blocker was restated in `tasks/todo.md` every session for three weeks and never once
+arrived anywhere a human would trip over it.
+**Rule:** Diagnostics need a delivery mechanism, and the mechanism is part of the feature.
+Ask "who receives this, and when?" — if the answer is "whoever thinks to look", it is not
+an alert. And an alert has to be able to stop: this one sends weekly and only while
+degraded, precisely so it stays worth reading. A daily nag for a five-minute fix is
+filtered within a week, after which the alarm is worth less than nothing because its
+silence now means nothing either.
+
+### Reconciling money in only one direction makes the number confidently wrong
+**What:** The reconciler was first designed to recover *sales* the webhook missed. A
+refund the webhook missed has the same cause and the opposite sign: the order sits at
+`paid` forever, and the admin rollup counts paid orders as revenue and as paying
+customers — the exact number the kill-criteria review reads. Recovering only the inflows
+would have made the metric *more* wrong, and wrong in the flattering direction, while
+looking like a rigour improvement.
+**Rule:** When you build a safety net for a ledger, build it for both signs in the same
+change. A one-directional reconciler is not half-finished, it is biased, and a biased
+number is more dangerous than a missing one because it gets trusted.
+
+### A type-level tripwire that fires inside a dependency bump is a tripwire nobody can act on
+**What:** `lib/stripe/api-version.ts` pinned the API version as a hand-written literal
+typed `Stripe.LatestApiVersion` — a single string-literal type — deliberately, so that an
+SDK bump would fail `tsc` in exactly one file and force a human to review Stripe's
+changelog. In practice it fired as `TS2322: Type '"2026-07-29.dahlia"' is not assignable
+to type '"2026-08-26.dahlia"'` at the bottom of a dependabot build log (#324, and #262
+before it), blocking a batch that carried a Next.js patch and a Sentry update. The
+literal also protected nothing at runtime: stripe-node already defaults `apiVersion` to
+its own `Stripe.API_VERSION`, so the value on the wire was identical with or without it.
+**Rule:** A review gate has to fail where the reviewer is looking, in words they can act
+on. Keep the gate, move it: derive the value from the SDK so the build cannot break, and
+put the tripwire in a test whose failure message names the file, the changelog URL and
+the one line to change. A gate that trains people to ignore red dependabot PRs is
+negative safety.
+
+### Reverting one file to clean up a mutation test reverts your work in it too
+**What:** After running mutation checks (deliberately breaking the code to prove the new
+tests catch it), the cleanup for five of six mutants was `cp` from a saved copy — but the
+sixth used `git checkout app/api/stripe/webhook/route.ts`. That restored the file to
+`main`, silently undoing the real extraction the whole PR was about. It was caught only
+because `git status` was printed in the same command and the file was missing from the
+modified list.
+**Rule:** Mutate from a saved copy and restore from the saved copy — never `git checkout`
+a file you have real uncommitted changes in. And print `git status` after any destructive
+cleanup: the failure mode here is silent, and the tests still passed afterwards because
+the reverted file was a *valid older implementation*.
