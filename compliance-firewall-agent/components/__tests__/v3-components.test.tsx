@@ -1,85 +1,16 @@
+/**
+ * Component tests for the shipped v3 surface.
+ *
+ * Five suites were removed on 2026-09-02 with the components they covered —
+ * ThreatFeed, CountdownTimer, PricingToggle, CodeBlock and ComparisonFlow. Each
+ * had exactly one consumer in the whole repository: this file. A component whose
+ * only caller is its own test is not covered, it is embalmed: the test proves the
+ * component still compiles, and nothing proves anyone wants it.
+ *
+ * What remains covers components a page actually renders.
+ */
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-
-// ── ThreatFeed ────────────────────────────────────────────────────
-import { ThreatFeed } from '../ui/ThreatFeed'
-
-describe('ThreatFeed', () => {
-  beforeEach(() => { vi.useFakeTimers() })
-  afterEach(() => { vi.useRealTimers() })
-
-  it('renders the feed container', () => {
-    render(<ThreatFeed />)
-    expect(screen.getByTestId('threat-feed')).toBeTruthy()
-  })
-
-  it('renders initial threat items', () => {
-    render(<ThreatFeed />)
-    const items = screen.getAllByTestId('threat-item')
-    expect(items.length).toBeGreaterThanOrEqual(5)
-  })
-
-  it('shows BLOCKED pill on at least one initial item', () => {
-    render(<ThreatFeed />)
-    // At least one status label should be visible
-    const feed = screen.getByTestId('threat-feed')
-    expect(feed.textContent).toMatch(/BLOCKED|FLAGGED|PASSED/)
-  })
-
-  it('adds a new item after 1800ms', async () => {
-    render(<ThreatFeed />)
-    const before = screen.getAllByTestId('threat-item').length
-    act(() => { vi.advanceTimersByTime(1800) })
-    const after = screen.getAllByTestId('threat-item').length
-    expect(after).toBeGreaterThanOrEqual(before)
-  })
-
-  it('shows live indicator badge', () => {
-    render(<ThreatFeed />)
-    expect(screen.getByText('Live intercept feed')).toBeTruthy()
-  })
-})
-
-// ── CountdownTimer ────────────────────────────────────────────────
-import { CountdownTimer } from '../ui/CountdownTimer'
-
-describe('CountdownTimer', () => {
-  beforeEach(() => { vi.useFakeTimers() })
-  afterEach(() => { vi.useRealTimers() })
-
-  it('renders countdown container', () => {
-    render(<CountdownTimer />)
-    expect(screen.getByTestId('countdown')).toBeTruthy()
-  })
-
-  it('renders seconds block', () => {
-    render(<CountdownTimer />)
-    expect(screen.getByTestId('countdown-seconds')).toBeTruthy()
-  })
-
-  it('seconds value is two digits', () => {
-    render(<CountdownTimer />)
-    const secs = screen.getByTestId('countdown-seconds').textContent ?? ''
-    expect(secs).toMatch(/^\d{2}$/)
-  })
-
-  it('updates seconds after 1000ms', async () => {
-    render(<CountdownTimer />)
-    act(() => { vi.advanceTimersByTime(1000) })
-    const after = screen.getByTestId('countdown-seconds').textContent
-    // Either same (59→00 rollover) or different
-    expect(typeof after).toBe('string')
-  })
-
-  it('renders all four time unit labels', () => {
-    render(<CountdownTimer />)
-    const text = screen.getByTestId('countdown').textContent ?? ''
-    expect(text).toContain('DD')
-    expect(text).toContain('HH')
-    expect(text).toContain('MM')
-    expect(text).toContain('SS')
-  })
-})
 
 // ── FaqAccordion ──────────────────────────────────────────────────
 import { FaqAccordion, type FaqItem } from '../ui/FaqAccordion'
@@ -129,104 +60,6 @@ describe('FaqAccordion', () => {
 })
 
 // ── PricingToggle ─────────────────────────────────────────────────
-import { PricingToggle } from '../ui/PricingToggle'
-
-describe('PricingToggle', () => {
-  it('renders with monthly selected by default', () => {
-    render(<PricingToggle />)
-    const toggle = screen.getByRole('switch')
-    expect(toggle.getAttribute('aria-checked')).toBe('false')
-  })
-
-  it('clicking toggle switches to annual', () => {
-    render(<PricingToggle />)
-    const toggle = screen.getByRole('switch')
-    fireEvent.click(toggle)
-    expect(toggle.getAttribute('aria-checked')).toBe('true')
-  })
-
-  it('calls onChange with annual when switching', () => {
-    const cb = vi.fn()
-    render(<PricingToggle onChange={cb} />)
-    fireEvent.click(screen.getByRole('switch'))
-    expect(cb).toHaveBeenCalledWith('annual')
-  })
-
-  it('shows savings badge when annual selected', () => {
-    render(<PricingToggle />)
-    fireEvent.click(screen.getByRole('switch'))
-    expect(screen.getByText('−20%')).toBeTruthy()
-  })
-
-  it('clicking Annual text label also activates annual', () => {
-    const cb = vi.fn()
-    render(<PricingToggle onChange={cb} />)
-    fireEvent.click(screen.getByText('Annual'))
-    expect(cb).toHaveBeenCalledWith('annual')
-  })
-})
-
-// ── CodeBlock ─────────────────────────────────────────────────────
-import { CodeBlock } from '../ui/CodeBlock'
-
-describe('CodeBlock', () => {
-  it('renders the provided code', () => {
-    render(<CodeBlock code="OPENAI_BASE_URL=https://gateway.example.com" />)
-    expect(screen.getByText('OPENAI_BASE_URL=https://gateway.example.com')).toBeTruthy()
-  })
-
-  it('shows filename when provided', () => {
-    render(<CodeBlock code="test" filename=".env" />)
-    expect(screen.getByText('.env')).toBeTruthy()
-  })
-
-  it('shows language label when provided', () => {
-    render(<CodeBlock code="test" language="bash" />)
-    expect(screen.getByText('bash')).toBeTruthy()
-  })
-
-  it('renders copy button', () => {
-    render(<CodeBlock code="test" />)
-    expect(screen.getByRole('button', { name: /copy/i })).toBeTruthy()
-  })
-
-  it('shows Copy label initially', () => {
-    render(<CodeBlock code="test" />)
-    expect(screen.getByText('Copy')).toBeTruthy()
-  })
-})
-
-// ── ComparisonFlow ────────────────────────────────────────────────
-import { ComparisonFlow } from '../ui/ComparisonFlow'
-
-describe('ComparisonFlow', () => {
-  it('renders without crashing', () => {
-    const { container } = render(<ComparisonFlow />)
-    expect(container.firstChild).toBeTruthy()
-  })
-
-  it('shows Without HoundShield panel', () => {
-    render(<ComparisonFlow />)
-    expect(screen.getByText('Without HoundShield')).toBeTruthy()
-  })
-
-  it('shows With HoundShield panel', () => {
-    render(<ComparisonFlow />)
-    expect(screen.getByText('With HoundShield')).toBeTruthy()
-  })
-
-  it('highlights local data boundary in positive panel', () => {
-    render(<ComparisonFlow />)
-    expect(screen.getByText("Data never leaves your network")).toBeTruthy()
-  })
-
-  it('shows CUI exposed warning in negative panel', () => {
-    render(<ComparisonFlow />)
-    expect(screen.getByText('(CUI exposed)')).toBeTruthy()
-  })
-})
-
-// ── NavV3 ─────────────────────────────────────────────────────────
 import { NavV3 } from '../layout/NavV3'
 
 // Mock next/navigation — NavV3 doesn't use pathname but next/link needs router
