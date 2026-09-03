@@ -191,3 +191,17 @@ coverage/
 
 # Claire worktree fragments — never belong in the repo
 .claire/
+
+# ---- NexusSwift ----------------------------------------------------------
+nexusswift/**/__pycache__/
+nexusswift/*.db
+nexusswift/*.db-wal
+nexusswift/*.db-shm
+
+# The blanket `tests/` rule above is meant for scratch fixtures, but it
+# matches at any depth and would silently drop NexusSwift's entire 80-test
+# security harness from every commit. Git cannot re-include a file whose
+# parent directory is excluded, so the directory must be un-excluded first
+# and the files second - one line alone does nothing.
+!nexusswift/tests/
+!nexusswift/tests/*.py

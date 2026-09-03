@@ -1,0 +1,16 @@
+# NexusSwift runtime dependencies.
+#
+# Deliberately minimal. Every dependency in a payment hub is an entry in the
+# threat model and a line in the SBOM, so the list is two entries and both
+# earn their place:
+#
+#   cryptography — the RSA-PSS implementation. Not reimplemented, ever:
+#                  hand-rolled padding is how signature-forgery CVEs happen.
+#                  Pinned >=42 because 41.x and earlier are affected by
+#                  GHSA-3ww4-gg4f-jr7f and GHSA-jfhm-5ghh-2f97.
+#   aiosqlite    — async wrapper over the stdlib sqlite3 driver.
+#
+# Everything else — XML, hashing, UUIDs, the async runtime, the test harness
+# — comes from the standard library.
+cryptography>=42.0.0,<47
+aiosqlite>=0.20.0,<1.0
