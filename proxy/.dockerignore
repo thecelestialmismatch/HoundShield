@@ -1,6 +1,30 @@
+# Build context exclusions.
+#
+# `tsconfig.json` includes "**/*.ts", so anything that reaches the build context
+# gets compiled into dist/ and shipped. That is how the published image came to
+# contain dist/vitest.config.js and a compiled ooda/__tests__ harness.
+#
+# Both leading-directory and **/ forms are listed on purpose: .dockerignore
+# matches with Go's filepath.Match, where a bare `__tests__` matches only at the
+# root and a nested `ooda/__tests__` needs the ** form.
+
 node_modules
 dist
 data
 .env
 *.db
 *.log
+
+# Test and benchmark trees — CI runs these from the repo, never from the image.
+__tests__
+**/__tests__
+bench
+vitest.config.ts
+
+# Operator tooling. `issue-offline-license.mjs` signs licences with a PRIVATE
+# key; it belongs on the machine that issues them, never in the artifact handed
+# to the customer those licences are issued to.
+scripts
+
+# Documentation. Read on GitHub, not from inside a container.
+*.md

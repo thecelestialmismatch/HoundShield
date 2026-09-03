@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "fs";
+import { readFileSync, readdirSync, statSync } from "fs";
 import path from "path";
 import {
   PRICING_PLANS,
@@ -95,5 +95,69 @@ describe("llms.txt stays in sync with the pricing source of truth", () => {
 
   it("does not contain the retired $69 Pro price", () => {
     expect(llms).not.toContain("$69");
+  });
+});
+
+/**
+ * PRICING_PLANS must stay DORMANT.
+ *
+ * The test above states, in a comment, that "no page renders it (verified: no
+ * non-test importer of PRICING_PLANS/getPlan/ANNUAL_DISCOUNT exists)". That
+ * verification was true and was performed by hand, which means it stopped being
+ * true the moment anyone imported the constant — and nothing would have said so.
+ *
+ * That is the exact failure this session's other fix came out of:
+ * `lib/detection/engines.ts` deleted a bad number from a CONSTANT while two
+ * consumers went on computing it, and `engines.test.ts` stayed green because it
+ * asserted the constant rather than the consumers. A hand-verified invariant
+ * recorded in prose is not a guard.
+ *
+ * It matters here because the dormant data disagrees with CLAUDE.md. `plans.ts`
+ * holds Free $0 / Pro $199 / Growth $499 / Enterprise $999 / Agency $2,499;
+ * CLAUDE.md's Stage 2 grid holds Starter $299 / Pro $799 / Enterprise $1,499.
+ * Neither matches the other, CLAUDE.md's NEVER-DO list forbids leading with a
+ * $199/mo subscription before the $499 report sells, and "Growth $499/mo" wears
+ * the same number as the one-time report with a 12x annual difference behind it.
+ *
+ * Reconciling those numbers is a FOUNDER decision and is deliberately not made
+ * in code — picking one silently would set pricing by side effect, the same
+ * reasoning that left the 20%-vs-40% partner ruling to the founder. What this
+ * guard does is make sure the unreconciled data cannot reach a buyer while the
+ * decision is outstanding.
+ */
+describe("the retired subscription grid cannot reach a page by accident", () => {
+  const APP_ROOT = path.join(__dirname, "..", "..", "..");
+
+  function sourceFiles(dir: string, acc: string[] = []): string[] {
+    for (const entry of readdirSync(dir)) {
+      if (entry === "node_modules" || entry === "__tests__" || entry.startsWith(".")) continue;
+      const full = path.join(dir, entry);
+      if (statSync(full).isDirectory()) sourceFiles(full, acc);
+      else if ((entry.endsWith(".ts") || entry.endsWith(".tsx")) && !entry.includes(".test."))
+        acc.push(full);
+    }
+    return acc;
+  }
+
+  it("has no non-test importer of the dormant Stage-2 symbols", () => {
+    const DORMANT = /\b(PRICING_PLANS|ANNUAL_DISCOUNT|getPlan)\b/;
+    const importers: string[] = [];
+
+    for (const file of sourceFiles(path.join(APP_ROOT, "app"))
+      .concat(sourceFiles(path.join(APP_ROOT, "components")), sourceFiles(path.join(APP_ROOT, "lib")))) {
+      // The definition itself is not an importer.
+      if (file.endsWith(path.join("lib", "pricing", "plans.ts"))) continue;
+      const src = readFileSync(file, "utf8")
+        .replace(/\/\*[\s\S]*?\*\//g, " ")
+        .replace(/(^|[^:])\/\/[^\n]*/g, "$1 ");
+      if (DORMANT.test(src)) importers.push(file.replace(APP_ROOT + path.sep, ""));
+    }
+
+    expect(
+      importers,
+      `PRICING_PLANS is retired Stage-2 data that disagrees with CLAUDE.md's grid and ` +
+        `contains the $199/mo tier the NEVER-DO list forbids. Rendering it publishes an ` +
+        `unbuyable price ladder next to the $499 anchor. Imported by: ${importers.join(", ")}`,
+    ).toEqual([]);
   });
 });

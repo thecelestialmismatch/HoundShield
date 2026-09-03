@@ -8,7 +8,7 @@ HoundShield is a compliance and data-loss-prevention product for regulated envir
 
 Report privately through either channel:
 
-1. **GitHub Private Vulnerability Reporting** — the [**Security → Report a vulnerability**](../../security/advisories/new) tab on this repository (preferred).
+1. **GitHub Private Vulnerability Reporting** — the [**Security → Report a vulnerability**](https://github.com/thecelestialmismatch/HoundShield/security/advisories/new) tab on this repository (preferred).
 2. **Email** — `security@houndshield.com` with the details below.
 
 Please include:
