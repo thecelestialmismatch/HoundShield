@@ -97,12 +97,20 @@ ${emailFooter(`<br /><a href="${APP_URL}/security" style="color:#94a3b8;">Securi
     vertical,
     isWholesale = false,
     amountCents,
+    recovered = false,
   }: {
     email: string;
     name?: string;
     vertical?: string;
     isWholesale?: boolean;
     amountCents?: number;
+    /**
+     * True when the daily reconciler found this sale in Stripe rather than the
+     * webhook delivering it. That is a live sale AND a broken webhook, and the
+     * founder needs both facts in the same email — the money is real, and the
+     * alert is late because the webhook rail is not working.
+     */
+    recovered?: boolean;
   }): { from: string; subject: string; html: string } => {
     // Derived, not typed. These literals went stale the moment wholesale moved.
     const dollars =
@@ -116,7 +124,9 @@ ${emailFooter(`<br /><a href="${APP_URL}/security" style="color:#94a3b8;">Securi
     const priceLine = isWholesale ? `${dollars} wholesale (RPO/MSP co-brand)` : `${dollars} retail`;
     return {
       from: FROM,
-      subject: `💰 ${dollars} CMMC report sold — ${email}`,
+      subject: recovered
+        ? `💰 ${dollars} CMMC report sold — ${email} (RECOVERED: webhook did not deliver)`
+        : `💰 ${dollars} CMMC report sold — ${email}`,
       html: `
 <!DOCTYPE html>
 <html>
@@ -134,6 +144,21 @@ ${emailFooter(`<br /><a href="${APP_URL}/security" style="color:#94a3b8;">Securi
         <tr><td style="padding:6px 0;color:#64748b;">Vertical</td><td style="padding:6px 0;">${vert}</td></tr>
         <tr><td style="padding:6px 0;color:#64748b;">Price</td><td style="padding:6px 0;">${priceLine}</td></tr>
       </table>
+      ${
+        recovered
+          ? `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px 20px;margin:22px 0 0;">
+        <p style="color:#991b1b;font-weight:600;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">Recovered by the daily reconciler</p>
+        <p style="color:#7f1d1d;font-size:14px;line-height:1.6;margin:0;">
+          Stripe took this money but the webhook never recorded it, so you are
+          hearing about it up to 24 hours late. The sale is real. Fix the rail:
+          set <code>STRIPE_WEBHOOK_SECRET</code> in Vercel (Production) from
+          Stripe &rarr; Developers &rarr; Webhooks &rarr; your
+          <code>/api/stripe/webhook</code> endpoint &rarr; Signing secret, then
+          redeploy. See <code>docs/RUNBOOK-MONEY-PATH.md</code>.
+        </p>
+      </div>`
+          : ''
+      }
       <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:16px 20px;margin:22px 0 0;">
         <p style="color:#9a3412;font-weight:600;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;">Next step — fulfill it</p>
         <p style="color:#7c2d12;font-size:14px;line-height:1.6;margin:0;">
