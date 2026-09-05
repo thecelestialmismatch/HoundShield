@@ -1,3 +1,14 @@
+/**
+ * Component tests for the shipped v3 surface.
+ *
+ * Five suites were removed on 2026-09-02 with the components they covered —
+ * ThreatFeed, CountdownTimer, PricingToggle, CodeBlock and ComparisonFlow. Each
+ * had exactly one consumer in the whole repository: this file. A component whose
+ * only caller is its own test is not covered, it is embalmed: the test proves the
+ * component still compiles, and nothing proves anyone wants it.
+ *
+ * What remains covers components a page actually renders.
+ */
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
@@ -5,7 +16,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
  * ThreatFeed, CountdownTimer, PricingToggle, CodeBlock and ComparisonFlow
  * were tested here and rendered by nothing. All five were deleted on
  * 2026-09-03 along with their tests: a reachability audit found no page,
- * component or route importing any of them.
+ * component or route importing any of them. (#327 reached the same
+ * conclusion independently and landed first; this is the same removal.)
  *
  * CodeBlock is the instructive one. Four pages DO render a code block —
  * ai-chat.tsx, (tools)/sdk/page.tsx, docs/ApiReference.tsx and
@@ -17,6 +29,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
  * What remains below is live: FaqAccordion (4 call sites), NavV3 (44) and
  * FooterV3 (41).
  */
+
+// ── FaqAccordion ──────────────────────────────────────────────────
 import { FaqAccordion, type FaqItem } from '../ui/FaqAccordion'
 
 const SAMPLE_FAQ: FaqItem[] = [

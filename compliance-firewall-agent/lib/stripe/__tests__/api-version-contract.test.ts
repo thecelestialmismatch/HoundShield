@@ -14,7 +14,8 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
-import { STRIPE_API_VERSION } from '@/lib/stripe/api-version';
+import Stripe from 'stripe';
+import { STRIPE_API_VERSION, REVIEWED_API_VERSION } from '@/lib/stripe/api-version';
 
 const APP_ROOT = path.resolve(__dirname, '../../..');
 const SCAN_DIRS = ['app', 'lib', 'components'];
@@ -50,6 +51,35 @@ describe('Stripe API version — single-source contract', () => {
 
   it('the pinned version has the Stripe release shape', () => {
     expect(STRIPE_API_VERSION).toMatch(/^\d{4}-\d{2}-\d{2}\.[a-z]+$/);
+  });
+
+  it('tracks the installed SDK rather than a hand-written literal', () => {
+    // The property that makes a dependabot stripe bump a green PR instead of
+    // `TS2322` at the bottom of a build log. If someone re-hardcodes the
+    // string, this is where it is caught.
+    expect(STRIPE_API_VERSION).toBe(Stripe.API_VERSION);
+  });
+
+  it('the SDK has not moved past the reviewed API version', () => {
+    // THE TRIPWIRE, relocated from tsc so its failure is readable.
+    //
+    // When this fails, a stripe SDK bump changed the API version this
+    // integration talks to. That is a real thing to look at — Stripe moved
+    // `invoice.subscription` to `invoice.parent.subscription_details
+    // .subscription` in 2025-04-30.basil and silently killed two webhook
+    // handlers. To clear it:
+    //   1. Read https://docs.stripe.com/changelog for every version between
+    //      REVIEWED_API_VERSION and Stripe.API_VERSION.
+    //   2. Confirm nothing this integration reads has moved. The surfaces are
+    //      checkout.sessions (list + the webhook payload), subscriptions,
+    //      and invoices — see app/api/stripe/**.
+    //   3. Set REVIEWED_API_VERSION in lib/stripe/api-version.ts to
+    //      Stripe.API_VERSION's current value, in the same PR as the bump.
+    // Nothing about production is broken while this is red: the wire version
+    // is the SDK's either way. It is a review gate, not an outage.
+    expect(
+      `${REVIEWED_API_VERSION} (reviewed) vs ${Stripe.API_VERSION} (installed SDK)`,
+    ).toBe(`${Stripe.API_VERSION} (reviewed) vs ${Stripe.API_VERSION} (installed SDK)`);
   });
 
   it('no source file outside api-version.ts hardcodes a quoted apiVersion', () => {

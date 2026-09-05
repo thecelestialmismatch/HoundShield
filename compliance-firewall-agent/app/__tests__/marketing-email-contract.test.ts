@@ -50,6 +50,12 @@ const TRANSACTIONAL = new Set([
   // also make it fail closed and send nothing while MARKETING_POSTAL_ADDRESS is
   // unset, silently swallowing the acknowledgement it exists to deliver.
   "contact-received.ts",
+  // An internal system alert to the operator of the system, sent only while
+  // the Stripe money path is degraded and only to founderInbox(). Not a
+  // commercial message to a recipient at all — §7702(17), 16 CFR 316.3 — and
+  // an unsubscribe link on it would let the founder opt out of the alarm that
+  // tells them sales are being lost.
+  "money-path-alert.ts",
 ]);
 
 function templateFiles(): string[] {

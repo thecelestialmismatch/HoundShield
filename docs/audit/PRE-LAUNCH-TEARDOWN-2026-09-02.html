@@ -250,7 +250,7 @@ footer.doc{
   <p class="dek">Five interaction surfaces inspected adversarially, one competitor dismantled, one monetization architecture rebuilt, and 180 dated operational units with no slack in them.</p>
   <dl class="metagrid">
     <div><dt>Surfaces audited</dt><dd>5 / 5</dd></div>
-    <div><dt>Blocking defects</dt><dd>9</dd></div>
+    <div><dt>Blocking defects</dt><dd>9 — 7 fixed</dd></div>
     <div><dt>Assertions anchored</dt><dd>58</dd></div>
     <div><dt>Confirmed / Likely / Assumed</dt><dd>49 / 5 / 4</dd></div>
     <div><dt>Calendar units</dt><dd>180</dd></div>
@@ -258,9 +258,10 @@ footer.doc{
   </dl>
 
   <div class="banner">
-    <h3>Launch-blocking condition</h3>
-    <p>The SHA-256 hash-chained audit log — the artifact the $499 report is sold on and the only reason a C3PAO accepts the evidence — does not exist in the product a CUI-handling customer runs.</p>
-    <p>The chain lives in <code>compliance-firewall-agent/lib/audit/seed-anchor.ts</code> and migrations <code>029</code>/<code>030</code>, which run on the Vercel and Supabase plane the project's own documentation states is not CUI-safe. The Mode B container writes <code>proxy_events</code> with no hash column, no previous-hash column and no signature. Selling a tamper-evident deliverable that the shipped container cannot produce is the one failure a defense buyer never forgives.</p>
+    <h3>Launch-blocking condition — CLOSED</h3>
+    <p>The SHA-256 hash-chained audit log — the artifact the $499 report is sold on and the only reason a C3PAO accepts the evidence — <strong>did not exist</strong> in the product a CUI-handling customer runs. It does now.</p>
+    <p>The chain lived only in <code>compliance-firewall-agent/lib/audit/seed-anchor.ts</code> and migrations <code>029</code>/<code>030</code>, on the Vercel and Supabase plane the project's own documentation states is not CUI-safe. The Mode B container wrote <code>proxy_events</code> with no hash column, no previous-hash column and no signature.</p>
+    <p><code>proxy/storage.ts</code> now chains every record as <code>SHA-256(prev_hash || canonical(event))</code>, <code>GET /v1/audit/verify</code> recomputes the whole chain and names the first bad record, and <code>__tests__/storage-chain.test.ts</code> proves it by actually editing, deleting, forging and backdating records. Records written before the chain are reported UNVERIFIABLE, never as tampered — retro-hashing them would be manufacturing evidence.</p>
   </div>
 
   <div class="banner neutral">
@@ -661,9 +662,10 @@ footer.doc{
   </ul>
 
   <div class="callout">
-    <h4>The pricing grid contradicts itself in shipped code</h4>
-    <p><code>lib/pricing/plans.ts:31–37</code> publishes Free $0, <strong>Pro $199/mo</strong>, <strong>Growth $499/mo</strong>, Enterprise $999/mo and Agency $2,499/mo. <code>CLAUDE.md</code>'s Stage 2 grid publishes Starter $299, Pro $799 and Enterprise $1,499. Neither grid matches the other, and both are canonical documents.</p>
-    <p><code>CLAUDE.md</code>'s NEVER DO list forbids leading with a $199/mo subscription before the $499 report sells; <code>plans.ts:33</code> ships that exact tier. Worse, <code>plans.ts:34</code> prices a monthly subscription at <strong>the identical $499</strong> as the one-time report, so the anchor number now names two different products with a 12× annual difference between them.</p>
+    <h4>The pricing grid contradicts itself in the source — but reaches no buyer</h4>
+    <p><strong>Correction to an earlier draft of this section.</strong> It read "two contradictory pricing grids ship". They do not ship. <code>lib/pricing/__tests__/plans.test.ts</code> records that <code>PRICING_PLANS</code> is dormant Stage-2 data with no non-test importer, and the 2026-08-15 live audit confirms <code>/pricing</code> shows exactly one grid: $499 one-time. Nothing published contradicts anything.</p>
+    <p>What is true: <code>lib/pricing/plans.ts:31–37</code> holds Free $0, <strong>Pro $199/mo</strong>, <strong>Growth $499/mo</strong>, Enterprise $999/mo and Agency $2,499/mo, while <code>CLAUDE.md</code>'s Stage 2 grid holds Starter $299, Pro $799 and Enterprise $1,499. Neither matches the other, <code>CLAUDE.md</code>'s NEVER DO list forbids the $199/mo tier outright, and "Growth $499/mo" wears the same number as the one-time report with a 12× annual difference behind it.</p>
+    <p>So the risk is latent, not live: a file named <code>plans.ts</code> is what a future contributor reasonably treats as the source of truth. The dormancy was verified by hand and recorded in a comment — which is exactly how the 90-vs-53 double count survived its own deletion. It is now an assertion: a test enumerates every non-test file under <code>app/</code>, <code>components/</code> and <code>lib/</code> and fails the build if any of them imports the retired symbols. Reconciling the numbers stays a founder decision; picking one in code would set pricing by side effect.</p>
   </div>
 
   <h3 class="sub">Product value bloat — sixteen engines, one price</h3>
