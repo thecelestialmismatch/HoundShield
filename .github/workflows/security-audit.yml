@@ -16,6 +16,17 @@ name: Security Audit
 #
 # If this job goes red: fix or explicitly accept the advisory. Do not
 # reinstate the wrapper.
+#
+# 2026-09-03: the step no longer calls `npm audit` directly. The advisory
+# endpoint returned 503 for several minutes and this job went red on three
+# unrelated branches — including the commit merged to main — with no way for a
+# reader to tell a REGISTRY OUTAGE from a REAL VULNERABILITY, because
+# `npm audit` exits 1 for both. `scripts/npm-audit-gate.mjs` reads the JSON
+# report instead of interpreting the exit code, retries a transport failure
+# (a 503 clears in seconds), and still FAILS when the state cannot be
+# determined — unknown is not clean — but says which of the two it is in the
+# first line. The gate is not weakened: it cannot pass without a report
+# showing zero advisories at the level.
 
 on:
   pull_request:
@@ -43,4 +54,6 @@ jobs:
           node-version: "20"
 
       - name: Audit production dependencies (high+)
-        run: npm audit --omit=dev --audit-level=high
+        # Runs from ${{ matrix.package }} via defaults.run.working-directory;
+        # the script lives at the repo root, hence the relative path.
+        run: node ../scripts/npm-audit-gate.mjs --level=high
