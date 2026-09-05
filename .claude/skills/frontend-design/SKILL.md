@@ -42,5 +42,5 @@ user-invocable: true
 
 ## Component Constraints
 - Max 500 lines per component — split into co-located files if larger
-- `PlatformDashboard` MUST use `dynamic(..., {ssr: false})` — Recharts crashes on SSR
+- Any Recharts component MUST use `dynamic(..., {ssr: false})` — Recharts crashes on SSR
 - Error boundary + loading state for every new feature

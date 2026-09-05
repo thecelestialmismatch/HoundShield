@@ -1,0 +1,736 @@
+<title>HoundShield Dead Weight Audit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;500;600&display=swap">
+<style>
+:root{
+  --paper:#eef2f6; --surface:#ffffff; --surface-2:#e4ebf1; --sunk:#dbe3ea;
+  --ink:#0f172a; --ink-2:#475569; --ink-3:#6b7b8c;
+  --rule:#d3dde5; --rule-hard:#a9b8c6;
+  --accent:#2f628f; --accent-soft:#dce8f2;
+  --crit:#8f2519; --crit-bg:#f6ded9;
+  --high:#7d5310; --high-bg:#f6ebd3;
+  --med:#2a5a63; --med-bg:#dcebec;
+  --ok:#26593f; --ok-bg:#dbeae0;
+  --shadow:0 1px 2px rgba(15,23,42,.06), 0 10px 28px -20px rgba(15,23,42,.35);
+  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#07070b; --surface:#0f131a; --surface-2:#161c25; --sunk:#0a0d12;
+    --ink:#e3e9ef; --ink-2:#a4b2c0; --ink-3:#78889a;
+    --rule:#232c37; --rule-hard:#36424f;
+    --accent:#81a6c6; --accent-soft:#16222e;
+    --crit:#e08978; --crit-bg:#2b1613;
+    --high:#d3a75f; --high-bg:#29200f;
+    --med:#6fb0b5; --med-bg:#122324;
+    --ok:#74b391; --ok-bg:#122318;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#07070b; --surface:#0f131a; --surface-2:#161c25; --sunk:#0a0d12;
+  --ink:#e3e9ef; --ink-2:#a4b2c0; --ink-3:#78889a;
+  --rule:#232c37; --rule-hard:#36424f;
+  --accent:#81a6c6; --accent-soft:#16222e;
+  --crit:#e08978; --crit-bg:#2b1613;
+  --high:#d3a75f; --high-bg:#29200f;
+  --med:#6fb0b5; --med-bg:#122324;
+  --ok:#74b391; --ok-bg:#122318;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:16px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 26px 110px}
+.prose{max-width:70ch}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+code,.mono{font-family:var(--mono);font-size:.86em}
+code{background:var(--sunk);padding:.1em .35em;border-radius:2px;color:var(--ink)}
+
+/* masthead */
+.mast{border-bottom:2px solid var(--ink);padding:46px 0 20px}
+.kicker{
+  font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;flex-wrap:wrap;gap:8px 22px;margin-bottom:18px;
+}
+h1{
+  font-family:var(--display);font-weight:500;font-size:clamp(40px,6.2vw,68px);
+  line-height:1.02;margin:0 0 14px;letter-spacing:-.015em;text-wrap:balance;
+}
+.standfirst{font-family:var(--display);font-size:20px;line-height:1.5;color:var(--ink-2);max-width:60ch;margin:0}
+
+/* verdict strip */
+.verdict{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);
+  margin:34px 0 8px;
+}
+.vcell{background:var(--surface);padding:16px 18px}
+.vnum{font-family:var(--mono);font-size:27px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.15;display:block}
+.vlab{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:5px;display:block}
+.vsub{font-size:12.5px;color:var(--ink-2);margin-top:6px;display:block;line-height:1.4}
+
+h2{
+  font-family:var(--display);font-weight:500;font-size:30px;line-height:1.16;
+  margin:56px 0 6px;letter-spacing:-.01em;text-wrap:balance;
+  padding-top:22px;border-top:1px solid var(--rule-hard);
+}
+h2 .h2n{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.1em;display:block;margin-bottom:8px;font-weight:400}
+h3{font-family:var(--body);font-weight:600;font-size:15.5px;margin:26px 0 6px;letter-spacing:.005em}
+p{margin:0 0 13px}
+
+/* findings */
+.finding{
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rule-hard);
+  padding:20px 22px;margin:16px 0;box-shadow:var(--shadow);
+}
+.finding.crit{border-left-color:var(--crit)}
+.finding.high{border-left-color:var(--high)}
+.finding.med{border-left-color:var(--med)}
+.finding.low{border-left-color:var(--ink-3)}
+.fhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 12px;margin-bottom:9px}
+.fid{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.06em}
+.ftitle{font-family:var(--display);font-size:21px;font-weight:500;line-height:1.25;margin:0;flex:1 1 320px;letter-spacing:-.005em}
+.chip{
+  font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  padding:3px 8px;border-radius:2px;font-weight:600;white-space:nowrap;
+}
+.chip.crit{background:var(--crit-bg);color:var(--crit)}
+.chip.high{background:var(--high-bg);color:var(--high)}
+.chip.med{background:var(--med-bg);color:var(--med)}
+.chip.low{background:var(--sunk);color:var(--ink-2)}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+.frow{display:grid;grid-template-columns:104px 1fr;gap:5px 16px;margin-top:12px;font-size:14.5px}
+.frow dt{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);padding-top:4px;
+}
+.frow dd{margin:0;color:var(--ink-2)}
+.frow dd strong{color:var(--ink);font-weight:600}
+.evidence{
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);
+  border-top:1px dashed var(--rule);margin-top:14px;padding-top:9px;line-height:1.55;
+}
+
+/* tables */
+.scroll{overflow-x:auto;margin:14px 0;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+th,td{text-align:left;padding:8px 13px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;background:var(--surface-2);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+td.path{font-family:var(--mono);font-size:12px;word-break:break-all}
+.miss{color:var(--crit);font-family:var(--mono);font-size:11.5px;font-weight:600}
+.blok{color:var(--ok);font-family:var(--mono);font-size:11.5px;font-weight:600}
+
+pre{
+  background:var(--sunk);border:1px solid var(--rule);padding:13px 15px;overflow-x:auto;
+  font-family:var(--mono);font-size:12.5px;line-height:1.6;margin:14px 0;color:var(--ink);
+}
+ul,ol{margin:0 0 13px;padding-left:20px}
+li{margin-bottom:5px}
+li::marker{color:var(--ink-3)}
+.note{
+  background:var(--accent-soft);border-left:3px solid var(--accent);
+  padding:14px 18px;margin:18px 0;font-size:14.5px;color:var(--ink-2);
+}
+.note strong{color:var(--ink)}
+.foot{margin-top:60px;padding-top:18px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11.5px;color:var(--ink-3);line-height:1.7}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">
+    <span>Maintainability Review</span>
+    <span>2026-09-03</span>
+    <span>branch claude/codebase-quality-review-f1j6rp</span>
+    <span>shipped · 3,114 tests green</span>
+  </div>
+  <h1>Dead Weight &amp;<br>Detection Drift</h1>
+  <p class="standfirst">An import-graph teardown of the HoundShield monorepo. It set out to find dead code — 6,611 unreachable lines and 95 removable packages, all now gone — and found something worse on the way: the shipped proxy was quarantining ordinary English, and the hosted demo was detecting PHI the customer's own deployment let through. Both fixed, both now guarded behaviourally.</p>
+</header>
+
+<div class="verdict">
+  <div class="vcell">
+    <span class="vnum">10/10</span>
+    <span class="vlab">Now unblocked</span>
+    <span class="vsub">Ordinary sentences the shipped proxy used to quarantine</span>
+  </div>
+  <div class="vcell">
+    <span class="vnum">5</span>
+    <span class="vlab">PHI leaks closed</span>
+    <span class="vsub">Strings Mode B missed that the demo caught</span>
+  </div>
+  <div class="vcell">
+    <span class="vnum">6,611</span>
+    <span class="vlab">Dead lines cut</span>
+    <span class="vsub">38 files unreachable from any route, page or script</span>
+  </div>
+  <div class="vcell">
+    <span class="vnum">95</span>
+    <span class="vlab">Packages removed</span>
+    <span class="vsub">67.5 MB, incl. a react-native + expo tree</span>
+  </div>
+  <div class="vcell">
+    <span class="vnum">3,114</span>
+    <span class="vlab">Tests green</span>
+    <span class="vsub">222 files · proxy 92 · build 0 · p99 0.68ms</span>
+  </div>
+</div>
+
+</div>
+
+<h2><span class="h2n">METHOD</span>How this was measured, and where it can be wrong</h2>
+
+<div class="prose">
+<p>Reachability was computed by building the full import graph of <code>compliance-firewall-agent/</code> — 802 source files — from every real entry point: all 89 App Router pages, 71 <code>route.ts</code> handlers, the Next.js special files, <code>middleware.ts</code>, <code>server.ts</code>, the Sentry and build configs, <code>scripts/</code>, and all 227 test files. A file is called <em>dead</em> only if nothing in that closure reaches it.</p>
+
+<p>Two passes were run: one including tests as entry points, one excluding them. The difference isolates modules that exist only to be tested — code with a test but no caller.</p>
+
+<p>Every candidate below was then re-checked by grep across the <em>whole</em> repo, including <code>proxy/</code>, <code>browser-extension/</code>, <code>sdk/</code> and <code>docs/</code>, because the app is not the only consumer.</p>
+</div>
+
+<div class="note">
+<strong>Stated limits.</strong> The graph resolves static <code>import</code>, <code>export … from</code>, side-effect imports, <code>import()</code> and <code>require()</code>. It cannot see a module loaded by a path built at runtime — one such case was found and excluded from the findings (see §Not flagged). Git dates were <em>not</em> used as evidence of abandonment: commit <code>05b5df7</code> touched 1,909 files at once, so "last modified" is meaningless across most of this tree.
+</div>
+
+<h2><span class="h2n">FINDING 01</span>The shipped proxy was quarantining ordinary English</h2>
+
+<div class="finding crit">
+  <div class="fhead">
+    <span class="fid">F-01</span>
+    <h3 class="ftitle">Ten of ten normal sentences blocked at HIGH risk</h3>
+    <span class="chip crit">Critical</span>
+    <span class="chip ok">Fixed</span>
+  </div>
+
+  <p>This was not on the list the audit set out to produce. It surfaced while building a
+  false-positive control set for the parity guard below, and it is the most consequential
+  thing in this document.</p>
+
+  <p>The <code>Task order / delivery order</code> rule, in both registries, read:</p>
+
+  <pre>/\b(?:task order|delivery order|TO|DO)\s*(?:no\.?|#)?\s*[A-Z0-9]{4,}/gi</pre>
+
+  <p>Two defects, both caused by the <code>i</code> flag. The alternation has <strong>no closing
+  <code>\b</code></strong>, so bare <code>TO</code> and <code>DO</code> match <em>inside</em>
+  ordinary words — <code>to|morrow</code>, <code>to|night</code>, <code>do|cument</code>,
+  <code>do|wnload</code>, <code>to|gether</code>. And under <code>i</code>,
+  <code>[A-Z0-9]{4,}</code> matches any word at all, so the "order number" was satisfied by
+  <code>production</code>, <code>review</code>, <code>Monday</code>.</p>
+
+  <p>Verified end-to-end through the real <code>scanMessages()</code> in
+  <code>proxy/scanner.ts</code> — not a transcribed regex — before and after:</p>
+
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Prompt</th><th>Before</th><th>Matched on</th><th>After</th></tr></thead>
+    <tbody>
+      <tr><td>Going to production on Thursday</td><td><span class="miss">QUARANTINE</span></td><td class="path">"to production"</td><td><span class="blok">ALLOW</span></td></tr>
+      <tr><td>We need to document the rollback steps</td><td><span class="miss">QUARANTINE</span></td><td class="path">"to document"</td><td><span class="blok">ALLOW</span></td></tr>
+      <tr><td>Please download the onboarding document</td><td><span class="miss">QUARANTINE</span></td><td class="path">"download"</td><td><span class="blok">ALLOW</span></td></tr>
+      <tr><td>Can we move the standup to 4 PM tomorrow?</td><td><span class="miss">QUARANTINE</span></td><td class="path">"tomorrow"</td><td><span class="blok">ALLOW</span></td></tr>
+      <tr><td>What is the total spend to date?</td><td><span class="miss">QUARANTINE</span></td><td class="path">"to date"</td><td><span class="blok">ALLOW</span></td></tr>
+      <tr><td>Summarize our CAGE code 1ABC2 contract</td><td><span class="blok">BLOCK</span></td><td class="path">CAGE code</td><td><span class="blok">BLOCK</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The scanner applies every pattern directly, with no context gating, and takes the
+  strongest verdict — so a single noisy rule decides the outcome for the whole prompt. In
+  practice any prompt containing "to " followed by a four-or-more character word was held for
+  review.</p>
+
+  <dl class="frow">
+    <dt>Why it matters</dt>
+    <dd>This is the failure mode that ends a DLP deployment. An operator who sees "Going to
+    production on Thursday" quarantined does not file a bug — they switch the proxy off, and
+    every real CUI block after that never happens. It also lands on the demo script, where
+    the prompt before the CAGE-code one is ordinary prose.</dd>
+    <dt>Fix</dt>
+    <dd>Closing <code>\b</code> on the alternation, and a
+    <code>(?=[A-Z0-9]*\d)</code> lookahead so the identifier must contain a digit.
+    <strong>10/10 benign sentences now pass; 5/5 real task-order forms still fire</strong>
+    (<code>TO 0001</code>, <code>delivery order N0001923D0001</code>,
+    <code>task order no. 88213</code>). Applied to both registries, byte-identical.</dd>
+    <dt>Guarded by</dt>
+    <dd>All ten sentences are now regression anchors in the parity corpus, asserted clean
+    against <em>both</em> engines. p99 scan latency unchanged at <strong>0.684 ms</strong>
+    against a 10 ms budget.</dd>
+  </dl>
+  <div class="evidence">VERIFIED — before/after run through <code>proxy/scanner.ts</code>; pattern floor 34 &ge; CI minimum 33; proxy suite 92/92.</div>
+</div>
+
+<h2><span class="h2n">FINDING 02</span>The two detection registries had drifted, and the guard could not see it</h2>
+
+<div class="finding crit">
+  <div class="fhead">
+    <span class="fid">F-02</span>
+    <h3 class="ftitle">Mode B missed PHI the hosted demo blocked</h3>
+    <span class="chip crit">Critical</span>
+    <span class="chip ok">Fixed</span>
+  </div>
+
+  <p>HoundShield maintains two independent pattern registries by design: <code>proxy/patterns/index.ts</code> (33 patterns — the shipped Mode B product on customer infrastructure) and <code>lib/classifier/*-patterns.ts</code> (53 patterns — the hosted plane and the PDF evidence generator). The split is deliberate and documented, and it is guarded by <code>lib/detection/__tests__/registry-drift.test.ts</code>.</p>
+
+  <p>That guard compares <strong>declared names and categories as source text</strong>. Its own header says so, and names the consequence: <em>"two patterns sharing a name with different regexes still pass."</em> This audit is the first evidence that the anticipated failure has actually happened.</p>
+
+  <p>Of 18 rules present in both registries, <strong>15 are byte-identical copies</strong> and <strong>3 have diverged</strong>. The material one is <code>Health plan beneficiary number</code> — the PHI rule that Rachel, the lead ICP, buys the product for. Both regexes were extracted from source and run against realistic strings:</p>
+
+  <div class="scroll">
+  <table>
+    <thead><tr><th>PHI string</th><th>Mode B — shipped proxy</th><th>Hosted plane</th></tr></thead>
+    <tbody>
+      <tr><td>Patient subscriber ID A9931204 needs prior auth</td><td><span class="miss">MISS</span></td><td><span class="blok">BLOCK</span></td></tr>
+      <tr><td>policy number 88213345 for the claim</td><td><span class="miss">MISS</span></td><td><span class="blok">BLOCK</span></td></tr>
+      <tr><td>group number 4471209 on the card</td><td><span class="miss">MISS</span></td><td><span class="blok">BLOCK</span></td></tr>
+      <tr><td>memberID 4471209823</td><td><span class="miss">MISS</span></td><td><span class="blok">BLOCK</span></td></tr>
+      <tr><td>insurance # 55192837</td><td><span class="miss">MISS</span></td><td><span class="blok">BLOCK</span></td></tr>
+      <tr><td>health plan id 90210XT</td><td><span class="blok">BLOCK</span></td><td><span class="miss">MISS</span></td></tr>
+      <tr><td>member id: 887711209</td><td><span class="blok">BLOCK</span></td><td><span class="blok">BLOCK</span></td></tr>
+      <tr><td>beneficiary number 100244</td><td><span class="blok">BLOCK</span></td><td><span class="blok">BLOCK</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The drift is bidirectional but <strong>asymmetric against the product you ship</strong>. The hosted plane recognises <code>subscriber</code>, <code>policy</code> and <code>group</code> identifiers and accepts 4–20 character IDs; the proxy recognises none of those three and requires 6–15. The demo a healthcare buyer is shown blocks five strings that the deployment they install would let through.</p>
+
+  <p>The other two divergences are lower severity but real: <code>Program office / DoD system identifier</code> — the hosted plane matches <code>PM</code>, the proxy does not; and <code>NIPRNet / SIPRNet references</code> — the hosted copy has an unescaped <code>.</code> where the proxy escapes it, making it marginally looser.</p>
+
+  <dl class="frow">
+    <dt>Why it matters</dt>
+    <dd>Mode B is the deployment the CUI-safe and HIPAA claims rest on. A detection gap there is a product-integrity issue, not a code-tidiness one — and the audit PDF is sold as assessment evidence.</dd>
+    <dt>Impact</dt>
+    <dd>Closing it is a <strong>regex change in one file</strong>, no architecture work. Merging both registries is the larger fix and is not required to stop the bleeding.</dd>
+    <dt>Risk</dt>
+    <dd>CLAUDE.md forbids replacing proxy patterns — <strong>extend only</strong>. CI enforces <code>ALL_PATTERNS.length &gt;= 33</code>. Widening the proxy regex to match the hosted one satisfies both. Widening also raises false positives on <code>group number</code> in non-PHI text; tune with the existing corpus before shipping.</dd>
+    <dt>Plan</dt>
+    <dd>1. Port the hosted <code>Health plan beneficiary number</code> regex into the proxy, and <code>PM</code> into the program-office rule. 2. Escape the <code>.</code> in the hosted NIPRNet rule. 3. Upgrade the drift guard from name comparison to <strong>behavioural comparison</strong> — assert both registries agree on a shared corpus of fixture strings. That closes the blind spot permanently and is the guard's own documented upgrade path.</dd>
+  </dl>
+
+  <div class="evidence">VERIFIED — both regexes parsed out of source and executed; 15 identical / 3 drifted computed over 18 shared rule names. Guard limitation quoted from <code>lib/detection/__tests__/registry-drift.test.ts</code> lines 33–36.</div>
+</div>
+
+<h2><span class="h2n">FINDINGS 02–03</span>Built, tested, and never connected</h2>
+
+<div class="finding high">
+  <div class="fhead">
+    <span class="fid">F-03</span>
+    <h3 class="ftitle">The session-start health check reported nothing</h3>
+    <span class="chip high">High</span>
+    <span class="chip ok">Wired</span>
+  </div>
+
+  <p><code>lib/health/service-status.ts</code> is 431 lines whose own header says it defines <em>"what /api/health reports, and which of it means a control is actually doing its job."</em> Nothing imports it. <code>app/api/health/route.ts</code> is 16 lines returning <code>{status:"ok"}</code> unconditionally, and <code>app/api/admin/health/route.ts</code> — 28 lines — does not import it either. <code>lib/auth/reset-diagnostics.ts</code> (85 lines, "password-reset readiness for /api/health") is orphaned the same way.</p>
+
+  <p>The health route was deliberately reduced to a liveness probe so it would not disclose topology — a sound decision. The diagnostics were simply never re-homed on the protected endpoint.</p>
+
+  <dl class="frow">
+    <dt>Why it matters</dt>
+    <dd>CLAUDE.md's Session Start Protocol instructs every session to <code>curl /api/health</code> to check integration health, and the Integration Status table claims that endpoint reports missing control stores and reset-code configuration as <strong>degraded rather than green</strong>. It cannot — it is a constant. The documented check currently returns <code>ok</code> whatever the state of the system.</dd>
+    <dt>Impact</dt>
+    <dd>This is a <strong>restore-or-retire decision, not a deletion</strong>. Wiring both modules into <code>/api/admin/health</code> recovers 516 lines of working, tested diagnostics. Deleting them removes the capability and the stale documentation together.</dd>
+    <dt>Risk</dt>
+    <dd>Deleting is the higher-risk option: it silently makes the CLAUDE.md protocol permanently false. Wiring is low-risk — the endpoint is already admin-gated and 404s unauthorised callers.</dd>
+    <dt>Plan</dt>
+    <dd>Wire both into <code>/api/admin/health</code>, then correct the CLAUDE.md Integration Status row to name the admin endpoint rather than <code>/api/health</code>. If you would rather retire them, delete both plus their tests and fix the same row.</dd>
+  </dl>
+  <div class="evidence">VERIFIED — full text of both health routes read; no import of either module in the repo.</div>
+</div>
+
+<div class="finding high">
+  <div class="fhead">
+    <span class="fid">F-04</span>
+    <h3 class="ftitle"><code>/api/chat</code> bypassed the shared rate limiter built for it</h3>
+    <span class="chip high">High</span>
+    <span class="chip ok">Fixed</span>
+  </div>
+
+  <p>Twenty-three routes call <code>enforceRateLimit</code> from <code>lib/rate-limit-shared.ts</code>, which counts in Postgres so the ceiling is shared across instances. Two routes — <code>/api/chat</code> and <code>/api/gateway/ollama</code> — instead call <code>createRateLimiter</code> from <code>lib/rate-limit.ts</code>, an in-process <code>Map</code>.</p>
+
+  <p><code>rate-limit-shared.ts</code> exists precisely because of this. Its header names the exposure: <em>"On Vercel Fluid Compute every instance has its own Map, so the real ceiling is (limit × live instances) and it resets on each cold start. For a route that bills OpenRouter per request that is a spend exposure, not a nitpick."</em></p>
+
+  <p><code>/api/chat</code> is exactly that route — 521 lines that fall back to the server's own <code>OPENROUTER_API_KEY</code> when the caller supplies none, limited to 10/min <em>per instance</em>. <code>/api/gateway/ollama</code> proxies to localhost and carries no cloud spend, so it is materially lower severity.</p>
+
+  <dl class="frow">
+    <dt>Impact</dt>
+    <dd>Swapping one route to <code>enforceRateLimit</code> closes a founder-billed spend path. Roughly a ten-line change.</dd>
+    <dt>Risk</dt>
+    <dd>Low. The shared limiter fails <em>open</em> to the in-process limiter by design, so a Postgres blip degrades rather than 429s. Confirm migration <code>028_rate_limit_buckets.sql</code> is applied in production first — until it is, the shared limiter silently falls back anyway.</dd>
+    <dt>Plan</dt>
+    <dd>Move <code>/api/chat</code> to <code>enforceRateLimit</code> with <code>LLM_RATE_LIMITS</code>. Leave <code>/api/gateway/ollama</code> as-is and add a one-line comment saying why, so the asymmetry stops looking accidental.</dd>
+    <dt>Do not</dt>
+    <dd>Delete <code>lib/rate-limit.ts</code>. It is not dead — the shared limiter imports it as its deliberate fallback.</dd>
+  </dl>
+  <div class="evidence">VERIFIED — importer counts 23 vs 2; <code>/api/chat</code> LLM fallback read at lines 449–500.</div>
+</div>
+
+<h2><span class="h2n">FINDING 04</span>Duplicate logic</h2>
+
+<div class="finding med">
+  <div class="fhead">
+    <span class="fid">F-05</span>
+    <h3 class="ftitle">An unused provider registry, shadowed by an inline copy</h3>
+    <span class="chip med">Medium</span>
+    <span class="chip ok">Deleted</span>
+  </div>
+
+  <p><code>lib/gateway/providers/</code> contains a typed adapter registry whose header declares it <em>"the single entry point for the streaming proxy to resolve which adapter to use."</em> Nothing imports it. The live <code>lib/gateway/stream-proxy.ts</code> declares its own <code>const PROVIDERS</code> table with the same four base URLs and its own header-building — the abstraction was written, never wired, and the runtime re-implemented it inline.</p>
+
+  <div class="scroll">
+  <table>
+    <thead><tr><th>File</th><th class="num">Lines</th><th>Disposition</th></tr></thead>
+    <tbody>
+      <tr><td class="path">lib/gateway/providers/index.ts</td><td class="num">350</td><td>Delete — no importer</td></tr>
+      <tr><td class="path">lib/gateway/providers/google.ts</td><td class="num">334</td><td>Delete — no importer</td></tr>
+      <tr><td class="path">lib/gateway/providers/anthropic.ts</td><td class="num">317</td><td>Delete — no importer</td></tr>
+      <tr><td class="path">lib/gateway/providers/openrouter.ts</td><td class="num">236</td><td>Delete — no importer</td></tr>
+      <tr><td class="path">lib/gateway/providers/openai.ts</td><td class="num">225</td><td>Delete — no importer</td></tr>
+      <tr><td class="path">lib/gateway/providers/types.ts</td><td class="num">—</td><td><strong>KEEP</strong> — <code>stream-scanner.ts</code> imports <code>ScanAlert</code></td></tr>
+      <tr><td class="path">lib/gateway/providers/ollama.ts</td><td class="num">—</td><td><strong>KEEP</strong> — used by <code>/api/gateway/ollama</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <dl class="frow">
+    <dt>Impact</dt>
+    <dd>1,462 lines. Removes the false signal that this directory is the routing layer — the single most misleading thing in <code>lib/gateway/</code> for a new contributor.</dd>
+    <dt>Risk</dt>
+    <dd>Low, but <strong>not zero</strong>: deleting the five files leaves <code>ProviderAdapter</code> / <code>ProviderConfig</code> / <code>ProviderName</code> in <code>types.ts</code> with no consumer. Prune those three types in the same commit; keep the rest of the file.</dd>
+    <dt>Plan</dt>
+    <dd>Delete the five adapters, prune the orphaned types, and leave a one-line comment in <code>stream-proxy.ts</code> stating that its <code>PROVIDERS</code> table is the single source of truth — otherwise someone rebuilds the registry.</dd>
+  </dl>
+  <div class="evidence">VERIFIED — <code>PROVIDERS</code> table read at <code>stream-proxy.ts:196–280</code>; sole external importer of <code>types.ts</code> is <code>stream-scanner.ts:35</code>.</div>
+</div>
+
+<p class="prose">Three smaller duplications follow the same shape — a superseded implementation left in place beside its replacement:</p>
+
+<div class="scroll">
+<table>
+  <thead><tr><th>Superseded</th><th class="num">Lines</th><th>Live replacement</th><th>Evidence</th></tr></thead>
+  <tbody>
+    <tr><td class="path">components/Navbar.tsx</td><td class="num">537</td><td class="path">components/layout/NavV3.tsx</td><td>NavV3 imported by 10+ pages; Navbar only by its own test</td></tr>
+    <tr><td class="path">app/blog/posts/data.ts</td><td class="num">206</td><td class="path">lib/blog/posts.ts</td><td>Competing <code>BlogPost</code> shape; live one feeds /blog and sitemap</td></tr>
+    <tr><td class="path">lib/integrations/siem/ (5 files)</td><td class="num">685</td><td>—</td><td>Whole cluster unreferenced; <code>hitl/notifications.ts</code> only mentions it in a comment</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="h2n">FINDINGS 05–06</span>Unreachable modules</h2>
+
+<div class="finding med">
+  <div class="fhead">
+    <span class="fid">F-06</span>
+    <h3 class="ftitle">Tier A — 26 files, 4,569 lines, zero importers anywhere</h3>
+    <span class="chip med">Medium</span>
+    <span class="chip ok">Deleted</span>
+  </div>
+  <p>No entry point reaches these, and no test does either. This is the mechanically safe tier.</p>
+
+  <div class="scroll">
+  <table>
+    <thead><tr><th>File</th><th class="num">Lines</th><th>Why it is dead</th></tr></thead>
+    <tbody>
+      <tr><td class="path">components/dashboard/openclaw-templates.ts</td><td class="num">624</td><td>No importer; name references a product surface that no longer exists</td></tr>
+      <tr><td class="path">components/landing/PlatformDashboard.tsx</td><td class="num">546</td><td>Imported only by PlatformDashboardClient, itself an orphan</td></tr>
+      <tr><td class="path">lib/gateway/providers/ (5 files)</td><td class="num">1,462</td><td>See F-04</td></tr>
+      <tr><td class="path">lib/integrations/siem/ (5 files)</td><td class="num">685</td><td>Unwired SIEM connectors</td></tr>
+      <tr><td class="path">lib/agent/memory-dna.ts</td><td class="num">343</td><td>No importer — yet documented as live in <code>.claude/rules/stack.md</code></td></tr>
+      <tr><td class="path">app/blog/posts/data.ts</td><td class="num">206</td><td>Superseded blog model</td></tr>
+      <tr><td class="path">lib/brain-ai/firecrawl-updater.ts</td><td class="num">135</td><td>Only a comment in knowledge-graph.ts refers to it</td></tr>
+      <tr><td class="path">components/landing/WhyHoundshield.tsx</td><td class="num">130</td><td>Unused landing section</td></tr>
+      <tr><td class="path">components/dashboard/operator/OperationalReadiness.tsx</td><td class="num">105</td><td>Unused panel</td></tr>
+      <tr><td class="path">components/ui/AnchorBadge.tsx</td><td class="num">96</td><td>Unused primitive</td></tr>
+      <tr><td class="path">lib/env.ts</td><td class="num">59</td><td>Validates <code>bytezApiKey</code> — a provider no longer in the stack</td></tr>
+      <tr><td class="path">components/FloatingNav.tsx</td><td class="num">53</td><td>Unused</td></tr>
+      <tr><td class="path">components/SectionSpotlight.tsx</td><td class="num">48</td><td>Unused</td></tr>
+      <tr><td class="path">components/ScrollProgress.tsx</td><td class="num">20</td><td>Superseded by <code>scroll-effects/ScrollProgressBarClient</code></td></tr>
+      <tr><td class="path">components/LocalizedPrice.tsx</td><td class="num">51</td><td>Unused</td></tr>
+      <tr><td class="path">components/landing/PlatformDashboardClient.tsx</td><td class="num">13</td><td>Wrapper for a dead component</td></tr>
+      <tr><td class="path">lib/reports/download.ts</td><td class="num">12</td><td>Unused; a test still mocks it (see plan)</td></tr>
+      <tr><td class="path">lib/secret.ts</td><td class="num">7</td><td>Thin <code>process.env</code> wrapper, unused</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <dl class="frow">
+    <dt>Impact</dt>
+    <dd>4,569 lines. Also retires two <strong>false landmarks</strong>: CLAUDE.md's "Critical Rules" open with a rule about keeping <code>PlatformDashboard</code> SSR-disabled — a rule about a dead component, now cited in two other files' comments as precedent. And <code>.claude/rules/stack.md</code> lists <code>memory-dna.ts</code> as a live stack component.</dd>
+    <dt>Risk</dt>
+    <dd>Low. Two specifics: <code>lib/reports/download.ts</code> is mocked in <code>components/__tests__/InstantSnapshot.test.tsx</code> — the component never imported it, so remove the stale <code>vi.mock</code> block in the same commit. And keep <code>setup-stripe.mjs</code>, which is unreferenced by design as a one-shot ops script.</dd>
+    <dt>Plan</dt>
+    <dd>Delete in one commit, then update the CLAUDE.md critical rule and the stack.md entry in the same PR — otherwise the docs keep pointing at files that are gone.</dd>
+  </dl>
+  <div class="evidence">VERIFIED — two-pass import-graph closure plus per-file grep across the whole repo.</div>
+</div>
+
+<div class="finding low">
+  <div class="fhead">
+    <span class="fid">F-07</span>
+    <h3 class="ftitle">Tier B — 12 files, 2,042 lines, reachable only from their own tests</h3>
+    <span class="chip low">Judgment</span>
+    <span class="chip ok">Resolved</span>
+  </div>
+  <p>These have passing tests and no caller. A green test on uncalled code is worse than no test: it reports health for something that cannot affect users, and it inflates the coverage gate.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>File</th><th class="num">Lines</th><th>Disposition</th></tr></thead>
+    <tbody>
+      <tr><td class="path">components/Navbar.tsx</td><td class="num">537</td><td>Delete with its test — superseded by NavV3</td></tr>
+      <tr><td class="path">lib/health/service-status.ts</td><td class="num">431</td><td><strong>Wire, don't delete</strong> — see F-02</td></tr>
+      <tr><td class="path">lib/gateway/zero-trust.ts</td><td class="num">245</td><td>Decide — gated on <code>HOUNDSHIELD_ZERO_TRUST</code>, never called</td></tr>
+      <tr><td class="path">lib/cache/swr-cache.ts</td><td class="num">170</td><td>Decide — stampede protection with nothing behind it</td></tr>
+      <tr><td class="path">components/ui/ThreatFeed.tsx</td><td class="num">128</td><td>Delete with test</td></tr>
+      <tr><td class="path">components/landing/FeaturesGrid.tsx</td><td class="num">108</td><td>Delete with test</td></tr>
+      <tr><td class="path">components/ui/ComparisonFlow.tsx</td><td class="num">93</td><td>Delete with test</td></tr>
+      <tr><td class="path">lib/auth/reset-diagnostics.ts</td><td class="num">85</td><td><strong>Wire, don't delete</strong> — see F-02</td></tr>
+      <tr><td class="path">components/ui/PricingToggle.tsx</td><td class="num">72</td><td>Delete with test</td></tr>
+      <tr><td class="path">components/ui/CountdownTimer.tsx</td><td class="num">66</td><td>Delete with test</td></tr>
+      <tr><td class="path">components/ui/CodeBlock.tsx</td><td class="num">64</td><td>Delete with test</td></tr>
+      <tr><td class="path">lib/auth/reset-password-state.ts</td><td class="num">55</td><td>Check against migration 035 before removing</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <dl class="frow">
+    <dt>Risk</dt>
+    <dd>Higher than Tier A — some of these are pending features, not corpses. <code>zero-trust.ts</code> and the two reset modules may be waiting on a migration or a flag. Confirm each against <code>tasks/todo.md</code> before deleting.</dd>
+    <dt>Plan</dt>
+    <dd>Split: delete the six UI components with their tests; wire the two health modules; put the remaining four to an explicit keep-or-kill decision rather than leaving them ambiguous.</dd>
+  </dl>
+</div>
+
+<h2><span class="h2n">FINDING 07</span>Dependencies nothing imports</h2>
+
+<div class="finding med">
+  <div class="fhead">
+    <span class="fid">F-08</span>
+    <h3 class="ftitle">Nine unused packages pulled in 95, including React Native and Expo</h3>
+    <span class="chip med">Medium</span>
+    <span class="chip ok">Removed</span>
+  </div>
+  <p>Each was confirmed with a repo-wide grep for <code>from '&lt;pkg&gt;'</code> and <code>require('&lt;pkg&gt;')</code> — <strong>zero references anywhere</strong>, including tests, scripts and the proxy.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Package</th><th class="num">On disk</th><th>Pulls in</th></tr></thead>
+    <tbody>
+      <tr><td class="path">date-fns</td><td class="num">28.0 MB</td><td>—</td></tr>
+      <tr><td class="path">three</td><td class="num">26.0 MB</td><td>@types/webxr</td></tr>
+      <tr><td class="path">remotion</td><td class="num">2.8 MB</td><td>—</td></tr>
+      <tr><td class="path">@react-three/fiber</td><td class="num">2.3 MB</td><td><strong>react-native</strong>, <strong>expo</strong>, expo-gl, zustand, its-fine</td></tr>
+      <tr><td class="path">react-hook-form</td><td class="num">2.0 MB</td><td>—</td></tr>
+      <tr><td class="path">@remotion/player + @remotion/three</td><td class="num">788 KB</td><td>—</td></tr>
+      <tr><td class="path">react-markdown</td><td class="num">88 KB</td><td>micromark + mdast + unified — 60+ packages</td></tr>
+      <tr><td class="path">next-themes</td><td class="num">52 KB</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <dl class="frow">
+    <dt>Impact</dt>
+    <dd><strong>95 packages, 67.5 MB</strong> — computed by reverse-reachability over the lockfile, then measured on disk. Faster cold installs, and 95 fewer packages in every <code>npm audit</code> and SBOM. For a product sold on supply-chain rigour, shipping an unused React Native tree is a bad look in a security questionnaire.</dd>
+    <dt>Risk</dt>
+    <dd>Low but check two things first: <code>next-themes</code> — confirm <code>components/theme-provider.tsx</code> does not re-export it under another name; and Tailwind's <code>content</code> globs, in case any package path is scanned. Keep <code>react-dom</code>, <code>@types/*</code>, <code>postcss</code>, <code>autoprefixer</code>, <code>tsx</code>, <code>typescript</code> and <code>jsdom</code> — they are used through configs, not imports, and correctly show as "unimported".</dd>
+    <dt>Plan</dt>
+    <dd><code>npm uninstall</code> all nine, then <code>npm ci &amp;&amp; npm run build &amp;&amp; npm test</code>. A failure here is loud and immediate, which makes this the safest high-value item on the list.</dd>
+  </dl>
+  <div class="evidence">VERIFIED — 861 packages installed; removable set computed as reachable-now minus reachable-without, then <code>du</code>-measured.</div>
+</div>
+
+<h2><span class="h2n">FINDINGS 08–11</span>Abandoned files and stale landmarks</h2>
+
+<div class="finding low">
+  <div class="fhead">
+    <span class="fid">F-09</span>
+    <h3 class="ftitle">A whole <code>create-next-app</code> scaffold sat at the repo root</h3>
+    <span class="chip low">Cleanup</span>
+    <span class="chip ok">Deleted</span>
+  </div>
+  <p>The real app is <code>compliance-firewall-agent/</code> and the root <code>package.json</code> says so. Beside it sits an untouched starter template:</p>
+  <ul>
+    <li><code>next.config.ts</code> — the empty stub, verbatim <code>/* config options here */</code></li>
+    <li><code>tsconfig.json</code> — <code>paths</code> maps <code>@/*</code> to <code>./src/*</code>, <strong>which does not exist</strong>, and its <code>include</code> globs would swallow both real packages</li>
+    <li><code>postcss.config.mjs</code> — requires <code>@tailwindcss/postcss</code> (v4), which is not a dependency anywhere; the app uses Tailwind v3</li>
+    <li><code>public/</code> — the five default Next.js SVGs, referenced by nothing</li>
+    <li><code>package-lock.json</code> — <code>"name": "nostalgic-raman-26ee6a"</code>, a leftover generated project name</li>
+    <li><code>yarn.lock</code> — 82 KB, alongside a package-lock, for one dependency; no CI job uses yarn</li>
+    <li><code>eslint.config.js</code> <em>and</em> <code>eslint.config.mjs</code> — two competing configs, <strong>neither runnable</strong>: both need packages absent from the root <code>package.json</code></li>
+  </ul>
+  <dl class="frow">
+    <dt>Impact</dt>
+    <dd>Removes a second, broken build configuration that an IDE or a new contributor can pick up instead of the real one. The dual lockfile is the sharpest edge — it invites the wrong package manager.</dd>
+    <dt>Risk</dt>
+    <dd>Verified low. Every CI job runs under <code>working-directory: compliance-firewall-agent</code> or <code>proxy</code>; none installs, lints or builds at root. The repo's own <code>scripts/verify-structure.mjs</code> guard requires none of these files, and passes today.</dd>
+    <dt>Plan</dt>
+    <dd>Delete all of the above. Keep root <code>package.json</code> (it carries <code>verify:structure</code>). Re-run <code>node scripts/verify-structure.mjs</code> — it should still print PASS.</dd>
+  </dl>
+  <div class="evidence">VERIFIED — all five workflow files read; structure guard executed, 31 paths, 0 problems.</div>
+</div>
+
+<div class="finding low">
+  <div class="fhead">
+    <span class="fid">F-10</span>
+    <h3 class="ftitle">Comments described a bug that was fixed three weeks ago</h3>
+    <span class="chip low">Cleanup</span>
+    <span class="chip ok">Fixed</span>
+  </div>
+  <p>Two source files assert, in the present tense, that middleware never runs in production:</p>
+  <pre>app/api/agent/execute/route.ts:29
+  "the middleware limiter that nominally covered /api/* does not
+   execute in production (legacy vercel.json `builds` mode)"
+
+app/command-center/layout.tsx:39
+  "...so in practice the deep path is ALWAYS lost."</pre>
+  <p><code>tasks/todo.md</code> records this as <strong>resolved on 2026-08-15</strong> — the Vercel Root Directory was repointed, middleware executes, and the entry lists the response headers that prove it. The current <code>vercel.json</code> has no <code>builds</code> key.</p>
+  <dl class="frow">
+    <dt>Impact</dt>
+    <dd>Comment-only, but this is the failure mode that costs the most later: an engineer reads "the limiter does not run" and adds redundant defences, or worse, trusts it and removes a real one.</dd>
+    <dt>Risk</dt>
+    <dd>None. Do not remove the auth checks these comments justify — the auth is correct and should stay; only the <em>reasoning</em> is out of date.</dd>
+    <dt>Plan</dt>
+    <dd>Rewrite both to past tense with the resolution date, and keep the code unchanged.</dd>
+  </dl>
+</div>
+
+<div class="finding low">
+  <div class="fhead">
+    <span class="fid">F-11</span>
+    <h3 class="ftitle">Four stray files committed from tooling</h3>
+    <span class="chip low">Cleanup</span>
+    <span class="chip ok">Removed</span>
+  </div>
+  <ul>
+    <li><code>.claire/worktrees/dreamy-hofstadter-abb558/proxy/ooda/baseline.ts</code> — a <strong>stale fork of live proxy code that differs from the real file</strong>. Two versions of a compliance module in one tree is an editing hazard.</li>
+    <li><code>.claire/worktrees/modest-jepsen-dce671/…/FaqAccordion.test.tsx</code> — a test for a component that no longer exists.</li>
+    <li><code>.playwright-mcp/*.yml</code> — two browser snapshots from 2026-05-20. The directory <em>is</em> in <code>.gitignore</code>, but the files were committed before the rule was added, so they remain tracked.</li>
+  </ul>
+  <dl class="frow">
+    <dt>Plan</dt>
+    <dd><code>git rm -r --cached .playwright-mcp</code> to make the existing ignore effective; delete <code>.claire/</code> outright and add it to <code>.gitignore</code>.</dd>
+  </dl>
+</div>
+
+<div class="finding low">
+  <div class="fhead">
+    <span class="fid">F-12</span>
+    <h3 class="ftitle">Five components exceed the repo's own 500-line ceiling</h3>
+    <span class="chip low">Debt</span>
+    <span class="chip low">Open</span>
+  </div>
+  <p>CLAUDE.md sets "Components max 500 lines — split if larger". Current breaches, excluding the dead ones above:</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>File</th><th class="num">Lines</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td class="path">components/dashboard/LiveCommandCenter.tsx</td><td class="num">1,321</td><td>The post-login surface — 2.6× the ceiling</td></tr>
+      <tr><td class="path">app/command-center/(tools)/rules/page.tsx</td><td class="num">930</td><td>Page component</td></tr>
+      <tr><td class="path">components/dashboard/lccStyles.ts</td><td class="num">913</td><td>Style object for the above</td></tr>
+      <tr><td class="path">components/dashboard/ai-chat.tsx</td><td class="num">742</td><td>—</td></tr>
+      <tr><td class="path">components/dashboard/simulation-graph.tsx</td><td class="num">738</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <dl class="frow">
+    <dt>Not flagged</dt>
+    <dd><code>lib/shieldready/controls/*</code> (1,667 / 1,209 / 946 lines) and <code>lib/cmmc-coverage/coverage-data.ts</code> are NIST control tables. Large data files are correct as data files — splitting them buys nothing.</dd>
+    <dt>Plan</dt>
+    <dd>Lowest priority here. If you touch <code>LiveCommandCenter</code> for another reason, extract its panels then; do not open a refactor for its own sake before revenue.</dd>
+  </dl>
+</div>
+
+<h2><span class="h2n">FINDING 12</span>Twenty API routes with no in-repo caller</h2>
+
+<div class="finding low">
+  <div class="fhead">
+    <span class="fid">F-13</span>
+    <h3 class="ftitle">Classify before deleting — some of these are the product</h3>
+    <span class="chip low">Investigate</span>
+    <span class="chip low">Open</span>
+  </div>
+  <p>Twenty of the 71 route handlers are not called from any page, component or script in the repo. <strong>That is not the same as dead</strong>, and this is the one section where an aggressive cut would break the product:</p>
+  <ul>
+    <li><strong>Public product surface — keep.</strong> <code>/api/v1/*</code> is the OpenAI-compatible endpoint customers point their <code>baseURL</code> at. <code>/api/events/ingest</code> has no in-app caller because its caller is <code>proxy/webhook.ts:62</code> — a different package.</li>
+    <li><strong>Operator/admin surface — keep.</strong> <code>/api/admin/health</code> is called by a human with a session, by design.</li>
+    <li><strong>Genuinely unclear — decide.</strong> <code>/api/agents/list</code>, <code>/api/auth/sso</code>, <code>/api/blockchain/stats</code>, <code>/api/brain-ai/skills</code>, <code>/api/brain-ai/transcript</code>, <code>/api/brain/ingest</code>, <code>/api/brain/v3</code>, <code>/api/cmmc-coverage</code>, <code>/api/models/leaderboard</code>, <code>/api/observability/*</code>, <code>/api/policy/update</code>, <code>/api/scan/security</code>.</li>
+  </ul>
+  <p><code>/api/cmmc-coverage</code> is the clearest candidate: the coverage page imports <code>lib/cmmc-coverage</code> directly as a Server Component, so the HTTP route duplicates a call path nothing uses.</p>
+  <dl class="frow">
+    <dt>Risk</dt>
+    <dd><strong>Highest deletion risk in this document.</strong> An unauthenticated route with no caller is also an unmonitored attack surface — but a customer-facing endpoint with no in-repo caller is normal and load-bearing.</dd>
+    <dt>Plan</dt>
+    <dd>Do not delete from static analysis. Pull 30 days of Vercel access logs, group by path, and delete only what shows zero external traffic. Until then, confirm each unclear route is auth-gated — that is the cheaper win and it is a security control, not cleanup.</dd>
+  </dl>
+</div>
+
+<h2><span class="h2n">NOT FLAGGED</span>Five things that look dead and are not</h2>
+
+<div class="prose">
+<p>Recorded so nobody re-derives them and deletes something load-bearing. Each was caught by verification after the graph reported it dead:</p>
+</div>
+
+<div class="scroll">
+<table>
+  <thead><tr><th>Looks dead</th><th>Actually</th></tr></thead>
+  <tbody>
+    <tr><td class="path">lib/dashboard/demo-telemetry-seed.ts</td><td>Loaded by <code>scripts/seed-demo-telemetry.mjs:58</code> via a path built at runtime — invisible to any import graph</td></tr>
+    <tr><td class="path">lib/rate-limit.ts</td><td>The deliberate fail-open fallback inside <code>rate-limit-shared.ts</code></td></tr>
+    <tr><td class="path">lib/agent/tools/*.ts (8 files)</td><td>Side-effect registered through <code>tools/index.ts</code>, dynamically imported by <code>/api/agent/execute</code></td></tr>
+    <tr><td class="path">lib/gateway/providers/types.ts</td><td><code>stream-scanner.ts</code> imports <code>ScanAlert</code> from it</td></tr>
+    <tr><td class="path">setup-stripe.mjs</td><td>One-shot ops script; unreferenced by design</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="h2n">SHIPPED</span>What was executed, and how each step was verified</h2>
+
+<div class="prose">
+<p>Every step below is in the branch, gated on the repo's own checks. The baseline before any
+change was 223 files / 3,099 tests; after, <strong>222 files / 3,114 tests</strong> — dead
+tests removed, new guards added.</p>
+</div>
+
+<div class="scroll">
+<table>
+  <thead><tr><th>#</th><th>Step</th><th>Effect</th><th>Verified by</th></tr></thead>
+  <tbody>
+    <tr><td class="num">1</td><td>Fixed the task-order false positives in both registries (F-01)</td><td>10/10 benign sentences unblocked</td><td>Before/after through <code>scanMessages()</code>; 10 regression anchors</td></tr>
+    <tr><td class="num">2</td><td>Unified the PHI rule; added case-sensitive <code>PM</code> rule (F-02)</td><td>5 PHI leaks closed in Mode B</td><td>8/8 block via real scanner; 12 TP / 0 FP on the union</td></tr>
+    <tr><td class="num">3</td><td>Upgraded the drift guard to behavioural parity</td><td>Blind spot closed permanently</td><td>76 assertions across 41-string corpus</td></tr>
+    <tr><td class="num">4</td><td>Bumped all 9 pattern-count docs 33/53 → 34/54</td><td>Docs match the registries</td><td>The repo's own <code>doc-counts</code> guard</td></tr>
+    <tr><td class="num">5</td><td>Wired health diagnostics into <code>/api/admin/health</code> (F-03)</td><td>516 lines restored, not deleted</td><td>9 new tests incl. fail-closed 404s</td></tr>
+    <tr><td class="num">6</td><td>Moved <code>/api/chat</code> to the shared limiter (F-04)</td><td>Founder-billed spend path closed</td><td>tsc 0; route contract tests</td></tr>
+    <tr><td class="num">7</td><td>Deleted 38 unreachable files (F-05, F-06, F-07)</td><td>6,611 lines</td><td>tsc 0; full suite green</td></tr>
+    <tr><td class="num">8</td><td>Uninstalled 9 dependencies (F-08)</td><td>95 packages / 67.5 MB; <code>npm ci</code> 861 → 766</td><td><code>npm ci</code> + build + suite</td></tr>
+    <tr><td class="num">9</td><td>Deleted the root scaffold and tooling strays (F-09, F-11)</td><td>~15 files, dual lockfile gone</td><td><code>verify-structure.mjs</code> PASS</td></tr>
+    <tr><td class="num">10</td><td>Corrected every doc naming a deleted file (F-10)</td><td>5 rule/skill files, CLAUDE.md, DESIGN.md</td><td>Zero stale references remain</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note">
+<strong>Deliberately left open, and why.</strong> <code>zero-trust.ts</code>,
+<code>swr-cache.ts</code> and <code>reset-password-state.ts</code> are built, tested and
+unwired. They stay, each now carrying an explicit <code>ponytail:</code> note naming its status
+and the decision needed — deleting an unwired deny-by-default access control is a founder call,
+not cleanup, and wiring one into the live gateway is a behaviour change that deserves its own
+review. F-12 (oversized components) and F-13 (routes with no in-repo caller) are also open:
+the first is not worth a refactor before revenue, and the second must be settled from access
+logs, not static analysis, because some of those routes <em>are</em> the product.
+</div>
+
+<div class="foot">
+  Method: two-pass import-graph reachability over 802 source files, 427 entry points; every finding re-verified by repo-wide grep and by reading the cited source.<br>
+  Baseline before any change: 223 test files, 3,099 tests passing.<br>
+  Gates: app 3,114 tests / 222 files · proxy 92 · tsc 0 · lint 0 errors (39 warnings, at baseline) · build EXIT 0 · scan p99 0.684 ms · structure guard PASS.<br>
+  Complements <code>docs/audit/PRE-LAUNCH-TEARDOWN-2026-09-02.html</code>, which covered deployment-artifact size; this covers in-application dead code and duplication.
+</div>
+
+</div>

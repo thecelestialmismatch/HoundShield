@@ -189,6 +189,9 @@ docs/decks/
 coverage/
 .lighthouseci/
 
+# Claire worktree fragments — never belong in the repo
+.claire/
+
 # ---- NexusSwift ----------------------------------------------------------
 nexusswift/**/__pycache__/
 nexusswift/*.db

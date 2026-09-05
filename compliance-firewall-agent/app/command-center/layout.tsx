@@ -33,14 +33,18 @@ import { IdleTimeout } from '@/components/auth/IdleTimeout'
  * is the permissive one, and it only decides PERSONALIZATION, never access.
  *
  * The `redirect` target is the dashboard rather than the exact deep path: a
- * layout is not given the pathname by design. Middleware would preserve the deep
- * path — but it does NOT execute in this deployment (proven 2026-07-29: no
- * `x-robots-tag` on /command-center, no `x-ratelimit-*` on /api/health; see
- * docs/DEPLOYMENT-MIDDLEWARE.md), so in practice the deep path is ALWAYS lost.
- * That is why signing in from a deep link used to land you somewhere you did not
- * ask for. The target below is now the canonical dashboard, so the fallback
- * lands where a signed-in operator expects to be rather than on a bare index.
- * Exact deep-path return comes back for free once middleware runs again.
+ * layout is not given the pathname by design.
+ *
+ * Historical note, corrected 2026-09-03: this comment used to say middleware
+ * does NOT execute in this deployment (true when written on 2026-07-29, when
+ * the legacy repo-root vercel.json disabled it). Middleware has executed since
+ * 2026-08-15 — `x-robots-tag` on /command-center and `x-ratelimit-*` are both
+ * present, and /command-center returns `x-matched-path: /login`. See
+ * docs/DEPLOYMENT-MIDDLEWARE.md.
+ *
+ * The canonical-dashboard target below is kept anyway: it is the right landing
+ * for a signed-in operator, and it does not depend on middleware to be correct.
+ * Restoring exact deep-path return is now a live option rather than blocked.
  */
 
 export const metadata: Metadata = {

@@ -13,7 +13,12 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { classifyRisk } from "@/lib/classifier/risk-engine";
-import { createRateLimiter } from "@/lib/rate-limit";
+import {
+  enforceRateLimit,
+  identifierFor,
+  clientIp,
+  LLM_RATE_LIMITS,
+} from "@/lib/rate-limit-shared";
 import { findFaqAnswer } from "@/lib/brain-ai/faq";
 import { cleanAnswer } from "@/lib/brain-ai/format-answer";
 import { sanitizeChatInput } from "@/lib/brain-ai/sanitize-input";
@@ -35,8 +40,22 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Rate limit: 10 requests per minute per IP
-const limiter = createRateLimiter("chat", { limit: 10, windowMs: 60 * 1000 });
+/*
+ * Rate limiting lives in lib/rate-limit-shared.ts, NOT the per-process
+ * limiter this route used to call.
+ *
+ * This route falls back to the SERVER's OPENROUTER_API_KEY when the caller
+ * supplies none (see resolveLlmProvider below), so every unthrottled request
+ * is billed to the founder's account. The in-process limiter keeps its
+ * counter in a Map, and on Vercel Fluid Compute each instance has its own —
+ * the real ceiling was (10 x live instances), reset on every cold start.
+ * That is exactly the spend exposure rate-limit-shared.ts was written to
+ * close, and this was one of two routes still bypassing it.
+ *
+ * The shared limiter counts in Postgres (migration 028) and fails OPEN to
+ * the in-process limiter if Postgres is briefly unreachable, so an
+ * infrastructure blip degrades accounting rather than 429ing real users.
+ */
 
 // ---------------------------------------------------------------------------
 // Model registry
@@ -305,22 +324,16 @@ export async function POST(request: NextRequest) {
   let userQuestion = "";
 
   try {
-    const ip =
-      request.headers.get("x-forwarded-for") ||
-      request.headers.get("x-real-ip") ||
-      "anonymous";
-    const rateLimitResult = limiter(ip);
+    // Also used below as the observability session fallback when the caller
+    // sends no sessionId, so it is derived once here.
+    const ip = clientIp(request);
 
-    if (!rateLimitResult.success) {
-      return NextResponse.json({ error: "Too many requests" }, {
-        status: 429,
-        headers: {
-          "X-RateLimit-Limit": rateLimitResult.limit.toString(),
-          "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
-          "X-RateLimit-Reset": rateLimitResult.reset.toString(),
-        },
-      });
-    }
+    const blocked = await enforceRateLimit(
+      "chat",
+      identifierFor({ ip }),
+      LLM_RATE_LIMITS.authenticated,
+    );
+    if (blocked) return blocked;
 
     const body = await request.json();
     const {

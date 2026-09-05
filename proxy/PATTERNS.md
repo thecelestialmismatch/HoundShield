@@ -1,6 +1,6 @@
 # HoundShield Detection Patterns
 
-33 patterns covering CMMC/CUI, HIPAA/PHI, PII, credentials, and IP.
+34 patterns covering CMMC/CUI, HIPAA/PHI, PII, credentials, and IP.
 All patterns enforced locally — zero data transmitted externally.
 
 Each pattern maps to one or more NIST SP 800-171 Rev 2 controls.
@@ -72,15 +72,23 @@ Each pattern maps to one or more NIST SP 800-171 Rev 2 controls.
 
 ---
 
-## Intellectual Property Patterns (1)
+## Intellectual Property Patterns (2)
 
 | Pattern | Risk | Action | NIST Controls |
 |---------|------|--------|---------------|
 | Patent numbers | MEDIUM | QUARANTINE | AC.L2-3.1.3 |
+| Program manager designator | HIGH | QUARANTINE | AC.L2-3.1.3 |
 
 **Examples detected:**
 - `US Patent 10,123,456`, `Patent No. 9876543`
 - `US20230123456A1` (patent application)
+- `PM Stryker`, `PM ACWS` — program-manager designators
+
+**Deliberately NOT detected:** clock times. `Program manager designator` is the
+only case-sensitive rule in the registry, because `PM` under a case-insensitive
+match fires on "move it to 4 PM tomorrow". It also carries a negative lookbehind
+for a preceding digit. A DLP rule that quarantines every meeting time is one the
+operator turns off.
 
 ---
 

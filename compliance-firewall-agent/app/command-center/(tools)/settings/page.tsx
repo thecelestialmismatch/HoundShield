@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/browser';
+import { signOutEverywhere } from '@/lib/auth/sign-out';
 import { BrainDataConsent } from '@/components/brain/BrainDataConsent';
 import { GatewayKeys } from './GatewayKeys';
 import {
@@ -189,10 +190,21 @@ export default function SettingsPage() {
     }
   }, []);
 
-  // Sign out
+  // Sign out — provider-aware, via the one shared implementation.
+  //
+  // This used to call Supabase's signOut() unconditionally and ignore the
+  // result, so under Better Auth it redirected to /login without ending the
+  // session. Redirect ONLY after revocation actually succeeds; on failure say
+  // so rather than reporting a sign-out that did not happen.
+  const [signOutFailed, setSignOutFailed] = useState(false);
   const handleSignOut = useCallback(async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    setSignOutFailed(false);
+    try {
+      await signOutEverywhere();
+    } catch {
+      setSignOutFailed(true);
+      return;
+    }
     router.push('/login');
     router.refresh();
   }, [router]);
@@ -361,8 +373,13 @@ export default function SettingsPage() {
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-red-500/10 text-red-400/70 text-sm font-medium hover:bg-red-500/5 hover:text-red-400 hover:border-red-500/20 transition-all"
         >
           <LogOut className="w-3.5 h-3.5" />
-          Sign Out
+          {signOutFailed ? 'Sign out failed — retry' : 'Sign Out'}
         </button>
+        {signOutFailed && (
+          <p role="alert" className="mt-2 text-xs text-red-400">
+            Your session is still active. Retry, and close this browser if it keeps failing.
+          </p>
+        )}
       </div>
     </div>
   );

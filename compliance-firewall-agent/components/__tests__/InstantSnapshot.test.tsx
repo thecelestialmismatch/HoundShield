@@ -1,10 +1,12 @@
 import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mockSave } = vi.hoisted(() => ({ mockSave: vi.fn() }));
-vi.mock("@/lib/reports/download", () => ({
-  saveComplianceReport: mockSave,
-}));
+// `@/lib/reports/download` used to be mocked here. It was removed on
+// 2026-09-03: InstantSnapshot never imported it, and nothing else in the app
+// did either, so the module was dead and this mock was stubbing a file no
+// code path could reach. The "no free download" guarantee below is now
+// structural — the browser-side save helper does not exist.
+//
 // ReportCheckoutButton pulls next/navigation's router — stub it for jsdom.
 vi.mock("@/components/ReportCheckoutButton", () => ({
   ReportCheckoutButton: ({ label }: { label?: string }) => (
@@ -14,10 +16,6 @@ vi.mock("@/components/ReportCheckoutButton", () => ({
 
 import { InstantSnapshot } from "../InstantSnapshot";
 import { sampleForAudience } from "@/components/snapshot/samples";
-
-beforeEach(() => {
-  mockSave.mockClear();
-});
 
 async function loadExampleAndScan(): Promise<void> {
   // The single "Load an example" button became four named scenarios. Drive the
@@ -57,7 +55,7 @@ describe("InstantSnapshot — the money-path climax", () => {
 
     // The free give-away download is gone; nothing is ever saved to the device.
     expect(screen.queryByRole("button", { name: /generate my gap-report pdf/i })).toBeNull();
-    expect(mockSave).not.toHaveBeenCalled();
+    // (the browser-side save helper no longer exists at all — see the note above)
 
     // Instead the full report is shown LOCKED, with a single $499 unlock CTA.
     expect(screen.getByText(/your full cmmc ai risk assessment report/i)).toBeTruthy();

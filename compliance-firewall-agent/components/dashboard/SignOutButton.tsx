@@ -3,17 +3,18 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { LogOut, Loader2 } from 'lucide-react'
-import { isBetterAuthClientEnabled, signOut as betterAuthSignOut } from '@/lib/auth/auth-client'
-import { createClient } from '@/lib/supabase/browser'
+import { signOutEverywhere } from '@/lib/auth/sign-out'
 
 /**
  * Provider-agnostic sign-out for the after-login console. The console had NO
  * way to end a session (the only sign-out lived on a command-center subpage) —
  * a dashboard a customer cannot leave is a trust smell on a security product.
  *
- * Mirrors lib/auth/session.ts's provider split: Better Auth when the public
- * flag selects it, Supabase Auth otherwise. On failure it degrades honestly
- * (visible "failed — retry" label, no redirect) — never a fake success.
+ * The provider split this used to carry inline now lives in
+ * `lib/auth/sign-out.ts`, because the settings page grew a second copy that
+ * forgot the Better Auth branch entirely. One implementation, two call sites.
+ * On failure it still degrades honestly (visible "failed — retry" label, no
+ * redirect) — never a fake success.
  */
 export function SignOutButton({ className }: { className?: string }) {
   const router = useRouter()
@@ -23,12 +24,7 @@ export function SignOutButton({ className }: { className?: string }) {
     if (state === 'busy') return
     setState('busy')
     try {
-      if (isBetterAuthClientEnabled()) {
-        await betterAuthSignOut()
-      } else {
-        const { error } = await createClient().auth.signOut()
-        if (error) throw error
-      }
+      await signOutEverywhere()
       router.push('/login')
       router.refresh()
     } catch {

@@ -12,6 +12,24 @@
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
+/*
+ * ThreatFeed, CountdownTimer, PricingToggle, CodeBlock and ComparisonFlow
+ * were tested here and rendered by nothing. All five were deleted on
+ * 2026-09-03 along with their tests: a reachability audit found no page,
+ * component or route importing any of them. (#327 reached the same
+ * conclusion independently and landed first; this is the same removal.)
+ *
+ * CodeBlock is the instructive one. Four pages DO render a code block —
+ * ai-chat.tsx, (tools)/sdk/page.tsx, docs/ApiReference.tsx and
+ * docs/quickstart/page.tsx — but each defines its OWN local CodeBlock with
+ * a different prop shape, and none imported the shared component. The
+ * shared one matched no call site, so it went; consolidating those four
+ * into one component is a real refactor and is tracked separately.
+ *
+ * What remains below is live: FaqAccordion (4 call sites), NavV3 (44) and
+ * FooterV3 (41).
+ */
+
 // ── FaqAccordion ──────────────────────────────────────────────────
 import { FaqAccordion, type FaqItem } from '../ui/FaqAccordion'
 

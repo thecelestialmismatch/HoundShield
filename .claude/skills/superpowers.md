@@ -13,13 +13,13 @@ git worktree add ../hs-feat-b -b feat/b
 # Agents work in parallel, merge when done
 ```
 
-### Memory DNA — Compressed Session State
-`lib/agent/memory-dna.ts` stores session state as compressed tokens. Use pattern:
-```typescript
-import { compressMemory, expandMemory } from "@/lib/agent/memory-dna";
-const dna = compressMemory(sessionMessages);      // ~10x compression
-const restored = expandMemory(dna, systemPrompt); // restore on new session
-```
+### Memory DNA — REMOVED 2026-09-03
+`lib/agent/memory-dna.ts` was deleted. It was written, documented in three
+places, and imported by nothing — a reachability audit found no caller from any
+route, page, script or test. The import example that used to sit here would not
+have compiled.
+
+For session state, use `lib/agent/memory.ts`, which is wired and in use.
 
 ### Self-Improving Hooks
 PostToolUse hooks that auto-fix issues:

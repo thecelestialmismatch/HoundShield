@@ -109,7 +109,19 @@ const CMMC_PATTERNS: DetectionPattern[] = [
   {
     name: "Task order / delivery order",
     category: "IP",
-    regex: /\b(?:task order|delivery order|TO|DO)\s*(?:no\.?|#)?\s*[A-Z0-9]{4,}/gi,
+    // Kept byte-identical to lib/classifier/cmmc-patterns.ts.
+    //
+    // Two bugs fixed here, both caused by the `i` flag:
+    //  1. The alternation had no closing \b, so bare TO/DO matched INSIDE
+    //     ordinary words — "tomorrow", "tonight", "document", "download",
+    //     "together".
+    //  2. [A-Z0-9]{4,} matched any word under `i`, so "to production" and
+    //     "to review" were read as order numbers.
+    // Measured before the fix: 10 of 10 ordinary English sentences were
+    // QUARANTINEd at HIGH risk by this one rule. The closing \b plus a
+    // lookahead requiring a digit removes all ten and keeps every real
+    // task-order form ("TO 0001", "delivery order N0001923D0001").
+    regex: /\b(?:task\s*order|delivery\s*order|TO|DO)\b\s*(?:no\.?|#)?\s*(?=[A-Z0-9]*\d)[A-Z0-9]{4,}\b/gi,
     risk_level: "HIGH",
     action: "QUARANTINE",
     nist_controls: ["AU.L2-3.3.1"],
@@ -157,7 +169,21 @@ const CMMC_PATTERNS: DetectionPattern[] = [
   {
     name: "Program office / DoD system identifier",
     category: "IP",
+    // `PM` is deliberately absent — see the matching note in
+    // lib/classifier/cmmc-patterns.ts. With the `i` flag a bare `PM` branch
+    // fires on every clock time. The case-sensitive rule below covers it.
     regex: /\b(?:PEO|PMS|ACAT|Milestone [ABC]|SRR|PDR|CDR|TRR)\s+[A-Z0-9]+/gi,
+    risk_level: "HIGH",
+    action: "QUARANTINE",
+    nist_controls: ["AC.L2-3.1.3"],
+  },
+  {
+    name: "Program manager designator",
+    category: "IP",
+    // Case-SENSITIVE by design (no `i` flag): a designator is written
+    // "PM Stryker", never "pm stryker". The negative lookbehind drops clock
+    // times, the dominant false positive for a two-letter token.
+    regex: /(?<!\d\s)(?<!\d)\bPM\s+[A-Z][A-Za-z0-9-]{2,}/g,
     risk_level: "HIGH",
     action: "QUARANTINE",
     nist_controls: ["AC.L2-3.1.3"],
@@ -201,7 +227,13 @@ const HIPAA_PATTERNS: DetectionPattern[] = [
   {
     name: "Health plan beneficiary number",
     category: "PHI",
-    regex: /\b(?:member\s+id|beneficiary\s+(?:id|number)|health\s+plan\s+(?:id|number)|insurance\s+(?:id|number))\s*[:#]?\s*[A-Z0-9]{6,15}\b/gi,
+    // Kept byte-identical to lib/classifier/hipaa-patterns.ts. This rule had
+    // drifted: Mode B recognised neither `subscriber`, `policy` nor `group`
+    // identifiers, so the shipped proxy let through five PHI strings the
+    // hosted demo blocked. Widened to the union of both, then narrowed on
+    // noise — the identifier must contain a digit, because the `i` flag makes
+    // [A-Z0-9] match plain words ("Policy number pending" matched before).
+    regex: /\b(?:member\s*(?:id|number|#)|beneficiary\s*(?:id|number|#)|health\s*plan\s*(?:id|number|#)|insurance\s*(?:id|number|#)|subscriber\s*(?:id|number|#)|policy\s*(?:number|#)|group\s*(?:number|#))\s*[:=#]?\s*\b(?=[A-Z0-9]*\d)[A-Z0-9]{4,20}\b/gi,
     risk_level: "CRITICAL",
     action: "BLOCK",
   },

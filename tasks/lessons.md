@@ -5,6 +5,73 @@ Pattern: **what happened → root cause → rule that prevents recurrence**
 
 ---
 
+## 2026-09-03 (maintainability audit — the guard that describes its own blind spot)
+
+### A drift guard that compares names will pass while the behaviour diverges
+**What:** `registry-drift.test.ts` guarded the two detection registries and its own header
+stated the ceiling: *"it compares declared names and categories as source text, not compiled
+behaviour, so two patterns sharing a name with different regexes still pass."* Three shared
+rules had already drifted through it. The worst left Mode B — the deployment the CUI/HIPAA
+claim depends on — detecting 5 PHI strings fewer than the hosted demo.
+**Root cause:** the limitation was written down honestly and then treated as documented rather
+than as a defect. A known gap in a guard is still a gap; naming it does not close it.
+**Rule:** when a guard's comment says what it cannot catch, that sentence is a bug report
+against the guard. Either close it or open a task — never both leave it and rely on it.
+Compare behaviour on a shared corpus, not declared text.
+
+### `[A-Z0-9]` under the `i` flag matches ordinary words — and two-letter tokens match inside them
+**What:** `Task order / delivery order` = `/\b(?:task order|delivery order|TO|DO)\s*(?:no\.?|#)?\s*[A-Z0-9]{4,}/gi`.
+Bare `TO`/`DO` with no closing `\b` matched *inside* "tomorrow", "tonight", "document",
+"download", "together"; and `[A-Z0-9]{4,}` under `i` matched any word, so "to production" and
+"to review" read as order numbers. **10 of 10 ordinary sentences QUARANTINEd at HIGH risk.**
+The same class of bug put `PM` in the program-office rule, where it fired on every clock time.
+**Root cause:** `i` silently widens every character class in the pattern, not just the literals
+you meant it for. A short alternative without a trailing boundary is a substring matcher.
+**Rule:** for any detection regex, (a) every short literal alternative gets an explicit closing
+`\b`, (b) an identifier class carries a `(?=[A-Z0-9]*\d)` lookahead so it cannot match prose,
+and (c) a rule that must be case-sensitive gets its own entry without the `i` flag rather than
+being wedged into a case-insensitive alternation. Every new rule ships with benign strings in
+the corpus, not just positives — the false-positive half is what decides whether an operator
+leaves the product switched on.
+
+### Verify a detection claim through the real scanner, never through a transcribed regex
+**What:** the false positives were first found by copying regexes into a scratch script. That is
+how they were *noticed*, but the finding was only trustworthy after running the actual
+`scanMessages()` from `proxy/scanner.ts` over the same strings — which also revealed the
+scanner applies patterns with no context gating, so a single noisy rule really does decide the
+verdict for the whole prompt.
+**Rule:** a claim about what the product detects is verified by calling the product's own entry
+point. A transcription is a hypothesis.
+
+### Dead code is cheap; a stale landmark pointing at it is not
+**What:** the audit deleted `PlatformDashboard` — the component named in CLAUDE.md's **first**
+Critical Rule, cited as precedent in two other files' comments. `memory-dna.ts` was listed as a
+live stack component in three places, one of which handed agents an import example that would
+not compile. `/api/health` was documented as the integration health check while returning a
+hardcoded `ok`.
+**Root cause:** deletions updated the code and left the map. Every one of these was a rule an
+agent would obey.
+**Rule:** deleting a file is not done until every doc, rule, skill and comment naming it is
+updated in the same commit. Where the rule is still true in general (Recharts crashes on SSR),
+restate it generally instead of deleting the knowledge with the file.
+
+### A test on uncalled code reports health for something users cannot reach
+**What:** 12 modules (2,042 lines) were reachable only from their own tests — green, counted in
+coverage, unreachable in production.
+**Rule:** run reachability with tests excluded as entry points, not just included. The
+difference between the two passes is exactly the code that has a test and no caller. Delete it,
+or wire it — and if it is a pending feature, say so in the file with a `ponytail:` note so it is
+tracked rather than mistaken for shipped.
+
+### `git log` dates are worthless as abandonment evidence after a bulk import
+**What:** every dead file dated 2026-08-07. That commit (`05b5df7`) touched **1,909 files**, so
+"last modified" said nothing about whether anything was abandoned. The date-based argument was
+dropped before it reached the report.
+**Rule:** before using file age as evidence, check how many files the commit touched.
+Reachability is the evidence; dates are a story.
+
+---
+
 ## 2026-08-14 (finishing the security audit — when the recommendation is the bug)
 
 ### A remediation item can be unimplementable, and it will still look shipped

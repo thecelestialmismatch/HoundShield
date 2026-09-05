@@ -109,8 +109,12 @@ export const HIPAA_PATTERNS: DetectionPattern[] = [
   {
     name: "Health plan beneficiary number",
     category: "HIPAA_PHI",
+    // Kept byte-identical to proxy/patterns/index.ts — see the note there.
+    // Adds `health plan` (which only the proxy had) and requires the
+    // identifier to contain a digit, which removes false positives such as
+    // "Policy number pending" that the previous `[A-Z0-9]{4,20}` matched.
     regex:
-      /\b(?:member\s*ID|beneficiary\s*(?:number|#|ID)|subscriber\s*(?:number|#|ID)|insurance\s*(?:ID|number|#)|policy\s*(?:number|#)|group\s*(?:number|#))\s*[:=]?\s*[A-Z0-9]{4,20}\b/gi,
+      /\b(?:member\s*(?:id|number|#)|beneficiary\s*(?:id|number|#)|health\s*plan\s*(?:id|number|#)|insurance\s*(?:id|number|#)|subscriber\s*(?:id|number|#)|policy\s*(?:number|#)|group\s*(?:number|#))\s*[:=#]?\s*\b(?=[A-Z0-9]*\d)[A-Z0-9]{4,20}\b/gi,
     risk_level: "HIGH",
     action: "BLOCK",
   },

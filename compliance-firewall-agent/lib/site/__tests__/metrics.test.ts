@@ -33,7 +33,11 @@ describe("the nav no longer ships a fabricated live counter", () => {
   // The brand rule: publish no fictional metrics — buyers verify everything.
   // These guard against the old client-incrementing "14,672 intercepted" /
   // "14,312 blocked" counters creeping back in.
-  const navs = ["components/layout/NavV3.tsx", "components/Navbar.tsx"];
+  // `components/Navbar.tsx` was also checked here until 2026-09-03. It was
+  // superseded by NavV3 (44 call sites vs none) and kept alive only by its own
+  // test, so it was deleted. NavV3 is the shipped nav and the only one a
+  // fabricated counter could reach a buyer through.
+  const navs = ["components/layout/NavV3.tsx"];
 
   for (const rel of navs) {
     it(`${rel} has no fabricated counter`, () => {
