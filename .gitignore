@@ -70,6 +70,12 @@ PR_BODY.md
 # Only ignore ephemeral sub-paths if they appear
 .claude/context/
 .claude/sessions/
+# Agent worktrees are local scratch checkouts. One was committed in #265
+# (219a8b3, 2026-08-07) as a bare gitlink (mode 160000) with no .gitmodules
+# entry, which made `git submodule foreach` exit 128 on every checkout
+# cleanup — a red herring in every CI job log. Ignored so it cannot be
+# re-added; scripts/verify-structure.mjs fails the build if one is.
+.claude/worktrees/
 
 # Strategy & planning docs (keep local, not in repo)
 *-EVOLUTION-STRATEGY*.md

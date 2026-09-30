@@ -2185,6 +2185,32 @@ a file you have real uncommitted changes in. And print `git status` after any de
 cleanup: the failure mode here is silent, and the tests still passed afterwards because
 the reverted file was a *valid older implementation*.
 
+### A green check can sit directly on top of a command that failed
+**What:** #331's security-audit gate ran green from `main` in 0.7s. Three lines below the
+green result, in the same job log, `actions/checkout`'s post-job cleanup was printing
+`fatal: No url found for submodule path '.claude/worktrees/nostalgic-lamport-6568bb'` and
+`##[warning]The process '/usr/bin/git' failed with exit code 128`. It had done that in
+every job in the repo since #265 (2026-08-07) — a local agent worktree committed as a
+bare gitlink (mode 160000) pointing at a commit that exists in no remote. Nobody saw it,
+because nobody reads past a green tick, which is the same reason the 503 in #331 cost an
+hour to diagnose.
+**Rule:** Read the log of your own green run, not just its conclusion. A job's exit code
+covers the steps the workflow declares; setup and cleanup run outside it and fail
+silently. And the cost of ambient noise is not the noise — it is that the next real
+failure arrives in a log people have already been trained to skim.
+
+### Ignoring a bad file stops that file; asserting the invariant stops the class
+**What:** The fix for the stray gitlink was three lines: `git rm --cached` it, and add
+`.claude/worktrees/` to `.gitignore`. Both are specific to a path. The next agent
+worktree with a different name would have been committed exactly the same way.
+**Rule:** After removing an instance, name the property that made it wrong and assert
+*that* — here, "every mode-160000 entry in the index must have a matching `path =` in
+.gitmodules", added to the existing `structure-guard` CI job. Then prove the assertion
+discriminates in both directions: it must fail on the offender re-added, and still pass
+on `tools/agent-harness`, the legitimate declared submodule. A guard that rejects
+everything would have "caught" the bug for the wrong reason and broken the real
+submodule the first time anyone touched it.
+
 ### A named-file allowlist only guards the files someone remembered to name
 **What:** `partner-offer-coherence.test.ts` was written specifically to stop stale partner
 economics from resurfacing, and it passed for weeks while `docs/gtm/rpo-outreach-list.md`
